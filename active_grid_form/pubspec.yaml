@@ -1,0 +1,23 @@
+name: active_grid_form
+description: A new Flutter package project.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  active_grid_core:
+    path: ../active_grid_core # TODO: Use hosted version on pub.dev once published
+
+dev_dependencies:
+  pedantic: ^1.9.2
+  flutter_test:
+    sdk: flutter
+
+flutter:
