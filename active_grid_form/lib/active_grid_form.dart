@@ -9,7 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
+/// A Widget to display a ActiveGrid Form
+///
+/// In order to use this there needs to be a [ActiveGrid] Widget in the Widget tree
 class ActiveGridForm extends StatefulWidget {
+  /// Creates a ActiveGridForm.
+  ///
+  /// The [formId] determines what Form is displayed. It works with empty and pre-filled forms.
   const ActiveGridForm({
     Key key,
     @required this.formId,
@@ -18,10 +24,16 @@ class ActiveGridForm extends StatefulWidget {
     this.titlePadding,
   }) : super(key: key);
 
+  /// Id of the Form to display
   final String formId;
+
+  /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
   final TextStyle titleStyle;
 
+  /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
   final EdgeInsets contentPadding;
+
+  /// Padding for the title. If no Padding is provided the [contentPadding] is used
   final EdgeInsets titlePadding;
 
   @override
