@@ -31,7 +31,7 @@ class FormComponentDateTime extends FormComponent<DateTime, String> {
   };
 
   static DateTime _parse(String json) {
-    if(json == 'nil') {
+    if(json == 'nil' || json == 'null') {
       return null;
     } else {
       return DateTime.parse(json);

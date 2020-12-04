@@ -23,6 +23,8 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
   FormData _formData;
   ActiveGridClient _client;
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -37,24 +39,27 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
         child: CircularProgressIndicator(),
       );
     } else {
-      return ListView.builder(
-        itemCount: 1 + _formData.components.length + _formData.actions.length,
-        itemBuilder: (context, index) {
-          // Title
-          if(index == 0) {
-            return Text(_formData.title);
-          } else if(index < _formData.components.length + 1) {
-            final componentIndex = index - 1;
-            return fromModel(_formData.components[componentIndex]);
-          } else {
-            final actionIndex = index - 1 - _formData.components.length;
-            return ActionButton(
-              action: _formData.actions[actionIndex],
-              onPressed: _performAction,
-              child: Text('Action$actionIndex'),
-            );
-          }
-        },
+      return Form(
+        key: _formKey,
+        child: ListView.builder(
+          itemCount: 1 + _formData.components.length + _formData.actions.length,
+          itemBuilder: (context, index) {
+            // Title
+            if(index == 0) {
+              return Text(_formData.title);
+            } else if(index < _formData.components.length + 1) {
+              final componentIndex = index - 1;
+              return fromModel(_formData.components[componentIndex]);
+            } else {
+              final actionIndex = index - 1 - _formData.components.length;
+              return ActionButton(
+                action: _formData.actions[actionIndex],
+                onPressed: _performAction,
+                child: Text('Action$actionIndex'),
+              );
+            }
+          },
+        ),
       );
     }
   }
@@ -67,14 +72,16 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
   }
 
   Future _performAction(FormAction action) async {
-    print(jsonEncode(_formData.toRequestObject()));
-    await _client.performAction(action, _formData).then((response) {
-      if(response.statusCode < 400) {
-        print('Perform Action Successful');
-      } else {
-        print('Error performing Request');
-      }
-    });
+    if(_formKey.currentState.validate()) {
+      print(jsonEncode(_formData.toRequestObject()));
+      await _client.performAction(action, _formData).then((response) {
+        if (response.statusCode < 400) {
+          print('Perform Action Successful');
+        } else {
+          print('Error performing Request ${response.body}');
+        }
+      });
+    }
   }
 
 }

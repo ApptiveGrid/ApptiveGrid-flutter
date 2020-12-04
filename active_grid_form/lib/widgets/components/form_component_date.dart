@@ -36,13 +36,14 @@ class _FormComponentDateState extends State<FormComponentDate> {
         child: TextFormField(
           controller: _controller,
           validator: (input) {
-            if (widget.component.required && input.isEmpty) {
+            if (widget.component.required && (input == null || input.isEmpty)) {
               // TODO: Make this Message configurable
-              return 'Required';
+              return '${widget.component.property} is required';
             } else {
               return null;
             }
           },
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
             labelText: widget.component.property,
           ),

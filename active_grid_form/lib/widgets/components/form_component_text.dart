@@ -33,17 +33,18 @@ class _FormComponentTextState extends State<FormComponentText> {
     return TextFormField(
       controller: _controller,
       validator: (input) {
-        if(widget.component.required && input.isEmpty) {
+        if(widget.component.required && (input == null || input.isEmpty)) {
           // TODO: Make this Message configurable
-          return 'Required';
+          return '${widget.component.property} is required';
         } else {
           return null;
         }
       },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       expands: widget.component.options.multi,
       decoration: InputDecoration(
-        helperText: widget.component.options.label,
-        labelText: widget.component.property,
+        helperText: widget.component.options.description,
+        labelText: widget.component.options.label?.isNotEmpty == true ? widget.component.options.label : widget.component.property,
         hintText: widget.component.options.placeholder,
       ),
     );
