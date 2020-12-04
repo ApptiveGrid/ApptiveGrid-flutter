@@ -1,6 +1,6 @@
 part of active_grid_model;
 
-class FormComponentCheckBox extends FormComponent<bool> {
+class FormComponentCheckBox extends FormComponent<bool, bool> {
   @override
   final String property;
   @override
@@ -19,7 +19,7 @@ class FormComponentCheckBox extends FormComponent<bool> {
         value = json['value'] ?? false,
         options = CheckBoxComponentOptions.fromJson(json['options']),
         required = json['required'],
-        type = FormTypeExtensions.fromString(json['type']);
+        type = FormType.checkbox;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -29,6 +29,9 @@ class FormComponentCheckBox extends FormComponent<bool> {
     'required': required,
     'type': type,
   };
+
+  @override
+  bool get schemaValue => value;
 }
 
 class CheckBoxComponentOptions extends FormComponentOptions<FormComponentCheckBox>{

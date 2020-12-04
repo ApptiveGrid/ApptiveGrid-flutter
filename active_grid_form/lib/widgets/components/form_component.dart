@@ -1,31 +1,19 @@
 part of active_grid_form_widgets;
 
-enum FormType { textField, datePicker, checkbox }
-
-abstract class FormTypeExtensions {
-  static FormType fromString(String value) {
-    switch (value) {
-      case 'textfield':
-        return FormType.textField;
-      case 'datePicker':
-        return FormType.datePicker;
-      case 'checkbox':
-        return FormType.checkbox;
-      default:
-        throw ArgumentError(
-            'No Type $value found. Supported Types are ${FormType.values}');
-    }
-  }
-}
-
 Widget fromModel(model.FormComponent component) {
-  if(component is model.FormComponentText) {
-    return FormComponentText(component: component,);
-  } else if(component is model.FormComponentCheckBox) {
-    return FormComponentCheckBox(component: component,);
-  } else if(component is model.FormComponentDateTime) {
-    return FormComponentDateTime(component: component,);
-  } else {
-    throw ArgumentError();
+  switch(component.type) {
+    case model.FormType.text:
+      return FormComponentText(component: component,);
+    case model.FormType.dateTime:
+      return FormComponentDateTime(component: component,);
+    case model.FormType.date:
+      return FormComponentDate(component: component,);
+    case model.FormType.integer:
+      return FormComponentNumber(component: component,);
+    case model.FormType.checkbox:
+      return FormComponentCheckBox(component: component,);
+    case model.FormType.unkown:
+    default:
+      throw ArgumentError();
   }
 }

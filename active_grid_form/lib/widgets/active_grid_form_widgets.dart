@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 part 'components/form_component.dart';
 part 'components/form_component_check_box.dart';
 part 'components/form_component_date_time.dart';
+part 'components/form_component_date.dart';
 part 'components/form_component_text.dart';
+part 'components/form_component_number.dart';
 
 part 'actions/action_button.dart';

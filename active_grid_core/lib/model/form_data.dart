@@ -10,7 +10,7 @@ class FormData {
 
   FormData.fromJson(Map<String, dynamic> json)
       : title = json['title'],
-        components = (json['components'] as List).map<FormComponent>((e) => FormComponent.fromJson(e)).toList(),
+        components = (json['components'] as List).map<FormComponent>((e) => FormComponent.fromJson(e, json['schema'])).toList(),
         actions = (json['actions'] as List).map((e) => FormAction.fromJson(e)).toList(),//json['actions'],
         schema = json['schema'];
 
@@ -28,34 +28,10 @@ class FormData {
   }
 
   Map<String, dynamic> toRequestObject() {
-    final schemaProperties = schema['properties'];
     return Map.fromEntries(components.map((component) {
-      final valueType = schemaProperties[component.property]['type'];
-      dynamic value;
-      switch(valueType) {
-        case 'integer':
-          value = component.value != null ? int.parse(component.value): null;
-          break;
-        case 'boolean':
-          value = component.value;
-          break;
-        case 'string':
-          final format = schemaProperties[component.property]['format'];
-          switch(format) {
-            case 'date-time':
-              value = (component.value as DateTime)?.toIso8601String();
-              break;
-            case 'date':
-              value = component.value != null ? DateFormat("yyyy-MM-dd").format(component.value as DateTime) : null;
-              break;
-            default:
-              value = component.value;
-              break;
-          }
-      }
       return MapEntry(
         component.property,
-        value
+        component.schemaValue
       );
     }));
   }

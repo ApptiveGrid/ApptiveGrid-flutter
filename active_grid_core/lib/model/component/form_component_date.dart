@@ -1,25 +1,25 @@
 part of active_grid_model;
 
-class FormComponentDateTime extends FormComponent<DateTime, String> {
+class FormComponentDate extends FormComponent<DateTime, String> {
   @override
   final String property;
   @override
   DateTime value;
   @override
-  final DateTimeComponentOptions options;
+  final DateComponentOptions options;
   @override
   final bool required;
   @override
   final FormType type;
 
-  FormComponentDateTime({@f.required this.property, this.value, @f.required this.options, this.required = false, @f.required this.type});
+  FormComponentDate({@f.required this.property, this.value, @f.required this.options, this.required = false, @f.required this.type});
 
-  FormComponentDateTime.fromJson(Map<String, dynamic> json)
+  FormComponentDate.fromJson(Map<String, dynamic> json)
       : property = json['property'],
         value = _parse(json['value'].toString()),
-        options = DateTimeComponentOptions.fromJson(json['options']),
+        options = DateComponentOptions.fromJson(json['options']),
         required = json['required'],
-        type = FormType.dateTime;
+        type = FormType.date;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -42,8 +42,8 @@ class FormComponentDateTime extends FormComponent<DateTime, String> {
   String get schemaValue => value?.toIso8601String();
 }
 
-class DateTimeComponentOptions extends FormComponentOptions<FormComponentDateTime>{
-  DateTimeComponentOptions.fromJson(Map<String, dynamic> json);
+class DateComponentOptions extends FormComponentOptions<FormComponentDate>{
+  DateComponentOptions.fromJson(Map<String, dynamic> json);
 
   Map<String, dynamic> toJson() => {};
 }

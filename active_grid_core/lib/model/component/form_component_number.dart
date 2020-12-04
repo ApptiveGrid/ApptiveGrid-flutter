@@ -1,25 +1,25 @@
 part of active_grid_model;
 
-class FormComponentText extends FormComponent<String, String> {
+class FormComponentNumber extends FormComponent<int, int> {
   @override
   final String property;
   @override
-  String value;
+  int value;
   @override
-  final TextComponentOptions options;
+  final NumberComponentOptions options;
   @override
   final bool required;
   @override
   final FormType type;
 
-  FormComponentText({@f.required this.property, this.value, @f.required this.options, this.required = false, @f.required this.type});
+  FormComponentNumber({@f.required this.property, this.value, @f.required this.options, this.required = false, @f.required this.type});
 
-  FormComponentText.fromJson(Map<String, dynamic> json)
+  FormComponentNumber.fromJson(Map<String, dynamic> json)
       : property = json['property'],
-        value = json['value'].toString(),
-        options = TextComponentOptions.fromJson(json['options']),
+        value = json['value'],
+        options = NumberComponentOptions.fromJson(json['options']),
         required = json['required'],
-        type = FormType.text;
+        type = FormType.integer;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -31,22 +31,22 @@ class FormComponentText extends FormComponent<String, String> {
   };
 
   @override
-  String get schemaValue => value;
+  int get schemaValue => value;
 }
 
-class TextComponentOptions extends FormComponentOptions<FormComponentText>{
+class NumberComponentOptions extends FormComponentOptions<FormComponentNumber>{
   final bool multi;
   final String placeholder;
   final String description;
   final String label;
 
-  TextComponentOptions(
+  NumberComponentOptions(
       {this.multi = false,
       this.placeholder = '',
       this.description = '',
       this.label});
 
-  TextComponentOptions.fromJson(Map<String, dynamic> json)
+  NumberComponentOptions.fromJson(Map<String, dynamic> json)
       : multi = json['multi'],
         placeholder = json['placeholder'],
         description = json['description'],
