@@ -12,7 +12,12 @@ class FormComponentNumber extends FormComponent<int, int> {
   @override
   final FormType type;
 
-  FormComponentNumber({@f.required this.property, this.value, @f.required this.options, this.required = false, @f.required this.type});
+  FormComponentNumber(
+      {@f.required this.property,
+      this.value,
+      @f.required this.options,
+      this.required = false,
+      @f.required this.type});
 
   FormComponentNumber.fromJson(Map<String, dynamic> json)
       : property = json['property'],
@@ -23,18 +28,18 @@ class FormComponentNumber extends FormComponent<int, int> {
 
   @override
   Map<String, dynamic> toJson() => {
-    'property': property,
-    'value': value,
-    'options': options.toJson(),
-    'required': required,
-    'type': type,
-  };
+        'property': property,
+        'value': value,
+        'options': options.toJson(),
+        'required': required,
+        'type': type,
+      };
 
   @override
   int get schemaValue => value;
 }
 
-class NumberComponentOptions extends FormComponentOptions<FormComponentNumber>{
+class NumberComponentOptions extends FormComponentOptions<FormComponentNumber> {
   final bool multi;
   final String placeholder;
   final String description;
@@ -51,7 +56,6 @@ class NumberComponentOptions extends FormComponentOptions<FormComponentNumber>{
         placeholder = json['placeholder'],
         description = json['description'],
         label = json['label'];
-
 
   Map<String, dynamic> toJson() => {
         'multi': multi,

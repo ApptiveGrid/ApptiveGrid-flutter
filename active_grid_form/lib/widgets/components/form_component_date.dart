@@ -13,7 +13,9 @@ class _FormComponentDateState extends State<FormComponentDate> {
   final TextEditingController _controller = TextEditingController();
 
   @override
-  Widget build(BuildContext context,) {
+  Widget build(
+    BuildContext context,
+  ) {
     if (widget.component.value != null) {
       final dateFormat = DateFormat.yMd();
       final dateString = dateFormat.format(widget.component.value);
@@ -23,14 +25,14 @@ class _FormComponentDateState extends State<FormComponentDate> {
       onTap: () {
         final initialDate = widget.component.value ?? DateTime.now();
         showDatePicker(
-            context: context,
-            initialDate: initialDate,
-            firstDate: DateTime.fromMillisecondsSinceEpoch(0),
-            lastDate: DateTime.fromMillisecondsSinceEpoch(
-                Duration(days: 100000000).inMilliseconds),)
-        .then((value) => setState(() {
-          widget.component.value = value;
-        }));
+          context: context,
+          initialDate: initialDate,
+          firstDate: DateTime.fromMillisecondsSinceEpoch(0),
+          lastDate: DateTime.fromMillisecondsSinceEpoch(
+              Duration(days: 100000000).inMilliseconds),
+        ).then((value) => setState(() {
+              widget.component.value = value;
+            }));
       },
       child: AbsorbPointer(
         child: TextFormField(

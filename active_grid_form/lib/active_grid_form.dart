@@ -10,7 +10,13 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class ActiveGridForm extends StatefulWidget {
-  const ActiveGridForm({Key key, @required this.formId, this.titleStyle, this.contentPadding, this.titlePadding,}) : super(key: key);
+  const ActiveGridForm({
+    Key key,
+    @required this.formId,
+    this.titleStyle,
+    this.contentPadding,
+    this.titlePadding,
+  }) : super(key: key);
 
   final String formId;
   final TextStyle titleStyle;
@@ -23,7 +29,6 @@ class ActiveGridForm extends StatefulWidget {
 }
 
 class _ActiveGridFormState extends State<ActiveGridForm> {
-
   FormData _formData;
   ActiveGridClient _client;
 
@@ -38,7 +43,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
 
   @override
   Widget build(BuildContext context) {
-    if(_formData == null) {
+    if (_formData == null) {
       return Center(
         child: CircularProgressIndicator(),
       );
@@ -49,13 +54,18 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
           itemCount: 1 + _formData.components.length + _formData.actions.length,
           itemBuilder: (context, index) {
             // Title
-            if(index == 0) {
+            if (index == 0) {
               return Padding(
-                padding: widget.titlePadding ?? widget.contentPadding ?? _defaultPadding,
-                child: Text(_formData.title,
-                style: widget.titleStyle ?? Theme.of(context).textTheme.headline5,),
+                padding: widget.titlePadding ??
+                    widget.contentPadding ??
+                    _defaultPadding,
+                child: Text(
+                  _formData.title,
+                  style: widget.titleStyle ??
+                      Theme.of(context).textTheme.headline5,
+                ),
               );
-            } else if(index < _formData.components.length + 1) {
+            } else if (index < _formData.components.length + 1) {
               final componentIndex = index - 1;
               return Padding(
                   padding: widget.contentPadding ?? _defaultPadding,
@@ -84,7 +94,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
   }
 
   Future _performAction(FormAction action) async {
-    if(_formKey.currentState.validate()) {
+    if (_formKey.currentState.validate()) {
       print(jsonEncode(_formData.toRequestObject()));
       await _client.performAction(action, _formData).then((response) {
         if (response.statusCode < 400) {
@@ -95,6 +105,4 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
       });
     }
   }
-
 }
-

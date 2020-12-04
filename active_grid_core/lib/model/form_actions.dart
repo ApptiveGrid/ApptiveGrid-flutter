@@ -11,7 +11,7 @@ class FormAction<T> {
         method = json['method'];
 
   Map<String, dynamic> toJson() => {
-    'uri': uri,
-    'method': method,
-  };
+        'uri': uri,
+        'method': method,
+      };
 }

@@ -10,12 +10,16 @@ class FormData {
 
   FormData.fromJson(Map<String, dynamic> json)
       : title = json['title'],
-        components = (json['components'] as List).map<FormComponent>((e) => FormComponent.fromJson(e, json['schema'])).toList(),
-        actions = (json['actions'] as List).map((e) => FormAction.fromJson(e)).toList(),//json['actions'],
+        components = (json['components'] as List)
+            .map<FormComponent>(
+                (e) => FormComponent.fromJson(e, json['schema']))
+            .toList(),
+        actions = (json['actions'] as List)
+            .map((e) => FormAction.fromJson(e))
+            .toList(), //json['actions'],
         schema = json['schema'];
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'title': title,
         'components': components.map((e) => e.toJson()),
         'actions': actions.map((e) => e.toJson()),
@@ -29,10 +33,7 @@ class FormData {
 
   Map<String, dynamic> toRequestObject() {
     return Map.fromEntries(components.map((component) {
-      return MapEntry(
-        component.property,
-        component.schemaValue
-      );
+      return MapEntry(component.property, component.schemaValue);
     }));
   }
 }

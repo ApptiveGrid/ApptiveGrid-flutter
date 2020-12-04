@@ -18,7 +18,8 @@ class ActiveGridClient {
     _client.close();
   }
 
-  Future<http.Response> performAction(FormAction action, FormData formData) async {
+  Future<http.Response> performAction(
+      FormAction action, FormData formData) async {
     final uri = Uri.parse('${_environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());

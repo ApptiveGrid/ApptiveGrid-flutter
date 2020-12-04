@@ -12,7 +12,12 @@ class FormComponentDate extends FormComponent<DateTime, String> {
   @override
   final FormType type;
 
-  FormComponentDate({@f.required this.property, this.value, @f.required this.options, this.required = false, @f.required this.type});
+  FormComponentDate(
+      {@f.required this.property,
+      this.value,
+      @f.required this.options,
+      this.required = false,
+      @f.required this.type});
 
   FormComponentDate.fromJson(Map<String, dynamic> json)
       : property = json['property'],
@@ -23,17 +28,18 @@ class FormComponentDate extends FormComponent<DateTime, String> {
 
   @override
   Map<String, dynamic> toJson() => {
-    'property': property,
-    'value': value,
-    'options': options.toJson(),
-    'required': required,
-    'type': type,
-  };
+        'property': property,
+        'value': value,
+        'options': options.toJson(),
+        'required': required,
+        'type': type,
+      };
 
   static DateTime _parse(String json) {
-    if(json == 'nil') {
+    if (json == 'nil') {
       return null;
     } else {
+      return null;
       return DateTime.parse(json);
     }
   }
@@ -42,7 +48,7 @@ class FormComponentDate extends FormComponent<DateTime, String> {
   String get schemaValue => value?.toIso8601String();
 }
 
-class DateComponentOptions extends FormComponentOptions<FormComponentDate>{
+class DateComponentOptions extends FormComponentOptions<FormComponentDate> {
   DateComponentOptions.fromJson(Map<String, dynamic> json);
 
   Map<String, dynamic> toJson() => {};

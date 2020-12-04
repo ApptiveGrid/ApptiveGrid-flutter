@@ -12,29 +12,34 @@ class FormComponentText extends FormComponent<String, String> {
   @override
   final FormType type;
 
-  FormComponentText({@f.required this.property, this.value, @f.required this.options, this.required = false, @f.required this.type});
+  FormComponentText(
+      {@f.required this.property,
+      this.value,
+      @f.required this.options,
+      this.required = false,
+      @f.required this.type});
 
   FormComponentText.fromJson(Map<String, dynamic> json)
       : property = json['property'],
-        value = json['value'].toString(),
+        value = json['value'],
         options = TextComponentOptions.fromJson(json['options']),
         required = json['required'],
         type = FormType.text;
 
   @override
   Map<String, dynamic> toJson() => {
-    'property': property,
-    'value': value,
-    'options': options.toJson(),
-    'required': required,
-    'type': type,
-  };
+        'property': property,
+        'value': value,
+        'options': options.toJson(),
+        'required': required,
+        'type': type,
+      };
 
   @override
-  String get schemaValue => value;
+  String get schemaValue => value ?? '';
 }
 
-class TextComponentOptions extends FormComponentOptions<FormComponentText>{
+class TextComponentOptions extends FormComponentOptions<FormComponentText> {
   final bool multi;
   final String placeholder;
   final String description;
@@ -51,7 +56,6 @@ class TextComponentOptions extends FormComponentOptions<FormComponentText>{
         placeholder = json['placeholder'],
         description = json['description'],
         label = json['label'];
-
 
   Map<String, dynamic> toJson() => {
         'multi': multi,

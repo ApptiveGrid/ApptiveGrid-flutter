@@ -10,7 +10,6 @@ class FormComponentText extends StatefulWidget {
 }
 
 class _FormComponentTextState extends State<FormComponentText> {
-
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -29,11 +28,13 @@ class _FormComponentTextState extends State<FormComponentText> {
   }
 
   @override
-  Widget build(BuildContext context,) {
+  Widget build(
+    BuildContext context,
+  ) {
     return TextFormField(
       controller: _controller,
       validator: (input) {
-        if(widget.component.required && (input == null || input.isEmpty)) {
+        if (widget.component.required && (input == null || input.isEmpty)) {
           // TODO: Make this Message configurable
           return '${widget.component.property} is required';
         } else {
@@ -44,7 +45,9 @@ class _FormComponentTextState extends State<FormComponentText> {
       expands: widget.component.options.multi,
       decoration: InputDecoration(
         helperText: widget.component.options.description,
-        labelText: widget.component.options.label?.isNotEmpty == true ? widget.component.options.label : widget.component.property,
+        labelText: widget.component.options.label?.isNotEmpty == true
+            ? widget.component.options.label
+            : widget.component.property,
         hintText: widget.component.options.placeholder,
       ),
     );

@@ -1,25 +1,27 @@
-import 'package:active_grid_form/active_grid_form.dart';
 import 'package:active_grid_core/active_grid_core.dart';
+import 'package:active_grid_form/active_grid_form.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ActiveGrid(
+      options: ActiveGridOptions(
+        environment: ActiveGridEnvironment.alpha,
+      ),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ActiveGrid(
-      options: ActiveGridOptions(
-        environment: ActiveGridEnvironment.alpha,
+    return MaterialApp(
+      title: 'Active Grid',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-      child: MaterialApp(
-        title: 'Active Grid',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: MyHomePage(title: 'Flutter Demo Home Page'),
-      ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -34,7 +36,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -5,7 +5,9 @@ class ActionButton extends StatelessWidget {
   final Widget child;
   final void Function(model.FormAction) onPressed;
 
-  const ActionButton({Key key, @required this.action, this.child, @required this.onPressed}) : super(key: key);
+  const ActionButton(
+      {Key key, @required this.action, this.child, @required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

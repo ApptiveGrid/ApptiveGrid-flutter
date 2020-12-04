@@ -10,7 +10,6 @@ class FormComponentNumber extends StatefulWidget {
 }
 
 class _FormComponentNumberState extends State<FormComponentNumber> {
-
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -29,11 +28,13 @@ class _FormComponentNumberState extends State<FormComponentNumber> {
   }
 
   @override
-  Widget build(BuildContext context,) {
+  Widget build(
+    BuildContext context,
+  ) {
     return TextFormField(
       controller: _controller,
       validator: (input) {
-        if(widget.component.required && input == null) {
+        if (widget.component.required && input == null) {
           // TODO: Make this Message configurable
           return '${widget.component.property} is required';
         } else {

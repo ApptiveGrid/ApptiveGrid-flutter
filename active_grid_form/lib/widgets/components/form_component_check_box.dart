@@ -15,7 +15,7 @@ class _FormComponentCheckBoxState extends State<FormComponentCheckBox> {
     return FormField<bool>(
       initialValue: widget.component.value,
       validator: (value) {
-        if(widget.component.required && !value) {
+        if (widget.component.required && !value) {
           return 'Required';
         } else {
           return null;
@@ -31,10 +31,8 @@ class _FormComponentCheckBoxState extends State<FormComponentCheckBox> {
             isDense: true,
           ),
           child: ColorFiltered(
-            colorFilter: ColorFilter.mode(
-              Theme.of(context).errorColor,
-              state.hasError ? BlendMode.srcATop : BlendMode.dstIn
-            ),
+            colorFilter: ColorFilter.mode(Theme.of(context).errorColor,
+                state.hasError ? BlendMode.srcATop : BlendMode.dstIn),
             child: Row(
               children: [
                 SizedBox(

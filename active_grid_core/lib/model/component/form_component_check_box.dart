@@ -12,7 +12,12 @@ class FormComponentCheckBox extends FormComponent<bool, bool> {
   @override
   final FormType type;
 
-  FormComponentCheckBox({@f.required this.property, this.value = false, @f.required this.options, this.required = false, @f.required this.type});
+  FormComponentCheckBox(
+      {@f.required this.property,
+      this.value = false,
+      @f.required this.options,
+      this.required = false,
+      @f.required this.type});
 
   FormComponentCheckBox.fromJson(Map<String, dynamic> json)
       : property = json['property'],
@@ -23,18 +28,19 @@ class FormComponentCheckBox extends FormComponent<bool, bool> {
 
   @override
   Map<String, dynamic> toJson() => {
-    'property': property,
-    'value': value,
-    'options': options.toJson(),
-    'required': required,
-    'type': type,
-  };
+        'property': property,
+        'value': value,
+        'options': options.toJson(),
+        'required': required,
+        'type': type,
+      };
 
   @override
   bool get schemaValue => value;
 }
 
-class CheckBoxComponentOptions extends FormComponentOptions<FormComponentCheckBox>{
+class CheckBoxComponentOptions
+    extends FormComponentOptions<FormComponentCheckBox> {
   CheckBoxComponentOptions.fromJson(Map<String, dynamic> json);
 
   Map<String, dynamic> toJson() => {};

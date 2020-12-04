@@ -7,14 +7,15 @@ class ActiveGrid extends StatefulWidget {
   final Widget child;
   final ActiveGridOptions options;
 
-  const ActiveGrid({Key key, this.child, this.options  = const ActiveGridOptions()}) : super(key: key);
+  const ActiveGrid(
+      {Key key, this.child, this.options = const ActiveGridOptions()})
+      : super(key: key);
 
   @override
   _ActiveGridState createState() => _ActiveGridState();
 }
 
 class _ActiveGridState extends State<ActiveGrid> {
-
   ActiveGridClient _client;
 
   @override
