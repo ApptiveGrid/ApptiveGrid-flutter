@@ -10,9 +10,13 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class ActiveGridForm extends StatefulWidget {
-  final String formId;
+  const ActiveGridForm({Key key, @required this.formId, this.titleStyle, this.contentPadding, this.titlePadding,}) : super(key: key);
 
-  const ActiveGridForm({Key key, @required this.formId,}) : super(key: key);
+  final String formId;
+  final TextStyle titleStyle;
+
+  final EdgeInsets contentPadding;
+  final EdgeInsets titlePadding;
 
   @override
   _ActiveGridFormState createState() => _ActiveGridFormState();
@@ -46,10 +50,16 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
           itemBuilder: (context, index) {
             // Title
             if(index == 0) {
-              return Text(_formData.title);
+              return Padding(
+                padding: widget.titlePadding ?? widget.contentPadding ?? _defaultPadding,
+                child: Text(_formData.title,
+                style: widget.titleStyle ?? Theme.of(context).textTheme.headline5,),
+              );
             } else if(index < _formData.components.length + 1) {
               final componentIndex = index - 1;
-              return fromModel(_formData.components[componentIndex]);
+              return Padding(
+                  padding: widget.contentPadding ?? _defaultPadding,
+                  child: fromModel(_formData.components[componentIndex]));
             } else {
               final actionIndex = index - 1 - _formData.components.length;
               return ActionButton(
@@ -63,6 +73,8 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
       );
     }
   }
+
+  EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
   Future _loadForm() async {
     final data = await _client.loadForm(formId: widget.formId);

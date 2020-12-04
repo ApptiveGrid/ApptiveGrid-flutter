@@ -43,6 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ActiveGridForm(
         formId: 'YOUR_FORM_ID',
+        titleStyle: Theme.of(context).textTheme.headline6,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+        titlePadding: const EdgeInsets.all(16),
       ),
     );
   }
