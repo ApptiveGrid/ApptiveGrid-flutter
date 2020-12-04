@@ -4,10 +4,13 @@ part of active_grid_network;
 enum ActiveGridEnvironment {
   /// Alpha Environment
   alpha,
+
   /// Beta Environment
   beta,
+
   /// Production Environment
-  production }
+  production
+}
 
 /// Extensions for [ActiveGridEnvironment]
 extension EnvironmentExtension on ActiveGridEnvironment {

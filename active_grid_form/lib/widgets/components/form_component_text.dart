@@ -3,7 +3,8 @@ part of active_grid_form_widgets;
 /// FormComponent Widget to display a [model.FormComponentText]
 class FormComponentText extends StatefulWidget {
   /// Creates a [TextFormField] to show and edit Text contained in [component]
-  const FormComponentText({Key key, @required this.component}) : super(key: key);
+  const FormComponentText({Key key, @required this.component})
+      : super(key: key);
 
   /// Component this Widget should reflect
   final model.FormComponentText component;

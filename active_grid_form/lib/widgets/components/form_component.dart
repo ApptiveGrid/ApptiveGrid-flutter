@@ -26,6 +26,7 @@ Widget fromModel(model.FormComponent component) {
         component: component,
       );
     default:
-      throw ArgumentError('No Widget found for component $component. Please make sure you are you using the latest version of this package?');
+      throw ArgumentError(
+          'No Widget found for component $component. Please make sure you are you using the latest version of this package?');
   }
 }

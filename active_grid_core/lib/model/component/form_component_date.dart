@@ -5,10 +5,10 @@ class FormComponentDate extends FormComponent<DateTime, String> {
   /// Creates a FormComponent
   FormComponentDate(
       {@f.required this.property,
-        this.value,
-        @f.required this.options,
-        this.required = false,
-        @f.required this.type});
+      this.value,
+      @f.required this.options,
+      this.required = false,
+      @f.required this.type});
 
   /// Deserializes [json] into a [FormComponent]
   FormComponentDate.fromJson(Map<String, dynamic> json)
@@ -17,7 +17,6 @@ class FormComponentDate extends FormComponent<DateTime, String> {
         options = StubComponentOptions.fromJson(json['options']),
         required = json['required'],
         type = FormType.date;
-
 
   @override
   final String property;

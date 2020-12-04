@@ -15,10 +15,11 @@ class StubComponentOptions extends FormComponentOptions {
 /// [FormComponentOptions] for Text Based Components
 class TextComponentOptions extends FormComponentOptions {
   /// Creates Options
-  TextComponentOptions({this.multi = false,
-    this.placeholder = '',
-    this.description = '',
-    this.label});
+  TextComponentOptions(
+      {this.multi = false,
+      this.placeholder = '',
+      this.description = '',
+      this.label});
 
   /// Deserializes [json] into [TextComponentOptions]
   TextComponentOptions.fromJson(Map<String, dynamic> json)
@@ -26,6 +27,7 @@ class TextComponentOptions extends FormComponentOptions {
         placeholder = json['placeholder'],
         description = json['description'],
         label = json['label'];
+
   /// Determines if the Textfield is growable
   final bool multi;
 
@@ -39,8 +41,7 @@ class TextComponentOptions extends FormComponentOptions {
   final String label;
 
   /// Serializes [TextComponentOptions] to json
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'multi': multi,
         'placeholder': placeholder,
         'description': description,

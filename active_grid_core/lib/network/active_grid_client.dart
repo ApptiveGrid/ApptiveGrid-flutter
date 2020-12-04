@@ -4,7 +4,7 @@ part of active_grid_network;
 class ActiveGridClient {
   /// Creates a ApiClient
   ActiveGridClient({this.environment = ActiveGridEnvironment.production})
-      :         _client = http.Client();
+      : _client = http.Client();
 
   /// Current Environment the Api is connecting to
   ActiveGridEnvironment environment;

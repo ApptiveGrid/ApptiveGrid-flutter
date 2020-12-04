@@ -4,12 +4,16 @@ part of active_grid_model;
 enum FormType {
   /// Component to display [String]
   text,
+
   /// Component to display [DateTime]
   dateTime,
+
   /// Component to display [DateTime] without the option to adjust the Time part
   date,
+
   /// Component to display [int] numbers
   integer,
+
   /// Component to display [bool] values
   checkbox,
 }
