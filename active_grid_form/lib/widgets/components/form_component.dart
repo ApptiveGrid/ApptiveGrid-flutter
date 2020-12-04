@@ -25,7 +25,6 @@ Widget fromModel(model.FormComponent component) {
       return FormComponentCheckBox(
         component: component,
       );
-    case model.FormType.unkown:
     default:
       throw ArgumentError('No Widget found for component $component. Please make sure you are you using the latest version of this package?');
   }

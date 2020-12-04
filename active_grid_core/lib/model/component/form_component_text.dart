@@ -1,17 +1,8 @@
 part of active_grid_model;
 
+/// Model for a [FormComponent] representing [FormType.text]
 class FormComponentText extends FormComponent<String, String> {
-  @override
-  final String property;
-  @override
-  String value;
-  @override
-  final TextComponentOptions options;
-  @override
-  final bool required;
-  @override
-  final FormType type;
-
+  /// Creates a FormComponent
   FormComponentText(
       {@f.required this.property,
       this.value,
@@ -19,12 +10,25 @@ class FormComponentText extends FormComponent<String, String> {
       this.required = false,
       @f.required this.type});
 
+  /// Deserializes [json] into a [FormComponent]
   FormComponentText.fromJson(Map<String, dynamic> json)
       : property = json['property'],
         value = json['value'],
         options = TextComponentOptions.fromJson(json['options']),
         required = json['required'],
         type = FormType.text;
+  @override
+  final String property;
+  @override
+  String value;
+  @override
+  final TextComponentOptions options;
+
+  @override
+  final bool required;
+
+  @override
+  final FormType type;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -37,30 +41,4 @@ class FormComponentText extends FormComponent<String, String> {
 
   @override
   String get schemaValue => value ?? '';
-}
-
-class TextComponentOptions extends FormComponentOptions<FormComponentText> {
-  final bool multi;
-  final String placeholder;
-  final String description;
-  final String label;
-
-  TextComponentOptions(
-      {this.multi = false,
-      this.placeholder = '',
-      this.description = '',
-      this.label});
-
-  TextComponentOptions.fromJson(Map<String, dynamic> json)
-      : multi = json['multi'],
-        placeholder = json['placeholder'],
-        description = json['description'],
-        label = json['label'];
-
-  Map<String, dynamic> toJson() => {
-        'multi': multi,
-        'placeholder': placeholder,
-        'description': description,
-        'label': label
-      };
 }

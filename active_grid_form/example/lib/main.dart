@@ -2,6 +2,8 @@ import 'package:active_grid_core/active_grid_core.dart';
 import 'package:active_grid_form/active_grid_form.dart';
 import 'package:flutter/material.dart';
 
+// ignore_for_file: public_member_api_docs
+
 void main() {
   runApp(
     ActiveGrid(

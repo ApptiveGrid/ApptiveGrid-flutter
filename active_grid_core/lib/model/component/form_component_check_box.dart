@@ -1,17 +1,8 @@
 part of active_grid_model;
 
+/// Model for a [FormComponent] representing [FormType.checkbox]
 class FormComponentCheckBox extends FormComponent<bool, bool> {
-  @override
-  final String property;
-  @override
-  bool value;
-  @override
-  final CheckBoxComponentOptions options;
-  @override
-  final bool required;
-  @override
-  final FormType type;
-
+  /// Creates a FormComponent
   FormComponentCheckBox(
       {@f.required this.property,
       this.value = false,
@@ -19,12 +10,26 @@ class FormComponentCheckBox extends FormComponent<bool, bool> {
       this.required = false,
       @f.required this.type});
 
+  /// Deserializes [json] into a [FormComponent]
   FormComponentCheckBox.fromJson(Map<String, dynamic> json)
       : property = json['property'],
         value = json['value'] ?? false,
-        options = CheckBoxComponentOptions.fromJson(json['options']),
+        options = StubComponentOptions.fromJson(json['options']),
         required = json['required'],
         type = FormType.checkbox;
+
+  @override
+  final String property;
+  @override
+  bool value;
+  @override
+  final StubComponentOptions options;
+
+  @override
+  final bool required;
+
+  @override
+  final FormType type;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -37,11 +42,4 @@ class FormComponentCheckBox extends FormComponent<bool, bool> {
 
   @override
   bool get schemaValue => value;
-}
-
-class CheckBoxComponentOptions
-    extends FormComponentOptions<FormComponentCheckBox> {
-  CheckBoxComponentOptions.fromJson(Map<String, dynamic> json);
-
-  Map<String, dynamic> toJson() => {};
 }

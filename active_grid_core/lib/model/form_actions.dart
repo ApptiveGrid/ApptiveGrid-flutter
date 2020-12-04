@@ -1,15 +1,22 @@
 part of active_grid_model;
 
-class FormAction<T> {
-  final String uri;
-  final String method;
-
+/// Model for a Action inside a Form
+class FormAction {
+  /// Creates a Form Action
   FormAction(this.uri, this.method);
 
+  /// Deserialize [json] into a [FormAction]
   FormAction.fromJson(Map<String, dynamic> json)
       : uri = json['uri'],
         method = json['method'];
 
+  /// Path the Action points to
+  final String uri;
+
+  /// [http.BaseRequest.method] method this Action uses
+  final String method;
+
+  /// Serializes [FormAction] to json
   Map<String, dynamic> toJson() => {
         'uri': uri,
         'method': method,

@@ -1,8 +1,19 @@
 part of active_grid_network;
 
-enum ActiveGridEnvironment { alpha, beta, production }
+/// Possible Stages/Environment ActiveGrid can point to
+enum ActiveGridEnvironment {
+  /// Alpha Environment
+  alpha,
+  /// Beta Environment
+  beta,
+  /// Production Environment
+  production }
 
+/// Extensions for [ActiveGridEnvironment]
 extension EnvironmentExtension on ActiveGridEnvironment {
+  /// Returns the API url for the selected [ActiveGridEnvironment]
+  ///
+  /// defaults to the same url as [ActiveGridEnvironment.production]
   String get url {
     switch (this) {
       case ActiveGridEnvironment.alpha:

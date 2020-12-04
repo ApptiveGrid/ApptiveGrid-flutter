@@ -1,17 +1,8 @@
 part of active_grid_model;
 
+/// Model for a [FormComponent] representing [FormType.integer]
 class FormComponentNumber extends FormComponent<int, int> {
-  @override
-  final String property;
-  @override
-  int value;
-  @override
-  final NumberComponentOptions options;
-  @override
-  final bool required;
-  @override
-  final FormType type;
-
+  /// Creates a FormComponent
   FormComponentNumber(
       {@f.required this.property,
       this.value,
@@ -19,12 +10,26 @@ class FormComponentNumber extends FormComponent<int, int> {
       this.required = false,
       @f.required this.type});
 
+  /// Deserializes [json] into a [FormComponent]
   FormComponentNumber.fromJson(Map<String, dynamic> json)
       : property = json['property'],
         value = json['value'],
-        options = NumberComponentOptions.fromJson(json['options']),
+        options = TextComponentOptions.fromJson(json['options']),
         required = json['required'],
         type = FormType.integer;
+
+  @override
+  final String property;
+  @override
+  int value;
+  @override
+  final TextComponentOptions options;
+
+  @override
+  final bool required;
+
+  @override
+  final FormType type;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -37,30 +42,4 @@ class FormComponentNumber extends FormComponent<int, int> {
 
   @override
   int get schemaValue => value;
-}
-
-class NumberComponentOptions extends FormComponentOptions<FormComponentNumber> {
-  final bool multi;
-  final String placeholder;
-  final String description;
-  final String label;
-
-  NumberComponentOptions(
-      {this.multi = false,
-      this.placeholder = '',
-      this.description = '',
-      this.label});
-
-  NumberComponentOptions.fromJson(Map<String, dynamic> json)
-      : multi = json['multi'],
-        placeholder = json['placeholder'],
-        description = json['description'],
-        label = json['label'];
-
-  Map<String, dynamic> toJson() => {
-        'multi': multi,
-        'placeholder': placeholder,
-        'description': description,
-        'label': label
-      };
 }

@@ -1,13 +1,11 @@
 part of active_grid_model;
 
+/// Model for FormData
 class FormData {
-  final String title;
-  final List<FormComponent> components;
-  final List<FormAction> actions;
-  final dynamic schema;
-
+  /// Creates a FormData Object
   FormData(this.title, this.components, this.actions, this.schema);
 
+  /// Deserializes [json] into a FormData Object
   FormData.fromJson(Map<String, dynamic> json)
       : title = json['title'],
         components = (json['components'] as List)
@@ -19,6 +17,21 @@ class FormData {
             .toList(), //json['actions'],
         schema = json['schema'];
 
+  /// Title of the Form
+  final String title;
+
+  /// List of [FormComponent] represented in the Form
+  final List<FormComponent> components;
+
+  /// List of [FormActions] available for this Form
+  final List<FormAction> actions;
+
+  /// Schema currently used to deserialize [components]
+  ///
+  /// In the Future this might be used to verify calls even more
+  final dynamic schema;
+
+  /// Serializes [FormData] to json
   Map<String, dynamic> toJson() => {
         'title': title,
         'components': components.map((e) => e.toJson()),
@@ -31,6 +44,7 @@ class FormData {
     return 'FormData(${toJson()})';
   }
 
+  /// Creates a [Map] used to send this data back to a server
   Map<String, dynamic> toRequestObject() {
     return Map.fromEntries(components.map((component) {
       return MapEntry(component.property, component.schemaValue);

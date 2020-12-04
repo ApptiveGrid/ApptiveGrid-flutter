@@ -8,5 +8,6 @@ part 'model/component/form_component_date_time.dart';
 part 'model/component/form_component_text.dart';
 part 'model/component/form_component_number.dart';
 part 'model/component/form_component_date.dart';
+part 'model/component/options.dart';
 part 'model/form_data.dart';
 part 'model/form_actions.dart';
