@@ -1,29 +1,8 @@
-# README #
+# Flutter Active Grid #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+A collection of Flutter Packages to integrate ActiveGrid into Flutter Apps.
 
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+| Package | Description |
+| ------- | ----------- |
+| [active_grid_core](active_grid_core) | Core Package for general functionalities. This includes all Network Calls, Models, etc. |
+| [active_grid_form](active_grid_form) | Display ActiveGrid Forms in an app and send data |
