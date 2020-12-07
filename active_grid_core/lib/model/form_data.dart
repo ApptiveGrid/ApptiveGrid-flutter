@@ -56,7 +56,7 @@ class FormData {
     return other is FormData &&
         title == other.title &&
         schema == other.schema &&
-        listEquals(actions, other.actions) &&
-        listEquals(components, other.components);
+        f.listEquals(actions, other.actions) &&
+        f.listEquals(components, other.components);
   }
 }
