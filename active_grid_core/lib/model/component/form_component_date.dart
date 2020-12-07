@@ -49,5 +49,5 @@ class FormComponentDate extends FormComponent<DateTime, String> {
   }
 
   @override
-  String get schemaValue => _dateFormat.format(value);
+  String get schemaValue => value != null ? _dateFormat.format(value) : null;
 }

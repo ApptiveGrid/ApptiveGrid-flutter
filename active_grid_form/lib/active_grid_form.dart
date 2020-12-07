@@ -1,7 +1,5 @@
 library active_grid_form;
 
-import 'dart:convert';
-
 import 'package:active_grid_core/active_grid_model.dart';
 import 'package:active_grid_core/active_grid_network.dart';
 import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';

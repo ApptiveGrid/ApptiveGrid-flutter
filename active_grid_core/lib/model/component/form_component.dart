@@ -67,8 +67,8 @@ abstract class FormComponent<T, R> {
       case 'boolean':
         return FormComponentCheckBox.fromJson(json);
       default:
-        return throw ArgumentError(
-            'No FormComponent found for $schemaType with format $format found.');
+        throw ArgumentError(
+            'No FormComponent found for SchemaType($schemaType) with format $format found.');
     }
   }
 

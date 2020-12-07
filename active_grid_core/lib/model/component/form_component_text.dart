@@ -40,5 +40,5 @@ class FormComponentText extends FormComponent<String, String> {
       };
 
   @override
-  String get schemaValue => value ?? '';
+  String get schemaValue => value;
 }
