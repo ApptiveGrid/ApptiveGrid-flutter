@@ -21,4 +21,14 @@ class FormAction {
         'uri': uri,
         'method': method,
       };
+
+  @override
+  String toString() {
+    return 'FormAction(uri: $uri, method: $method)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FormAction && uri == other.uri && method == other.method;
+  }
 }

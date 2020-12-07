@@ -87,4 +87,19 @@ void main() {
       ]);
     });
   });
+
+  group('Serializing', () {
+    test('toJson -> fromJson -> equals', () {
+      final action = FormAction('/uri', 'POST');
+      final schema = response['schema'];
+      final component = FormComponentNumber(
+          type: FormType.integer,
+          options: TextComponentOptions(),
+          property: 'NumberC');
+
+      final formData = FormData(title, [component], [action], schema);
+
+      expect(FormData.fromJson(formData.toJson()), formData);
+    });
+  });
 }

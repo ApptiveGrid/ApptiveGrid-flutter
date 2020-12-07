@@ -18,4 +18,15 @@ void main() {
       expect(action.method, method);
     });
   });
+
+  group('Serializing', () {
+    test('toJson -> fromJson -> equals', () {
+      final uri = '/api/a/3ojhtqiltc0kiylfp8nddmxmk';
+      final method = 'POST';
+
+      final action = FormAction(uri, method);
+
+      expect(FormAction.fromJson(action.toJson()), action);
+    });
+  });
 }
