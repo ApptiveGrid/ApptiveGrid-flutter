@@ -54,9 +54,9 @@ class FormData {
   @override
   bool operator ==(Object other) {
     return other is FormData &&
-    title == other.title &&
-    schema == other.schema &&
-    listEquals(actions, other.actions) &&
+        title == other.title &&
+        schema == other.schema &&
+        listEquals(actions, other.actions) &&
         listEquals(components, other.components);
   }
 }
