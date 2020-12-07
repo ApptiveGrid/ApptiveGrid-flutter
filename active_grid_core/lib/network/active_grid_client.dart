@@ -2,9 +2,15 @@ part of active_grid_network;
 
 /// Api Client to communicate with the ActiveGrid Backend
 class ActiveGridClient {
-  /// Creates a ApiClient
+  /// Creates an ApiClient
   ActiveGridClient({this.environment = ActiveGridEnvironment.production})
       : _client = http.Client();
+
+  /// Creates an Api Client on the Basis of a [http.Client]
+  ///
+  /// this should only be used for testing in order to pass in a Mocked [http.Client]
+  @visibleForTesting
+  ActiveGridClient.fromClient(http.Client httpClient) : _client = httpClient, environment = ActiveGridEnvironment.production;
 
   /// Current Environment the Api is connecting to
   ActiveGridEnvironment environment;
@@ -29,6 +35,11 @@ class ActiveGridClient {
     final uri = Uri.parse('${environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
+    print('''Doing Request soon:
+    uri: $uri
+    request: $request
+    body: ${request.body}
+    ''');
     final response = await _client.send(request);
     return http.Response.fromStream(response);
   }
