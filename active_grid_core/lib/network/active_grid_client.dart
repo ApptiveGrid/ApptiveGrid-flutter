@@ -37,11 +37,6 @@ class ActiveGridClient {
     final uri = Uri.parse('${environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
-    print('''Doing Request soon:
-    uri: $uri
-    request: $request
-    body: ${request.body}
-    ''');
     final response = await _client.send(request);
     return http.Response.fromStream(response);
   }

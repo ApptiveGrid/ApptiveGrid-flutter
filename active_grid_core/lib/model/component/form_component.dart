@@ -40,6 +40,28 @@ abstract class FormComponent<T, R> {
   /// Type of the component
   FormType get type;
 
+  /// Saves this into a [Map] that can be encoded using [json.encode]
+  Map<String, dynamic> toJson() => {
+        'property': property,
+        'value': schemaValue,
+        'options': options.toJson(),
+        'required': required,
+        'type': type,
+      };
+
+  /// Value to be used when sending this back to the Serve
+  R get schemaValue;
+
+  @override
+  bool operator ==(Object other) {
+    return other is FormComponent<T, R> &&
+        property == other.property &&
+        value == other.value &&
+        options == other.options &&
+        required == other.required &&
+        type == other.type;
+  }
+
   /// Mapping to a concrete implementation based on [json] and [schema]
   ///
   /// Throws an [ArgumentError] if not matching implementation is found.
@@ -71,10 +93,4 @@ abstract class FormComponent<T, R> {
             'No FormComponent found for SchemaType($schemaType) with format $format found.');
     }
   }
-
-  /// Saves this into a [Map] that can be encoded using [json.encode]
-  Map<String, dynamic> toJson();
-
-  /// Value to be used when sending this back to the Server
-  R get schemaValue;
 }

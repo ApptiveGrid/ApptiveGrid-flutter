@@ -1,7 +1,10 @@
 part of active_grid_model;
 
 /// Abstract class for additional options for a [FormComponent]
-abstract class FormComponentOptions {}
+abstract class FormComponentOptions {
+  /// Serializes [FormComponentOptions] to json
+  Map<String, dynamic> toJson();
+}
 
 /// [FormComponentOptions] without any content
 class StubComponentOptions extends FormComponentOptions {
@@ -9,7 +12,13 @@ class StubComponentOptions extends FormComponentOptions {
   StubComponentOptions.fromJson(Map<String, dynamic> json);
 
   /// Serializes [StubComponentOptions] to json
+  @override
   Map<String, dynamic> toJson() => {};
+
+  @override
+  bool operator ==(Object other) {
+    return other is StubComponentOptions;
+  }
 }
 
 /// [FormComponentOptions] for Text Based Components
@@ -41,10 +50,20 @@ class TextComponentOptions extends FormComponentOptions {
   final String label;
 
   /// Serializes [TextComponentOptions] to json
+  @override
   Map<String, dynamic> toJson() => {
         'multi': multi,
         'placeholder': placeholder,
         'description': description,
         'label': label
       };
+
+  @override
+  bool operator ==(Object other) {
+    return other is TextComponentOptions &&
+        multi == other.multi &&
+        placeholder == other.placeholder &&
+        description == other.description &&
+        label == other.label;
+  }
 }
