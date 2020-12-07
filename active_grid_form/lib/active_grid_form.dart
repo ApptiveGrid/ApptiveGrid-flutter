@@ -107,7 +107,6 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
 
   Future _performAction(FormAction action) async {
     if (_formKey.currentState.validate()) {
-      print(jsonEncode(_formData.toRequestObject()));
       await _client.performAction(action, _formData).then((response) {
         if (response.statusCode < 400) {
           print('Perform Action Successful');

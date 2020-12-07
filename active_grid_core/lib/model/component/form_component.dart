@@ -19,6 +19,9 @@ enum FormType {
 }
 
 /// Data Object that represents a entry in a Form
+///
+/// [T] is the type used internally (e.g. [DateTime] for [FormType.dateTime]
+/// [R] is the type expected by the backend when sending back data
 abstract class FormComponent<T, R> {
   /// Name of the Component
   String get property;
