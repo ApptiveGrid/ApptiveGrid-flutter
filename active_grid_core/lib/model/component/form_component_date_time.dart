@@ -13,7 +13,7 @@ class FormComponentDateTime extends FormComponent<DateTime, String> {
   /// Deserializes [json] into a [FormComponent]
   FormComponentDateTime.fromJson(Map<String, dynamic> json)
       : property = json['property'],
-        value = _parse(json['value'].toString()),
+        value = _parse(json['value']),
         options = StubComponentOptions.fromJson(json['options']),
         required = json['required'],
         type = FormType.dateTime;
@@ -39,7 +39,7 @@ class FormComponentDateTime extends FormComponent<DateTime, String> {
       };
 
   static DateTime _parse(String json) {
-    if (json == 'nil' || json == 'null') {
+    if (json == null) {
       return null;
     } else {
       return DateTime.parse(json);

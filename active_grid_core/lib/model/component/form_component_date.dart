@@ -13,7 +13,7 @@ class FormComponentDate extends FormComponent<DateTime, String> {
   /// Deserializes [json] into a [FormComponent]
   FormComponentDate.fromJson(Map<String, dynamic> json)
       : property = json['property'],
-        value = _parse(json['value'].toString()),
+        value = _parse(json['value']),
         options = StubComponentOptions.fromJson(json['options']),
         required = json['required'],
         type = FormType.date;
@@ -38,14 +38,16 @@ class FormComponentDate extends FormComponent<DateTime, String> {
         'type': type,
       };
 
+  static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
+
   static DateTime _parse(String json) {
-    if (json == 'nil') {
+    if (json == null) {
       return null;
     } else {
-      return DateTime.parse(json);
+      return _dateFormat.parse(json);
     }
   }
 
   @override
-  String get schemaValue => value?.toIso8601String();
+  String get schemaValue => _dateFormat.format(value);
 }

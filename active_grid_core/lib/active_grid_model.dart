@@ -1,6 +1,7 @@
 library active_grid_model;
 
 import 'package:flutter/foundation.dart' as f;
+import 'package:intl/intl.dart';
 
 part 'model/component/form_component.dart';
 part 'model/component/form_component_check_box.dart';
