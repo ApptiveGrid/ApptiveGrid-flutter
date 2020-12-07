@@ -10,7 +10,9 @@ class ActiveGridClient {
   ///
   /// this should only be used for testing in order to pass in a Mocked [http.Client]
   @visibleForTesting
-  ActiveGridClient.fromClient(http.Client httpClient) : _client = httpClient, environment = ActiveGridEnvironment.production;
+  ActiveGridClient.fromClient(http.Client httpClient)
+      : _client = httpClient,
+        environment = ActiveGridEnvironment.production;
 
   /// Current Environment the Api is connecting to
   ActiveGridEnvironment environment;

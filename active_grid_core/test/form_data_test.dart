@@ -7,31 +7,16 @@ void main() {
     'schema': {
       'type': 'object',
       'properties': {
-        'TextC': {
-          'type': 'string'
-        },
-        'NumberC': {
-          'type': 'integer'
-        },
-        'DateTimeC': {
-          'type': 'string',
-          'format': 'date-time'
-        },
-        'DateC': {
-          'type': 'string',
-          'format': 'date'
-        },
-        'CheckmarkC': {
-          'type': 'boolean'
-        }
+        'TextC': {'type': 'string'},
+        'NumberC': {'type': 'integer'},
+        'DateTimeC': {'type': 'string', 'format': 'date-time'},
+        'DateC': {'type': 'string', 'format': 'date'},
+        'CheckmarkC': {'type': 'boolean'}
       },
       'required': []
     },
     'actions': [
-      {
-        'uri': '/api/a/3ojhtqiltc0kiylfp8nddmxmk',
-        'method': 'POST'
-      }
+      {'uri': '/api/a/3ojhtqiltc0kiylfp8nddmxmk', 'method': 'POST'}
     ],
     'components': [
       {
@@ -82,17 +67,17 @@ void main() {
     ],
     'title': title
   };
-  
+
   group('Parsing', () {
     test('Successful', () {
       final formData = FormData.fromJson(response);
-      
+
       expect(formData.title, title);
-      
+
       expect(formData.actions.length, 1);
-      
+
       expect(formData.components.length, 5);
-      
+
       expect(formData.components.map((e) => e.runtimeType).toList(), [
         FormComponentText,
         FormComponentNumber,

@@ -2,7 +2,7 @@ import 'package:active_grid_core/active_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('Parsing',() {
+  group('Parsing', () {
     test('Successful Parse', () {
       final uri = '/api/a/3ojhtqiltc0kiylfp8nddmxmk';
       final method = 'POST';
