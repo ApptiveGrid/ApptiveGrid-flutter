@@ -20,7 +20,7 @@ class ActiveGridForm extends StatefulWidget {
     this.titleStyle,
     this.contentPadding,
     this.titlePadding,
-    this.hideTitle,
+    this.hideTitle = false,
   }) : super(key: key);
 
   /// Id of the Form to display
