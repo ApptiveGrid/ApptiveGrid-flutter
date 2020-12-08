@@ -8,6 +8,9 @@ abstract class FormComponentOptions {
 
 /// [FormComponentOptions] without any content
 class StubComponentOptions extends FormComponentOptions {
+  /// Creates Options
+  StubComponentOptions();
+
   /// Deserializes [json] into [StubComponentOptions]
   StubComponentOptions.fromJson(Map<String, dynamic> json);
 
