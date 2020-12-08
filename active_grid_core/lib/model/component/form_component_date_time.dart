@@ -29,15 +29,6 @@ class FormComponentDateTime extends FormComponent<DateTime, String> {
   @override
   final FormType type;
 
-  @override
-  Map<String, dynamic> toJson() => {
-        'property': property,
-        'value': value,
-        'options': options.toJson(),
-        'required': required,
-        'type': type,
-      };
-
   static DateTime _parse(String json) {
     if (json == null) {
       return null;

@@ -2,9 +2,17 @@ part of active_grid_network;
 
 /// Api Client to communicate with the ActiveGrid Backend
 class ActiveGridClient {
-  /// Creates a ApiClient
+  /// Creates an ApiClient
   ActiveGridClient({this.environment = ActiveGridEnvironment.production})
       : _client = http.Client();
+
+  /// Creates an Api Client on the Basis of a [http.Client]
+  ///
+  /// this should only be used for testing in order to pass in a Mocked [http.Client]
+  @visibleForTesting
+  ActiveGridClient.fromClient(http.Client httpClient)
+      : _client = httpClient,
+        environment = ActiveGridEnvironment.production;
 
   /// Current Environment the Api is connecting to
   ActiveGridEnvironment environment;

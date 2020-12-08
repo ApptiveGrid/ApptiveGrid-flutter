@@ -32,14 +32,5 @@ class FormComponentCheckBox extends FormComponent<bool, bool> {
   final FormType type;
 
   @override
-  Map<String, dynamic> toJson() => {
-        'property': property,
-        'value': value,
-        'options': options.toJson(),
-        'required': required,
-        'type': type,
-      };
-
-  @override
   bool get schemaValue => value;
 }

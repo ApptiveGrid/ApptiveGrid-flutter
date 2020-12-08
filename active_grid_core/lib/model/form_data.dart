@@ -34,8 +34,8 @@ class FormData {
   /// Serializes [FormData] to json
   Map<String, dynamic> toJson() => {
         'title': title,
-        'components': components.map((e) => e.toJson()),
-        'actions': actions.map((e) => e.toJson()),
+        'components': components.map((e) => e.toJson()).toList(),
+        'actions': actions.map((e) => e.toJson()).toList(),
         'schema': schema,
       };
 
@@ -48,6 +48,15 @@ class FormData {
   Map<String, dynamic> toRequestObject() {
     return Map.fromEntries(components.map((component) {
       return MapEntry(component.property, component.schemaValue);
-    }));
+    }).where((element) => element.value != null));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FormData &&
+        title == other.title &&
+        schema == other.schema &&
+        f.listEquals(actions, other.actions) &&
+        f.listEquals(components, other.components);
   }
 }

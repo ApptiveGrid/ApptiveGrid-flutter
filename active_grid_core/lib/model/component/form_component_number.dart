@@ -32,14 +32,5 @@ class FormComponentNumber extends FormComponent<int, int> {
   final FormType type;
 
   @override
-  Map<String, dynamic> toJson() => {
-        'property': property,
-        'value': value,
-        'options': options.toJson(),
-        'required': required,
-        'type': type,
-      };
-
-  @override
   int get schemaValue => value;
 }

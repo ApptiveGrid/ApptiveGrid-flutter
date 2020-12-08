@@ -17,6 +17,7 @@ class FormComponentText extends FormComponent<String, String> {
         options = TextComponentOptions.fromJson(json['options']),
         required = json['required'],
         type = FormType.text;
+
   @override
   final String property;
   @override
@@ -31,14 +32,5 @@ class FormComponentText extends FormComponent<String, String> {
   final FormType type;
 
   @override
-  Map<String, dynamic> toJson() => {
-        'property': property,
-        'value': value,
-        'options': options.toJson(),
-        'required': required,
-        'type': type,
-      };
-
-  @override
-  String get schemaValue => value ?? '';
+  String get schemaValue => value;
 }
