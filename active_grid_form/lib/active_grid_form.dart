@@ -70,7 +70,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
             // Title
             if (index == 0) {
               if (widget.hideTitle) {
-                return Container();
+                return const SizedBox();
               } else {
                 return Padding(
                   padding: widget.titlePadding ??
