@@ -35,7 +35,7 @@ class ActiveGridForm extends StatefulWidget {
   /// Padding for the title. If no Padding is provided the [contentPadding] is used
   final EdgeInsets titlePadding;
 
-  /// Flag to display form title
+  /// Flag to hide the form title, default is false
   final bool hideTitle;
 
   @override
