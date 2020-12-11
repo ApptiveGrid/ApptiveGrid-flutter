@@ -16,13 +16,14 @@ class FormComponentDate extends StatefulWidget {
 
 class _FormComponentDateState extends State<FormComponentDate> {
   final TextEditingController _controller = TextEditingController();
+  final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
 
   @override
   Widget build(
     BuildContext context,
   ) {
+    final dateFormat = DateFormat.yMd();
     if (widget.component.value != null) {
-      final dateFormat = DateFormat.yMd();
       final dateString = dateFormat.format(widget.component.value);
       _controller.text = dateString;
     }
@@ -35,12 +36,18 @@ class _FormComponentDateState extends State<FormComponentDate> {
           firstDate: DateTime.fromMillisecondsSinceEpoch(0),
           lastDate: DateTime.fromMillisecondsSinceEpoch(
               Duration(days: 100000000).inMilliseconds),
-        ).then((value) => setState(() {
+        ).then((value) {
+          if (value != null) {
+            _formKey.currentState.didChange(dateFormat.format(value));
+            setState(() {
               widget.component.value = value;
-            }));
+            });
+          }
+        });
       },
       child: AbsorbPointer(
         child: TextFormField(
+          key: _formKey,
           controller: _controller,
           validator: (input) {
             if (widget.component.required && (input == null || input.isEmpty)) {

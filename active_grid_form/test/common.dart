@@ -23,7 +23,7 @@ class TestApp extends StatelessWidget {
       child: MaterialApp(
         home: Builder(
           builder: (context) {
-            return child;
+            return Material(child: child);
           },
         ),
       ),
