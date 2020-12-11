@@ -5,9 +5,13 @@ import 'package:mockito/mockito.dart';
 
 class MockActiveGridClient extends Mock implements ActiveGridClient {}
 
-
 class TestApp extends StatelessWidget {
-  const TestApp({Key key, this.client, this.child, this.options = const ActiveGridOptions()}) : super(key: key);
+  const TestApp(
+      {Key key,
+      this.client,
+      this.child,
+      this.options = const ActiveGridOptions()})
+      : super(key: key);
 
   final Widget child;
 

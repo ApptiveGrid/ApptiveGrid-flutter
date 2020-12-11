@@ -11,14 +11,15 @@ class ActiveGrid extends StatefulWidget {
   /// Creates Active Grid
   const ActiveGrid(
       {Key key, this.child, this.options = const ActiveGridOptions()})
-      : client = null, super(key: key);
+      : client = null,
+        super(key: key);
 
   /// Creates ActiveGrid with an defined ActiveGridClient
   ///
   /// Used testing to Provide a MockedClient
   @visibleForTesting
   ActiveGrid.withClient({ActiveGridClient client, this.child, this.options})
-  : client = client;
+      : client = client;
 
   /// Widget that should be wrapped. Normally this is something like [MaterialApp]
   final Widget child;
@@ -42,7 +43,8 @@ class _ActiveGridState extends State<ActiveGrid> {
   @override
   void initState() {
     super.initState();
-    _client = widget.client ?? ActiveGridClient(environment: widget.options.environment);
+    _client = widget.client ??
+        ActiveGridClient(environment: widget.options.environment);
   }
 
   @override

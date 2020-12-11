@@ -36,8 +36,10 @@ void main() {
       );
 
       final completer = Completer<model.FormData>();
-      when(client.loadForm(formId: anyNamed('formId'))).thenAnswer((_) async => formData);
-      when(client.performAction(action, any)).thenAnswer((realInvocation) async {
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
+      when(client.performAction(action, any))
+          .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
       });
@@ -78,8 +80,9 @@ void main() {
           formId: 'formId',
         ),
       );
-      
-      when(client.loadForm(formId: anyNamed('formId'))).thenAnswer((_) async => formData);
+
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -119,8 +122,10 @@ void main() {
       );
 
       final completer = Completer<model.FormData>();
-      when(client.loadForm(formId: anyNamed('formId'))).thenAnswer((_) async => formData);
-      when(client.performAction(action, any)).thenAnswer((realInvocation) async {
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
+      when(client.performAction(action, any))
+          .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
       });
@@ -133,10 +138,14 @@ void main() {
 
       expect(find.byType(FormComponentDateTime), findsOneWidget);
 
-      await tester.tap(find.text('Date'),);
+      await tester.tap(
+        find.text('Date'),
+      );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('OK'),);
+      await tester.tap(
+        find.text('OK'),
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.byType(ActionButton));
@@ -170,8 +179,10 @@ void main() {
       );
 
       final completer = Completer<model.FormData>();
-      when(client.loadForm(formId: anyNamed('formId'))).thenAnswer((_) async => formData);
-      when(client.performAction(action, any)).thenAnswer((realInvocation) async {
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
+      when(client.performAction(action, any))
+          .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
       });
@@ -184,17 +195,25 @@ void main() {
 
       expect(find.byType(FormComponentDateTime), findsOneWidget);
 
-      await tester.tap(find.text('Time'),);
+      await tester.tap(
+        find.text('Time'),
+      );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('OK'),);
+      await tester.tap(
+        find.text('OK'),
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      final result = await completer.future.then((data) => data.components.first.value as DateTime);
-      expect(DateTime(result.year, result.month, result.day, result.hour, result.minute), date);
+      final result = await completer.future
+          .then((data) => data.components.first.value as DateTime);
+      expect(
+          DateTime(result.year, result.month, result.day, result.hour,
+              result.minute),
+          date);
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -220,7 +239,8 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: anyNamed('formId'))).thenAnswer((_) async => formData);
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -260,8 +280,10 @@ void main() {
       );
 
       final completer = Completer<model.FormData>();
-      when(client.loadForm(formId: anyNamed('formId'))).thenAnswer((_) async => formData);
-      when(client.performAction(action, any)).thenAnswer((realInvocation) async {
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
+      when(client.performAction(action, any))
+          .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
       });
@@ -274,10 +296,14 @@ void main() {
 
       expect(find.byType(FormComponentDate), findsOneWidget);
 
-      await tester.tap(find.byType(FormComponentDate),);
+      await tester.tap(
+        find.byType(FormComponentDate),
+      );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('OK'),);
+      await tester.tap(
+        find.text('OK'),
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.byType(ActionButton));
@@ -310,7 +336,8 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: anyNamed('formId'))).thenAnswer((_) async => formData);
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -350,8 +377,10 @@ void main() {
       );
 
       final completer = Completer<model.FormData>();
-      when(client.loadForm(formId: anyNamed('formId'))).thenAnswer((_) async => formData);
-      when(client.performAction(action, any)).thenAnswer((realInvocation) async {
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
+      when(client.performAction(action, any))
+          .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
       });
@@ -393,7 +422,8 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: anyNamed('formId'))).thenAnswer((_) async => formData);
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -433,8 +463,10 @@ void main() {
       );
 
       final completer = Completer<model.FormData>();
-      when(client.loadForm(formId: anyNamed('formId'))).thenAnswer((_) async => formData);
-      when(client.performAction(action, any)).thenAnswer((realInvocation) async {
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
+      when(client.performAction(action, any))
+          .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
       });
@@ -476,7 +508,8 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: anyNamed('formId'))).thenAnswer((_) async => formData);
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();

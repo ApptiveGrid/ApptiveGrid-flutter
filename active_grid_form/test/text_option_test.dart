@@ -10,12 +10,14 @@ void main() {
       final property = 'Property';
       final component = model.FormComponentText(
         property: property,
-        options: model.TextComponentOptions(
-
-        ),
+        options: model.TextComponentOptions(),
         type: model.FormType.text,
       );
-      final target = TestApp(child: FormComponentText(component: component,),);
+      final target = TestApp(
+        child: FormComponentText(
+          component: component,
+        ),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -33,7 +35,11 @@ void main() {
         ),
         type: model.FormType.text,
       );
-      final target = TestApp(child: FormComponentText(component: component,),);
+      final target = TestApp(
+        child: FormComponentText(
+          component: component,
+        ),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -47,12 +53,14 @@ void main() {
       final property = 'Property';
       final component = model.FormComponentNumber(
         property: property,
-        options: model.TextComponentOptions(
-
-        ),
+        options: model.TextComponentOptions(),
         type: model.FormType.integer,
       );
-      final target = TestApp(child: FormComponentNumber(component: component,),);
+      final target = TestApp(
+        child: FormComponentNumber(
+          component: component,
+        ),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -70,7 +78,11 @@ void main() {
         ),
         type: model.FormType.integer,
       );
-      final target = TestApp(child: FormComponentNumber(component: component,),);
+      final target = TestApp(
+        child: FormComponentNumber(
+          component: component,
+        ),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();

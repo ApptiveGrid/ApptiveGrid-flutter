@@ -112,7 +112,13 @@ void main() {
 
       final formData = FormData.fromJson(response);
 
-      expect(schema.validateWithErrors(jsonEncode(formData.toRequestObject(),), parseJson: true), []);
+      expect(
+          schema.validateWithErrors(
+              jsonEncode(
+                formData.toRequestObject(),
+              ),
+              parseJson: true),
+          []);
     });
   });
 }
