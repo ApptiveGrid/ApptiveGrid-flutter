@@ -9,6 +9,7 @@ environment:
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
+  lottie: ^0.7.0+1
   flutter:
     sdk: flutter
 
@@ -22,3 +23,5 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  assets:
+    - assets/
