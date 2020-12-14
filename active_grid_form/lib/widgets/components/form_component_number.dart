@@ -39,7 +39,7 @@ class _FormComponentNumberState extends State<FormComponentNumber> {
     return TextFormField(
       controller: _controller,
       validator: (input) {
-        if (widget.component.required && input == null) {
+        if (widget.component.required && (input == null || input.isEmpty)) {
           // TODO: Make this Message configurable
           return '${widget.component.property} is required';
         } else {

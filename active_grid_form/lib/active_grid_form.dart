@@ -20,6 +20,7 @@ class ActiveGridForm extends StatefulWidget {
     this.titleStyle,
     this.contentPadding,
     this.titlePadding,
+    this.hideTitle = false,
   }) : super(key: key);
 
   /// Id of the Form to display
@@ -33,6 +34,9 @@ class ActiveGridForm extends StatefulWidget {
 
   /// Padding for the title. If no Padding is provided the [contentPadding] is used
   final EdgeInsets titlePadding;
+
+  /// Flag to hide the form title, default is false
+  final bool hideTitle;
 
   @override
   _ActiveGridFormState createState() => _ActiveGridFormState();
@@ -65,16 +69,20 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
           itemBuilder: (context, index) {
             // Title
             if (index == 0) {
-              return Padding(
-                padding: widget.titlePadding ??
-                    widget.contentPadding ??
-                    _defaultPadding,
-                child: Text(
-                  _formData.title,
-                  style: widget.titleStyle ??
-                      Theme.of(context).textTheme.headline5,
-                ),
-              );
+              if (widget.hideTitle) {
+                return const SizedBox();
+              } else {
+                return Padding(
+                  padding: widget.titlePadding ??
+                      widget.contentPadding ??
+                      _defaultPadding,
+                  child: Text(
+                    _formData.title,
+                    style: widget.titleStyle ??
+                        Theme.of(context).textTheme.headline5,
+                  ),
+                );
+              }
             } else if (index < _formData.components.length + 1) {
               final componentIndex = index - 1;
               return Padding(
