@@ -122,10 +122,8 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
   }
 
   Widget _buildSuccess(BuildContext context) {
-    return Padding(
+    return ListView(
       padding: const EdgeInsets.all(32.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AspectRatio(
               aspectRatio: 1,
@@ -151,15 +149,12 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
                 child: Text('Send Additional Answer')),
           )
         ],
-      ),
     );
   }
 
   Widget _buildError(BuildContext context) {
-    return Padding(
+    return ListView(
       padding: const EdgeInsets.all(32.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AspectRatio(
               aspectRatio: 1,
@@ -186,7 +181,6 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
                 child: Text('Back to Form')),
           )
         ],
-      ),
     );
   }
 
