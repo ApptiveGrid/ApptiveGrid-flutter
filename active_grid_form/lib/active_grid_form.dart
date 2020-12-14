@@ -210,9 +210,9 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
 
   void _performAction(FormAction action) {
     if (_formKey.currentState.validate()) {
-      _client.performAction(action, _formData).then((response) {
+      _client.performAction(action, _formData).then((response) async {
         if (response.statusCode < 400) {
-          if (widget.onActionSuccess?.call(action) ?? true) {
+          if (await widget.onActionSuccess?.call(action) ?? true) {
             setState(() {
               _success = true;
             });
@@ -227,7 +227,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
   }
 
   void _onError(dynamic error) async {
-    if (widget.onError?.call(error) ?? true) {
+    if (await widget.onError?.call(error) ?? true) {
       setState(() {
         _error = error;
       });
