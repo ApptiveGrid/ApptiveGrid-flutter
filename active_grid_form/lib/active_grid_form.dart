@@ -1,5 +1,7 @@
 library active_grid_form;
 
+import 'dart:async';
+
 import 'package:active_grid_core/active_grid_model.dart';
 import 'package:active_grid_core/active_grid_network.dart';
 import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
@@ -51,6 +53,8 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
 
   bool _success = false;
 
+  dynamic _error;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -60,10 +64,12 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
 
   @override
   Widget build(BuildContext context) {
-    if (_formData == null) {
-      return _buildLoading(context);
+    if (_error != null) {
+      return _buildError(context);
     } else if (_success) {
       return _buildSuccess(context);
+    } else if (_formData == null) {
+      return _buildLoading(context);
     } else {
       return _buildForm(context);
     }
@@ -138,6 +144,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
                   _loadForm();
                   setState(() {
                     _success = false;
+                    _error = null;
                     _formData = null;
                   });
                 },
@@ -148,12 +155,50 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
     );
   }
 
+  Widget _buildError(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AspectRatio(
+              aspectRatio: 1,
+              child: Lottie.asset(
+                'packages/active_grid_form/assets/error.json',
+                repeat: false,
+              )),
+          Text(
+            'OOps! - Error',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headline4,
+          ),
+          Center(
+            child: FlatButton(
+                onPressed: () {
+                  if (_formData == null) {
+                    _loadForm();
+                  }
+                  setState(() {
+                    _success = false;
+                    _error = null;
+                  });
+                },
+                child: Text('Back to Form')),
+          )
+        ],
+      ),
+    );
+  }
+
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
-  Future _loadForm() async {
-    final data = await _client.loadForm(formId: widget.formId);
-    setState(() {
-      _formData = data;
+  void _loadForm() {
+    _client.loadForm(formId: widget.formId).then((value) {
+      setState(() {
+        _formData = value;
+      });
+    }).catchError((error) {
+      _onError(error);
     });
   }
 
@@ -161,14 +206,21 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
     if (_formKey.currentState.validate()) {
       await _client.performAction(action, _formData).then((response) {
         if (response.statusCode < 400) {
-          print('Perform Action Successful');
           setState(() {
             _success = true;
           });
         } else {
-          print('Error performing Request ${response.body}');
+          _onError(response);
         }
+      }).catchError((error) {
+        _onError(error);
       });
     }
+  }
+
+  void _onError(dynamic error) {
+    setState(() {
+      _error = error;
+    });
   }
 }
