@@ -1,7 +1,5 @@
 library active_grid_form;
 
-import 'dart:async';
-
 import 'package:active_grid_core/active_grid_model.dart';
 import 'package:active_grid_core/active_grid_network.dart';
 import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
@@ -124,63 +122,63 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
   Widget _buildSuccess(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(32.0),
-        children: [
-          AspectRatio(
-              aspectRatio: 1,
-              child: Lottie.asset(
-                'packages/active_grid_form/assets/success.json',
-                repeat: false,
-              )),
-          Text(
-            'Thank You!',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline4,
-          ),
-          Center(
-            child: FlatButton(
-                onPressed: () {
-                  _loadForm();
-                  setState(() {
-                    _success = false;
-                    _error = null;
-                    _formData = null;
-                  });
-                },
-                child: Text('Send Additional Answer')),
-          )
-        ],
+      children: [
+        AspectRatio(
+            aspectRatio: 1,
+            child: Lottie.asset(
+              'packages/active_grid_form/assets/success.json',
+              repeat: false,
+            )),
+        Text(
+          'Thank You!',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        Center(
+          child: FlatButton(
+              onPressed: () {
+                _loadForm();
+                setState(() {
+                  _success = false;
+                  _error = null;
+                  _formData = null;
+                });
+              },
+              child: Text('Send Additional Answer')),
+        )
+      ],
     );
   }
 
   Widget _buildError(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(32.0),
-        children: [
-          AspectRatio(
-              aspectRatio: 1,
-              child: Lottie.asset(
-                'packages/active_grid_form/assets/error.json',
-                repeat: false,
-              )),
-          Text(
-            'OOps! - Error',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline4,
-          ),
-          Center(
-            child: FlatButton(
-                onPressed: () {
-                  if (_formData == null) {
-                    _loadForm();
-                  }
-                  setState(() {
-                    _success = false;
-                    _error = null;
-                  });
-                },
-                child: Text('Back to Form')),
-          )
-        ],
+      children: [
+        AspectRatio(
+            aspectRatio: 1,
+            child: Lottie.asset(
+              'packages/active_grid_form/assets/error.json',
+              repeat: false,
+            )),
+        Text(
+          'Oops! - Error',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        Center(
+          child: FlatButton(
+              onPressed: () {
+                if (_formData == null) {
+                  _loadForm();
+                }
+                setState(() {
+                  _success = false;
+                  _error = null;
+                });
+              },
+              child: Text('Back to Form')),
+        )
+      ],
     );
   }
 
@@ -196,9 +194,9 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
     });
   }
 
-  Future _performAction(FormAction action) async {
+  void _performAction(FormAction action) {
     if (_formKey.currentState.validate()) {
-      await _client.performAction(action, _formData).then((response) {
+      _client.performAction(action, _formData).then((response) {
         if (response.statusCode < 400) {
           setState(() {
             _success = true;
