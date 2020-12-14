@@ -249,4 +249,60 @@ void main() {
       });
     });
   });
+
+  group('Skip Custom Builder', () {
+    testWidgets('Shows Success', (tester) async {
+      final client = MockActiveGridClient();
+      final target = TestApp(
+        client: client,
+        child: ActiveGridForm(
+          formId: 'form',
+          onActionSuccess: (action) async {
+            return false;
+          },
+        ),
+      );
+      final action = model.FormAction('uri', 'method');
+      final formData = model.FormData('Form Title', [], [action], {});
+
+      when(client.loadForm(formId: 'form'))
+          .thenAnswer((realInvocation) async => formData);
+      when(client.performAction(action, formData))
+          .thenAnswer((_) async => http.Response('', 200));
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Lottie), findsNothing);
+    });
+
+    testWidgets('Shows Error', (tester) async {
+      final client = MockActiveGridClient();
+      final target = TestApp(
+        client: client,
+        child: ActiveGridForm(
+          formId: 'form',
+          onError: (error) async {
+            return false;
+          },
+        ),
+      );
+      final action = model.FormAction('uri', 'method');
+      final formData = model.FormData('Form Title', [], [action], {});
+
+      when(client.loadForm(formId: 'form'))
+          .thenAnswer((realInvocation) async => formData);
+      when(client.performAction(action, formData))
+          .thenAnswer((_) => Future.error(''));
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Lottie), findsNothing);
+    });
+  });
 }

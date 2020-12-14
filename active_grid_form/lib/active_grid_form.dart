@@ -22,6 +22,8 @@ class ActiveGridForm extends StatefulWidget {
     this.contentPadding,
     this.titlePadding,
     this.hideTitle = false,
+    this.onActionSuccess,
+    this.onError,
   }) : super(key: key);
 
   /// Id of the Form to display
@@ -38,6 +40,18 @@ class ActiveGridForm extends StatefulWidget {
 
   /// Flag to hide the form title, default is false
   final bool hideTitle;
+
+  /// Callback after [FormAction] completes Successfully
+  ///
+  /// If this returns false the default success screen is not shown.
+  /// This functionality can be used to do a custom Widget or Transition
+  final Future<bool> Function(FormAction) onActionSuccess;
+
+  /// Callback if an Error occurs
+  ///
+  /// If this returns false the default error screen is not shown.
+  /// This functionality can be used to do a custom Widget or Transition
+  final Future<bool> Function(dynamic) onError;
 
   @override
   _ActiveGridFormState createState() => _ActiveGridFormState();
@@ -198,9 +212,11 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
     if (_formKey.currentState.validate()) {
       _client.performAction(action, _formData).then((response) {
         if (response.statusCode < 400) {
-          setState(() {
-            _success = true;
-          });
+          if (widget.onActionSuccess?.call(action) ?? true) {
+            setState(() {
+              _success = true;
+            });
+          }
         } else {
           _onError(response);
         }
@@ -210,9 +226,11 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
     }
   }
 
-  void _onError(dynamic error) {
-    setState(() {
-      _error = error;
-    });
+  void _onError(dynamic error) async {
+    if (widget.onError?.call(error) ?? true) {
+      setState(() {
+        _error = error;
+      });
+    }
   }
 }
