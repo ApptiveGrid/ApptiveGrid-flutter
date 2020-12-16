@@ -5,6 +5,7 @@ import 'package:active_grid_core/active_grid_network.dart';
 import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 /// A Widget to display a ActiveGrid Form
@@ -21,6 +22,8 @@ class ActiveGridForm extends StatefulWidget {
     this.contentPadding,
     this.titlePadding,
     this.hideTitle = false,
+    this.onActionSuccess,
+    this.onError,
   }) : super(key: key);
 
   /// Id of the Form to display
@@ -38,6 +41,18 @@ class ActiveGridForm extends StatefulWidget {
   /// Flag to hide the form title, default is false
   final bool hideTitle;
 
+  /// Callback after [FormAction] completes Successfully
+  ///
+  /// If this returns false the default success screen is not shown.
+  /// This functionality can be used to do a custom Widget or Transition
+  final Future<bool> Function(FormAction) onActionSuccess;
+
+  /// Callback if an Error occurs
+  ///
+  /// If this returns false the default error screen is not shown.
+  /// This functionality can be used to do a custom Widget or Transition
+  final Future<bool> Function(dynamic) onError;
+
   @override
   _ActiveGridFormState createState() => _ActiveGridFormState();
 }
@@ -48,6 +63,10 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
 
   final _formKey = GlobalKey<FormState>();
 
+  bool _success = false;
+
+  dynamic _error;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -57,68 +76,160 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
 
   @override
   Widget build(BuildContext context) {
-    if (_formData == null) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
+    if (_error != null) {
+      return _buildError(context);
+    } else if (_success) {
+      return _buildSuccess(context);
+    } else if (_formData == null) {
+      return _buildLoading(context);
     } else {
-      return Form(
-        key: _formKey,
-        child: ListView.builder(
-          itemCount: 1 + _formData.components.length + _formData.actions.length,
-          itemBuilder: (context, index) {
-            // Title
-            if (index == 0) {
-              if (widget.hideTitle) {
-                return const SizedBox();
-              } else {
-                return Padding(
-                  padding: widget.titlePadding ??
-                      widget.contentPadding ??
-                      _defaultPadding,
-                  child: Text(
-                    _formData.title,
-                    style: widget.titleStyle ??
-                        Theme.of(context).textTheme.headline5,
-                  ),
-                );
-              }
-            } else if (index < _formData.components.length + 1) {
-              final componentIndex = index - 1;
-              return Padding(
-                  padding: widget.contentPadding ?? _defaultPadding,
-                  child: fromModel(_formData.components[componentIndex]));
+      return _buildForm(context);
+    }
+  }
+
+  Widget _buildLoading(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _buildForm(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: ListView.builder(
+        itemCount: 1 + _formData.components.length + _formData.actions.length,
+        itemBuilder: (context, index) {
+          // Title
+          if (index == 0) {
+            if (widget.hideTitle) {
+              return const SizedBox();
             } else {
-              final actionIndex = index - 1 - _formData.components.length;
-              return ActionButton(
-                action: _formData.actions[actionIndex],
-                onPressed: _performAction,
-                child: Text('Action$actionIndex'),
+              return Padding(
+                padding: widget.titlePadding ??
+                    widget.contentPadding ??
+                    _defaultPadding,
+                child: Text(
+                  _formData.title,
+                  style: widget.titleStyle ??
+                      Theme.of(context).textTheme.headline5,
+                ),
               );
             }
-          },
+          } else if (index < _formData.components.length + 1) {
+            final componentIndex = index - 1;
+            return Padding(
+                padding: widget.contentPadding ?? _defaultPadding,
+                child: fromModel(_formData.components[componentIndex]));
+          } else {
+            final actionIndex = index - 1 - _formData.components.length;
+            return ActionButton(
+              action: _formData.actions[actionIndex],
+              onPressed: _performAction,
+              child: Text('Action$actionIndex'),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildSuccess(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(32.0),
+      children: [
+        AspectRatio(
+            aspectRatio: 1,
+            child: Lottie.asset(
+              'packages/active_grid_form/assets/success.json',
+              repeat: false,
+            )),
+        Text(
+          'Thank You!',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline4,
         ),
-      );
-    }
+        Center(
+          child: FlatButton(
+              onPressed: () {
+                _loadForm();
+                setState(() {
+                  _success = false;
+                  _error = null;
+                  _formData = null;
+                });
+              },
+              child: Text('Send Additional Answer')),
+        )
+      ],
+    );
+  }
+
+  Widget _buildError(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(32.0),
+      children: [
+        AspectRatio(
+            aspectRatio: 1,
+            child: Lottie.asset(
+              'packages/active_grid_form/assets/error.json',
+              repeat: false,
+            )),
+        Text(
+          'Oops! - Error',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        Center(
+          child: FlatButton(
+              onPressed: () {
+                if (_formData == null) {
+                  _loadForm();
+                }
+                setState(() {
+                  _success = false;
+                  _error = null;
+                });
+              },
+              child: Text('Back to Form')),
+        )
+      ],
+    );
   }
 
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
-  Future _loadForm() async {
-    final data = await _client.loadForm(formId: widget.formId);
-    setState(() {
-      _formData = data;
+  void _loadForm() {
+    _client.loadForm(formId: widget.formId).then((value) {
+      setState(() {
+        _formData = value;
+      });
+    }).catchError((error) {
+      _onError(error);
     });
   }
 
-  Future _performAction(FormAction action) async {
+  void _performAction(FormAction action) {
     if (_formKey.currentState.validate()) {
-      await _client.performAction(action, _formData).then((response) {
+      _client.performAction(action, _formData).then((response) async {
         if (response.statusCode < 400) {
-          print('Perform Action Successful');
+          if (await widget.onActionSuccess?.call(action) ?? true) {
+            setState(() {
+              _success = true;
+            });
+          }
         } else {
-          print('Error performing Request ${response.body}');
+          _onError(response);
         }
+      }).catchError((error) {
+        _onError(error);
+      });
+    }
+  }
+
+  void _onError(dynamic error) async {
+    if (await widget.onError?.call(error) ?? true) {
+      setState(() {
+        _error = error;
       });
     }
   }
