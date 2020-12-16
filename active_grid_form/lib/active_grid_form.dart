@@ -125,7 +125,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
             return ActionButton(
               action: _formData.actions[actionIndex],
               onPressed: _performAction,
-              child: Text('Action$actionIndex'),
+              child: Text('Send'),
             );
           }
         },
