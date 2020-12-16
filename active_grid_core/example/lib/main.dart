@@ -14,7 +14,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ActiveGrid(child: MyHomePage(title: 'Flutter Demo Home Page')),
+      home: ActiveGrid(
+        options: ActiveGridOptions(
+          environment: ActiveGridEnvironment.alpha,
+        ),
+        child: MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }

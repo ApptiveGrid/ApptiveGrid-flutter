@@ -31,4 +31,7 @@ class FormAction {
   bool operator ==(Object other) {
     return other is FormAction && uri == other.uri && method == other.method;
   }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

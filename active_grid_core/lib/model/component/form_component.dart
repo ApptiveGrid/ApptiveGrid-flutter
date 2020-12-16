@@ -53,6 +53,9 @@ abstract class FormComponent<T, R> {
   R get schemaValue;
 
   @override
+  String toString() => '$runtimeType(${toJson()})';
+
+  @override
   bool operator ==(Object other) {
     return other is FormComponent<T, R> &&
         property == other.property &&
@@ -61,6 +64,9 @@ abstract class FormComponent<T, R> {
         required == other.required &&
         type == other.type;
   }
+
+  @override
+  int get hashCode => toString().hashCode;
 
   /// Mapping to a concrete implementation based on [json] and [schema]
   ///

@@ -9,7 +9,6 @@ void main() {
         property: 'Property',
         required: false,
         options: model.TextComponentOptions(),
-        type: model.FormType.text,
       );
 
       final widget = fromModel(component);
@@ -22,7 +21,6 @@ void main() {
         property: 'Property',
         required: false,
         options: model.TextComponentOptions(),
-        type: model.FormType.integer,
       );
 
       final widget = fromModel(component);
@@ -35,7 +33,6 @@ void main() {
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
-        type: model.FormType.date,
       );
 
       final widget = fromModel(component);
@@ -48,7 +45,6 @@ void main() {
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
-        type: model.FormType.dateTime,
       );
 
       final widget = fromModel(component);
@@ -61,7 +57,6 @@ void main() {
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
-        type: model.FormType.checkbox,
       );
 
       final widget = fromModel(component);
@@ -75,7 +70,6 @@ void main() {
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
-        type: null,
       );
 
       expect(() => fromModel(component), throwsArgumentError);
