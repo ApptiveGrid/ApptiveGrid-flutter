@@ -68,11 +68,11 @@ void main() {
       final action = FormAction('/uri', 'POST');
       final property = 'Checkbox';
       final component = FormComponentCheckBox(
-          property: property,
-          value: true,
-          options: StubComponentOptions.fromJson({}),
-          required: false,
-          type: FormType.checkbox);
+        property: property,
+        value: true,
+        options: StubComponentOptions.fromJson({}),
+        required: false,
+      );
       final schema = {
         'type': 'object',
         'properties': {

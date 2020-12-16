@@ -43,12 +43,12 @@ class TextComponentOptions extends FormComponentOptions {
 
   /// Deserializes [json] into [TextComponentOptions]
   TextComponentOptions.fromJson(Map<String, dynamic> json)
-      : multi = json['multi'],
+      : multi = json['multi'] ?? false,
         placeholder = json['placeholder'],
         description = json['description'],
         label = json['label'];
 
-  /// Determines if the Textfield is growable
+  /// Determines if the Textfield is growable defaults to false
   final bool multi;
 
   /// Placeholder Text

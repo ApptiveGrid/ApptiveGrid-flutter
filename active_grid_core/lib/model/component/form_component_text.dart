@@ -3,12 +3,12 @@ part of active_grid_model;
 /// Model for a [FormComponent] representing [FormType.text]
 class FormComponentText extends FormComponent<String, String> {
   /// Creates a FormComponent
-  FormComponentText(
-      {@f.required this.property,
-      this.value,
-      @f.required this.options,
-      this.required = false,
-      @f.required this.type});
+  FormComponentText({
+    @f.required this.property,
+    this.value,
+    @f.required this.options,
+    this.required = false,
+  }) : type = FormType.text;
 
   /// Deserializes [json] into a [FormComponent]
   FormComponentText.fromJson(Map<String, dynamic> json)

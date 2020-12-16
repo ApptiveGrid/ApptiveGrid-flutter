@@ -11,11 +11,11 @@ void main() {
         description: 'Description',
       );
       final component = FormComponentText(
-          property: 'Property',
-          value: 'Value',
-          options: options,
-          required: true,
-          type: FormType.text);
+        property: 'Property',
+        value: 'Value',
+        options: options,
+        required: true,
+      );
 
       expect(FormComponentText.fromJson(component.toJson()), component);
     });
@@ -28,11 +28,11 @@ void main() {
         description: 'Description',
       );
       final component = FormComponentNumber(
-          property: 'Property',
-          value: 1,
-          options: options,
-          required: true,
-          type: FormType.integer);
+        property: 'Property',
+        value: 1,
+        options: options,
+        required: true,
+      );
 
       expect(FormComponentNumber.fromJson(component.toJson()), component);
     });
@@ -40,11 +40,11 @@ void main() {
     test('Date', () {
       final options = StubComponentOptions.fromJson({});
       final component = FormComponentDate(
-          property: 'Property',
-          value: DateTime(2020, 07, 12),
-          options: options,
-          required: true,
-          type: FormType.date);
+        property: 'Property',
+        value: DateTime(2020, 07, 12),
+        options: options,
+        required: true,
+      );
 
       expect(FormComponentDate.fromJson(component.toJson()), component);
     });
@@ -52,11 +52,11 @@ void main() {
     test('DateTime', () {
       final options = StubComponentOptions.fromJson({});
       final component = FormComponentDateTime(
-          property: 'Property',
-          value: DateTime(2020, 07, 12, 12, 0, 0, 0),
-          options: options,
-          required: true,
-          type: FormType.dateTime);
+        property: 'Property',
+        value: DateTime(2020, 07, 12, 12, 0, 0, 0),
+        options: options,
+        required: true,
+      );
 
       expect(FormComponentDateTime.fromJson(component.toJson()), component);
     });
@@ -64,11 +64,11 @@ void main() {
     test('Checkbox', () {
       final options = StubComponentOptions.fromJson({});
       final component = FormComponentCheckBox(
-          property: 'Property',
-          value: false,
-          options: options,
-          required: true,
-          type: FormType.checkbox);
+        property: 'Property',
+        value: false,
+        options: options,
+        required: true,
+      );
 
       expect(FormComponentCheckBox.fromJson(component.toJson()), component);
     });

@@ -3,12 +3,12 @@ part of active_grid_model;
 /// Model for a [FormComponent] representing [FormType.dateTime]
 class FormComponentDateTime extends FormComponent<DateTime, String> {
   /// Creates a FormComponent
-  FormComponentDateTime(
-      {@f.required this.property,
-      this.value,
-      @f.required this.options,
-      this.required = false,
-      @f.required this.type});
+  FormComponentDateTime({
+    @f.required this.property,
+    this.value,
+    @f.required this.options,
+    this.required = false,
+  }) : type = FormType.dateTime;
 
   /// Deserializes [json] into a [FormComponent]
   FormComponentDateTime.fromJson(Map<String, dynamic> json)
