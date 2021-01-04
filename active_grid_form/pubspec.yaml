@@ -14,11 +14,7 @@ dependencies:
     sdk: flutter
 
   active_grid_core:
-    # Use for development path: ../active_grid_core # TODO: Use hosted version on pub.dev once published
-    git:
-      url: https://bitbucket.org/2denker/flutter_active_grid
-      path: active_grid_core
-      ref: master
+    path: ../active_grid_core # TODO: Use hosted version on pub.dev once published
 
 dev_dependencies:
   pedantic: ^1.9.2

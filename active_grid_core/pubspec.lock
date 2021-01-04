@@ -42,7 +42,7 @@ packages:
       name: build
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.2"
+    version: "1.6.0"
   built_collection:
     dependency: transitive
     description:
@@ -311,7 +311,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.2+2"
+    version: "4.3.2+3"
   pub_semver:
     dependency: transitive
     description:
@@ -332,7 +332,7 @@ packages:
       name: sass
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.30.0"
+    version: "1.32.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -360,7 +360,7 @@ packages:
       name: source_gen
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.9"
+    version: "0.9.10+1"
   source_maps:
     dependency: transitive
     description:
