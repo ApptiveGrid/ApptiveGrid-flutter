@@ -11,9 +11,11 @@ packages:
   active_grid_core:
     dependency: "direct main"
     description:
-      path: "../active_grid_core"
-      relative: true
-    source: path
+      path: active_grid_core
+      ref: master
+      resolved-ref: d8a5ef2b4e0c7774e47cd4a357d774cb9d53c308
+      url: "https://bitbucket.org/2denker/flutter_active_grid"
+    source: git
     version: "0.0.1"
   analyzer:
     dependency: transitive
