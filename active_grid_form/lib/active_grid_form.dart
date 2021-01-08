@@ -22,6 +22,7 @@ class ActiveGridForm extends StatefulWidget {
     this.contentPadding,
     this.titlePadding,
     this.hideTitle = false,
+    this.onFormLoaded,
     this.onActionSuccess,
     this.onError,
   }) : super(key: key);
@@ -40,6 +41,21 @@ class ActiveGridForm extends StatefulWidget {
 
   /// Flag to hide the form title, default is false
   final bool hideTitle;
+
+  /// Callback after [FormData] loads successfully
+  ///
+  /// Use this to modify the UI Displaying the Form
+  /// ```dart
+  /// ActiveGridForm(
+  ///   id: [YOUR_FORM_ID],
+  ///   onFormLoaded: (data) {
+  ///     setState(() {
+  ///       title = data.title;
+  ///     });
+  ///   }
+  /// ),
+  /// ```
+  final void Function(FormData) onFormLoaded;
 
   /// Callback after [FormAction] completes Successfully
   ///
@@ -200,6 +216,9 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
 
   void _loadForm() {
     _client.loadForm(formId: widget.formId).then((value) {
+      if (widget.onFormLoaded != null) {
+        widget.onFormLoaded(value);
+      }
       setState(() {
         _formData = value;
       });
