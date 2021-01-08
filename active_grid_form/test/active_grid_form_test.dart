@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:active_grid_form/active_grid_form.dart';
 import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +49,30 @@ void main() {
 
       expect(find.text('Form Title'), findsNothing);
     });
+  });
+
+  testWidgets('OnLoadedCallback gets called', (tester) async {
+    final client = MockActiveGridClient();
+    final form = model.FormData('Form Title', [], [], {});
+    final completer = Completer<model.FormData>();
+    final target = TestApp(
+      client: client,
+      child: ActiveGridForm(
+        formId: 'form',
+        onFormLoaded: (data) {
+          completer.complete(data);
+        },
+      ),
+    );
+
+    when(client.loadForm(formId: 'form'))
+        .thenAnswer((realInvocation) async => form);
+
+    await tester.pumpWidget(target);
+    await tester.pumpAndSettle();
+
+    final result = await completer.future;
+    expect(result, form);
   });
 
   group('Loading', () {
