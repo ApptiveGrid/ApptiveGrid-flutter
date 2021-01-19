@@ -48,6 +48,8 @@ abstract class FormComponent<T, R> {
   /// Mapping to a concrete implementation based on [json] and [schema]
   ///
   /// Throws an [ArgumentError] if not matching implementation is found.
+  // missing_return can be ignored as the switch statement is exhaustive
+  // ignore: missing_return
   static FormComponent fromJson(dynamic json, dynamic schema) {
     final dataType =
         dataTypeFromSchema(schema: schema, propertyName: json['property']);
@@ -63,6 +65,5 @@ abstract class FormComponent<T, R> {
       case DataType.checkbox:
         return FormComponentCheckBox.fromJson(json);
     }
-    throw ArgumentError('No FormComponent found for ${json['property']}.');
   }
 }

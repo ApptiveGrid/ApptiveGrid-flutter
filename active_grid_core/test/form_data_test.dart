@@ -96,7 +96,8 @@ void main() {
       final action = FormAction('/uri', 'POST');
       final schema = response['schema'];
       final component = FormComponentNumber(
-          options: TextComponentOptions(), property: 'NumberC',
+          options: TextComponentOptions(),
+          property: 'NumberC',
           data: IntegerDataEntity());
 
       final formData = FormData(title, [component], [action], schema);
@@ -125,8 +126,9 @@ void main() {
     final action = FormAction('/uri', 'POST');
     final schema = response['schema'];
     final component = FormComponentNumber(
-      data: IntegerDataEntity(),
-        options: TextComponentOptions(), property: 'NumberC');
+        data: IntegerDataEntity(),
+        options: TextComponentOptions(),
+        property: 'NumberC');
 
     final a = FormData(title, [component], [action], schema);
     final b = FormData(title, [component], [action], schema);

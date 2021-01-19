@@ -347,5 +347,26 @@ void main() {
 
       expect(() => FormComponent.fromJson(json, schema), throwsArgumentError);
     });
+
+    test('Unknown Property throws', () {
+      final property = 'property';
+
+      final schema = {
+        'properties': {
+          property: {
+            'type': 'unkown',
+          }
+        }
+      };
+      final json = {
+        'property': 'schemaError',
+        'value': null,
+        'required': true,
+        'options': <String, dynamic>{},
+        'type': 'unkown'
+      };
+
+      expect(() => FormComponent.fromJson(json, schema), throwsArgumentError);
+    });
   });
 }

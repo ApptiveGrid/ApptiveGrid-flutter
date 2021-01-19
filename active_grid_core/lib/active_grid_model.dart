@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' as f;
 import 'package:intl/intl.dart';
 
 part 'model/data_type.dart';
+part 'model/data_entity.dart';
 
 part 'model/form/component/form_component.dart';
 part 'model/form/component/form_component_check_box.dart';
