@@ -96,9 +96,7 @@ void main() {
       final action = FormAction('/uri', 'POST');
       final schema = response['schema'];
       final component = FormComponentNumber(
-          type: FormType.integer,
-          options: TextComponentOptions(),
-          property: 'NumberC');
+          options: TextComponentOptions(), property: 'NumberC');
 
       final formData = FormData(title, [component], [action], schema);
 
@@ -119,6 +117,27 @@ void main() {
               ),
               parseJson: true),
           []);
+    });
+  });
+
+  group('Equality', () {
+    final action = FormAction('/uri', 'POST');
+    final schema = response['schema'];
+    final component = FormComponentNumber(
+        options: TextComponentOptions(), property: 'NumberC');
+
+    final a = FormData(title, [component], [action], schema);
+    final b = FormData(title, [component], [action], schema);
+    final c = FormData.fromJson(response);
+
+    test('a == b', () {
+      expect(a == b, true);
+      expect(a.hashCode - b.hashCode, 0);
+    });
+
+    test('a != c', () {
+      expect(a == c, false);
+      expect((a.hashCode - c.hashCode) == 0, false);
     });
   });
 }

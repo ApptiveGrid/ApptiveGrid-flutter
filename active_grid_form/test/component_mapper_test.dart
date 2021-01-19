@@ -9,7 +9,6 @@ void main() {
         property: 'Property',
         required: false,
         options: model.TextComponentOptions(),
-        type: model.FormType.text,
       );
 
       final widget = fromModel(component);
@@ -22,7 +21,6 @@ void main() {
         property: 'Property',
         required: false,
         options: model.TextComponentOptions(),
-        type: model.FormType.integer,
       );
 
       final widget = fromModel(component);
@@ -35,7 +33,6 @@ void main() {
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
-        type: model.FormType.date,
       );
 
       final widget = fromModel(component);
@@ -48,7 +45,6 @@ void main() {
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
-        type: model.FormType.dateTime,
       );
 
       final widget = fromModel(component);
@@ -61,7 +57,6 @@ void main() {
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
-        type: model.FormType.checkbox,
       );
 
       final widget = fromModel(component);
@@ -71,14 +66,29 @@ void main() {
 
     test('ArgumentError', () {
       // This won't work once everything is migrated to Null-Safety
-      final component = model.FormComponentCheckBox(
-        property: 'Property',
-        required: false,
-        options: model.StubComponentOptions(),
-        type: null,
-      );
+      final component = UnknownComponent();
 
       expect(() => fromModel(component), throwsArgumentError);
     });
   });
+}
+
+class UnknownComponent extends model.FormComponent<String, String> {
+  @override
+  model.FormComponentOptions get options => model.StubComponentOptions();
+
+  @override
+  String get property => 'Property';
+
+  @override
+  bool get required => false;
+
+  @override
+  String get schemaValue => 'Value';
+
+  @override
+  model.FormType get type => null;
+
+  @override
+  String get value => 'Value';
 }
