@@ -9,7 +9,7 @@ abstract class FormComponent<T, R> {
   String get property;
 
   /// Value of the Component
-  T get value;
+  DataEntity<T, R> get data;
 
   /// Additional options of a component
   FormComponentOptions get options;
@@ -19,60 +19,47 @@ abstract class FormComponent<T, R> {
   /// For [DataType.checkbox] this will make only `true` values valid
   bool get required;
 
-  /// Type of the component
-  DataType get type;
-
   /// Saves this into a [Map] that can be encoded using [json.encode]
   Map<String, dynamic> toJson() => {
         'property': property,
-        'value': schemaValue,
+        'value': data.schemaValue,
         'options': options.toJson(),
         'required': required,
-        'type': type,
       };
 
-  /// Value to be used when sending this back to the Serve
-  R get schemaValue;
+  @override
+  String toString() {
+    return '$runtimeType(property: $property, data: $data, options: $options, required: $required)';
+  }
 
   @override
   bool operator ==(Object other) {
-    return other is FormComponent<T, R> &&
+    return runtimeType == other.runtimeType &&
+        other is FormComponent<T, R> &&
         property == other.property &&
-        value == other.value &&
+        data == other.data &&
         options == other.options &&
-        required == other.required &&
-        type == other.type;
+        required == other.required;
   }
 
   /// Mapping to a concrete implementation based on [json] and [schema]
   ///
   /// Throws an [ArgumentError] if not matching implementation is found.
   static FormComponent fromJson(dynamic json, dynamic schema) {
-    final properties = schema['properties'][json['property']];
-    final schemaType = properties['type'];
-    final format = properties['format'];
-    switch (schemaType) {
-      case 'string':
-        FormComponent component;
-        switch (format) {
-          case 'date-time':
-            component = FormComponentDateTime.fromJson(json);
-            break;
-          case 'date':
-            component = FormComponentDate.fromJson(json);
-            break;
-          default:
-            component = FormComponentText.fromJson(json);
-            break;
-        }
-        return component;
-      case 'integer':
+    final dataType =
+        dataTypeFromSchema(schema: schema, propertyName: json['property']);
+    switch (dataType) {
+      case DataType.text:
+        return FormComponentText.fromJson(json);
+      case DataType.dateTime:
+        return FormComponentDateTime.fromJson(json);
+      case DataType.date:
+        return FormComponentDate.fromJson(json);
+      case DataType.integer:
         return FormComponentNumber.fromJson(json);
-      case 'boolean':
+      case DataType.checkbox:
         return FormComponentCheckBox.fromJson(json);
-      default:
-        throw ArgumentError(
-            'No FormComponent found for SchemaType($schemaType) with format $format found.');
     }
+    throw ArgumentError('No FormComponent found for ${json['property']}.');
   }
 }

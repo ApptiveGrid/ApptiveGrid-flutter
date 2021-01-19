@@ -47,7 +47,7 @@ class FormData {
   /// Creates a [Map] used to send this data back to a server
   Map<String, dynamic> toRequestObject() {
     return Map.fromEntries(components.map((component) {
-      return MapEntry(component.property, component.schemaValue);
+      return MapEntry(component.property, component.data.schemaValue);
     }).where((element) => element.value != null));
   }
 

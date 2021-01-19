@@ -5,38 +5,23 @@ class FormComponentDateTime extends FormComponent<DateTime, String> {
   /// Creates a FormComponent
   FormComponentDateTime(
       {@f.required this.property,
-      this.value,
+      @f.required this.data,
       @f.required this.options,
-      this.required = false,
-      @f.required this.type});
+      this.required = false});
 
   /// Deserializes [json] into a [FormComponent]
   FormComponentDateTime.fromJson(Map<String, dynamic> json)
       : property = json['property'],
-        value = _parse(json['value']),
+        data = DateTimeDataEntity.fromJson(json['value']),
         options = StubComponentOptions.fromJson(json['options']),
-        required = json['required'],
-        type = DataType.dateTime;
+        required = json['required'];
 
   @override
   final String property;
   @override
-  DateTime value;
+  DateTimeDataEntity data;
   @override
   final StubComponentOptions options;
   @override
   final bool required;
-  @override
-  final DataType type;
-
-  static DateTime _parse(String json) {
-    if (json == null) {
-      return null;
-    } else {
-      return DateTime.parse(json);
-    }
-  }
-
-  @override
-  String get schemaValue => value?.toIso8601String();
 }

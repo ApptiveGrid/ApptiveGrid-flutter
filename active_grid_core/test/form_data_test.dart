@@ -96,9 +96,9 @@ void main() {
       final action = FormAction('/uri', 'POST');
       final schema = response['schema'];
       final component = FormComponentNumber(
-          type: DataType.integer,
           options: TextComponentOptions(),
-          property: 'NumberC');
+          property: 'NumberC',
+          data: IntegerDataEntity());
 
       final formData = FormData(title, [component], [action], schema);
 
