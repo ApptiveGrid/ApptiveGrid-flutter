@@ -63,6 +63,9 @@ abstract class DataEntity<T, S> {
     return runtimeType == other.runtimeType &&
         value == (other as DataEntity).value;
   }
+
+  @override
+  int get hashCode => toString().hashCode;
 }
 
 class StringDataEntity extends DataEntity<String, String> {

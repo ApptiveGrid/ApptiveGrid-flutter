@@ -59,4 +59,7 @@ class FormData {
         f.listEquals(actions, other.actions) &&
         f.listEquals(components, other.components);
   }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

@@ -42,6 +42,9 @@ abstract class FormComponent<T, R> {
         required == other.required;
   }
 
+  @override
+  int get hashCode => toString().hashCode;
+
   /// Mapping to a concrete implementation based on [json] and [schema]
   ///
   /// Throws an [ArgumentError] if not matching implementation is found.

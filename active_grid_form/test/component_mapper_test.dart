@@ -70,15 +70,23 @@ void main() {
     });
 
     test('ArgumentError', () {
-      // This won't work once everything is migrated to Null-Safety
-      final component = model.FormComponentCheckBox(
-        data: null,
-        property: 'Property',
-        required: false,
-        options: model.StubComponentOptions(),
-      );
+      final component = UnknownComponent();
 
       expect(() => fromModel(component), throwsArgumentError);
     });
   });
+}
+
+class UnknownComponent extends model.FormComponent<String, String> {
+  @override
+  model.FormComponentOptions get options => model.StubComponentOptions();
+
+  @override
+  String get property => 'Property';
+
+  @override
+  bool get required => false;
+
+  @override
+  model.DataEntity<String, String> get data => null;
 }
