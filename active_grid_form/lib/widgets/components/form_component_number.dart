@@ -18,10 +18,10 @@ class _FormComponentNumberState extends State<FormComponentNumber> {
   @override
   void initState() {
     super.initState();
-    _controller.text = widget.component.value?.toString();
+    _controller.text = widget.component.data.value?.toString();
     _controller.addListener(() {
       if (_controller.text != null && _controller.text.isNotEmpty) {
-        widget.component.value = int.parse(_controller.text);
+        widget.component.data.value = int.parse(_controller.text);
       }
     });
   }
