@@ -12,3 +12,4 @@ part 'model/form/component/form_component_date.dart';
 part 'model/form/component/options.dart';
 part 'model/form/form_data.dart';
 part 'model/form/form_actions.dart';
+part 'model/data_type.dart';

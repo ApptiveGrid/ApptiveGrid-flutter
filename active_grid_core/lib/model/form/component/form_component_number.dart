@@ -1,6 +1,6 @@
 part of active_grid_model;
 
-/// Model for a [FormComponent] representing [FormType.integer]
+/// Model for a [FormComponent] representing [DataType.integer]
 class FormComponentNumber extends FormComponent<int, int> {
   /// Creates a FormComponent
   FormComponentNumber(
@@ -16,7 +16,7 @@ class FormComponentNumber extends FormComponent<int, int> {
         value = json['value'],
         options = TextComponentOptions.fromJson(json['options']),
         required = json['required'],
-        type = FormType.integer;
+        type = DataType.integer;
 
   @override
   final String property;
@@ -29,7 +29,7 @@ class FormComponentNumber extends FormComponent<int, int> {
   final bool required;
 
   @override
-  final FormType type;
+  final DataType type;
 
   @override
   int get schemaValue => value;

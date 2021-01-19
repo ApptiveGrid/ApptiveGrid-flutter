@@ -1,6 +1,6 @@
 part of active_grid_model;
 
-/// Model for a [FormComponent] representing [FormType.dateTime]
+/// Model for a [FormComponent] representing [DataType.dateTime]
 class FormComponentDateTime extends FormComponent<DateTime, String> {
   /// Creates a FormComponent
   FormComponentDateTime(
@@ -16,7 +16,7 @@ class FormComponentDateTime extends FormComponent<DateTime, String> {
         value = _parse(json['value']),
         options = StubComponentOptions.fromJson(json['options']),
         required = json['required'],
-        type = FormType.dateTime;
+        type = DataType.dateTime;
 
   @override
   final String property;
@@ -27,7 +27,7 @@ class FormComponentDateTime extends FormComponent<DateTime, String> {
   @override
   final bool required;
   @override
-  final FormType type;
+  final DataType type;
 
   static DateTime _parse(String json) {
     if (json == null) {

@@ -11,7 +11,7 @@ void main() {
       final component = model.FormComponentText(
         property: property,
         options: model.TextComponentOptions(),
-        type: model.FormType.text,
+        type: model.DataType.text,
       );
       final target = TestApp(
         child: FormComponentText(
@@ -33,7 +33,7 @@ void main() {
         options: model.TextComponentOptions(
           label: customLabel,
         ),
-        type: model.FormType.text,
+        type: model.DataType.text,
       );
       final target = TestApp(
         child: FormComponentText(
@@ -54,7 +54,7 @@ void main() {
       final component = model.FormComponentNumber(
         property: property,
         options: model.TextComponentOptions(),
-        type: model.FormType.integer,
+        type: model.DataType.integer,
       );
       final target = TestApp(
         child: FormComponentNumber(
@@ -76,7 +76,7 @@ void main() {
         options: model.TextComponentOptions(
           label: customLabel,
         ),
-        type: model.FormType.integer,
+        type: model.DataType.integer,
       );
       final target = TestApp(
         child: FormComponentNumber(

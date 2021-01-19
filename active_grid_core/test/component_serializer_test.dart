@@ -15,7 +15,7 @@ void main() {
           value: 'Value',
           options: options,
           required: true,
-          type: FormType.text);
+          type: DataType.text);
 
       expect(FormComponentText.fromJson(component.toJson()), component);
     });
@@ -32,7 +32,7 @@ void main() {
           value: 1,
           options: options,
           required: true,
-          type: FormType.integer);
+          type: DataType.integer);
 
       expect(FormComponentNumber.fromJson(component.toJson()), component);
     });
@@ -44,7 +44,7 @@ void main() {
           value: DateTime(2020, 07, 12),
           options: options,
           required: true,
-          type: FormType.date);
+          type: DataType.date);
 
       expect(FormComponentDate.fromJson(component.toJson()), component);
     });
@@ -56,7 +56,7 @@ void main() {
           value: DateTime(2020, 07, 12, 12, 0, 0, 0),
           options: options,
           required: true,
-          type: FormType.dateTime);
+          type: DataType.dateTime);
 
       expect(FormComponentDateTime.fromJson(component.toJson()), component);
     });
@@ -68,7 +68,7 @@ void main() {
           value: false,
           options: options,
           required: true,
-          type: FormType.checkbox);
+          type: DataType.checkbox);
 
       expect(FormComponentCheckBox.fromJson(component.toJson()), component);
     });

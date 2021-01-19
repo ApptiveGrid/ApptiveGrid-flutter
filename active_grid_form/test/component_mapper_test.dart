@@ -9,7 +9,7 @@ void main() {
         property: 'Property',
         required: false,
         options: model.TextComponentOptions(),
-        type: model.FormType.text,
+        type: model.DataType.text,
       );
 
       final widget = fromModel(component);
@@ -22,7 +22,7 @@ void main() {
         property: 'Property',
         required: false,
         options: model.TextComponentOptions(),
-        type: model.FormType.integer,
+        type: model.DataType.integer,
       );
 
       final widget = fromModel(component);
@@ -35,7 +35,7 @@ void main() {
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
-        type: model.FormType.date,
+        type: model.DataType.date,
       );
 
       final widget = fromModel(component);
@@ -48,7 +48,7 @@ void main() {
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
-        type: model.FormType.dateTime,
+        type: model.DataType.dateTime,
       );
 
       final widget = fromModel(component);
@@ -61,7 +61,7 @@ void main() {
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
-        type: model.FormType.checkbox,
+        type: model.DataType.checkbox,
       );
 
       final widget = fromModel(component);

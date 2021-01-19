@@ -21,7 +21,7 @@ void main() {
           property: 'Property',
           options: model.TextComponentOptions(),
           required: false,
-          type: model.FormType.text);
+          type: model.DataType.text);
       final formData = model.FormData('Title', [
         component,
       ], [
@@ -67,7 +67,7 @@ void main() {
           property: 'Property',
           options: model.TextComponentOptions(),
           required: true,
-          type: model.FormType.text);
+          type: model.DataType.text);
       final formData = model.FormData('Title', [
         component,
       ], [
@@ -107,7 +107,7 @@ void main() {
           property: 'Property',
           options: model.StubComponentOptions(),
           required: false,
-          type: model.FormType.dateTime);
+          type: model.DataType.dateTime);
       final formData = model.FormData('Title', [
         component,
       ], [
@@ -164,7 +164,7 @@ void main() {
           property: 'Property',
           options: model.StubComponentOptions(),
           required: false,
-          type: model.FormType.dateTime);
+          type: model.DataType.dateTime);
       final formData = model.FormData('Title', [
         component,
       ], [
@@ -225,7 +225,7 @@ void main() {
           property: 'Property',
           options: model.StubComponentOptions(),
           required: true,
-          type: model.FormType.dateTime);
+          type: model.DataType.dateTime);
       final formData = model.FormData('Title', [
         component,
       ], [
@@ -265,7 +265,7 @@ void main() {
           property: 'Property',
           options: model.StubComponentOptions(),
           required: false,
-          type: model.FormType.date);
+          type: model.DataType.date);
       final formData = model.FormData('Title', [
         component,
       ], [
@@ -322,7 +322,7 @@ void main() {
           property: 'Property',
           options: model.StubComponentOptions(),
           required: true,
-          type: model.FormType.date);
+          type: model.DataType.date);
       final formData = model.FormData('Title', [
         component,
       ], [
@@ -362,7 +362,7 @@ void main() {
           property: 'Property',
           options: model.TextComponentOptions(),
           required: false,
-          type: model.FormType.integer);
+          type: model.DataType.integer);
       final formData = model.FormData('Title', [
         component,
       ], [
@@ -408,7 +408,7 @@ void main() {
           property: 'Property',
           options: model.TextComponentOptions(),
           required: true,
-          type: model.FormType.integer);
+          type: model.DataType.integer);
       final formData = model.FormData('Title', [
         component,
       ], [
@@ -448,7 +448,7 @@ void main() {
           property: 'Property',
           options: model.StubComponentOptions(),
           required: false,
-          type: model.FormType.checkbox);
+          type: model.DataType.checkbox);
       final formData = model.FormData('Title', [
         component,
       ], [
@@ -494,7 +494,7 @@ void main() {
           property: 'Property',
           options: model.StubComponentOptions(),
           required: true,
-          type: model.FormType.checkbox);
+          type: model.DataType.checkbox);
       final formData = model.FormData('Title', [
         component,
       ], [

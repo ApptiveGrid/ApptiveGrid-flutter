@@ -72,7 +72,7 @@ void main() {
           value: true,
           options: StubComponentOptions.fromJson({}),
           required: false,
-          type: FormType.checkbox);
+          type: DataType.checkbox);
       final schema = {
         'type': 'object',
         'properties': {

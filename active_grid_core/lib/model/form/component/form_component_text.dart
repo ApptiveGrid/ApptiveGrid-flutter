@@ -1,6 +1,6 @@
 part of active_grid_model;
 
-/// Model for a [FormComponent] representing [FormType.text]
+/// Model for a [FormComponent] representing [DataType.text]
 class FormComponentText extends FormComponent<String, String> {
   /// Creates a FormComponent
   FormComponentText(
@@ -16,7 +16,7 @@ class FormComponentText extends FormComponent<String, String> {
         value = json['value'],
         options = TextComponentOptions.fromJson(json['options']),
         required = json['required'],
-        type = FormType.text;
+        type = DataType.text;
 
   @override
   final String property;
@@ -29,7 +29,7 @@ class FormComponentText extends FormComponent<String, String> {
   final bool required;
 
   @override
-  final FormType type;
+  final DataType type;
 
   @override
   String get schemaValue => value;

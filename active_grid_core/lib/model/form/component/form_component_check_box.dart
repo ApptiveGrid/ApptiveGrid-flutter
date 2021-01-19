@@ -1,6 +1,6 @@
 part of active_grid_model;
 
-/// Model for a [FormComponent] representing [FormType.checkbox]
+/// Model for a [FormComponent] representing [DataType.checkbox]
 class FormComponentCheckBox extends FormComponent<bool, bool> {
   /// Creates a FormComponent
   FormComponentCheckBox(
@@ -16,7 +16,7 @@ class FormComponentCheckBox extends FormComponent<bool, bool> {
         value = json['value'] ?? false,
         options = StubComponentOptions.fromJson(json['options']),
         required = json['required'],
-        type = FormType.checkbox;
+        type = DataType.checkbox;
 
   @override
   final String property;
@@ -29,7 +29,7 @@ class FormComponentCheckBox extends FormComponent<bool, bool> {
   final bool required;
 
   @override
-  final FormType type;
+  final DataType type;
 
   @override
   bool get schemaValue => value;

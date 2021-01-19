@@ -36,7 +36,7 @@ void main() {
       expect(parsedComponent.property, property);
       expect(parsedComponent.value, value);
       expect(parsedComponent.required, true);
-      expect(parsedComponent.type, FormType.text);
+      expect(parsedComponent.type, DataType.text);
       expect(parsedComponent.schemaValue, value);
 
       final parsedOptions = parsedComponent.options as TextComponentOptions;
@@ -69,7 +69,7 @@ void main() {
       expect(parsedComponent.property, property);
       expect(parsedComponent.value, value);
       expect(parsedComponent.required, true);
-      expect(parsedComponent.type, FormType.dateTime);
+      expect(parsedComponent.type, DataType.dateTime);
       expect(parsedComponent.schemaValue, value.toIso8601String());
 
       final parsedOptions = parsedComponent.options as StubComponentOptions;
@@ -99,7 +99,7 @@ void main() {
       expect(parsedComponent.property, property);
       expect(parsedComponent.value, value);
       expect(parsedComponent.required, true);
-      expect(parsedComponent.type, FormType.date);
+      expect(parsedComponent.type, DataType.date);
       expect(parsedComponent.schemaValue, '2020-12-07');
 
       final parsedOptions = parsedComponent.options as StubComponentOptions;
@@ -139,7 +139,7 @@ void main() {
       expect(parsedComponent.property, property);
       expect(parsedComponent.value, value);
       expect(parsedComponent.required, true);
-      expect(parsedComponent.type, FormType.integer);
+      expect(parsedComponent.type, DataType.integer);
       expect(parsedComponent.schemaValue, value);
 
       final parsedOptions = parsedComponent.options as TextComponentOptions;
@@ -174,7 +174,7 @@ void main() {
       expect(parsedComponent.property, property);
       expect(parsedComponent.value, value);
       expect(parsedComponent.required, true);
-      expect(parsedComponent.type, FormType.checkbox);
+      expect(parsedComponent.type, DataType.checkbox);
       expect(parsedComponent.schemaValue, value);
 
       final parsedOptions = parsedComponent.options as StubComponentOptions;
