@@ -1,8 +1,7 @@
 name: active_grid_form
-description: A new Flutter package project.
+description: A Flutter Package to display ActiveGrid Forms inside a Flutter App.
 version: 0.0.1
-author:
-homepage:
+homepage: https://zweidenker.de
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

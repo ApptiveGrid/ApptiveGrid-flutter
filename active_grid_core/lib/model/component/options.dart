@@ -19,9 +19,17 @@ class StubComponentOptions extends FormComponentOptions {
   Map<String, dynamic> toJson() => {};
 
   @override
+  String toString() {
+    return runtimeType.toString();
+  }
+
+  @override
   bool operator ==(Object other) {
     return other is StubComponentOptions;
   }
+
+  @override
+  int get hashCode => toString().hashCode;
 }
 
 /// [FormComponentOptions] for Text Based Components
@@ -35,12 +43,12 @@ class TextComponentOptions extends FormComponentOptions {
 
   /// Deserializes [json] into [TextComponentOptions]
   TextComponentOptions.fromJson(Map<String, dynamic> json)
-      : multi = json['multi'],
+      : multi = json['multi'] ?? false,
         placeholder = json['placeholder'],
         description = json['description'],
         label = json['label'];
 
-  /// Determines if the Textfield is growable
+  /// Determines if the Textfield is growable defaults to false
   final bool multi;
 
   /// Placeholder Text
@@ -62,6 +70,11 @@ class TextComponentOptions extends FormComponentOptions {
       };
 
   @override
+  String toString() {
+    return 'TextComponentOptions(${toJson()}';
+  }
+
+  @override
   bool operator ==(Object other) {
     return other is TextComponentOptions &&
         multi == other.multi &&
@@ -69,4 +82,7 @@ class TextComponentOptions extends FormComponentOptions {
         description == other.description &&
         label == other.label;
   }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
+import 'mocks.dart';
+
 void main() {
   group('ActiveGrid Provides necessary Objects', () {
     testWidgets('ActiveGridClient', (tester) async {
@@ -109,6 +111,29 @@ void main() {
         final client = Provider.of<ActiveGridClient>(context, listen: false);
         expect(ActiveGridEnvironment.production, client.environment);
       });
+    });
+  });
+
+  group('Mock Client', () {
+    testWidgets('withClient Uses Provided Client', (tester) async {
+      BuildContext context;
+      final client = MockActiveGridClient();
+      final target = ActiveGrid.withClient(
+        client: client,
+        child: Builder(
+          builder: (buildContext) {
+            context = buildContext;
+            return Container();
+          },
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      final providedClient =
+          Provider.of<ActiveGridClient>(context, listen: false);
+      expect(providedClient, client);
     });
   });
 }

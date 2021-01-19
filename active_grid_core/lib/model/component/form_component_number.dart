@@ -3,12 +3,12 @@ part of active_grid_model;
 /// Model for a [FormComponent] representing [FormType.integer]
 class FormComponentNumber extends FormComponent<int, int> {
   /// Creates a FormComponent
-  FormComponentNumber(
-      {@f.required this.property,
-      this.value,
-      @f.required this.options,
-      this.required = false,
-      @f.required this.type});
+  FormComponentNumber({
+    @f.required this.property,
+    this.value,
+    @f.required this.options,
+    this.required = false,
+  }) : type = FormType.integer;
 
   /// Deserializes [json] into a [FormComponent]
   FormComponentNumber.fromJson(Map<String, dynamic> json)

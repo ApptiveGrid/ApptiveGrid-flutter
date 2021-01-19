@@ -1,8 +1,7 @@
 name: active_grid_core
-description: A new Flutter package project.
+description: Core Library for ActiveGrid used to provide general ActiveGrid functionality to other Packages or Apps
 version: 0.0.1
-author:
-homepage:
+homepage: https://zweidenker.de
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
