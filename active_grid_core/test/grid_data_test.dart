@@ -173,6 +173,7 @@ void main() {
 
       expect(saved, json);
       expect(restored, initialData);
+      expect(restored.hashCode, initialData.hashCode);
     });
   });
 }
