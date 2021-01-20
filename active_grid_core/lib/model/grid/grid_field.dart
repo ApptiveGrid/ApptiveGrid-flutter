@@ -13,4 +13,20 @@ class GridField {
 
   /// type of the field
   final DataType type;
+
+  @override
+  String toString() {
+    return 'GridField(id: $id, name: $name, type: $type}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GridField &&
+        id == other.id &&
+        name == other.name &&
+        type == other.type;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

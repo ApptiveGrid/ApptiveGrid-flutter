@@ -28,4 +28,29 @@ class GridData {
   final List<GridField> fields;
 
   final List<GridRow> rows;
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'schema': schema,
+        'entities': rows.map((e) => e.toJson()).toList(),
+        'fieldIds': fields.map((e) => e.id).toList(),
+        'fieldNames': fields.map((e) => e.name).toList(),
+      };
+
+  @override
+  String toString() {
+    return 'GridData(name: $name, fields: $fields, rows: $rows)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GridData &&
+        name == other.name &&
+        schema == other.schema &&
+        f.listEquals(fields, other.fields) &&
+        f.listEquals(rows, other.rows);
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

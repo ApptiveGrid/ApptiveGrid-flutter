@@ -1,21 +1,5 @@
 part of active_grid_model;
 
-class GridRow {
-  GridRow(this.id, this.entries);
-
-  factory GridRow.fromJson(dynamic json, List<GridField> fields) {
-    final data = json['fields'] as List;
-    final entries = List<GridEntry>.filled(data.length, null);
-    for (var i = 0; i < data.length; i++) {
-      entries[0] = GridEntry.fromJson(entries[i], fields[i]);
-    }
-    return GridRow(json['_id'], entries);
-  }
-  final String id;
-
-  final List<GridEntry> entries;
-}
-
 class GridEntry {
   GridEntry(this.field, this.data);
 
@@ -44,4 +28,17 @@ class GridEntry {
   final GridField field;
 
   final DataEntity data;
+
+  @override
+  String toString() {
+    return 'GridEntry(field: $field, data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GridEntry && field == other.field && data == other.data;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

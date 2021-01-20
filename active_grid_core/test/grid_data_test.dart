@@ -18,7 +18,7 @@ void main() {
           'fields': [
             'Hello',
             1,
-            '2020-12-08T01:00:00+00:00',
+            '2020-12-08T01:00:00.000Z',
             '2020-12-13',
             null,
             null,
@@ -27,26 +27,10 @@ void main() {
           '_id': '3ojhtqm2bgtwzpdbktuv6syv5'
         },
         {
-          'fields': [null, null, null, null, null, null, null],
-          '_id': '3ojhtqnrpxdex3vpju8aoutji'
-        },
-        {
-          'fields': [null, null, null, null, null, null, null],
-          '_id': '3ojhtqj8nf92mpwhmo68wq1ok'
-        },
-        {
-          'fields': [null, null, null, null, null, null, null],
-          '_id': '3ojhtqlvnx96vkd5cazse9iz3'
-        },
-        {
-          'fields': [null, null, null, null, null, null, null],
-          '_id': '3ojhtqle6wk0xv9dh8ksf74i1'
-        },
-        {
           'fields': [
             'Hola Web',
             1,
-            '2020-12-14T09:12:00+00:00',
+            '2020-12-14T09:12:00.000Z',
             '2020-12-15',
             null,
             null,
@@ -106,7 +90,7 @@ void main() {
           'fields': [
             'AAA',
             null,
-            '2020-12-14T11:42:00+00:00',
+            '2020-12-14T11:42:00.000Z',
             '2020-12-17',
             null,
             null,
@@ -118,7 +102,7 @@ void main() {
           'fields': [
             'TTTTTTT',
             12312344,
-            '2020-12-14T06:00:00+00:00',
+            '2020-12-14T06:00:00.000Z',
             '2020-12-16',
             null,
             null,
@@ -175,7 +159,20 @@ void main() {
       expect(gridData.name, 'New grid');
       expect(gridData.schema, isNot(null));
       expect(gridData.fields.length, 7);
-      expect(gridData.rows.length, 23);
+      expect(gridData.rows.length, 19);
+
+      final firstRow = gridData.rows[0];
+      expect(firstRow.entries[0].data.value, 'Hello');
+      expect(firstRow.entries[1].data.value, 1);
+    });
+
+    test('From Json == To Json -> FromJson', () {
+      final initialData = GridData.fromJson(json);
+      final saved = initialData.toJson();
+      final restored = GridData.fromJson(saved);
+
+      expect(saved, json);
+      expect(restored, initialData);
     });
   });
 }
