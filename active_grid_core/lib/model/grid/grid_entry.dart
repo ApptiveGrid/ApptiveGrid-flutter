@@ -1,8 +1,13 @@
 part of active_grid_model;
 
+/// Model for a Cell Entry in a Grid
 class GridEntry {
+  /// Creates a GridEntry
   GridEntry(this.field, this.data);
 
+  /// Creates a GridEntry with value [jsonData]
+  ///
+  /// [field.type] is used for determining the [DataEntity] runtimeType of [data]
   factory GridEntry.fromJson(dynamic jsonData, GridField field) {
     DataEntity dataEntity;
     switch (field.type) {
@@ -25,8 +30,10 @@ class GridEntry {
     return GridEntry(field, dataEntity);
   }
 
+  /// Column this Entry belongs to
   final GridField field;
 
+  /// Data that is held in the cell
   final DataEntity data;
 
   @override

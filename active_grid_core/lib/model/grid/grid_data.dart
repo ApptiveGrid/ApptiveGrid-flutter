@@ -1,8 +1,11 @@
 part of active_grid_model;
 
+/// Model for GridData
 class GridData {
+  /// Creates a GridData Object
   GridData(this.name, this.schema, this.fields, this.rows);
 
+  /// Deserializes [json] into a GridData Object
   factory GridData.fromJson(Map<String, dynamic> json) {
     final ids = json['fieldIds'] as List<String>;
     final names = json['fieldNames'] as List<String>;
@@ -21,14 +24,19 @@ class GridData {
     return GridData(json['name'], schema, fields, entries);
   }
 
+  /// Name of the Form
   final String name;
 
+  /// Schema used for deserializing and validating data send back to the server
   final dynamic schema;
 
+  /// List of [GridField] representing the Columns the Grid has
   final List<GridField> fields;
 
+  /// Rows of the Grid
   final List<GridRow> rows;
 
+  /// Serializes [GridData] into a json Map
   Map<String, dynamic> toJson() => {
         'name': name,
         'schema': schema,

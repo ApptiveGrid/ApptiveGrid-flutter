@@ -19,7 +19,7 @@ void main() {
       final value = 'value';
 
       final single = GridEntry(field, StringDataEntity(value));
-      final double = GridEntry(field, StringDataEntity(value+value));
+      final double = GridEntry(field, StringDataEntity(value + value));
 
       expect(single, isNot(double));
       expect(single.hashCode, isNot(double.hashCode));
