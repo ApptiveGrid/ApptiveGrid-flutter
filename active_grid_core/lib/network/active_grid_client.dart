@@ -12,7 +12,7 @@ class ActiveGridClient {
   ///
   /// this should only be used for testing in order to pass in a Mocked [http.Client]
   @visibleForTesting
-  ActiveGridClient.fromClient(http.Client httpClient)
+  ActiveGridClient.fromClient(http.Client httpClient, {this.authentication})
       : _client = httpClient,
         environment = ActiveGridEnvironment.production;
 
@@ -29,7 +29,9 @@ class ActiveGridClient {
     _client.close();
   }
 
-  Map<String, String> get _headers => <String, String>{
+  /// Headers that are used for multiple Calls
+  @visibleForTesting
+  Map<String, String> get headers => <String, String>{
         if (authentication != null)
           HttpHeaders.authorizationHeader: authentication.header,
       };
@@ -61,7 +63,7 @@ class ActiveGridClient {
       @required String space,
       @required String grid}) async {
     final url = '${environment.url}/api/users/$user/spaces/$space/grids/$grid';
-    final response = await _client.get(url, headers: _headers);
+    final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
     }

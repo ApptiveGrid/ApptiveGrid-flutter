@@ -36,6 +36,9 @@ class ActiveGrid extends StatefulWidget {
   @override
   _ActiveGridState createState() => _ActiveGridState();
 
+  /// Get direct Access to [ActiveGridClient]
+  ///
+  /// uses [Provider] to return the client
   static ActiveGridClient getClient(BuildContext context,
       {bool listen = true}) {
     return Provider.of<ActiveGridClient>(context, listen: listen);
