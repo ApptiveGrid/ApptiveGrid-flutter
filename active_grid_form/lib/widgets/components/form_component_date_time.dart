@@ -23,12 +23,12 @@ class _FormComponentDateTimeState extends State<FormComponentDateTime> {
   Widget build(
     BuildContext context,
   ) {
-    if (widget.component.value != null) {
+    if (widget.component.data.value != null) {
       final dateFormat = DateFormat.yMd();
-      final dateString = dateFormat.format(widget.component.value);
+      final dateString = dateFormat.format(widget.component.data.value);
       _dateController.text = dateString;
       final timeFormat = DateFormat.jm();
-      final timeString = timeFormat.format(widget.component.value);
+      final timeString = timeFormat.format(widget.component.data.value);
       _timeController.text = timeString;
     }
     return FormField<DateTime>(
@@ -54,7 +54,7 @@ class _FormComponentDateTimeState extends State<FormComponentDateTime> {
                 child: InkWell(
                   onTap: () {
                     final initialDate =
-                        widget.component.value ?? DateTime.now();
+                        widget.component.data.value ?? DateTime.now();
                     showDatePicker(
                       context: context,
                       initialDate: initialDate,
@@ -65,7 +65,7 @@ class _FormComponentDateTimeState extends State<FormComponentDateTime> {
                       if (value != null) {
                         state.didChange(value);
                         setState(() {
-                          widget.component.value = value;
+                          widget.component.data.value = value;
                         });
                       }
                     });
@@ -87,7 +87,7 @@ class _FormComponentDateTimeState extends State<FormComponentDateTime> {
                 child: InkWell(
                   onTap: () {
                     final initialDate =
-                        widget.component.value ?? DateTime.now();
+                        widget.component.data.value ?? DateTime.now();
                     showTimePicker(
                       context: context,
                       initialTime: TimeOfDay.fromDateTime(initialDate),
@@ -103,7 +103,7 @@ class _FormComponentDateTimeState extends State<FormComponentDateTime> {
                               initialDate.second,
                               initialDate.millisecond,
                               initialDate.microsecond);
-                          widget.component.value = newDate;
+                          widget.component.data.value = newDate;
                           state.didChange(newDate);
                         });
                       }

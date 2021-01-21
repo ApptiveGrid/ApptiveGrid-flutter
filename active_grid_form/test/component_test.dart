@@ -18,6 +18,7 @@ void main() {
         'method',
       );
       final component = model.FormComponentText(
+        data: model.StringDataEntity(),
         property: 'Property',
         options: model.TextComponentOptions(),
         required: false,
@@ -55,7 +56,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.value, 'Value');
+      expect(result.components.first.data.value, 'Value');
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -64,6 +65,7 @@ void main() {
         'method',
       );
       final component = model.FormComponentText(
+        data: model.StringDataEntity(),
         property: 'Property',
         options: model.TextComponentOptions(),
         required: true,
@@ -104,6 +106,7 @@ void main() {
         'method',
       );
       final component = model.FormComponentDateTime(
+        data: model.DateTimeDataEntity(),
         property: 'Property',
         options: model.StubComponentOptions(),
         required: false,
@@ -152,7 +155,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.value, date);
+      expect(result.components.first.data.value, date);
     });
 
     testWidgets('Value is send and used with Time Picker', (tester) async {
@@ -161,6 +164,7 @@ void main() {
         'method',
       );
       final component = model.FormComponentDateTime(
+        data: model.DateTimeDataEntity(),
         property: 'Property',
         options: model.StubComponentOptions(),
         required: false,
@@ -209,7 +213,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future
-          .then((data) => data.components.first.value as DateTime);
+          .then((data) => data.components.first.data.value as DateTime);
       expect(
           DateTime(result.year, result.month, result.day, result.hour,
               result.minute),
@@ -222,6 +226,7 @@ void main() {
         'method',
       );
       final component = model.FormComponentDateTime(
+        data: model.DateTimeDataEntity(),
         property: 'Property',
         options: model.StubComponentOptions(),
         required: true,
@@ -262,6 +267,7 @@ void main() {
         'method',
       );
       final component = model.FormComponentDate(
+        data: model.DateDataEntity(),
         property: 'Property',
         options: model.StubComponentOptions(),
         required: false,
@@ -310,7 +316,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.value, date);
+      expect(result.components.first.data.value, date);
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -319,6 +325,7 @@ void main() {
         'method',
       );
       final component = model.FormComponentDate(
+        data: model.DateDataEntity(),
         property: 'Property',
         options: model.StubComponentOptions(),
         required: true,
@@ -359,6 +366,7 @@ void main() {
         'method',
       );
       final component = model.FormComponentNumber(
+        data: model.IntegerDataEntity(),
         property: 'Property',
         options: model.TextComponentOptions(),
         required: false,
@@ -396,7 +404,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.value, 12);
+      expect(result.components.first.data.value, 12);
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -405,6 +413,7 @@ void main() {
         'method',
       );
       final component = model.FormComponentNumber(
+        data: model.IntegerDataEntity(),
         property: 'Property',
         options: model.TextComponentOptions(),
         required: true,
@@ -445,6 +454,7 @@ void main() {
         'method',
       );
       final component = model.FormComponentCheckBox(
+        data: model.BooleanDataEntity(),
         property: 'Property',
         options: model.StubComponentOptions(),
         required: false,
@@ -482,7 +492,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.value, true);
+      expect(result.components.first.data.value, true);
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -491,6 +501,7 @@ void main() {
         'method',
       );
       final component = model.FormComponentCheckBox(
+        data: model.BooleanDataEntity(),
         property: 'Property',
         options: model.StubComponentOptions(),
         required: true,

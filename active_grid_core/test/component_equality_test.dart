@@ -4,14 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   final textA = FormComponentText(
       property: 'Property',
-      value: 'Value',
+      data: StringDataEntity('Value'),
       options: TextComponentOptions(
         label: 'Label',
       ),
       required: true);
   final textB = FormComponentText(
       property: 'Property',
-      value: 'Value',
+      data: StringDataEntity('Value'),
       options: TextComponentOptions(
         label: 'Label',
       ),
@@ -19,6 +19,7 @@ void main() {
 
   final textC = FormComponentText(
       property: 'Property',
+      data: StringDataEntity(),
       options: TextComponentOptions(
         label: 'Label',
       ),
@@ -26,6 +27,7 @@ void main() {
 
   final number = FormComponentNumber(
       property: 'Property',
+      data: IntegerDataEntity(),
       options: TextComponentOptions(
         label: 'Label',
       ),
@@ -33,18 +35,21 @@ void main() {
 
   final date = FormComponentDate(
     property: 'Property',
+    data: DateDataEntity(),
     options: StubComponentOptions(),
     required: false,
   );
 
   final dateTime = FormComponentDateTime(
     property: 'Property',
+    data: DateTimeDataEntity(),
     options: StubComponentOptions(),
     required: false,
   );
 
   final checkBox = FormComponentCheckBox(
     property: 'Property',
+    data: BooleanDataEntity(),
     options: StubComponentOptions(),
     required: false,
   );

@@ -34,10 +34,10 @@ void main() {
 
       expect(parsedComponent.runtimeType, FormComponentText);
       expect(parsedComponent.property, property);
-      expect(parsedComponent.value, value);
+      expect(parsedComponent.data.value, value);
       expect(parsedComponent.required, true);
-      expect(parsedComponent.type, FormType.text);
-      expect(parsedComponent.schemaValue, value);
+      expect(parsedComponent.data.runtimeType, StringDataEntity);
+      expect(parsedComponent.data.schemaValue, value);
 
       final parsedOptions = parsedComponent.options as TextComponentOptions;
       expect(parsedOptions.multi, true);
@@ -67,10 +67,10 @@ void main() {
 
       expect(parsedComponent.runtimeType, FormComponentDateTime);
       expect(parsedComponent.property, property);
-      expect(parsedComponent.value, value);
+      expect(parsedComponent.data.value, value);
       expect(parsedComponent.required, true);
-      expect(parsedComponent.type, FormType.dateTime);
-      expect(parsedComponent.schemaValue, value.toIso8601String());
+      expect(parsedComponent.data.runtimeType, DateTimeDataEntity);
+      expect(parsedComponent.data.schemaValue, value.toIso8601String());
 
       final parsedOptions = parsedComponent.options as StubComponentOptions;
       expect(false, parsedOptions == null);
@@ -97,10 +97,10 @@ void main() {
 
       expect(parsedComponent.runtimeType, FormComponentDate);
       expect(parsedComponent.property, property);
-      expect(parsedComponent.value, value);
+      expect(parsedComponent.data.value, value);
       expect(parsedComponent.required, true);
-      expect(parsedComponent.type, FormType.date);
-      expect(parsedComponent.schemaValue, '2020-12-07');
+      expect(parsedComponent.data.runtimeType, DateDataEntity);
+      expect(parsedComponent.data.schemaValue, '2020-12-07');
 
       final parsedOptions = parsedComponent.options as StubComponentOptions;
       expect(false, parsedOptions == null);
@@ -137,10 +137,10 @@ void main() {
 
       expect(parsedComponent.runtimeType, FormComponentNumber);
       expect(parsedComponent.property, property);
-      expect(parsedComponent.value, value);
+      expect(parsedComponent.data.value, value);
       expect(parsedComponent.required, true);
-      expect(parsedComponent.type, FormType.integer);
-      expect(parsedComponent.schemaValue, value);
+      expect(parsedComponent.data.runtimeType, IntegerDataEntity);
+      expect(parsedComponent.data.schemaValue, value);
 
       final parsedOptions = parsedComponent.options as TextComponentOptions;
       expect(parsedOptions.multi, true);
@@ -172,10 +172,10 @@ void main() {
 
       expect(parsedComponent.runtimeType, FormComponentCheckBox);
       expect(parsedComponent.property, property);
-      expect(parsedComponent.value, value);
+      expect(parsedComponent.data.value, value);
       expect(parsedComponent.required, true);
-      expect(parsedComponent.type, FormType.checkbox);
-      expect(parsedComponent.schemaValue, value);
+      expect(parsedComponent.data.runtimeType, BooleanDataEntity);
+      expect(parsedComponent.data.schemaValue, value);
 
       final parsedOptions = parsedComponent.options as StubComponentOptions;
       expect(false, parsedOptions == null);
@@ -213,8 +213,8 @@ void main() {
 
       expect(parsedComponent.runtimeType, FormComponentText);
       expect(parsedComponent.property, property);
-      expect(parsedComponent.value, null);
-      expect(parsedComponent.schemaValue, null);
+      expect(parsedComponent.data.value, null);
+      expect(parsedComponent.data.schemaValue, null);
     });
 
     test('DateTime', () {
@@ -237,8 +237,8 @@ void main() {
 
       expect(parsedComponent.runtimeType, FormComponentDateTime);
       expect(parsedComponent.property, property);
-      expect(parsedComponent.value, null);
-      expect(parsedComponent.schemaValue, null);
+      expect(parsedComponent.data.value, null);
+      expect(parsedComponent.data.schemaValue, null);
     });
 
     test('Date', () {
@@ -261,8 +261,8 @@ void main() {
 
       expect(parsedComponent.runtimeType, FormComponentDate);
       expect(parsedComponent.property, property);
-      expect(parsedComponent.value, null);
-      expect(parsedComponent.schemaValue, null);
+      expect(parsedComponent.data.value, null);
+      expect(parsedComponent.data.schemaValue, null);
     });
 
     test('Number', () {
@@ -295,8 +295,8 @@ void main() {
 
       expect(parsedComponent.runtimeType, FormComponentNumber);
       expect(parsedComponent.property, property);
-      expect(parsedComponent.value, null);
-      expect(parsedComponent.schemaValue, null);
+      expect(parsedComponent.data.value, null);
+      expect(parsedComponent.data.schemaValue, null);
     });
 
     test('Checkbox', () {
@@ -321,8 +321,8 @@ void main() {
 
       expect(parsedComponent.runtimeType, FormComponentCheckBox);
       expect(parsedComponent.property, property);
-      expect(parsedComponent.value, false);
-      expect(parsedComponent.schemaValue, false);
+      expect(parsedComponent.data.value, false);
+      expect(parsedComponent.data.schemaValue, false);
     });
   });
 
@@ -339,6 +339,27 @@ void main() {
       };
       final json = {
         'property': property,
+        'value': null,
+        'required': true,
+        'options': <String, dynamic>{},
+        'type': 'unkown'
+      };
+
+      expect(() => FormComponent.fromJson(json, schema), throwsArgumentError);
+    });
+
+    test('Unknown Property throws', () {
+      final property = 'property';
+
+      final schema = {
+        'properties': {
+          property: {
+            'type': 'unkown',
+          }
+        }
+      };
+      final json = {
+        'property': 'schemaError',
         'value': null,
         'required': true,
         'options': <String, dynamic>{},

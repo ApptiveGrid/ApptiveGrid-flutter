@@ -9,6 +9,7 @@ void main() {
     testWidgets('Default Label is Property', (tester) async {
       final property = 'Property';
       final component = model.FormComponentText(
+        data: model.StringDataEntity(),
         property: property,
         options: model.TextComponentOptions(),
       );
@@ -28,6 +29,7 @@ void main() {
       final property = 'Property';
       final customLabel = 'CustomLabel';
       final component = model.FormComponentText(
+        data: model.StringDataEntity(),
         property: property,
         options: model.TextComponentOptions(
           label: customLabel,
@@ -50,6 +52,7 @@ void main() {
     testWidgets('Default Label is Property', (tester) async {
       final property = 'Property';
       final component = model.FormComponentNumber(
+        data: model.IntegerDataEntity(),
         property: property,
         options: model.TextComponentOptions(),
       );
@@ -69,6 +72,7 @@ void main() {
       final property = 'Property';
       final customLabel = 'CustomLabel';
       final component = model.FormComponentNumber(
+        data: model.IntegerDataEntity(),
         property: property,
         options: model.TextComponentOptions(
           label: customLabel,

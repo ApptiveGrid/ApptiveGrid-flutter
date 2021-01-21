@@ -1,36 +1,28 @@
 part of active_grid_model;
 
-/// Model for a [FormComponent] representing [FormType.text]
+/// Model for a [FormComponent] representing [DataType.text]
 class FormComponentText extends FormComponent<String, String> {
   /// Creates a FormComponent
-  FormComponentText({
-    @f.required this.property,
-    this.value,
-    @f.required this.options,
-    this.required = false,
-  }) : type = FormType.text;
+  FormComponentText(
+      {@f.required this.property,
+      @f.required this.data,
+      @f.required this.options,
+      this.required = false});
 
   /// Deserializes [json] into a [FormComponent]
   FormComponentText.fromJson(Map<String, dynamic> json)
       : property = json['property'],
-        value = json['value'],
+        data = StringDataEntity(json['value']),
         options = TextComponentOptions.fromJson(json['options']),
-        required = json['required'],
-        type = FormType.text;
+        required = json['required'];
 
   @override
   final String property;
   @override
-  String value;
+  StringDataEntity data;
   @override
   final TextComponentOptions options;
 
   @override
   final bool required;
-
-  @override
-  final FormType type;
-
-  @override
-  String get schemaValue => value;
 }

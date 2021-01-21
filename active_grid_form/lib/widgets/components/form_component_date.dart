@@ -23,13 +23,13 @@ class _FormComponentDateState extends State<FormComponentDate> {
     BuildContext context,
   ) {
     final dateFormat = DateFormat.yMd();
-    if (widget.component.value != null) {
-      final dateString = dateFormat.format(widget.component.value);
+    if (widget.component.data.value != null) {
+      final dateString = dateFormat.format(widget.component.data.value);
       _controller.text = dateString;
     }
     return InkWell(
       onTap: () {
-        final initialDate = widget.component.value ?? DateTime.now();
+        final initialDate = widget.component.data.value ?? DateTime.now();
         showDatePicker(
           context: context,
           initialDate: initialDate,
@@ -40,7 +40,7 @@ class _FormComponentDateState extends State<FormComponentDate> {
           if (value != null) {
             _formKey.currentState.didChange(dateFormat.format(value));
             setState(() {
-              widget.component.value = value;
+              widget.component.data.value = value;
             });
           }
         });

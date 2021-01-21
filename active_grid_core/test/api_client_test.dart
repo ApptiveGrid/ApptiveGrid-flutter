@@ -69,7 +69,7 @@ void main() {
       final property = 'Checkbox';
       final component = FormComponentCheckBox(
         property: property,
-        value: true,
+        data: BooleanDataEntity(true),
         options: StubComponentOptions.fromJson({}),
         required: false,
       );

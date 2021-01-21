@@ -12,7 +12,7 @@ void main() {
       );
       final component = FormComponentText(
         property: 'Property',
-        value: 'Value',
+        data: StringDataEntity('Value'),
         options: options,
         required: true,
       );
@@ -29,7 +29,7 @@ void main() {
       );
       final component = FormComponentNumber(
         property: 'Property',
-        value: 1,
+        data: IntegerDataEntity(1),
         options: options,
         required: true,
       );
@@ -41,7 +41,7 @@ void main() {
       final options = StubComponentOptions.fromJson({});
       final component = FormComponentDate(
         property: 'Property',
-        value: DateTime(2020, 07, 12),
+        data: DateDataEntity(DateTime(2020, 07, 12)),
         options: options,
         required: true,
       );
@@ -53,7 +53,7 @@ void main() {
       final options = StubComponentOptions.fromJson({});
       final component = FormComponentDateTime(
         property: 'Property',
-        value: DateTime(2020, 07, 12, 12, 0, 0, 0),
+        data: DateTimeDataEntity(DateTime(2020, 07, 12, 12, 0, 0, 0)),
         options: options,
         required: true,
       );
@@ -65,7 +65,7 @@ void main() {
       final options = StubComponentOptions.fromJson({});
       final component = FormComponentCheckBox(
         property: 'Property',
-        value: false,
+        data: BooleanDataEntity(false),
         options: options,
         required: true,
       );

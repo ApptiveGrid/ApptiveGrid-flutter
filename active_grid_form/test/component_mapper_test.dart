@@ -6,6 +6,7 @@ void main() {
   group('Mapping', () {
     test('TextComponent', () {
       final component = model.FormComponentText(
+        data: model.StringDataEntity(),
         property: 'Property',
         required: false,
         options: model.TextComponentOptions(),
@@ -18,6 +19,7 @@ void main() {
 
     test('NumberComponent', () {
       final component = model.FormComponentNumber(
+        data: model.IntegerDataEntity(),
         property: 'Property',
         required: false,
         options: model.TextComponentOptions(),
@@ -30,6 +32,7 @@ void main() {
 
     test('DateComponent', () {
       final component = model.FormComponentDate(
+        data: model.DateDataEntity(),
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
@@ -42,6 +45,7 @@ void main() {
 
     test('DateTimeComponent', () {
       final component = model.FormComponentDateTime(
+        data: model.DateTimeDataEntity(),
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
@@ -54,6 +58,7 @@ void main() {
 
     test('CheckBoxComponent', () {
       final component = model.FormComponentCheckBox(
+        data: model.BooleanDataEntity(),
         property: 'Property',
         required: false,
         options: model.StubComponentOptions(),
@@ -65,7 +70,6 @@ void main() {
     });
 
     test('ArgumentError', () {
-      // This won't work once everything is migrated to Null-Safety
       final component = UnknownComponent();
 
       expect(() => fromModel(component), throwsArgumentError);
@@ -84,11 +88,5 @@ class UnknownComponent extends model.FormComponent<String, String> {
   bool get required => false;
 
   @override
-  String get schemaValue => 'Value';
-
-  @override
-  model.FormType get type => null;
-
-  @override
-  String get value => 'Value';
+  model.DataEntity<String, String> get data => null;
 }

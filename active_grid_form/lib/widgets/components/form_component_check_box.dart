@@ -16,7 +16,7 @@ class _FormComponentCheckBoxState extends State<FormComponentCheckBox> {
   @override
   Widget build(BuildContext context) {
     return FormField<bool>(
-      initialValue: widget.component.value,
+      initialValue: widget.component.data.value,
       validator: (value) {
         if (widget.component.required && !value) {
           return 'Required';
@@ -42,9 +42,9 @@ class _FormComponentCheckBoxState extends State<FormComponentCheckBox> {
                   height: 24,
                   width: 24,
                   child: Checkbox(
-                    value: widget.component.value,
+                    value: widget.component.data.value,
                     onChanged: (newValue) {
-                      widget.component.value = newValue;
+                      widget.component.data.value = newValue;
                       state.didChange(newValue);
                       setState(() {});
                     },
