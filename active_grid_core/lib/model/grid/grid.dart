@@ -1,12 +1,12 @@
 part of active_grid_model;
 
 /// Model for GridData
-class GridData {
+class Grid {
   /// Creates a GridData Object
-  GridData(this.name, this.schema, this.fields, this.rows);
+  Grid(this.name, this.schema, this.fields, this.rows);
 
   /// Deserializes [json] into a GridData Object
-  factory GridData.fromJson(Map<String, dynamic> json) {
+  factory Grid.fromJson(Map<String, dynamic> json) {
     final ids = json['fieldIds'] as List<String>;
     final names = json['fieldNames'] as List<String>;
     final schema = json['schema'];
@@ -21,7 +21,7 @@ class GridData {
     final entries = (json['entities'] as List)
         .map((e) => GridRow.fromJson(e, fields))
         .toList();
-    return GridData(json['name'], schema, fields, entries);
+    return Grid(json['name'], schema, fields, entries);
   }
 
   /// Name of the Form
@@ -36,7 +36,7 @@ class GridData {
   /// Rows of the Grid
   final List<GridRow> rows;
 
-  /// Serializes [GridData] into a json Map
+  /// Serializes [Grid] into a json Map
   Map<String, dynamic> toJson() => {
         'name': name,
         'schema': schema,
@@ -52,7 +52,7 @@ class GridData {
 
   @override
   bool operator ==(Object other) {
-    return other is GridData &&
+    return other is Grid &&
         name == other.name &&
         schema == other.schema &&
         f.listEquals(fields, other.fields) &&

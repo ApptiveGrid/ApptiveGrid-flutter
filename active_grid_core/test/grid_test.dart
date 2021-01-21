@@ -154,22 +154,22 @@ void main() {
     };
 
     test('Parses json Response', () {
-      final gridData = GridData.fromJson(json);
+      final grid = Grid.fromJson(json);
 
-      expect(gridData.name, 'New grid');
-      expect(gridData.schema, isNot(null));
-      expect(gridData.fields.length, 7);
-      expect(gridData.rows.length, 19);
+      expect(grid.name, 'New grid');
+      expect(grid.schema, isNot(null));
+      expect(grid.fields.length, 7);
+      expect(grid.rows.length, 19);
 
-      final firstRow = gridData.rows[0];
+      final firstRow = grid.rows[0];
       expect(firstRow.entries[0].data.value, 'Hello');
       expect(firstRow.entries[1].data.value, 1);
     });
 
     test('From Json == To Json -> FromJson', () {
-      final initialData = GridData.fromJson(json);
+      final initialData = Grid.fromJson(json);
       final saved = initialData.toJson();
-      final restored = GridData.fromJson(saved);
+      final restored = Grid.fromJson(saved);
 
       expect(saved, json);
       expect(restored, initialData);
