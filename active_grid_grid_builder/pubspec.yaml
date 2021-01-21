@@ -1,0 +1,23 @@
+name: active_grid_grid_builder
+description: A Flutter Package to build Widgets based on Data from an ActiveGrid Grid.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  active_grid_core:
+    path: ../active_grid_core # TODO: Use hosted version on pub.dev once published
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter:
+

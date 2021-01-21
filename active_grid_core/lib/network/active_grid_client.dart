@@ -3,8 +3,10 @@ part of active_grid_network;
 /// Api Client to communicate with the ActiveGrid Backend
 class ActiveGridClient {
   /// Creates an ApiClient
-  ActiveGridClient({this.environment = ActiveGridEnvironment.production})
-      : _client = http.Client();
+  ActiveGridClient({
+    this.environment = ActiveGridEnvironment.production,
+    this.authentication,
+  }) : _client = http.Client();
 
   /// Creates an Api Client on the Basis of a [http.Client]
   ///
@@ -17,6 +19,9 @@ class ActiveGridClient {
   /// Current Environment the Api is connecting to
   ActiveGridEnvironment environment;
 
+  /// Authentication Object
+  ActiveGridAuthentication authentication;
+
   final http.Client _client;
 
   /// Close the connection on the httpClient
@@ -24,7 +29,12 @@ class ActiveGridClient {
     _client.close();
   }
 
-  /// Loads a form specified with [formId]
+  Map<String, String> get _headers => <String, String>{
+        if (authentication != null)
+          HttpHeaders.authorizationHeader: authentication.header,
+      };
+
+  /// Loads a [FormData] specified with [formId]
   Future<FormData> loadForm({@required String formId}) async {
     final url = '${environment.url}/api/a/$formId';
     final response = await _client.get(url);
@@ -39,5 +49,22 @@ class ActiveGridClient {
     request.body = jsonEncode(formData.toRequestObject());
     final response = await _client.send(request);
     return http.Response.fromStream(response);
+  }
+
+  /// Loads a [Grid]
+  ///
+  /// [user] User that owns the [Grid]
+  /// [space] Space the [Grid] is in
+  /// [grid] id of the [Grid]
+  Future<Grid> loadGrid(
+      {@required String user,
+      @required String space,
+      @required String grid}) async {
+    final url = '${environment.url}/api/users/$user/spaces/$space/grids/$grid';
+    final response = await _client.get(url, headers: _headers);
+    if (response.statusCode >= 400) {
+      throw response;
+    }
+    return Grid.fromJson(json.decode(response.body));
   }
 }
