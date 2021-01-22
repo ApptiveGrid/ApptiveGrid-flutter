@@ -14,7 +14,7 @@ void main() {
         options: TextComponentOptions(),
       );
       final target = TestApp(
-        child: FormComponentText(
+        child: TextFormWidget(
           component: component,
         ),
       );
@@ -36,7 +36,7 @@ void main() {
         ),
       );
       final target = TestApp(
-        child: FormComponentText(
+        child: TextFormWidget(
           component: component,
         ),
       );
@@ -57,7 +57,7 @@ void main() {
         options: TextComponentOptions(),
       );
       final target = TestApp(
-        child: FormComponentNumber(
+        child: NumberFormWidget(
           component: component,
         ),
       );
@@ -79,7 +79,7 @@ void main() {
         ),
       );
       final target = TestApp(
-        child: FormComponentNumber(
+        child: NumberFormWidget(
           component: component,
         ),
       );

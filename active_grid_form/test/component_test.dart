@@ -48,7 +48,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FormComponentText), findsOneWidget);
+      expect(find.byType(TextFormWidget), findsOneWidget);
 
       await tester.enterText(find.byType(TextFormField), 'Value');
       await tester.pumpAndSettle();
@@ -89,7 +89,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FormComponentText), findsOneWidget);
+      expect(find.byType(TextFormWidget), findsOneWidget);
 
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
@@ -139,7 +139,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FormComponentDateTime), findsOneWidget);
+      expect(find.byType(DateTimeFormWidget), findsOneWidget);
 
       await tester.tap(
         find.text('Date'),
@@ -197,7 +197,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FormComponentDateTime), findsOneWidget);
+      expect(find.byType(DateTimeFormWidget), findsOneWidget);
 
       await tester.tap(
         find.text('Time'),
@@ -250,7 +250,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FormComponentDateTime), findsOneWidget);
+      expect(find.byType(DateTimeFormWidget), findsOneWidget);
 
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
@@ -300,10 +300,10 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FormComponentDate), findsOneWidget);
+      expect(find.byType(DateFormWidget), findsOneWidget);
 
       await tester.tap(
-        find.byType(FormComponentDate),
+        find.byType(DateFormWidget),
       );
       await tester.pumpAndSettle();
 
@@ -349,7 +349,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FormComponentDate), findsOneWidget);
+      expect(find.byType(DateFormWidget), findsOneWidget);
 
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
@@ -396,7 +396,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FormComponentNumber), findsOneWidget);
+      expect(find.byType(NumberFormWidget), findsOneWidget);
 
       await tester.enterText(find.byType(TextFormField), '12');
       await tester.pumpAndSettle();
@@ -437,7 +437,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FormComponentNumber), findsOneWidget);
+      expect(find.byType(NumberFormWidget), findsOneWidget);
 
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
@@ -484,7 +484,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FormComponentCheckBox), findsOneWidget);
+      expect(find.byType(CheckBoxFormWidget), findsOneWidget);
 
       await tester.tap(find.byType(Checkbox));
       await tester.pumpAndSettle();
@@ -525,7 +525,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FormComponentCheckBox), findsOneWidget);
+      expect(find.byType(CheckBoxFormWidget), findsOneWidget);
 
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();

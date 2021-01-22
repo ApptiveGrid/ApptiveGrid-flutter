@@ -14,7 +14,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, FormComponentText);
+      expect(widget.runtimeType, TextFormWidget);
     });
 
     test('NumberComponent', () {
@@ -27,7 +27,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, FormComponentNumber);
+      expect(widget.runtimeType, NumberFormWidget);
     });
 
     test('DateComponent', () {
@@ -40,7 +40,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, FormComponentDate);
+      expect(widget.runtimeType, DateFormWidget);
     });
 
     test('DateTimeComponent', () {
@@ -53,7 +53,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, FormComponentDateTime);
+      expect(widget.runtimeType, DateTimeFormWidget);
     });
 
     test('CheckBoxComponent', () {
@@ -66,7 +66,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, FormComponentCheckBox);
+      expect(widget.runtimeType, CheckBoxFormWidget);
     });
 
     test('ArgumentError', () {

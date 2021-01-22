@@ -6,23 +6,23 @@ part of active_grid_form_widgets;
 Widget fromModel(FormComponent component) {
   switch (component.data.runtimeType) {
     case StringDataEntity:
-      return FormComponentText(
+      return TextFormWidget(
         component: component,
       );
     case DateTimeDataEntity:
-      return FormComponentDateTime(
+      return DateTimeFormWidget(
         component: component,
       );
     case DateDataEntity:
-      return FormComponentDate(
+      return DateFormWidget(
         component: component,
       );
     case IntegerDataEntity:
-      return FormComponentNumber(
+      return NumberFormWidget(
         component: component,
       );
     case BooleanDataEntity:
-      return FormComponentCheckBox(
+      return CheckBoxFormWidget(
         component: component,
       );
     default:
