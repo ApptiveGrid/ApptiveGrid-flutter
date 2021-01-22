@@ -58,7 +58,7 @@ void main() {
 
       expect(formData.title, 'Form');
       expect(formData.components.length, 1);
-      expect(formData.components[0].runtimeType, FormComponentText);
+      expect(formData.components[0].runtimeType, StringFormComponent);
       expect(formData.actions.length, 1);
     });
   });
@@ -67,7 +67,7 @@ void main() {
     test('Successful', () async {
       final action = FormAction('/uri', 'POST');
       final property = 'Checkbox';
-      final component = FormComponentCheckBox(
+      final component = BooleanFormComponent(
         property: property,
         data: BooleanDataEntity(true),
         options: StubComponentOptions.fromJson({}),

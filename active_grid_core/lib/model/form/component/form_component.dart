@@ -2,14 +2,13 @@ part of active_grid_model;
 
 /// Data Object that represents a entry in a Form
 ///
-/// [T] is the type used internally (e.g. [DateTime] for [DataType.dateTime]
-/// [R] is the type expected by the backend when sending back data
-abstract class FormComponent<T, R> {
+/// [T] is the [DataEntity] type of [data]
+abstract class FormComponent<T extends DataEntity> {
   /// Name of the Component
   String get property;
 
   /// Value of the Component
-  DataEntity<T, R> get data;
+  T get data;
 
   /// Additional options of a component
   FormComponentOptions get options;
@@ -35,7 +34,7 @@ abstract class FormComponent<T, R> {
   @override
   bool operator ==(Object other) {
     return runtimeType == other.runtimeType &&
-        other is FormComponent<T, R> &&
+        other is FormComponent<T> &&
         property == other.property &&
         data == other.data &&
         options == other.options &&
@@ -55,15 +54,15 @@ abstract class FormComponent<T, R> {
         dataTypeFromSchema(schema: schema, propertyName: json['property']);
     switch (dataType) {
       case DataType.text:
-        return FormComponentText.fromJson(json);
+        return StringFormComponent.fromJson(json);
       case DataType.dateTime:
-        return FormComponentDateTime.fromJson(json);
+        return DateTimeFormComponent.fromJson(json);
       case DataType.date:
-        return FormComponentDate.fromJson(json);
+        return DateFormComponent.fromJson(json);
       case DataType.integer:
-        return FormComponentNumber.fromJson(json);
+        return IntegerFormComponent.fromJson(json);
       case DataType.checkbox:
-        return FormComponentCheckBox.fromJson(json);
+        return BooleanFormComponent.fromJson(json);
     }
   }
 }

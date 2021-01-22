@@ -1,6 +1,6 @@
 import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:active_grid_core/active_grid_model.dart' as model;
+import 'package:active_grid_core/active_grid_model.dart';
 
 import 'common.dart';
 
@@ -8,10 +8,10 @@ void main() {
   group('Text', () {
     testWidgets('Default Label is Property', (tester) async {
       final property = 'Property';
-      final component = model.FormComponentText(
-        data: model.StringDataEntity(),
+      final component = StringFormComponent(
+        data: StringDataEntity(),
         property: property,
-        options: model.TextComponentOptions(),
+        options: TextComponentOptions(),
       );
       final target = TestApp(
         child: FormComponentText(
@@ -28,10 +28,10 @@ void main() {
     testWidgets('Custom Label is shown', (tester) async {
       final property = 'Property';
       final customLabel = 'CustomLabel';
-      final component = model.FormComponentText(
-        data: model.StringDataEntity(),
+      final component = StringFormComponent(
+        data: StringDataEntity(),
         property: property,
-        options: model.TextComponentOptions(
+        options: TextComponentOptions(
           label: customLabel,
         ),
       );
@@ -51,10 +51,10 @@ void main() {
   group('Number', () {
     testWidgets('Default Label is Property', (tester) async {
       final property = 'Property';
-      final component = model.FormComponentNumber(
-        data: model.IntegerDataEntity(),
+      final component = IntegerFormComponent(
+        data: IntegerDataEntity(),
         property: property,
-        options: model.TextComponentOptions(),
+        options: TextComponentOptions(),
       );
       final target = TestApp(
         child: FormComponentNumber(
@@ -71,10 +71,10 @@ void main() {
     testWidgets('Custom Label is shown', (tester) async {
       final property = 'Property';
       final customLabel = 'CustomLabel';
-      final component = model.FormComponentNumber(
-        data: model.IntegerDataEntity(),
+      final component = IntegerFormComponent(
+        data: IntegerDataEntity(),
         property: property,
-        options: model.TextComponentOptions(
+        options: TextComponentOptions(
           label: customLabel,
         ),
       );

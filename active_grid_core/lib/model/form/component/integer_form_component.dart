@@ -1,9 +1,9 @@
 part of active_grid_model;
 
-/// Model for a [FormComponent] representing [DataType.integer]
-class FormComponentNumber extends FormComponent<int, int> {
+/// Model for a [FormComponent] representing [IntegerDataEntity]
+class IntegerFormComponent extends FormComponent<IntegerDataEntity> {
   /// Creates a FormComponent
-  FormComponentNumber({
+  IntegerFormComponent({
     @f.required this.property,
     @f.required this.data,
     @f.required this.options,
@@ -11,7 +11,7 @@ class FormComponentNumber extends FormComponent<int, int> {
   });
 
   /// Deserializes [json] into a [FormComponent]
-  FormComponentNumber.fromJson(Map<String, dynamic> json)
+  IntegerFormComponent.fromJson(Map<String, dynamic> json)
       : property = json['property'],
         data = IntegerDataEntity(json['value']),
         options = TextComponentOptions.fromJson(json['options']),

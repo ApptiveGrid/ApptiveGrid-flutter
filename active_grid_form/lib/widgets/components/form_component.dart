@@ -3,25 +3,25 @@ part of active_grid_form_widgets;
 /// Returns a corresponding Widget for a specific [component]
 ///
 /// Throws an [ArgumentError] if no Widget for a specific [model.DataType] is found
-Widget fromModel(model.FormComponent component) {
+Widget fromModel(FormComponent component) {
   switch (component.data.runtimeType) {
-    case model.StringDataEntity:
+    case StringDataEntity:
       return FormComponentText(
         component: component,
       );
-    case model.DateTimeDataEntity:
+    case DateTimeDataEntity:
       return FormComponentDateTime(
         component: component,
       );
-    case model.DateDataEntity:
+    case DateDataEntity:
       return FormComponentDate(
         component: component,
       );
-    case model.IntegerDataEntity:
+    case IntegerDataEntity:
       return FormComponentNumber(
         component: component,
       );
-    case model.BooleanDataEntity:
+    case BooleanDataEntity:
       return FormComponentCheckBox(
         component: component,
       );

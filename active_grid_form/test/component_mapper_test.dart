@@ -1,15 +1,15 @@
-import 'package:active_grid_core/active_grid_model.dart' as model;
+import 'package:active_grid_core/active_grid_model.dart';
 import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Mapping', () {
     test('TextComponent', () {
-      final component = model.FormComponentText(
-        data: model.StringDataEntity(),
+      final component = StringFormComponent(
+        data: StringDataEntity(),
         property: 'Property',
         required: false,
-        options: model.TextComponentOptions(),
+        options: TextComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -18,11 +18,11 @@ void main() {
     });
 
     test('NumberComponent', () {
-      final component = model.FormComponentNumber(
-        data: model.IntegerDataEntity(),
+      final component = IntegerFormComponent(
+        data: IntegerDataEntity(),
         property: 'Property',
         required: false,
-        options: model.TextComponentOptions(),
+        options: TextComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -31,11 +31,11 @@ void main() {
     });
 
     test('DateComponent', () {
-      final component = model.FormComponentDate(
-        data: model.DateDataEntity(),
+      final component = DateFormComponent(
+        data: DateDataEntity(),
         property: 'Property',
         required: false,
-        options: model.StubComponentOptions(),
+        options: StubComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -44,11 +44,11 @@ void main() {
     });
 
     test('DateTimeComponent', () {
-      final component = model.FormComponentDateTime(
-        data: model.DateTimeDataEntity(),
+      final component = DateTimeFormComponent(
+        data: DateTimeDataEntity(),
         property: 'Property',
         required: false,
-        options: model.StubComponentOptions(),
+        options: StubComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -57,11 +57,11 @@ void main() {
     });
 
     test('CheckBoxComponent', () {
-      final component = model.FormComponentCheckBox(
-        data: model.BooleanDataEntity(),
+      final component = BooleanFormComponent(
+        data: BooleanDataEntity(),
         property: 'Property',
         required: false,
-        options: model.StubComponentOptions(),
+        options: StubComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -77,9 +77,9 @@ void main() {
   });
 }
 
-class UnknownComponent extends model.FormComponent<String, String> {
+class UnknownComponent extends FormComponent<DataEntity<String, String>> {
   @override
-  model.FormComponentOptions get options => model.StubComponentOptions();
+  FormComponentOptions get options => StubComponentOptions();
 
   @override
   String get property => 'Property';
@@ -88,5 +88,5 @@ class UnknownComponent extends model.FormComponent<String, String> {
   bool get required => false;
 
   @override
-  model.DataEntity<String, String> get data => null;
+  DataEntity<String, String> get data => null;
 }

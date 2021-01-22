@@ -1,6 +1,6 @@
 part of active_grid_form_widgets;
 
-/// FormComponent Widget to display a [model.FormComponentDate]
+/// FormComponent Widget to display a [model.DateFormComponent]
 class FormComponentDate extends StatefulWidget {
   /// Creates a Widget to display and select a Date contained in [component]
   ///
@@ -8,7 +8,7 @@ class FormComponentDate extends StatefulWidget {
   const FormComponentDate({Key key, this.component}) : super(key: key);
 
   /// Component this Widget should reflect
-  final model.FormComponentDate component;
+  final DateFormComponent component;
 
   @override
   State<StatefulWidget> createState() => _FormComponentDateState();

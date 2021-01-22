@@ -32,7 +32,7 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, FormComponentText);
+      expect(parsedComponent.runtimeType, StringFormComponent);
       expect(parsedComponent.property, property);
       expect(parsedComponent.data.value, value);
       expect(parsedComponent.required, true);
@@ -65,7 +65,7 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, FormComponentDateTime);
+      expect(parsedComponent.runtimeType, DateTimeFormComponent);
       expect(parsedComponent.property, property);
       expect(parsedComponent.data.value, value);
       expect(parsedComponent.required, true);
@@ -95,7 +95,7 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, FormComponentDate);
+      expect(parsedComponent.runtimeType, DateFormComponent);
       expect(parsedComponent.property, property);
       expect(parsedComponent.data.value, value);
       expect(parsedComponent.required, true);
@@ -135,7 +135,7 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, FormComponentNumber);
+      expect(parsedComponent.runtimeType, IntegerFormComponent);
       expect(parsedComponent.property, property);
       expect(parsedComponent.data.value, value);
       expect(parsedComponent.required, true);
@@ -170,7 +170,7 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, FormComponentCheckBox);
+      expect(parsedComponent.runtimeType, BooleanFormComponent);
       expect(parsedComponent.property, property);
       expect(parsedComponent.data.value, value);
       expect(parsedComponent.required, true);
@@ -211,7 +211,7 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, FormComponentText);
+      expect(parsedComponent.runtimeType, StringFormComponent);
       expect(parsedComponent.property, property);
       expect(parsedComponent.data.value, null);
       expect(parsedComponent.data.schemaValue, null);
@@ -235,7 +235,7 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, FormComponentDateTime);
+      expect(parsedComponent.runtimeType, DateTimeFormComponent);
       expect(parsedComponent.property, property);
       expect(parsedComponent.data.value, null);
       expect(parsedComponent.data.schemaValue, null);
@@ -259,7 +259,7 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, FormComponentDate);
+      expect(parsedComponent.runtimeType, DateFormComponent);
       expect(parsedComponent.property, property);
       expect(parsedComponent.data.value, null);
       expect(parsedComponent.data.schemaValue, null);
@@ -293,7 +293,7 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, FormComponentNumber);
+      expect(parsedComponent.runtimeType, IntegerFormComponent);
       expect(parsedComponent.property, property);
       expect(parsedComponent.data.value, null);
       expect(parsedComponent.data.schemaValue, null);
@@ -319,7 +319,7 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, FormComponentCheckBox);
+      expect(parsedComponent.runtimeType, BooleanFormComponent);
       expect(parsedComponent.property, property);
       expect(parsedComponent.data.value, false);
       expect(parsedComponent.data.schemaValue, false);

@@ -1,27 +1,27 @@
 part of active_grid_model;
 
-/// Model for a [FormComponent] representing [DataType.checkbox]
-class FormComponentCheckBox extends FormComponent<bool, bool> {
+/// Model for a [FormComponent] representing [StringDataEntity]
+class StringFormComponent extends FormComponent<StringDataEntity> {
   /// Creates a FormComponent
-  FormComponentCheckBox(
+  StringFormComponent(
       {@f.required this.property,
       @f.required this.data,
       @f.required this.options,
       this.required = false});
 
   /// Deserializes [json] into a [FormComponent]
-  FormComponentCheckBox.fromJson(Map<String, dynamic> json)
+  StringFormComponent.fromJson(Map<String, dynamic> json)
       : property = json['property'],
-        data = BooleanDataEntity(json['value']),
-        options = StubComponentOptions.fromJson(json['options']),
+        data = StringDataEntity(json['value']),
+        options = TextComponentOptions.fromJson(json['options']),
         required = json['required'];
 
   @override
   final String property;
   @override
-  BooleanDataEntity data;
+  StringDataEntity data;
   @override
-  final StubComponentOptions options;
+  final TextComponentOptions options;
 
   @override
   final bool required;

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:active_grid_core/active_grid_model.dart' as model;
+import 'package:active_grid_core/active_grid_model.dart';
 import 'package:active_grid_form/active_grid_form.dart';
 import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
@@ -13,17 +13,17 @@ import 'common.dart';
 void main() {
   group('Text', () {
     testWidgets('Value is send', (tester) async {
-      final action = model.FormAction(
+      final action = FormAction(
         'uri',
         'method',
       );
-      final component = model.FormComponentText(
-        data: model.StringDataEntity(),
+      final component = StringFormComponent(
+        data: StringDataEntity(),
         property: 'Property',
-        options: model.TextComponentOptions(),
+        options: TextComponentOptions(),
         required: false,
       );
-      final formData = model.FormData('Title', [
+      final formData = FormData('Title', [
         component,
       ], [
         action,
@@ -36,7 +36,7 @@ void main() {
         ),
       );
 
-      final completer = Completer<model.FormData>();
+      final completer = Completer<FormData>();
       when(client.loadForm(formId: anyNamed('formId')))
           .thenAnswer((_) async => formData);
       when(client.performAction(action, any))
@@ -60,17 +60,17 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = model.FormAction(
+      final action = FormAction(
         'uri',
         'method',
       );
-      final component = model.FormComponentText(
-        data: model.StringDataEntity(),
+      final component = StringFormComponent(
+        data: StringDataEntity(),
         property: 'Property',
-        options: model.TextComponentOptions(),
+        options: TextComponentOptions(),
         required: true,
       );
-      final formData = model.FormData('Title', [
+      final formData = FormData('Title', [
         component,
       ], [
         action,
@@ -101,17 +101,17 @@ void main() {
 
   group('DateTime', () {
     testWidgets('Value is send and used with Date Picker', (tester) async {
-      final action = model.FormAction(
+      final action = FormAction(
         'uri',
         'method',
       );
-      final component = model.FormComponentDateTime(
-        data: model.DateTimeDataEntity(),
+      final component = DateTimeFormComponent(
+        data: DateTimeDataEntity(),
         property: 'Property',
-        options: model.StubComponentOptions(),
+        options: StubComponentOptions(),
         required: false,
       );
-      final formData = model.FormData('Title', [
+      final formData = FormData('Title', [
         component,
       ], [
         action,
@@ -124,7 +124,7 @@ void main() {
         ),
       );
 
-      final completer = Completer<model.FormData>();
+      final completer = Completer<FormData>();
       when(client.loadForm(formId: anyNamed('formId')))
           .thenAnswer((_) async => formData);
       when(client.performAction(action, any))
@@ -159,17 +159,17 @@ void main() {
     });
 
     testWidgets('Value is send and used with Time Picker', (tester) async {
-      final action = model.FormAction(
+      final action = FormAction(
         'uri',
         'method',
       );
-      final component = model.FormComponentDateTime(
-        data: model.DateTimeDataEntity(),
+      final component = DateTimeFormComponent(
+        data: DateTimeDataEntity(),
         property: 'Property',
-        options: model.StubComponentOptions(),
+        options: StubComponentOptions(),
         required: false,
       );
-      final formData = model.FormData('Title', [
+      final formData = FormData('Title', [
         component,
       ], [
         action,
@@ -182,7 +182,7 @@ void main() {
         ),
       );
 
-      final completer = Completer<model.FormData>();
+      final completer = Completer<FormData>();
       when(client.loadForm(formId: anyNamed('formId')))
           .thenAnswer((_) async => formData);
       when(client.performAction(action, any))
@@ -221,17 +221,17 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = model.FormAction(
+      final action = FormAction(
         'uri',
         'method',
       );
-      final component = model.FormComponentDateTime(
-        data: model.DateTimeDataEntity(),
+      final component = DateTimeFormComponent(
+        data: DateTimeDataEntity(),
         property: 'Property',
-        options: model.StubComponentOptions(),
+        options: StubComponentOptions(),
         required: true,
       );
-      final formData = model.FormData('Title', [
+      final formData = FormData('Title', [
         component,
       ], [
         action,
@@ -262,17 +262,17 @@ void main() {
 
   group('Date', () {
     testWidgets('Value is send', (tester) async {
-      final action = model.FormAction(
+      final action = FormAction(
         'uri',
         'method',
       );
-      final component = model.FormComponentDate(
-        data: model.DateDataEntity(),
+      final component = DateFormComponent(
+        data: DateDataEntity(),
         property: 'Property',
-        options: model.StubComponentOptions(),
+        options: StubComponentOptions(),
         required: false,
       );
-      final formData = model.FormData('Title', [
+      final formData = FormData('Title', [
         component,
       ], [
         action,
@@ -285,7 +285,7 @@ void main() {
         ),
       );
 
-      final completer = Completer<model.FormData>();
+      final completer = Completer<FormData>();
       when(client.loadForm(formId: anyNamed('formId')))
           .thenAnswer((_) async => formData);
       when(client.performAction(action, any))
@@ -320,17 +320,17 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = model.FormAction(
+      final action = FormAction(
         'uri',
         'method',
       );
-      final component = model.FormComponentDate(
-        data: model.DateDataEntity(),
+      final component = DateFormComponent(
+        data: DateDataEntity(),
         property: 'Property',
-        options: model.StubComponentOptions(),
+        options: StubComponentOptions(),
         required: true,
       );
-      final formData = model.FormData('Title', [
+      final formData = FormData('Title', [
         component,
       ], [
         action,
@@ -361,17 +361,17 @@ void main() {
 
   group('Number', () {
     testWidgets('Value is send', (tester) async {
-      final action = model.FormAction(
+      final action = FormAction(
         'uri',
         'method',
       );
-      final component = model.FormComponentNumber(
-        data: model.IntegerDataEntity(),
+      final component = IntegerFormComponent(
+        data: IntegerDataEntity(),
         property: 'Property',
-        options: model.TextComponentOptions(),
+        options: TextComponentOptions(),
         required: false,
       );
-      final formData = model.FormData('Title', [
+      final formData = FormData('Title', [
         component,
       ], [
         action,
@@ -384,7 +384,7 @@ void main() {
         ),
       );
 
-      final completer = Completer<model.FormData>();
+      final completer = Completer<FormData>();
       when(client.loadForm(formId: anyNamed('formId')))
           .thenAnswer((_) async => formData);
       when(client.performAction(action, any))
@@ -408,17 +408,17 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = model.FormAction(
+      final action = FormAction(
         'uri',
         'method',
       );
-      final component = model.FormComponentNumber(
-        data: model.IntegerDataEntity(),
+      final component = IntegerFormComponent(
+        data: IntegerDataEntity(),
         property: 'Property',
-        options: model.TextComponentOptions(),
+        options: TextComponentOptions(),
         required: true,
       );
-      final formData = model.FormData('Title', [
+      final formData = FormData('Title', [
         component,
       ], [
         action,
@@ -449,17 +449,17 @@ void main() {
 
   group('CheckBox', () {
     testWidgets('Value is send', (tester) async {
-      final action = model.FormAction(
+      final action = FormAction(
         'uri',
         'method',
       );
-      final component = model.FormComponentCheckBox(
-        data: model.BooleanDataEntity(),
+      final component = BooleanFormComponent(
+        data: BooleanDataEntity(),
         property: 'Property',
-        options: model.StubComponentOptions(),
+        options: StubComponentOptions(),
         required: false,
       );
-      final formData = model.FormData('Title', [
+      final formData = FormData('Title', [
         component,
       ], [
         action,
@@ -472,7 +472,7 @@ void main() {
         ),
       );
 
-      final completer = Completer<model.FormData>();
+      final completer = Completer<FormData>();
       when(client.loadForm(formId: anyNamed('formId')))
           .thenAnswer((_) async => formData);
       when(client.performAction(action, any))
@@ -496,17 +496,17 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = model.FormAction(
+      final action = FormAction(
         'uri',
         'method',
       );
-      final component = model.FormComponentCheckBox(
-        data: model.BooleanDataEntity(),
+      final component = BooleanFormComponent(
+        data: BooleanDataEntity(),
         property: 'Property',
-        options: model.StubComponentOptions(),
+        options: StubComponentOptions(),
         required: true,
       );
-      final formData = model.FormData('Title', [
+      final formData = FormData('Title', [
         component,
       ], [
         action,

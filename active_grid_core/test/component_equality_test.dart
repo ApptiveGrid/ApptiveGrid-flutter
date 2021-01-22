@@ -2,14 +2,14 @@ import 'package:active_grid_core/active_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final textA = FormComponentText(
+  final textA = StringFormComponent(
       property: 'Property',
       data: StringDataEntity('Value'),
       options: TextComponentOptions(
         label: 'Label',
       ),
       required: true);
-  final textB = FormComponentText(
+  final textB = StringFormComponent(
       property: 'Property',
       data: StringDataEntity('Value'),
       options: TextComponentOptions(
@@ -17,7 +17,7 @@ void main() {
       ),
       required: true);
 
-  final textC = FormComponentText(
+  final textC = StringFormComponent(
       property: 'Property',
       data: StringDataEntity(),
       options: TextComponentOptions(
@@ -25,7 +25,7 @@ void main() {
       ),
       required: false);
 
-  final number = FormComponentNumber(
+  final number = IntegerFormComponent(
       property: 'Property',
       data: IntegerDataEntity(),
       options: TextComponentOptions(
@@ -33,21 +33,21 @@ void main() {
       ),
       required: false);
 
-  final date = FormComponentDate(
+  final date = DateFormComponent(
     property: 'Property',
     data: DateDataEntity(),
     options: StubComponentOptions(),
     required: false,
   );
 
-  final dateTime = FormComponentDateTime(
+  final dateTime = DateTimeFormComponent(
     property: 'Property',
     data: DateTimeDataEntity(),
     options: StubComponentOptions(),
     required: false,
   );
 
-  final checkBox = FormComponentCheckBox(
+  final checkBox = BooleanFormComponent(
     property: 'Property',
     data: BooleanDataEntity(),
     options: StubComponentOptions(),
