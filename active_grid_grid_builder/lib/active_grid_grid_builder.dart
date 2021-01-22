@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 
 export 'package:active_grid_core/active_grid_core.dart';
 
+/// Builder for building Widgets that use [Grid] as the Data Source
 class ActiveGridGridBuilder extends StatefulWidget {
+  ///
   const ActiveGridGridBuilder({
     Key key,
     @required this.user,
