@@ -6,28 +6,35 @@ import 'package:flutter/material.dart';
 
 export 'package:active_grid_core/active_grid_core.dart';
 
-part 'grid_snapshot.dart';
-
 class ActiveGridGridBuilder extends StatefulWidget {
-  const ActiveGridGridBuilder(
-      {Key key,
-      @required this.user,
-      @required this.space,
-      @required this.grid,
-      @required this.builder})
-      : super(key: key);
+  const ActiveGridGridBuilder({
+    Key key,
+    @required this.user,
+    @required this.space,
+    @required this.grid,
+    this.initialData,
+    @required this.builder,
+  }) : super(key: key);
 
   final String user;
   final String space;
   final String grid;
-  final Widget Function(BuildContext, GridSnapshot) builder;
+  final Grid initialData;
+  final Widget Function(BuildContext, AsyncSnapshot<Grid>) builder;
 
   @override
   ActiveGridGridBuilderState createState() => ActiveGridGridBuilderState();
 }
 
 class ActiveGridGridBuilderState extends State<ActiveGridGridBuilder> {
-  GridSnapshot _snapshot = GridSnapshot();
+  AsyncSnapshot<Grid> _snapshot;
+
+  @override
+  void initState() {
+    _snapshot =
+        AsyncSnapshot<Grid>.withData(ConnectionState.none, widget.initialData);
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -44,10 +51,10 @@ class ActiveGridGridBuilderState extends State<ActiveGridGridBuilder> {
     return ActiveGrid.getClient(context, listen: listen)
         .loadGrid(user: widget.user, space: widget.space, grid: widget.grid)
         .then((value) => setState(() {
-              _snapshot = GridSnapshot(data: value);
+              _snapshot = AsyncSnapshot.withData(ConnectionState.done, value);
             }))
         .catchError((error) => setState(() {
-              _snapshot = GridSnapshot(error: error);
+              _snapshot = AsyncSnapshot.withError(ConnectionState.none, error);
             }));
   }
 }
