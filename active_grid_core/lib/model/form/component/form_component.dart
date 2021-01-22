@@ -51,8 +51,11 @@ abstract class FormComponent<T, R> {
   // missing_return can be ignored as the switch statement is exhaustive
   // ignore: missing_return
   static FormComponent fromJson(dynamic json, dynamic schema) {
-    final dataType =
-        dataTypeFromSchema(schema: schema, propertyName: json['property']);
+    final properties = schema['properties'][json['property']];
+    if (properties == null) {
+      throw ArgumentError('No Schema Entry found for ${json['property']}');
+    }
+    final dataType = dataTypeFromSchemaProperty(schemaProperty: properties);
     switch (dataType) {
       case DataType.text:
         return FormComponentText.fromJson(json);

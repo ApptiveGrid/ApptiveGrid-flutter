@@ -26,9 +26,7 @@ class FormData {
   /// List of [FormActions] available for this Form
   final List<FormAction> actions;
 
-  /// Schema currently used to deserialize [components]
-  ///
-  /// In the Future this might be used to verify calls even more
+  /// Schema used to deserialize [components] and verify data send back to the server
   final dynamic schema;
 
   /// Serializes [FormData] to json

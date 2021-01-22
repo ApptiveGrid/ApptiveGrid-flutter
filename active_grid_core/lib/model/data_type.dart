@@ -18,17 +18,12 @@ enum DataType {
   checkbox,
 }
 
-/// Returns [DataType] that matches [schema] and [propertyName]
+/// Returns [DataType] that matching a certain schema [schemaProperty]
 ///
-/// throws [ArgumentError] if [propertyName] is not present in [schema]
 /// throws [ArgumentError] if DataType is not supported yet
-DataType dataTypeFromSchema({dynamic schema, String propertyName}) {
-  final properties = schema['properties'][propertyName];
-  if (properties == null) {
-    throw ArgumentError('No Schema Entry found for $propertyName');
-  }
-  final schemaType = properties['type'];
-  final format = properties['format'];
+DataType dataTypeFromSchemaProperty({dynamic schemaProperty}) {
+  final schemaType = schemaProperty['type'];
+  final format = schemaProperty['format'];
   switch (schemaType) {
     case 'string':
       switch (format) {
