@@ -13,8 +13,8 @@ class GridRow {
     final data = json['fields'] as List;
     final entries = List<GridEntry>.filled(data.length, null);
     for (var i = 0; i < data.length; i++) {
-      entries[i] =
-          GridEntry.fromJson(data[i], fields[i], schema['properties'][i]);
+      entries[i] = GridEntry.fromJson(
+          data[i], fields[i], schema['properties']['fields']['items'][i]);
     }
     return GridRow(json['_id'], entries);
   }

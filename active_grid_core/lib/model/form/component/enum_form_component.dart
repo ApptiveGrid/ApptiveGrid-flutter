@@ -6,13 +6,13 @@ class EnumFormComponent extends FormComponent<EnumDataEntity> {
   EnumFormComponent(
       {@f.required this.property,
       @f.required this.data,
-      @f.required this.options,
+      this.options = const StubComponentOptions(),
       this.required = false});
 
   /// Deserializes [json] into a [FormComponent]
   EnumFormComponent.fromJson(Map<String, dynamic> json, dynamic schema)
       : property = json['property'],
-        data = EnumDataEntity(json['value'], schema['enum']),
+        data = EnumDataEntity(value: json['value'], values: schema['enum']),
         options = StubComponentOptions.fromJson(json['options']),
         required = json['required'];
 

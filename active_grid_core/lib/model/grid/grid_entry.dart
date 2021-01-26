@@ -28,7 +28,7 @@ class GridEntry {
         dataEntity = BooleanDataEntity(jsonData);
         break;
       case DataType.selectionBox:
-        dataEntity = EnumDataEntity(jsonData, schema);
+        dataEntity = EnumDataEntity(value: jsonData, values: schema['enum']);
         break;
     }
     return GridEntry(field, dataEntity);

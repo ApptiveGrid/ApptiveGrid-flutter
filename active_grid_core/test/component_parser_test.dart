@@ -324,6 +324,35 @@ void main() {
       expect(parsedComponent.data.value, false);
       expect(parsedComponent.data.schemaValue, false);
     });
+
+    test('Enum', () {
+      final property = 'property';
+
+      final schema = {
+        'properties': {
+          property: {
+            'type': 'string',
+            'enum': ['GmbH', 'AG', 'Freiberuflich']
+          }
+        },
+      };
+      final json = {
+        'property': property,
+        'value': 'AG',
+        'required': true,
+        'options': <String, dynamic>{},
+        'type': 'selectBox'
+      };
+
+      final parsedComponent = FormComponent.fromJson(json, schema);
+
+      expect(parsedComponent.runtimeType, EnumFormComponent);
+      expect(parsedComponent.property, property);
+      expect(parsedComponent.data.value, 'AG');
+      expect((parsedComponent.data as EnumDataEntity).values,
+          ['GmbH', 'AG', 'Freiberuflich']);
+      expect(parsedComponent.data.schemaValue, 'AG');
+    });
   });
 
   group('Errors', () {

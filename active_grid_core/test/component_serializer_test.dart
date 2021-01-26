@@ -72,5 +72,38 @@ void main() {
 
       expect(BooleanFormComponent.fromJson(component.toJson()), component);
     });
+
+    test('Enum', () {
+      final property = 'property';
+
+      final schema = {
+        'properties': {
+          property: {
+            'type': 'string',
+            'enum': ['GmbH', 'AG', 'Freiberuflich']
+          }
+        },
+      };
+      final json = {
+        'property': property,
+        'value': 'AG',
+        'required': true,
+        'options': <String, dynamic>{},
+        'type': 'selectBox'
+      };
+
+      final jsonComponent = FormComponent.fromJson(json, schema);
+      final component = EnumFormComponent(
+        property: property,
+        data: EnumDataEntity(
+            value: 'AG', values: ['GmbH', 'AG', 'Freiberuflich']),
+        required: true,
+      );
+
+      expect(
+          EnumFormComponent.fromJson(
+              jsonComponent.toJson(), schema['properties'][property]),
+          component);
+    });
   });
 }
