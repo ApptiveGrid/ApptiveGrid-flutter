@@ -534,4 +534,96 @@ void main() {
       expect(find.text('Required'), findsOneWidget);
     });
   });
+
+  group('Enum', () {
+    testWidgets('Value is send', (tester) async {
+      final action = FormAction(
+        'uri',
+        'method',
+      );
+      final component = EnumFormComponent(
+        data: EnumDataEntity(value: 'value', options: ['value', 'newValue']),
+        property: 'Property',
+        options: StubComponentOptions(),
+        required: false,
+      );
+      final formData = FormData('Title', [
+        component,
+      ], [
+        action,
+      ], {});
+      final client = MockActiveGridClient();
+      final target = TestApp(
+        client: client,
+        child: ActiveGridForm(
+          formId: 'formId',
+        ),
+      );
+
+      final completer = Completer<FormData>();
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
+      when(client.performAction(action, any))
+          .thenAnswer((realInvocation) async {
+        completer.complete(realInvocation.positionalArguments[1]);
+        return Response('', 200);
+      });
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EnumFormWidget), findsOneWidget);
+
+      await tester.tap(find.text('value'));
+      await tester.pumpAndSettle();
+      // Dropdown creates multiple instances. Use last inspired by original test
+      // https://github.com/flutter/flutter/blob/fc9addb88b5262ce98e8f39b0eefa6fa9be2ca6a/packages/flutter/test/material/dropdown_test.dart#L356
+      await tester.tap(find.text('newValue').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      final result = await completer.future;
+      expect(result.components.first.data.value, 'newValue');
+    });
+
+    testWidgets('Required shows Error', (tester) async {
+      final action = FormAction(
+        'uri',
+        'method',
+      );
+      final component = EnumFormComponent(
+        data: EnumDataEntity(options: ['value']),
+        property: 'Property',
+        options: StubComponentOptions(),
+        required: true,
+      );
+      final formData = FormData('Title', [
+        component,
+      ], [
+        action,
+      ], {});
+      final client = MockActiveGridClient();
+      final target = TestApp(
+        client: client,
+        child: ActiveGridForm(
+          formId: 'formId',
+        ),
+      );
+
+      when(client.loadForm(formId: anyNamed('formId')))
+          .thenAnswer((_) async => formData);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EnumFormWidget), findsOneWidget);
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      verifyNever(client.performAction(action, formData));
+      expect(find.text('Property is required'), findsOneWidget);
+    });
+  });
 }
