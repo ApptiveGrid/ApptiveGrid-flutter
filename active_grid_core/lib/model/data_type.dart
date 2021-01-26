@@ -16,6 +16,9 @@ enum DataType {
 
   /// Type to display [bool] values
   checkbox,
+
+  /// Type to display enum values
+  selectionBox,
 }
 
 /// Returns [DataType] that matching a certain schema [schemaProperty]
@@ -26,6 +29,9 @@ DataType dataTypeFromSchemaProperty({dynamic schemaProperty}) {
   final format = schemaProperty['format'];
   switch (schemaType) {
     case 'string':
+      if (schemaProperty['enum'] != null) {
+        return DataType.selectionBox;
+      }
       switch (format) {
         case 'date-time':
           return DataType.dateTime;
@@ -37,8 +43,7 @@ DataType dataTypeFromSchemaProperty({dynamic schemaProperty}) {
       return DataType.integer;
     case 'boolean':
       return DataType.checkbox;
-    default:
-      throw ArgumentError(
-          'No according DataType found. Supported DataTypes are ${DataType.values}');
   }
+  throw ArgumentError(
+      'No according DataType found. Supported DataTypes are ${DataType.values}');
 }

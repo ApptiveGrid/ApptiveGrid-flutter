@@ -109,3 +109,18 @@ class IntegerDataEntity extends DataEntity<int, int> {
   @override
   int get schemaValue => value;
 }
+
+/// [DataEntity] representing an enum like Object
+class EnumDataEntity extends DataEntity<String, String> {
+  /// Creates a new EnumDataEntity Object with [value] out of possible [values]
+  EnumDataEntity([this.value, this.values]);
+
+  @override
+  String value;
+
+  /// Possible Values of the Data Entity
+  List<String> values = [];
+
+  @override
+  String get schemaValue => value;
+}

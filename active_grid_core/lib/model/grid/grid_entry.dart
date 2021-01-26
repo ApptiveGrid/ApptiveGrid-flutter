@@ -8,7 +8,8 @@ class GridEntry {
   /// Creates a GridEntry with value [jsonData]
   ///
   /// [field.type] is used for determining the [DataEntity] runtimeType of [data]
-  factory GridEntry.fromJson(dynamic jsonData, GridField field) {
+  factory GridEntry.fromJson(
+      dynamic jsonData, GridField field, dynamic schema) {
     DataEntity dataEntity;
     switch (field.type) {
       case DataType.text:
@@ -25,6 +26,9 @@ class GridEntry {
         break;
       case DataType.checkbox:
         dataEntity = BooleanDataEntity(jsonData);
+        break;
+      case DataType.selectionBox:
+        dataEntity = EnumDataEntity(jsonData, schema);
         break;
     }
     return GridEntry(field, dataEntity);

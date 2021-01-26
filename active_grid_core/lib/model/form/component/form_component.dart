@@ -66,6 +66,8 @@ abstract class FormComponent<T extends DataEntity> {
         return IntegerFormComponent.fromJson(json);
       case DataType.checkbox:
         return BooleanFormComponent.fromJson(json);
+      case DataType.selectionBox:
+        return EnumFormComponent.fromJson(json, properties);
     }
   }
 }
