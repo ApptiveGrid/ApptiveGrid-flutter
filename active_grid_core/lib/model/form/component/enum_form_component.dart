@@ -14,7 +14,7 @@ class EnumFormComponent extends FormComponent<EnumDataEntity> {
       : property = json['property'],
         data = EnumDataEntity(
             value: json['value'],
-            values: schema['enum'].map<String>((e) => e.toString()).toList()),
+            options: schema['enum'].map<String>((e) => e.toString()).toList()),
         options = StubComponentOptions.fromJson(json['options']),
         required = json['required'];
 

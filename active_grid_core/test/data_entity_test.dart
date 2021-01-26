@@ -107,10 +107,10 @@ void main() {
     test('Value is set', () {
       final value = 'value';
       final values = ['value', 'otherValue'];
-      final entity = EnumDataEntity(value: value, values: values);
+      final entity = EnumDataEntity(value: value, options: values);
 
       expect(entity.value, value);
-      expect(entity.values, values);
+      expect(entity.options, values);
       expect(entity.schemaValue, value);
     });
 
@@ -118,7 +118,7 @@ void main() {
       final entity = EnumDataEntity();
 
       expect(entity.value, null);
-      expect(entity.values, []);
+      expect(entity.options, []);
     });
   });
 
@@ -131,11 +131,11 @@ void main() {
     final dateTime = DateTimeDataEntity.fromJson('2020-03-03T12:12:12.000');
     final boolean = BooleanDataEntity(true);
     final selection =
-        EnumDataEntity(value: 'value', values: ['value', 'otherValue']);
+        EnumDataEntity(value: 'value', options: ['value', 'otherValue']);
     final equalSelection =
-        EnumDataEntity(value: 'value', values: ['value', 'otherValue']);
+        EnumDataEntity(value: 'value', options: ['value', 'otherValue']);
     final unEqualSelection =
-        EnumDataEntity(value: 'otherValue', values: ['value', 'otherValue']);
+        EnumDataEntity(value: 'otherValue', options: ['value', 'otherValue']);
 
     test('equals', () {
       expect(string == stringEquals, true);

@@ -349,7 +349,7 @@ void main() {
       expect(parsedComponent.runtimeType, EnumFormComponent);
       expect(parsedComponent.property, property);
       expect(parsedComponent.data.value, 'AG');
-      expect((parsedComponent.data as EnumDataEntity).values,
+      expect((parsedComponent.data as EnumDataEntity).options,
           ['GmbH', 'AG', 'Freiberuflich']);
       expect(parsedComponent.data.schemaValue, 'AG');
     });

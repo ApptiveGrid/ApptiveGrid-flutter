@@ -96,7 +96,7 @@ void main() {
       final component = EnumFormComponent(
         property: property,
         data: EnumDataEntity(
-            value: 'AG', values: ['GmbH', 'AG', 'Freiberuflich']),
+            value: 'AG', options: ['GmbH', 'AG', 'Freiberuflich']),
         required: true,
       );
 
