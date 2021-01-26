@@ -7,8 +7,8 @@ class Grid {
 
   /// Deserializes [json] into a GridData Object
   factory Grid.fromJson(Map<String, dynamic> json) {
-    final ids = json['fieldIds'] as List<String>;
-    final names = json['fieldNames'] as List<String>;
+    final ids = json['fieldIds'] as List;
+    final names = json['fieldNames'] as List;
     final schema = json['schema'];
     final fields = List<GridField>.filled(ids.length, null);
     for (var i = 0; i < ids.length; i++) {

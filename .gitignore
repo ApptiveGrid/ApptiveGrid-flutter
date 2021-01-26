@@ -50,3 +50,5 @@ Thumbs.db
 
 active_grid_core/coverage
 **/coverage
+*/.vscode/
+*/.dart_tool

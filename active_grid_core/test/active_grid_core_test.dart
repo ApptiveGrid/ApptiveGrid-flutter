@@ -21,8 +21,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(
-          true, Provider.of<ActiveGridClient>(context, listen: false) != null);
+      expect(true, ActiveGrid.getClient(context, listen: false) != null);
     });
   });
 
@@ -110,6 +109,29 @@ void main() {
 
         final client = Provider.of<ActiveGridClient>(context, listen: false);
         expect(ActiveGridEnvironment.production, client.environment);
+      });
+
+      testWidgets('Authentication', (tester) async {
+        BuildContext context;
+        final authentication = ActiveGridAuthentication(
+            username: 'username', password: 'password');
+        final target = ActiveGrid(
+          options: ActiveGridOptions(
+            authentication: authentication,
+          ),
+          child: Builder(
+            builder: (buildContext) {
+              context = buildContext;
+              return Container();
+            },
+          ),
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        final client = Provider.of<ActiveGridClient>(context, listen: false);
+        expect(client.authentication, authentication);
       });
     });
   });
