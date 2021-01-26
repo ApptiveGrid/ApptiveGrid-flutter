@@ -1,7 +1,6 @@
 library active_grid_form;
 
-import 'package:active_grid_core/active_grid_model.dart';
-import 'package:active_grid_core/active_grid_network.dart';
+import 'package:active_grid_core/active_grid_core.dart';
 import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

@@ -25,6 +25,10 @@ Widget fromModel(FormComponent component) {
       return CheckBoxFormWidget(
         component: component,
       );
+    case EnumDataEntity:
+      return EnumFormWidget(
+        component: component,
+      );
     default:
       throw ArgumentError(
           'No Widget found for component $component. Please make sure you are you using the latest version of this package?');
