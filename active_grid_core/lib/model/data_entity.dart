@@ -109,3 +109,33 @@ class IntegerDataEntity extends DataEntity<int, int> {
   @override
   int get schemaValue => value;
 }
+
+/// [DataEntity] representing an enum like Object
+class EnumDataEntity extends DataEntity<String, String> {
+  /// Creates a new EnumDataEntity Object with [value] out of possible [options]
+  EnumDataEntity({this.value, this.options = const []});
+
+  @override
+  String value;
+
+  /// Possible options of the Data Entity
+  List<String> options;
+
+  @override
+  String get schemaValue => value;
+
+  @override
+  String toString() {
+    return '$runtimeType(value: $value, values: $options)}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return runtimeType == other.runtimeType &&
+        value == (other as DataEntity).value &&
+        f.listEquals(options, (other as EnumDataEntity).options);
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
+}

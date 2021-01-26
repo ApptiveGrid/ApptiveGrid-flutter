@@ -19,7 +19,7 @@ class Grid {
               schemaProperty: schema['properties']['fields']['items'][i]));
     }
     final entries = (json['entities'] as List)
-        .map((e) => GridRow.fromJson(e, fields))
+        .map((e) => GridRow.fromJson(e, fields, schema))
         .toList();
     return Grid(json['name'], schema, fields, entries);
   }

@@ -11,7 +11,8 @@ void main() {
         'DateC',
         'New field',
         'New field 2',
-        'CheckmarkC'
+        'CheckmarkC',
+        'Enums',
       ],
       'entities': [
         {
@@ -22,7 +23,8 @@ void main() {
             '2020-12-13',
             null,
             null,
-            true
+            true,
+            'Enum1'
           ],
           '_id': '3ojhtqm2bgtwzpdbktuv6syv5'
         },
@@ -34,57 +36,14 @@ void main() {
             '2020-12-15',
             null,
             null,
-            true
+            true,
+            'Enum2'
           ],
           '_id': '6bs7tqexlcy88cry3qzzvjbyz'
         },
         {
-          'fields': [null, null, null, null, null, null, false],
+          'fields': [null, null, null, null, null, null, false, null],
           '_id': '6bs7tqf61rppn1nixxb6cr7se'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '6bs7tqk85swyk8x1bzxmyowav'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '6bs7tqilroemy8o3jl54ece6k'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '6bs7tqge7fusxbtwes1pejda8'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '6bs7tqi3951seact9e97wiec4'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '6bs7tqf01nyoe1rcf3p44rhmr'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '6bs7tqlp4zblujta5kxqi8snl'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '6bs7tqgw6vmem61thjsnaiepz'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '6bs7tqhjv1ir7cl67gng1t9ik'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '6bs7tqj5789pomp1y3gmcq1o2'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '6bs7tqju10ilc0szdhdgx8z65'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '6bs7tqibqyrbw49dm238bkw2p'
         },
         {
           'fields': [
@@ -94,7 +53,8 @@ void main() {
             '2020-12-17',
             null,
             null,
-            true
+            true,
+            'Enum2'
           ],
           '_id': 'bxzfxf43vaeefhje6xcmnofa8'
         },
@@ -106,22 +66,11 @@ void main() {
             '2020-12-16',
             null,
             null,
-            true
+            true,
+            null
           ],
           '_id': 'bxzfxf72k3j4d5fcmk6w0pa4s'
         },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '2ft7hl2x5ah4np2u3i36264ys'
-        },
-        {
-          'fields': [null, null, null, null, null, null, false],
-          '_id': '2ft7hl4vmy025mn7evqn5h78x'
-        },
-        {
-          'fields': [null, null, null, null, null, null, true],
-          '_id': '2ft7hl49f1da42yjld9i7623y'
-        }
       ],
       'fieldIds': [
         '4zc4l45nmww7ujq7y4axlbtjg',
@@ -130,7 +79,8 @@ void main() {
         '4zc4l49to77dhfagr844flaey',
         '4zc4l48ez9l3p0gni56z9obo4',
         '4zc4l4ale6sfv3y40hly478z9',
-        '4zc4l456pca5ursrt9rxefpsc'
+        '4zc4l456pca5ursrt9rxefpsc',
+        '4zc4l456pca5ursrt9rxef123'
       ],
       'schema': {
         'type': 'object',
@@ -144,7 +94,14 @@ void main() {
               {'type': 'string', 'format': 'date'},
               {'type': 'string'},
               {'type': 'string'},
-              {'type': 'boolean'}
+              {'type': 'boolean'},
+              {
+                'type': 'string',
+                'enum': [
+                  'Enum1',
+                  'Enum2',
+                ]
+              },
             ]
           },
           '_id': {'type': 'string'}
@@ -158,12 +115,15 @@ void main() {
 
       expect(grid.name, 'New grid');
       expect(grid.schema, isNot(null));
-      expect(grid.fields.length, 7);
-      expect(grid.rows.length, 19);
+      expect(grid.fields.length, 8);
+      expect(grid.rows.length, 5);
 
       final firstRow = grid.rows[0];
       expect(firstRow.entries[0].data.value, 'Hello');
       expect(firstRow.entries[1].data.value, 1);
+      expect(firstRow.entries[7].data.value, 'Enum1');
+      expect((firstRow.entries[7].data as EnumDataEntity).options,
+          ['Enum1', 'Enum2']);
     });
 
     test('From Json == To Json -> FromJson', () {

@@ -103,6 +103,25 @@ void main() {
     });
   });
 
+  group('Enum', () {
+    test('Value is set', () {
+      final value = 'value';
+      final values = ['value', 'otherValue'];
+      final entity = EnumDataEntity(value: value, options: values);
+
+      expect(entity.value, value);
+      expect(entity.options, values);
+      expect(entity.schemaValue, value);
+    });
+
+    test('Default is null', () {
+      final entity = EnumDataEntity();
+
+      expect(entity.value, null);
+      expect(entity.options, []);
+    });
+  });
+
   group('Equality', () {
     final string = StringDataEntity('Value');
     final stringEquals = StringDataEntity('Value');
@@ -111,10 +130,18 @@ void main() {
     final date = DateDataEntity.fromJson('2020-03-03');
     final dateTime = DateTimeDataEntity.fromJson('2020-03-03T12:12:12.000');
     final boolean = BooleanDataEntity(true);
+    final selection =
+        EnumDataEntity(value: 'value', options: ['value', 'otherValue']);
+    final equalSelection =
+        EnumDataEntity(value: 'value', options: ['value', 'otherValue']);
+    final unEqualSelection =
+        EnumDataEntity(value: 'otherValue', options: ['value', 'otherValue']);
 
     test('equals', () {
       expect(string == stringEquals, true);
       expect(string.hashCode - stringEquals.hashCode == 0, true);
+      expect(selection == equalSelection, true);
+      expect(selection.hashCode - equalSelection.hashCode == 0, true);
     });
     test('not equals', () {
       expect(string == stringUnequals, false);
@@ -123,6 +150,8 @@ void main() {
       expect(string.hashCode != date.hashCode, true);
       expect(string.hashCode != dateTime.hashCode, true);
       expect(string.hashCode != boolean.hashCode, true);
+      expect(selection == unEqualSelection, false);
+      expect(selection.hashCode - unEqualSelection.hashCode == 0, false);
     });
   });
 }

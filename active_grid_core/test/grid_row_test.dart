@@ -16,7 +16,17 @@ void main() {
         'fields': [value]
       }, [
         field
-      ]);
+      ], {
+        'type': 'object',
+        'properties': {
+          'fields': {
+            'type': 'array',
+            'items': [
+              {'type': 'string'},
+            ]
+          }
+        },
+      });
 
       expect(direct.hashCode, fromJson.hashCode);
       expect(direct, direct);

@@ -8,7 +8,11 @@ void main() {
       final value = 'value';
 
       final direct = GridEntry(field, StringDataEntity(value));
-      final fromJson = GridEntry.fromJson(value, field);
+      final fromJson = GridEntry.fromJson(value, field, {
+        'properties': [
+          {'type': 'string'}
+        ]
+      });
 
       expect(fromJson, direct);
       expect(fromJson.hashCode, direct.hashCode);

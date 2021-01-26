@@ -6,7 +6,7 @@ class DateTimeFormComponent extends FormComponent<DateTimeDataEntity> {
   DateTimeFormComponent(
       {@f.required this.property,
       @f.required this.data,
-      @f.required this.options,
+      this.options = const StubComponentOptions(),
       this.required = false});
 
   /// Deserializes [json] into a [FormComponent]
