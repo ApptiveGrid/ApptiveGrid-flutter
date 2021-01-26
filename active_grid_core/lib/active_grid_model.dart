@@ -7,11 +7,11 @@ part 'model/data_type.dart';
 part 'model/data_entity.dart';
 
 part 'model/form/component/form_component.dart';
-part 'model/form/component/form_component_check_box.dart';
-part 'model/form/component/form_component_date_time.dart';
-part 'model/form/component/form_component_text.dart';
-part 'model/form/component/form_component_number.dart';
-part 'model/form/component/form_component_date.dart';
+part 'model/form/component/boolean_form_component.dart';
+part 'model/form/component/date_time_form_component.dart';
+part 'model/form/component/string_form_component.dart';
+part 'model/form/component/integer_form_component.dart';
+part 'model/form/component/date_form_component.dart';
 part 'model/form/component/options.dart';
 part 'model/form/form_data.dart';
 part 'model/form/form_actions.dart';

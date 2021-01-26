@@ -82,11 +82,11 @@ void main() {
       expect(formData.components.length, 5);
 
       expect(formData.components.map((e) => e.runtimeType).toList(), [
-        FormComponentText,
-        FormComponentNumber,
-        FormComponentDateTime,
-        FormComponentDate,
-        FormComponentCheckBox,
+        StringFormComponent,
+        IntegerFormComponent,
+        DateTimeFormComponent,
+        DateFormComponent,
+        BooleanFormComponent,
       ]);
     });
   });
@@ -95,7 +95,7 @@ void main() {
     test('toJson -> fromJson -> equals', () {
       final action = FormAction('/uri', 'POST');
       final schema = response['schema'];
-      final component = FormComponentNumber(
+      final component = IntegerFormComponent(
           options: TextComponentOptions(),
           property: 'NumberC',
           data: IntegerDataEntity());
@@ -125,7 +125,7 @@ void main() {
   group('Equality', () {
     final action = FormAction('/uri', 'POST');
     final schema = response['schema'];
-    final component = FormComponentNumber(
+    final component = IntegerFormComponent(
         data: IntegerDataEntity(),
         options: TextComponentOptions(),
         property: 'NumberC');

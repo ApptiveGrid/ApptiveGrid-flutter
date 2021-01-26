@@ -1,18 +1,18 @@
 part of active_grid_form_widgets;
 
-/// FormComponent Widget to display a [model.FormComponentNumber]
-class FormComponentNumber extends StatefulWidget {
+/// FormComponent Widget to display a [model.IntegerFormComponent]
+class NumberFormWidget extends StatefulWidget {
   /// Creates a [TextFormField] to show and edit an integer contained in [component]
-  const FormComponentNumber({Key key, this.component}) : super(key: key);
+  const NumberFormWidget({Key key, this.component}) : super(key: key);
 
   /// Component this Widget should reflect
-  final model.FormComponentNumber component;
+  final IntegerFormComponent component;
 
   @override
-  _FormComponentNumberState createState() => _FormComponentNumberState();
+  _NumberFormWidgetState createState() => _NumberFormWidgetState();
 }
 
-class _FormComponentNumberState extends State<FormComponentNumber> {
+class _NumberFormWidgetState extends State<NumberFormWidget> {
   final TextEditingController _controller = TextEditingController();
 
   @override

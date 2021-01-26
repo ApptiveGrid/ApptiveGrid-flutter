@@ -1,27 +1,27 @@
 part of active_grid_model;
 
-/// Model for a [FormComponent] representing [DataType.text]
-class FormComponentText extends FormComponent<String, String> {
+/// Model for a [FormComponent] representing [BooleanDataEntity]
+class BooleanFormComponent extends FormComponent<BooleanDataEntity> {
   /// Creates a FormComponent
-  FormComponentText(
+  BooleanFormComponent(
       {@f.required this.property,
       @f.required this.data,
       @f.required this.options,
       this.required = false});
 
   /// Deserializes [json] into a [FormComponent]
-  FormComponentText.fromJson(Map<String, dynamic> json)
+  BooleanFormComponent.fromJson(Map<String, dynamic> json)
       : property = json['property'],
-        data = StringDataEntity(json['value']),
-        options = TextComponentOptions.fromJson(json['options']),
+        data = BooleanDataEntity(json['value']),
+        options = StubComponentOptions.fromJson(json['options']),
         required = json['required'];
 
   @override
   final String property;
   @override
-  StringDataEntity data;
+  BooleanDataEntity data;
   @override
-  final TextComponentOptions options;
+  final StubComponentOptions options;
 
   @override
   final bool required;

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mockito/mockito.dart';
-import 'package:active_grid_core/active_grid_model.dart' as model;
+import 'package:active_grid_core/active_grid_model.dart';
 import 'package:http/http.dart' as http;
 
 import 'common.dart';
@@ -23,7 +23,7 @@ void main() {
       );
 
       when(client.loadForm(formId: 'form')).thenAnswer(
-          (realInvocation) async => model.FormData('Form Title', [], [], {}));
+          (realInvocation) async => FormData('Form Title', [], [], {}));
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -42,7 +42,7 @@ void main() {
       );
 
       when(client.loadForm(formId: 'form')).thenAnswer(
-          (realInvocation) async => model.FormData('Form Title', [], [], {}));
+          (realInvocation) async => FormData('Form Title', [], [], {}));
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -53,8 +53,8 @@ void main() {
 
   testWidgets('OnLoadedCallback gets called', (tester) async {
     final client = MockActiveGridClient();
-    final form = model.FormData('Form Title', [], [], {});
-    final completer = Completer<model.FormData>();
+    final form = FormData('Form Title', [], [], {});
+    final completer = Completer<FormData>();
     final target = TestApp(
       client: client,
       child: ActiveGridForm(
@@ -102,8 +102,8 @@ void main() {
           formId: 'form',
         ),
       );
-      final action = model.FormAction('uri', 'method');
-      final formData = model.FormData('Form Title', [], [action], {});
+      final action = FormAction('uri', 'method');
+      final formData = FormData('Form Title', [], [action], {});
 
       when(client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);
@@ -128,8 +128,8 @@ void main() {
           formId: 'form',
         ),
       );
-      final action = model.FormAction('uri', 'method');
-      final formData = model.FormData('Form Title', [], [action], {});
+      final action = FormAction('uri', 'method');
+      final formData = FormData('Form Title', [], [action], {});
 
       when(client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);
@@ -202,8 +202,8 @@ void main() {
             formId: 'form',
           ),
         );
-        final action = model.FormAction('uri', 'method');
-        final formData = model.FormData('Form Title', [], [action], {});
+        final action = FormAction('uri', 'method');
+        final formData = FormData('Form Title', [], [action], {});
 
         when(client.loadForm(formId: 'form'))
             .thenAnswer((realInvocation) async => formData);
@@ -228,8 +228,8 @@ void main() {
             formId: 'form',
           ),
         );
-        final action = model.FormAction('uri', 'method');
-        final formData = model.FormData('Form Title', [], [action], {});
+        final action = FormAction('uri', 'method');
+        final formData = FormData('Form Title', [], [action], {});
 
         when(client.loadForm(formId: 'form'))
             .thenAnswer((realInvocation) async => formData);
@@ -254,8 +254,8 @@ void main() {
             formId: 'form',
           ),
         );
-        final action = model.FormAction('uri', 'method');
-        final formData = model.FormData('Form Title', [], [action], {});
+        final action = FormAction('uri', 'method');
+        final formData = FormData('Form Title', [], [action], {});
 
         when(client.loadForm(formId: 'form'))
             .thenAnswer((realInvocation) async => formData);
@@ -288,8 +288,8 @@ void main() {
           },
         ),
       );
-      final action = model.FormAction('uri', 'method');
-      final formData = model.FormData('Form Title', [], [action], {});
+      final action = FormAction('uri', 'method');
+      final formData = FormData('Form Title', [], [action], {});
 
       when(client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);
@@ -315,8 +315,8 @@ void main() {
           },
         ),
       );
-      final action = model.FormAction('uri', 'method');
-      final formData = model.FormData('Form Title', [], [action], {});
+      final action = FormAction('uri', 'method');
+      final formData = FormData('Form Title', [], [action], {});
 
       when(client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);

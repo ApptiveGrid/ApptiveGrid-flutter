@@ -8,6 +8,8 @@ import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
+export 'package:active_grid_core/active_grid_core.dart';
+
 /// A Widget to display a ActiveGrid Form
 ///
 /// In order to use this there needs to be a [ActiveGrid] Widget in the Widget tree

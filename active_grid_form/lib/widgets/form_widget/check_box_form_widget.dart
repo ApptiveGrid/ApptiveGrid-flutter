@@ -1,18 +1,18 @@
 part of active_grid_form_widgets;
 
-/// FormComponent Widget to display a [model.FormComponentCheckBox]
-class FormComponentCheckBox extends StatefulWidget {
+/// FormComponent Widget to display a [model.BooleanFormComponent]
+class CheckBoxFormWidget extends StatefulWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
-  const FormComponentCheckBox({Key key, this.component}) : super(key: key);
+  const CheckBoxFormWidget({Key key, this.component}) : super(key: key);
 
   /// Component this Widget should reflect
-  final model.FormComponentCheckBox component;
+  final BooleanFormComponent component;
 
   @override
-  _FormComponentCheckBoxState createState() => _FormComponentCheckBoxState();
+  _CheckBoxFormWidgetState createState() => _CheckBoxFormWidgetState();
 }
 
-class _FormComponentCheckBoxState extends State<FormComponentCheckBox> {
+class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
   @override
   Widget build(BuildContext context) {
     return FormField<bool>(
