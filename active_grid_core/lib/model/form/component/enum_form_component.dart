@@ -12,7 +12,9 @@ class EnumFormComponent extends FormComponent<EnumDataEntity> {
   /// Deserializes [json] into a [FormComponent]
   EnumFormComponent.fromJson(Map<String, dynamic> json, dynamic schema)
       : property = json['property'],
-        data = EnumDataEntity(value: json['value'], values: schema['enum']),
+        data = EnumDataEntity(
+            value: json['value'],
+            values: schema['enum'].map<String>((e) => e.toString()).toList()),
         options = StubComponentOptions.fromJson(json['options']),
         required = json['required'];
 
