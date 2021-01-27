@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 part 'form_widget/form_widget.dart';
 part 'form_widget/check_box_form_widget.dart';
+part 'form_widget/enum_form_widget.dart';
 part 'form_widget/date_time_form_widget.dart';
 part 'form_widget/date_form_widget.dart';
 part 'form_widget/text_form_widget.dart';

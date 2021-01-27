@@ -69,6 +69,19 @@ void main() {
       expect(widget.runtimeType, CheckBoxFormWidget);
     });
 
+    test('EnumComponent', () {
+      final component = EnumFormComponent(
+        data: EnumDataEntity(),
+        property: 'Property',
+        required: false,
+        options: StubComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, EnumFormWidget);
+    });
+
     test('ArgumentError', () {
       final component = UnknownComponent();
 

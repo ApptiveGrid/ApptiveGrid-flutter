@@ -1,6 +1,6 @@
 part of active_grid_form_widgets;
 
-/// FormComponent Widget to display a [model.DateFormComponent]
+/// FormComponent Widget to display a [DateFormComponent]
 class DateFormWidget extends StatefulWidget {
   /// Creates a Widget to display and select a Date contained in [component]
   ///
