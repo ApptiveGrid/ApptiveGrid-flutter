@@ -173,7 +173,8 @@ void main() {
       expect(calledRequest.method, action.method);
       expect(calledRequest.url.toString(),
           '${ActiveGridEnvironment.production.url}${action.uri}');
-      expect(calledRequest.headers[HttpHeaders.contentTypeHeader], ContentType.json.value);
+      expect(calledRequest.headers[HttpHeaders.contentTypeHeader],
+          ContentType.json.value);
     });
   });
 
