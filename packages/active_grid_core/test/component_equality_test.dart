@@ -36,21 +36,21 @@ void main() {
   final date = DateFormComponent(
     property: 'Property',
     data: DateDataEntity(),
-    options: StubComponentOptions(),
+    options: FormComponentOptions(),
     required: false,
   );
 
   final dateTime = DateTimeFormComponent(
     property: 'Property',
     data: DateTimeDataEntity(),
-    options: StubComponentOptions(),
+    options: FormComponentOptions(),
     required: false,
   );
 
   final checkBox = BooleanFormComponent(
     property: 'Property',
     data: BooleanDataEntity(),
-    options: StubComponentOptions(),
+    options: FormComponentOptions(),
     required: false,
   );
 

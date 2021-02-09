@@ -6,14 +6,14 @@ class BooleanFormComponent extends FormComponent<BooleanDataEntity> {
   BooleanFormComponent(
       {@f.required this.property,
       @f.required this.data,
-      this.options = const StubComponentOptions(),
+      this.options = const FormComponentOptions(),
       this.required = false});
 
   /// Deserializes [json] into a [FormComponent]
   BooleanFormComponent.fromJson(Map<String, dynamic> json)
       : property = json['property'],
         data = BooleanDataEntity(json['value']),
-        options = StubComponentOptions.fromJson(json['options']),
+        options = FormComponentOptions.fromJson(json['options']),
         required = json['required'];
 
   @override
@@ -21,7 +21,7 @@ class BooleanFormComponent extends FormComponent<BooleanDataEntity> {
   @override
   BooleanDataEntity data;
   @override
-  final StubComponentOptions options;
+  final FormComponentOptions options;
 
   @override
   final bool required;

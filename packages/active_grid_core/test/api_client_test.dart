@@ -142,7 +142,7 @@ void main() {
       final component = BooleanFormComponent(
         property: property,
         data: BooleanDataEntity(true),
-        options: StubComponentOptions.fromJson({}),
+        options: FormComponentOptions.fromJson({}),
         required: false,
       );
       final schema = {

@@ -72,7 +72,7 @@ void main() {
       expect(parsedComponent.data.runtimeType, DateTimeDataEntity);
       expect(parsedComponent.data.schemaValue, value.toIso8601String());
 
-      final parsedOptions = parsedComponent.options as StubComponentOptions;
+      final parsedOptions = parsedComponent.options;
       expect(false, parsedOptions == null);
     });
 
@@ -102,7 +102,7 @@ void main() {
       expect(parsedComponent.data.runtimeType, DateDataEntity);
       expect(parsedComponent.data.schemaValue, '2020-12-07');
 
-      final parsedOptions = parsedComponent.options as StubComponentOptions;
+      final parsedOptions = parsedComponent.options;
       expect(false, parsedOptions == null);
     });
 
@@ -177,7 +177,7 @@ void main() {
       expect(parsedComponent.data.runtimeType, BooleanDataEntity);
       expect(parsedComponent.data.schemaValue, value);
 
-      final parsedOptions = parsedComponent.options as StubComponentOptions;
+      final parsedOptions = parsedComponent.options;
       expect(false, parsedOptions == null);
     });
   });

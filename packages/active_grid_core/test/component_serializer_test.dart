@@ -38,7 +38,7 @@ void main() {
     });
 
     test('Date', () {
-      final options = StubComponentOptions.fromJson({});
+      final options = FormComponentOptions.fromJson({});
       final component = DateFormComponent(
         property: 'Property',
         data: DateDataEntity(DateTime(2020, 07, 12)),
@@ -50,7 +50,7 @@ void main() {
     });
 
     test('DateTime', () {
-      final options = StubComponentOptions.fromJson({});
+      final options = FormComponentOptions.fromJson({});
       final component = DateTimeFormComponent(
         property: 'Property',
         data: DateTimeDataEntity(DateTime(2020, 07, 12, 12, 0, 0, 0)),
@@ -62,7 +62,7 @@ void main() {
     });
 
     test('Checkbox', () {
-      final options = StubComponentOptions.fromJson({});
+      final options = FormComponentOptions.fromJson({});
       final component = BooleanFormComponent(
         property: 'Property',
         data: BooleanDataEntity(false),
