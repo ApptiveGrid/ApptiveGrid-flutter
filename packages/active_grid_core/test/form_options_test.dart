@@ -30,12 +30,14 @@ void main() {
 
   group('FormComponentOptions', () {
     group('Equality', () {
-      final a = FormComponentOptions(label: 'Label', description: 'Description');
+      final a =
+          FormComponentOptions(label: 'Label', description: 'Description');
       final b = FormComponentOptions.fromJson({
         'label': 'Label',
         'description': 'Description',
       });
-      final c = FormComponentOptions(label: 'Label', description: 'Other Description');
+      final c = FormComponentOptions(
+          label: 'Label', description: 'Other Description');
 
       test('a == b', () {
         expect(a == b, true);
