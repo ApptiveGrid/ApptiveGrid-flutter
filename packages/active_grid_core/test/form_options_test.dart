@@ -35,10 +35,16 @@ void main() {
         'label': 'Label',
         'description': 'Description',
       });
+      final c = FormComponentOptions(label: 'Label', description: 'Other Description');
 
       test('a == b', () {
         expect(a == b, true);
         expect(a.hashCode - b.hashCode, 0);
+      });
+
+      test('a != c', () {
+        expect(a == c, false);
+        expect((a.hashCode - c.hashCode) == 0, false);
       });
     });
   });
