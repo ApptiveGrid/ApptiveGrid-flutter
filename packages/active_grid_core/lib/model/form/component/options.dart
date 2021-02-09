@@ -1,34 +1,38 @@
 part of active_grid_model;
 
 /// Abstract class for additional options for a [FormComponent]
-abstract class FormComponentOptions {
+class FormComponentOptions {
   /// Enables const constructors
-  const FormComponentOptions();
+  const FormComponentOptions({this.description, this.label});
+
+  /// Deserializes [json] into [TextComponentOptions]
+  FormComponentOptions.fromJson(Map<String, dynamic> json)
+      : description = json['description'],
+        label = json['label'];
+
+  /// Description that describes the Component
+  final String description;
+
+  /// Label to be used instead of [FormComponent.property]
+  final String label;
 
   /// Serializes [FormComponentOptions] to json
-  Map<String, dynamic> toJson();
-}
-
-/// [FormComponentOptions] without any content
-class StubComponentOptions extends FormComponentOptions {
-  /// Creates Options
-  const StubComponentOptions();
-
-  /// Deserializes [json] into [StubComponentOptions]
-  StubComponentOptions.fromJson(Map<String, dynamic> json);
-
-  /// Serializes [StubComponentOptions] to json
-  @override
-  Map<String, dynamic> toJson() => {};
+  Map<String, dynamic> toJson() => {
+    'description': description,
+    'label': label,
+  };
 
   @override
   String toString() {
-    return runtimeType.toString();
+    return '$runtimeType(${toJson()}';
   }
 
   @override
   bool operator ==(Object other) {
-    return other is StubComponentOptions;
+    return other is FormComponentOptions &&
+        !(other is TextComponentOptions) &&
+        description == other.description &&
+        label == other.label;
   }
 
   @override
@@ -40,8 +44,8 @@ class TextComponentOptions extends FormComponentOptions {
   /// Creates Options
   TextComponentOptions(
       {this.multi = false,
-      this.placeholder = '',
-      this.description = '',
+      this.placeholder,
+      this.description,
       this.label});
 
   /// Deserializes [json] into [TextComponentOptions]
@@ -57,10 +61,12 @@ class TextComponentOptions extends FormComponentOptions {
   /// Placeholder Text
   final String placeholder;
 
-  /// Description that descibes the Component
+  /// Description that describes the Component
+  @override
   final String description;
 
   /// Label to be used instead of [FormComponent.property]
+  @override
   final String label;
 
   /// Serializes [TextComponentOptions] to json
@@ -71,11 +77,6 @@ class TextComponentOptions extends FormComponentOptions {
         'description': description,
         'label': label
       };
-
-  @override
-  String toString() {
-    return 'TextComponentOptions(${toJson()}';
-  }
 
   @override
   bool operator ==(Object other) {
