@@ -28,10 +28,13 @@ void main() {
     });
   });
 
-  group('StubComponentOptions', () {
+  group('FormComponentOptions', () {
     group('Equality', () {
-      final a = StubComponentOptions();
-      final b = StubComponentOptions.fromJson({});
+      final a = FormComponentOptions(label: 'Label', description: 'Description');
+      final b = FormComponentOptions.fromJson({
+        'label': 'Label',
+        'description': 'Description',
+      });
 
       test('a == b', () {
         expect(a == b, true);
