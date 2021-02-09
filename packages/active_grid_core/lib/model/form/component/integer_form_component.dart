@@ -6,6 +6,7 @@ class IntegerFormComponent extends FormComponent<IntegerDataEntity> {
   IntegerFormComponent({
     @f.required this.property,
     @f.required this.data,
+    @f.required this.fieldId,
     @f.required this.options,
     this.required = false,
   });
@@ -15,15 +16,17 @@ class IntegerFormComponent extends FormComponent<IntegerDataEntity> {
       : property = json['property'],
         data = IntegerDataEntity(json['value']),
         options = TextComponentOptions.fromJson(json['options']),
-        required = json['required'];
+        required = json['required'],
+        fieldId = json['fieldId'];
 
   @override
   final String property;
   @override
   IntegerDataEntity data;
   @override
+  String fieldId;
+  @override
   final TextComponentOptions options;
-
   @override
   final bool required;
 }

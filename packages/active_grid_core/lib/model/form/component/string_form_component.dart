@@ -7,6 +7,7 @@ class StringFormComponent extends FormComponent<StringDataEntity> {
       {@f.required this.property,
       @f.required this.data,
       @f.required this.options,
+      @f.required this.fieldId,
       this.required = false});
 
   /// Deserializes [json] into a [FormComponent]
@@ -14,15 +15,17 @@ class StringFormComponent extends FormComponent<StringDataEntity> {
       : property = json['property'],
         data = StringDataEntity(json['value']),
         options = TextComponentOptions.fromJson(json['options']),
-        required = json['required'];
+        required = json['required'],
+        fieldId = json['fieldId'];
 
   @override
   final String property;
   @override
   StringDataEntity data;
   @override
+  final String fieldId;
+  @override
   final TextComponentOptions options;
-
   @override
   final bool required;
 }
