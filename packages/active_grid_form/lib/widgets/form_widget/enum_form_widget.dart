@@ -37,7 +37,8 @@ class _EnumFormWidgetState extends State<EnumFormWidget> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       value: widget.component.data.value,
       decoration: InputDecoration(
-        labelText: widget.component.property,
+        helperText: widget.component.options.description,
+        labelText: widget.component.options.label ?? widget.component.property,
       ),
     );
   }
