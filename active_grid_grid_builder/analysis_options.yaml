@@ -1,6 +1,0 @@
-include: package:pedantic/analysis_options.yaml
-
-linter:
-  rules:
-    public_member_api_docs: true
-    sort_constructors_first: true
