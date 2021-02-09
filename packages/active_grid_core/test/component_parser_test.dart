@@ -152,6 +152,8 @@ void main() {
     test('Checkbox', () {
       final property = 'property';
       final value = true;
+      final description = 'description';
+      final label = 'label';
 
       final schema = {
         'properties': {
@@ -164,7 +166,10 @@ void main() {
         'property': property,
         'value': value,
         'required': true,
-        'options': <String, dynamic>{},
+        'options': <String, dynamic>{
+          'description': description,
+          'label': label
+        },
         'type': 'checkbox'
       };
 
@@ -178,7 +183,8 @@ void main() {
       expect(parsedComponent.data.schemaValue, value);
 
       final parsedOptions = parsedComponent.options;
-      expect(false, parsedOptions == null);
+      expect(parsedOptions.description, description);
+      expect(parsedOptions.label, label);
     });
   });
 
