@@ -44,7 +44,9 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
       builder: (state) {
         return InputDecorator(
           decoration: InputDecoration(
-            labelText: widget.component.property,
+            helperText: widget.component.options.description,
+            labelText:
+                widget.component.options.label ?? widget.component.property,
             errorText: state.errorText,
           ),
           child: Row(
