@@ -18,9 +18,9 @@ class FormComponentOptions {
 
   /// Serializes [FormComponentOptions] to json
   Map<String, dynamic> toJson() => {
-    'description': description,
-    'label': label,
-  };
+        'description': description,
+        'label': label,
+      };
 
   @override
   String toString() {
@@ -43,10 +43,7 @@ class FormComponentOptions {
 class TextComponentOptions extends FormComponentOptions {
   /// Creates Options
   TextComponentOptions(
-      {this.multi = false,
-      this.placeholder,
-      this.description,
-      this.label});
+      {this.multi = false, this.placeholder, this.description, this.label});
 
   /// Deserializes [json] into [TextComponentOptions]
   TextComponentOptions.fromJson(Map<String, dynamic> json)
