@@ -6,6 +6,7 @@ class DateTimeFormComponent extends FormComponent<DateTimeDataEntity> {
   DateTimeFormComponent(
       {@f.required this.property,
       @f.required this.data,
+      @f.required this.fieldId,
       this.options = const FormComponentOptions(),
       this.required = false});
 
@@ -14,12 +15,15 @@ class DateTimeFormComponent extends FormComponent<DateTimeDataEntity> {
       : property = json['property'],
         data = DateTimeDataEntity.fromJson(json['value']),
         options = FormComponentOptions.fromJson(json['options']),
-        required = json['required'];
+        required = json['required'],
+        fieldId = json['fieldId'];
 
   @override
   final String property;
   @override
   DateTimeDataEntity data;
+  @override
+  final String fieldId;
   @override
   final FormComponentOptions options;
   @override
