@@ -35,7 +35,7 @@ void main() {
         data: DateDataEntity(),
         property: 'Property',
         required: false,
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -48,7 +48,7 @@ void main() {
         data: DateTimeDataEntity(),
         property: 'Property',
         required: false,
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -61,7 +61,7 @@ void main() {
         data: BooleanDataEntity(),
         property: 'Property',
         required: false,
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -74,7 +74,7 @@ void main() {
         data: EnumDataEntity(),
         property: 'Property',
         required: false,
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -92,7 +92,7 @@ void main() {
 
 class UnknownComponent extends FormComponent<DataEntity<String, String>> {
   @override
-  FormComponentOptions get options => StubComponentOptions();
+  FormComponentOptions get options => FormComponentOptions();
 
   @override
   String get property => 'Property';

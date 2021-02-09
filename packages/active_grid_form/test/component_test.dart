@@ -108,7 +108,7 @@ void main() {
       final component = DateTimeFormComponent(
         data: DateTimeDataEntity(),
         property: 'Property',
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
         required: false,
       );
       final formData = FormData('Title', [
@@ -166,7 +166,7 @@ void main() {
       final component = DateTimeFormComponent(
         data: DateTimeDataEntity(),
         property: 'Property',
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
         required: false,
       );
       final formData = FormData('Title', [
@@ -228,7 +228,7 @@ void main() {
       final component = DateTimeFormComponent(
         data: DateTimeDataEntity(),
         property: 'Property',
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
         required: true,
       );
       final formData = FormData('Title', [
@@ -269,7 +269,7 @@ void main() {
       final component = DateFormComponent(
         data: DateDataEntity(),
         property: 'Property',
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
         required: false,
       );
       final formData = FormData('Title', [
@@ -327,7 +327,7 @@ void main() {
       final component = DateFormComponent(
         data: DateDataEntity(),
         property: 'Property',
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
         required: true,
       );
       final formData = FormData('Title', [
@@ -456,7 +456,7 @@ void main() {
       final component = BooleanFormComponent(
         data: BooleanDataEntity(),
         property: 'Property',
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
         required: false,
       );
       final formData = FormData('Title', [
@@ -503,7 +503,7 @@ void main() {
       final component = BooleanFormComponent(
         data: BooleanDataEntity(),
         property: 'Property',
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
         required: true,
       );
       final formData = FormData('Title', [
@@ -544,7 +544,7 @@ void main() {
       final component = EnumFormComponent(
         data: EnumDataEntity(value: 'value', options: ['value', 'newValue']),
         property: 'Property',
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
         required: false,
       );
       final formData = FormData('Title', [
@@ -595,7 +595,7 @@ void main() {
       final component = EnumFormComponent(
         data: EnumDataEntity(options: ['value']),
         property: 'Property',
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
         required: true,
       );
       final formData = FormData('Title', [
