@@ -27,7 +27,7 @@ void main() {
         'schema': {
           'type': 'object',
           'properties': {
-            'TextC': {'type': 'string'},
+            '4zc4l48ffin5v8pa2emyx9s15': {'type': 'string'},
           },
           'required': []
         },
@@ -45,7 +45,8 @@ void main() {
               'description': '',
               'label': null
             },
-            'type': 'textfield'
+            'type': 'textfield',
+            'fieldId': '4zc4l48ffin5v8pa2emyx9s15'
           },
         ],
         'title': 'Form'
@@ -139,16 +140,18 @@ void main() {
     test('Successful', () async {
       final action = FormAction('/uri', 'POST');
       final property = 'Checkbox';
+      final id = 'id';
       final component = BooleanFormComponent(
+        fieldId: id,
         property: property,
         data: BooleanDataEntity(true),
-        options: StubComponentOptions.fromJson({}),
+        options: FormComponentOptions.fromJson({}),
         required: false,
       );
       final schema = {
         'type': 'object',
         'properties': {
-          property: {'type': 'boolean'},
+          id: {'type': 'boolean'},
         },
         'required': []
       };
@@ -170,6 +173,8 @@ void main() {
       expect(calledRequest.method, action.method);
       expect(calledRequest.url.toString(),
           '${ActiveGridEnvironment.production.url}${action.uri}');
+      expect(calledRequest.headers[HttpHeaders.contentTypeHeader],
+          ContentType.json.value);
     });
   });
 

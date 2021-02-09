@@ -6,7 +6,8 @@ class EnumFormComponent extends FormComponent<EnumDataEntity> {
   EnumFormComponent(
       {@f.required this.property,
       @f.required this.data,
-      this.options = const StubComponentOptions(),
+      @f.required this.fieldId,
+      this.options = const FormComponentOptions(),
       this.required = false});
 
   /// Deserializes [json] into a [FormComponent]
@@ -15,15 +16,18 @@ class EnumFormComponent extends FormComponent<EnumDataEntity> {
         data = EnumDataEntity(
             value: json['value'],
             options: schema['enum'].map<String>((e) => e.toString()).toList()),
-        options = StubComponentOptions.fromJson(json['options']),
-        required = json['required'];
+        options = FormComponentOptions.fromJson(json['options']),
+        required = json['required'],
+        fieldId = json['fieldId'];
 
   @override
   final String property;
   @override
   EnumDataEntity data;
   @override
-  final StubComponentOptions options;
+  final String fieldId;
+  @override
+  final FormComponentOptions options;
 
   @override
   final bool required;

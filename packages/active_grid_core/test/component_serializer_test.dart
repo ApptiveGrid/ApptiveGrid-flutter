@@ -11,6 +11,7 @@ void main() {
         description: 'Description',
       );
       final component = StringFormComponent(
+        fieldId: 'id',
         property: 'Property',
         data: StringDataEntity('Value'),
         options: options,
@@ -28,6 +29,7 @@ void main() {
         description: 'Description',
       );
       final component = IntegerFormComponent(
+        fieldId: 'id',
         property: 'Property',
         data: IntegerDataEntity(1),
         options: options,
@@ -38,8 +40,9 @@ void main() {
     });
 
     test('Date', () {
-      final options = StubComponentOptions.fromJson({});
+      final options = FormComponentOptions.fromJson({});
       final component = DateFormComponent(
+        fieldId: 'id',
         property: 'Property',
         data: DateDataEntity(DateTime(2020, 07, 12)),
         options: options,
@@ -50,8 +53,9 @@ void main() {
     });
 
     test('DateTime', () {
-      final options = StubComponentOptions.fromJson({});
+      final options = FormComponentOptions.fromJson({});
       final component = DateTimeFormComponent(
+        fieldId: 'id',
         property: 'Property',
         data: DateTimeDataEntity(DateTime(2020, 07, 12, 12, 0, 0, 0)),
         options: options,
@@ -62,8 +66,9 @@ void main() {
     });
 
     test('Checkbox', () {
-      final options = StubComponentOptions.fromJson({});
+      final options = FormComponentOptions.fromJson({});
       final component = BooleanFormComponent(
+        fieldId: 'id',
         property: 'Property',
         data: BooleanDataEntity(false),
         options: options,
@@ -75,10 +80,11 @@ void main() {
 
     test('Enum', () {
       final property = 'property';
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {
+          id: {
             'type': 'string',
             'enum': ['GmbH', 'AG', 'Freiberuflich']
           }
@@ -86,6 +92,7 @@ void main() {
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': 'AG',
         'required': true,
         'options': <String, dynamic>{},
@@ -94,6 +101,7 @@ void main() {
 
       final jsonComponent = FormComponent.fromJson(json, schema);
       final component = EnumFormComponent(
+        fieldId: id,
         property: property,
         data: EnumDataEntity(
             value: 'AG', options: ['GmbH', 'AG', 'Freiberuflich']),
@@ -102,7 +110,7 @@ void main() {
 
       expect(
           EnumFormComponent.fromJson(
-              jsonComponent.toJson(), schema['properties'][property]),
+              jsonComponent.toJson(), schema['properties'][id]),
           component);
     });
   });

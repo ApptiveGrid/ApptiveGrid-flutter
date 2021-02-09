@@ -6,6 +6,7 @@ void main() {
   group('Mapping', () {
     test('TextComponent', () {
       final component = StringFormComponent(
+        fieldId: 'id',
         data: StringDataEntity(),
         property: 'Property',
         required: false,
@@ -19,6 +20,7 @@ void main() {
 
     test('NumberComponent', () {
       final component = IntegerFormComponent(
+        fieldId: 'id',
         data: IntegerDataEntity(),
         property: 'Property',
         required: false,
@@ -32,10 +34,11 @@ void main() {
 
     test('DateComponent', () {
       final component = DateFormComponent(
+        fieldId: 'id',
         data: DateDataEntity(),
         property: 'Property',
         required: false,
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -45,10 +48,11 @@ void main() {
 
     test('DateTimeComponent', () {
       final component = DateTimeFormComponent(
+        fieldId: 'id',
         data: DateTimeDataEntity(),
         property: 'Property',
         required: false,
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -58,10 +62,11 @@ void main() {
 
     test('CheckBoxComponent', () {
       final component = BooleanFormComponent(
+        fieldId: 'id',
         data: BooleanDataEntity(),
         property: 'Property',
         required: false,
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -71,10 +76,11 @@ void main() {
 
     test('EnumComponent', () {
       final component = EnumFormComponent(
+        fieldId: 'id',
         data: EnumDataEntity(),
         property: 'Property',
         required: false,
-        options: StubComponentOptions(),
+        options: FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -92,13 +98,16 @@ void main() {
 
 class UnknownComponent extends FormComponent<DataEntity<String, String>> {
   @override
-  FormComponentOptions get options => StubComponentOptions();
+  FormComponentOptions get options => FormComponentOptions();
 
   @override
   String get property => 'Property';
 
   @override
   bool get required => false;
+
+  @override
+  String get fieldId => 'id';
 
   @override
   DataEntity<String, String> get data => null;

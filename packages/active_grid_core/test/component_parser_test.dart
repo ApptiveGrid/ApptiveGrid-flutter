@@ -5,6 +5,7 @@ void main() {
   group('Prefilled values', () {
     test('Text', () {
       final property = 'property';
+      final id = 'id';
       final value = 'value';
       final placeholder = 'placeholder';
       final description = 'description';
@@ -12,13 +13,14 @@ void main() {
 
       final schema = {
         'properties': {
-          property: {
+          id: {
             'type': 'string',
           }
         }
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': value,
         'required': true,
         'options': {
@@ -49,14 +51,16 @@ void main() {
     test('DateTime', () {
       final property = 'property';
       final value = DateTime(2020, 12, 7, 12, 0, 0);
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {'type': 'string', 'format': 'date-time'}
+          id: {'type': 'string', 'format': 'date-time'}
         }
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': value.toIso8601String(),
         'required': true,
         'options': <String, dynamic>{},
@@ -72,21 +76,23 @@ void main() {
       expect(parsedComponent.data.runtimeType, DateTimeDataEntity);
       expect(parsedComponent.data.schemaValue, value.toIso8601String());
 
-      final parsedOptions = parsedComponent.options as StubComponentOptions;
+      final parsedOptions = parsedComponent.options;
       expect(false, parsedOptions == null);
     });
 
     test('Date', () {
       final property = 'property';
       final value = DateTime(2020, 12, 7);
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {'type': 'string', 'format': 'date'}
+          id: {'type': 'string', 'format': 'date'}
         }
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': '2020-12-07',
         'required': true,
         'options': <String, dynamic>{},
@@ -102,7 +108,7 @@ void main() {
       expect(parsedComponent.data.runtimeType, DateDataEntity);
       expect(parsedComponent.data.schemaValue, '2020-12-07');
 
-      final parsedOptions = parsedComponent.options as StubComponentOptions;
+      final parsedOptions = parsedComponent.options;
       expect(false, parsedOptions == null);
     });
 
@@ -112,16 +118,18 @@ void main() {
       final placeholder = 'placeholder';
       final description = 'description';
       final label = 'label';
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {
+          id: {
             'type': 'integer',
           }
         }
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': value,
         'required': true,
         'options': {
@@ -152,19 +160,26 @@ void main() {
     test('Checkbox', () {
       final property = 'property';
       final value = true;
+      final description = 'description';
+      final label = 'label';
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {
+          id: {
             'type': 'boolean',
           }
         }
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': value,
         'required': true,
-        'options': <String, dynamic>{},
+        'options': <String, dynamic>{
+          'description': description,
+          'label': label
+        },
         'type': 'checkbox'
       };
 
@@ -177,8 +192,9 @@ void main() {
       expect(parsedComponent.data.runtimeType, BooleanDataEntity);
       expect(parsedComponent.data.schemaValue, value);
 
-      final parsedOptions = parsedComponent.options as StubComponentOptions;
-      expect(false, parsedOptions == null);
+      final parsedOptions = parsedComponent.options;
+      expect(parsedOptions.description, description);
+      expect(parsedOptions.label, label);
     });
   });
 
@@ -188,16 +204,18 @@ void main() {
       final placeholder = 'placeholder';
       final description = 'description';
       final label = 'label';
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {
+          id: {
             'type': 'string',
           }
         }
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': null,
         'required': true,
         'options': {
@@ -219,14 +237,16 @@ void main() {
 
     test('DateTime', () {
       final property = 'property';
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {'type': 'string', 'format': 'date-time'}
+          id: {'type': 'string', 'format': 'date-time'}
         }
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': null,
         'required': true,
         'options': <String, dynamic>{},
@@ -243,14 +263,16 @@ void main() {
 
     test('Date', () {
       final property = 'property';
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {'type': 'string', 'format': 'date'}
+          id: {'type': 'string', 'format': 'date'}
         }
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': null,
         'required': true,
         'options': <String, dynamic>{},
@@ -270,16 +292,18 @@ void main() {
       final placeholder = 'placeholder';
       final description = 'description';
       final label = 'label';
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {
+          id: {
             'type': 'integer',
           }
         }
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': null,
         'required': true,
         'options': {
@@ -301,16 +325,18 @@ void main() {
 
     test('Checkbox', () {
       final property = 'property';
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {
+          id: {
             'type': 'boolean',
           }
         }
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': null,
         'required': true,
         'options': <String, dynamic>{},
@@ -327,10 +353,11 @@ void main() {
 
     test('Enum', () {
       final property = 'property';
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {
+          id: {
             'type': 'string',
             'enum': ['GmbH', 'AG', 'Freiberuflich']
           }
@@ -338,6 +365,7 @@ void main() {
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': 'AG',
         'required': true,
         'options': <String, dynamic>{},
@@ -358,16 +386,18 @@ void main() {
   group('Errors', () {
     test('Unknown Type throws', () {
       final property = 'property';
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {
+          id: {
             'type': 'unkown',
           }
         }
       };
       final json = {
         'property': property,
+        'fieldId': id,
         'value': null,
         'required': true,
         'options': <String, dynamic>{},
@@ -379,10 +409,11 @@ void main() {
 
     test('Unknown Property throws', () {
       final property = 'property';
+      final id = 'id';
 
       final schema = {
         'properties': {
-          property: {
+          id: {
             'type': 'unkown',
           }
         }

@@ -28,6 +28,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
       builder: (state) {
         return InputDecorator(
           decoration: InputDecoration(
+            helperText: widget.component.options.description,
             errorText: state.errorText,
             contentPadding: EdgeInsets.zero,
             border: InputBorder.none,
@@ -50,7 +51,8 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
                     },
                   ),
                 ),
-                Text(widget.component.property),
+                Text(widget.component.options.label ??
+                    widget.component.property),
               ],
             ),
           ),

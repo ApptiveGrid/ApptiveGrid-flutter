@@ -28,14 +28,25 @@ void main() {
     });
   });
 
-  group('StubComponentOptions', () {
+  group('FormComponentOptions', () {
     group('Equality', () {
-      final a = StubComponentOptions();
-      final b = StubComponentOptions.fromJson({});
+      final a =
+          FormComponentOptions(label: 'Label', description: 'Description');
+      final b = FormComponentOptions.fromJson({
+        'label': 'Label',
+        'description': 'Description',
+      });
+      final c = FormComponentOptions(
+          label: 'Label', description: 'Other Description');
 
       test('a == b', () {
         expect(a == b, true);
         expect(a.hashCode - b.hashCode, 0);
+      });
+
+      test('a != c', () {
+        expect(a == c, false);
+        expect((a.hashCode - c.hashCode) == 0, false);
       });
     });
   });

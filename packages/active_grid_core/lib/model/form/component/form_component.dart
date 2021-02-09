@@ -18,23 +18,28 @@ abstract class FormComponent<T extends DataEntity> {
   /// For [DataType.checkbox] this will make only `true` values valid
   bool get required;
 
+  /// Id of this FormComponent
+  String get fieldId;
+
   /// Saves this into a [Map] that can be encoded using [json.encode]
   Map<String, dynamic> toJson() => {
         'property': property,
         'value': data.schemaValue,
         'options': options.toJson(),
         'required': required,
+        'fieldId': fieldId,
       };
 
   @override
   String toString() {
-    return '$runtimeType(property: $property, data: $data, options: $options, required: $required)';
+    return '$runtimeType(property: $property, fieldId: $fieldId data: $data, options: $options, required: $required)';
   }
 
   @override
   bool operator ==(Object other) {
     return runtimeType == other.runtimeType &&
         other is FormComponent<T> &&
+        fieldId == other.fieldId &&
         property == other.property &&
         data == other.data &&
         options == other.options &&
@@ -50,9 +55,10 @@ abstract class FormComponent<T extends DataEntity> {
   // missing_return can be ignored as the switch statement is exhaustive
   // ignore: missing_return
   static FormComponent fromJson(dynamic json, dynamic schema) {
-    final properties = schema['properties'][json['property']];
+    final properties = schema['properties'][json['fieldId']];
     if (properties == null) {
-      throw ArgumentError('No Schema Entry found for ${json['property']}');
+      throw ArgumentError(
+          'No Schema Entry found for ${json['property']} with id ${json['fieldId']}');
     }
     final dataType = dataTypeFromSchemaProperty(schemaProperty: properties);
     switch (dataType) {

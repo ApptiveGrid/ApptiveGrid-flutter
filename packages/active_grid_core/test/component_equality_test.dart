@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final textA = StringFormComponent(
+      fieldId: 'textId',
       property: 'Property',
       data: StringDataEntity('Value'),
       options: TextComponentOptions(
@@ -10,6 +11,7 @@ void main() {
       ),
       required: true);
   final textB = StringFormComponent(
+      fieldId: 'textId',
       property: 'Property',
       data: StringDataEntity('Value'),
       options: TextComponentOptions(
@@ -18,6 +20,7 @@ void main() {
       required: true);
 
   final textC = StringFormComponent(
+      fieldId: 'textC',
       property: 'Property',
       data: StringDataEntity(),
       options: TextComponentOptions(
@@ -26,6 +29,7 @@ void main() {
       required: false);
 
   final number = IntegerFormComponent(
+      fieldId: 'number',
       property: 'Property',
       data: IntegerDataEntity(),
       options: TextComponentOptions(
@@ -34,23 +38,26 @@ void main() {
       required: false);
 
   final date = DateFormComponent(
+    fieldId: 'date',
     property: 'Property',
     data: DateDataEntity(),
-    options: StubComponentOptions(),
+    options: FormComponentOptions(),
     required: false,
   );
 
   final dateTime = DateTimeFormComponent(
+    fieldId: 'dateTime',
     property: 'Property',
     data: DateTimeDataEntity(),
-    options: StubComponentOptions(),
+    options: FormComponentOptions(),
     required: false,
   );
 
   final checkBox = BooleanFormComponent(
+    fieldId: 'checkBox',
     property: 'Property',
     data: BooleanDataEntity(),
-    options: StubComponentOptions(),
+    options: FormComponentOptions(),
     required: false,
   );
 

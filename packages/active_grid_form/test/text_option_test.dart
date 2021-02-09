@@ -9,6 +9,7 @@ void main() {
     testWidgets('Default Label is Property', (tester) async {
       final property = 'Property';
       final component = StringFormComponent(
+        fieldId: 'id',
         data: StringDataEntity(),
         property: property,
         options: TextComponentOptions(),
@@ -29,6 +30,7 @@ void main() {
       final property = 'Property';
       final customLabel = 'CustomLabel';
       final component = StringFormComponent(
+        fieldId: 'id',
         data: StringDataEntity(),
         property: property,
         options: TextComponentOptions(
@@ -52,6 +54,7 @@ void main() {
     testWidgets('Default Label is Property', (tester) async {
       final property = 'Property';
       final component = IntegerFormComponent(
+        fieldId: 'id',
         data: IntegerDataEntity(),
         property: property,
         options: TextComponentOptions(),
@@ -72,6 +75,7 @@ void main() {
       final property = 'Property';
       final customLabel = 'CustomLabel';
       final component = IntegerFormComponent(
+        fieldId: 'id',
         data: IntegerDataEntity(),
         property: property,
         options: TextComponentOptions(

@@ -49,6 +49,8 @@ class ActiveGridClient {
     final uri = Uri.parse('${environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
+    request.headers
+        .addAll({HttpHeaders.contentTypeHeader: ContentType.json.value});
     final response = await _client.send(request);
     return http.Response.fromStream(response);
   }

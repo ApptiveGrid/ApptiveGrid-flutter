@@ -48,9 +48,7 @@ class _TextFormWidgetState extends State<TextFormWidget> {
       expands: widget.component.options.multi,
       decoration: InputDecoration(
         helperText: widget.component.options.description,
-        labelText: widget.component.options.label?.isNotEmpty == true
-            ? widget.component.options.label
-            : widget.component.property,
+        labelText: widget.component.options.label ?? widget.component.property,
         hintText: widget.component.options.placeholder,
       ),
     );
