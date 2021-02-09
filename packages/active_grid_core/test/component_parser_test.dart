@@ -419,11 +419,12 @@ void main() {
         }
       };
       final json = {
-        'property': 'schemaError',
+        'property': property,
         'value': null,
         'required': true,
         'options': <String, dynamic>{},
-        'type': 'unkown'
+        'type': 'unkown',
+        'fieldId': 'differentId'
       };
 
       expect(() => FormComponent.fromJson(json, schema), throwsArgumentError);
