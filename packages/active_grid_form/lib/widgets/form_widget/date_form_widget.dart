@@ -60,7 +60,8 @@ class _DateFormWidgetState extends State<DateFormWidget> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
             helperText: widget.component.options.description,
-            labelText: widget.component.options.label ?? widget.component.property,
+            labelText:
+                widget.component.options.label ?? widget.component.property,
           ),
         ),
       ),

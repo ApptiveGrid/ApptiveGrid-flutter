@@ -32,10 +32,8 @@ void main() {
       final component = BooleanFormComponent(
         data: BooleanDataEntity(),
         property: property,
-        options: FormComponentOptions(
-          label: customLabel,
-          description: description
-        ),
+        options:
+            FormComponentOptions(label: customLabel, description: description),
       );
       final target = TestApp(
         child: CheckBoxFormWidget(
@@ -78,10 +76,8 @@ void main() {
       final component = DateFormComponent(
         data: DateDataEntity(),
         property: property,
-        options: FormComponentOptions(
-            label: customLabel,
-            description: description
-        ),
+        options:
+            FormComponentOptions(label: customLabel, description: description),
       );
       final target = TestApp(
         child: DateFormWidget(
@@ -124,10 +120,8 @@ void main() {
       final component = DateTimeFormComponent(
         data: DateTimeDataEntity(),
         property: property,
-        options: FormComponentOptions(
-            label: customLabel,
-            description: description
-        ),
+        options:
+            FormComponentOptions(label: customLabel, description: description),
       );
       final target = TestApp(
         child: DateTimeFormWidget(
@@ -170,10 +164,8 @@ void main() {
       final component = EnumFormComponent(
         data: EnumDataEntity(),
         property: property,
-        options: FormComponentOptions(
-            label: customLabel,
-            description: description
-        ),
+        options:
+            FormComponentOptions(label: customLabel, description: description),
       );
       final target = TestApp(
         child: EnumFormWidget(

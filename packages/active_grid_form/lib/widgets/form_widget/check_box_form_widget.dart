@@ -51,7 +51,8 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
                     },
                   ),
                 ),
-                Text(widget.component.options.label ?? widget.component.property),
+                Text(widget.component.options.label ??
+                    widget.component.property),
               ],
             ),
           ),
