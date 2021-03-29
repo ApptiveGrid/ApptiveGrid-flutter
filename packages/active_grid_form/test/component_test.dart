@@ -5,7 +5,7 @@ import 'package:active_grid_form/active_grid_form.dart';
 import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart';
 
 import 'common.dart';
@@ -38,9 +38,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
-      when(client.performAction(action, any))
+      when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -85,7 +85,7 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -96,7 +96,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(client.performAction(action, formData));
+      verifyNever(() => client.performAction(action, formData));
       expect(find.text('Property is required'), findsOneWidget);
     });
   });
@@ -128,9 +128,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
-      when(client.performAction(action, any))
+      when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -187,9 +187,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
-      when(client.performAction(action, any))
+      when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -249,7 +249,7 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -260,7 +260,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(client.performAction(action, formData));
+      verifyNever(() => client.performAction(action, formData));
       expect(find.text('Property is required'), findsOneWidget);
     });
   });
@@ -292,9 +292,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
-      when(client.performAction(action, any))
+      when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -350,7 +350,7 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -361,7 +361,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(client.performAction(action, formData));
+      verifyNever(() => client.performAction(action, formData));
       expect(find.text('Property is required'), findsOneWidget);
     });
   });
@@ -393,9 +393,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
-      when(client.performAction(action, any))
+      when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -440,7 +440,7 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -451,7 +451,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(client.performAction(action, formData));
+      verifyNever(() => client.performAction(action, formData));
       expect(find.text('Property is required'), findsOneWidget);
     });
   });
@@ -483,9 +483,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
-      when(client.performAction(action, any))
+      when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -530,7 +530,7 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -541,7 +541,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(client.performAction(action, formData));
+      verifyNever(() => client.performAction(action, formData));
       expect(find.text('Required'), findsOneWidget);
     });
   });
@@ -573,9 +573,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
-      when(client.performAction(action, any))
+      when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -624,7 +624,7 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: anyNamed('formId')))
+      when(() => client.loadForm(formId: any(named: 'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -635,7 +635,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(client.performAction(action, formData));
+      verifyNever(() => client.performAction(action, formData));
       expect(find.text('Property is required'), findsOneWidget);
     });
   });

@@ -1,7 +1,7 @@
 import 'package:active_grid_core/active_grid_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockActiveGridClient extends Mock implements ActiveGridClient {}
 

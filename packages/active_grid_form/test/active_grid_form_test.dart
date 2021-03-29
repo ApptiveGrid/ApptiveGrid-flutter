@@ -5,7 +5,7 @@ import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:active_grid_core/active_grid_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,7 +22,7 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: 'form')).thenAnswer(
+      when(() => client.loadForm(formId: 'form')).thenAnswer(
           (realInvocation) async => FormData('Form Title', [], [], {}));
 
       await tester.pumpWidget(target);
@@ -41,7 +41,7 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: 'form')).thenAnswer(
+      when(() => client.loadForm(formId: 'form')).thenAnswer(
           (realInvocation) async => FormData('Form Title', [], [], {}));
 
       await tester.pumpWidget(target);
@@ -65,7 +65,7 @@ void main() {
       ),
     );
 
-    when(client.loadForm(formId: 'form'))
+    when(() => client.loadForm(formId: 'form'))
         .thenAnswer((realInvocation) async => form);
 
     await tester.pumpWidget(target);
@@ -105,9 +105,9 @@ void main() {
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);
-      when(client.performAction(action, formData))
+      when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -131,9 +131,9 @@ void main() {
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);
-      when(client.performAction(action, formData))
+      when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -145,7 +145,7 @@ void main() {
       await tester.tap(find.byType(FlatButton, skipOffstage: false));
       await tester.pumpAndSettle();
 
-      verify(client.loadForm(formId: 'form')).called(2);
+      verify(() => client.loadForm(formId: 'form')).called(2);
     });
   });
 
@@ -160,7 +160,7 @@ void main() {
           ),
         );
 
-        when(client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formId: 'form'))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -179,7 +179,7 @@ void main() {
             formId: 'form',
           ),
         );
-        when(client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formId: 'form'))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -189,7 +189,7 @@ void main() {
         await tester.tap(find.byType(FlatButton, skipOffstage: false));
         await tester.pumpAndSettle();
 
-        verify(client.loadForm(formId: 'form')).called(2);
+        verify(() => client.loadForm(formId: 'form')).called(2);
       });
     });
 
@@ -205,9 +205,9 @@ void main() {
         final action = FormAction('uri', 'method');
         final formData = FormData('Form Title', [], [action], {});
 
-        when(client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formId: 'form'))
             .thenAnswer((realInvocation) async => formData);
-        when(client.performAction(action, formData))
+        when(() => client.performAction(action, formData))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -231,9 +231,9 @@ void main() {
         final action = FormAction('uri', 'method');
         final formData = FormData('Form Title', [], [action], {});
 
-        when(client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formId: 'form'))
             .thenAnswer((realInvocation) async => formData);
-        when(client.performAction(action, formData))
+        when(() => client.performAction(action, formData))
             .thenAnswer((_) async => http.Response('', 500));
 
         await tester.pumpWidget(target);
@@ -257,9 +257,9 @@ void main() {
         final action = FormAction('uri', 'method');
         final formData = FormData('Form Title', [], [action], {});
 
-        when(client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formId: 'form'))
             .thenAnswer((realInvocation) async => formData);
-        when(client.performAction(action, formData))
+        when(() => client.performAction(action, formData))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -291,9 +291,9 @@ void main() {
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);
-      when(client.performAction(action, formData))
+      when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -318,9 +318,9 @@ void main() {
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);
-      when(client.performAction(action, formData))
+      when(() => client.performAction(action, formData))
           .thenAnswer((_) => Future.error(''));
 
       await tester.pumpWidget(target);
