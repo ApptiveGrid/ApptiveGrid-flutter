@@ -22,6 +22,8 @@ class ActiveGridClient {
   /// Authentication Object
   ActiveGridAuthentication? authentication;
 
+  TokenResponse? _token;
+
   final http.Client _client;
 
   /// Close the connection on the httpClient
@@ -32,8 +34,8 @@ class ActiveGridClient {
   /// Headers that are used for multiple Calls
   @visibleForTesting
   Map<String, String> get headers => <String, String>{
-        if (authentication != null)
-          HttpHeaders.authorizationHeader: authentication!.header,
+        if (_token?.accessToken != null)
+          HttpHeaders.authorizationHeader: 'Bearer ${_token?.accessToken}',
       };
 
   /// Loads a [FormData] specified with [formId]
@@ -71,5 +73,32 @@ class ActiveGridClient {
       throw response;
     }
     return Grid.fromJson(json.decode(response.body));
+  }
+
+  Future<Credential> authenticate() async {
+    final uri = Uri.parse('https://iam.zweidenker.de/auth/realms/activegrid-test');
+    final issuer = await Issuer.discover(uri);
+    final client = Client(issuer, 'web');
+
+    urlLauncher(String url) async {
+      if (await canLaunch(url)) {
+        await launch(url, forceWebView: true);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
+    final authenticator = Authenticator(client,
+      scopes: [],
+      urlLancher: urlLauncher,
+    );
+
+    final credential = await authenticator.authorize();
+
+    _token = await credential.getTokenResponse();
+
+    closeWebView();
+
+    return credential;
   }
 }
