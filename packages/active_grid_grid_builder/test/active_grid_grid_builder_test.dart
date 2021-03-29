@@ -21,7 +21,7 @@ void main() {
         grid: gridId,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Text(snapshot.data.name);
+            return Text(snapshot.data!.name);
           } else {
             return CircularProgressIndicator();
           }
@@ -50,7 +50,7 @@ void main() {
         initialData: Grid('Initial Title', null, [], []),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Text(snapshot.data.name);
+            return Text(snapshot.data!.name);
           } else {
             return CircularProgressIndicator();
           }
@@ -109,7 +109,7 @@ void main() {
         grid: gridId,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Text(snapshot.data.name);
+            return Text(snapshot.data!.name);
           } else {
             return CircularProgressIndicator();
           }
@@ -124,7 +124,7 @@ void main() {
     await tester.pumpWidget(target);
     await tester.pump();
 
-    await key.currentState.reload();
+    await key.currentState!.reload();
 
     verify(() => client.loadGrid(user: user, space: space, grid: gridId)).called(2);
   });
