@@ -10,7 +10,7 @@ import 'mocks.dart';
 
 void main() {
   final httpClient = MockHttpClient();
-  ActiveGridClient activeGridClient;
+  late ActiveGridClient activeGridClient;
 
   setUpAll(() {
     registerFallbackValue<BaseRequest>(Request('GET', Uri()));
@@ -24,7 +24,6 @@ void main() {
 
   tearDown(() {
     activeGridClient.dispose();
-    activeGridClient = null;
   });
 
   group('loadForm', () {
@@ -167,7 +166,7 @@ void main() {
           'POST', Uri.parse('${ActiveGridEnvironment.production.url}/uri}'));
       request.body = jsonEncode(jsonEncode(formData.toRequestObject()));
 
-      BaseRequest calledRequest;
+      late BaseRequest calledRequest;
 
       when(() => httpClient.send(any())).thenAnswer((realInvocation) async {
         calledRequest = realInvocation.positionalArguments[0];

@@ -8,7 +8,7 @@ import 'mocks.dart';
 void main() {
   group('ActiveGrid Provides necessary Objects', () {
     testWidgets('ActiveGridClient', (tester) async {
-      BuildContext context;
+      late BuildContext context;
       final target = ActiveGrid(
         child: Builder(
           builder: (buildContext) {
@@ -21,14 +21,14 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(true, ActiveGrid.getClient(context, listen: false) != null);
+      expect(true, ActiveGrid.getClient(context, listen: false) is ActiveGridClient);
     });
   });
 
   group('Options are reflected in client', () {
     group('Environment', () {
       testWidgets('Alpha', (tester) async {
-        BuildContext context;
+        late BuildContext context;
         final options = ActiveGridOptions(
           environment: ActiveGridEnvironment.alpha,
         );
@@ -50,7 +50,7 @@ void main() {
       });
 
       testWidgets('Beta', (tester) async {
-        BuildContext context;
+        late BuildContext context;
         final options = ActiveGridOptions(
           environment: ActiveGridEnvironment.beta,
         );
@@ -72,7 +72,7 @@ void main() {
       });
 
       testWidgets('Production', (tester) async {
-        BuildContext context;
+        late BuildContext context;
         final options = ActiveGridOptions(
           environment: ActiveGridEnvironment.production,
         );
@@ -89,12 +89,12 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        final client = Provider.of<ActiveGridClient>(context, listen: false);
+        final client = ActiveGrid.getClient(context, listen: false);
         expect(ActiveGridEnvironment.production, client.environment);
       });
 
       testWidgets('Default is Prod', (tester) async {
-        BuildContext context;
+        late BuildContext context;
         final target = ActiveGrid(
           child: Builder(
             builder: (buildContext) {
@@ -112,7 +112,7 @@ void main() {
       });
 
       testWidgets('Authentication', (tester) async {
-        BuildContext context;
+        late BuildContext context;
         final authentication = ActiveGridAuthentication(
             username: 'username', password: 'password');
         final target = ActiveGrid(
@@ -138,7 +138,7 @@ void main() {
 
   group('Mock Client', () {
     testWidgets('withClient Uses Provided Client', (tester) async {
-      BuildContext context;
+      late BuildContext context;
       final client = MockActiveGridClient();
       final target = ActiveGrid.withClient(
         client: client,

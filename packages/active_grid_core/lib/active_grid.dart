@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class ActiveGrid extends StatefulWidget {
   /// Creates Active Grid
   const ActiveGrid(
-      {Key key, this.child, this.options = const ActiveGridOptions()})
+      {Key? key, this.child, this.options = const ActiveGridOptions()})
       : client = null,
         super(key: key);
 
@@ -18,11 +18,11 @@ class ActiveGrid extends StatefulWidget {
   ///
   /// Used testing to Provide a MockedClient
   @visibleForTesting
-  ActiveGrid.withClient({ActiveGridClient client, this.child, this.options})
+  ActiveGrid.withClient({required ActiveGridClient client, this.child, this.options = const ActiveGridOptions()})
       : client = client;
 
   /// Widget that should be wrapped. Normally this is something like [MaterialApp]
-  final Widget child;
+  final Widget? child;
 
   /// Configuration options for ActiveGrid
   final ActiveGridOptions options;
@@ -31,7 +31,7 @@ class ActiveGrid extends StatefulWidget {
   ///
   /// Used for supplying a Mocked Client for testing
   @visibleForTesting
-  final ActiveGridClient client;
+  final ActiveGridClient? client;
 
   @override
   _ActiveGridState createState() => _ActiveGridState();
@@ -46,7 +46,7 @@ class ActiveGrid extends StatefulWidget {
 }
 
 class _ActiveGridState extends State<ActiveGrid> {
-  ActiveGridClient _client;
+  late ActiveGridClient _client;
 
   @override
   void initState() {
@@ -59,7 +59,7 @@ class _ActiveGridState extends State<ActiveGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider.value(
+    return Provider<ActiveGridClient>.value(
       value: _client,
       child: widget.child,
     );

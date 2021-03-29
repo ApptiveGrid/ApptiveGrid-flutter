@@ -110,7 +110,7 @@ void main() {
 
       expect(
           EnumFormComponent.fromJson(
-              jsonComponent.toJson(), schema['properties'][id]),
+              jsonComponent.toJson(), schema['properties']![id]),
           component);
     });
   });

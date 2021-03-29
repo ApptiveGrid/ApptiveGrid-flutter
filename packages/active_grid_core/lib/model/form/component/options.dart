@@ -11,10 +11,10 @@ class FormComponentOptions {
         label = json['label'];
 
   /// Description that describes the Component
-  final String description;
+  final String? description;
 
   /// Label to be used instead of [FormComponent.property]
-  final String label;
+  final String? label;
 
   /// Serializes [FormComponentOptions] to json
   Map<String, dynamic> toJson() => {
@@ -56,15 +56,15 @@ class TextComponentOptions extends FormComponentOptions {
   final bool multi;
 
   /// Placeholder Text
-  final String placeholder;
+  final String? placeholder;
 
   /// Description that describes the Component
   @override
-  final String description;
+  final String? description;
 
   /// Label to be used instead of [FormComponent.property]
   @override
-  final String label;
+  final String? label;
 
   /// Serializes [TextComponentOptions] to json
   @override

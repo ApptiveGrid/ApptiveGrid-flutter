@@ -4,9 +4,9 @@ part of active_grid_model;
 class DateTimeFormComponent extends FormComponent<DateTimeDataEntity> {
   /// Creates a FormComponent
   DateTimeFormComponent(
-      {@f.required this.property,
-      @f.required this.data,
-      @f.required this.fieldId,
+      {required this.property,
+      required this.data,
+      required this.fieldId,
       this.options = const FormComponentOptions(),
       this.required = false});
 
