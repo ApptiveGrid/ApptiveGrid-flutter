@@ -11,7 +11,6 @@ import 'package:http/http.dart';
 import 'common.dart';
 
 void main() {
-
   setUpAll(() {
     registerFallbackValue<FormData>(FormData("Title", [], [], {}));
   });

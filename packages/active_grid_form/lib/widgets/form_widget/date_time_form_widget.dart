@@ -6,7 +6,8 @@ class DateTimeFormWidget extends StatefulWidget {
   ///
   /// Clicking on the Date part will show a DatePicker using [showDatePicker]
   /// Clicking on the Time part will show a TimePicker using [showTimePicker]
-  const DateTimeFormWidget({Key? key, required this.component}) : super(key: key);
+  const DateTimeFormWidget({Key? key, required this.component})
+      : super(key: key);
 
   /// Component this Widget should reflect
   final DateTimeFormComponent component;
