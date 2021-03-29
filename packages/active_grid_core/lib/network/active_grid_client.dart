@@ -38,7 +38,7 @@ class ActiveGridClient {
 
   /// Loads a [FormData] specified with [formId]
   Future<FormData> loadForm({@required String formId}) async {
-    final url = '${environment.url}/api/a/$formId';
+    final url = Uri.parse('${environment.url}/api/a/$formId');
     final response = await _client.get(url);
     return FormData.fromJson(json.decode(response.body));
   }
@@ -64,7 +64,7 @@ class ActiveGridClient {
       {@required String user,
       @required String space,
       @required String grid}) async {
-    final url = '${environment.url}/api/users/$user/spaces/$space/grids/$grid';
+    final url = Uri.parse('${environment.url}/api/users/$user/spaces/$space/grids/$grid');
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
