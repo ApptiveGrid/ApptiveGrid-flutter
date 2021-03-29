@@ -26,15 +26,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -66,15 +64,15 @@ class _MyHomePageState extends State<MyHomePage> {
             } else {
               return RefreshIndicator(
                 onRefresh: () {
-                  return _builderKey.currentState?.reload();
+                  return _builderKey.currentState?.reload() ?? Future.value();
                 },
                 child: ListView.separated(
-                  itemCount: snapshot.data.rows.length,
+                  itemCount: snapshot.data!.rows.length,
                   separatorBuilder: (context, index) {
                     return Divider();
                   },
                   itemBuilder: (context, index) {
-                    final row = snapshot.data.rows[index];
+                    final row = snapshot.data!.rows[index];
                     return ListTile(
                       leading: Padding(
                         padding: const EdgeInsets.fromLTRB(4, 4, 4, 8),
