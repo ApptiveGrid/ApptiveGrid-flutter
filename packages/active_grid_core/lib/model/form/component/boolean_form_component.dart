@@ -19,7 +19,7 @@ class BooleanFormComponent extends FormComponent<BooleanDataEntity> {
         fieldId = json['fieldId'];
 
   @override
-  final String /*!*/ property;
+  final String property;
   @override
   BooleanDataEntity data;
   @override
