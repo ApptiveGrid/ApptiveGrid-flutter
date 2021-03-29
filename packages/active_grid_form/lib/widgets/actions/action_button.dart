@@ -6,14 +6,14 @@ class ActionButton extends StatelessWidget {
   ///
   /// This uses a RaisedButton.
   const ActionButton(
-      {Key key, @required this.action, this.child, @required this.onPressed})
+      {Key? key, required this.action, this.child, required this.onPressed})
       : super(key: key);
 
   /// The action the Button represents
   final FormAction action;
 
   /// The child Widget displayed in the Button
-  final Widget child;
+  final Widget? child;
 
   /// Called when the button is pressed
   ///

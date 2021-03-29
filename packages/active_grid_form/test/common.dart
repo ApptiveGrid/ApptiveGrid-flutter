@@ -7,22 +7,22 @@ class MockActiveGridClient extends Mock implements ActiveGridClient {}
 
 class TestApp extends StatelessWidget {
   const TestApp(
-      {Key key,
+      {Key? key,
       this.client,
       this.child,
       this.options = const ActiveGridOptions()})
       : super(key: key);
 
-  final Widget child;
+  final Widget? child;
 
-  final ActiveGridClient client;
+  final ActiveGridClient? client;
 
   final ActiveGridOptions options;
 
   @override
   Widget build(BuildContext context) {
     return ActiveGrid.withClient(
-      client: client,
+      client: client ?? MockActiveGridClient(),
       options: options,
       child: MaterialApp(
         home: Builder(

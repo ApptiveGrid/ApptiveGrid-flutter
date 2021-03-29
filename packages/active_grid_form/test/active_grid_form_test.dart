@@ -77,11 +77,16 @@ void main() {
 
   group('Loading', () {
     testWidgets('Initial shows Loading', (tester) async {
+      final client = MockActiveGridClient();
       final target = TestApp(
+        client: client,
         child: ActiveGridForm(
           formId: 'form',
         ),
       );
+      final form = FormData('Form Title', [], [], {});
+      when(() => client.loadForm(formId: 'form'))
+          .thenAnswer((realInvocation) async => form);
 
       await tester.pumpWidget(target);
 

@@ -11,6 +11,11 @@ import 'package:http/http.dart';
 import 'common.dart';
 
 void main() {
+
+  setUpAll(() {
+    registerFallbackValue<FormData>(FormData("Title", [], [], {}));
+  });
+
   group('Text', () {
     testWidgets('Value is send', (tester) async {
       final action = FormAction(

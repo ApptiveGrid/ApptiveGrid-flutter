@@ -3,7 +3,7 @@ part of active_grid_form_widgets;
 /// FormComponent Widget to display a [IntegerFormComponent]
 class NumberFormWidget extends StatefulWidget {
   /// Creates a [TextFormField] to show and edit an integer contained in [component]
-  const NumberFormWidget({Key key, this.component}) : super(key: key);
+  const NumberFormWidget({Key? key, required this.component}) : super(key: key);
 
   /// Component this Widget should reflect
   final IntegerFormComponent component;
@@ -18,9 +18,9 @@ class _NumberFormWidgetState extends State<NumberFormWidget> {
   @override
   void initState() {
     super.initState();
-    _controller.text = widget.component.data.value?.toString();
+    _controller.text = widget.component.data.value?.toString() ?? "";
     _controller.addListener(() {
-      if (_controller.text != null && _controller.text.isNotEmpty) {
+      if (_controller.text.isNotEmpty) {
         widget.component.data.value = int.parse(_controller.text);
       }
     });

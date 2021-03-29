@@ -3,7 +3,7 @@ part of active_grid_form_widgets;
 /// FormComponent Widget to display a [StringFormComponent]
 class TextFormWidget extends StatefulWidget {
   /// Creates a [TextFormField] to show and edit Text contained in [component]
-  const TextFormWidget({Key key, @required this.component}) : super(key: key);
+  const TextFormWidget({Key? key, required this.component}) : super(key: key);
 
   /// Component this Widget should reflect
   final StringFormComponent component;
@@ -18,7 +18,7 @@ class _TextFormWidgetState extends State<TextFormWidget> {
   @override
   void initState() {
     super.initState();
-    _controller.text = widget.component.data.value;
+    _controller.text = widget.component.data.value ?? "";
     _controller.addListener(() {
       widget.component.data.value = _controller.text;
     });

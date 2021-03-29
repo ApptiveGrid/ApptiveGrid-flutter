@@ -6,7 +6,7 @@ class DateTimeFormWidget extends StatefulWidget {
   ///
   /// Clicking on the Date part will show a DatePicker using [showDatePicker]
   /// Clicking on the Time part will show a TimePicker using [showTimePicker]
-  const DateTimeFormWidget({Key key, this.component}) : super(key: key);
+  const DateTimeFormWidget({Key? key, required this.component}) : super(key: key);
 
   /// Component this Widget should reflect
   final DateTimeFormComponent component;
@@ -25,10 +25,10 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
   ) {
     if (widget.component.data.value != null) {
       final dateFormat = DateFormat.yMd();
-      final dateString = dateFormat.format(widget.component.data.value);
+      final dateString = dateFormat.format(widget.component.data.value!);
       _dateController.text = dateString;
       final timeFormat = DateFormat.jm();
-      final timeString = timeFormat.format(widget.component.data.value);
+      final timeString = timeFormat.format(widget.component.data.value!);
       _timeController.text = timeString;
     }
     return FormField<DateTime>(
