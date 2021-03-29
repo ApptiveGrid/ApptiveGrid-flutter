@@ -122,7 +122,7 @@ void main() {
 
       expect(find.byType(Lottie), findsOneWidget);
       expect(find.text('Thank You!', skipOffstage: false), findsOneWidget);
-      expect(find.byType(FlatButton, skipOffstage: false), findsOneWidget);
+      expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
     });
 
     testWidgets('Send Additional Click reloads Form', (tester) async {
@@ -146,8 +146,8 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      await tester.scrollUntilVisible(find.byType(FlatButton), 100);
-      await tester.tap(find.byType(FlatButton, skipOffstage: false));
+      await tester.scrollUntilVisible(find.byType(TextButton), 100);
+      await tester.tap(find.byType(TextButton, skipOffstage: false));
       await tester.pumpAndSettle();
 
       verify(() => client.loadForm(formId: 'form')).called(2);
@@ -173,7 +173,7 @@ void main() {
 
         expect(find.byType(Lottie), findsOneWidget);
         expect(find.text('Oops! - Error', skipOffstage: false), findsOneWidget);
-        expect(find.byType(FlatButton, skipOffstage: false), findsOneWidget);
+        expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
       });
 
       testWidgets('Initial Error Reloads Form', (tester) async {
@@ -190,8 +190,8 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        await tester.scrollUntilVisible(find.byType(FlatButton), 100);
-        await tester.tap(find.byType(FlatButton, skipOffstage: false));
+        await tester.scrollUntilVisible(find.byType(TextButton), 100);
+        await tester.tap(find.byType(TextButton, skipOffstage: false));
         await tester.pumpAndSettle();
 
         verify(() => client.loadForm(formId: 'form')).called(2);
@@ -222,7 +222,7 @@ void main() {
 
         expect(find.byType(Lottie), findsOneWidget);
         expect(find.text('Oops! - Error', skipOffstage: false), findsOneWidget);
-        expect(find.byType(FlatButton, skipOffstage: false), findsOneWidget);
+        expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
       });
 
       testWidgets('Server Error shows Error', (tester) async {
@@ -248,7 +248,7 @@ void main() {
 
         expect(find.byType(Lottie), findsOneWidget);
         expect(find.text('Oops! - Error', skipOffstage: false), findsOneWidget);
-        expect(find.byType(FlatButton, skipOffstage: false), findsOneWidget);
+        expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
       });
 
       testWidgets('Back to Form shows Form', (tester) async {
@@ -272,8 +272,8 @@ void main() {
         await tester.tap(find.byType(ActionButton));
         await tester.pumpAndSettle();
 
-        await tester.scrollUntilVisible(find.byType(FlatButton), 100);
-        await tester.tap(find.byType(FlatButton, skipOffstage: false));
+        await tester.scrollUntilVisible(find.byType(TextButton), 100);
+        await tester.tap(find.byType(TextButton, skipOffstage: false));
         await tester.pumpAndSettle();
 
         expect(find.text('Form Title'), findsOneWidget);

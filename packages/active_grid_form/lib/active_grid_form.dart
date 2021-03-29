@@ -166,7 +166,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
           style: Theme.of(context).textTheme.headline4,
         ),
         Center(
-          child: FlatButton(
+          child: TextButton(
               onPressed: () {
                 _loadForm();
                 setState(() {
@@ -197,7 +197,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
           style: Theme.of(context).textTheme.headline4,
         ),
         Center(
-          child: FlatButton(
+          child: TextButton(
               onPressed: () {
                 if (_formData == null) {
                   _loadForm();
