@@ -18,7 +18,10 @@ class ActiveGrid extends StatefulWidget {
   ///
   /// Used testing to Provide a MockedClient
   @visibleForTesting
-  ActiveGrid.withClient({required ActiveGridClient client, this.child, this.options = const ActiveGridOptions()})
+  ActiveGrid.withClient(
+      {required ActiveGridClient client,
+      this.child,
+      this.options = const ActiveGridOptions()})
       : client = client;
 
   /// Widget that should be wrapped. Normally this is something like [MaterialApp]

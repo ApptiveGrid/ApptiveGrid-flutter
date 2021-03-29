@@ -10,13 +10,13 @@ class Grid {
     final ids = json['fieldIds'] as List;
     final names = json['fieldNames'] as List;
     final schema = json['schema'];
-    final fields = List<GridField>.generate(ids.length, (i) =>
-      GridField(
-          ids[i],
-          names[i],
-          dataTypeFromSchemaProperty(
-              schemaProperty: schema['properties']['fields']['items'][i]))
-    );
+    final fields = List<GridField>.generate(
+        ids.length,
+        (i) => GridField(
+            ids[i],
+            names[i],
+            dataTypeFromSchemaProperty(
+                schemaProperty: schema['properties']['fields']['items'][i])));
     final entries = (json['entities'] as List)
         .map((e) => GridRow.fromJson(e, fields, schema))
         .toList();

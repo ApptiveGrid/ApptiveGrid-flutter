@@ -21,7 +21,8 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(true, ActiveGrid.getClient(context, listen: false) is ActiveGridClient);
+      expect(true,
+          ActiveGrid.getClient(context, listen: false) is ActiveGridClient);
     });
   });
 

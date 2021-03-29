@@ -11,10 +11,10 @@ class GridRow {
   factory GridRow.fromJson(
       dynamic json, List<GridField> fields, dynamic schema) {
     final data = json['fields'] as List;
-    final entries = List<GridEntry>.generate(data.length, (i) =>
-        GridEntry.fromJson(
-          data[i], fields[i], schema['properties']['fields']['items'][i])
-    );
+    final entries = List<GridEntry>.generate(
+        data.length,
+        (i) => GridEntry.fromJson(
+            data[i], fields[i], schema['properties']['fields']['items'][i]));
     return GridRow(json['_id'], entries);
   }
 

@@ -112,9 +112,9 @@ void main() {
       final response = Response(json.encode(rawResponse), 200);
 
       when(() => httpClient.get(
-              Uri.parse('${ActiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
-              headers: any(named: 'headers')))
-          .thenAnswer((_) async => response);
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       final grid = await activeGridClient.loadGrid(
           grid: gridId, space: space, user: user);
@@ -130,9 +130,9 @@ void main() {
       final response = Response(json.encode(rawResponse), 400);
 
       when(() => httpClient.get(
-              Uri.parse('${ActiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
-              headers: any(named: 'headers')))
-          .thenAnswer((_) async => response);
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       expect(
           () =>
