@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:active_grid_grid_builder/active_grid_grid_builder.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'common.dart';
 
@@ -30,7 +30,7 @@ void main() {
     );
 
     final title = 'Title';
-    when(client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(user: user, space: space, grid: gridId))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
@@ -59,7 +59,7 @@ void main() {
     );
 
     final title = 'Title';
-    when(client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(user: user, space: space, grid: gridId))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
@@ -88,7 +88,7 @@ void main() {
       ),
     );
 
-    when(client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(user: user, space: space, grid: gridId))
         .thenAnswer((_) => Future.error(''));
 
     await tester.pumpWidget(target);
@@ -118,7 +118,7 @@ void main() {
     );
 
     final title = 'Title';
-    when(client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(user: user, space: space, grid: gridId))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
@@ -126,6 +126,6 @@ void main() {
 
     await key.currentState.reload();
 
-    verify(client.loadGrid(user: user, space: space, grid: gridId)).called(2);
+    verify(() => client.loadGrid(user: user, space: space, grid: gridId)).called(2);
   });
 }
