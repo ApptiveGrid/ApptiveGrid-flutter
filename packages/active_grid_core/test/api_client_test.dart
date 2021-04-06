@@ -2,11 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:active_grid_core/active_grid_core.dart';
-import 'package:active_grid_core/network/active_grid_authenticator.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:openid_client/openid_client.dart';
 
 import 'mocks.dart';
 

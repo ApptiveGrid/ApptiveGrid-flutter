@@ -15,8 +15,6 @@ enum ActiveGridEnvironment {
 /// Extensions for [ActiveGridEnvironment]
 extension EnvironmentExtension on ActiveGridEnvironment {
   /// Returns the API url for the selected [ActiveGridEnvironment]
-  ///
-  /// defaults to the same url as [ActiveGridEnvironment.production]
   String get url {
     switch (this) {
       case ActiveGridEnvironment.alpha:
@@ -28,6 +26,7 @@ extension EnvironmentExtension on ActiveGridEnvironment {
     }
   }
 
+  /// Returns the realm that needs to be used for Authentication
   String get authRealm {
     switch (this) {
       case ActiveGridEnvironment.alpha:

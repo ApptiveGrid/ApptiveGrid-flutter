@@ -6,8 +6,6 @@ A Flutter Package to build Widgets based on Grid Data
 
 In order to use any ActiveGrid Feature you must wrap your App with a `ActiveGrid` Widget
 
-As Grids require authentication you need to add `ActiveGridAuthentication` to `ActiveGridOptions`
-
 ```dart
 import 'package:active_grid_core/active_grid_core.dart';
 
@@ -15,9 +13,8 @@ void main() {
   runApp(
     ActiveGrid(
       options: ActiveGridOptions(
-        authentication: ActiveGridAuthentication(
-          username: 'USERNAME',
-          password: 'PASSWORD',
+        authenticationOptions: ActiveGridAuthenticationOptions(
+          autoAuthenticate = true,
         ),
       ),
       child: MyApp(),
@@ -25,6 +22,11 @@ void main() {
   );
 }
 ```
+
+## Authentication
+
+Grids need Authentication. In order to authenticate a user either manually call `ActiveGrid.getClient(context).authenticate()`.
+Alternatively you can set `autoAuthenticate` to `true` in `ActiveGridAuthenticationOptions` in the `ActiveGridOptions`
 
 ## Usage
 

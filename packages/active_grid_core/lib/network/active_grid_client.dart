@@ -76,6 +76,9 @@ class ActiveGridClient {
     return Grid.fromJson(json.decode(response.body));
   }
 
+  /// Authenticate the User
+  ///
+  /// This will open a Webpage for the User Auth
   Future<Credential> authenticate() {
     return _authenticator.authenticate();
   }

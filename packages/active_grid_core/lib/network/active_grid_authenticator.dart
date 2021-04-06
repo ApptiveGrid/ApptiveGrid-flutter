@@ -2,13 +2,17 @@ import 'package:active_grid_core/active_grid_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:http/http.dart' as http;
 
+/// Class for handling authentication related methods for ActiveGrid
 class ActiveGridAuthenticator {
+  /// Create a new [ActiveGridAuthenticator]
+  /// [options] is used to get the [ActiveGridEnvironment.authRealm] for the [_uri]
   ActiveGridAuthenticator({this.options = const ActiveGridOptions()})
       : _uri = Uri.parse(
             'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
 
+  /// [ActiveGridOptions] used for getting the correct [ActiveGridEnvironment.authRealm]
+  /// and checking if authentication should automatically be handled
   final ActiveGridOptions options;
 
   final Uri _uri;
@@ -17,12 +21,15 @@ class ActiveGridAuthenticator {
 
   TokenResponse? _token;
 
+  /// Override the token for testing purposes
   @visibleForTesting
   void setToken(TokenResponse token) => _token = token;
 
+  /// Override the [Client] for testing purposes
   @visibleForTesting
   void setAuthClient(Client client) => _authClient = client;
 
+  /// Override the [Authenticator] for testing purposes
   @visibleForTesting
   Authenticator? testAuthenticator;
 
@@ -35,6 +42,9 @@ class ActiveGridAuthenticator {
     return _authClient ??= await createClient();
   }
 
+  /// Open the Authentication Webpage
+  ///
+  /// Returns [Credential] from the authentication call
   Future<Credential> authenticate() async {
     final client = await _client;
 
@@ -60,7 +70,12 @@ class ActiveGridAuthenticator {
     return credential;
   }
 
-  Future<bool> checkAuthentication() async {
+  /// Checks the authentication status and performs actions depending on the status
+  ///
+  /// If the User is not authenticated and [ActiveGridAuthenticationOptions.autoAuthenticate] is true this will call [authenticate]
+  ///
+  /// If the token is expired it will refresh the token using the refresh token
+  Future<void> checkAuthentication() async {
     if (_token == null &&
         options.authenticationOptions?.autoAuthenticate == true) {
       await authenticate();
@@ -75,9 +90,9 @@ class ActiveGridAuthenticator {
 
       _token = await credential.getTokenResponse();
     }
-    return true;
   }
 
+  /// If there is a authenticated User this will return the authentication header
   String? get header {
     if (_token != null) {
       return '${_token?.tokenType} ${_token?.accessToken}';

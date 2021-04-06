@@ -15,9 +15,8 @@ void main() {
     ActiveGrid(
       options: ActiveGridOptions(
         environment: ActiveGridEnvironment.alpha,
-        authentication: ActiveGridAuthentication(
-          username: 'USERNAME',
-          password: 'PASSWORD',
+        authenticationOptions: ActiveGridAuthenticationOptions(
+          autoAuthenticate = true,
         ),
       ),
       child: MyApp(),
