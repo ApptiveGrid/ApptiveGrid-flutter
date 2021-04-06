@@ -24,8 +24,18 @@ extension EnvironmentExtension on ActiveGridEnvironment {
       case ActiveGridEnvironment.beta:
         return 'https://beta.activegrid.de';
       case ActiveGridEnvironment.production:
-      default:
-        return 'https://activegrid.de';
+        return 'https://app.activegrid.de';
+    }
+  }
+
+  String get authRealm {
+    switch (this) {
+
+      case ActiveGridEnvironment.alpha:
+      case ActiveGridEnvironment.beta:
+        return 'activegrid-test';
+      case ActiveGridEnvironment.production:
+        return 'activegrid';
     }
   }
 }

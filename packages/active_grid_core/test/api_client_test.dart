@@ -187,7 +187,13 @@ void main() {
     test('Check Urls', () {
       expect(ActiveGridEnvironment.alpha.url, 'https://alpha.activegrid.de');
       expect(ActiveGridEnvironment.beta.url, 'https://beta.activegrid.de');
-      expect(ActiveGridEnvironment.production.url, 'https://activegrid.de');
+      expect(ActiveGridEnvironment.production.url, 'https://app.activegrid.de');
+    });
+
+    test('Check Auth Realm', () {
+      expect(ActiveGridEnvironment.alpha.authRealm, 'activegrid-test');
+      expect(ActiveGridEnvironment.beta.authRealm, 'activegrid-test');
+      expect(ActiveGridEnvironment.production.authRealm, 'activegrid');
     });
   });
 

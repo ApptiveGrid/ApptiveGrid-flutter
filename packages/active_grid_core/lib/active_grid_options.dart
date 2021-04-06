@@ -5,12 +5,12 @@ class ActiveGridOptions {
   /// Creates a configuration
   const ActiveGridOptions({
     this.environment = ActiveGridEnvironment.production,
-    this.authentication,
+    this.authenticationOptions,
   });
 
   /// Determines the API endpoint used
   final ActiveGridEnvironment environment;
 
   /// Authentication for API
-  final ActiveGridAuthentication? authentication;
+  final ActiveGridAuthenticationOptions? authenticationOptions;
 }
