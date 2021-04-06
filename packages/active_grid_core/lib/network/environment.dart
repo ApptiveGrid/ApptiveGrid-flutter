@@ -30,7 +30,6 @@ extension EnvironmentExtension on ActiveGridEnvironment {
 
   String get authRealm {
     switch (this) {
-
       case ActiveGridEnvironment.alpha:
       case ActiveGridEnvironment.beta:
         return 'activegrid-test';

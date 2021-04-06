@@ -1,9 +1,11 @@
 import 'package:active_grid_core/active_grid_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class ActiveGridAuthenticator {
-  ActiveGridAuthenticator({required this.options})
+  ActiveGridAuthenticator({this.options = const ActiveGridOptions()})
       : _uri =
             Uri.parse('https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
 
@@ -14,6 +16,15 @@ class ActiveGridAuthenticator {
   Client? _authClient;
 
   TokenResponse? _token;
+
+  @visibleForTesting
+  void setToken(TokenResponse token) => _token = token;
+
+  @visibleForTesting
+  void setAuthClient(Client client) => _authClient = client;
+
+  @visibleForTesting
+  Authenticator? testAuthenticator;
 
   Future<Client> get _client async {
     Future<Client> createClient() async {
@@ -29,12 +40,10 @@ class ActiveGridAuthenticator {
     urlLauncher(String url) async {
       if (await canLaunch(url)) {
         await launch(url, forceWebView: true);
-      } else {
-        throw 'Could not launch $url';
       }
     }
 
-    final authenticator = Authenticator(
+    final authenticator = testAuthenticator ?? Authenticator(
       client,
       scopes: [],
       urlLancher: urlLauncher,
@@ -58,7 +67,7 @@ class ActiveGridAuthenticator {
       // Token is expired refresh it
       final client = await _client;
       client.createCredential(refreshToken: _token?.refreshToken);
-      final authenticator = Authenticator(client);
+      final authenticator = testAuthenticator ?? Authenticator(client);
       final credential = await authenticator.authorize();
 
       _token = await credential.getTokenResponse();
