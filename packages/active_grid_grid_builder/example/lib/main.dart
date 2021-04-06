@@ -8,10 +8,9 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(ActiveGrid(
       options: ActiveGridOptions(
-        environment: ActiveGridEnvironment.alpha,
-        authentication: ActiveGridAuthentication(
-          username: 'USERNAME',
-          password: 'PASSWORD',
+        environment: ActiveGridEnvironment.beta,
+        authenticationOptions: ActiveGridAuthenticationOptions(
+          autoAuthenticate: true,
         ),
       ),
       child: MyApp()));
@@ -26,27 +25,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: AuthenticationPage(),
+      home: MyHomePage(),
     );
   }
 }
-
-class AuthenticationPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            ActiveGrid.getClient(context, listen: false).authenticate().then((value) => Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage())));
-          },
-          child: Text('Authenticate'),
-        ),
-      ),
-    );
-  }
-}
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -66,9 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ActiveGridGridBuilder(
           key: _builderKey,
-          user: '54mdwi1qwv22xywt6ptnztpcn',
-          space: '54mdwi61nd3th0lcn2hpafrx3',
-          grid: '54mdwi0670lefvb6tkjwvdl0k',
+          user: 'USER_ID',
+          space: 'SPACE_ID',
+          grid: 'GRID_ID',
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(
