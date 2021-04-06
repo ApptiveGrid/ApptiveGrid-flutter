@@ -94,10 +94,9 @@ class ActiveGridAuthenticator {
 
   /// If there is a authenticated User this will return the authentication header
   String? get header {
-    if (_token != null) {
-      return '${_token?.tokenType} ${_token?.accessToken}';
-    } else {
-      return null;
+    final token = _token;
+    if (token != null) {
+      return '${token.tokenType} ${token.accessToken}';
     }
   }
 }
