@@ -114,8 +114,8 @@ void main() {
 
       testWidgets('Authentication', (tester) async {
         late BuildContext context;
-        final authentication = ActiveGridAuthenticationOptions(
-            autoAuthenticate: true);
+        final authentication =
+            ActiveGridAuthenticationOptions(autoAuthenticate: true);
         final target = ActiveGrid(
           options: ActiveGridOptions(
             authenticationOptions: authentication,

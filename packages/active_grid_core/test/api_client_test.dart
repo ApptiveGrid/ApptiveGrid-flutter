@@ -207,8 +207,10 @@ void main() {
 
     test('With Authentication has headers', () {
       final authenticator = MockActiveGridAuthenticator();
-      when(() => authenticator.header).thenReturn('Bearer dXNlcm5hbWU6cGFzc3dvcmQ=');
-      final client = ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
+      when(() => authenticator.header)
+          .thenReturn('Bearer dXNlcm5hbWU6cGFzc3dvcmQ=');
+      final client =
+          ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
       expect(client.headers,
           {HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ='});
     });
@@ -217,8 +219,10 @@ void main() {
   group('Authorization', () {
     test('Authorize calls Authenticator', () {
       final authenticator = MockActiveGridAuthenticator();
-      when(() => authenticator.authenticate()).thenAnswer((_) async => MockCredential());
-      final client = ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
+      when(() => authenticator.authenticate())
+          .thenAnswer((_) async => MockCredential());
+      final client =
+          ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
       client.authenticate();
 
       verify(() => authenticator.authenticate()).called(1);

@@ -5,14 +5,19 @@ class ActiveGridClient {
   /// Creates an ApiClient
   ActiveGridClient({
     this.options = const ActiveGridOptions(),
-  }) : _client = http.Client(), _authenticator = ActiveGridAuthenticator(options: options);
+  })  : _client = http.Client(),
+        _authenticator = ActiveGridAuthenticator(options: options);
 
   /// Creates an Api Client on the Basis of a [http.Client]
   ///
   /// this should only be used for testing in order to pass in a Mocked [http.Client]
   @visibleForTesting
-  ActiveGridClient.fromClient(http.Client httpClient, {this.options = const ActiveGridOptions(), ActiveGridAuthenticator? authenticator})
-      : _client = httpClient, this._authenticator = authenticator ?? ActiveGridAuthenticator(options: options);
+  ActiveGridClient.fromClient(http.Client httpClient,
+      {this.options = const ActiveGridOptions(),
+      ActiveGridAuthenticator? authenticator})
+      : _client = httpClient,
+        this._authenticator =
+            authenticator ?? ActiveGridAuthenticator(options: options);
 
   /// Current Environment the Api is connecting to
   ActiveGridOptions options;
@@ -29,8 +34,9 @@ class ActiveGridClient {
   /// Headers that are used for multiple Calls
   @visibleForTesting
   Map<String, String> get headers => (<String, String?>{
-          HttpHeaders.authorizationHeader: _authenticator.header,
-      }..removeWhere((key, value) => value == null)).map((key, value) => MapEntry(key, value!));
+        HttpHeaders.authorizationHeader: _authenticator.header,
+      }..removeWhere((key, value) => value == null))
+          .map((key, value) => MapEntry(key, value!));
 
   /// Loads a [FormData] specified with [formId]
   Future<FormData> loadForm({required String formId}) async {

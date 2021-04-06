@@ -126,6 +126,7 @@ void main() {
 
     await key.currentState!.reload();
 
-    verify(() => client.loadGrid(user: user, space: space, grid: gridId)).called(2);
+    verify(() => client.loadGrid(user: user, space: space, grid: gridId))
+        .called(2);
   });
 }

@@ -11,7 +11,8 @@ class MockHttpClient extends Mock implements Client {}
 
 class MockActiveGridClient extends Mock implements ActiveGridClient {}
 
-class MockActiveGridAuthenticator extends Mock implements ActiveGridAuthenticator {}
+class MockActiveGridAuthenticator extends Mock
+    implements ActiveGridAuthenticator {}
 
 class MockCredential extends Mock implements openid.Credential {}
 
@@ -21,4 +22,6 @@ class MockAuthClient extends Mock implements openid.Client {}
 
 class MockAuthenticator extends Mock implements openid_io.Authenticator {}
 
-class MockUrlLauncher extends Mock with MockPlatformInterfaceMixin implements UrlLauncherPlatform {}
+class MockUrlLauncher extends Mock
+    with MockPlatformInterfaceMixin
+    implements UrlLauncherPlatform {}

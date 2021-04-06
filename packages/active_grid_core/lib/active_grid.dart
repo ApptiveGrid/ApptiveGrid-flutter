@@ -56,7 +56,8 @@ class _ActiveGridState extends State<ActiveGrid> {
     super.initState();
     _client = widget.client ??
         ActiveGridClient(
-            options: widget.options,);
+          options: widget.options,
+        );
   }
 
   @override

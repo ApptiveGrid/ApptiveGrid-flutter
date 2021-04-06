@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 
 class ActiveGridAuthenticator {
   ActiveGridAuthenticator({this.options = const ActiveGridOptions()})
-      : _uri =
-            Uri.parse('https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
+      : _uri = Uri.parse(
+            'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
 
   final ActiveGridOptions options;
 
@@ -31,6 +31,7 @@ class ActiveGridAuthenticator {
       final issuer = await Issuer.discover(_uri);
       return Client(issuer, 'web');
     }
+
     return _authClient ??= await createClient();
   }
 
@@ -43,11 +44,12 @@ class ActiveGridAuthenticator {
       }
     }
 
-    final authenticator = testAuthenticator ?? Authenticator(
-      client,
-      scopes: [],
-      urlLancher: urlLauncher,
-    );
+    final authenticator = testAuthenticator ??
+        Authenticator(
+          client,
+          scopes: [],
+          urlLancher: urlLauncher,
+        );
 
     final credential = await authenticator.authorize();
 
@@ -59,11 +61,12 @@ class ActiveGridAuthenticator {
   }
 
   Future<bool> checkAuthentication() async {
-    if(_token == null && options.authenticationOptions?.autoAuthenticate == true) {
+    if (_token == null &&
+        options.authenticationOptions?.autoAuthenticate == true) {
       await authenticate();
     }
 
-    if(_token != null && _token?.expiresIn?.isNegative == true) {
+    if (_token != null && _token?.expiresIn?.isNegative == true) {
       // Token is expired refresh it
       final client = await _client;
       client.createCredential(refreshToken: _token?.refreshToken);
@@ -76,7 +79,7 @@ class ActiveGridAuthenticator {
   }
 
   String? get header {
-    if(_token != null) {
+    if (_token != null) {
       return '${_token?.tokenType} ${_token?.accessToken}';
     } else {
       return null;

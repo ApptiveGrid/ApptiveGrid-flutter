@@ -81,10 +81,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             aspectRatio: 1,
                             child: Image.network(
                               row.entries
-                                  .firstWhere((element) =>
-                                      element.field.name == 'imgUrl')
-                                  .data
-                                  .value ?? "",
+                                      .firstWhere((element) =>
+                                          element.field.name == 'imgUrl')
+                                      .data
+                                      .value ??
+                                  "",
                               fit: BoxFit.cover,
                             ),
                           ),
