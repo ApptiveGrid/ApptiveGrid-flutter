@@ -6,10 +6,10 @@ part of active_grid_model;
 /// [S] type used when sending Data back
 abstract class DataEntity<T, S> {
   /// The value of the Entity
-  T value;
+  T? value;
 
   /// The Value that is used when sending data back to the server. Matching against the schema
-  S get schemaValue;
+  S? get schemaValue;
 
   @override
   String toString() {
@@ -32,10 +32,10 @@ class StringDataEntity extends DataEntity<String, String> {
   StringDataEntity([this.value]);
 
   @override
-  String value;
+  String? value;
 
   @override
-  String get schemaValue => value;
+  String? get schemaValue => value;
 }
 
 /// [DataEntity] representing [DateTime] Objects
@@ -52,11 +52,11 @@ class DateTimeDataEntity extends DataEntity<DateTime, String> {
   }
 
   @override
-  DateTime value;
+  DateTime? value;
 
   /// Returns [value] as a Iso8601 Date String
   @override
-  String get schemaValue => value?.toIso8601String();
+  String? get schemaValue => value?.toIso8601String();
 }
 
 /// [DataEntity] representing a Date
@@ -76,11 +76,11 @@ class DateDataEntity extends DataEntity<DateTime, String> {
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
 
   @override
-  DateTime value;
+  DateTime? value;
 
   /// Returns [value] formatted to yyyy-MM-dd
   @override
-  String get schemaValue => value != null ? _dateFormat.format(value) : null;
+  String? get schemaValue => value != null ? _dateFormat.format(value!) : null;
 }
 
 /// [DataEntity] representing [boolean] Objects
@@ -92,10 +92,10 @@ class BooleanDataEntity extends DataEntity<bool, bool> {
 
   /// defaults to false
   @override
-  bool value;
+  bool? value;
 
   @override
-  bool get schemaValue => value;
+  bool? get schemaValue => value;
 }
 
 /// [DataEntity] representing [int] Objects
@@ -104,10 +104,10 @@ class IntegerDataEntity extends DataEntity<int, int> {
   IntegerDataEntity([this.value]);
 
   @override
-  int value;
+  int? value;
 
   @override
-  int get schemaValue => value;
+  int? get schemaValue => value;
 }
 
 /// [DataEntity] representing an enum like Object
@@ -116,13 +116,13 @@ class EnumDataEntity extends DataEntity<String, String> {
   EnumDataEntity({this.value, this.options = const []});
 
   @override
-  String value;
+  String? value;
 
   /// Possible options of the Data Entity
   List<String> options;
 
   @override
-  String get schemaValue => value;
+  String? get schemaValue => value;
 
   @override
   String toString() {

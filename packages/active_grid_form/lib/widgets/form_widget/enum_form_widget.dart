@@ -3,7 +3,7 @@ part of active_grid_form_widgets;
 /// FormComponent Widget to display a [EnumFormComponent]
 class EnumFormWidget extends StatefulWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
-  const EnumFormWidget({Key key, this.component}) : super(key: key);
+  const EnumFormWidget({Key? key, required this.component}) : super(key: key);
 
   /// Component this Widget should reflect
   final EnumFormComponent component;

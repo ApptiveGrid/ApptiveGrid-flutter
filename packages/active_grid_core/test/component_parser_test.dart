@@ -77,7 +77,7 @@ void main() {
       expect(parsedComponent.data.schemaValue, value.toIso8601String());
 
       final parsedOptions = parsedComponent.options;
-      expect(false, parsedOptions == null);
+      expect(FormComponentOptions(), parsedOptions);
     });
 
     test('Date', () {
@@ -109,7 +109,7 @@ void main() {
       expect(parsedComponent.data.schemaValue, '2020-12-07');
 
       final parsedOptions = parsedComponent.options;
-      expect(false, parsedOptions == null);
+      expect(FormComponentOptions(), parsedOptions);
     });
 
     test('Number', () {

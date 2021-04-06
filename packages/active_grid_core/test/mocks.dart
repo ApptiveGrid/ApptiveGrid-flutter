@@ -1,6 +1,6 @@
 import 'package:active_grid_core/active_grid_core.dart';
 import 'package:http/http.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockHttpClient extends Mock implements Client {}
 

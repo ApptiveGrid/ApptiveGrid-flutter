@@ -4,10 +4,10 @@ part of active_grid_model;
 class IntegerFormComponent extends FormComponent<IntegerDataEntity> {
   /// Creates a FormComponent
   IntegerFormComponent({
-    @f.required this.property,
-    @f.required this.data,
-    @f.required this.fieldId,
-    @f.required this.options,
+    required this.property,
+    required this.data,
+    required this.fieldId,
+    required this.options,
     this.required = false,
   });
 

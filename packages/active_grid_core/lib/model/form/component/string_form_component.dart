@@ -4,10 +4,10 @@ part of active_grid_model;
 class StringFormComponent extends FormComponent<StringDataEntity> {
   /// Creates a FormComponent
   StringFormComponent(
-      {@f.required this.property,
-      @f.required this.data,
-      @f.required this.options,
-      @f.required this.fieldId,
+      {required this.property,
+      required this.data,
+      required this.options,
+      required this.fieldId,
       this.required = false});
 
   /// Deserializes [json] into a [FormComponent]

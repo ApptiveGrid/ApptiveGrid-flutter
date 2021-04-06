@@ -4,13 +4,19 @@ import 'dart:io';
 import 'package:active_grid_core/active_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'mocks.dart';
 
 void main() {
   final httpClient = MockHttpClient();
-  ActiveGridClient activeGridClient;
+  late ActiveGridClient activeGridClient;
+
+  setUpAll(() {
+    registerFallbackValue<BaseRequest>(Request('GET', Uri()));
+    registerFallbackValue<Uri>(Uri());
+    registerFallbackValue<Map<String, String>>(Map<String, String>());
+  });
 
   setUp(() {
     activeGridClient = ActiveGridClient.fromClient(httpClient);
@@ -18,7 +24,6 @@ void main() {
 
   tearDown(() {
     activeGridClient.dispose();
-    activeGridClient = null;
   });
 
   group('loadForm', () {
@@ -54,7 +59,7 @@ void main() {
 
       final response = Response(json.encode(rawResponse), 200);
 
-      when(httpClient.get(any)).thenAnswer((_) async => response);
+      when(() => httpClient.get(any())).thenAnswer((_) async => response);
 
       final formData = await activeGridClient.loadForm(formId: 'FormId');
 
@@ -106,10 +111,10 @@ void main() {
 
       final response = Response(json.encode(rawResponse), 200);
 
-      when(httpClient.get(
-              '${ActiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
-              headers: anyNamed('headers')))
-          .thenAnswer((_) async => response);
+      when(() => httpClient.get(
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       final grid = await activeGridClient.loadGrid(
           grid: gridId, space: space, user: user);
@@ -124,10 +129,10 @@ void main() {
 
       final response = Response(json.encode(rawResponse), 400);
 
-      when(httpClient.get(
-              '${ActiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
-              headers: anyNamed('headers')))
-          .thenAnswer((_) async => response);
+      when(() => httpClient.get(
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       expect(
           () =>
@@ -161,9 +166,9 @@ void main() {
           'POST', Uri.parse('${ActiveGridEnvironment.production.url}/uri}'));
       request.body = jsonEncode(jsonEncode(formData.toRequestObject()));
 
-      BaseRequest calledRequest;
+      late BaseRequest calledRequest;
 
-      when(httpClient.send(any)).thenAnswer((realInvocation) async {
+      when(() => httpClient.send(any())).thenAnswer((realInvocation) async {
         calledRequest = realInvocation.positionalArguments[0];
         return StreamedResponse(Stream.value([]), 200);
       });

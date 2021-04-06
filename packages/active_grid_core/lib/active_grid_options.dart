@@ -12,5 +12,5 @@ class ActiveGridOptions {
   final ActiveGridEnvironment environment;
 
   /// Authentication for API
-  final ActiveGridAuthentication authentication;
+  final ActiveGridAuthentication? authentication;
 }

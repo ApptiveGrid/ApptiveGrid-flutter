@@ -24,7 +24,7 @@ enum DataType {
 /// Returns [DataType] that matching a certain schema [schemaProperty]
 ///
 /// throws [ArgumentError] if DataType is not supported yet
-DataType dataTypeFromSchemaProperty({dynamic schemaProperty}) {
+DataType dataTypeFromSchemaProperty({required dynamic schemaProperty}) {
   final schemaType = schemaProperty['type'];
   final format = schemaProperty['format'];
   switch (schemaType) {
