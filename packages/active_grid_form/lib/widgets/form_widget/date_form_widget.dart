@@ -5,7 +5,7 @@ class DateFormWidget extends StatefulWidget {
   /// Creates a Widget to display and select a Date contained in [component]
   ///
   /// Clicking on this will show a DatePicker using [showDatePicker]
-  const DateFormWidget({Key key, this.component}) : super(key: key);
+  const DateFormWidget({Key? key, required this.component}) : super(key: key);
 
   /// Component this Widget should reflect
   final DateFormComponent component;
@@ -24,7 +24,7 @@ class _DateFormWidgetState extends State<DateFormWidget> {
   ) {
     final dateFormat = DateFormat.yMd();
     if (widget.component.data.value != null) {
-      final dateString = dateFormat.format(widget.component.data.value);
+      final dateString = dateFormat.format(widget.component.data.value!);
       _controller.text = dateString;
     }
     return InkWell(
@@ -38,7 +38,7 @@ class _DateFormWidgetState extends State<DateFormWidget> {
               Duration(days: 100000000).inMilliseconds),
         ).then((value) {
           if (value != null) {
-            _formKey.currentState.didChange(dateFormat.format(value));
+            _formKey.currentState!.didChange(dateFormat.format(value));
             setState(() {
               widget.component.data.value = value;
             });

@@ -96,7 +96,7 @@ void main() {
   });
 }
 
-class UnknownComponent extends FormComponent<DataEntity<String, String>> {
+class UnknownComponent extends FormComponent<UnknownDataEntity> {
   @override
   FormComponentOptions get options => FormComponentOptions();
 
@@ -110,5 +110,10 @@ class UnknownComponent extends FormComponent<DataEntity<String, String>> {
   String get fieldId => 'id';
 
   @override
-  DataEntity<String, String> get data => null;
+  UnknownDataEntity get data => UnknownDataEntity();
+}
+
+class UnknownDataEntity extends DataEntity<String, String> {
+  @override
+  String? get schemaValue => null;
 }

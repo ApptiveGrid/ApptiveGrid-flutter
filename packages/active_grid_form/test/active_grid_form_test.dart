@@ -5,7 +5,7 @@ import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:active_grid_core/active_grid_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,7 +22,7 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: 'form')).thenAnswer(
+      when(() => client.loadForm(formId: 'form')).thenAnswer(
           (realInvocation) async => FormData('Form Title', [], [], {}));
 
       await tester.pumpWidget(target);
@@ -41,7 +41,7 @@ void main() {
         ),
       );
 
-      when(client.loadForm(formId: 'form')).thenAnswer(
+      when(() => client.loadForm(formId: 'form')).thenAnswer(
           (realInvocation) async => FormData('Form Title', [], [], {}));
 
       await tester.pumpWidget(target);
@@ -65,7 +65,7 @@ void main() {
       ),
     );
 
-    when(client.loadForm(formId: 'form'))
+    when(() => client.loadForm(formId: 'form'))
         .thenAnswer((realInvocation) async => form);
 
     await tester.pumpWidget(target);
@@ -77,11 +77,16 @@ void main() {
 
   group('Loading', () {
     testWidgets('Initial shows Loading', (tester) async {
+      final client = MockActiveGridClient();
       final target = TestApp(
+        client: client,
         child: ActiveGridForm(
           formId: 'form',
         ),
       );
+      final form = FormData('Form Title', [], [], {});
+      when(() => client.loadForm(formId: 'form'))
+          .thenAnswer((realInvocation) async => form);
 
       await tester.pumpWidget(target);
 
@@ -105,9 +110,9 @@ void main() {
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);
-      when(client.performAction(action, formData))
+      when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -117,7 +122,7 @@ void main() {
 
       expect(find.byType(Lottie), findsOneWidget);
       expect(find.text('Thank You!', skipOffstage: false), findsOneWidget);
-      expect(find.byType(FlatButton, skipOffstage: false), findsOneWidget);
+      expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
     });
 
     testWidgets('Send Additional Click reloads Form', (tester) async {
@@ -131,9 +136,9 @@ void main() {
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);
-      when(client.performAction(action, formData))
+      when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -141,11 +146,11 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      await tester.scrollUntilVisible(find.byType(FlatButton), 100);
-      await tester.tap(find.byType(FlatButton, skipOffstage: false));
+      await tester.scrollUntilVisible(find.byType(TextButton), 100);
+      await tester.tap(find.byType(TextButton, skipOffstage: false));
       await tester.pumpAndSettle();
 
-      verify(client.loadForm(formId: 'form')).called(2);
+      verify(() => client.loadForm(formId: 'form')).called(2);
     });
   });
 
@@ -160,7 +165,7 @@ void main() {
           ),
         );
 
-        when(client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formId: 'form'))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -168,7 +173,7 @@ void main() {
 
         expect(find.byType(Lottie), findsOneWidget);
         expect(find.text('Oops! - Error', skipOffstage: false), findsOneWidget);
-        expect(find.byType(FlatButton, skipOffstage: false), findsOneWidget);
+        expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
       });
 
       testWidgets('Initial Error Reloads Form', (tester) async {
@@ -179,17 +184,17 @@ void main() {
             formId: 'form',
           ),
         );
-        when(client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formId: 'form'))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        await tester.scrollUntilVisible(find.byType(FlatButton), 100);
-        await tester.tap(find.byType(FlatButton, skipOffstage: false));
+        await tester.scrollUntilVisible(find.byType(TextButton), 100);
+        await tester.tap(find.byType(TextButton, skipOffstage: false));
         await tester.pumpAndSettle();
 
-        verify(client.loadForm(formId: 'form')).called(2);
+        verify(() => client.loadForm(formId: 'form')).called(2);
       });
     });
 
@@ -205,9 +210,9 @@ void main() {
         final action = FormAction('uri', 'method');
         final formData = FormData('Form Title', [], [action], {});
 
-        when(client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formId: 'form'))
             .thenAnswer((realInvocation) async => formData);
-        when(client.performAction(action, formData))
+        when(() => client.performAction(action, formData))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -217,7 +222,7 @@ void main() {
 
         expect(find.byType(Lottie), findsOneWidget);
         expect(find.text('Oops! - Error', skipOffstage: false), findsOneWidget);
-        expect(find.byType(FlatButton, skipOffstage: false), findsOneWidget);
+        expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
       });
 
       testWidgets('Server Error shows Error', (tester) async {
@@ -231,9 +236,9 @@ void main() {
         final action = FormAction('uri', 'method');
         final formData = FormData('Form Title', [], [action], {});
 
-        when(client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formId: 'form'))
             .thenAnswer((realInvocation) async => formData);
-        when(client.performAction(action, formData))
+        when(() => client.performAction(action, formData))
             .thenAnswer((_) async => http.Response('', 500));
 
         await tester.pumpWidget(target);
@@ -243,7 +248,7 @@ void main() {
 
         expect(find.byType(Lottie), findsOneWidget);
         expect(find.text('Oops! - Error', skipOffstage: false), findsOneWidget);
-        expect(find.byType(FlatButton, skipOffstage: false), findsOneWidget);
+        expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
       });
 
       testWidgets('Back to Form shows Form', (tester) async {
@@ -257,9 +262,9 @@ void main() {
         final action = FormAction('uri', 'method');
         final formData = FormData('Form Title', [], [action], {});
 
-        when(client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formId: 'form'))
             .thenAnswer((realInvocation) async => formData);
-        when(client.performAction(action, formData))
+        when(() => client.performAction(action, formData))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -267,8 +272,8 @@ void main() {
         await tester.tap(find.byType(ActionButton));
         await tester.pumpAndSettle();
 
-        await tester.scrollUntilVisible(find.byType(FlatButton), 100);
-        await tester.tap(find.byType(FlatButton, skipOffstage: false));
+        await tester.scrollUntilVisible(find.byType(TextButton), 100);
+        await tester.tap(find.byType(TextButton, skipOffstage: false));
         await tester.pumpAndSettle();
 
         expect(find.text('Form Title'), findsOneWidget);
@@ -291,9 +296,9 @@ void main() {
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);
-      when(client.performAction(action, formData))
+      when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -318,9 +323,9 @@ void main() {
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formId: 'form'))
           .thenAnswer((realInvocation) async => formData);
-      when(client.performAction(action, formData))
+      when(() => client.performAction(action, formData))
           .thenAnswer((_) => Future.error(''));
 
       await tester.pumpWidget(target);

@@ -7,27 +7,27 @@ Widget fromModel(FormComponent component) {
   switch (component.data.runtimeType) {
     case StringDataEntity:
       return TextFormWidget(
-        component: component,
+        component: component as StringFormComponent,
       );
     case DateTimeDataEntity:
       return DateTimeFormWidget(
-        component: component,
+        component: component as DateTimeFormComponent,
       );
     case DateDataEntity:
       return DateFormWidget(
-        component: component,
+        component: component as DateFormComponent,
       );
     case IntegerDataEntity:
       return NumberFormWidget(
-        component: component,
+        component: component as IntegerFormComponent,
       );
     case BooleanDataEntity:
       return CheckBoxFormWidget(
-        component: component,
+        component: component as BooleanFormComponent,
       );
     case EnumDataEntity:
       return EnumFormWidget(
-        component: component,
+        component: component as EnumFormComponent,
       );
     default:
       throw ArgumentError(

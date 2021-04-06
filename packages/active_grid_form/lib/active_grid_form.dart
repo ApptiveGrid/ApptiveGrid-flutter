@@ -17,8 +17,8 @@ class ActiveGridForm extends StatefulWidget {
   ///
   /// The [formId] determines what Form is displayed. It works with empty and pre-filled forms.
   const ActiveGridForm({
-    Key key,
-    @required this.formId,
+    Key? key,
+    required this.formId,
     this.titleStyle,
     this.contentPadding,
     this.titlePadding,
@@ -32,13 +32,13 @@ class ActiveGridForm extends StatefulWidget {
   final String formId;
 
   /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
-  final TextStyle titleStyle;
+  final TextStyle? titleStyle;
 
   /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
-  final EdgeInsets contentPadding;
+  final EdgeInsets? contentPadding;
 
   /// Padding for the title. If no Padding is provided the [contentPadding] is used
-  final EdgeInsets titlePadding;
+  final EdgeInsets? titlePadding;
 
   /// Flag to hide the form title, default is false
   final bool hideTitle;
@@ -56,27 +56,27 @@ class ActiveGridForm extends StatefulWidget {
   ///   }
   /// ),
   /// ```
-  final void Function(FormData) onFormLoaded;
+  final void Function(FormData)? onFormLoaded;
 
   /// Callback after [FormAction] completes Successfully
   ///
   /// If this returns false the default success screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
-  final Future<bool> Function(FormAction) onActionSuccess;
+  final Future<bool> Function(FormAction)? onActionSuccess;
 
   /// Callback if an Error occurs
   ///
   /// If this returns false the default error screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
-  final Future<bool> Function(dynamic) onError;
+  final Future<bool> Function(dynamic)? onError;
 
   @override
   _ActiveGridFormState createState() => _ActiveGridFormState();
 }
 
 class _ActiveGridFormState extends State<ActiveGridForm> {
-  FormData _formData;
-  ActiveGridClient _client;
+  FormData? _formData;
+  late ActiveGridClient _client;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -100,7 +100,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
     } else if (_formData == null) {
       return _buildLoading(context);
     } else {
-      return _buildForm(context);
+      return _buildForm(context, _formData!);
     }
   }
 
@@ -110,11 +110,11 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
     );
   }
 
-  Widget _buildForm(BuildContext context) {
+  Widget _buildForm(BuildContext context, FormData data) {
     return Form(
       key: _formKey,
       child: ListView.builder(
-        itemCount: 1 + _formData.components.length + _formData.actions.length,
+        itemCount: 1 + data.components.length + data.actions.length,
         itemBuilder: (context, index) {
           // Title
           if (index == 0) {
@@ -126,21 +126,21 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
                     widget.contentPadding ??
                     _defaultPadding,
                 child: Text(
-                  _formData.title,
+                  data.title,
                   style: widget.titleStyle ??
                       Theme.of(context).textTheme.headline5,
                 ),
               );
             }
-          } else if (index < _formData.components.length + 1) {
+          } else if (index < data.components.length + 1) {
             final componentIndex = index - 1;
             return Padding(
                 padding: widget.contentPadding ?? _defaultPadding,
-                child: fromModel(_formData.components[componentIndex]));
+                child: fromModel(data.components[componentIndex]));
           } else {
-            final actionIndex = index - 1 - _formData.components.length;
+            final actionIndex = index - 1 - data.components.length;
             return ActionButton(
-              action: _formData.actions[actionIndex],
+              action: data.actions[actionIndex],
               onPressed: _performAction,
               child: Text('Send'),
             );
@@ -166,7 +166,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
           style: Theme.of(context).textTheme.headline4,
         ),
         Center(
-          child: FlatButton(
+          child: TextButton(
               onPressed: () {
                 _loadForm();
                 setState(() {
@@ -197,7 +197,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
           style: Theme.of(context).textTheme.headline4,
         ),
         Center(
-          child: FlatButton(
+          child: TextButton(
               onPressed: () {
                 if (_formData == null) {
                   _loadForm();
@@ -218,7 +218,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
   void _loadForm() {
     _client.loadForm(formId: widget.formId).then((value) {
       if (widget.onFormLoaded != null) {
-        widget.onFormLoaded(value);
+        widget.onFormLoaded!(value);
       }
       setState(() {
         _formData = value;
@@ -229,8 +229,8 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
   }
 
   void _performAction(FormAction action) {
-    if (_formKey.currentState.validate()) {
-      _client.performAction(action, _formData).then((response) async {
+    if (_formKey.currentState!.validate()) {
+      _client.performAction(action, _formData!).then((response) async {
         if (response.statusCode < 400) {
           if (await widget.onActionSuccess?.call(action) ?? true) {
             setState(() {

@@ -3,7 +3,8 @@ part of active_grid_form_widgets;
 /// FormComponent Widget to display a [BooleanFormComponent]
 class CheckBoxFormWidget extends StatefulWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
-  const CheckBoxFormWidget({Key key, this.component}) : super(key: key);
+  const CheckBoxFormWidget({Key? key, required this.component})
+      : super(key: key);
 
   /// Component this Widget should reflect
   final BooleanFormComponent component;
@@ -18,7 +19,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
     return FormField<bool>(
       initialValue: widget.component.data.value,
       validator: (value) {
-        if (widget.component.required && !value) {
+        if (widget.component.required && !value!) {
           return 'Required';
         } else {
           return null;
