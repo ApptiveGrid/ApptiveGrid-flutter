@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:active_grid_grid_builder/active_grid_grid_builder.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'common.dart';
 
@@ -21,7 +21,7 @@ void main() {
         grid: gridId,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Text(snapshot.data.name);
+            return Text(snapshot.data!.name);
           } else {
             return CircularProgressIndicator();
           }
@@ -30,7 +30,7 @@ void main() {
     );
 
     final title = 'Title';
-    when(client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(user: user, space: space, grid: gridId))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
@@ -50,7 +50,7 @@ void main() {
         initialData: Grid('Initial Title', null, [], []),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Text(snapshot.data.name);
+            return Text(snapshot.data!.name);
           } else {
             return CircularProgressIndicator();
           }
@@ -59,7 +59,7 @@ void main() {
     );
 
     final title = 'Title';
-    when(client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(user: user, space: space, grid: gridId))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
@@ -88,7 +88,7 @@ void main() {
       ),
     );
 
-    when(client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(user: user, space: space, grid: gridId))
         .thenAnswer((_) => Future.error(''));
 
     await tester.pumpWidget(target);
@@ -109,7 +109,7 @@ void main() {
         grid: gridId,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Text(snapshot.data.name);
+            return Text(snapshot.data!.name);
           } else {
             return CircularProgressIndicator();
           }
@@ -118,14 +118,14 @@ void main() {
     );
 
     final title = 'Title';
-    when(client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(user: user, space: space, grid: gridId))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
     await tester.pump();
 
-    await key.currentState.reload();
+    await key.currentState!.reload();
 
-    verify(client.loadGrid(user: user, space: space, grid: gridId)).called(2);
+    verify(() => client.loadGrid(user: user, space: space, grid: gridId)).called(2);
   });
 }

@@ -10,12 +10,12 @@ export 'package:active_grid_core/active_grid_core.dart';
 class ActiveGridGridBuilder extends StatefulWidget {
   /// Creates a Builder Widet
   const ActiveGridGridBuilder({
-    Key key,
-    @required this.user,
-    @required this.space,
-    @required this.grid,
+    Key? key,
+    required this.user,
+    required this.space,
+    required this.grid,
     this.initialData,
-    @required this.builder,
+    required this.builder,
   }) : super(key: key);
 
   /// id of the user who owns the grid
@@ -28,10 +28,10 @@ class ActiveGridGridBuilder extends StatefulWidget {
   final String grid;
 
   /// Initial [Grid] data that should be shown
-  final Grid initialData;
+  final Grid? initialData;
 
   /// Callback that is used to build the widget
-  final Widget Function(BuildContext, AsyncSnapshot<Grid>) builder;
+  final Widget Function(BuildContext, AsyncSnapshot<Grid?>) builder;
 
   @override
   ActiveGridGridBuilderState createState() => ActiveGridGridBuilderState();
@@ -39,12 +39,12 @@ class ActiveGridGridBuilder extends StatefulWidget {
 
 /// State of a [ActiveGridGridBuilder] Widget
 class ActiveGridGridBuilderState extends State<ActiveGridGridBuilder> {
-  AsyncSnapshot<Grid> _snapshot;
+  late AsyncSnapshot<Grid?> _snapshot;
 
   @override
   void initState() {
     _snapshot =
-        AsyncSnapshot<Grid>.withData(ConnectionState.none, widget.initialData);
+        AsyncSnapshot<Grid?>.withData(ConnectionState.none, widget.initialData);
     super.initState();
   }
 
