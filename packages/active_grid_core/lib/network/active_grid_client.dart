@@ -11,8 +11,8 @@ class ActiveGridClient {
   ///
   /// this should only be used for testing in order to pass in a Mocked [http.Client]
   @visibleForTesting
-  ActiveGridClient.fromClient(http.Client httpClient, {this.options = const ActiveGridOptions()})
-      : _client = httpClient, _authenticator = ActiveGridAuthenticator(options: options);
+  ActiveGridClient.fromClient(http.Client httpClient, {this.options = const ActiveGridOptions(), ActiveGridAuthenticator? authenticator})
+      : _client = httpClient, this._authenticator = authenticator ?? ActiveGridAuthenticator(options: options);
 
   /// Current Environment the Api is connecting to
   ActiveGridOptions options;

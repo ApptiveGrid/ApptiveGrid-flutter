@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:active_grid_core/active_grid_core.dart';
+import 'package:active_grid_core/network/active_grid_authenticator.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:openid_client/openid_client.dart';
 
 import 'mocks.dart';
 
@@ -204,11 +206,22 @@ void main() {
     });
 
     test('With Authentication has headers', () {
-      final authentication =
-          ActiveGridAuthentication(username: 'username', password: 'password');
-      final client = ActiveGridClient(authentication: authentication);
+      final authenticator = MockActiveGridAuthenticator();
+      when(() => authenticator.header).thenReturn('Bearer dXNlcm5hbWU6cGFzc3dvcmQ=');
+      final client = ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
       expect(client.headers,
-          {HttpHeaders.authorizationHeader: 'Basic dXNlcm5hbWU6cGFzc3dvcmQ='});
+          {HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ='});
+    });
+  });
+
+  group('Authorization', () {
+    test('Authorize calls Authenticator', () {
+      final authenticator = MockActiveGridAuthenticator();
+      when(() => authenticator.authenticate()).thenAnswer((_) async => MockCredential());
+      final client = ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
+      client.authenticate();
+
+      verify(() => authenticator.authenticate()).called(1);
     });
   });
 }
