@@ -4,23 +4,25 @@ part of active_grid_network;
 class ActiveGridClient {
   /// Creates an ApiClient
   ActiveGridClient({
-    this.environment = ActiveGridEnvironment.production,
-    this.authentication,
-  }) : _client = http.Client();
+    this.options = const ActiveGridOptions(),
+  })  : _client = http.Client(),
+        _authenticator = ActiveGridAuthenticator(options: options);
 
   /// Creates an Api Client on the Basis of a [http.Client]
   ///
   /// this should only be used for testing in order to pass in a Mocked [http.Client]
   @visibleForTesting
-  ActiveGridClient.fromClient(http.Client httpClient, {this.authentication})
+  ActiveGridClient.fromClient(http.Client httpClient,
+      {this.options = const ActiveGridOptions(),
+      ActiveGridAuthenticator? authenticator})
       : _client = httpClient,
-        environment = ActiveGridEnvironment.production;
+        this._authenticator =
+            authenticator ?? ActiveGridAuthenticator(options: options);
 
   /// Current Environment the Api is connecting to
-  ActiveGridEnvironment environment;
+  ActiveGridOptions options;
 
-  /// Authentication Object
-  ActiveGridAuthentication? authentication;
+  final ActiveGridAuthenticator _authenticator;
 
   final http.Client _client;
 
@@ -31,14 +33,14 @@ class ActiveGridClient {
 
   /// Headers that are used for multiple Calls
   @visibleForTesting
-  Map<String, String> get headers => <String, String>{
-        if (authentication != null)
-          HttpHeaders.authorizationHeader: authentication!.header,
-      };
+  Map<String, String> get headers => (<String, String?>{
+        HttpHeaders.authorizationHeader: _authenticator.header,
+      }..removeWhere((key, value) => value == null))
+          .map((key, value) => MapEntry(key, value!));
 
   /// Loads a [FormData] specified with [formId]
   Future<FormData> loadForm({required String formId}) async {
-    final url = Uri.parse('${environment.url}/api/a/$formId');
+    final url = Uri.parse('${options.environment.url}/api/a/$formId');
     final response = await _client.get(url);
     return FormData.fromJson(json.decode(response.body));
   }
@@ -46,7 +48,7 @@ class ActiveGridClient {
   /// Performs a [FormAction] using [formData]
   Future<http.Response> performAction(
       FormAction action, FormData formData) async {
-    final uri = Uri.parse('${environment.url}${action.uri}');
+    final uri = Uri.parse('${options.environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
     request.headers
@@ -64,12 +66,20 @@ class ActiveGridClient {
       {required String user,
       required String space,
       required String grid}) async {
+    await _authenticator.checkAuthentication();
     final url = Uri.parse(
-        '${environment.url}/api/users/$user/spaces/$space/grids/$grid');
+        '${options.environment.url}/api/users/$user/spaces/$space/grids/$grid');
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
     }
     return Grid.fromJson(json.decode(response.body));
+  }
+
+  /// Authenticate the User
+  ///
+  /// This will open a Webpage for the User Auth
+  Future<Credential> authenticate() {
+    return _authenticator.authenticate();
   }
 }

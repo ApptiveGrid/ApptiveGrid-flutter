@@ -18,7 +18,7 @@ class _NumberFormWidgetState extends State<NumberFormWidget> {
   @override
   void initState() {
     super.initState();
-    if(widget.component.data.value != null) {
+    if (widget.component.data.value != null) {
       _controller.text = widget.component.data.value!.toString();
     }
     _controller.addListener(() {

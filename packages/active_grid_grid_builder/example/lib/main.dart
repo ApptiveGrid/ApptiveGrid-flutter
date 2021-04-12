@@ -8,10 +8,9 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(ActiveGrid(
       options: ActiveGridOptions(
-        environment: ActiveGridEnvironment.alpha,
-        authentication: ActiveGridAuthentication(
-          username: 'USERNAME',
-          password: 'PASSWORD',
+        environment: ActiveGridEnvironment.beta,
+        authenticationOptions: ActiveGridAuthenticationOptions(
+          autoAuthenticate: true,
         ),
       ),
       child: MyApp()));
@@ -82,10 +81,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             aspectRatio: 1,
                             child: Image.network(
                               row.entries
-                                  .firstWhere((element) =>
-                                      element.field.name == 'imgUrl')
-                                  .data
-                                  .value,
+                                      .firstWhere((element) =>
+                                          element.field.name == 'imgUrl')
+                                      .data
+                                      .value ??
+                                  "",
                               fit: BoxFit.cover,
                             ),
                           ),

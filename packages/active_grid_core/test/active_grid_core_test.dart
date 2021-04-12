@@ -47,7 +47,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ActiveGridClient>(context, listen: false);
-        expect(ActiveGridEnvironment.alpha, client.environment);
+        expect(ActiveGridEnvironment.alpha, client.options.environment);
       });
 
       testWidgets('Beta', (tester) async {
@@ -69,7 +69,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ActiveGridClient>(context, listen: false);
-        expect(ActiveGridEnvironment.beta, client.environment);
+        expect(ActiveGridEnvironment.beta, client.options.environment);
       });
 
       testWidgets('Production', (tester) async {
@@ -91,7 +91,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = ActiveGrid.getClient(context, listen: false);
-        expect(ActiveGridEnvironment.production, client.environment);
+        expect(ActiveGridEnvironment.production, client.options.environment);
       });
 
       testWidgets('Default is Prod', (tester) async {
@@ -109,16 +109,16 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ActiveGridClient>(context, listen: false);
-        expect(ActiveGridEnvironment.production, client.environment);
+        expect(ActiveGridEnvironment.production, client.options.environment);
       });
 
       testWidgets('Authentication', (tester) async {
         late BuildContext context;
-        final authentication = ActiveGridAuthentication(
-            username: 'username', password: 'password');
+        final authentication =
+            ActiveGridAuthenticationOptions(autoAuthenticate: true);
         final target = ActiveGrid(
           options: ActiveGridOptions(
-            authentication: authentication,
+            authenticationOptions: authentication,
           ),
           child: Builder(
             builder: (buildContext) {
@@ -132,7 +132,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ActiveGridClient>(context, listen: false);
-        expect(client.authentication, authentication);
+        expect(client.options.authenticationOptions, authentication);
       });
     });
   });

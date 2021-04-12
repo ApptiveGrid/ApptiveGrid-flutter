@@ -15,8 +15,6 @@ enum ActiveGridEnvironment {
 /// Extensions for [ActiveGridEnvironment]
 extension EnvironmentExtension on ActiveGridEnvironment {
   /// Returns the API url for the selected [ActiveGridEnvironment]
-  ///
-  /// defaults to the same url as [ActiveGridEnvironment.production]
   String get url {
     switch (this) {
       case ActiveGridEnvironment.alpha:
@@ -24,8 +22,18 @@ extension EnvironmentExtension on ActiveGridEnvironment {
       case ActiveGridEnvironment.beta:
         return 'https://beta.activegrid.de';
       case ActiveGridEnvironment.production:
-      default:
-        return 'https://activegrid.de';
+        return 'https://app.activegrid.de';
+    }
+  }
+
+  /// Returns the realm that needs to be used for Authentication
+  String get authRealm {
+    switch (this) {
+      case ActiveGridEnvironment.alpha:
+      case ActiveGridEnvironment.beta:
+        return 'activegrid-test';
+      case ActiveGridEnvironment.production:
+        return 'activegrid';
     }
   }
 }
