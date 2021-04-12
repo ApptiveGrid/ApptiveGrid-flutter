@@ -8,8 +8,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  active_grid_core:
-    path: ../active_grid_core # TODO: Use hosted version on pub.dev once published
+  active_grid_core: ^0.1.0
   flutter:
     sdk: flutter
 
