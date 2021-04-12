@@ -5,7 +5,6 @@ import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 
 export 'package:active_grid_core/active_grid_core.dart';
 
@@ -87,7 +86,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _client = Provider.of(context);
+    _client = ActiveGrid.getClient(context);
     _loadForm();
   }
 
