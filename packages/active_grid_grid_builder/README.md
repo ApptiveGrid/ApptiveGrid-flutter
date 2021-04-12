@@ -1,5 +1,7 @@
 # ActiveGrid GridBuilder
 
+[![Pub](https://img.shields.io/pub/v/active_grid_grid_builder.svg)](https://pub.dartlang.org/packages/active_grid_grid_builder)  [![pub points](https://badges.bar/active_grid_grid_builder/pub%20points)](https://pub.dev/packages/active_grid_grid_builder/score)  [![popularity](https://badges.bar/active_grid_grid_builder/popularity)](https://pub.dev/packages/active_grid_grid_builder/score)  [![likes](https://badges.bar/active_grid_grid_builder/likes)](https://pub.dev/packages/active_grid_grid_builder/score)
+
 A Flutter Package to build Widgets based on Grid Data
 
 ## Setup

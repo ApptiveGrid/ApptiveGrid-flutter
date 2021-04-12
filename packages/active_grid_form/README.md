@@ -1,5 +1,7 @@
 # ActiveGrid Form
 
+[![Pub](https://img.shields.io/pub/v/active_grid_form.svg)](https://pub.dartlang.org/packages/active_grid_form)  [![pub points](https://badges.bar/active_grid_form/pub%20points)](https://pub.dev/packages/active_grid_form/score)  [![popularity](https://badges.bar/active_grid_form/popularity)](https://pub.dev/packages/active_grid_form/score)  [![likes](https://badges.bar/active_grid_form/likes)](https://pub.dev/packages/active_grid_form/score)
+
 A Flutter Package to display ActiveGrid Forms inside a Flutter App
 
 ## Setup
