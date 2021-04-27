@@ -61,8 +61,10 @@ class ActiveGridAuthenticator {
 
     _token = await credential?.getTokenResponse();
 
-    if (!kIsWeb) {
+    try {
       await closeWebView();
+    } on MissingPluginException {
+      debugPrint('Close WebView only available on some platforms');
     }
 
     return credential;
