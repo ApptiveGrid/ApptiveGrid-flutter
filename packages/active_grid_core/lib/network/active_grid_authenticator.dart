@@ -54,7 +54,7 @@ class ActiveGridAuthenticator {
         Authenticator(
           client,
           scopes: [],
-          urlLancher: urlLauncher,
+          urlLauncher: urlLauncher,
         );
 
     final credential = await authenticator.authorize();
@@ -83,7 +83,7 @@ class ActiveGridAuthenticator {
       // Token is expired refresh it
       final client = await _client;
       client.createCredential(refreshToken: _token?.refreshToken);
-      final authenticator = testAuthenticator ?? Authenticator(client);
+      final authenticator = testAuthenticator ?? Authenticator(client, urlLauncher: (_) {});
       final credential = await authenticator.authorize();
 
       _token = await credential?.getTokenResponse();
@@ -97,4 +97,10 @@ class ActiveGridAuthenticator {
       return '${token.tokenType} ${token.accessToken}';
     }
   }
+}
+
+/// Interface to provide common functionality for authorization operations
+abstract class IAuthenticator {
+  /// Authorizes the User against the Auth Server
+  Future<Credential?> authorize();
 }

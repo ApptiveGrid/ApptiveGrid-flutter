@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'dart:html';
-import 'package:active_grid_core/network/authenticator.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:openid_client/openid_client.dart';
 
 /// Custom Authenticator for handling Authentication for Flutter Web
-///
-/// It uses the Constructor from the io implementation of openid client
-class Authenticator implements IAuthenticator {
+class Authenticator {
 
   /// Creates a authenticator object
   ///
@@ -16,7 +13,7 @@ class Authenticator implements IAuthenticator {
   /// It is currently not possible to set a custom redirect Url for the authentication process itself
   Authenticator(
       Client client, {
-        Function(String)? urlLancher,
+        Function(String)? urlLauncher,
         Iterable<String> scopes = const [],
         Uri? redirectUri,
       }) : _authenticator = _CustomAuthenticator(
@@ -27,7 +24,7 @@ class Authenticator implements IAuthenticator {
 
   late final _CustomAuthenticator _authenticator;
 
-  @override
+  /// Authorizes the Client
   Future<Credential?> authorize() async {
     final credential = await _authenticator.credential;
     if(credential == null) {

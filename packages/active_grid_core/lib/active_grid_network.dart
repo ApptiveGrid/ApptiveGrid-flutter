@@ -7,8 +7,7 @@ import 'package:active_grid_core/active_grid_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:openid_client/openid_client.dart';
-import 'network/authenticator.dart'
-    if (dart.library.io) 'package:openid_client/openid_client_io.dart'
+import 'package:active_grid_core/network/io_authenticator.dart'
     if (dart.library.html) 'package:active_grid_core/network/web_authenticator.dart';
 
 import 'package:url_launcher/url_launcher.dart';

@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:openid_client/openid_client.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
+import 'package:pedantic/pedantic.dart';
 
 import 'mocks.dart';
 
@@ -114,7 +115,7 @@ main() {
       final authClient = MockAuthClient();
       when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
       authenticator.setAuthClient(authClient);
-      authenticator.authenticate();
+      unawaited(authenticator.authenticate());
       final launchedUrl = await completer.future;
       expect(
           launchedUrl
