@@ -1,11 +1,13 @@
 import 'package:active_grid_grid_builder/active_grid_grid_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:active_grid_core/web_auth_enabler/configure_nonweb.dart' if (dart.library.html) 'package:active_grid_core/web_auth_enabler/configure_web.dart';
 
 /// Shows a contact List
 ///
 /// Set Up your Grid in Active Grid using Text Columns
 /// | First Name | Last Name | imgUrl
-void main() {
+void main() async {
+  await enableWebAuth();
   runApp(ActiveGrid(
       options: ActiveGridOptions(
         environment: ActiveGridEnvironment.beta,

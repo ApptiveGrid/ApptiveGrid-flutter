@@ -4,9 +4,9 @@ packages:
   active_grid_core:
     dependency: transitive
     description:
-      name: active_grid_core
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../../active_grid_core"
+      relative: true
+    source: path
     version: "0.1.0"
   active_grid_grid_builder:
     dependency: "direct main"
