@@ -42,10 +42,9 @@ class ActiveGridAuthenticator {
   /// Open the Authentication Webpage
   ///
   /// Returns [Credential] from the authentication call
-  Future<Credential> authenticate() async {
+  Future<Credential?> authenticate() async {
     final client = await _client;
-
-    urlLauncher(String url) async {
+    Future<void> urlLauncher(String url) async {
       if (await canLaunch(url)) {
         await launch(url, forceWebView: true);
       }
@@ -60,9 +59,11 @@ class ActiveGridAuthenticator {
 
     final credential = await authenticator.authorize();
 
-    _token = await credential.getTokenResponse();
+    _token = await credential?.getTokenResponse();
 
-    closeWebView();
+    if(!kIsWeb) {
+      await closeWebView();
+    }
 
     return credential;
   }
@@ -85,7 +86,7 @@ class ActiveGridAuthenticator {
       final authenticator = testAuthenticator ?? Authenticator(client);
       final credential = await authenticator.authorize();
 
-      _token = await credential.getTokenResponse();
+      _token = await credential?.getTokenResponse();
     }
   }
 

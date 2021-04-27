@@ -16,7 +16,7 @@ class ActiveGridClient {
       {this.options = const ActiveGridOptions(),
       ActiveGridAuthenticator? authenticator})
       : _client = httpClient,
-        this._authenticator =
+        _authenticator =
             authenticator ?? ActiveGridAuthenticator(options: options);
 
   /// Current Environment the Api is connecting to
@@ -78,7 +78,7 @@ class ActiveGridClient {
   /// Authenticate the User
   ///
   /// This will open a Webpage for the User Auth
-  Future<Credential> authenticate() {
+  Future<Credential?> authenticate() {
     return _authenticator.authenticate();
   }
 }

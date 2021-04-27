@@ -1,6 +1,6 @@
 import 'package:active_grid_grid_builder/active_grid_grid_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:active_grid_core/web_auth_enabler/configure_nonweb.dart' if (dart.library.html) 'package:active_grid_core/web_auth_enabler/configure_web.dart';
+
 
 /// Shows a contact List
 ///
