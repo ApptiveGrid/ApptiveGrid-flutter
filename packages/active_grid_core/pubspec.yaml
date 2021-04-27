@@ -1,7 +1,7 @@
 name: active_grid_core
 description: Core Library for ActiveGrid used to provide general ActiveGrid functionality to other Packages or Apps
 version: 0.1.0
-homepage: https://zweidenker.de
+homepage: https://www.activegrid.de
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -19,6 +19,8 @@ dependencies:
 dev_dependencies:
   mocktail: ^0.1.1
   json_schema2: ^2.0.0
+  url_launcher_platform_interface: ^2.0.2
+  plugin_platform_interface: ^2.0.0
   flutter_test:
     sdk: flutter
 

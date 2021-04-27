@@ -1,5 +1,7 @@
 # ActiveGrid Core
 
+[![Pub](https://img.shields.io/pub/v/active_grid_core.svg)](https://pub.dartlang.org/packages/active_grid_core)  [![pub points](https://badges.bar/active_grid_core/pub%20points)](https://pub.dev/packages/active_grid_core/score)  [![popularity](https://badges.bar/active_grid_core/popularity)](https://pub.dev/packages/active_grid_core/score)  [![likes](https://badges.bar/active_grid_core/likes)](https://pub.dev/packages/active_grid_core/score)
+
 Core Library for ActiveGrid. This provides general access to ActiveGrid functionalities.
 It also contains authentication and general client logic so you can build your own ActiveGrid experiences using this.
 

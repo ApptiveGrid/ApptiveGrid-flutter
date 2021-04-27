@@ -1,7 +1,4 @@
-import 'package:active_grid_core/active_grid_core.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:openid_client/openid_client_io.dart';
-import 'package:url_launcher/url_launcher.dart';
+part of active_grid_network;
 
 /// Class for handling authentication related methods for ActiveGrid
 class ActiveGridAuthenticator {

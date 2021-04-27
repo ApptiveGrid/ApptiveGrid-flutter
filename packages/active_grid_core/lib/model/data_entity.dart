@@ -18,8 +18,9 @@ abstract class DataEntity<T, S> {
 
   @override
   bool operator ==(Object other) {
-    return runtimeType == other.runtimeType &&
-        value == (other as DataEntity).value;
+    return other is DataEntity<T, S> &&
+        runtimeType == other.runtimeType &&
+        value == (other).value;
   }
 
   @override
@@ -131,9 +132,9 @@ class EnumDataEntity extends DataEntity<String, String> {
 
   @override
   bool operator ==(Object other) {
-    return runtimeType == other.runtimeType &&
-        value == (other as DataEntity).value &&
-        f.listEquals(options, (other as EnumDataEntity).options);
+    return other is EnumDataEntity &&
+        value == (other).value &&
+        f.listEquals(options, (other).options);
   }
 
   @override
