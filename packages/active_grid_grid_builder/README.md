@@ -30,6 +30,16 @@ void main() {
 Grids need Authentication. In order to authenticate a user either manually call `ActiveGrid.getClient(context).authenticate()`.
 Alternatively you can set `autoAuthenticate` to `true` in `ActiveGridAuthenticationOptions` in the `ActiveGridOptions`
 
+### Flutter Web
+If you want to use it with Flutter web you need to call and await `enableWebAuth` before runApp. This takes care of the redirect of the Authentication Server
+
+```dart
+void main() async {
+  await enableWebAuth();
+  runApp(ActiveGrid(child: MyApp()));
+}
+```
+
 ## Usage
 
 Add `ActiveGridGridBuilder` to your widget tree. The `builder` behaves the same as `FutureBuilder`.
