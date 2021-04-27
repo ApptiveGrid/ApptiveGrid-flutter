@@ -1,13 +1,13 @@
 @TestOn('!browser')
-
 import 'dart:async';
 
 import 'package:active_grid_core/active_grid_core.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:openid_client/openid_client.dart';
-import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import 'mocks.dart';
 
@@ -123,6 +123,44 @@ void main() {
           launchedUrl
               .startsWith('https://iam.zweidenker.de/auth/realms/activegrid/'),
           true);
+    });
+
+    test('Missing Plugin Exception gets Caught', () async {
+      final completer = Completer<String>();
+      final urlLauncher = MockUrlLauncher();
+      when(() => urlLauncher.launch(
+            any(),
+            useSafariVC: any(named: 'useSafariVC'),
+            useWebView: any(named: 'useWebView'),
+            enableJavaScript: any(named: 'enableJavaScript'),
+            enableDomStorage: any(named: 'enableDomStorage'),
+            universalLinksOnly: any(named: 'universalLinksOnly'),
+            headers: any(named: 'headers'),
+          )).thenAnswer((invocation) async {
+        completer.complete(invocation.positionalArguments[0]);
+        return true;
+      });
+      when(() => urlLauncher.canLaunch(any()))
+          .thenAnswer((invocation) async => true);
+      when(() => urlLauncher.closeWebView())
+          .thenThrow(MissingPluginException());
+      UrlLauncherPlatform.instance = urlLauncher;
+
+      final authenticator = ActiveGridAuthenticator();
+      // Mock AuthBackend Return a new Token
+      final mockAuthBackend = MockAuthenticator();
+      authenticator.testAuthenticator = mockAuthBackend;
+      final credential = MockCredential();
+      final newToken = TokenResponse.fromJson(
+          {'token_type': 'Bearer', 'access_token': '12345'});
+      when(() => mockAuthBackend.authorize())
+          .thenAnswer((invocation) async => credential);
+      when(() => credential.getTokenResponse())
+          .thenAnswer((invocation) async => newToken);
+      final authClient = MockAuthClient();
+      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      authenticator.setAuthClient(authClient);
+      await authenticator.authenticate();
     });
   });
 }

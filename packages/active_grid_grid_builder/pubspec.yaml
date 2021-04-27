@@ -1,6 +1,6 @@
 name: active_grid_grid_builder
 description: A Flutter Package to build Widgets based on Data from an ActiveGrid Grid.
-version: 0.1.1
+version: 0.1.1+1
 homepage: https://www.activegrid.de
 
 environment:
