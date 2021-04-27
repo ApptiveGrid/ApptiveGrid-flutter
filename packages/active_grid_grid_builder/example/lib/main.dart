@@ -1,7 +1,6 @@
 import 'package:active_grid_grid_builder/active_grid_grid_builder.dart';
 import 'package:flutter/material.dart';
 
-
 /// Shows a contact List
 ///
 /// Set Up your Grid in Active Grid using Text Columns

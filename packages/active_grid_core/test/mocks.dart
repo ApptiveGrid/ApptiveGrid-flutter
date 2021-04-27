@@ -1,6 +1,6 @@
 import 'package:active_grid_core/active_grid_core.dart';
 import 'package:active_grid_core/network/io_authenticator.dart'
-  if (dart.library.html) 'package:active_grid_core/network/web_authenticator.dart';
+    if (dart.library.html) 'package:active_grid_core/network/web_authenticator.dart';
 
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';

@@ -2,7 +2,6 @@ import 'package:openid_client/openid_client_io.dart' as openid;
 
 /// IO Implementation of Authenticator
 class Authenticator {
-
   /// Creates an Authenticator
   Authenticator(
     openid.Client? client, {
@@ -10,11 +9,11 @@ class Authenticator {
     Iterable<String> scopes = const [],
     Uri? redirectUri,
   }) : _authenticator = openid.Authenticator(
-                client,
-                scopes: scopes,
-                redirectUri: redirectUri,
-                urlLancher: urlLauncher,
-              );
+          client,
+          scopes: scopes,
+          redirectUri: redirectUri,
+          urlLancher: urlLauncher,
+        );
 
   final openid.Authenticator _authenticator;
 

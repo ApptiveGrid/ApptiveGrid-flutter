@@ -6,28 +6,27 @@ import 'package:openid_client/openid_client.dart';
 
 /// Custom Authenticator for handling Authentication for Flutter Web
 class Authenticator {
-
   /// Creates a authenticator object
   ///
   /// [redirectUri] should be the uri the Auth Provider redirected to.
   /// It is currently not possible to set a custom redirect Url for the authentication process itself
   Authenticator(
-      Client client, {
-        Function(String)? urlLauncher,
-        Iterable<String> scopes = const [],
-        Uri? redirectUri,
-      }) : _authenticator = _CustomAuthenticator(
-    client,
-    scopes: scopes,
-    redirectedUri: redirectUri.toString(),
-  );
+    Client client, {
+    Function(String)? urlLauncher,
+    Iterable<String> scopes = const [],
+    Uri? redirectUri,
+  }) : _authenticator = _CustomAuthenticator(
+          client,
+          scopes: scopes,
+          redirectedUri: redirectUri.toString(),
+        );
 
   late final _CustomAuthenticator _authenticator;
 
   /// Authorizes the Client
   Future<Credential?> authorize() async {
     final credential = await _authenticator.credential;
-    if(credential == null) {
+    if (credential == null) {
       _authenticator.authorize();
       return _authenticator.flow.callback({'code': 'some code'});
     } else {
@@ -38,18 +37,25 @@ class Authenticator {
 
 /// Custom Implementation based on Authenticator from openid_client_browser to match specific criteria needed for ActiveGrid
 class _CustomAuthenticator {
-  _CustomAuthenticator._(this.flow, {String? redirectedUri, required Client client}) : credential = _credentialFromUri(flow, redirectedUri: redirectedUri, client: client);
+  _CustomAuthenticator._(this.flow,
+      {String? redirectedUri, required Client client})
+      : credential = _credentialFromUri(flow,
+            redirectedUri: redirectedUri, client: client);
 
-  _CustomAuthenticator(client, {Iterable<String> scopes = const [], String? redirectedUri})
-      : this._(Flow.authorizationCode(client,
-      state: window.localStorage['openid_client:state'])
-    ..scopes.addAll(scopes)
-    ..redirectUri = Uri(
-      host: Uri.base.host,
-      scheme: Uri.base.scheme,
-      port: Uri.base.port,
-      fragment: null,
-    ), redirectedUri: redirectedUri, client: client);
+  _CustomAuthenticator(client,
+      {Iterable<String> scopes = const [], String? redirectedUri})
+      : this._(
+            Flow.authorizationCode(client,
+                state: window.localStorage['openid_client:state'])
+              ..scopes.addAll(scopes)
+              ..redirectUri = Uri(
+                host: Uri.base.host,
+                scheme: Uri.base.scheme,
+                port: Uri.base.port,
+                fragment: null,
+              ),
+            redirectedUri: redirectedUri,
+            client: client);
 
   final Future<Credential?> credential;
 
@@ -65,8 +71,7 @@ class _CustomAuthenticator {
     _forgetCredentials();
     var c = await credential;
     if (c == null) return;
-    var uri = c.generateLogoutUrl(
-        redirectUri: Uri.parse(window.location.href));
+    var uri = c.generateLogoutUrl(redirectUri: Uri.parse(window.location.href));
     if (uri != null) {
       window.location.href = uri.toString();
     }
@@ -77,9 +82,10 @@ class _CustomAuthenticator {
     window.localStorage.remove('openid_client:auth');
   }
 
-  static Future<Credential?> _credentialFromUri(Flow flow, {String? redirectedUri, required Client client}) async {
+  static Future<Credential?> _credentialFromUri(Flow flow,
+      {String? redirectedUri, required Client client}) async {
     Map? q;
-    if(window.localStorage.containsKey('openid_client:credential')) {
+    if (window.localStorage.containsKey('openid_client:credential')) {
       /// Saved Credentials
       final json = jsonDecode(window.localStorage['openid_client:credential']!);
       return Credential.fromJson(json);
@@ -94,35 +100,37 @@ class _CustomAuthenticator {
           q.containsKey('code') ||
           q.containsKey('id_token')) {
         window.localStorage['openid_client:auth'] = json.encode(q);
-        window.location.href =
-            Uri.parse(window.location.href).toString();
+        window.location.href = Uri.parse(window.location.href).toString();
       }
     }
     if (q!.containsKey('access_token') ||
         q.containsKey('code') ||
         q.containsKey('id_token')) {
-      final code= q['code'];
-      final json = await http.post(client.issuer!.metadata.tokenEndpoint!,
-          body: {
-            'grant_type': 'authorization_code',
-            'code': code,
-            'redirect_uri': Uri(
-              host: Uri.base.host,
-              scheme: Uri.base.scheme,
-              port: Uri.base.port,
-              fragment: null,
-            ).toString(),
-            'client_id': client.clientId,
-          },);
+      final code = q['code'];
+      final json = await http.post(
+        client.issuer!.metadata.tokenEndpoint!,
+        body: {
+          'grant_type': 'authorization_code',
+          'code': code,
+          'redirect_uri': Uri(
+            host: Uri.base.host,
+            scheme: Uri.base.scheme,
+            port: Uri.base.port,
+            fragment: null,
+          ).toString(),
+          'client_id': client.clientId,
+        },
+      );
       final token = TokenResponse.fromJson(jsonDecode(json.body));
-      final credential =  Credential.fromJson({
+      final credential = Credential.fromJson({
         'issuer': client.issuer!.metadata.toJson(),
         'client_id': client.clientId,
         'client_secret': client.clientSecret,
         'token': token.toJson(),
         'nonce': null
       });
-      window.localStorage['openid_client:credential'] = jsonEncode(credential.toJson());
+      window.localStorage['openid_client:credential'] =
+          jsonEncode(credential.toJson());
       return credential;
     }
     return null;

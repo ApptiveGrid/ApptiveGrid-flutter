@@ -61,7 +61,7 @@ class ActiveGridAuthenticator {
 
     _token = await credential?.getTokenResponse();
 
-    if(!kIsWeb) {
+    if (!kIsWeb) {
       await closeWebView();
     }
 
@@ -83,7 +83,8 @@ class ActiveGridAuthenticator {
       // Token is expired refresh it
       final client = await _client;
       client.createCredential(refreshToken: _token?.refreshToken);
-      final authenticator = testAuthenticator ?? Authenticator(client, urlLauncher: (_) {});
+      final authenticator =
+          testAuthenticator ?? Authenticator(client, urlLauncher: (_) {});
       final credential = await authenticator.authorize();
 
       _token = await credential?.getTokenResponse();
