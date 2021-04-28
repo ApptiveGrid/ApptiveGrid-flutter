@@ -64,7 +64,9 @@ class ActiveGridAuthenticator {
     try {
       await closeWebView();
     } on MissingPluginException {
-      debugPrint('Close WebView only available on some platforms');
+      debugPrint('closeWebView is not avaialbe on this platform');
+    } on UnimplementedError {
+      debugPrint('closeWebView is not avaialbe on this platform');
     }
 
     return credential;

@@ -1,3 +1,6 @@
+## [0.1.1+2]
+* Fix closeWebView invocation on Web
+
 ## [0.1.1+1]
 * Cleanup
 * Add Authentication Documentation to README
