@@ -21,7 +21,6 @@ pipeline {
   }
 
   stages {
-
     stage('Setup') {
       matrix {
         axes {
@@ -93,7 +92,7 @@ pipeline {
             label 'ios-build'
           }
           stages {
-            stage('Flutter Build iOS') {
+            stage('Build iOS Examples') {
               steps {
                 script {
                   flutter.melosRun('build:ios')
@@ -114,17 +113,17 @@ pipeline {
             label 'android-build'
           }
           stages {
-            stage('Flutter Build iOS') {
+            stage('Build Android Examples') {
               steps {
                 script {
                   flutter.melosRun('build:android')
                 }
               }
-            }
-            post {
-              success {
-                script {
-                  archiveArtifacts '**/release/**/*.apk'
+              post {
+                success {
+                  script {
+                    archiveArtifacts '**/release/**/*.apk'
+                  }
                 }
               }
             }
