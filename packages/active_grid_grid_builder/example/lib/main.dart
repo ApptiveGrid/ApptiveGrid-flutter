@@ -17,6 +17,7 @@ void main() async {
       child: MyApp()));
 }
 
+///
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -26,19 +27,19 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(),
+      home: _MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+class _MyHomePage extends StatefulWidget {
+  _MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<_MyHomePage> {
   final GlobalKey<ActiveGridGridBuilderState> _builderKey = GlobalKey();
 
   @override
@@ -47,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('Grid Builder'),
       ),
+      // Add the ActiveGridGridBuilder to your Widget Tree
       body: ActiveGridGridBuilder(
           key: _builderKey,
           user: 'USER_ID',
@@ -86,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           element.field.name == 'imgUrl')
                                       .data
                                       .value ??
-                                  "",
+                                  '',
                               fit: BoxFit.cover,
                             ),
                           ),
