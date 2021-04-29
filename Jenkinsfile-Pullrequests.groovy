@@ -77,10 +77,8 @@ pipeline {
         label 'android-build || ios-build'
       }
       steps {
-        dir(appDirectory) {
-          script {
-            flutter.melosRun('test:all')
-          }
+        script {
+          flutter.melosRun('test:all')
         }
       }
     }
