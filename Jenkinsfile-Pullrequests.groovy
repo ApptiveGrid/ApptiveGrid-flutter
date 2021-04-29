@@ -98,11 +98,11 @@ pipeline {
                   flutter.melosRun('build:ios')
                 }
               }
-            }
-            post {
-              success {
-                script {
-                  archiveArtifacts '**/ios/**/*.ipa'
+              post {
+                success {
+                  script {
+                    archiveArtifacts '**/ios/**/*.ipa'
+                  }
                 }
               }
             }
