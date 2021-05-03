@@ -95,17 +95,14 @@ pipeline {
       }
       steps {
         script {
-          try {
-            flutter.melosRun('test:all')
-          } catch (Exception e) {
-            failedStage = Stage.UnitTest
-            throw e
-          }
+          flutter.melosRun('test:all')
         }
-      }
-      post {
-        always {
-          junit "**/test_results/*.xml"
+        junit "**/test_results/*.xml"
+        script {
+          if(currentBuild.result != 'SUCCESS') {
+            failedStage = Stage.UnitTest
+            throw Exception()
+          }
         }
       }
     }
