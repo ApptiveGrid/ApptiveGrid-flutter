@@ -15,7 +15,6 @@ pipeline {
   options { disableConcurrentBuilds() }
 
   environment {
-    PUB_CACHE = "${WORKSPACE}/.pub-cache"
     GRADLE_USER_HOME = "${WORKSPACE}/.gradle"
     FLUTTER_ROOT = "${WORKSPACE}/vendor/flutter"
   }
