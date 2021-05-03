@@ -82,6 +82,7 @@ pipeline {
             flutter.melosRun('lint:all')
           } catch (Exception e) {
             failedStage = Stage.Lint
+            currentBuild.result = 'UNSTABLE'
             // Don't Abort Build here
           }
         }
