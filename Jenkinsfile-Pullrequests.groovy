@@ -8,6 +8,7 @@ Bitbucket bitbucket = new Bitbucket(this)
 Flutter flutter = new Flutter(this)
 String targetBranch = null
 String bitbucketCredentials = 'git-ac-flutter'
+Stage failedStage = null
 
 pipeline {
   agent none
@@ -78,7 +79,12 @@ pipeline {
       }
       steps {
         script {
-          flutter.melosRun('test:all')
+          try {
+            flutter.melosRun('test:all')
+          } catch (Exception e) {
+            failedStage = Stage.UnitTest
+            throw e
+          }
         }
       }
     }
@@ -93,7 +99,12 @@ pipeline {
             stage('Build iOS Examples') {
               steps {
                 script {
-                  flutter.melosRun('build:ios')
+                  try {
+                    flutter.melosRun('build:ios')
+                  } catch (Exception e) {
+                    failedStage = Stage.Assemble
+                    throw e
+                  }
                 }
               }
             }
@@ -107,7 +118,12 @@ pipeline {
             stage('Build Android Examples') {
               steps {
                 script {
-                  flutter.melosRun('build:android')
+                  try {
+                    flutter.melosRun('build:android')
+                  } catch (Exception e) {
+                    failedStage = Stage.Assemble
+                    throw e
+                  }
                 }
               }
               post {
@@ -127,9 +143,9 @@ pipeline {
     always {
       script {
         if (currentBuild.currentResult == 'SUCCESS') {
-          bitbucket.reportBuildResult(projectUrl, BuildState.SUCCESSFUL)
+          bitbucket.reportPullRequests(projectUrl, Stage.Successful, '')
         } else {
-          bitbucket.reportBuildResult(projectUrl, BuildState.FAILED)
+          bitbucket.reportPullRequests(projectUrl, failedStage, '')
         }
       }
       node('ios-build') {
