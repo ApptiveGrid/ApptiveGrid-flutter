@@ -7,7 +7,7 @@ scripts:
   analyze:
     run: |
       melos exec -c 5 -- \
-        dart analyze . --fatal-infos
+        "dart analyze . --fatal-infos"
 
   test:all:
     run: melos run test --no-select
@@ -15,7 +15,7 @@ scripts:
   test:
     run: |
       melos exec -c 1 -- \
-        flutter test --coverage
+        "mkdir -p test_results && flutter test --machine | tojunit -o MELOS_PACKAGE_PATH/test_results/output.xml"
     select-package:
       dir-exists:
         - test
