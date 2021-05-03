@@ -80,7 +80,7 @@ pipeline {
       steps {
         script {
           try {
-            flutter.melosRun('analyze')
+            flutter.melosRun('lint:all')
           } catch (Exception e) {
             failedStage = Stage.Lint
             // Don't Abort Build here
