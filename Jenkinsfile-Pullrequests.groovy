@@ -98,8 +98,17 @@ pipeline {
           flutter.melosRun('test:all')
         }
         junit "**/test_results/*.xml"
-        script {
-          if(currentBuild.result != 'SUCCESS') {
+      }
+      post {
+        failure {
+          script {
+            failedStage = Stage.UnitTest
+            throw Exception()
+
+          }
+        }
+        unstable {
+          script {
             failedStage = Stage.UnitTest
             throw Exception()
           }
