@@ -8,7 +8,7 @@ Bitbucket bitbucket = new Bitbucket(this)
 Flutter flutter = new Flutter(this)
 String targetBranch = null
 String bitbucketCredentials = 'git-ac-flutter'
-Stage failedStage = null
+Stage failedStage = Stage.Successful
 
 pipeline {
   agent none
@@ -68,6 +68,22 @@ pipeline {
         success {
           script {
             bitbucket.startBuildStateReporting(projectUrl)
+          }
+        }
+      }
+    }
+
+    stage('Analyze') {
+      agent {
+        label 'android-build || ios-build'
+      }
+      steps {
+        script {
+          try {
+            flutter.melosRun('analyze')
+          } catch (Exception e) {
+            failedStage = Stage.Lint
+            // Don't Abort Build here
           }
         }
       }
@@ -147,11 +163,7 @@ pipeline {
   post {
     always {
       script {
-        if (currentBuild.currentResult == 'SUCCESS') {
-          bitbucket.reportPullRequests(projectUrl, Stage.Successful, '')
-        } else {
-          bitbucket.reportPullRequests(projectUrl, failedStage, '')
-        }
+        bitbucket.reportPullRequests(projectUrl, failedStage, 'testReport/')
       }
       node('ios-build') {
         deleteDir()
