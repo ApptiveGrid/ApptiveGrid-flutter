@@ -48,6 +48,8 @@ void main() {
       // Mock AuthBackend Return a new Token
       final mockAuthBackend = MockAuthenticator();
       authenticator.testAuthenticator = mockAuthBackend;
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
       final credential = MockCredential();
       final newToken = TokenResponse.fromJson(
           {'token_type': 'Bearer', 'access_token': '12345'});
@@ -73,9 +75,12 @@ void main() {
       // Mock AuthBackend Return a new Token
       final mockAuthBackend = MockAuthenticator();
       authenticator.testAuthenticator = mockAuthBackend;
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
       final credential = MockCredential();
       final newToken = TokenResponse.fromJson(
           {'token_type': 'Bearer', 'access_token': '12345'});
+      when(() => client.createCredential(refreshToken: any(named: 'refreshToken'))).thenReturn(credential);
       when(() => mockAuthBackend.authorize())
           .thenAnswer((invocation) async => credential);
       when(() => credential.getTokenResponse())
