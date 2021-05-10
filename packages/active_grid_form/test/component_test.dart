@@ -12,7 +12,7 @@ import 'common.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue<FormData>(FormData("Title", [], [], {}));
+    registerFallbackValue<FormData>(FormData('Title', [], [], {}));
   });
 
   group('Text', () {

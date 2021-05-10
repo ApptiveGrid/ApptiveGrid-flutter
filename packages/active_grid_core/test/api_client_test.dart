@@ -15,7 +15,7 @@ void main() {
   setUpAll(() {
     registerFallbackValue<BaseRequest>(Request('GET', Uri()));
     registerFallbackValue<Uri>(Uri());
-    registerFallbackValue<Map<String, String>>(Map<String, String>());
+    registerFallbackValue<Map<String, String>>(<String, String>{});
   });
 
   setUp(() {

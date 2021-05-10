@@ -5,12 +5,12 @@ part of active_grid_network;
 /// HttpHeaders Used in ActiveGrid Requests
 /// These are normally part of dart:io which would limit the functionality for the web
 abstract class HttpHeaders {
-  static const authorizationHeader = "authorization";
-  static const contentTypeHeader = "content-type";
+  static const authorizationHeader = 'authorization';
+  static const contentTypeHeader = 'content-type';
 }
 
 /// ContentType Used in ActiveGrid Requests
 /// These are normally part of dart:io which would limit the functionality for the web
 abstract class ContentType {
-  static const json = "application/json";
+  static const json = 'application/json';
 }

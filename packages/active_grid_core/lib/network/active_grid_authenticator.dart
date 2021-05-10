@@ -42,10 +42,9 @@ class ActiveGridAuthenticator {
   /// Open the Authentication Webpage
   ///
   /// Returns [Credential] from the authentication call
-  Future<Credential> authenticate() async {
+  Future<Credential?> authenticate() async {
     final client = await _client;
-
-    urlLauncher(String url) async {
+    Future<void> urlLauncher(String url) async {
       if (await canLaunch(url)) {
         await launch(url, forceWebView: true);
       }
@@ -55,14 +54,20 @@ class ActiveGridAuthenticator {
         Authenticator(
           client,
           scopes: [],
-          urlLancher: urlLauncher,
+          urlLauncher: urlLauncher,
         );
 
     final credential = await authenticator.authorize();
 
-    _token = await credential.getTokenResponse();
+    _token = await credential?.getTokenResponse();
 
-    closeWebView();
+    try {
+      await closeWebView();
+    } on MissingPluginException {
+      debugPrint('closeWebView is not avaialbe on this platform');
+    } on UnimplementedError {
+      debugPrint('closeWebView is not avaialbe on this platform');
+    }
 
     return credential;
   }
@@ -82,10 +87,11 @@ class ActiveGridAuthenticator {
       // Token is expired refresh it
       final client = await _client;
       client.createCredential(refreshToken: _token?.refreshToken);
-      final authenticator = testAuthenticator ?? Authenticator(client);
+      final authenticator =
+          testAuthenticator ?? Authenticator(client, urlLauncher: (_) {});
       final credential = await authenticator.authorize();
 
-      _token = await credential.getTokenResponse();
+      _token = await credential?.getTokenResponse();
     }
   }
 
@@ -96,4 +102,10 @@ class ActiveGridAuthenticator {
       return '${token.tokenType} ${token.accessToken}';
     }
   }
+}
+
+/// Interface to provide common functionality for authorization operations
+abstract class IAuthenticator {
+  /// Authorizes the User against the Auth Server
+  Future<Credential?> authorize();
 }

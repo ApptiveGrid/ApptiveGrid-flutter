@@ -18,7 +18,7 @@ class _TextFormWidgetState extends State<TextFormWidget> {
   @override
   void initState() {
     super.initState();
-    _controller.text = widget.component.data.value ?? "";
+    _controller.text = widget.component.data.value ?? '';
     _controller.addListener(() {
       widget.component.data.value = _controller.text;
     });
