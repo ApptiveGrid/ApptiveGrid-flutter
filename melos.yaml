@@ -33,6 +33,18 @@ scripts:
         - test
       ignore: "*example*"
 
+  test:all_coverage:
+    run: melos run test:coverage --no-select
+
+  test:coverage:
+    run: |
+      melos exec -c 1 -- \
+        "mkdir -p coverage && flutter test --coverage && genhtml coverage/lcov.info -o coverage/html"
+    select-package:
+      dir-exists:
+        - test
+      ignore: "*example*"
+
   build:android:
     run: |
       melos run build:example_android_pub --no-select && melos bootstrap

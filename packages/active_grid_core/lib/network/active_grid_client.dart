@@ -71,7 +71,7 @@ class ActiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
     final url = Uri.parse(
-        '${options.environment.url}/${gridUri.uriString}');
+        '${options.environment.url}${gridUri.uriString}');
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
@@ -96,7 +96,7 @@ class ActiveGridClient {
     await _authenticator.checkAuthentication();
 
     final url =
-        Uri.parse('${options.environment.url}/${spaceUri.uriString}');
+        Uri.parse('${options.environment.url}${spaceUri.uriString}');
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;

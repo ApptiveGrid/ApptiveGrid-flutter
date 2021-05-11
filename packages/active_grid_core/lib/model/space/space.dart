@@ -4,11 +4,12 @@ class SpaceUri {
   SpaceUri({required this.user, required this.space,});
 
   factory SpaceUri.fromUri(String uri) {
-    final regex = r'/api/users/(\w+)/spaces/(\w+)';
-    final match = RegExp(regex).allMatches(uri).elementAt(0);
-    if(match.groupCount != 2) {
+    final regex = r'/api/users/(\w+)/spaces/(\w+)\b';
+    final matches = RegExp(regex).allMatches(uri);
+    if(matches.isEmpty || matches.elementAt(0).groupCount != 2) {
       throw ArgumentError('Could not parse SpaceUri $uri');
     }
+    final match = matches.elementAt(0);
     return SpaceUri(user: match.group(1)!, space: match.group(2)!);
   }
 
@@ -54,7 +55,7 @@ class Space {
   Map<String, dynamic> toJson() => {
     'name' : name,
     'id' : id,
-    'gridUris': grids.map((e) => e.uriString),
+    'gridUris': grids.map((e) => e.uriString).toList(),
   };
 
   @override

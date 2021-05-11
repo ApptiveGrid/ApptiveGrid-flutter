@@ -135,8 +135,8 @@ void main() {
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       expect(
-          () =>
-              activeGridClient.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)),
+          () => activeGridClient.loadGrid(
+              gridUri: GridUri(user: user, space: space, grid: gridId)),
           throwsA(isInstanceOf<Response>()));
     });
   });
@@ -224,6 +224,73 @@ void main() {
       client.authenticate();
 
       verify(() => authenticator.authenticate()).called(1);
+    });
+  });
+
+  group('/user/me', () {
+    final rawResponse = {
+      'id': 'id',
+      'firstName': 'Jane',
+      'lastName': 'Doe',
+      'email': 'jane.doe@zweidenker.de',
+      'spaceUris': [
+        '/api/users/id/spaces/spaceId',
+      ]
+    };
+    test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(() => httpClient.get(
+          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/me'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      final user = await activeGridClient.getMe();
+
+      expect(user, isNot(null));
+    });
+
+    test('400 Status throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(() => httpClient.get(
+          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/me'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      expect(() => activeGridClient.getMe(), throwsA(isInstanceOf<Response>()));
+    });
+  });
+
+  group('get Space', () {
+    final userId = 'userId';
+    final spaceId = 'spaceId';
+    final spaceUri = SpaceUri(user: userId, space: spaceId);
+    final rawResponse = {
+      'id': spaceId,
+      'name': 'TestSpace',
+      'gridUris': [
+        '/api/users/id/spaces/spaceId/grids/gridId',
+      ]
+    };
+    test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(() => httpClient.get(
+          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      final space = await activeGridClient.getSpace(spaceUri: spaceUri);
+
+      expect(space, isNot(null));
+    });
+
+    test('400 Status throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(() => httpClient.get(
+          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      expect(() => activeGridClient.getSpace(spaceUri: spaceUri), throwsA(isInstanceOf<Response>()));
     });
   });
 }

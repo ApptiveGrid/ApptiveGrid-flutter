@@ -30,7 +30,7 @@ class User {
     'lastName' : lastName,
     'firstName' : firstName,
     'id' : id,
-    'spaceUris': spaces.map((e) => e.uriString),
+    'spaceUris': spaces.map((e) => e.uriString).toList(),
   };
 
   @override
