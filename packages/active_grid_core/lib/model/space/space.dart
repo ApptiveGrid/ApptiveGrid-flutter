@@ -32,3 +32,44 @@ class SpaceUri {
   @override
   int get hashCode => toString().hashCode;
 }
+
+class Space {
+  Space({
+    required this.id,
+    required this.name,
+    required this.grids
+  });
+
+  Space.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        id = json['id'],
+        grids = (json['gridUris'] as List)
+            .map((e) => GridUri.fromUri(e))
+            .toList();
+
+  final String name;
+  final String id;
+  final List<GridUri> grids;
+
+  Map<String, dynamic> toJson() => {
+    'name' : name,
+    'id' : id,
+    'gridUris': grids.map((e) => e.uriString()),
+  };
+
+  @override
+  String toString() {
+    return 'Space(name: $name, id: $id, spaces: ${grids.toString()})';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Space &&
+        id == other.id &&
+        name == other.name &&
+        f.listEquals(grids, other.grids);
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
+}

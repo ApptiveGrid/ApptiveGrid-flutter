@@ -91,6 +91,22 @@ class ActiveGridClient {
     }
     return User.fromJson(json.decode(response.body));
   }
+
+  Future<Space> getSpace({
+    required String user,
+    required String space,
+  }) async {
+    await _authenticator.checkAuthentication();
+
+    final url =
+        Uri.parse('${options.environment.url}/api/users/$user/spaces/$space');
+    final response = await _client.get(url, headers: headers);
+    if (response.statusCode >= 400) {
+      throw response;
+    }
+    return Space.fromJson(json.decode(response.body));
+  }
+
   /// Authenticate the User
   ///
   /// This will open a Webpage for the User Auth
