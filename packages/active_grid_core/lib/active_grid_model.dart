@@ -21,3 +21,7 @@ part 'model/grid/grid.dart';
 part 'model/grid/grid_field.dart';
 part 'model/grid/grid_entry.dart';
 part 'model/grid/grid_row.dart';
+
+part 'model/space/space.dart';
+
+part 'model/user/user.dart';

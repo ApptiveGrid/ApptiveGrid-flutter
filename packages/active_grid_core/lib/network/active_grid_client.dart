@@ -12,10 +12,11 @@ class ActiveGridClient {
   ///
   /// this should only be used for testing in order to pass in a Mocked [http.Client]
   @visibleForTesting
-  ActiveGridClient.fromClient(http.Client httpClient,
-      {this.options = const ActiveGridOptions(),
-      ActiveGridAuthenticator? authenticator})
-      : _client = httpClient,
+  ActiveGridClient.fromClient(
+    http.Client httpClient, {
+    this.options = const ActiveGridOptions(),
+    ActiveGridAuthenticator? authenticator,
+  })  : _client = httpClient,
         _authenticator =
             authenticator ?? ActiveGridAuthenticator(options: options);
 
@@ -39,7 +40,9 @@ class ActiveGridClient {
           .map((key, value) => MapEntry(key, value!));
 
   /// Loads a [FormData] specified with [formId]
-  Future<FormData> loadForm({required String formId}) async {
+  Future<FormData> loadForm({
+    required String formId,
+  }) async {
     final url = Uri.parse('${options.environment.url}/api/a/$formId');
     final response = await _client.get(url);
     return FormData.fromJson(json.decode(response.body));
@@ -47,7 +50,9 @@ class ActiveGridClient {
 
   /// Performs a [FormAction] using [formData]
   Future<http.Response> performAction(
-      FormAction action, FormData formData) async {
+    FormAction action,
+    FormData formData,
+  ) async {
     final uri = Uri.parse('${options.environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
@@ -61,10 +66,11 @@ class ActiveGridClient {
   /// [user] User that owns the [Grid]
   /// [space] Space the [Grid] is in
   /// [grid] id of the [Grid]
-  Future<Grid> loadGrid(
-      {required String user,
-      required String space,
-      required String grid}) async {
+  Future<Grid> loadGrid({
+    required String user,
+    required String space,
+    required String grid,
+  }) async {
     await _authenticator.checkAuthentication();
     final url = Uri.parse(
         '${options.environment.url}/api/users/$user/spaces/$space/grids/$grid');
@@ -75,6 +81,16 @@ class ActiveGridClient {
     return Grid.fromJson(json.decode(response.body));
   }
 
+  Future<User> getMe() async {
+    await _authenticator.checkAuthentication();
+
+    final url = Uri.parse('${options.environment.url}/api/users/me');
+    final response = await _client.get(url, headers: headers);
+    if (response.statusCode >= 400) {
+      throw response;
+    }
+    return User.fromJson(json.decode(response.body));
+  }
   /// Authenticate the User
   ///
   /// This will open a Webpage for the User Auth
