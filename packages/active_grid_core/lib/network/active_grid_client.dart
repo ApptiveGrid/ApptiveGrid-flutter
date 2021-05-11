@@ -67,13 +67,11 @@ class ActiveGridClient {
   /// [space] Space the [Grid] is in
   /// [grid] id of the [Grid]
   Future<Grid> loadGrid({
-    required String user,
-    required String space,
-    required String grid,
+    required GridUri gridUri
   }) async {
     await _authenticator.checkAuthentication();
     final url = Uri.parse(
-        '${options.environment.url}/api/users/$user/spaces/$space/grids/$grid');
+        '${options.environment.url}/${gridUri.uriString}');
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
@@ -93,13 +91,12 @@ class ActiveGridClient {
   }
 
   Future<Space> getSpace({
-    required String user,
-    required String space,
+    required SpaceUri spaceUri
   }) async {
     await _authenticator.checkAuthentication();
 
     final url =
-        Uri.parse('${options.environment.url}/api/users/$user/spaces/$space');
+        Uri.parse('${options.environment.url}/${spaceUri.uriString}');
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;

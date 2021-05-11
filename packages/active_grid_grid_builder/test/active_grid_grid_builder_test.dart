@@ -30,7 +30,7 @@ void main() {
     );
 
     final title = 'Title';
-    when(() => client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
@@ -59,7 +59,7 @@ void main() {
     );
 
     final title = 'Title';
-    when(() => client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
@@ -88,7 +88,7 @@ void main() {
       ),
     );
 
-    when(() => client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)))
         .thenAnswer((_) => Future.error(''));
 
     await tester.pumpWidget(target);
@@ -118,7 +118,7 @@ void main() {
     );
 
     final title = 'Title';
-    when(() => client.loadGrid(user: user, space: space, grid: gridId))
+    when(() => client.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
@@ -126,7 +126,7 @@ void main() {
 
     await key.currentState!.reload();
 
-    verify(() => client.loadGrid(user: user, space: space, grid: gridId))
+    verify(() => client.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)))
         .called(2);
   });
 }

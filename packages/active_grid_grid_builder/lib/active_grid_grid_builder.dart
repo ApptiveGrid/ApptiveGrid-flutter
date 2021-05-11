@@ -64,7 +64,7 @@ class ActiveGridGridBuilderState extends State<ActiveGridGridBuilder> {
   /// For example used when doing pull to refresh
   Future<void> reload({bool listen = false}) {
     return ActiveGrid.getClient(context, listen: listen)
-        .loadGrid(user: widget.user, space: widget.space, grid: widget.grid)
+        .loadGrid(gridUri: GridUri(user: widget.user, space: widget.space, grid: widget.grid))
         .then((value) => setState(() {
               _snapshot = AsyncSnapshot.withData(ConnectionState.done, value);
             }))

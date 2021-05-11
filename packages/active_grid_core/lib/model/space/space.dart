@@ -1,7 +1,7 @@
 part of active_grid_model;
 
 class SpaceUri {
-  SpaceUri({required this.user, required this.id,});
+  SpaceUri({required this.user, required this.space,});
 
   factory SpaceUri.fromUri(String uri) {
     final regex = r'/api/users/(\w+)/spaces/(\w+)';
@@ -9,23 +9,23 @@ class SpaceUri {
     if(match.groupCount != 2) {
       throw ArgumentError('Could not parse SpaceUri $uri');
     }
-    return SpaceUri(user: match.group(1)!, id: match.group(2)!);
+    return SpaceUri(user: match.group(1)!, space: match.group(2)!);
   }
 
   final String user;
-  final String id;
+  final String space;
 
   @override
   String toString() {
-    return 'SpaceUri(user: $user, id: $id)';
+    return 'SpaceUri(user: $user, space: $space)';
   }
 
-  String uriString() => '/api/users/$user/spaces/$id';
+  String get uriString => '/api/users/$user/spaces/$space';
 
   @override
   bool operator ==(Object other) {
     return other is SpaceUri &&
-        id == other.id &&
+        space == other.space &&
         user == other.user;
   }
 
@@ -54,7 +54,7 @@ class Space {
   Map<String, dynamic> toJson() => {
     'name' : name,
     'id' : id,
-    'gridUris': grids.map((e) => e.uriString()),
+    'gridUris': grids.map((e) => e.uriString),
   };
 
   @override

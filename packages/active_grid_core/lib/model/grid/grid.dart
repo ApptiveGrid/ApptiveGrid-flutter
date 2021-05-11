@@ -1,7 +1,7 @@
 part of active_grid_model;
 
 class GridUri {
-  GridUri({required this.user, required this.space, required this.id,});
+  GridUri({required this.user, required this.space, required this.grid,});
 
   factory GridUri.fromUri(String uri) {
     final regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)';
@@ -9,24 +9,24 @@ class GridUri {
     if(match.groupCount != 3) {
       throw ArgumentError('Could not parse GridUri $uri');
     }
-    return GridUri(user: match.group(1)!, space: match.group(2)!, id: match.group(3)!);
+    return GridUri(user: match.group(1)!, space: match.group(2)!, grid: match.group(3)!);
   }
 
   final String user;
   final String space;
-  final String id;
+  final String grid;
 
   @override
   String toString() {
-    return 'GridUri(user: $user, space: $space id: $id)';
+    return 'GridUri(user: $user, space: $space grid: $grid)';
   }
 
-  String uriString() => '/api/users/$user/spaces/$space/grids/$id';
+  String get uriString => '/api/users/$user/spaces/$space/grids/$grid';
 
   @override
   bool operator ==(Object other) {
     return other is GridUri &&
-        id == other.id &&
+        grid == other.grid &&
         user == other.user &&
         space == other.space;
   }

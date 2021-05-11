@@ -117,7 +117,7 @@ void main() {
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       final grid = await activeGridClient.loadGrid(
-          grid: gridId, space: space, user: user);
+          gridUri: GridUri(user: user, space: space, grid: gridId));
 
       expect(grid, isNot(null));
     });
@@ -136,7 +136,7 @@ void main() {
 
       expect(
           () =>
-              activeGridClient.loadGrid(grid: gridId, space: space, user: user),
+              activeGridClient.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)),
           throwsA(isInstanceOf<Response>()));
     });
   });

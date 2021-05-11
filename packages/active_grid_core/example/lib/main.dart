@@ -21,7 +21,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   User? _user;
-  List<Space> _spaces = [];
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +118,7 @@ class _SpaceSectionState extends State<_SpaceSection> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _spaceFuture = ActiveGrid.getClient(context)
-        .getSpace(user: widget.spaceUri.user, space: widget.spaceUri.id);
+        .getSpace(spaceUri: SpaceUri(user: widget.spaceUri.user, space: widget.spaceUri.space));
   }
 
   @override
@@ -136,7 +135,7 @@ class _SpaceSectionState extends State<_SpaceSection> {
                     Text(space.name),
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: space.grids.map((e) => Text(e.id)).toList(),
+                      children: space.grids.map((e) => Text(e.grid)).toList(),
                     )
                   ],
                 );
