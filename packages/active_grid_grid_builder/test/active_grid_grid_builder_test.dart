@@ -16,9 +16,9 @@ void main() {
     final target = TestApp(
       client: client,
       child: ActiveGridGridBuilder(
-        user: user,
+        gridUri: GridUri(user: user,
         space: space,
-        grid: gridId,
+        grid: gridId,),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
@@ -44,9 +44,9 @@ void main() {
     final target = TestApp(
       client: client,
       child: ActiveGridGridBuilder(
-        user: user,
-        space: space,
-        grid: gridId,
+        gridUri: GridUri(user: user,
+          space: space,
+          grid: gridId,),
         initialData: Grid('Initial Title', null, [], []),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -75,9 +75,9 @@ void main() {
     final target = TestApp(
       client: client,
       child: ActiveGridGridBuilder(
-        user: user,
-        space: space,
-        grid: gridId,
+        gridUri: GridUri(user: user,
+          space: space,
+          grid: gridId,),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error');
@@ -104,9 +104,9 @@ void main() {
       client: client,
       child: ActiveGridGridBuilder(
         key: key,
-        user: user,
-        space: space,
-        grid: gridId,
+        gridUri: GridUri(user: user,
+          space: space,
+          grid: gridId,),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);

@@ -46,9 +46,11 @@ Add `ActiveGridGridBuilder` to your widget tree. The `builder` behaves the same 
 
 ```dart
 ActiveGridGridBuilder(
-    user: 'USER_ID',
-    space: 'SPACE_ID',
-    grid: 'GRID_ID',
+    gridUri: GridUri(
+        user: 'USER_ID',
+        space: 'SPACE_ID',
+        grid: 'GRID_ID',
+    ),
     builder: (context, snapshot) {
         return YourWidget(gridData: snapshot.data);
     }
