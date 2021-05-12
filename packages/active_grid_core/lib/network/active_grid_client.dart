@@ -43,8 +43,14 @@ class ActiveGridClient {
   Future<FormData> loadForm({
     required FormUri formUri,
   }) async {
+    if(formUri.needsAuthorization) {
+      await _authenticator.checkAuthentication();
+    }
     final url = Uri.parse('${options.environment.url}${formUri.uriString}');
-    final response = await _client.get(url);
+    final response = await _client.get(url, headers: headers);
+    if (response.statusCode >= 400) {
+      throw response;
+    }
     return FormData.fromJson(json.decode(response.body));
   }
 
@@ -57,7 +63,11 @@ class ActiveGridClient {
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
     request.headers.addAll({HttpHeaders.contentTypeHeader: ContentType.json});
+    request.headers.addAll(headers);
     final response = await _client.send(request);
+    if (response.statusCode >= 400) {
+      throw response;
+    }
     return http.Response.fromStream(response);
   }
 

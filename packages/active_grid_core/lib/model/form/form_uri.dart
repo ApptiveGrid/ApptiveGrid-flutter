@@ -17,6 +17,8 @@ abstract class FormUri {
   }
 
   String get uriString;
+
+  bool get needsAuthorization;
 }
 
 class _RedirectFormUri extends FormUri {
@@ -35,6 +37,8 @@ class _RedirectFormUri extends FormUri {
   @override
   String get uriString => '/api/a/$form';
 
+  @override
+  bool get needsAuthorization => false;
   @override
   String toString() {
     return '_RedirectFormUri(form: $form)';
@@ -65,6 +69,9 @@ class _DirectFormUri extends FormUri {
   final String space;
   final String grid;
   final String form;
+
+  @override
+  bool get needsAuthorization => true;
 
   @override
   String get uriString => '/api/users/$user/spaces/$space/grids/$grid/forms/$form';
