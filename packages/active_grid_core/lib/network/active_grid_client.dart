@@ -104,6 +104,20 @@ class ActiveGridClient {
     return Space.fromJson(json.decode(response.body));
   }
 
+  Future<List<FormUri>> getForms({
+    required GridUri gridUri
+  }) async {
+    await _authenticator.checkAuthentication();
+
+    final url =
+    Uri.parse('${options.environment.url}${gridUri.uriString}/forms');
+    final response = await _client.get(url, headers: headers);
+    if (response.statusCode >= 400) {
+      throw response;
+    }
+    return (json.decode(response.body) as List).map((e) => FormUri.fromUri(e)).toList();
+  }
+
   /// Authenticate the User
   ///
   /// This will open a Webpage for the User Auth
