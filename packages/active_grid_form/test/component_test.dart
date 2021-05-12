@@ -443,6 +443,37 @@ void main() {
       expect(result.components.first.data.value, 12);
     });
 
+    testWidgets('Prefilled Value gets displayed', (tester) async {
+      final component = IntegerFormComponent(
+        fieldId: 'id',
+        data: IntegerDataEntity(123),
+        property: 'Property',
+        options: TextComponentOptions(),
+        required: false,
+      );
+      final formData = FormData('Title', [
+        component,
+      ], [], {});
+      final client = MockActiveGridClient();
+      final target = TestApp(
+        client: client,
+        child: ActiveGridForm(
+          formUri:
+          FormUri.fromRedirectUri(
+            form: 'formId',
+          ),
+        ),
+      );
+
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(form: 'formId')))
+          .thenAnswer((_) async => formData);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text('123'), findsOneWidget);
+    });
+
     testWidgets('Required shows Error', (tester) async {
       final action = FormAction(
         'uri',
