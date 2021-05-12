@@ -5,6 +5,7 @@ import 'package:active_grid_core/active_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pedantic/pedantic.dart';
 
 import 'mocks.dart';
 
@@ -27,36 +28,36 @@ void main() {
   });
 
   group('loadForm', () {
-    test('Success', () async {
-      final rawResponse = {
-        'schema': {
-          'type': 'object',
-          'properties': {
-            '4zc4l48ffin5v8pa2emyx9s15': {'type': 'string'},
-          },
-          'required': []
+    final rawResponse = {
+      'schema': {
+        'type': 'object',
+        'properties': {
+          '4zc4l48ffin5v8pa2emyx9s15': {'type': 'string'},
         },
-        'actions': [
-          {'uri': '/api/a/3ojhtqiltc0kiylfp8nddmxmk', 'method': 'POST'}
-        ],
-        'components': [
-          {
-            'property': 'TextC',
-            'value': null,
-            'required': false,
-            'options': {
-              'multi': false,
-              'placeholder': '',
-              'description': '',
-              'label': null
-            },
-            'type': 'textfield',
-            'fieldId': '4zc4l48ffin5v8pa2emyx9s15'
+        'required': []
+      },
+      'actions': [
+        {'uri': '/api/a/3ojhtqiltc0kiylfp8nddmxmk', 'method': 'POST'}
+      ],
+      'components': [
+        {
+          'property': 'TextC',
+          'value': null,
+          'required': false,
+          'options': {
+            'multi': false,
+            'placeholder': '',
+            'description': '',
+            'label': null
           },
-        ],
-        'title': 'Form'
-      };
+          'type': 'textfield',
+          'fieldId': '4zc4l48ffin5v8pa2emyx9s15'
+        },
+      ],
+      'title': 'Form'
+    };
 
+    test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);
 
       when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer((_) async => response);
@@ -67,6 +68,27 @@ void main() {
       expect(formData.components.length, 1);
       expect(formData.components[0].runtimeType, StringFormComponent);
       expect(formData.actions.length, 1);
+    });
+
+
+    test('DirectUri checks authentication', () async {
+      final response = Response(json.encode(rawResponse), 200);
+      final authenticator = MockActiveGridAuthenticator();
+      final client = ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
+
+      when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer((_) async => response);
+      when(() => authenticator.checkAuthentication()).thenAnswer((_) => Future.value() );
+
+      unawaited(client.loadForm(formUri: FormUri.fromDirectUri(user: 'user', space: 'space', grid: 'grid', form: 'FormId')));
+      verify(() => authenticator.checkAuthentication()).called(1);
+    });
+
+    test('400+ Response throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      expect(() => activeGridClient.loadForm(formUri: FormUri.fromRedirectUri(form: 'FormId')), throwsA(isInstanceOf<Response>()));
     });
   });
 
