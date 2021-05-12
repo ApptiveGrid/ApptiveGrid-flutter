@@ -61,7 +61,7 @@ void main() {
 
       when(() => httpClient.get(any())).thenAnswer((_) async => response);
 
-      final formData = await activeGridClient.loadForm(formId: 'FormId');
+      final formData = await activeGridClient.loadForm(formUri: FormUri.fromRedirectUri(formId: 'FormId'));
 
       expect(formData.title, 'Form');
       expect(formData.components.length, 1);

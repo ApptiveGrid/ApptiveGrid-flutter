@@ -37,12 +37,15 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId:  'formId')))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -85,11 +88,14 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId: 'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -127,12 +133,15 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId: 'formId')))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -186,12 +195,15 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId: 'formId')))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -249,11 +261,14 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId:'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -291,12 +306,15 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId:  'formId')))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -350,11 +368,14 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId:'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -392,12 +413,15 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId: 'formId')))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -440,11 +464,14 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId: 'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -482,12 +509,15 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId: 'formId')))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -530,11 +560,14 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId: 'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -572,12 +605,15 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId: 'formId')))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -624,11 +660,14 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'formId',
+          formUri:
+          FormUri.fromRedirectUri(
+            formId: 'formId',
+          ),
         ),
       );
 
-      when(() => client.loadForm(formId: any(named: 'formId')))
+      when(() => client.loadForm(formUri: FormUri.fromRedirectUri(formId: 'formId')))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);

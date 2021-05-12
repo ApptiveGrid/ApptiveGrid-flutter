@@ -39,11 +39,11 @@ class ActiveGridClient {
       }..removeWhere((key, value) => value == null))
           .map((key, value) => MapEntry(key, value!));
 
-  /// Loads a [FormData] specified with [formId]
+  /// Loads a [FormData] specified with a [FormUri]
   Future<FormData> loadForm({
-    required String formId,
+    required FormUri formUri,
   }) async {
-    final url = Uri.parse('${options.environment.url}/api/a/$formId');
+    final url = Uri.parse('${options.environment.url}${formUri.uriString}');
     final response = await _client.get(url);
     return FormData.fromJson(json.decode(response.body));
   }

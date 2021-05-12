@@ -60,7 +60,6 @@ void main() {
     test('Plain and From json not equal with different values', () {
       final id = 'id';
       final name = 'name';
-      final grid = GridUri(user: 'user', space: id, grid: 'gridId');
 
       final plain = Space(id: id, name: name, grids: []);
 
