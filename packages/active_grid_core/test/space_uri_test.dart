@@ -11,7 +11,8 @@ void main() {
     });
 
     test('Too long Uri still produces correct SpaceUri', () {
-      final spaceUri = SpaceUri.fromUri('/api/users/123456/spaces/asdfg/grids/1a2s3d4f');
+      final spaceUri =
+          SpaceUri.fromUri('/api/users/123456/spaces/asdfg/grids/1a2s3d4f');
 
       expect(spaceUri.user, '123456');
       expect(spaceUri.space, 'asdfg');
@@ -24,15 +25,25 @@ void main() {
 
   group('Equality', () {
     test('From UriString equals to direct invocation', () {
-      final parsed = SpaceUri.fromUri('/api/users/123456/spaces/asdfg/spaces/1a2s3d4f');
-      final direct = SpaceUri(user: '123456', space: 'asdfg',);
+      final parsed =
+          SpaceUri.fromUri('/api/users/123456/spaces/asdfg/spaces/1a2s3d4f');
+      final direct = SpaceUri(
+        user: '123456',
+        space: 'asdfg',
+      );
       expect(parsed == direct, true);
       expect(parsed.hashCode - direct.hashCode, 0);
     });
 
     test('Different Values do not equal', () {
-      final one = SpaceUri(user: '12345', space: 'asdf',);
-      final two = SpaceUri(user: '123456', space: 'asdfg',);
+      final one = SpaceUri(
+        user: '12345',
+        space: 'asdf',
+      );
+      final two = SpaceUri(
+        user: '123456',
+        space: 'asdfg',
+      );
       expect(one == two, false);
       expect((one.hashCode - two.hashCode) != 0, true);
     });

@@ -43,7 +43,7 @@ class ActiveGridClient {
   Future<FormData> loadForm({
     required FormUri formUri,
   }) async {
-    if(formUri.needsAuthorization) {
+    if (formUri.needsAuthorization) {
       await _authenticator.checkAuthentication();
     }
     final url = Uri.parse('${options.environment.url}${formUri.uriString}');
@@ -76,12 +76,9 @@ class ActiveGridClient {
   /// [user] User that owns the [Grid]
   /// [space] Space the [Grid] is in
   /// [grid] id of the [Grid]
-  Future<Grid> loadGrid({
-    required GridUri gridUri
-  }) async {
+  Future<Grid> loadGrid({required GridUri gridUri}) async {
     await _authenticator.checkAuthentication();
-    final url = Uri.parse(
-        '${options.environment.url}${gridUri.uriString}');
+    final url = Uri.parse('${options.environment.url}${gridUri.uriString}');
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
@@ -100,13 +97,10 @@ class ActiveGridClient {
     return User.fromJson(json.decode(response.body));
   }
 
-  Future<Space> getSpace({
-    required SpaceUri spaceUri
-  }) async {
+  Future<Space> getSpace({required SpaceUri spaceUri}) async {
     await _authenticator.checkAuthentication();
 
-    final url =
-        Uri.parse('${options.environment.url}${spaceUri.uriString}');
+    final url = Uri.parse('${options.environment.url}${spaceUri.uriString}');
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
@@ -114,18 +108,18 @@ class ActiveGridClient {
     return Space.fromJson(json.decode(response.body));
   }
 
-  Future<List<FormUri>> getForms({
-    required GridUri gridUri
-  }) async {
+  Future<List<FormUri>> getForms({required GridUri gridUri}) async {
     await _authenticator.checkAuthentication();
 
     final url =
-    Uri.parse('${options.environment.url}${gridUri.uriString}/forms');
+        Uri.parse('${options.environment.url}${gridUri.uriString}/forms');
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
     }
-    return (json.decode(response.body) as List).map((e) => FormUri.fromUri(e)).toList();
+    return (json.decode(response.body) as List)
+        .map((e) => FormUri.fromUri(e))
+        .toList();
   }
 
   /// Authenticate the User

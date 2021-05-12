@@ -4,7 +4,8 @@ part of active_grid_network;
 class ActiveGridAuthenticator {
   /// Create a new [ActiveGridAuthenticator]
   /// [options] is used to get the [ActiveGridEnvironment.authRealm] for the [_uri]
-  ActiveGridAuthenticator({this.options = const ActiveGridOptions(), this.httpClient})
+  ActiveGridAuthenticator(
+      {this.options = const ActiveGridOptions(), this.httpClient})
       : _uri = Uri.parse(
             'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
 

@@ -26,12 +26,12 @@ class User {
   final List<SpaceUri> spaces;
 
   Map<String, dynamic> toJson() => {
-    'email' : email,
-    'lastName' : lastName,
-    'firstName' : firstName,
-    'id' : id,
-    'spaceUris': spaces.map((e) => e.uriString).toList(),
-  };
+        'email': email,
+        'lastName': lastName,
+        'firstName': firstName,
+        'id': id,
+        'spaceUris': spaces.map((e) => e.uriString).toList(),
+      };
 
   @override
   String toString() {
@@ -41,11 +41,11 @@ class User {
   @override
   bool operator ==(Object other) {
     return other is User &&
-    id == other.id &&
-    email == other.email &&
-    lastName == other.lastName &&
-    firstName == other.firstName &&
-    f.listEquals(spaces, other.spaces);
+        id == other.id &&
+        email == other.email &&
+        lastName == other.lastName &&
+        firstName == other.firstName &&
+        f.listEquals(spaces, other.spaces);
   }
 
   @override

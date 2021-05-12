@@ -1,16 +1,21 @@
 part of active_grid_model;
 
 class GridUri {
-  GridUri({required this.user, required this.space, required this.grid,});
+  GridUri({
+    required this.user,
+    required this.space,
+    required this.grid,
+  });
 
   factory GridUri.fromUri(String uri) {
     final regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)\b';
     final matches = RegExp(regex).allMatches(uri);
-    if(matches.isEmpty || matches.elementAt(0).groupCount != 3) {
+    if (matches.isEmpty || matches.elementAt(0).groupCount != 3) {
       throw ArgumentError('Could not parse GridUri $uri');
     }
     final match = matches.elementAt(0);
-    return GridUri(user: match.group(1)!, space: match.group(2)!, grid: match.group(3)!);
+    return GridUri(
+        user: match.group(1)!, space: match.group(2)!, grid: match.group(3)!);
   }
 
   final String user;

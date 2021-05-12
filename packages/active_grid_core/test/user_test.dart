@@ -53,7 +53,12 @@ void main() {
       final email = 'jane.doe@zweidenker.de';
       final spaceUri = SpaceUri(user: id, space: 'spaceId');
 
-      final plain = User(email: email, lastName: lastName, firstName: firstName, id: id, spaces: [spaceUri]);
+      final plain = User(
+          email: email,
+          lastName: lastName,
+          firstName: firstName,
+          id: id,
+          spaces: [spaceUri]);
 
       final jsonUser = User.fromJson({
         'id': 'id',
@@ -75,7 +80,12 @@ void main() {
       final lastName = 'Doe';
       final email = 'jane.doe@zweidenker.de';
 
-      final plain = User(email: email, lastName: lastName, firstName: firstName, id: id, spaces: []);
+      final plain = User(
+          email: email,
+          lastName: lastName,
+          firstName: firstName,
+          id: id,
+          spaces: []);
 
       final jsonUser = User.fromJson({
         'id': 'id',

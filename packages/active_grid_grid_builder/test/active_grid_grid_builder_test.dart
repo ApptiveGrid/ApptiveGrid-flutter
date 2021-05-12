@@ -16,9 +16,11 @@ void main() {
     final target = TestApp(
       client: client,
       child: ActiveGridGridBuilder(
-        gridUri: GridUri(user: user,
-        space: space,
-        grid: gridId,),
+        gridUri: GridUri(
+          user: user,
+          space: space,
+          grid: gridId,
+        ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
@@ -30,7 +32,8 @@ void main() {
     );
 
     final title = 'Title';
-    when(() => client.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)))
+    when(() => client.loadGrid(
+            gridUri: GridUri(user: user, space: space, grid: gridId)))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
@@ -44,9 +47,11 @@ void main() {
     final target = TestApp(
       client: client,
       child: ActiveGridGridBuilder(
-        gridUri: GridUri(user: user,
+        gridUri: GridUri(
+          user: user,
           space: space,
-          grid: gridId,),
+          grid: gridId,
+        ),
         initialData: Grid('Initial Title', null, [], []),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -59,7 +64,8 @@ void main() {
     );
 
     final title = 'Title';
-    when(() => client.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)))
+    when(() => client.loadGrid(
+            gridUri: GridUri(user: user, space: space, grid: gridId)))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
@@ -75,9 +81,11 @@ void main() {
     final target = TestApp(
       client: client,
       child: ActiveGridGridBuilder(
-        gridUri: GridUri(user: user,
+        gridUri: GridUri(
+          user: user,
           space: space,
-          grid: gridId,),
+          grid: gridId,
+        ),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error');
@@ -88,7 +96,8 @@ void main() {
       ),
     );
 
-    when(() => client.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)))
+    when(() => client.loadGrid(
+            gridUri: GridUri(user: user, space: space, grid: gridId)))
         .thenAnswer((_) => Future.error(''));
 
     await tester.pumpWidget(target);
@@ -104,9 +113,11 @@ void main() {
       client: client,
       child: ActiveGridGridBuilder(
         key: key,
-        gridUri: GridUri(user: user,
+        gridUri: GridUri(
+          user: user,
           space: space,
-          grid: gridId,),
+          grid: gridId,
+        ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
@@ -118,7 +129,8 @@ void main() {
     );
 
     final title = 'Title';
-    when(() => client.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)))
+    when(() => client.loadGrid(
+            gridUri: GridUri(user: user, space: space, grid: gridId)))
         .thenAnswer((_) async => Grid(title, null, [], []));
 
     await tester.pumpWidget(target);
@@ -126,7 +138,7 @@ void main() {
 
     await key.currentState!.reload();
 
-    verify(() => client.loadGrid(gridUri: GridUri(user: user, space: space, grid: gridId)))
-        .called(2);
+    verify(() => client.loadGrid(
+        gridUri: GridUri(user: user, space: space, grid: gridId))).called(2);
   });
 }

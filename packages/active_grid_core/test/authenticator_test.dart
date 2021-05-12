@@ -225,7 +225,8 @@ void main() {
               ));
 
       final client = await authenticator.authClient;
-      expect(client.issuer!.metadata.toJson(), _zweidenkerIssuer.metadata.toJson());
+      expect(client.issuer!.metadata.toJson(),
+          _zweidenkerIssuer.metadata.toJson());
     });
   });
 }

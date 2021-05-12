@@ -8,7 +8,8 @@ void main() {
         final gridUri = FormUri.fromUri(
             '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/a1s2d3f4');
 
-        expect(gridUri.uriString, '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/a1s2d3f4');
+        expect(gridUri.uriString,
+            '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/a1s2d3f4');
       });
 
       test('Malformatted Uri throws ArgumentError', () {
@@ -21,7 +22,8 @@ void main() {
       test('From UriString equals to direct invocation', () {
         final parsed = FormUri.fromUri(
             '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/a1s2d3f4');
-        final direct = FormUri.fromDirectUri(user: '123456', space: 'asdfg', grid: '1a2s3d4f', form: 'a1s2d3f4');
+        final direct = FormUri.fromDirectUri(
+            user: '123456', space: 'asdfg', grid: '1a2s3d4f', form: 'a1s2d3f4');
         expect(parsed == direct, true);
         expect(parsed.hashCode - direct.hashCode, 0);
       });
@@ -29,7 +31,11 @@ void main() {
       test('Different Values do not equal', () {
         final one = FormUri.fromUri(
             '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/a1s2d3f4');
-        final two = FormUri.fromDirectUri(user: '123456', space: 'asdfg', grid: '1a2s3d4f', form: 'a1s2d3f45');
+        final two = FormUri.fromDirectUri(
+            user: '123456',
+            space: 'asdfg',
+            grid: '1a2s3d4f',
+            form: 'a1s2d3f45');
         expect(one == two, false);
         expect((one.hashCode - two.hashCode) != 0, true);
       });
@@ -51,8 +57,7 @@ void main() {
       });
 
       test('Malformatted Uri throws ArgumentError', () {
-        expect(() => FormUri.fromUri('/api/a/'),
-            throwsArgumentError);
+        expect(() => FormUri.fromUri('/api/a/'), throwsArgumentError);
       });
     });
 

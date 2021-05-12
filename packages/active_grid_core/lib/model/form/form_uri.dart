@@ -3,14 +3,28 @@ part of active_grid_model;
 abstract class FormUri {
   FormUri._();
 
-  factory FormUri.fromRedirectUri({required String form,}) => _RedirectFormUri(form: form);
-  factory FormUri.fromDirectUri({required String user, required String space, required String grid, required String form,}) => _DirectFormUri(user: user, space: space, grid: grid, form: form,);
+  factory FormUri.fromRedirectUri({
+    required String form,
+  }) =>
+      _RedirectFormUri(form: form);
+  factory FormUri.fromDirectUri({
+    required String user,
+    required String space,
+    required String grid,
+    required String form,
+  }) =>
+      _DirectFormUri(
+        user: user,
+        space: space,
+        grid: grid,
+        form: form,
+      );
 
   factory FormUri.fromUri(String uri) {
-    if(RegExp(_DirectFormUri.regex).hasMatch(uri)) {
+    if (RegExp(_DirectFormUri.regex).hasMatch(uri)) {
       return _DirectFormUri.fromUri(uri);
     }
-    if(RegExp(_RedirectFormUri.regex).hasMatch(uri)) {
+    if (RegExp(_RedirectFormUri.regex).hasMatch(uri)) {
       return _RedirectFormUri.fromUri(uri);
     }
     throw ArgumentError('Could not parse FormUri $uri');
@@ -46,8 +60,7 @@ class _RedirectFormUri extends FormUri {
 
   @override
   bool operator ==(Object other) {
-    return other is _RedirectFormUri &&
-        form == other.form;
+    return other is _RedirectFormUri && form == other.form;
   }
 
   @override
@@ -55,15 +68,25 @@ class _RedirectFormUri extends FormUri {
 }
 
 class _DirectFormUri extends FormUri {
-  _DirectFormUri({required this.user, required this.space, required this.grid, required this.form}) : super._();
+  _DirectFormUri(
+      {required this.user,
+      required this.space,
+      required this.grid,
+      required this.form})
+      : super._();
 
   factory _DirectFormUri.fromUri(String uri) {
     final matches = RegExp(regex).allMatches(uri);
     final match = matches.elementAt(0);
-    return _DirectFormUri(user: match.group(1)!, space: match.group(2)!, grid: match.group(3)!, form: match.group(4)!);
+    return _DirectFormUri(
+        user: match.group(1)!,
+        space: match.group(2)!,
+        grid: match.group(3)!,
+        form: match.group(4)!);
   }
 
-  static const regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)/forms/(\w+)\b';
+  static const regex =
+      r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)/forms/(\w+)\b';
 
   final String user;
   final String space;
@@ -74,7 +97,8 @@ class _DirectFormUri extends FormUri {
   bool get needsAuthorization => true;
 
   @override
-  String get uriString => '/api/users/$user/spaces/$space/grids/$grid/forms/$form';
+  String get uriString =>
+      '/api/users/$user/spaces/$space/grids/$grid/forms/$form';
 
   @override
   String toString() {

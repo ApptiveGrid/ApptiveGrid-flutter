@@ -60,9 +60,11 @@ void main() {
     test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);
 
-      when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer((_) async => response);
+      when(() => httpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => response);
 
-      final formData = await activeGridClient.loadForm(formUri: FormUri.fromRedirectUri(form: 'FormId'));
+      final formData = await activeGridClient.loadForm(
+          formUri: FormUri.fromRedirectUri(form: 'FormId'));
 
       expect(formData.title, 'Form');
       expect(formData.components.length, 1);
@@ -70,25 +72,33 @@ void main() {
       expect(formData.actions.length, 1);
     });
 
-
     test('DirectUri checks authentication', () async {
       final response = Response(json.encode(rawResponse), 200);
       final authenticator = MockActiveGridAuthenticator();
-      final client = ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
+      final client =
+          ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
 
-      when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer((_) async => response);
-      when(() => authenticator.checkAuthentication()).thenAnswer((_) => Future.value() );
+      when(() => httpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => response);
+      when(() => authenticator.checkAuthentication())
+          .thenAnswer((_) => Future.value());
 
-      unawaited(client.loadForm(formUri: FormUri.fromDirectUri(user: 'user', space: 'space', grid: 'grid', form: 'FormId')));
+      unawaited(client.loadForm(
+          formUri: FormUri.fromDirectUri(
+              user: 'user', space: 'space', grid: 'grid', form: 'FormId')));
       verify(() => authenticator.checkAuthentication()).called(1);
     });
 
     test('400+ Response throws Response', () async {
       final response = Response(json.encode(rawResponse), 400);
 
-      when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer((_) async => response);
+      when(() => httpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => response);
 
-      expect(() => activeGridClient.loadForm(formUri: FormUri.fromRedirectUri(form: 'FormId')), throwsA(isInstanceOf<Response>()));
+      expect(
+          () => activeGridClient.loadForm(
+              formUri: FormUri.fromRedirectUri(form: 'FormId')),
+          throwsA(isInstanceOf<Response>()));
     });
   });
 
@@ -209,7 +219,8 @@ void main() {
     test('Check Urls', () {
       expect(ActiveGridEnvironment.alpha.url, 'https://alpha.apptivegrid.de');
       expect(ActiveGridEnvironment.beta.url, 'https://beta.apptivegrid.de');
-      expect(ActiveGridEnvironment.production.url, 'https://app.apptivegrid.de');
+      expect(
+          ActiveGridEnvironment.production.url, 'https://app.apptivegrid.de');
     });
 
     test('Check Auth Realm', () {
@@ -297,7 +308,8 @@ void main() {
       final response = Response(json.encode(rawResponse), 200);
 
       when(() => httpClient.get(
-          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       final space = await activeGridClient.getSpace(spaceUri: spaceUri);
@@ -309,10 +321,12 @@ void main() {
       final response = Response(json.encode(rawResponse), 400);
 
       when(() => httpClient.get(
-          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
-      expect(() => activeGridClient.getSpace(spaceUri: spaceUri), throwsA(isInstanceOf<Response>()));
+      expect(() => activeGridClient.getSpace(spaceUri: spaceUri),
+          throwsA(isInstanceOf<Response>()));
     });
   });
 
@@ -323,32 +337,37 @@ void main() {
     final form0 = 'formId0';
     final form1 = 'formId1';
     final gridUri = GridUri(user: userId, space: spaceId, grid: gridId);
-    final rawResponse =  [
-        '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
-        '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1',
-      ];
+    final rawResponse = [
+      '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
+      '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1',
+    ];
     test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);
 
       when(() => httpClient.get(
-          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       final forms = await activeGridClient.getForms(gridUri: gridUri);
 
       expect(forms.length, 2);
-      expect(forms[0].uriString, '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0');
-      expect(forms[1].uriString, '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1');
+      expect(forms[0].uriString,
+          '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0');
+      expect(forms[1].uriString,
+          '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1');
     });
 
     test('400 Status throws Response', () async {
       final response = Response(json.encode(rawResponse), 400);
 
       when(() => httpClient.get(
-          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
-      expect(() => activeGridClient.getForms(gridUri: gridUri), throwsA(isInstanceOf<Response>()));
+      expect(() => activeGridClient.getForms(gridUri: gridUri),
+          throwsA(isInstanceOf<Response>()));
     });
   });
 }

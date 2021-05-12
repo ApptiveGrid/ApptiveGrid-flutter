@@ -1,12 +1,15 @@
 part of active_grid_model;
 
 class SpaceUri {
-  SpaceUri({required this.user, required this.space,});
+  SpaceUri({
+    required this.user,
+    required this.space,
+  });
 
   factory SpaceUri.fromUri(String uri) {
     final regex = r'/api/users/(\w+)/spaces/(\w+)\b';
     final matches = RegExp(regex).allMatches(uri);
-    if(matches.isEmpty || matches.elementAt(0).groupCount != 2) {
+    if (matches.isEmpty || matches.elementAt(0).groupCount != 2) {
       throw ArgumentError('Could not parse SpaceUri $uri');
     }
     final match = matches.elementAt(0);
@@ -25,9 +28,7 @@ class SpaceUri {
 
   @override
   bool operator ==(Object other) {
-    return other is SpaceUri &&
-        space == other.space &&
-        user == other.user;
+    return other is SpaceUri && space == other.space && user == other.user;
   }
 
   @override
@@ -35,28 +36,23 @@ class SpaceUri {
 }
 
 class Space {
-  Space({
-    required this.id,
-    required this.name,
-    required this.grids
-  });
+  Space({required this.id, required this.name, required this.grids});
 
   Space.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         id = json['id'],
-        grids = (json['gridUris'] as List)
-            .map((e) => GridUri.fromUri(e))
-            .toList();
+        grids =
+            (json['gridUris'] as List).map((e) => GridUri.fromUri(e)).toList();
 
   final String name;
   final String id;
   final List<GridUri> grids;
 
   Map<String, dynamic> toJson() => {
-    'name' : name,
-    'id' : id,
-    'gridUris': grids.map((e) => e.uriString).toList(),
-  };
+        'name': name,
+        'id': id,
+        'gridUris': grids.map((e) => e.uriString).toList(),
+      };
 
   @override
   String toString() {

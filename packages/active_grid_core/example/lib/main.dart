@@ -33,13 +33,17 @@ class _MyAppState extends State<MyApp> {
         return Scaffold(
           body: ListView(
             children: [
-              Text('User',
-              style: Theme.of(context).textTheme.headline4,),
+              Text(
+                'User',
+                style: Theme.of(context).textTheme.headline4,
+              ),
               _UserSection(
                   onUserLoaded: (user) => setState(() => _user = user)),
-              if(_user != null)
-                Text('Spaces',
-                  style: Theme.of(context).textTheme.headline4,),
+              if (_user != null)
+                Text(
+                  'Spaces',
+                  style: Theme.of(context).textTheme.headline4,
+                ),
               ...((_user?.spaces) ?? []).map((e) => _SpaceSection(spaceUri: e)),
             ],
           ),
@@ -117,8 +121,9 @@ class _SpaceSectionState extends State<_SpaceSection> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _spaceFuture = ActiveGrid.getClient(context)
-        .getSpace(spaceUri: SpaceUri(user: widget.spaceUri.user, space: widget.spaceUri.space));
+    _spaceFuture = ActiveGrid.getClient(context).getSpace(
+        spaceUri:
+            SpaceUri(user: widget.spaceUri.user, space: widget.spaceUri.space));
   }
 
   @override
