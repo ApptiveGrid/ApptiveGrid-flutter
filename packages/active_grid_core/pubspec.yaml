@@ -1,6 +1,6 @@
 name: active_grid_core
 description: Core Library for ActiveGrid used to provide general ActiveGrid functionality to other Packages or Apps
-version: 0.1.1+2
+version: 0.2.0
 homepage: https://www.activegrid.de
 
 environment:

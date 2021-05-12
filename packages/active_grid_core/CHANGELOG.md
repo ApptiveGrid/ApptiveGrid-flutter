@@ -1,3 +1,12 @@
+## [0.2.0]
+* Use SpaceUri, GridUri and FormUri to access data via the api
+* Use ApptiveGrid Backend
+* Add Support for new calls
+    * "me" User
+    * available spaces
+    * available grids
+    * available forms
+
 ## [0.1.1+2]
 * Fix closeWebView invocation on Web
 

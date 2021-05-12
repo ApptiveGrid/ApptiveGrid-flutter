@@ -35,7 +35,7 @@ In order to display an ActiveGrid Form in your App use the `ActiveGridForm` Widg
         title: Text(widget.title),
       ),
       body: ActiveGridForm(
-        formId: 'YOUR_FORM_ID',
+        formUri: FormUri.redirectForm(form: 'YOUR_FORM_ID'),
       ),
     );
   }
@@ -55,7 +55,7 @@ Widget build(BuildContext context) {
       title: Text(widget.title),
     ),
     body: ActiveGridForm(
-      formId: 'YOUR_FORM_ID',
+      formUri: FormUri.redirectForm(form: 'YOUR_FORM_ID'),
       titleStyle: Theme.of(context).textTheme.headline6,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
       titlePadding: const EdgeInsets.all(16),
