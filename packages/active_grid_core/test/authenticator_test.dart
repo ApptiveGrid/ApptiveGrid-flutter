@@ -215,7 +215,7 @@ void main() {
       final httpClient = MockHttpClient();
       final authenticator = ActiveGridAuthenticator(httpClient: httpClient);
       final discoveryUri = Uri.parse(
-          'https://iam.zweidenker.de/auth/realms/activegrid/.well-known/openid-configuration');
+          'https://iam.zweidenker.de/auth/realms/apptivegrid/.well-known/openid-configuration');
 
       when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
           .thenAnswer((invocation) async => Response(

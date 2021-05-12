@@ -59,7 +59,7 @@ void main() {
 
       final response = Response(json.encode(rawResponse), 200);
 
-      when(() => httpClient.get(any())).thenAnswer((_) async => response);
+      when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       final formData = await activeGridClient.loadForm(formUri: FormUri.fromRedirectUri(form: 'FormId'));
 
@@ -185,15 +185,15 @@ void main() {
 
   group('Environment', () {
     test('Check Urls', () {
-      expect(ActiveGridEnvironment.alpha.url, 'https://alpha.activegrid.de');
-      expect(ActiveGridEnvironment.beta.url, 'https://beta.activegrid.de');
-      expect(ActiveGridEnvironment.production.url, 'https://app.activegrid.de');
+      expect(ActiveGridEnvironment.alpha.url, 'https://alpha.apptivegrid.de');
+      expect(ActiveGridEnvironment.beta.url, 'https://beta.apptivegrid.de');
+      expect(ActiveGridEnvironment.production.url, 'https://app.apptivegrid.de');
     });
 
     test('Check Auth Realm', () {
-      expect(ActiveGridEnvironment.alpha.authRealm, 'activegrid-test');
-      expect(ActiveGridEnvironment.beta.authRealm, 'activegrid-test');
-      expect(ActiveGridEnvironment.production.authRealm, 'activegrid');
+      expect(ActiveGridEnvironment.alpha.authRealm, 'apptivegrid-test');
+      expect(ActiveGridEnvironment.beta.authRealm, 'apptivegrid-test');
+      expect(ActiveGridEnvironment.production.authRealm, 'apptivegrid');
     });
   });
 

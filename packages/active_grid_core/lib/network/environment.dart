@@ -18,11 +18,11 @@ extension EnvironmentExtension on ActiveGridEnvironment {
   String get url {
     switch (this) {
       case ActiveGridEnvironment.alpha:
-        return 'https://alpha.activegrid.de';
+        return 'https://alpha.apptivegrid.de';
       case ActiveGridEnvironment.beta:
-        return 'https://beta.activegrid.de';
+        return 'https://beta.apptivegrid.de';
       case ActiveGridEnvironment.production:
-        return 'https://app.activegrid.de';
+        return 'https://app.apptivegrid.de';
     }
   }
 
@@ -31,9 +31,9 @@ extension EnvironmentExtension on ActiveGridEnvironment {
     switch (this) {
       case ActiveGridEnvironment.alpha:
       case ActiveGridEnvironment.beta:
-        return 'activegrid-test';
+        return 'apptivegrid-test';
       case ActiveGridEnvironment.production:
-        return 'activegrid';
+        return 'apptivegrid';
     }
   }
 }
