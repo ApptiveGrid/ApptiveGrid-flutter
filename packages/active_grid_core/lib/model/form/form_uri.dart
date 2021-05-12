@@ -3,7 +3,7 @@ part of active_grid_model;
 abstract class FormUri {
   FormUri._();
 
-  factory FormUri.fromRedirectUri({required String formId,}) => _RedirectFormUri(form: formId);
+  factory FormUri.fromRedirectUri({required String form,}) => _RedirectFormUri(form: form);
   factory FormUri.fromDirectUri({required String user, required String space, required String grid, required String form,}) => _DirectFormUri(user: user, space: space, grid: grid, form: form,);
 
   factory FormUri.fromUri(String uri) {
@@ -24,9 +24,6 @@ class _RedirectFormUri extends FormUri {
 
   factory _RedirectFormUri.fromUri(String uri) {
     final matches = RegExp(regex).allMatches(uri);
-    if(matches.isEmpty || matches.elementAt(0).groupCount != 2) {
-      throw ArgumentError('Could not parse FormUri $uri');
-    }
     final match = matches.elementAt(0);
     return _RedirectFormUri(form: match.group(2)!);
   }
@@ -58,9 +55,6 @@ class _DirectFormUri extends FormUri {
 
   factory _DirectFormUri.fromUri(String uri) {
     final matches = RegExp(regex).allMatches(uri);
-    if(matches.isEmpty || matches.elementAt(0).groupCount != 4) {
-      throw ArgumentError('Could not parse FormUri $uri');
-    }
     final match = matches.elementAt(0);
     return _DirectFormUri(user: match.group(1)!, space: match.group(2)!, grid: match.group(3)!, form: match.group(4)!);
   }
