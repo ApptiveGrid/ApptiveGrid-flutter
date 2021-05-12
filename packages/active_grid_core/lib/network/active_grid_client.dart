@@ -39,7 +39,10 @@ class ActiveGridClient {
       }..removeWhere((key, value) => value == null))
           .map((key, value) => MapEntry(key, value!));
 
-  /// Loads a [FormData] specified with a [FormUri]
+  /// Loads a [FormData] represented by [formUri]
+  ///
+  /// Based on [formUri] this might require Authentication
+  /// throws [Response] if the request fails
   Future<FormData> loadForm({
     required FormUri formUri,
   }) async {
@@ -55,6 +58,8 @@ class ActiveGridClient {
   }
 
   /// Performs a [FormAction] using [formData]
+  ///
+  /// throws [Response] if the request fails
   Future<http.Response> performAction(
     FormAction action,
     FormData formData,
@@ -71,11 +76,10 @@ class ActiveGridClient {
     return http.Response.fromStream(response);
   }
 
-  /// Loads a [Grid]
+  /// Loads a [Grid] represented by [gridUri]
   ///
-  /// [user] User that owns the [Grid]
-  /// [space] Space the [Grid] is in
-  /// [grid] id of the [Grid]
+  /// Requires Authorization
+  /// throws [Response] if the request fails
   Future<Grid> loadGrid({required GridUri gridUri}) async {
     await _authenticator.checkAuthentication();
     final url = Uri.parse('${options.environment.url}${gridUri.uriString}');
@@ -86,6 +90,10 @@ class ActiveGridClient {
     return Grid.fromJson(json.decode(response.body));
   }
 
+  /// Get the [User] that is authenticated
+  ///
+  /// Requires Authorization
+  /// throws [Response] if the request fails
   Future<User> getMe() async {
     await _authenticator.checkAuthentication();
 
@@ -97,6 +105,10 @@ class ActiveGridClient {
     return User.fromJson(json.decode(response.body));
   }
 
+  /// Get the [Space] represented by [spaceUri]
+  ///
+  /// Requires Authorization
+  /// throws [Response] if the request fails
   Future<Space> getSpace({required SpaceUri spaceUri}) async {
     await _authenticator.checkAuthentication();
 
@@ -108,6 +120,10 @@ class ActiveGridClient {
     return Space.fromJson(json.decode(response.body));
   }
 
+  /// Get all [FormUris] that are contained in a [Grid] represented by [gridUri]
+  ///
+  /// Requires Authorization
+  /// throws [Response] if the request fails
   Future<List<FormUri>> getForms({required GridUri gridUri}) async {
     await _authenticator.checkAuthentication();
 

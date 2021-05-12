@@ -1,13 +1,24 @@
 part of active_grid_model;
 
+/// A Uri representation used for performing Form based Api Calls
+///
+/// FormUris can come from different sources.
+/// For Form Links displayed through EditLink/Preview Popups you want to pass in the [FormUri.redirectForm]
+/// For Forms accessed via the api through [GridUri]s called on [ActiveGridClient.getForms] use [FormUri.directForm]
+/// If you just have the Uri part you can also use [FormUri.fromUri] which will handle it automatically
 abstract class FormUri {
   FormUri._();
 
-  factory FormUri.fromRedirectUri({
+  /// Create a FormUri accessed via a redirect Link from the ActiveGrid UI Console
+  /// e.g. for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [form]
+  factory FormUri.redirectForm({
     required String form,
   }) =>
       _RedirectFormUri(form: form);
-  factory FormUri.fromDirectUri({
+
+  /// Create a FormUri with known attributes for [user], [space], [grid], [form]
+  /// Mainly used when passed from other Api Calls
+  factory FormUri.directForm({
     required String user,
     required String space,
     required String grid,
@@ -20,6 +31,13 @@ abstract class FormUri {
         form: form,
       );
 
+  /// Creates a FormUri based on a [uri]
+  /// [uri] must match either:
+  /// /api/(r|a)/(\w+)\b for [_RedirectFormUri]
+  /// or
+  /// /api/users/(\w+)/spaces/(\w+)/grids/(\w+)/forms/(\w+)\b
+  ///
+  /// throws an [ArgumentError] if [uri] can't be matched against against the above regexes
   factory FormUri.fromUri(String uri) {
     if (RegExp(_DirectFormUri.regex).hasMatch(uri)) {
       return _DirectFormUri.fromUri(uri);
@@ -30,8 +48,13 @@ abstract class FormUri {
     throw ArgumentError('Could not parse FormUri $uri');
   }
 
+  /// Returns the uriString used for Api Calls using this FormUri
   String get uriString;
 
+  /// Indicates whether or not a call to this Form will require Authentication
+  ///
+  /// return [false] for [_RedirectFormUri]
+  /// return [true] for [_DirectFormUri]
   bool get needsAuthorization;
 }
 

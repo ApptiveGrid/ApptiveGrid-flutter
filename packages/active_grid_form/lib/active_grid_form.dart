@@ -30,8 +30,8 @@ class ActiveGridForm extends StatefulWidget {
   /// [FormUri] of the Form to display
   ///
   /// If you copied the id from a EditLink or Preview Window on apptivegrid you should use:
-  /// [FormUri.fromRedirectUri] with the id
-  /// If you display Data gathered from a Grid you more likely want to use [FormUri.fromDirectUri]
+  /// [FormUri..fromRedirect] with the id
+  /// If you display Data gathered from a Grid you more likely want to use [FormUri..directForm]
   final FormUri formUri;
 
   /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used

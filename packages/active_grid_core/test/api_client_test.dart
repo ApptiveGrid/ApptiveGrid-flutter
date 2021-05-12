@@ -64,7 +64,7 @@ void main() {
           .thenAnswer((_) async => response);
 
       final formData = await activeGridClient.loadForm(
-          formUri: FormUri.fromRedirectUri(form: 'FormId'));
+          formUri: FormUri.redirectForm(form: 'FormId'));
 
       expect(formData.title, 'Form');
       expect(formData.components.length, 1);
@@ -84,7 +84,7 @@ void main() {
           .thenAnswer((_) => Future.value());
 
       unawaited(client.loadForm(
-          formUri: FormUri.fromDirectUri(
+          formUri: FormUri.directForm(
               user: 'user', space: 'space', grid: 'grid', form: 'FormId')));
       verify(() => authenticator.checkAuthentication()).called(1);
     });
@@ -97,7 +97,7 @@ void main() {
 
       expect(
           () => activeGridClient.loadForm(
-              formUri: FormUri.fromRedirectUri(form: 'FormId')),
+              formUri: FormUri.redirectForm(form: 'FormId')),
           throwsA(isInstanceOf<Response>()));
     });
   });

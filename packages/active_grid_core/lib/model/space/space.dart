@@ -1,11 +1,15 @@
 part of active_grid_model;
 
+/// A Uri representation used for performing Space based Api Calls
 class SpaceUri {
+  /// Creates a new [SpaceUri] based on known ids for [user] and [space]
   SpaceUri({
     required this.user,
     required this.space,
   });
 
+  /// Creates a new [SpaceUri] based on a string [uri]
+  /// Main usage of this is for [SpaceUri] retrieved through other Api Calls
   factory SpaceUri.fromUri(String uri) {
     final regex = r'/api/users/(\w+)/spaces/(\w+)\b';
     final matches = RegExp(regex).allMatches(uri);
@@ -16,7 +20,10 @@ class SpaceUri {
     return SpaceUri(user: match.group(1)!, space: match.group(2)!);
   }
 
+  /// Id of the User that owns this Grid
   final String user;
+
+  /// Id of the Space this [SpaceUri] is representing
   final String space;
 
   @override
@@ -24,6 +31,7 @@ class SpaceUri {
     return 'SpaceUri(user: $user, space: $space)';
   }
 
+  /// Generates the uriString used for ApiCalls referencing this [space]
   String get uriString => '/api/users/$user/spaces/$space';
 
   @override
@@ -35,19 +43,29 @@ class SpaceUri {
   int get hashCode => toString().hashCode;
 }
 
+/// Model for a Space
 class Space {
+  /// Creates a new Space Model with a certain [id] and [name]
+  /// [grids] is [List<GridUri>] pointing to the [Grid]s contained in this [Space]
   Space({required this.id, required this.name, required this.grids});
 
+  /// Deserializes [json] into a [Space] Object
   Space.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         id = json['id'],
         grids =
             (json['gridUris'] as List).map((e) => GridUri.fromUri(e)).toList();
 
+  /// Name of this space
   final String name;
+
+  /// Id of this space
   final String id;
+
+  /// [GridUri]s pointing to [Grid]s contained in this [Space]
   final List<GridUri> grids;
 
+  /// Serializes this [Space] into a json Map
   Map<String, dynamic> toJson() => {
         'name': name,
         'id': id,
