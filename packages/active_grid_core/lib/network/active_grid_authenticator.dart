@@ -4,7 +4,8 @@ part of active_grid_network;
 class ActiveGridAuthenticator {
   /// Create a new [ActiveGridAuthenticator]
   /// [options] is used to get the [ActiveGridEnvironment.authRealm] for the [_uri]
-  ActiveGridAuthenticator({this.options = const ActiveGridOptions()})
+  ActiveGridAuthenticator(
+      {this.options = const ActiveGridOptions(), this.httpClient})
       : _uri = Uri.parse(
             'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
 
@@ -13,6 +14,9 @@ class ActiveGridAuthenticator {
   final ActiveGridOptions options;
 
   final Uri _uri;
+
+  /// Http Client that should be used for Auth Requests
+  final http.Client? httpClient;
 
   Client? _authClient;
 
@@ -32,12 +36,16 @@ class ActiveGridAuthenticator {
 
   Future<Client> get _client async {
     Future<Client> createClient() async {
-      final issuer = await Issuer.discover(_uri);
-      return Client(issuer, 'web');
+      final issuer = await Issuer.discover(_uri, httpClient: httpClient);
+      return Client(issuer, 'web', httpClient: httpClient);
     }
 
     return _authClient ??= await createClient();
   }
+
+  /// Used to test implementation of get _client
+  @visibleForTesting
+  Future<Client> get authClient => _client;
 
   /// Open the Authentication Webpage
   ///
@@ -64,9 +72,9 @@ class ActiveGridAuthenticator {
     try {
       await closeWebView();
     } on MissingPluginException {
-      debugPrint('closeWebView is not avaialbe on this platform');
+      debugPrint('closeWebView is not available on this platform');
     } on UnimplementedError {
-      debugPrint('closeWebView is not avaialbe on this platform');
+      debugPrint('closeWebView is not available on this platform');
     }
 
     return credential;

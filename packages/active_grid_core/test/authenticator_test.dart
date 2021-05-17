@@ -1,9 +1,11 @@
 @TestOn('!browser')
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:active_grid_core/active_grid_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:openid_client/openid_client.dart';
 import 'package:pedantic/pedantic.dart';
@@ -80,7 +82,9 @@ void main() {
       final credential = MockCredential();
       final newToken = TokenResponse.fromJson(
           {'token_type': 'Bearer', 'access_token': '12345'});
-      when(() => client.createCredential(refreshToken: any(named: 'refreshToken'))).thenReturn(credential);
+      when(() =>
+              client.createCredential(refreshToken: any(named: 'refreshToken')))
+          .thenReturn(credential);
       when(() => mockAuthBackend.authorize())
           .thenAnswer((invocation) async => credential);
       when(() => credential.getTokenResponse())
@@ -167,43 +171,63 @@ void main() {
       authenticator.setAuthClient(authClient);
       await authenticator.authenticate();
     });
+
+    test('Unimplemented Error gets Caught', () async {
+      final completer = Completer<String>();
+      final urlLauncher = MockUrlLauncher();
+      when(() => urlLauncher.launch(
+            any(),
+            useSafariVC: any(named: 'useSafariVC'),
+            useWebView: any(named: 'useWebView'),
+            enableJavaScript: any(named: 'enableJavaScript'),
+            enableDomStorage: any(named: 'enableDomStorage'),
+            universalLinksOnly: any(named: 'universalLinksOnly'),
+            headers: any(named: 'headers'),
+          )).thenAnswer((invocation) async {
+        completer.complete(invocation.positionalArguments[0]);
+        return true;
+      });
+      when(() => urlLauncher.canLaunch(any()))
+          .thenAnswer((invocation) async => true);
+      when(() => urlLauncher.closeWebView()).thenThrow(UnimplementedError());
+      UrlLauncherPlatform.instance = urlLauncher;
+
+      final authenticator = ActiveGridAuthenticator();
+      // Mock AuthBackend Return a new Token
+      final mockAuthBackend = MockAuthenticator();
+      authenticator.testAuthenticator = mockAuthBackend;
+      final credential = MockCredential();
+      final newToken = TokenResponse.fromJson(
+          {'token_type': 'Bearer', 'access_token': '12345'});
+      when(() => mockAuthBackend.authorize())
+          .thenAnswer((invocation) async => credential);
+      when(() => credential.getTokenResponse())
+          .thenAnswer((invocation) async => newToken);
+      final authClient = MockAuthClient();
+      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      authenticator.setAuthClient(authClient);
+      await authenticator.authenticate();
+    });
   });
 
-  test('Unimplemented Error gets Caught', () async {
-    final completer = Completer<String>();
-    final urlLauncher = MockUrlLauncher();
-    when(() => urlLauncher.launch(
-          any(),
-          useSafariVC: any(named: 'useSafariVC'),
-          useWebView: any(named: 'useWebView'),
-          enableJavaScript: any(named: 'enableJavaScript'),
-          enableDomStorage: any(named: 'enableDomStorage'),
-          universalLinksOnly: any(named: 'universalLinksOnly'),
-          headers: any(named: 'headers'),
-        )).thenAnswer((invocation) async {
-      completer.complete(invocation.positionalArguments[0]);
-      return true;
-    });
-    when(() => urlLauncher.canLaunch(any()))
-        .thenAnswer((invocation) async => true);
-    when(() => urlLauncher.closeWebView()).thenThrow(UnimplementedError());
-    UrlLauncherPlatform.instance = urlLauncher;
+  group('Create Client', () {
+    test('Creates new Client', () async {
+      final httpClient = MockHttpClient();
+      final authenticator = ActiveGridAuthenticator(httpClient: httpClient);
+      final discoveryUri = Uri.parse(
+          'https://iam.zweidenker.de/auth/realms/apptivegrid/.well-known/openid-configuration');
 
-    final authenticator = ActiveGridAuthenticator();
-    // Mock AuthBackend Return a new Token
-    final mockAuthBackend = MockAuthenticator();
-    authenticator.testAuthenticator = mockAuthBackend;
-    final credential = MockCredential();
-    final newToken = TokenResponse.fromJson(
-        {'token_type': 'Bearer', 'access_token': '12345'});
-    when(() => mockAuthBackend.authorize())
-        .thenAnswer((invocation) async => credential);
-    when(() => credential.getTokenResponse())
-        .thenAnswer((invocation) async => newToken);
-    final authClient = MockAuthClient();
-    when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
-    authenticator.setAuthClient(authClient);
-    await authenticator.authenticate();
+      when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
+          .thenAnswer((invocation) async => Response(
+                jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+                200,
+                request: Request('GET', discoveryUri),
+              ));
+
+      final client = await authenticator.authClient;
+      expect(client.issuer!.metadata.toJson(),
+          _zweidenkerIssuer.metadata.toJson());
+    });
   });
 }
 

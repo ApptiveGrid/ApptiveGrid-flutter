@@ -18,12 +18,15 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'form',
+          formUri: FormUri.redirectForm(
+            form: 'form',
+          ),
         ),
       );
 
-      when(() => client.loadForm(formId: 'form')).thenAnswer(
-          (realInvocation) async => FormData('Form Title', [], [], {}));
+      when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
+          .thenAnswer(
+              (realInvocation) async => FormData('Form Title', [], [], {}));
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -36,13 +39,16 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'form',
+          formUri: FormUri.redirectForm(
+            form: 'form',
+          ),
           hideTitle: true,
         ),
       );
 
-      when(() => client.loadForm(formId: 'form')).thenAnswer(
-          (realInvocation) async => FormData('Form Title', [], [], {}));
+      when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
+          .thenAnswer(
+              (realInvocation) async => FormData('Form Title', [], [], {}));
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -58,14 +64,16 @@ void main() {
     final target = TestApp(
       client: client,
       child: ActiveGridForm(
-        formId: 'form',
+        formUri: FormUri.redirectForm(
+          form: 'form',
+        ),
         onFormLoaded: (data) {
           completer.complete(data);
         },
       ),
     );
 
-    when(() => client.loadForm(formId: 'form'))
+    when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
         .thenAnswer((realInvocation) async => form);
 
     await tester.pumpWidget(target);
@@ -81,11 +89,13 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'form',
+          formUri: FormUri.redirectForm(
+            form: 'form',
+          ),
         ),
       );
       final form = FormData('Form Title', [], [], {});
-      when(() => client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
           .thenAnswer((realInvocation) async => form);
 
       await tester.pumpWidget(target);
@@ -104,13 +114,15 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'form',
+          formUri: FormUri.redirectForm(
+            form: 'form',
+          ),
         ),
       );
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(() => client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
       when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
@@ -130,13 +142,15 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'form',
+          formUri: FormUri.redirectForm(
+            form: 'form',
+          ),
         ),
       );
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(() => client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
       when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
@@ -150,7 +164,8 @@ void main() {
       await tester.tap(find.byType(TextButton, skipOffstage: false));
       await tester.pumpAndSettle();
 
-      verify(() => client.loadForm(formId: 'form')).called(2);
+      verify(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
+          .called(2);
     });
   });
 
@@ -161,11 +176,13 @@ void main() {
         final target = TestApp(
           client: client,
           child: ActiveGridForm(
-            formId: 'form',
+            formUri: FormUri.redirectForm(
+              form: 'form',
+            ),
           ),
         );
 
-        when(() => client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -181,10 +198,12 @@ void main() {
         final target = TestApp(
           client: client,
           child: ActiveGridForm(
-            formId: 'form',
+            formUri: FormUri.redirectForm(
+              form: 'form',
+            ),
           ),
         );
-        when(() => client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -194,7 +213,9 @@ void main() {
         await tester.tap(find.byType(TextButton, skipOffstage: false));
         await tester.pumpAndSettle();
 
-        verify(() => client.loadForm(formId: 'form')).called(2);
+        verify(() =>
+                client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
+            .called(2);
       });
     });
 
@@ -204,13 +225,15 @@ void main() {
         final target = TestApp(
           client: client,
           child: ActiveGridForm(
-            formId: 'form',
+            formUri: FormUri.redirectForm(
+              form: 'form',
+            ),
           ),
         );
         final action = FormAction('uri', 'method');
         final formData = FormData('Form Title', [], [action], {});
 
-        when(() => client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
         when(() => client.performAction(action, formData))
             .thenAnswer((_) => Future.error(''));
@@ -230,13 +253,15 @@ void main() {
         final target = TestApp(
           client: client,
           child: ActiveGridForm(
-            formId: 'form',
+            formUri: FormUri.redirectForm(
+              form: 'form',
+            ),
           ),
         );
         final action = FormAction('uri', 'method');
         final formData = FormData('Form Title', [], [action], {});
 
-        when(() => client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
         when(() => client.performAction(action, formData))
             .thenAnswer((_) async => http.Response('', 500));
@@ -256,13 +281,15 @@ void main() {
         final target = TestApp(
           client: client,
           child: ActiveGridForm(
-            formId: 'form',
+            formUri: FormUri.redirectForm(
+              form: 'form',
+            ),
           ),
         );
         final action = FormAction('uri', 'method');
         final formData = FormData('Form Title', [], [action], {});
 
-        when(() => client.loadForm(formId: 'form'))
+        when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
         when(() => client.performAction(action, formData))
             .thenAnswer((_) => Future.error(''));
@@ -287,7 +314,9 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'form',
+          formUri: FormUri.redirectForm(
+            form: 'form',
+          ),
           onActionSuccess: (action) async {
             return false;
           },
@@ -296,7 +325,7 @@ void main() {
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(() => client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
       when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
@@ -314,7 +343,9 @@ void main() {
       final target = TestApp(
         client: client,
         child: ActiveGridForm(
-          formId: 'form',
+          formUri: FormUri.redirectForm(
+            form: 'form',
+          ),
           onError: (error) async {
             return false;
           },
@@ -323,7 +354,7 @@ void main() {
       final action = FormAction('uri', 'method');
       final formData = FormData('Form Title', [], [action], {});
 
-      when(() => client.loadForm(formId: 'form'))
+      when(() => client.loadForm(formUri: FormUri.redirectForm(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
       when(() => client.performAction(action, formData))
           .thenAnswer((_) => Future.error(''));

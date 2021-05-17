@@ -5,6 +5,7 @@ import 'package:active_grid_core/active_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pedantic/pedantic.dart';
 
 import 'mocks.dart';
 
@@ -27,46 +28,77 @@ void main() {
   });
 
   group('loadForm', () {
-    test('Success', () async {
-      final rawResponse = {
-        'schema': {
-          'type': 'object',
-          'properties': {
-            '4zc4l48ffin5v8pa2emyx9s15': {'type': 'string'},
-          },
-          'required': []
+    final rawResponse = {
+      'schema': {
+        'type': 'object',
+        'properties': {
+          '4zc4l48ffin5v8pa2emyx9s15': {'type': 'string'},
         },
-        'actions': [
-          {'uri': '/api/a/3ojhtqiltc0kiylfp8nddmxmk', 'method': 'POST'}
-        ],
-        'components': [
-          {
-            'property': 'TextC',
-            'value': null,
-            'required': false,
-            'options': {
-              'multi': false,
-              'placeholder': '',
-              'description': '',
-              'label': null
-            },
-            'type': 'textfield',
-            'fieldId': '4zc4l48ffin5v8pa2emyx9s15'
+        'required': []
+      },
+      'actions': [
+        {'uri': '/api/a/3ojhtqiltc0kiylfp8nddmxmk', 'method': 'POST'}
+      ],
+      'components': [
+        {
+          'property': 'TextC',
+          'value': null,
+          'required': false,
+          'options': {
+            'multi': false,
+            'placeholder': '',
+            'description': '',
+            'label': null
           },
-        ],
-        'title': 'Form'
-      };
+          'type': 'textfield',
+          'fieldId': '4zc4l48ffin5v8pa2emyx9s15'
+        },
+      ],
+      'title': 'Form'
+    };
 
+    test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);
 
-      when(() => httpClient.get(any())).thenAnswer((_) async => response);
+      when(() => httpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => response);
 
-      final formData = await activeGridClient.loadForm(formId: 'FormId');
+      final formData = await activeGridClient.loadForm(
+          formUri: FormUri.redirectForm(form: 'FormId'));
 
       expect(formData.title, 'Form');
       expect(formData.components.length, 1);
       expect(formData.components[0].runtimeType, StringFormComponent);
       expect(formData.actions.length, 1);
+    });
+
+    test('DirectUri checks authentication', () async {
+      final response = Response(json.encode(rawResponse), 200);
+      final authenticator = MockActiveGridAuthenticator();
+      final client =
+          ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
+
+      when(() => httpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => response);
+      when(() => authenticator.checkAuthentication())
+          .thenAnswer((_) => Future.value());
+
+      unawaited(client.loadForm(
+          formUri: FormUri.directForm(
+              user: 'user', space: 'space', grid: 'grid', form: 'FormId')));
+      verify(() => authenticator.checkAuthentication()).called(1);
+    });
+
+    test('400+ Response throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(() => httpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => response);
+
+      expect(
+          () => activeGridClient.loadForm(
+              formUri: FormUri.redirectForm(form: 'FormId')),
+          throwsA(isInstanceOf<Response>()));
     });
   });
 
@@ -117,7 +149,7 @@ void main() {
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       final grid = await activeGridClient.loadGrid(
-          grid: gridId, space: space, user: user);
+          gridUri: GridUri(user: user, space: space, grid: gridId));
 
       expect(grid, isNot(null));
     });
@@ -135,8 +167,8 @@ void main() {
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       expect(
-          () =>
-              activeGridClient.loadGrid(grid: gridId, space: space, user: user),
+          () => activeGridClient.loadGrid(
+              gridUri: GridUri(user: user, space: space, grid: gridId)),
           throwsA(isInstanceOf<Response>()));
     });
   });
@@ -185,15 +217,16 @@ void main() {
 
   group('Environment', () {
     test('Check Urls', () {
-      expect(ActiveGridEnvironment.alpha.url, 'https://alpha.activegrid.de');
-      expect(ActiveGridEnvironment.beta.url, 'https://beta.activegrid.de');
-      expect(ActiveGridEnvironment.production.url, 'https://app.activegrid.de');
+      expect(ActiveGridEnvironment.alpha.url, 'https://alpha.apptivegrid.de');
+      expect(ActiveGridEnvironment.beta.url, 'https://beta.apptivegrid.de');
+      expect(
+          ActiveGridEnvironment.production.url, 'https://app.apptivegrid.de');
     });
 
     test('Check Auth Realm', () {
-      expect(ActiveGridEnvironment.alpha.authRealm, 'activegrid-test');
-      expect(ActiveGridEnvironment.beta.authRealm, 'activegrid-test');
-      expect(ActiveGridEnvironment.production.authRealm, 'activegrid');
+      expect(ActiveGridEnvironment.alpha.authRealm, 'apptivegrid-test');
+      expect(ActiveGridEnvironment.beta.authRealm, 'apptivegrid-test');
+      expect(ActiveGridEnvironment.production.authRealm, 'apptivegrid');
     });
   });
 
@@ -224,6 +257,117 @@ void main() {
       client.authenticate();
 
       verify(() => authenticator.authenticate()).called(1);
+    });
+  });
+
+  group('/user/me', () {
+    final rawResponse = {
+      'id': 'id',
+      'firstName': 'Jane',
+      'lastName': 'Doe',
+      'email': 'jane.doe@zweidenker.de',
+      'spaceUris': [
+        '/api/users/id/spaces/spaceId',
+      ]
+    };
+    test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(() => httpClient.get(
+          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/me'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      final user = await activeGridClient.getMe();
+
+      expect(user, isNot(null));
+    });
+
+    test('400 Status throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(() => httpClient.get(
+          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/me'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      expect(() => activeGridClient.getMe(), throwsA(isInstanceOf<Response>()));
+    });
+  });
+
+  group('get Space', () {
+    final userId = 'userId';
+    final spaceId = 'spaceId';
+    final spaceUri = SpaceUri(user: userId, space: spaceId);
+    final rawResponse = {
+      'id': spaceId,
+      'name': 'TestSpace',
+      'gridUris': [
+        '/api/users/id/spaces/spaceId/grids/gridId',
+      ]
+    };
+    test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(() => httpClient.get(
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      final space = await activeGridClient.getSpace(spaceUri: spaceUri);
+
+      expect(space, isNot(null));
+    });
+
+    test('400 Status throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(() => httpClient.get(
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      expect(() => activeGridClient.getSpace(spaceUri: spaceUri),
+          throwsA(isInstanceOf<Response>()));
+    });
+  });
+
+  group('get Forms', () {
+    final userId = 'userId';
+    final spaceId = 'spaceId';
+    final gridId = 'gridId';
+    final form0 = 'formId0';
+    final form1 = 'formId1';
+    final gridUri = GridUri(user: userId, space: spaceId, grid: gridId);
+    final rawResponse = [
+      '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
+      '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1',
+    ];
+    test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(() => httpClient.get(
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      final forms = await activeGridClient.getForms(gridUri: gridUri);
+
+      expect(forms.length, 2);
+      expect(forms[0].uriString,
+          '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0');
+      expect(forms[1].uriString,
+          '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1');
+    });
+
+    test('400 Status throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(() => httpClient.get(
+          Uri.parse(
+              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      expect(() => activeGridClient.getForms(gridUri: gridUri),
+          throwsA(isInstanceOf<Response>()));
     });
   });
 }

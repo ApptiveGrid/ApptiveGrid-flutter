@@ -51,9 +51,11 @@ class _MyHomePageState extends State<_MyHomePage> {
       // Add the ActiveGridGridBuilder to your Widget Tree
       body: ActiveGridGridBuilder(
           key: _builderKey,
-          user: 'USER_ID',
-          space: 'SPACE_ID',
-          grid: 'GRID_ID',
+          gridUri: GridUri(
+            user: 'USER_ID',
+            space: 'SPACE_ID',
+            grid: 'GRID_ID',
+          ),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(

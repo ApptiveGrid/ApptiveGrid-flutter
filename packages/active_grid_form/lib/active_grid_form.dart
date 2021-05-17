@@ -17,7 +17,7 @@ class ActiveGridForm extends StatefulWidget {
   /// The [formId] determines what Form is displayed. It works with empty and pre-filled forms.
   const ActiveGridForm({
     Key? key,
-    required this.formId,
+    required this.formUri,
     this.titleStyle,
     this.contentPadding,
     this.titlePadding,
@@ -27,8 +27,12 @@ class ActiveGridForm extends StatefulWidget {
     this.onError,
   }) : super(key: key);
 
-  /// Id of the Form to display
-  final String formId;
+  /// [FormUri] of the Form to display
+  ///
+  /// If you copied the id from a EditLink or Preview Window on apptivegrid you should use:
+  /// [FormUri..fromRedirect] with the id
+  /// If you display Data gathered from a Grid you more likely want to use [FormUri..directForm]
+  final FormUri formUri;
 
   /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
   final TextStyle? titleStyle;
@@ -215,7 +219,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
   void _loadForm() {
-    _client.loadForm(formId: widget.formId).then((value) {
+    _client.loadForm(formUri: widget.formUri).then((value) {
       if (widget.onFormLoaded != null) {
         widget.onFormLoaded!(value);
       }

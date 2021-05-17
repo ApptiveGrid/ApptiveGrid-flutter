@@ -27,9 +27,10 @@ class MyApp extends StatelessWidget {
           title: Text('Active Grid Forms'),
         ),
         body: ActiveGridForm(
-          formId: 'YOUR_FORM_ID',
+          formUri: FormUri.redirectForm(form: 'YOUR_FORM_ID'),
           titleStyle: Theme.of(context).textTheme.headline6,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
           titlePadding: const EdgeInsets.all(16),
         ),
       ),

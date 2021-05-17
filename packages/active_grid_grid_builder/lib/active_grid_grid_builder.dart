@@ -11,21 +11,13 @@ class ActiveGridGridBuilder extends StatefulWidget {
   /// Creates a Builder Widet
   const ActiveGridGridBuilder({
     Key? key,
-    required this.user,
-    required this.space,
-    required this.grid,
+    required this.gridUri,
     this.initialData,
     required this.builder,
   }) : super(key: key);
 
-  /// id of the user who owns the grid
-  final String user;
-
-  /// id the space is in
-  final String space;
-
-  /// id of the grid
-  final String grid;
+  /// GridUri of the grid that should be used
+  final GridUri gridUri;
 
   /// Initial [Grid] data that should be shown
   final Grid? initialData;
@@ -64,7 +56,7 @@ class ActiveGridGridBuilderState extends State<ActiveGridGridBuilder> {
   /// For example used when doing pull to refresh
   Future<void> reload({bool listen = false}) {
     return ActiveGrid.getClient(context, listen: listen)
-        .loadGrid(user: widget.user, space: widget.space, grid: widget.grid)
+        .loadGrid(gridUri: widget.gridUri)
         .then((value) => setState(() {
               _snapshot = AsyncSnapshot.withData(ConnectionState.done, value);
             }))

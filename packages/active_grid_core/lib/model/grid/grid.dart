@@ -1,11 +1,62 @@
 part of active_grid_model;
 
+/// A Uri representation used for performing Grid based Api Calls
+class GridUri {
+  /// Creates a new [GridUri] based on known ids for [user], [space] and [grid]
+  GridUri({
+    required this.user,
+    required this.space,
+    required this.grid,
+  });
+
+  /// Creates a new [GridUri] based on a string [uri]
+  /// Main usage of this is for [GridUri] retrieved through other Api Calls
+  factory GridUri.fromUri(String uri) {
+    final regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)\b';
+    final matches = RegExp(regex).allMatches(uri);
+    if (matches.isEmpty || matches.elementAt(0).groupCount != 3) {
+      throw ArgumentError('Could not parse GridUri $uri');
+    }
+    final match = matches.elementAt(0);
+    return GridUri(
+        user: match.group(1)!, space: match.group(2)!, grid: match.group(3)!);
+  }
+
+  /// Id of the User that owns this Grid
+  final String user;
+
+  /// Id of the Space this Grid is in
+  final String space;
+
+  /// Id of the Grid this [GridUri] is representing
+  final String grid;
+
+  @override
+  String toString() {
+    return 'GridUri(user: $user, space: $space grid: $grid)';
+  }
+
+  /// Generates the uriString used for ApiCalls referencing this [grid]
+  String get uriString => '/api/users/$user/spaces/$space/grids/$grid';
+
+  @override
+  bool operator ==(Object other) {
+    return other is GridUri &&
+        grid == other.grid &&
+        user == other.user &&
+        space == other.space;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
+}
+
 /// Model for GridData
 class Grid {
   /// Creates a GridData Object
   Grid(this.name, this.schema, this.fields, this.rows);
 
-  /// Deserializes [json] into a GridData Object
+  /// Deserializes [json] into a [Grid] Object
   factory Grid.fromJson(Map<String, dynamic> json) {
     final ids = json['fieldIds'] as List;
     final names = json['fieldNames'] as List;

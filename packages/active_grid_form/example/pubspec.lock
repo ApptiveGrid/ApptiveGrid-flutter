@@ -7,14 +7,14 @@ packages:
       path: "../../active_grid_core"
       relative: true
     source: path
-    version: "0.1.1+2"
+    version: "0.2.0"
   active_grid_form:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.1.0"
+    version: "0.2.0"
   archive:
     dependency: transitive
     description:
