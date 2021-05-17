@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 /// This is used to look up things like the [ApptiveGridClient] for other ApptiveGrid Widgets.
 /// It uses [Provider] to distribute dependencies to other ApptiveGrid Widgets
 class ApptiveGrid extends StatefulWidget {
-  /// Creates Active Grid
+  /// Creates Apptive grid
   const ApptiveGrid(
       {Key? key, this.child, this.options = const ApptiveGridOptions()})
       : client = null,

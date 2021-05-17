@@ -1,6 +1,6 @@
 part of apptive_grid_model;
 
-/// The Data Types that are available in Active Grid
+/// The Data Types that are available in Apptive grid
 enum DataType {
   /// Type to display [String]
   text,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Shows a contact List
 ///
-/// Set Up your Grid in Active Grid using Text Columns
+/// Set Up your Grid in Apptive grid using Text Columns
 /// | First Name | Last Name | imgUrl
 void main() async {
   await enableWebAuth();
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Active Grid',
+      title: 'Apptive grid',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,

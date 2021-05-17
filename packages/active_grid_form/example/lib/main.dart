@@ -18,13 +18,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Active Grid',
+      title: 'Apptive grid',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Active Grid Forms'),
+          title: Text('Apptive grid Forms'),
         ),
         body: ApptiveGridForm(
           formUri: FormUri.redirectForm(form: 'YOUR_FORM_ID'),
