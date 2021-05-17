@@ -1,4 +1,5 @@
 ## [0.2.0]
+* It's ApptiveGrid now
 * Use SpaceUri, GridUri and FormUri to access data via the api
 * Use ApptiveGrid Backend
 * Add Support for new calls

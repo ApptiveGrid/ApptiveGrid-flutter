@@ -1,4 +1,5 @@
 ## [0.2.0]
+* It's ApptiveGrid now
 * Load Grids with GridUri
 
 ## [0.1.1]

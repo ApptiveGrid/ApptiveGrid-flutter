@@ -48,11 +48,10 @@ Thumbs.db
 *.mov
 *.wmv
 
-active_grid_core/coverage
+
 **/coverage
 */.vscode/
 */.dart_tool
 packages/*/pubspec.lock
-melos_activegridflutter.iml
+melos_*.iml
 **/test_results
-melos_apptivegridflutter.iml
