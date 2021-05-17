@@ -3,66 +3,66 @@ import 'package:active_grid_core/active_grid_network.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-/// A Base Widget needed to add general ActiveGrid functionality to a Flutter App
+/// A Base Widget needed to add general ApptiveGrid functionality to a Flutter App
 ///
-/// This is used to look up things like the [ActiveGridClient] for other ActiveGrid Widgets.
-/// It uses [Provider] to distribute dependencies to other ActiveGrid Widgets
-class ActiveGrid extends StatefulWidget {
+/// This is used to look up things like the [ApptiveGridClient] for other ApptiveGrid Widgets.
+/// It uses [Provider] to distribute dependencies to other ApptiveGrid Widgets
+class ApptiveGrid extends StatefulWidget {
   /// Creates Active Grid
-  const ActiveGrid(
-      {Key? key, this.child, this.options = const ActiveGridOptions()})
+  const ApptiveGrid(
+      {Key? key, this.child, this.options = const ApptiveGridOptions()})
       : client = null,
         super(key: key);
 
-  /// Creates ActiveGrid with an defined ActiveGridClient
+  /// Creates ApptiveGrid with an defined ApptiveGridClient
   ///
   /// Used testing to Provide a MockedClient
   @visibleForTesting
-  ActiveGrid.withClient(
-      {required ActiveGridClient client,
+  ApptiveGrid.withClient(
+      {required ApptiveGridClient client,
       this.child,
-      this.options = const ActiveGridOptions()})
+      this.options = const ApptiveGridOptions()})
       : client = client;
 
   /// Widget that should be wrapped. Normally this is something like [MaterialApp]
   final Widget? child;
 
-  /// Configuration options for ActiveGrid
-  final ActiveGridOptions options;
+  /// Configuration options for ApptiveGrid
+  final ApptiveGridOptions options;
 
-  /// [ActiveGridClient] to use
+  /// [ApptiveGridClient] to use
   ///
   /// Used for supplying a Mocked Client for testing
   @visibleForTesting
-  final ActiveGridClient? client;
+  final ApptiveGridClient? client;
 
   @override
-  _ActiveGridState createState() => _ActiveGridState();
+  _ApptiveGridState createState() => _ApptiveGridState();
 
-  /// Get direct Access to [ActiveGridClient]
+  /// Get direct Access to [ApptiveGridClient]
   ///
   /// uses [Provider] to return the client
-  static ActiveGridClient getClient(BuildContext context,
+  static ApptiveGridClient getClient(BuildContext context,
       {bool listen = true}) {
-    return Provider.of<ActiveGridClient>(context, listen: listen);
+    return Provider.of<ApptiveGridClient>(context, listen: listen);
   }
 }
 
-class _ActiveGridState extends State<ActiveGrid> {
-  late ActiveGridClient _client;
+class _ApptiveGridState extends State<ApptiveGrid> {
+  late ApptiveGridClient _client;
 
   @override
   void initState() {
     super.initState();
     _client = widget.client ??
-        ActiveGridClient(
+        ApptiveGridClient(
           options: widget.options,
         );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Provider<ActiveGridClient>.value(
+    return Provider<ApptiveGridClient>.value(
       value: _client,
       child: widget.child,
     );

@@ -17,7 +17,7 @@ void main() {
   group('Header', () {
     test('Has Token returns Token', () {
       final authenticator =
-          ActiveGridAuthenticator(options: ActiveGridOptions());
+          ApptiveGridAuthenticator(options: ApptiveGridOptions());
       final token = TokenResponse.fromJson(
           {'token_type': 'Bearer', 'access_token': '12345'});
       authenticator.setToken(token);
@@ -27,7 +27,7 @@ void main() {
 
     test('Has no Token returns null', () {
       final authenticator =
-          ActiveGridAuthenticator(options: ActiveGridOptions());
+          ApptiveGridAuthenticator(options: ApptiveGridOptions());
       expect(authenticator.header, null);
     });
   });
@@ -39,9 +39,9 @@ void main() {
 
       UrlLauncherPlatform.instance = urlLauncher;
 
-      final authenticator = ActiveGridAuthenticator(
-        options: ActiveGridOptions(
-          authenticationOptions: ActiveGridAuthenticationOptions(
+      final authenticator = ApptiveGridAuthenticator(
+        options: ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
           ),
         ),
@@ -67,7 +67,7 @@ void main() {
 
     test('Expired Token Refreshes', () async {
       final authenticator =
-          ActiveGridAuthenticator(options: ActiveGridOptions());
+          ApptiveGridAuthenticator(options: ApptiveGridOptions());
 
       // Current token should be Expired
       final token = MockToken();
@@ -122,7 +122,7 @@ void main() {
       when(() => urlLauncher.closeWebView()).thenAnswer((invocation) async {});
       UrlLauncherPlatform.instance = urlLauncher;
 
-      final authenticator = ActiveGridAuthenticator();
+      final authenticator = ApptiveGridAuthenticator();
       final authClient = MockAuthClient();
       when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
       authenticator.setAuthClient(authClient);
@@ -130,7 +130,7 @@ void main() {
       final launchedUrl = await completer.future;
       expect(
           launchedUrl
-              .startsWith('https://iam.zweidenker.de/auth/realms/activegrid/'),
+              .startsWith('https://iam.zweidenker.de/auth/realms/apptiveGrid/'),
           true);
     });
 
@@ -155,7 +155,7 @@ void main() {
           .thenThrow(MissingPluginException());
       UrlLauncherPlatform.instance = urlLauncher;
 
-      final authenticator = ActiveGridAuthenticator();
+      final authenticator = ApptiveGridAuthenticator();
       // Mock AuthBackend Return a new Token
       final mockAuthBackend = MockAuthenticator();
       authenticator.testAuthenticator = mockAuthBackend;
@@ -192,7 +192,7 @@ void main() {
       when(() => urlLauncher.closeWebView()).thenThrow(UnimplementedError());
       UrlLauncherPlatform.instance = urlLauncher;
 
-      final authenticator = ActiveGridAuthenticator();
+      final authenticator = ApptiveGridAuthenticator();
       // Mock AuthBackend Return a new Token
       final mockAuthBackend = MockAuthenticator();
       authenticator.testAuthenticator = mockAuthBackend;
@@ -213,7 +213,7 @@ void main() {
   group('Create Client', () {
     test('Creates new Client', () async {
       final httpClient = MockHttpClient();
-      final authenticator = ActiveGridAuthenticator(httpClient: httpClient);
+      final authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
       final discoveryUri = Uri.parse(
           'https://iam.zweidenker.de/auth/realms/apptivegrid/.well-known/openid-configuration');
 
@@ -233,21 +233,21 @@ void main() {
 
 Issuer get _zweidenkerIssuer => Issuer(
       OpenIdProviderMetadata.fromJson({
-        'issuer': 'https://iam.zweidenker.de/auth/realms/activegrid',
+        'issuer': 'https://iam.zweidenker.de/auth/realms/apptiveGrid',
         'authorization_endpoint':
-            'https://iam.zweidenker.de/auth/realms/activegrid/protocol/openid-connect/auth',
+            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/auth',
         'token_endpoint':
-            'https://iam.zweidenker.de/auth/realms/activegrid/protocol/openid-connect/token',
+            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/token',
         'introspection_endpoint':
-            'https://iam.zweidenker.de/auth/realms/activegrid/protocol/openid-connect/token/introspect',
+            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/token/introspect',
         'userinfo_endpoint':
-            'https://iam.zweidenker.de/auth/realms/activegrid/protocol/openid-connect/userinfo',
+            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/userinfo',
         'end_session_endpoint':
-            'https://iam.zweidenker.de/auth/realms/activegrid/protocol/openid-connect/logout',
+            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/logout',
         'jwks_uri':
-            'https://iam.zweidenker.de/auth/realms/activegrid/protocol/openid-connect/certs',
+            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/certs',
         'check_session_iframe':
-            'https://iam.zweidenker.de/auth/realms/activegrid/protocol/openid-connect/login-status-iframe.html',
+            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/login-status-iframe.html',
         'grant_types_supported':
             '[authorization_code, implicit, refresh_token, password, client_credentials]',
         'response_types_supported':
@@ -265,7 +265,7 @@ Issuer get _zweidenkerIssuer => Issuer(
             '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512, none]',
         'response_modes_supported': '[query, fragment, form_post]',
         'registration_endpoint':
-            'https://iam.zweidenker.de/auth/realms/activegrid/clients-registrations/openid-connect',
+            'https://iam.zweidenker.de/auth/realms/apptiveGrid/clients-registrations/openid-connect',
         'token_endpoint_auth_methods_supported':
             '[private_key_jwt, client_secret_basic, client_secret_post, tls_client_auth, client_secret_jwt]',
         'token_endpoint_auth_signing_alg_values_supported':
@@ -282,7 +282,7 @@ Issuer get _zweidenkerIssuer => Issuer(
         'code_challenge_methods_supported': '[plain, S256]',
         'tls_client_certificate_bound_access_tokens': 'true',
         'revocation_endpoint':
-            'https://iam.zweidenker.de/auth/realms/activegrid/protocol/openid-connect/revoke',
+            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/revoke',
         'revocation_endpoint_auth_methods_supported':
             '[private_key_jwt, client_secret_basic, client_secret_post, tls_client_auth, client_secret_jwt]',
         'revocation_endpoint_auth_signing_alg_values_supported':

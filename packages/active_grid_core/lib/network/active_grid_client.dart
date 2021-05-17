@@ -1,29 +1,29 @@
 part of active_grid_network;
 
-/// Api Client to communicate with the ActiveGrid Backend
-class ActiveGridClient {
+/// Api Client to communicate with the ApptiveGrid Backend
+class ApptiveGridClient {
   /// Creates an ApiClient
-  ActiveGridClient({
-    this.options = const ActiveGridOptions(),
+  ApptiveGridClient({
+    this.options = const ApptiveGridOptions(),
   })  : _client = http.Client(),
-        _authenticator = ActiveGridAuthenticator(options: options);
+        _authenticator = ApptiveGridAuthenticator(options: options);
 
   /// Creates an Api Client on the Basis of a [http.Client]
   ///
   /// this should only be used for testing in order to pass in a Mocked [http.Client]
   @visibleForTesting
-  ActiveGridClient.fromClient(
+  ApptiveGridClient.fromClient(
     http.Client httpClient, {
-    this.options = const ActiveGridOptions(),
-    ActiveGridAuthenticator? authenticator,
+    this.options = const ApptiveGridOptions(),
+    ApptiveGridAuthenticator? authenticator,
   })  : _client = httpClient,
         _authenticator =
-            authenticator ?? ActiveGridAuthenticator(options: options);
+            authenticator ?? ApptiveGridAuthenticator(options: options);
 
   /// Current Environment the Api is connecting to
-  ActiveGridOptions options;
+  ApptiveGridOptions options;
 
-  final ActiveGridAuthenticator _authenticator;
+  final ApptiveGridAuthenticator _authenticator;
 
   final http.Client _client;
 

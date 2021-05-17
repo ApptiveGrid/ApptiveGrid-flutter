@@ -12,10 +12,10 @@ void main() {
   final gridId = 'grid';
 
   testWidgets('Builder is called with data', (tester) async {
-    final client = MockActiveGridClient();
+    final client = MockApptiveGridClient();
     final target = TestApp(
       client: client,
-      child: ActiveGridGridBuilder(
+      child: ApptiveGridGridBuilder(
         gridUri: GridUri(
           user: user,
           space: space,
@@ -43,10 +43,10 @@ void main() {
   });
 
   testWidgets('Initial Data is displayed', (tester) async {
-    final client = MockActiveGridClient();
+    final client = MockApptiveGridClient();
     final target = TestApp(
       client: client,
-      child: ActiveGridGridBuilder(
+      child: ApptiveGridGridBuilder(
         gridUri: GridUri(
           user: user,
           space: space,
@@ -77,10 +77,10 @@ void main() {
   });
 
   testWidgets('Builder is called with error', (tester) async {
-    final client = MockActiveGridClient();
+    final client = MockApptiveGridClient();
     final target = TestApp(
       client: client,
-      child: ActiveGridGridBuilder(
+      child: ApptiveGridGridBuilder(
         gridUri: GridUri(
           user: user,
           space: space,
@@ -107,11 +107,11 @@ void main() {
   });
 
   testWidgets('Reload calls client', (tester) async {
-    final client = MockActiveGridClient();
-    final key = GlobalKey<ActiveGridGridBuilderState>();
+    final client = MockApptiveGridClient();
+    final key = GlobalKey<ApptiveGridGridBuilderState>();
     final target = TestApp(
       client: client,
-      child: ActiveGridGridBuilder(
+      child: ApptiveGridGridBuilder(
         key: key,
         gridUri: GridUri(
           user: user,

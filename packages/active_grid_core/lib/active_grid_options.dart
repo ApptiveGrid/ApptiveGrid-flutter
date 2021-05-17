@@ -1,16 +1,16 @@
 import 'package:active_grid_core/active_grid_network.dart';
 
-/// Configuration options for [ActiveGrid]
-class ActiveGridOptions {
+/// Configuration options for [ApptiveGrid]
+class ApptiveGridOptions {
   /// Creates a configuration
-  const ActiveGridOptions({
-    this.environment = ActiveGridEnvironment.production,
+  const ApptiveGridOptions({
+    this.environment = ApptiveGridEnvironment.production,
     this.authenticationOptions,
   });
 
   /// Determines the API endpoint used
-  final ActiveGridEnvironment environment;
+  final ApptiveGridEnvironment environment;
 
   /// Authentication for API
-  final ActiveGridAuthenticationOptions? authenticationOptions;
+  final ApptiveGridAuthenticationOptions? authenticationOptions;
 }

@@ -3,26 +3,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockActiveGridClient extends Mock implements ActiveGridClient {}
+class MockApptiveGridClient extends Mock implements ApptiveGridClient {}
 
 class TestApp extends StatelessWidget {
   const TestApp(
       {Key? key,
       this.client,
       this.child,
-      this.options = const ActiveGridOptions()})
+      this.options = const ApptiveGridOptions()})
       : super(key: key);
 
   final Widget? child;
 
-  final ActiveGridClient? client;
+  final ApptiveGridClient? client;
 
-  final ActiveGridOptions options;
+  final ApptiveGridOptions options;
 
   @override
   Widget build(BuildContext context) {
-    return ActiveGrid.withClient(
-      client: client ?? MockActiveGridClient(),
+    return ApptiveGrid.withClient(
+      client: client ?? MockApptiveGridClient(),
       options: options,
       child: MaterialApp(
         home: Builder(

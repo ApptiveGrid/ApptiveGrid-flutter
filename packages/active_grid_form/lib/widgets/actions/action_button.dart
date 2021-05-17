@@ -1,6 +1,6 @@
 part of active_grid_form_widgets;
 
-/// Button for a Form Action used inside a [ActiveGridForm]
+/// Button for a Form Action used inside a [ApptiveGridForm]
 class ActionButton extends StatelessWidget {
   /// Creates an Action Button
   ///

@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(
-    ActiveGrid(
-      options: ActiveGridOptions(
-        environment: ActiveGridEnvironment.alpha,
+    ApptiveGrid(
+      options: ApptiveGridOptions(
+        environment: ApptiveGridEnvironment.alpha,
       ),
       child: MyApp(),
     ),
   );
 }
 
-/// Simply add a ActiveGridForm Widget to your Widget Tree
+/// Simply add a ApptiveGridForm Widget to your Widget Tree
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Active Grid Forms'),
         ),
-        body: ActiveGridForm(
+        body: ApptiveGridForm(
           formUri: FormUri.redirectForm(form: 'YOUR_FORM_ID'),
           titleStyle: Theme.of(context).textTheme.headline6,
           contentPadding:

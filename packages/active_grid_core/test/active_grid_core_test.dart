@@ -6,10 +6,10 @@ import 'package:provider/provider.dart';
 import 'mocks.dart';
 
 void main() {
-  group('ActiveGrid Provides necessary Objects', () {
-    testWidgets('ActiveGridClient', (tester) async {
+  group('ApptiveGrid Provides necessary Objects', () {
+    testWidgets('ApptiveGridClient', (tester) async {
       late BuildContext context;
-      final target = ActiveGrid(
+      final target = ApptiveGrid(
         child: Builder(
           builder: (buildContext) {
             context = buildContext;
@@ -22,7 +22,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(true,
-          ActiveGrid.getClient(context, listen: false) is ActiveGridClient);
+          ApptiveGrid.getClient(context, listen: false) is ApptiveGridClient);
     });
   });
 
@@ -30,10 +30,10 @@ void main() {
     group('Environment', () {
       testWidgets('Alpha', (tester) async {
         late BuildContext context;
-        final options = ActiveGridOptions(
-          environment: ActiveGridEnvironment.alpha,
+        final options = ApptiveGridOptions(
+          environment: ApptiveGridEnvironment.alpha,
         );
-        final target = ActiveGrid(
+        final target = ApptiveGrid(
           options: options,
           child: Builder(
             builder: (buildContext) {
@@ -46,16 +46,16 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        final client = Provider.of<ActiveGridClient>(context, listen: false);
-        expect(ActiveGridEnvironment.alpha, client.options.environment);
+        final client = Provider.of<ApptiveGridClient>(context, listen: false);
+        expect(ApptiveGridEnvironment.alpha, client.options.environment);
       });
 
       testWidgets('Beta', (tester) async {
         late BuildContext context;
-        final options = ActiveGridOptions(
-          environment: ActiveGridEnvironment.beta,
+        final options = ApptiveGridOptions(
+          environment: ApptiveGridEnvironment.beta,
         );
-        final target = ActiveGrid(
+        final target = ApptiveGrid(
           options: options,
           child: Builder(
             builder: (buildContext) {
@@ -68,16 +68,16 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        final client = Provider.of<ActiveGridClient>(context, listen: false);
-        expect(ActiveGridEnvironment.beta, client.options.environment);
+        final client = Provider.of<ApptiveGridClient>(context, listen: false);
+        expect(ApptiveGridEnvironment.beta, client.options.environment);
       });
 
       testWidgets('Production', (tester) async {
         late BuildContext context;
-        final options = ActiveGridOptions(
-          environment: ActiveGridEnvironment.production,
+        final options = ApptiveGridOptions(
+          environment: ApptiveGridEnvironment.production,
         );
-        final target = ActiveGrid(
+        final target = ApptiveGrid(
           options: options,
           child: Builder(
             builder: (buildContext) {
@@ -90,13 +90,13 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        final client = ActiveGrid.getClient(context, listen: false);
-        expect(ActiveGridEnvironment.production, client.options.environment);
+        final client = ApptiveGrid.getClient(context, listen: false);
+        expect(ApptiveGridEnvironment.production, client.options.environment);
       });
 
       testWidgets('Default is Prod', (tester) async {
         late BuildContext context;
-        final target = ActiveGrid(
+        final target = ApptiveGrid(
           child: Builder(
             builder: (buildContext) {
               context = buildContext;
@@ -108,16 +108,16 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        final client = Provider.of<ActiveGridClient>(context, listen: false);
-        expect(ActiveGridEnvironment.production, client.options.environment);
+        final client = Provider.of<ApptiveGridClient>(context, listen: false);
+        expect(ApptiveGridEnvironment.production, client.options.environment);
       });
 
       testWidgets('Authentication', (tester) async {
         late BuildContext context;
         final authentication =
-            ActiveGridAuthenticationOptions(autoAuthenticate: true);
-        final target = ActiveGrid(
-          options: ActiveGridOptions(
+            ApptiveGridAuthenticationOptions(autoAuthenticate: true);
+        final target = ApptiveGrid(
+          options: ApptiveGridOptions(
             authenticationOptions: authentication,
           ),
           child: Builder(
@@ -131,7 +131,7 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        final client = Provider.of<ActiveGridClient>(context, listen: false);
+        final client = Provider.of<ApptiveGridClient>(context, listen: false);
         expect(client.options.authenticationOptions, authentication);
       });
     });
@@ -140,8 +140,8 @@ void main() {
   group('Mock Client', () {
     testWidgets('withClient Uses Provided Client', (tester) async {
       late BuildContext context;
-      final client = MockActiveGridClient();
-      final target = ActiveGrid.withClient(
+      final client = MockApptiveGridClient();
+      final target = ApptiveGrid.withClient(
         client: client,
         child: Builder(
           builder: (buildContext) {
@@ -155,7 +155,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final providedClient =
-          Provider.of<ActiveGridClient>(context, listen: false);
+          Provider.of<ApptiveGridClient>(context, listen: false);
       expect(providedClient, client);
     });
   });

@@ -1,7 +1,7 @@
 part of active_grid_network;
 
-/// Possible Stages/Environment ActiveGrid can point to
-enum ActiveGridEnvironment {
+/// Possible Stages/Environment ApptiveGrid can point to
+enum ApptiveGridEnvironment {
   /// Alpha Environment
   alpha,
 
@@ -12,16 +12,16 @@ enum ActiveGridEnvironment {
   production
 }
 
-/// Extensions for [ActiveGridEnvironment]
-extension EnvironmentExtension on ActiveGridEnvironment {
-  /// Returns the API url for the selected [ActiveGridEnvironment]
+/// Extensions for [ApptiveGridEnvironment]
+extension EnvironmentExtension on ApptiveGridEnvironment {
+  /// Returns the API url for the selected [ApptiveGridEnvironment]
   String get url {
     switch (this) {
-      case ActiveGridEnvironment.alpha:
+      case ApptiveGridEnvironment.alpha:
         return 'https://alpha.apptivegrid.de';
-      case ActiveGridEnvironment.beta:
+      case ApptiveGridEnvironment.beta:
         return 'https://beta.apptivegrid.de';
-      case ActiveGridEnvironment.production:
+      case ApptiveGridEnvironment.production:
         return 'https://app.apptivegrid.de';
     }
   }
@@ -29,10 +29,10 @@ extension EnvironmentExtension on ActiveGridEnvironment {
   /// Returns the realm that needs to be used for Authentication
   String get authRealm {
     switch (this) {
-      case ActiveGridEnvironment.alpha:
-      case ActiveGridEnvironment.beta:
+      case ApptiveGridEnvironment.alpha:
+      case ApptiveGridEnvironment.beta:
         return 'apptivegrid-test';
-      case ActiveGridEnvironment.production:
+      case ApptiveGridEnvironment.production:
         return 'apptivegrid';
     }
   }

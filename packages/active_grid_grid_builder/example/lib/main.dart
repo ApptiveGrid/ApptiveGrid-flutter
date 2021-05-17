@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 /// | First Name | Last Name | imgUrl
 void main() async {
   await enableWebAuth();
-  runApp(ActiveGrid(
-      options: ActiveGridOptions(
-        environment: ActiveGridEnvironment.beta,
-        authenticationOptions: ActiveGridAuthenticationOptions(
+  runApp(ApptiveGrid(
+      options: ApptiveGridOptions(
+        environment: ApptiveGridEnvironment.beta,
+        authenticationOptions: ApptiveGridAuthenticationOptions(
           autoAuthenticate: true,
         ),
       ),
@@ -40,7 +40,7 @@ class _MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<_MyHomePage> {
-  final GlobalKey<ActiveGridGridBuilderState> _builderKey = GlobalKey();
+  final GlobalKey<ApptiveGridGridBuilderState> _builderKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +48,8 @@ class _MyHomePageState extends State<_MyHomePage> {
       appBar: AppBar(
         title: Text('Grid Builder'),
       ),
-      // Add the ActiveGridGridBuilder to your Widget Tree
-      body: ActiveGridGridBuilder(
+      // Add the ApptiveGridGridBuilder to your Widget Tree
+      body: ApptiveGridGridBuilder(
           key: _builderKey,
           gridUri: GridUri(
             user: 'USER_ID',

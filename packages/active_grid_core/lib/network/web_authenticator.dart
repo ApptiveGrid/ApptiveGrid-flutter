@@ -35,7 +35,7 @@ class Authenticator {
   }
 }
 
-/// Custom Implementation based on Authenticator from openid_client_browser to match specific criteria needed for ActiveGrid
+/// Custom Implementation based on Authenticator from openid_client_browser to match specific criteria needed for ApptiveGrid
 class _CustomAuthenticator {
   _CustomAuthenticator._(this.flow,
       {String? redirectedUri, required Client client})

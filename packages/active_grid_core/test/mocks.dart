@@ -10,10 +10,10 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockHttpClient extends Mock implements Client {}
 
-class MockActiveGridClient extends Mock implements ActiveGridClient {}
+class MockApptiveGridClient extends Mock implements ApptiveGridClient {}
 
-class MockActiveGridAuthenticator extends Mock
-    implements ActiveGridAuthenticator {}
+class MockApptiveGridAuthenticator extends Mock
+    implements ApptiveGridAuthenticator {}
 
 class MockCredential extends Mock implements openid.Credential {}
 

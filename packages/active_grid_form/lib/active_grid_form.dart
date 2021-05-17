@@ -8,14 +8,14 @@ import 'package:lottie/lottie.dart';
 
 export 'package:active_grid_core/active_grid_core.dart';
 
-/// A Widget to display a ActiveGrid Form
+/// A Widget to display a ApptiveGrid Form
 ///
-/// In order to use this there needs to be a [ActiveGrid] Widget in the Widget tree
-class ActiveGridForm extends StatefulWidget {
-  /// Creates a ActiveGridForm.
+/// In order to use this there needs to be a [ApptiveGrid] Widget in the Widget tree
+class ApptiveGridForm extends StatefulWidget {
+  /// Creates a ApptiveGridForm.
   ///
   /// The [formId] determines what Form is displayed. It works with empty and pre-filled forms.
-  const ActiveGridForm({
+  const ApptiveGridForm({
     Key? key,
     required this.formUri,
     this.titleStyle,
@@ -50,7 +50,7 @@ class ActiveGridForm extends StatefulWidget {
   ///
   /// Use this to modify the UI Displaying the Form
   /// ```dart
-  /// ActiveGridForm(
+  /// ApptiveGridForm(
   ///   id: [YOUR_FORM_ID],
   ///   onFormLoaded: (data) {
   ///     setState(() {
@@ -74,12 +74,12 @@ class ActiveGridForm extends StatefulWidget {
   final Future<bool> Function(dynamic)? onError;
 
   @override
-  _ActiveGridFormState createState() => _ActiveGridFormState();
+  _ApptiveGridFormState createState() => _ApptiveGridFormState();
 }
 
-class _ActiveGridFormState extends State<ActiveGridForm> {
+class _ApptiveGridFormState extends State<ApptiveGridForm> {
   FormData? _formData;
-  late ActiveGridClient _client;
+  late ApptiveGridClient _client;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -90,7 +90,7 @@ class _ActiveGridFormState extends State<ActiveGridForm> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _client = ActiveGrid.getClient(context);
+    _client = ApptiveGrid.getClient(context);
     _loadForm();
   }
 

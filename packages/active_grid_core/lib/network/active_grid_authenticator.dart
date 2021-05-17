@@ -1,17 +1,17 @@
 part of active_grid_network;
 
-/// Class for handling authentication related methods for ActiveGrid
-class ActiveGridAuthenticator {
-  /// Create a new [ActiveGridAuthenticator]
-  /// [options] is used to get the [ActiveGridEnvironment.authRealm] for the [_uri]
-  ActiveGridAuthenticator(
-      {this.options = const ActiveGridOptions(), this.httpClient})
+/// Class for handling authentication related methods for ApptiveGrid
+class ApptiveGridAuthenticator {
+  /// Create a new [ApptiveGridAuthenticator]
+  /// [options] is used to get the [ApptiveGridEnvironment.authRealm] for the [_uri]
+  ApptiveGridAuthenticator(
+      {this.options = const ApptiveGridOptions(), this.httpClient})
       : _uri = Uri.parse(
             'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
 
-  /// [ActiveGridOptions] used for getting the correct [ActiveGridEnvironment.authRealm]
+  /// [ApptiveGridOptions] used for getting the correct [ApptiveGridEnvironment.authRealm]
   /// and checking if authentication should automatically be handled
-  final ActiveGridOptions options;
+  final ApptiveGridOptions options;
 
   final Uri _uri;
 
@@ -82,7 +82,7 @@ class ActiveGridAuthenticator {
 
   /// Checks the authentication status and performs actions depending on the status
   ///
-  /// If the User is not authenticated and [ActiveGridAuthenticationOptions.autoAuthenticate] is true this will call [authenticate]
+  /// If the User is not authenticated and [ApptiveGridAuthenticationOptions.autoAuthenticate] is true this will call [authenticate]
   ///
   /// If the token is expired it will refresh the token using the refresh token
   Future<void> checkAuthentication() async {

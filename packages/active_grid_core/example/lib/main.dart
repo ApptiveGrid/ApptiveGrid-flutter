@@ -1,19 +1,19 @@
 import 'package:active_grid_core/active_grid_core.dart';
 import 'package:flutter/material.dart';
 
-/// Add A ActiveGrid Widget to your Widget Tree to enable ActiveGrid Functionality
+/// Add A ApptiveGrid Widget to your Widget Tree to enable ApptiveGrid Functionality
 void main() async {
   await enableWebAuth();
-  runApp(ActiveGrid(
-      options: ActiveGridOptions(
-          environment: ActiveGridEnvironment.beta,
-          authenticationOptions: ActiveGridAuthenticationOptions(
+  runApp(ApptiveGrid(
+      options: ApptiveGridOptions(
+          environment: ApptiveGridEnvironment.beta,
+          authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
           )),
       child: MyApp()));
 }
 
-/// You can access the ActiveGridClient via ActiveGrid.getClient()
+/// You can access the ApptiveGridClient via ApptiveGrid.getClient()
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -68,7 +68,7 @@ class _UserSectionState extends State<_UserSection> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _userFuture = ActiveGrid.getClient(context).getMe().then((value) {
+    _userFuture = ApptiveGrid.getClient(context).getMe().then((value) {
       widget.onUserLoaded(value);
       return value;
     });
@@ -121,7 +121,7 @@ class _SpaceSectionState extends State<_SpaceSection> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _spaceFuture = ActiveGrid.getClient(context).getSpace(
+    _spaceFuture = ApptiveGrid.getClient(context).getSpace(
         spaceUri:
             SpaceUri(user: widget.spaceUri.user, space: widget.spaceUri.space));
   }

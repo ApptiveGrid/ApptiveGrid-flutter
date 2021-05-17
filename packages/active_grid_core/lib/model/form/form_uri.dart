@@ -4,12 +4,12 @@ part of active_grid_model;
 ///
 /// FormUris can come from different sources.
 /// For Form Links displayed through EditLink/Preview Popups you want to pass in the [FormUri.redirectForm]
-/// For Forms accessed via the api through [GridUri]s called on [ActiveGridClient.getForms] use [FormUri.directForm]
+/// For Forms accessed via the api through [GridUri]s called on [ApptiveGridClient.getForms] use [FormUri.directForm]
 /// If you just have the Uri part you can also use [FormUri.fromUri] which will handle it automatically
 abstract class FormUri {
   FormUri._();
 
-  /// Create a FormUri accessed via a redirect Link from the ActiveGrid UI Console
+  /// Create a FormUri accessed via a redirect Link from the ApptiveGrid UI Console
   /// e.g. for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [form]
   factory FormUri.redirectForm({
     required String form,

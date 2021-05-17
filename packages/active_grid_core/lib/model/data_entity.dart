@@ -1,6 +1,6 @@
 part of active_grid_model;
 
-/// Model representing a DataEntry from ActiveGrid
+/// Model representing a DataEntry from ApptiveGrid
 ///
 /// [T] type of the data used in Flutter
 /// [S] type used when sending Data back

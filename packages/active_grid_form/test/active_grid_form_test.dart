@@ -14,10 +14,10 @@ import 'common.dart';
 void main() {
   group('Title', () {
     testWidgets('Title Displays', (tester) async {
-      final client = MockActiveGridClient();
+      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
-        child: ActiveGridForm(
+        child: ApptiveGridForm(
           formUri: FormUri.redirectForm(
             form: 'form',
           ),
@@ -35,10 +35,10 @@ void main() {
     });
 
     testWidgets('Title do not displays', (tester) async {
-      final client = MockActiveGridClient();
+      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
-        child: ActiveGridForm(
+        child: ApptiveGridForm(
           formUri: FormUri.redirectForm(
             form: 'form',
           ),
@@ -58,12 +58,12 @@ void main() {
   });
 
   testWidgets('OnLoadedCallback gets called', (tester) async {
-    final client = MockActiveGridClient();
+    final client = MockApptiveGridClient();
     final form = FormData('Form Title', [], [], {});
     final completer = Completer<FormData>();
     final target = TestApp(
       client: client,
-      child: ActiveGridForm(
+      child: ApptiveGridForm(
         formUri: FormUri.redirectForm(
           form: 'form',
         ),
@@ -85,10 +85,10 @@ void main() {
 
   group('Loading', () {
     testWidgets('Initial shows Loading', (tester) async {
-      final client = MockActiveGridClient();
+      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
-        child: ActiveGridForm(
+        child: ApptiveGridForm(
           formUri: FormUri.redirectForm(
             form: 'form',
           ),
@@ -110,10 +110,10 @@ void main() {
 
   group('Success', () {
     testWidgets('Shows Success', (tester) async {
-      final client = MockActiveGridClient();
+      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
-        child: ActiveGridForm(
+        child: ApptiveGridForm(
           formUri: FormUri.redirectForm(
             form: 'form',
           ),
@@ -138,10 +138,10 @@ void main() {
     });
 
     testWidgets('Send Additional Click reloads Form', (tester) async {
-      final client = MockActiveGridClient();
+      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
-        child: ActiveGridForm(
+        child: ApptiveGridForm(
           formUri: FormUri.redirectForm(
             form: 'form',
           ),
@@ -172,10 +172,10 @@ void main() {
   group('Error', () {
     group('Initial Call', () {
       testWidgets('Initial Error Shows', (tester) async {
-        final client = MockActiveGridClient();
+        final client = MockApptiveGridClient();
         final target = TestApp(
           client: client,
-          child: ActiveGridForm(
+          child: ApptiveGridForm(
             formUri: FormUri.redirectForm(
               form: 'form',
             ),
@@ -194,10 +194,10 @@ void main() {
       });
 
       testWidgets('Initial Error Reloads Form', (tester) async {
-        final client = MockActiveGridClient();
+        final client = MockApptiveGridClient();
         final target = TestApp(
           client: client,
-          child: ActiveGridForm(
+          child: ApptiveGridForm(
             formUri: FormUri.redirectForm(
               form: 'form',
             ),
@@ -221,10 +221,10 @@ void main() {
 
     group('Action Error', () {
       testWidgets('Shows Error', (tester) async {
-        final client = MockActiveGridClient();
+        final client = MockApptiveGridClient();
         final target = TestApp(
           client: client,
-          child: ActiveGridForm(
+          child: ApptiveGridForm(
             formUri: FormUri.redirectForm(
               form: 'form',
             ),
@@ -249,10 +249,10 @@ void main() {
       });
 
       testWidgets('Server Error shows Error', (tester) async {
-        final client = MockActiveGridClient();
+        final client = MockApptiveGridClient();
         final target = TestApp(
           client: client,
-          child: ActiveGridForm(
+          child: ApptiveGridForm(
             formUri: FormUri.redirectForm(
               form: 'form',
             ),
@@ -277,10 +277,10 @@ void main() {
       });
 
       testWidgets('Back to Form shows Form', (tester) async {
-        final client = MockActiveGridClient();
+        final client = MockApptiveGridClient();
         final target = TestApp(
           client: client,
-          child: ActiveGridForm(
+          child: ApptiveGridForm(
             formUri: FormUri.redirectForm(
               form: 'form',
             ),
@@ -310,10 +310,10 @@ void main() {
 
   group('Skip Custom Builder', () {
     testWidgets('Shows Success', (tester) async {
-      final client = MockActiveGridClient();
+      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
-        child: ActiveGridForm(
+        child: ApptiveGridForm(
           formUri: FormUri.redirectForm(
             form: 'form',
           ),
@@ -339,10 +339,10 @@ void main() {
     });
 
     testWidgets('Shows Error', (tester) async {
-      final client = MockActiveGridClient();
+      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
-        child: ActiveGridForm(
+        child: ApptiveGridForm(
           formUri: FormUri.redirectForm(
             form: 'form',
           ),

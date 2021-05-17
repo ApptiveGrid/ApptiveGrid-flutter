@@ -11,7 +11,7 @@ import 'mocks.dart';
 
 void main() {
   final httpClient = MockHttpClient();
-  late ActiveGridClient activeGridClient;
+  late ApptiveGridClient apptiveGridClient;
 
   setUpAll(() {
     registerFallbackValue<BaseRequest>(Request('GET', Uri()));
@@ -20,11 +20,11 @@ void main() {
   });
 
   setUp(() {
-    activeGridClient = ActiveGridClient.fromClient(httpClient);
+    apptiveGridClient = ApptiveGridClient.fromClient(httpClient);
   });
 
   tearDown(() {
-    activeGridClient.dispose();
+    apptiveGridClient.dispose();
   });
 
   group('loadForm', () {
@@ -63,7 +63,7 @@ void main() {
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer((_) async => response);
 
-      final formData = await activeGridClient.loadForm(
+      final formData = await apptiveGridClient.loadForm(
           formUri: FormUri.redirectForm(form: 'FormId'));
 
       expect(formData.title, 'Form');
@@ -74,9 +74,9 @@ void main() {
 
     test('DirectUri checks authentication', () async {
       final response = Response(json.encode(rawResponse), 200);
-      final authenticator = MockActiveGridAuthenticator();
+      final authenticator = MockApptiveGridAuthenticator();
       final client =
-          ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
+          ApptiveGridClient.fromClient(httpClient, authenticator: authenticator);
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer((_) async => response);
@@ -96,7 +96,7 @@ void main() {
           .thenAnswer((_) async => response);
 
       expect(
-          () => activeGridClient.loadForm(
+          () => apptiveGridClient.loadForm(
               formUri: FormUri.redirectForm(form: 'FormId')),
           throwsA(isInstanceOf<Response>()));
     });
@@ -145,10 +145,10 @@ void main() {
 
       when(() => httpClient.get(
           Uri.parse(
-              '${ActiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
+              '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
-      final grid = await activeGridClient.loadGrid(
+      final grid = await apptiveGridClient.loadGrid(
           gridUri: GridUri(user: user, space: space, grid: gridId));
 
       expect(grid, isNot(null));
@@ -163,11 +163,11 @@ void main() {
 
       when(() => httpClient.get(
           Uri.parse(
-              '${ActiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
+              '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
       expect(
-          () => activeGridClient.loadGrid(
+          () => apptiveGridClient.loadGrid(
               gridUri: GridUri(user: user, space: space, grid: gridId)),
           throwsA(isInstanceOf<Response>()));
     });
@@ -195,7 +195,7 @@ void main() {
       final formData = FormData('Title', [component], [action], schema);
 
       final request = Request(
-          'POST', Uri.parse('${ActiveGridEnvironment.production.url}/uri}'));
+          'POST', Uri.parse('${ApptiveGridEnvironment.production.url}/uri}'));
       request.body = jsonEncode(jsonEncode(formData.toRequestObject()));
 
       late BaseRequest calledRequest;
@@ -205,11 +205,11 @@ void main() {
         return StreamedResponse(Stream.value([]), 200);
       });
 
-      await activeGridClient.performAction(action, formData);
+      await apptiveGridClient.performAction(action, formData);
 
       expect(calledRequest.method, action.method);
       expect(calledRequest.url.toString(),
-          '${ActiveGridEnvironment.production.url}${action.uri}');
+          '${ApptiveGridEnvironment.production.url}${action.uri}');
       expect(calledRequest.headers[HttpHeaders.contentTypeHeader],
           ContentType.json);
     });
@@ -217,31 +217,31 @@ void main() {
 
   group('Environment', () {
     test('Check Urls', () {
-      expect(ActiveGridEnvironment.alpha.url, 'https://alpha.apptivegrid.de');
-      expect(ActiveGridEnvironment.beta.url, 'https://beta.apptivegrid.de');
+      expect(ApptiveGridEnvironment.alpha.url, 'https://alpha.apptivegrid.de');
+      expect(ApptiveGridEnvironment.beta.url, 'https://beta.apptivegrid.de');
       expect(
-          ActiveGridEnvironment.production.url, 'https://app.apptivegrid.de');
+          ApptiveGridEnvironment.production.url, 'https://app.apptivegrid.de');
     });
 
     test('Check Auth Realm', () {
-      expect(ActiveGridEnvironment.alpha.authRealm, 'apptivegrid-test');
-      expect(ActiveGridEnvironment.beta.authRealm, 'apptivegrid-test');
-      expect(ActiveGridEnvironment.production.authRealm, 'apptivegrid');
+      expect(ApptiveGridEnvironment.alpha.authRealm, 'apptivegrid-test');
+      expect(ApptiveGridEnvironment.beta.authRealm, 'apptivegrid-test');
+      expect(ApptiveGridEnvironment.production.authRealm, 'apptivegrid');
     });
   });
 
   group('Headers', () {
     test('No Authentication empty headers', () {
-      final client = ActiveGridClient();
+      final client = ApptiveGridClient();
       expect(client.headers, {});
     });
 
     test('With Authentication has headers', () {
-      final authenticator = MockActiveGridAuthenticator();
+      final authenticator = MockApptiveGridAuthenticator();
       when(() => authenticator.header)
           .thenReturn('Bearer dXNlcm5hbWU6cGFzc3dvcmQ=');
       final client =
-          ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
+          ApptiveGridClient.fromClient(httpClient, authenticator: authenticator);
       expect(client.headers,
           {HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ='});
     });
@@ -249,11 +249,11 @@ void main() {
 
   group('Authorization', () {
     test('Authorize calls Authenticator', () {
-      final authenticator = MockActiveGridAuthenticator();
+      final authenticator = MockApptiveGridAuthenticator();
       when(() => authenticator.authenticate())
           .thenAnswer((_) async => MockCredential());
       final client =
-          ActiveGridClient.fromClient(httpClient, authenticator: authenticator);
+          ApptiveGridClient.fromClient(httpClient, authenticator: authenticator);
       client.authenticate();
 
       verify(() => authenticator.authenticate()).called(1);
@@ -274,10 +274,10 @@ void main() {
       final response = Response(json.encode(rawResponse), 200);
 
       when(() => httpClient.get(
-          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/me'),
+          Uri.parse('${ApptiveGridEnvironment.production.url}/api/users/me'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
-      final user = await activeGridClient.getMe();
+      final user = await apptiveGridClient.getMe();
 
       expect(user, isNot(null));
     });
@@ -286,10 +286,10 @@ void main() {
       final response = Response(json.encode(rawResponse), 400);
 
       when(() => httpClient.get(
-          Uri.parse('${ActiveGridEnvironment.production.url}/api/users/me'),
+          Uri.parse('${ApptiveGridEnvironment.production.url}/api/users/me'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
-      expect(() => activeGridClient.getMe(), throwsA(isInstanceOf<Response>()));
+      expect(() => apptiveGridClient.getMe(), throwsA(isInstanceOf<Response>()));
     });
   });
 
@@ -309,10 +309,10 @@ void main() {
 
       when(() => httpClient.get(
           Uri.parse(
-              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
+              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
-      final space = await activeGridClient.getSpace(spaceUri: spaceUri);
+      final space = await apptiveGridClient.getSpace(spaceUri: spaceUri);
 
       expect(space, isNot(null));
     });
@@ -322,10 +322,10 @@ void main() {
 
       when(() => httpClient.get(
           Uri.parse(
-              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
+              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
-      expect(() => activeGridClient.getSpace(spaceUri: spaceUri),
+      expect(() => apptiveGridClient.getSpace(spaceUri: spaceUri),
           throwsA(isInstanceOf<Response>()));
     });
   });
@@ -346,10 +346,10 @@ void main() {
 
       when(() => httpClient.get(
           Uri.parse(
-              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
+              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
-      final forms = await activeGridClient.getForms(gridUri: gridUri);
+      final forms = await apptiveGridClient.getForms(gridUri: gridUri);
 
       expect(forms.length, 2);
       expect(forms[0].uriString,
@@ -363,10 +363,10 @@ void main() {
 
       when(() => httpClient.get(
           Uri.parse(
-              '${ActiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
+              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
-      expect(() => activeGridClient.getForms(gridUri: gridUri),
+      expect(() => apptiveGridClient.getForms(gridUri: gridUri),
           throwsA(isInstanceOf<Response>()));
     });
   });

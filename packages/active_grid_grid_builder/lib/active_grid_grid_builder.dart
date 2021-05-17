@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 export 'package:active_grid_core/active_grid_core.dart';
 
 /// Builder for building Widgets that use [Grid] as the Data Source
-class ActiveGridGridBuilder extends StatefulWidget {
+class ApptiveGridGridBuilder extends StatefulWidget {
   /// Creates a Builder Widet
-  const ActiveGridGridBuilder({
+  const ApptiveGridGridBuilder({
     Key? key,
     required this.gridUri,
     this.initialData,
@@ -26,11 +26,11 @@ class ActiveGridGridBuilder extends StatefulWidget {
   final Widget Function(BuildContext, AsyncSnapshot<Grid?>) builder;
 
   @override
-  ActiveGridGridBuilderState createState() => ActiveGridGridBuilderState();
+  ApptiveGridGridBuilderState createState() => ApptiveGridGridBuilderState();
 }
 
-/// State of a [ActiveGridGridBuilder] Widget
-class ActiveGridGridBuilderState extends State<ActiveGridGridBuilder> {
+/// State of a [ApptiveGridGridBuilder] Widget
+class ApptiveGridGridBuilderState extends State<ApptiveGridGridBuilder> {
   late AsyncSnapshot<Grid?> _snapshot;
 
   @override
@@ -55,7 +55,7 @@ class ActiveGridGridBuilderState extends State<ActiveGridGridBuilder> {
   ///
   /// For example used when doing pull to refresh
   Future<void> reload({bool listen = false}) {
-    return ActiveGrid.getClient(context, listen: listen)
+    return ApptiveGrid.getClient(context, listen: listen)
         .loadGrid(gridUri: widget.gridUri)
         .then((value) => setState(() {
               _snapshot = AsyncSnapshot.withData(ConnectionState.done, value);
