@@ -1,4 +1,4 @@
-part of active_grid_form_widgets;
+part of apptive_grid_form_widgets;
 
 /// Button for a Form Action used inside a [ApptiveGridForm]
 class ActionButton extends StatelessWidget {

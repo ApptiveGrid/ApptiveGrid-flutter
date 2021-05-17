@@ -1,4 +1,4 @@
-part of active_grid_network;
+part of apptive_grid_network;
 
 /// Model for authentication options
 class ApptiveGridAuthenticationOptions {

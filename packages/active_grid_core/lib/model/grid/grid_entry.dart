@@ -1,4 +1,4 @@
-part of active_grid_model;
+part of apptive_grid_model;
 
 /// Model for a Cell Entry in a Grid
 class GridEntry {

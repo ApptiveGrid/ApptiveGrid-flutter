@@ -1,4 +1,4 @@
-part of active_grid_model;
+part of apptive_grid_model;
 
 /// Model for a Action inside a Form
 class FormAction {

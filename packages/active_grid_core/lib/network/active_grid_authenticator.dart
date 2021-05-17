@@ -1,4 +1,4 @@
-part of active_grid_network;
+part of apptive_grid_network;
 
 /// Class for handling authentication related methods for ApptiveGrid
 class ApptiveGridAuthenticator {

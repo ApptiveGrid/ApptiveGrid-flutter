@@ -1,4 +1,4 @@
-import 'package:active_grid_core/active_grid_core.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter/material.dart';
 
 /// Add A ApptiveGrid Widget to your Widget Tree to enable ApptiveGrid Functionality

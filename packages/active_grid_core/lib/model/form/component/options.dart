@@ -1,4 +1,4 @@
-part of active_grid_model;
+part of apptive_grid_model;
 
 /// Abstract class for additional options for a [FormComponent]
 class FormComponentOptions {

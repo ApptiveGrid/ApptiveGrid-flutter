@@ -1,4 +1,4 @@
-part of active_grid_network;
+part of apptive_grid_network;
 
 // ignore_for_file: public_member_api_docs
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:active_grid_grid_builder/active_grid_grid_builder.dart';
+import 'package:apptive_grid_grid_builder/apptive_grid_grid_builder.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'common.dart';

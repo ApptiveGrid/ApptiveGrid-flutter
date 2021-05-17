@@ -10,7 +10,7 @@ environment:
 
 dependencies:
 
-  active_grid_grid_builder:
+  apptive_grid_grid_builder:
     path: ../
 
   flutter:

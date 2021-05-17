@@ -1,4 +1,4 @@
-part of active_grid_model;
+part of apptive_grid_model;
 
 /// A Uri representation used for performing Space based Api Calls
 class SpaceUri {

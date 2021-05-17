@@ -1,4 +1,4 @@
-library active_grid_model;
+library apptive_grid_model;
 
 import 'package:flutter/foundation.dart' as f;
 import 'package:intl/intl.dart';

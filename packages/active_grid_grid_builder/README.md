@@ -1,6 +1,6 @@
 # ApptiveGrid GridBuilder
 
-[![Pub](https://img.shields.io/pub/v/active_grid_grid_builder.svg)](https://pub.dartlang.org/packages/active_grid_grid_builder)  [![pub points](https://badges.bar/active_grid_grid_builder/pub%20points)](https://pub.dev/packages/active_grid_grid_builder/score)  [![popularity](https://badges.bar/active_grid_grid_builder/popularity)](https://pub.dev/packages/active_grid_grid_builder/score)  [![likes](https://badges.bar/active_grid_grid_builder/likes)](https://pub.dev/packages/active_grid_grid_builder/score)
+[![Pub](https://img.shields.io/pub/v/apptive_grid_grid_builder.svg)](https://pub.dartlang.org/packages/apptive_grid_grid_builder)  [![pub points](https://badges.bar/apptive_grid_grid_builder/pub%20points)](https://pub.dev/packages/apptive_grid_grid_builder/score)  [![popularity](https://badges.bar/apptive_grid_grid_builder/popularity)](https://pub.dev/packages/apptive_grid_grid_builder/score)  [![likes](https://badges.bar/apptive_grid_grid_builder/likes)](https://pub.dev/packages/apptive_grid_grid_builder/score)
 
 A Flutter Package to build Widgets based on Grid Data
 
@@ -9,7 +9,7 @@ A Flutter Package to build Widgets based on Grid Data
 In order to use any ApptiveGrid Feature you must wrap your App with a `ApptiveGrid` Widget
 
 ```dart
-import 'package:active_grid_core/active_grid_core.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 
 void main() {
   runApp(

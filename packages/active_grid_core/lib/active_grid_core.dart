@@ -1,6 +1,6 @@
-library active_grid_core;
+library apptive_grid_core;
 
-export 'active_grid.dart';
-export 'active_grid_options.dart';
-export 'active_grid_model.dart';
-export 'active_grid_network.dart';
+export 'apptive_grid.dart';
+export 'apptive_grid_options.dart';
+export 'apptive_grid_model.dart';
+export 'apptive_grid_network.dart';

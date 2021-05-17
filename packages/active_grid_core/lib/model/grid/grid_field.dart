@@ -1,4 +1,4 @@
-part of active_grid_model;
+part of apptive_grid_model;
 
 /// Model representing a Field in a Grid
 class GridField {

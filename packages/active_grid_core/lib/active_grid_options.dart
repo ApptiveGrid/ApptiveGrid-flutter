@@ -1,4 +1,4 @@
-import 'package:active_grid_core/active_grid_network.dart';
+import 'package:apptive_grid_core/apptive_grid_network.dart';
 
 /// Configuration options for [ApptiveGrid]
 class ApptiveGridOptions {

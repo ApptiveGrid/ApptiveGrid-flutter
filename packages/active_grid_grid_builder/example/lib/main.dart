@@ -1,4 +1,4 @@
-import 'package:active_grid_grid_builder/active_grid_grid_builder.dart';
+import 'package:apptive_grid_grid_builder/apptive_grid_grid_builder.dart';
 import 'package:flutter/material.dart';
 
 /// Shows a contact List

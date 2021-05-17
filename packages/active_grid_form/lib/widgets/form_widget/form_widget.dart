@@ -1,4 +1,4 @@
-part of active_grid_form_widgets;
+part of apptive_grid_form_widgets;
 
 /// Returns a corresponding Widget for a specific [component]
 ///

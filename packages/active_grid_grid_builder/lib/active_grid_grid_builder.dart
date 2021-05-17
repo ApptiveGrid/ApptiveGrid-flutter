@@ -1,10 +1,10 @@
-library active_grid_grid_builder;
+library apptive_grid_grid_builder;
 
-import 'package:active_grid_core/active_grid_core.dart';
-import 'package:active_grid_core/active_grid_model.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:flutter/material.dart';
 
-export 'package:active_grid_core/active_grid_core.dart';
+export 'package:apptive_grid_core/apptive_grid_core.dart';
 
 /// Builder for building Widgets that use [Grid] as the Data Source
 class ApptiveGridGridBuilder extends StatefulWidget {

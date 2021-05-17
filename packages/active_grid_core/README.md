@@ -1,6 +1,6 @@
 # ApptiveGrid Core
 
-[![Pub](https://img.shields.io/pub/v/active_grid_core.svg)](https://pub.dartlang.org/packages/active_grid_core)  [![pub points](https://badges.bar/active_grid_core/pub%20points)](https://pub.dev/packages/active_grid_core/score)  [![popularity](https://badges.bar/active_grid_core/popularity)](https://pub.dev/packages/active_grid_core/score)  [![likes](https://badges.bar/active_grid_core/likes)](https://pub.dev/packages/active_grid_core/score)
+[![Pub](https://img.shields.io/pub/v/apptive_grid_core.svg)](https://pub.dartlang.org/packages/apptive_grid_core)  [![pub points](https://badges.bar/apptive_grid_core/pub%20points)](https://pub.dev/packages/apptive_grid_core/score)  [![popularity](https://badges.bar/apptive_grid_core/popularity)](https://pub.dev/packages/apptive_grid_core/score)  [![likes](https://badges.bar/apptive_grid_core/likes)](https://pub.dev/packages/apptive_grid_core/score)
 
 Core Library for ApptiveGrid. This provides general access to ApptiveGrid functionalities.
 It also contains authentication and general client logic so you can build your own ApptiveGrid experiences using this.
@@ -9,7 +9,7 @@ It also contains authentication and general client logic so you can build your o
 In order to use any ApptiveGrid Feature you must wrap your App with a `ApptiveGrid` Widget
 
 ```dart
-import 'package:active_grid_core/active_grid_core.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 
 void main() {
   runApp(

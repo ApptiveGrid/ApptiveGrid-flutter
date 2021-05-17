@@ -1,12 +1,12 @@
-library active_grid_form;
+library apptive_grid_form;
 
-import 'package:active_grid_core/active_grid_core.dart';
-import 'package:active_grid_form/widgets/active_grid_form_widgets.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 
-export 'package:active_grid_core/active_grid_core.dart';
+export 'package:apptive_grid_core/apptive_grid_core.dart';
 
 /// A Widget to display a ApptiveGrid Form
 ///
@@ -160,7 +160,7 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
         AspectRatio(
             aspectRatio: 1,
             child: Lottie.asset(
-              'packages/active_grid_form/assets/success.json',
+              'packages/apptive_grid_form/assets/success.json',
               repeat: false,
             )),
         Text(
@@ -191,7 +191,7 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
         AspectRatio(
             aspectRatio: 1,
             child: Lottie.asset(
-              'packages/active_grid_form/assets/error.json',
+              'packages/apptive_grid_form/assets/error.json',
               repeat: false,
             )),
         Text(

@@ -1,4 +1,4 @@
-import 'package:active_grid_core/active_grid_core.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';

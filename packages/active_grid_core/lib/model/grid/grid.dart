@@ -1,4 +1,4 @@
-part of active_grid_model;
+part of apptive_grid_model;
 
 /// A Uri representation used for performing Grid based Api Calls
 class GridUri {

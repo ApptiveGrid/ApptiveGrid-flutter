@@ -1,4 +1,4 @@
-part of active_grid_form_widgets;
+part of apptive_grid_form_widgets;
 
 /// FormComponent Widget to display a [EnumFormComponent]
 class EnumFormWidget extends StatefulWidget {

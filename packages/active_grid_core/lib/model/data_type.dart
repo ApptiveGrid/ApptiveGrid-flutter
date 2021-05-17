@@ -1,4 +1,4 @@
-part of active_grid_model;
+part of apptive_grid_model;
 
 /// The Data Types that are available in Active Grid
 enum DataType {
