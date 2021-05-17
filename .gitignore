@@ -55,3 +55,4 @@ active_grid_core/coverage
 packages/*/pubspec.lock
 melos_activegridflutter.iml
 **/test_results
+melos_apptivegridflutter.iml
