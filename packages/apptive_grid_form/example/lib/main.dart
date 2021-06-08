@@ -18,16 +18,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Apptive grid',
+      title: 'Apptive Grid',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Apptive grid Forms'),
+          title: Text('ApptiveGrid Forms'),
         ),
         body: ApptiveGridForm(
-          formUri: FormUri.redirectForm(form: 'YOUR_FORM_ID'),
+          formUri: RedirectFormUri(form: 'YOUR_FORM_ID'),
           titleStyle: Theme.of(context).textTheme.headline6,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 0),

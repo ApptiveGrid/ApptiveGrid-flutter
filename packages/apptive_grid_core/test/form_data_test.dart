@@ -157,4 +157,39 @@ void main() {
       expect((a.hashCode - c.hashCode) == 0, false);
     });
   });
+
+  group('Without Actions', () {
+    final responseWithoutActions = {
+      'schema': {
+        'type': 'object',
+        'properties': {
+          'b8qscjhfw5mukbred3tae8bd2': {'type': 'string'}
+        },
+        'required': []
+      },
+      'schemaObject':
+          '/api/users/609bc536dad545d1af7e82db/spaces/60ae6036e65b14482e7f99ac/grids/60ae6039e65b14482e7f99af',
+      'components': [
+        {
+          'property': 'name',
+          'value': '123',
+          'required': false,
+          'options': {
+            'multi': false,
+            'placeholder': null,
+            'description': null,
+            'label': null
+          },
+          'fieldId': 'b8qscjhfw5mukbred3tae8bd2',
+          'type': 'textfield'
+        }
+      ],
+      'title': 'New title'
+    };
+    test('Form Without Actions parses correctly', () {
+      final formData = FormData.fromJson(responseWithoutActions);
+
+      expect(formData.actions.length, 0);
+    });
+  });
 }

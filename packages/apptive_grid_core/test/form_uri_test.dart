@@ -1,6 +1,7 @@
 import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+// ignore_for_file: deprecated_member_use_from_same_package
 void main() {
   group('Direct FormUri', () {
     group('Parsing', () {
@@ -13,8 +14,12 @@ void main() {
       });
 
       test('Malformatted Uri throws ArgumentError', () {
-        expect(() => FormUri.fromUri('/api/users/123456/spaces/asdfg/'),
-            throwsArgumentError);
+        final uri = '/api/users/123456/spaces/asdfg/';
+        expect(
+            () => FormUri.fromUri(uri),
+            throwsA(predicate<ArgumentError>(
+                (e) => e.message == 'Could not parse FormUri $uri',
+                'ArgumentError with specific Message')));
       });
     });
 
@@ -57,7 +62,12 @@ void main() {
       });
 
       test('Malformatted Uri throws ArgumentError', () {
-        expect(() => FormUri.fromUri('/api/a/'), throwsArgumentError);
+        final uri = '/api/a';
+        expect(
+            () => FormUri.fromUri(uri),
+            throwsA(predicate<ArgumentError>(
+                (e) => e.message == 'Could not parse FormUri $uri',
+                'ArgumentError with specific Message')));
       });
     });
 

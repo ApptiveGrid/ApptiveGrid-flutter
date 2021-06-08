@@ -1,3 +1,6 @@
+## [0.2.1]
+* Updated ApptiveGridCore to 0.2.1
+
 ## [0.2.0]
 * It's ApptiveGrid now
 * Load Grids with GridUri

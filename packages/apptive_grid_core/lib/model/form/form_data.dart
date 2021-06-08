@@ -12,9 +12,11 @@ class FormData {
             .map<FormComponent>(
                 (e) => FormComponent.fromJson(e, json['schema']))
             .toList(),
-        actions = (json['actions'] as List)
-            .map((e) => FormAction.fromJson(e))
-            .toList(), //json['actions'],
+        actions = json['actions'] != null
+            ? (json['actions'] as List)
+                .map((e) => FormAction.fromJson(e))
+                .toList()
+            : [],
         schema = json['schema'];
 
   /// Title of the Form

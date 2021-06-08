@@ -55,3 +55,4 @@ Thumbs.db
 packages/*/pubspec.lock
 melos_*.iml
 **/test_results
+packages/**/example/pubspec.lock

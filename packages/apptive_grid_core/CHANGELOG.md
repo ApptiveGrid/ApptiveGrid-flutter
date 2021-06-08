@@ -1,3 +1,8 @@
+## [0.2.1]
+* FormUri Changes
+    * Please use `DirectFormUri` and `RedirectFormUri` now
+    * Add ability to get a Filled Form with `DirectFormUri.forEntity`
+
 ## [0.2.0]
 * It's ApptiveGrid now
 * Use SpaceUri, GridUri and FormUri to access data via the api

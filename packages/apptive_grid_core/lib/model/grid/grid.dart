@@ -1,7 +1,7 @@
 part of apptive_grid_model;
 
 /// A Uri representation used for performing Grid based Api Calls
-class GridUri {
+class GridUri extends ApptiveGridUri {
   /// Creates a new [GridUri] based on known ids for [user], [space] and [grid]
   GridUri({
     required this.user,
@@ -36,7 +36,8 @@ class GridUri {
     return 'GridUri(user: $user, space: $space grid: $grid)';
   }
 
-  /// Generates the uriString used for ApiCalls referencing this [grid]
+  /// Generates the uriString used for ApiCalls referencing this
+  @override
   String get uriString => '/api/users/$user/spaces/$space/grids/$grid';
 
   @override

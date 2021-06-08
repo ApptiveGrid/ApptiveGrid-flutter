@@ -1,7 +1,7 @@
 part of apptive_grid_model;
 
 /// A Uri representation used for performing Space based Api Calls
-class SpaceUri {
+class SpaceUri extends ApptiveGridUri {
   /// Creates a new [SpaceUri] based on known ids for [user] and [space]
   SpaceUri({
     required this.user,
@@ -32,6 +32,7 @@ class SpaceUri {
   }
 
   /// Generates the uriString used for ApiCalls referencing this [space]
+  @override
   String get uriString => '/api/users/$user/spaces/$space';
 
   @override

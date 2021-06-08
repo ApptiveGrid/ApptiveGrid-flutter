@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -64,7 +63,7 @@ void main() {
           .thenAnswer((_) async => response);
 
       final formData = await apptiveGridClient.loadForm(
-          formUri: FormUri.redirectForm(form: 'FormId'));
+          formUri: RedirectFormUri(form: 'FormId'));
 
       expect(formData.title, 'Form');
       expect(formData.components.length, 1);
@@ -75,8 +74,8 @@ void main() {
     test('DirectUri checks authentication', () async {
       final response = Response(json.encode(rawResponse), 200);
       final authenticator = MockApptiveGridAuthenticator();
-      final client =
-          ApptiveGridClient.fromClient(httpClient, authenticator: authenticator);
+      final client = ApptiveGridClient.fromClient(httpClient,
+          authenticator: authenticator);
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer((_) async => response);
@@ -84,7 +83,7 @@ void main() {
           .thenAnswer((_) => Future.value());
 
       unawaited(client.loadForm(
-          formUri: FormUri.directForm(
+          formUri: DirectFormUri(
               user: 'user', space: 'space', grid: 'grid', form: 'FormId')));
       verify(() => authenticator.checkAuthentication()).called(1);
     });
@@ -97,7 +96,7 @@ void main() {
 
       expect(
           () => apptiveGridClient.loadForm(
-              formUri: FormUri.redirectForm(form: 'FormId')),
+              formUri: RedirectFormUri(form: 'FormId')),
           throwsA(isInstanceOf<Response>()));
     });
   });
@@ -240,8 +239,8 @@ void main() {
       final authenticator = MockApptiveGridAuthenticator();
       when(() => authenticator.header)
           .thenReturn('Bearer dXNlcm5hbWU6cGFzc3dvcmQ=');
-      final client =
-          ApptiveGridClient.fromClient(httpClient, authenticator: authenticator);
+      final client = ApptiveGridClient.fromClient(httpClient,
+          authenticator: authenticator);
       expect(client.headers,
           {HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ='});
     });
@@ -252,8 +251,8 @@ void main() {
       final authenticator = MockApptiveGridAuthenticator();
       when(() => authenticator.authenticate())
           .thenAnswer((_) async => MockCredential());
-      final client =
-          ApptiveGridClient.fromClient(httpClient, authenticator: authenticator);
+      final client = ApptiveGridClient.fromClient(httpClient,
+          authenticator: authenticator);
       client.authenticate();
 
       verify(() => authenticator.authenticate()).called(1);
@@ -289,7 +288,8 @@ void main() {
           Uri.parse('${ApptiveGridEnvironment.production.url}/api/users/me'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
-      expect(() => apptiveGridClient.getMe(), throwsA(isInstanceOf<Response>()));
+      expect(
+          () => apptiveGridClient.getMe(), throwsA(isInstanceOf<Response>()));
     });
   });
 

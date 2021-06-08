@@ -13,8 +13,12 @@ void main() {
     });
 
     test('Malformatted Uri throws ArgumentError', () {
-      expect(() => GridUri.fromUri('/api/users/123456/spaces/asdfg/'),
-          throwsArgumentError);
+      final uri = '/api/users/123456/spaces/asdfg/';
+      expect(
+          () => GridUri.fromUri(uri),
+          throwsA(predicate<ArgumentError>(
+              (e) => e.message == 'Could not parse GridUri $uri',
+              'ArgumentError with specific Message')));
     });
   });
 

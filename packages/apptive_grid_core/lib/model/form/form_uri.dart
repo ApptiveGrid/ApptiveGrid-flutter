@@ -3,28 +3,34 @@ part of apptive_grid_model;
 /// A Uri representation used for performing Form based Api Calls
 ///
 /// FormUris can come from different sources.
-/// For Form Links displayed through EditLink/Preview Popups you want to pass in the [FormUri.redirectForm]
-/// For Forms accessed via the api through [GridUri]s called on [ApptiveGridClient.getForms] use [FormUri.directForm]
-/// If you just have the Uri part you can also use [FormUri.fromUri] which will handle it automatically
-abstract class FormUri {
+///
+/// Depending on your use case you should use a different constructor
+///
+/// [FormUri.fromUri] is best used if you have a URI Link to a Form but don't know if it's a redirect Link or a direct Link to a Form
+///
+/// [RedirectFormUri] should be used if you accessed a Form via a Redirect Link e.g. https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa
+/// [DirectFormUri] should be used if accessed
+abstract class FormUri extends ApptiveGridUri {
   FormUri._();
 
   /// Create a FormUri accessed via a redirect Link from the ApptiveGrid UI Console
   /// e.g. for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [form]
+  @Deprecated('Please use the RedirectFormUri Constructor directly')
   factory FormUri.redirectForm({
     required String form,
   }) =>
-      _RedirectFormUri(form: form);
+      RedirectFormUri(form: form);
 
   /// Create a FormUri with known attributes for [user], [space], [grid], [form]
   /// Mainly used when passed from other Api Calls
+  @Deprecated('Please use the DirectFormUri Constructor directly')
   factory FormUri.directForm({
     required String user,
     required String space,
     required String grid,
     required String form,
   }) =>
-      _DirectFormUri(
+      DirectFormUri(
         user: user,
         space: space,
         grid: grid,
@@ -33,42 +39,54 @@ abstract class FormUri {
 
   /// Creates a FormUri based on a [uri]
   /// [uri] must match either:
-  /// /api/(r|a)/(\w+)\b for [_RedirectFormUri]
+  /// /api/(r|a)/(\w+)\b for [RedirectFormUri]
   /// or
-  /// /api/users/(\w+)/spaces/(\w+)/grids/(\w+)/forms/(\w+)\b
+  /// /api/users/(\w+)/spaces/(\w+)/grids/(\w+)/forms/(\w+)\b for [DirectFormUri]
   ///
   /// throws an [ArgumentError] if [uri] can't be matched against against the above regexes
   factory FormUri.fromUri(String uri) {
-    if (RegExp(_DirectFormUri.regex).hasMatch(uri)) {
-      return _DirectFormUri.fromUri(uri);
+    if (RegExp(DirectFormUri._regex).hasMatch(uri)) {
+      return DirectFormUri.fromUri(uri);
     }
-    if (RegExp(_RedirectFormUri.regex).hasMatch(uri)) {
-      return _RedirectFormUri.fromUri(uri);
+    if (RegExp(RedirectFormUri._regex).hasMatch(uri)) {
+      return RedirectFormUri.fromUri(uri);
     }
     throw ArgumentError('Could not parse FormUri $uri');
   }
 
   /// Returns the uriString used for Api Calls using this FormUri
+  @override
   String get uriString;
 
   /// Indicates whether or not a call to this Form will require Authentication
   ///
-  /// return [false] for [_RedirectFormUri]
-  /// return [true] for [_DirectFormUri]
+  /// return [false] for [RedirectFormUri]
+  /// return [true] for [DirectFormUri]
   bool get needsAuthorization;
 }
 
-class _RedirectFormUri extends FormUri {
-  _RedirectFormUri({required this.form}) : super._();
+/// A FormUri for a Form represented by a redirect Link
+class RedirectFormUri extends FormUri {
+  /// Create a FormUri accessed via a redirect Link from the ApptiveGrid UI Console
+  /// for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [form]
+  RedirectFormUri({required this.form}) : super._();
 
-  factory _RedirectFormUri.fromUri(String uri) {
-    final matches = RegExp(regex).allMatches(uri);
+  /// Creates a FormUri based on a [uri]
+  /// [uri] must match:
+  /// /api/(r|a)/(\w+)\b
+  factory RedirectFormUri.fromUri(String uri) {
+    final matches = RegExp(_regex).allMatches(uri);
+    if (matches.isEmpty || matches.elementAt(0).groupCount != 2) {
+      throw ArgumentError('Could not parse FormUri $uri');
+    }
     final match = matches.elementAt(0);
-    return _RedirectFormUri(form: match.group(2)!);
+    return RedirectFormUri(form: match.group(2)!);
   }
 
-  static const regex = r'/api/(r|a)/(\w+)\b';
+  static const _regex = r'/api/(r|a)/(\w+)\b';
 
+  /// Id this is representing
+  /// for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [form]
   final String form;
 
   @override
@@ -76,65 +94,105 @@ class _RedirectFormUri extends FormUri {
 
   @override
   bool get needsAuthorization => false;
+
   @override
   String toString() {
-    return '_RedirectFormUri(form: $form)';
+    return 'RedirectFormUri(form: $form)';
   }
 
   @override
   bool operator ==(Object other) {
-    return other is _RedirectFormUri && form == other.form;
+    return other is RedirectFormUri && form == other.form;
   }
 
   @override
   int get hashCode => toString().hashCode;
 }
 
-class _DirectFormUri extends FormUri {
-  _DirectFormUri(
+/// A FormUri for a Form represented by a direct Link
+class DirectFormUri extends FormUri {
+  /// Create a FormUri with known attributes for [user], [space], [grid], [form]
+  DirectFormUri(
       {required this.user,
       required this.space,
       required this.grid,
-      required this.form})
+      required this.form,
+      this.entity})
       : super._();
 
-  factory _DirectFormUri.fromUri(String uri) {
-    final matches = RegExp(regex).allMatches(uri);
+  /// Creates a FormUri based on a [uri]
+  /// Creates a FormUri based on a [uri]
+  /// [uri] must match:
+  /// /api/users/(\w+)/spaces/(\w+)/grids/(\w+)/forms/(\w+)\b
+  factory DirectFormUri.fromUri(String uri) {
+    final parsed = Uri.parse(uri);
+    final matches = RegExp(_regex).allMatches(parsed.path);
+    if (matches.isEmpty || matches.elementAt(0).groupCount != 4) {
+      throw ArgumentError('Could not parse FormUri $uri');
+    }
+
     final match = matches.elementAt(0);
-    return _DirectFormUri(
+    EntityUri? entity;
+    if (parsed.queryParameters['uri'] != null) {
+      entity = EntityUri.fromUri(parsed.queryParameters['uri']!);
+    }
+    return DirectFormUri(
         user: match.group(1)!,
         space: match.group(2)!,
         grid: match.group(3)!,
-        form: match.group(4)!);
+        form: match.group(4)!,
+        entity: entity);
   }
 
-  static const regex =
+  static const _regex =
       r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)/forms/(\w+)\b';
 
+  /// Id of the User that owns this Grid
   final String user;
+
+  /// Id of the Space this Grid is in
   final String space;
+
+  /// Id of the Grid this is in
   final String grid;
+
+  /// Id of the Form this [FormUri] is representing
   final String form;
+
+  /// Optional [EntityUri] leading to a pre-filled form
+  final EntityUri? entity;
 
   @override
   bool get needsAuthorization => true;
 
   @override
-  String get uriString =>
-      '/api/users/$user/spaces/$space/grids/$grid/forms/$form';
+  String get uriString {
+    var entityAppendix = '';
+    if (entity != null) {
+      entityAppendix = '?uri=${entity!.uriString}';
+    }
+    return '/api/users/$user/spaces/$space/grids/$grid/forms/$form$entityAppendix';
+  }
+
+  /// Returns a FormUri pointing to a Form prefilled with values for a certain [EntityUri]
+  FormUri forEntity({required EntityUri entity}) {
+    return DirectFormUri(
+        user: user, space: space, grid: grid, form: form, entity: entity);
+  }
 
   @override
   String toString() {
-    return '_DirectFormUri(user: $user, space: $space, grid: $grid, form: $form)';
+    return 'DirectFormUri(user: $user, space: $space, grid: $grid, form: $form, entity: $entity)';
   }
 
   @override
   bool operator ==(Object other) {
-    return other is _DirectFormUri &&
+    return other is DirectFormUri &&
         grid == other.grid &&
         user == other.user &&
         space == other.space &&
-        form == other.form;
+        form == other.form &&
+        entity == other.entity;
   }
 
   @override

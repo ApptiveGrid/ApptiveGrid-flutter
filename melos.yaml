@@ -7,7 +7,7 @@ scripts:
 
   lint:all:
     run: |
-      melos run lint:analyze && melos run lint:pub --no-select
+      melos run lint:analyze && melos run lint:pub --no-select && melos run lint:format
 
   lint:analyze:
     run: |
@@ -20,6 +20,11 @@ scripts:
         "dart pub publish --dry-run"
     select-package:
       ignore: "*example*"
+
+  lint:format:
+    run: |
+      melos exec -c 1 -- \
+        "flutter format . --set-exit-if-changed"
 
   test:all:
     run: melos run test --no-select
