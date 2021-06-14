@@ -40,6 +40,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
             colorFilter: ColorFilter.mode(Theme.of(context).errorColor,
                 state.hasError ? BlendMode.srcATop : BlendMode.dstIn),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: 24,
@@ -53,8 +54,11 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
                     },
                   ),
                 ),
-                Text(widget.component.options.label ??
-                    widget.component.property),
+                SizedBox(width: 4,),
+                Expanded(
+                  child: Text(widget.component.options.label ??
+                      widget.component.property),
+                ),
               ],
             ),
           ),
