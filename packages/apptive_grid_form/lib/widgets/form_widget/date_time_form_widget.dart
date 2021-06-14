@@ -81,6 +81,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                         hintText: 'Date',
                         border: InputBorder.none,
                         isDense: true,
+                        filled: false,
                         contentPadding: EdgeInsets.zero,
                       ),
                     ),
@@ -119,6 +120,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                       decoration: InputDecoration(
                         hintText: 'Time',
                         isDense: true,
+                        filled: false,
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.zero,
                       ),
