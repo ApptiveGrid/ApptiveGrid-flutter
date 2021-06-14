@@ -54,7 +54,9 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
                     },
                   ),
                 ),
-                SizedBox(width: 4,),
+                SizedBox(
+                  width: 4,
+                ),
                 Expanded(
                   child: Text(widget.component.options.label ??
                       widget.component.property),
