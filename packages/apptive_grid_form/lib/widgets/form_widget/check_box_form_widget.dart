@@ -35,6 +35,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
             contentPadding: EdgeInsets.zero,
             border: InputBorder.none,
             isDense: true,
+            filled: false,
           ),
           child: ColorFiltered(
             colorFilter: ColorFilter.mode(Theme.of(context).errorColor,
