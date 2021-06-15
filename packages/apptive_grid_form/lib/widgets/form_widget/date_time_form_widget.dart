@@ -46,6 +46,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
         return InputDecorator(
           decoration: InputDecoration(
             helperText: widget.component.options.description,
+            helperMaxLines: 100,
             labelText:
                 widget.component.options.label ?? widget.component.property,
             errorText: state.errorText,
@@ -80,6 +81,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                         hintText: 'Date',
                         border: InputBorder.none,
                         isDense: true,
+                        filled: false,
                         contentPadding: EdgeInsets.zero,
                       ),
                     ),
@@ -118,6 +120,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                       decoration: InputDecoration(
                         hintText: 'Time',
                         isDense: true,
+                        filled: false,
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.zero,
                       ),

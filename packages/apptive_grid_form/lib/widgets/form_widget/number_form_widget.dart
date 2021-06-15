@@ -53,6 +53,7 @@ class _NumberFormWidgetState extends State<NumberFormWidget> {
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         helperText: widget.component.options.description,
+        helperMaxLines: 100,
         labelText: widget.component.options.label ?? widget.component.property,
         hintText: widget.component.options.placeholder,
       ),

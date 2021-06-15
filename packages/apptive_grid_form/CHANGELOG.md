@@ -1,3 +1,8 @@
+## [0.2.1+1]
+* Display up to 100 Lines of Field Description
+* Fix Overflow in CheckBoxFormWidget
+* Fix Display Problems when using Filled InputDecorations for DateTime Components
+
 ## [0.2.1]
 * Updated ApptiveGridCore to 0.2.1 to use new FormUris
 
