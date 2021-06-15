@@ -1,3 +1,6 @@
+## [0.2.1+2]
+* Make CheckboxFormWidget have no background
+
 ## [0.2.1+1]
 * Display up to 100 Lines of Field Description
 * Fix Overflow in CheckBoxFormWidget
