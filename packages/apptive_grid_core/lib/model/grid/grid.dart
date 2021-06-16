@@ -55,7 +55,7 @@ class GridUri extends ApptiveGridUri {
 /// Model for GridData
 class Grid {
   /// Creates a GridData Object
-  Grid(this.name, this.schema, this.fields, this.rows);
+  Grid(this.name, this.schema, this.fields, this.rows, {this.filter});
 
   /// Deserializes [json] into a [Grid] Object
   factory Grid.fromJson(Map<String, dynamic> json) {
@@ -72,7 +72,8 @@ class Grid {
     final entries = (json['entities'] as List)
         .map((e) => GridRow.fromJson(e, fields, schema))
         .toList();
-    return Grid(json['name'], schema, fields, entries);
+    final filter = json['filter'];
+    return Grid(json['name'], schema, fields, entries, filter: filter);
   }
 
   /// Name of the Form
@@ -80,6 +81,9 @@ class Grid {
 
   /// Schema used for deserializing and validating data send back to the server
   final dynamic schema;
+
+  /// Filter applied to this GridView. If this is not null the Grid is actually a GridView
+  final dynamic filter;
 
   /// List of [GridField] representing the Columns the Grid has
   final List<GridField> fields;
@@ -94,11 +98,12 @@ class Grid {
         'entities': rows.map((e) => e.toJson()).toList(),
         'fieldIds': fields.map((e) => e.id).toList(),
         'fieldNames': fields.map((e) => e.name).toList(),
+        if (filter != null) 'filter': filter,
       };
 
   @override
   String toString() {
-    return 'GridData(name: $name, fields: $fields, rows: $rows)';
+    return 'GridData(name: $name, fields: $fields, rows: $rows, filter: $filter)';
   }
 
   @override
