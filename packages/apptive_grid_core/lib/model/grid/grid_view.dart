@@ -20,7 +20,10 @@ class GridViewUri extends GridUri {
     }
     final match = matches.elementAt(0);
     return GridViewUri(
-        user: match.group(1)!, space: match.group(2)!, grid: match.group(3)!, view: match.group(4)!);
+        user: match.group(1)!,
+        space: match.group(2)!,
+        grid: match.group(3)!,
+        view: match.group(4)!);
   }
 
   /// Id of the View this [GridViewUri] is representing
@@ -33,7 +36,8 @@ class GridViewUri extends GridUri {
 
   /// Generates the uriString used for ApiCalls referencing this
   @override
-  String get uriString => '/api/users/$user/spaces/$space/grids/$grid/views/$view';
+  String get uriString =>
+      '/api/users/$user/spaces/$space/grids/$grid/views/$view';
 
   @override
   bool operator ==(Object other) {

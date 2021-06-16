@@ -146,7 +146,7 @@ class ApptiveGridClient {
     await _authenticator.checkAuthentication();
 
     final url =
-    Uri.parse('${options.environment.url}${gridUri.uriString}/views');
+        Uri.parse('${options.environment.url}${gridUri.uriString}/views');
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;

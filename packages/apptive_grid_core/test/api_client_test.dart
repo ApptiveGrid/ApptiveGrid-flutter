@@ -429,7 +429,9 @@ void main() {
           '9fqx8okgtzoafyanblvfg61cl',
           '9fqx8on7ee2hq5iv20vcu9svw'
         ],
-        'filter': {'9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}},
+        'filter': {
+          '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
+        },
         'schema': {
           'type': 'object',
           'properties': {
@@ -454,7 +456,9 @@ void main() {
               '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view0'),
           headers: any(named: 'headers'))).thenAnswer((_) async => response);
 
-      final gridView = await apptiveGridClient.loadGrid(gridUri: GridViewUri(user: userId, space: spaceId, grid: gridId, view: view0));
+      final gridView = await apptiveGridClient.loadGrid(
+          gridUri: GridViewUri(
+              user: userId, space: spaceId, grid: gridId, view: view0));
 
       expect(gridView.filter != null, true);
       expect(gridView.fields.length, 3);
