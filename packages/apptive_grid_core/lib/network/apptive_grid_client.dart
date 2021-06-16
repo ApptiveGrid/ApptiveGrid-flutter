@@ -120,7 +120,7 @@ class ApptiveGridClient {
     return Space.fromJson(json.decode(response.body));
   }
 
-  /// Get all [FormUris] that are contained in a [Grid] represented by [gridUri]
+  /// Get all [FormUri]s that are contained in a [Grid] represented by [gridUri]
   ///
   /// Requires Authorization
   /// throws [Response] if the request fails
@@ -135,6 +135,24 @@ class ApptiveGridClient {
     }
     return (json.decode(response.body) as List)
         .map((e) => FormUri.fromUri(e))
+        .toList();
+  }
+
+  /// Get all [GridViewUri]s that are contained in a [Grid] represented by [gridUri]
+  ///
+  /// Requires Authorization
+  /// throws [Response] if the request fails
+  Future<List<GridViewUri>> getGridViews({required GridUri gridUri}) async {
+    await _authenticator.checkAuthentication();
+
+    final url =
+    Uri.parse('${options.environment.url}${gridUri.uriString}/views');
+    final response = await _client.get(url, headers: headers);
+    if (response.statusCode >= 400) {
+      throw response;
+    }
+    return (json.decode(response.body) as List)
+        .map((e) => GridViewUri.fromUri(e))
         .toList();
   }
 
