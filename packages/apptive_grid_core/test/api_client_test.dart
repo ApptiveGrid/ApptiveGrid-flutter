@@ -370,4 +370,99 @@ void main() {
           throwsA(isInstanceOf<Response>()));
     });
   });
+
+  group('GridViews', () {
+    final userId = 'userId';
+    final spaceId = 'spaceId';
+    final gridId = 'gridId';
+    final view0 = 'viewId0';
+    final view1 = 'viewId1';
+    final gridUri = GridUri(user: userId, space: spaceId, grid: gridId);
+    final rawResponse = [
+      '/api/users/id/spaces/spaceId/grids/gridId/views/$view0',
+      '/api/users/id/spaces/spaceId/grids/gridId/views/$view1',
+    ];
+    test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(() => httpClient.get(
+          Uri.parse(
+              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      final views = await apptiveGridClient.getGridViews(gridUri: gridUri);
+
+      expect(views.length, 2);
+      expect(views[0].uriString,
+          '/api/users/id/spaces/spaceId/grids/gridId/views/$view0');
+      expect(views[1].uriString,
+          '/api/users/id/spaces/spaceId/grids/gridId/views/$view1');
+    });
+
+    test('400 Status throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(() => httpClient.get(
+          Uri.parse(
+              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      expect(() => apptiveGridClient.getGridViews(gridUri: gridUri),
+          throwsA(isInstanceOf<Response>()));
+    });
+
+    test('GridView parses Filters', () async {
+      final gridViewResponse = {
+        'fieldNames': ['First Name', 'Last Name', 'imgUrl'],
+        'entities': [
+          {
+            'fields': [
+              'Adam',
+              'Riese',
+              'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
+            ],
+            '_id': '60c9c997f8eeb8636c8140c4'
+          }
+        ],
+        'fieldIds': [
+          '9fqx8om03flgh8d4m1l953x29',
+          '9fqx8okgtzoafyanblvfg61cl',
+          '9fqx8on7ee2hq5iv20vcu9svw'
+        ],
+        'filter': {
+          '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
+        },
+        'schema': {
+          'type': 'object',
+          'properties': {
+            'fields': {
+              'type': 'array',
+              'items': [
+                {'type': 'string'},
+                {'type': 'string'},
+                {'type': 'string'}
+              ]
+            },
+            '_id': {'type': 'string'}
+          }
+        },
+        'name': 'New grid view'
+      };
+
+      final response = Response(json.encode(gridViewResponse), 200);
+
+      when(() => httpClient.get(
+          Uri.parse(
+              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view0'),
+          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+
+      final gridView = await apptiveGridClient.loadGrid(
+          gridUri: GridViewUri(
+              user: userId, space: spaceId, grid: gridId, view: view0));
+
+      expect(gridView.filter != null, true);
+      expect(gridView.fields.length, 3);
+      expect(gridView.rows.length, 1);
+    });
+  });
 }

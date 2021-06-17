@@ -1,3 +1,6 @@
+## [0.2.2]
+* Add support for GridViews
+
 ## [0.2.1]
 * Updated ApptiveGridCore to 0.2.1
 

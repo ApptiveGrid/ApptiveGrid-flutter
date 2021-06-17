@@ -1,3 +1,6 @@
+## [0.2.2]
+* Add support for GridViews
+
 ## [0.2.1]
 * FormUri Changes
     * Please use `DirectFormUri` and `RedirectFormUri` now
