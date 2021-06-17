@@ -89,17 +89,17 @@ class ApptiveGridAuthenticator {
     if (_token == null &&
         options.authenticationOptions?.autoAuthenticate == true) {
       await authenticate();
-    }
-
-    if (_token != null && _token?.expiresIn?.isNegative == true) {
+    } else if (_token != null &&
+        (_token?.expiresAt?.difference(DateTime.now()).inSeconds ?? 0) < 70) {
       // Token is expired refresh it
       final client = await _client;
-      client.createCredential(refreshToken: _token?.refreshToken);
-      final authenticator =
-          testAuthenticator ?? Authenticator(client, urlLauncher: (_) {});
-      final credential = await authenticator.authorize();
+      final credential = client.createCredential(
+        accessToken: _token?.accessToken,
+        refreshToken: _token?.refreshToken,
+        expiresAt: _token?.expiresAt,
+      );
 
-      _token = await credential?.getTokenResponse();
+      _token = await credential.getTokenResponse(true);
     }
   }
 

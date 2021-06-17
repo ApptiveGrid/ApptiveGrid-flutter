@@ -1,3 +1,6 @@
+## [0.2.3]
+* Fix Refresh Authentication
+
 ## [0.2.1+2]
 * Make CheckboxFormWidget have no background
 

@@ -1,3 +1,6 @@
+## [0.2.3]
+* Fix Refresh Authentication
+
 ## [0.2.2]
 * Add support for GridViews
 

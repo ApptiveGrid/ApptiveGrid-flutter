@@ -70,8 +70,10 @@ void main() {
           ApptiveGridAuthenticator(options: ApptiveGridOptions());
 
       // Current token should be Expired
+      final now = DateTime.now();
       final token = MockToken();
-      when(() => token.expiresIn).thenReturn(Duration(seconds: -1));
+      when(() => token.expiresAt)
+          .thenReturn(now.subtract(Duration(seconds: 20)));
       authenticator.setToken(token);
 
       // Mock AuthBackend Return a new Token
@@ -82,18 +84,22 @@ void main() {
       final credential = MockCredential();
       final newToken = TokenResponse.fromJson(
           {'token_type': 'Bearer', 'access_token': '12345'});
-      when(() =>
-              client.createCredential(refreshToken: any(named: 'refreshToken')))
-          .thenReturn(credential);
+      when(
+        () => client.createCredential(
+            accessToken: any(named: 'accessToken'),
+            refreshToken: any(named: 'refreshToken'),
+            expiresAt: any(named: 'expiresAt')),
+      ).thenReturn(credential);
       when(() => mockAuthBackend.authorize())
           .thenAnswer((invocation) async => credential);
-      when(() => credential.getTokenResponse())
+      when(() => credential.getTokenResponse(any()))
           .thenAnswer((invocation) async => newToken);
 
       await authenticator.checkAuthentication();
 
       // Check if new Token is used in Header
       expect(authenticator.header, 'Bearer 12345');
+      verify(() => credential.getTokenResponse(any())).called(1);
     });
   });
 
