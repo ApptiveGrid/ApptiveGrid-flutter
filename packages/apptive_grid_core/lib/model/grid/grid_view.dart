@@ -1,6 +1,6 @@
 part of apptive_grid_model;
 
-/// A Uri representation used for performing Grid based Api Calls
+/// A Uri representing a GridView
 class GridViewUri extends GridUri {
   /// Creates a new [GridViewUri] based on known ids for [user], [space], [grid] and [view]
   GridViewUri({
