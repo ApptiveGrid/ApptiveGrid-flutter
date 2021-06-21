@@ -140,3 +140,25 @@ class EnumDataEntity extends DataEntity<String, String> {
   @override
   int get hashCode => toString().hashCode;
 }
+
+class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
+
+  CrossReferenceDataEntity({required Map jsonValue, required String gridUri}) :
+      _displayValue = jsonValue['displayValue'],
+      entityUri = EntityUri.fromUri(jsonValue['uri']),
+  gridUri = GridUri.fromUri(gridUri);
+
+  final String _displayValue;
+  final EntityUri entityUri;
+  final GridUri gridUri;
+
+  @override
+  dynamic get schemaValue => {
+    'displayValue': _displayValue,
+    'uri': entityUri.uriString
+  };
+
+ @override
+ String? get value => _displayValue;
+
+}
