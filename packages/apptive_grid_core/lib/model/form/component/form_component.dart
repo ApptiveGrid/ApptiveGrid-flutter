@@ -52,8 +52,6 @@ abstract class FormComponent<T extends DataEntity> {
   /// Mapping to a concrete implementation based on [json] and [schema]
   ///
   /// Throws an [ArgumentError] if not matching implementation is found.
-  // missing_return can be ignored as the switch statement is exhaustive
-  // ignore: missing_return
   static FormComponent fromJson(dynamic json, dynamic schema) {
     final properties = schema['properties'][json['fieldId']];
     if (properties == null) {
@@ -74,6 +72,8 @@ abstract class FormComponent<T extends DataEntity> {
         return BooleanFormComponent.fromJson(json);
       case DataType.selectionBox:
         return EnumFormComponent.fromJson(json, properties);
+      case DataType.crossReference:
+        return CrossReferenceFormComponent.fromJson(json, properties);
     }
   }
 }

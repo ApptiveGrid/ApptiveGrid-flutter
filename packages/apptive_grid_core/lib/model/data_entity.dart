@@ -143,22 +143,44 @@ class EnumDataEntity extends DataEntity<String, String> {
 
 class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 
-  CrossReferenceDataEntity({required Map jsonValue, required String gridUri}) :
-      _displayValue = jsonValue['displayValue'],
-      entityUri = EntityUri.fromUri(jsonValue['uri']),
+  CrossReferenceDataEntity({required Map? jsonValue, required String gridUri}) :
+      _displayValue = jsonValue?['displayValue'],
+      entityUri = jsonValue?['uri'] != null ? EntityUri.fromUri(jsonValue?['uri']) : null,
   gridUri = GridUri.fromUri(gridUri);
 
-  final String _displayValue;
-  final EntityUri entityUri;
+  final String? _displayValue;
+  final EntityUri? entityUri;
   final GridUri gridUri;
 
   @override
-  dynamic get schemaValue => {
-    'displayValue': _displayValue,
-    'uri': entityUri.uriString
-  };
+  dynamic get schemaValue {
+    if(_displayValue == null || entityUri == null) {
+      return null;
+    } else {
+      return {
+        'displayValue': _displayValue,
+        'uri': entityUri?.uriString
+      };
+    }
+  }
 
  @override
  String? get value => _displayValue;
 
+
+  @override
+  String toString() {
+    return 'CrossReferenceDataEntity(displayValue: $value, enitytUri: $entityUri, gridUri: $gridUri)}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CrossReferenceDataEntity &&
+        value == other.value &&
+        entityUri == other.entityUri &&
+    gridUri == other.gridUri;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

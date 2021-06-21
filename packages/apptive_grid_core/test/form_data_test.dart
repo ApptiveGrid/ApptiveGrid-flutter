@@ -192,4 +192,106 @@ void main() {
       expect(formData.actions.length, 0);
     });
   });
+
+  group('Cross Reference', () {
+    test('Form with Cross Reference without Value parses', () {
+      final responseWithCrossReference = {
+        'schema': {
+          'type': 'object',
+          'properties': {
+            '3ftoqhqbct15h5o730uknpvp5': {
+              'type': 'object',
+              'properties': {
+                'displayValue': {'type': 'string'},
+                'uri': {'type': 'string'}
+              },
+              'required': ['uri'],
+              'objectType': 'entityreference',
+              'gridUri':
+                  '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06'
+            }
+          },
+          'required': []
+        },
+        'schemaObject':
+            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036e50edfa83071816e03',
+        'components': [
+          {
+            'property': 'name',
+            'value': null,
+            'required': false,
+            'options': {'label': null, 'description': null},
+            'fieldId': '3ftoqhqbct15h5o730uknpvp5',
+            'type': 'entitySelect'
+          }
+        ],
+        'title': 'New title'
+      };
+
+      final formData = FormData.fromJson(responseWithCrossReference);
+
+      expect(formData.title, 'New title');
+      expect(formData.components[0].runtimeType, CrossReferenceFormComponent);
+      expect(formData.components[0].data.value, null);
+      expect(
+          (formData.components[0].data as CrossReferenceDataEntity).entityUri,
+          null);
+      expect(
+          (formData.components[0].data as CrossReferenceDataEntity).gridUri,
+          GridUri.fromUri(
+              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06'));
+    });
+
+    test('Form with Cross Reference with prefilled Value parses', () {
+      final responseWithCrossReference = {
+        'schema': {
+          'type': 'object',
+          'properties': {
+            '3ftoqhqbct15h5o730uknpvp5': {
+              'type': 'object',
+              'properties': {
+                'displayValue': {'type': 'string'},
+                'uri': {'type': 'string'}
+              },
+              'required': ['uri'],
+              'objectType': 'entityreference',
+              'gridUri':
+                  '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06'
+            }
+          },
+          'required': []
+        },
+        'schemaObject':
+            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036e50edfa83071816e03',
+        'components': [
+          {
+            'property': 'name',
+            'value': {
+              'displayValue': 'Yeah!',
+              'uri':
+                  '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+            },
+            'required': false,
+            'options': {'label': null, 'description': null},
+            'fieldId': '3ftoqhqbct15h5o730uknpvp5',
+            'type': 'entitySelect'
+          }
+        ],
+        'title': 'New title'
+      };
+
+      final formData = FormData.fromJson(responseWithCrossReference);
+
+      expect(formData.title, 'New title');
+      expect(formData.components[0].runtimeType, CrossReferenceFormComponent);
+      expect(formData.components[0].data.value, 'Yeah!');
+      expect(
+          (formData.components[0].data as CrossReferenceDataEntity).entityUri,
+          EntityUri.fromUri('/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'));
+      expect(
+          (formData.components[0].data as CrossReferenceDataEntity).gridUri,
+          GridUri.fromUri(
+              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06'));
+    });
+  });
 }
