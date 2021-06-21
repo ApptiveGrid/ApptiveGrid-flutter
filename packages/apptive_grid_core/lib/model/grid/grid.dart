@@ -11,15 +11,23 @@ class GridUri extends ApptiveGridUri {
 
   /// Creates a new [GridUri] based on a string [uri]
   /// Main usage of this is for [GridUri] retrieved through other Api Calls
+  /// If the Uri passed in is a [GridViewUri] it will return that
   factory GridUri.fromUri(String uri) {
-    final regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)\b';
-    final matches = RegExp(regex).allMatches(uri);
-    if (matches.isEmpty || matches.elementAt(0).groupCount != 3) {
-      throw ArgumentError('Could not parse GridUri $uri');
+    try {
+      // Try to parse as GridViewUri
+      return GridViewUri.fromUri(uri);
+    } on ArgumentError {
+      final regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)\b';
+      final matches = RegExp(regex).allMatches(uri);
+      if (matches.isEmpty || matches
+          .elementAt(0)
+          .groupCount != 3) {
+        throw ArgumentError('Could not parse GridUri $uri');
+      }
+      final match = matches.elementAt(0);
+      return GridUri(
+          user: match.group(1)!, space: match.group(2)!, grid: match.group(3)!);
     }
-    final match = matches.elementAt(0);
-    return GridUri(
-        user: match.group(1)!, space: match.group(2)!, grid: match.group(3)!);
   }
 
   /// Id of the User that owns this Grid
