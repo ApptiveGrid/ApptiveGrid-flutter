@@ -1,3 +1,6 @@
+## [0.2.4]
+* Update apptive_grid_core to add support for CrossReference
+
 ## [0.2.3]
 * Fix Refresh Authentication
 
