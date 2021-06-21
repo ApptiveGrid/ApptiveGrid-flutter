@@ -48,7 +48,7 @@ DataType dataTypeFromSchemaProperty({required dynamic schemaProperty}) {
       return DataType.checkbox;
     case 'object':
       final objectType = schemaProperty['objectType'];
-      switch(objectType) {
+      switch (objectType) {
         case 'entityreference':
           return DataType.crossReference;
       }

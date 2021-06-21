@@ -141,32 +141,42 @@ class EnumDataEntity extends DataEntity<String, String> {
   int get hashCode => toString().hashCode;
 }
 
+/// [DataEntity] representing an Object CrossReferencing to a different Grid
 class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
+  /// Create a new CrossReference Data Entity
+  CrossReferenceDataEntity(
+      {String? displayValue, this.entityUri, required this.gridUri})
+      : _displayValue = displayValue;
 
-  CrossReferenceDataEntity({required Map? jsonValue, required String gridUri}) :
-      _displayValue = jsonValue?['displayValue'],
-      entityUri = jsonValue?['uri'] != null ? EntityUri.fromUri(jsonValue?['uri']) : null,
-  gridUri = GridUri.fromUri(gridUri);
+  /// Creates a new CrossReferenceDataEntity from a Json Response
+  factory CrossReferenceDataEntity.fromJson(
+          {required Map? jsonValue, required String gridUri}) =>
+      CrossReferenceDataEntity(
+          displayValue: jsonValue?['displayValue'],
+          entityUri: jsonValue?['uri'] != null
+              ? EntityUri.fromUri(jsonValue?['uri'])
+              : null,
+          gridUri: GridUri.fromUri(gridUri));
 
   final String? _displayValue;
+
+  /// The [EntityUri] pointing to the Entity this is referencing
   final EntityUri? entityUri;
+
+  /// Pointing to the [Grid] this is referencing
   final GridUri gridUri;
 
   @override
   dynamic get schemaValue {
-    if(_displayValue == null || entityUri == null) {
+    if (_displayValue == null || entityUri == null) {
       return null;
     } else {
-      return {
-        'displayValue': _displayValue,
-        'uri': entityUri?.uriString
-      };
+      return {'displayValue': _displayValue, 'uri': entityUri?.uriString};
     }
   }
 
- @override
- String? get value => _displayValue;
-
+  @override
+  String? get value => _displayValue;
 
   @override
   String toString() {
@@ -178,7 +188,7 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
     return other is CrossReferenceDataEntity &&
         value == other.value &&
         entityUri == other.entityUri &&
-    gridUri == other.gridUri;
+        gridUri == other.gridUri;
   }
 
   @override

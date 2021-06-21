@@ -31,7 +31,8 @@ class GridEntry {
         dataEntity = EnumDataEntity(value: jsonData, options: schema['enum']);
         break;
       case DataType.crossReference:
-        dataEntity = CrossReferenceDataEntity(jsonValue: jsonData, gridUri: schema['gridUri']);
+        dataEntity = CrossReferenceDataEntity.fromJson(
+            jsonValue: jsonData, gridUri: schema['gridUri']);
         break;
     }
     return GridEntry(field, dataEntity);

@@ -19,9 +19,7 @@ class GridUri extends ApptiveGridUri {
     } on ArgumentError {
       final regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)\b';
       final matches = RegExp(regex).allMatches(uri);
-      if (matches.isEmpty || matches
-          .elementAt(0)
-          .groupCount != 3) {
+      if (matches.isEmpty || matches.elementAt(0).groupCount != 3) {
         throw ArgumentError('Could not parse GridUri $uri');
       }
       final match = matches.elementAt(0);

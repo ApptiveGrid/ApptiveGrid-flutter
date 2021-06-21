@@ -287,7 +287,8 @@ void main() {
       expect(formData.components[0].data.value, 'Yeah!');
       expect(
           (formData.components[0].data as CrossReferenceDataEntity).entityUri,
-          EntityUri.fromUri('/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'));
+          EntityUri.fromUri(
+              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'));
       expect(
           (formData.components[0].data as CrossReferenceDataEntity).gridUri,
           GridUri.fromUri(
