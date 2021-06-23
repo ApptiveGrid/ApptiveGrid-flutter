@@ -30,6 +30,10 @@ class GridEntry {
       case DataType.selectionBox:
         dataEntity = EnumDataEntity(value: jsonData, options: schema['enum']);
         break;
+      case DataType.crossReference:
+        dataEntity = CrossReferenceDataEntity.fromJson(
+            jsonValue: jsonData, gridUri: schema['gridUri']);
+        break;
     }
     return GridEntry(field, dataEntity);
   }

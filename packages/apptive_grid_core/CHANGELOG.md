@@ -1,3 +1,6 @@
+## [0.2.4]
+* Add support for `CrossReference` Data Type
+
 ## [0.2.3]
 * Fix Refresh Authentication
 
