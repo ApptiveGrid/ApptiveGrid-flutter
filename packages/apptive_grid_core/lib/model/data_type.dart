@@ -19,6 +19,9 @@ enum DataType {
 
   /// Type to display enum values
   selectionBox,
+
+  /// Type to display CrossReference Values
+  crossReference,
 }
 
 /// Returns [DataType] that matching a certain schema [schemaProperty]
@@ -43,7 +46,13 @@ DataType dataTypeFromSchemaProperty({required dynamic schemaProperty}) {
       return DataType.integer;
     case 'boolean':
       return DataType.checkbox;
+    case 'object':
+      final objectType = schemaProperty['objectType'];
+      switch (objectType) {
+        case 'entityreference':
+          return DataType.crossReference;
+      }
   }
   throw ArgumentError(
-      'No according DataType found. Supported DataTypes are ${DataType.values}');
+      'No according DataType found for "$schemaType". Supported DataTypes are ${DataType.values}');
 }

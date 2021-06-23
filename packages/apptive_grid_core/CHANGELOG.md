@@ -1,5 +1,8 @@
-## [0.2.3+1]
+## [0.2.5]
 * Fix Parsing of Enum Entries
+
+## [0.2.4]
+* Add support for `CrossReference` Data Type
 
 ## [0.2.3]
 * Fix Refresh Authentication
