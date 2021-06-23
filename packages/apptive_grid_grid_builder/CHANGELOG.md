@@ -1,3 +1,6 @@
+## [0.2.3+1]
+* Fix Parsing of Enum Entries
+
 ## [0.2.3]
 * Fix Refresh Authentication
 
