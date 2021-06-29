@@ -1,4 +1,5 @@
 import 'package:apptive_grid_core/apptive_grid_network.dart';
+import 'package:apptive_grid_core/cache/apptive_grid_cache.dart';
 
 /// Configuration options for [ApptiveGrid]
 class ApptiveGridOptions {
@@ -6,6 +7,7 @@ class ApptiveGridOptions {
   const ApptiveGridOptions({
     this.environment = ApptiveGridEnvironment.production,
     this.authenticationOptions,
+    this.cache,
   });
 
   /// Determines the API endpoint used
@@ -13,4 +15,8 @@ class ApptiveGridOptions {
 
   /// Authentication for API
   final ApptiveGridAuthenticationOptions? authenticationOptions;
+
+  /// Implementation for Caching. Use this to cache/store values for faster initial Data
+  /// This can also be used to enable offline mode sending
+  final ApptiveGridCache? cache;
 }
