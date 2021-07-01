@@ -35,3 +35,32 @@ class FormAction {
   @override
   int get hashCode => toString().hashCode;
 }
+
+class ActionItem {
+  ActionItem({required this.action, required this.data});
+  ActionItem.fromJson(Map<String, dynamic> json) :
+    action = FormAction.fromJson(json['action']),
+    data = FormData.fromJson(json['data']);
+
+  final FormAction action;
+
+  final FormData data;
+
+  Map<String, dynamic> toJson() => {
+    'action': action.toJson(),
+    'data': data.toJson(),
+  };
+
+  @override
+  String toString() {
+    return 'ActionItem(action: $action, data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ActionItem && action == other.action && data == other.data;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
+}

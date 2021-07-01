@@ -62,18 +62,26 @@ class ApptiveGridClient {
   /// throws [Response] if the request fails
   Future<http.Response> performAction(
     FormAction action,
-    FormData formData,
-  ) async {
+    FormData formData, {
+    bool saveToPendingItems = false,
+  }) async {
+    final actionItem = ActionItem(action: action, data: formData);
     final uri = Uri.parse('${options.environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
     request.headers.addAll({HttpHeaders.contentTypeHeader: ContentType.json});
     request.headers.addAll(headers);
-    final response = await _client.send(request);
+    final streamResponse = await _client.send(request);
+    final response = await http.Response.fromStream(streamResponse);
     if (response.statusCode >= 400) {
+      if (saveToPendingItems) {
+        await options.cache?.addPendingActionItem(actionItem);
+      }
       throw response;
     }
-    return http.Response.fromStream(response);
+    // Action was performed successfully. Remove it from pending Actions
+    await options.cache?.removePendingActionItem(actionItem);
+    return response;
   }
 
   /// Loads a [Grid] represented by [gridUri]
@@ -161,5 +169,21 @@ class ApptiveGridClient {
   /// This will open a Webpage for the User Auth
   Future<Credential?> authenticate() {
     return _authenticator.authenticate();
+  }
+
+  Future sendPendingActions() async {
+    final pendingActions = await options.cache?.getPendingActionItems() ?? [];
+
+    for (final action in pendingActions) {
+      try {
+        await performAction(
+          action.action,
+          action.data,
+          saveToPendingItems: false, // don't resubmit this to pending items
+        );
+      } on http.Response catch (_) {
+        // Was not able to submit this action
+      }
+    }
   }
 }

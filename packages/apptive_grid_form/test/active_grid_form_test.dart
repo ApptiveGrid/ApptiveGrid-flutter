@@ -1,20 +1,27 @@
 import 'dart:async';
 
+import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:apptive_grid_core/apptive_grid_model.dart';
-import 'package:http/http.dart' as http;
 
 import 'common.dart';
 
 void main() {
+
+  late ApptiveGridClient client;
+
+  setUp(() {
+    client = MockApptiveGridClient();
+    when(() => client.sendPendingActions()).thenAnswer((_) async {});
+  });
+
   group('Title', () {
     testWidgets('Title Displays', (tester) async {
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -35,7 +42,6 @@ void main() {
     });
 
     testWidgets('Title do not displays', (tester) async {
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -58,7 +64,6 @@ void main() {
   });
 
   testWidgets('OnLoadedCallback gets called', (tester) async {
-    final client = MockApptiveGridClient();
     final form = FormData('Form Title', [], [], {});
     final completer = Completer<FormData>();
     final target = TestApp(
@@ -85,7 +90,6 @@ void main() {
 
   group('Loading', () {
     testWidgets('Initial shows Loading', (tester) async {
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -110,7 +114,6 @@ void main() {
 
   group('Success', () {
     testWidgets('Shows Success', (tester) async {
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -138,7 +141,6 @@ void main() {
     });
 
     testWidgets('Send Additional Click reloads Form', (tester) async {
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -172,7 +174,6 @@ void main() {
   group('Error', () {
     group('Initial Call', () {
       testWidgets('Initial Error Shows', (tester) async {
-        final client = MockApptiveGridClient();
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
@@ -194,7 +195,6 @@ void main() {
       });
 
       testWidgets('Initial Error Reloads Form', (tester) async {
-        final client = MockApptiveGridClient();
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
@@ -220,7 +220,6 @@ void main() {
 
     group('Action Error', () {
       testWidgets('Shows Error', (tester) async {
-        final client = MockApptiveGridClient();
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
@@ -248,7 +247,6 @@ void main() {
       });
 
       testWidgets('Server Error shows Error', (tester) async {
-        final client = MockApptiveGridClient();
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
@@ -276,7 +274,6 @@ void main() {
       });
 
       testWidgets('Back to Form shows Form', (tester) async {
-        final client = MockApptiveGridClient();
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
@@ -309,7 +306,6 @@ void main() {
 
   group('Skip Custom Builder', () {
     testWidgets('Shows Success', (tester) async {
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -338,7 +334,6 @@ void main() {
     });
 
     testWidgets('Shows Error', (tester) async {
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(

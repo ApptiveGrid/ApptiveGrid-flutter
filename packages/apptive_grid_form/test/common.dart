@@ -22,7 +22,7 @@ class TestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ApptiveGrid.withClient(
-      client: client ?? MockApptiveGridClient(),
+      client: client ?? _fallbackClient,
       options: options,
       child: MaterialApp(
         home: Builder(
@@ -32,5 +32,12 @@ class TestApp extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  ApptiveGridClient get _fallbackClient {
+    final client = MockApptiveGridClient();
+    when(() => client.sendPendingActions()).thenAnswer((invocation) async {});
+
+    return client;
   }
 }

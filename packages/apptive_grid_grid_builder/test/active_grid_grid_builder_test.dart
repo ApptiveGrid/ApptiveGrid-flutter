@@ -11,8 +11,15 @@ void main() {
   final space = 'space';
   final gridId = 'grid';
 
+  late ApptiveGridClient client;
+
+  setUp(() {
+    client = MockApptiveGridClient();
+
+    when(() => client.sendPendingActions()).thenAnswer((_) async {});
+  });
+
   testWidgets('Builder is called with data', (tester) async {
-    final client = MockApptiveGridClient();
     final target = TestApp(
       client: client,
       child: ApptiveGridGridBuilder(
@@ -43,7 +50,6 @@ void main() {
   });
 
   testWidgets('Initial Data is displayed', (tester) async {
-    final client = MockApptiveGridClient();
     final target = TestApp(
       client: client,
       child: ApptiveGridGridBuilder(
@@ -77,7 +83,6 @@ void main() {
   });
 
   testWidgets('Builder is called with error', (tester) async {
-    final client = MockApptiveGridClient();
     final target = TestApp(
       client: client,
       child: ApptiveGridGridBuilder(
@@ -107,7 +112,6 @@ void main() {
   });
 
   testWidgets('Reload calls client', (tester) async {
-    final client = MockApptiveGridClient();
     final key = GlobalKey<ApptiveGridGridBuilderState>();
     final target = TestApp(
       client: client,

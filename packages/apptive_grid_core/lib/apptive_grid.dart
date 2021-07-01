@@ -58,6 +58,7 @@ class _ApptiveGridState extends State<ApptiveGrid> {
         ApptiveGridClient(
           options: widget.options,
         );
+    _client.sendPendingActions();
   }
 
   @override
