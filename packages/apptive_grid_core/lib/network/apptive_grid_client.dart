@@ -63,7 +63,7 @@ class ApptiveGridClient {
   Future<http.Response> performAction(
     FormAction action,
     FormData formData, {
-    bool saveToPendingItems = false,
+    bool saveToPendingItems = true,
   }) async {
     final actionItem = ActionItem(action: action, data: formData);
     final uri = Uri.parse('${options.environment.url}${action.uri}');
