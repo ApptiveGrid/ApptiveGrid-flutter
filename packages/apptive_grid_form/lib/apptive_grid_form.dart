@@ -118,7 +118,6 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
     });
   }
 
-
   void _onError(dynamic error) async {
     if (await widget.onError?.call(error) ?? true) {
       setState(() {
@@ -128,21 +127,28 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
   }
 }
 
+/// A Widget to display [FormData]
 class ApptiveGridFormData extends StatefulWidget {
+  /// Creates a Widget to display [formData]
+  ///
+  /// if [error] is not null it will display a error
   const ApptiveGridFormData(
       {Key? key,
       this.formData,
-        this.error,
+      this.error,
       this.titleStyle,
       this.contentPadding,
       this.titlePadding,
       this.hideTitle = false,
       this.onActionSuccess,
-      this.onError, this.triggerReload})
+      this.onError,
+      this.triggerReload})
       : super(key: key);
 
+  /// [FormData] that should be displayed
   final FormData? formData;
 
+  /// Error that should be displayed. Having a error will have priority over [formData]
   final dynamic error;
 
   /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
@@ -169,6 +175,7 @@ class ApptiveGridFormData extends StatefulWidget {
   /// This functionality can be used to do a custom Widget or Transition
   final Future<bool> Function(dynamic)? onError;
 
+  /// Will be called when [formData] should be reloaded
   final void Function()? triggerReload;
 
   @override
@@ -330,6 +337,7 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             });
           }
         } else {
+          // TODO: Add Screen to show if form was saved
           _onError(response);
         }
       }).catchError((error) {

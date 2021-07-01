@@ -59,6 +59,7 @@ class ApptiveGridClient {
 
   /// Performs a [FormAction] using [formData]
   ///
+  /// if this returns a [http.Response] with a [http.Response.statusCode] >= 400 it means that the Item was saved in [options.cache]
   /// throws [Response] if the request fails
   Future<http.Response> performAction(
     FormAction action,
@@ -172,6 +173,7 @@ class ApptiveGridClient {
     return _authenticator.authenticate();
   }
 
+  /// Tries to send pending [ActionItem]s that are stored in [options.cache]
   Future sendPendingActions() async {
     final pendingActions = await options.cache?.getPendingActionItems() ?? [];
 

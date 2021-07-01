@@ -12,7 +12,6 @@ import 'package:mocktail/mocktail.dart';
 import 'common.dart';
 
 void main() {
-
   late ApptiveGridClient client;
 
   setUp(() {
