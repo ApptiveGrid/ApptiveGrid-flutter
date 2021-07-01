@@ -74,8 +74,9 @@ class ApptiveGridClient {
     final streamResponse = await _client.send(request);
     final response = await http.Response.fromStream(streamResponse);
     if (response.statusCode >= 400) {
-      if (saveToPendingItems) {
-        await options.cache?.addPendingActionItem(actionItem);
+      if (saveToPendingItems && options.cache != null) {
+        await options.cache!.addPendingActionItem(actionItem);
+        return response;
       }
       throw response;
     }

@@ -81,10 +81,6 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
   FormData? _formData;
   late ApptiveGridClient _client;
 
-  final _formKey = GlobalKey<FormState>();
-
-  bool _success = false;
-
   dynamic _error;
 
   @override
@@ -92,6 +88,114 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
     super.didChangeDependencies();
     _client = ApptiveGrid.getClient(context);
     _loadForm();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ApptiveGridFormData(
+      formData: _formData,
+      error: _error,
+      titleStyle: widget.titleStyle,
+      contentPadding: widget.contentPadding,
+      titlePadding: widget.titlePadding,
+      hideTitle: widget.hideTitle,
+      onActionSuccess: widget.onActionSuccess,
+      onError: widget.onError,
+      triggerReload: _loadForm,
+    );
+  }
+
+  void _loadForm() {
+    _client.loadForm(formUri: widget.formUri).then((value) {
+      if (widget.onFormLoaded != null) {
+        widget.onFormLoaded!(value);
+      }
+      setState(() {
+        _formData = value;
+      });
+    }).catchError((error) {
+      _onError(error);
+    });
+  }
+
+
+  void _onError(dynamic error) async {
+    if (await widget.onError?.call(error) ?? true) {
+      setState(() {
+        _error = error;
+      });
+    }
+  }
+}
+
+class ApptiveGridFormData extends StatefulWidget {
+  const ApptiveGridFormData(
+      {Key? key,
+      this.formData,
+        this.error,
+      this.titleStyle,
+      this.contentPadding,
+      this.titlePadding,
+      this.hideTitle = false,
+      this.onActionSuccess,
+      this.onError, this.triggerReload})
+      : super(key: key);
+
+  final FormData? formData;
+
+  final dynamic error;
+
+  /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
+  final TextStyle? titleStyle;
+
+  /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
+  final EdgeInsets? contentPadding;
+
+  /// Padding for the title. If no Padding is provided the [contentPadding] is used
+  final EdgeInsets? titlePadding;
+
+  /// Flag to hide the form title, default is false
+  final bool hideTitle;
+
+  /// Callback after [FormAction] completes Successfully
+  ///
+  /// If this returns false the default success screen is not shown.
+  /// This functionality can be used to do a custom Widget or Transition
+  final Future<bool> Function(FormAction)? onActionSuccess;
+
+  /// Callback if an Error occurs
+  ///
+  /// If this returns false the default error screen is not shown.
+  /// This functionality can be used to do a custom Widget or Transition
+  final Future<bool> Function(dynamic)? onError;
+
+  final void Function()? triggerReload;
+
+  @override
+  _ApptiveGridFormDataState createState() => _ApptiveGridFormDataState();
+}
+
+class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
+  FormData? _formData;
+  late ApptiveGridClient _client;
+
+  final _formKey = GlobalKey<FormState>();
+
+  bool _success = false;
+
+  dynamic _error;
+
+  @override
+  void didUpdateWidget(covariant ApptiveGridFormData oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _formData = widget.formData;
+    _error = widget.error;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _client = ApptiveGrid.getClient(context);
   }
 
   @override
@@ -171,11 +275,11 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
         Center(
           child: TextButton(
               onPressed: () {
-                _loadForm();
+                widget.triggerReload?.call();
                 setState(() {
                   _success = false;
                   _error = null;
-                  _formData = null;
+                  _formData = widget.formData;
                 });
               },
               child: Text('Send Additional Answer')),
@@ -202,9 +306,7 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
         Center(
           child: TextButton(
               onPressed: () {
-                if (_formData == null) {
-                  _loadForm();
-                }
+                widget.triggerReload?.call();
                 setState(() {
                   _success = false;
                   _error = null;
@@ -217,19 +319,6 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
   }
 
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
-
-  void _loadForm() {
-    _client.loadForm(formUri: widget.formUri).then((value) {
-      if (widget.onFormLoaded != null) {
-        widget.onFormLoaded!(value);
-      }
-      setState(() {
-        _formData = value;
-      });
-    }).catchError((error) {
-      _onError(error);
-    });
-  }
 
   void _performAction(FormAction action) {
     if (_formKey.currentState!.validate()) {
