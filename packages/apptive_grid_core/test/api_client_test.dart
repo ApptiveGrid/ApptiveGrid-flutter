@@ -496,7 +496,7 @@ void main() {
         return StreamedResponse(Stream.value([]), 400);
       });
 
-     await expectLater(() async => await client.performAction(action, data), throwsA(isInstanceOf<Response>()));
+     await expectLater((await client.performAction(action, data)).statusCode, 400);
 
       verify(() => cache.addPendingActionItem(any())).called(1);
 
