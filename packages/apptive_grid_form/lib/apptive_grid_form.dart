@@ -307,8 +307,7 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         AspectRatio(
             aspectRatio: 1,
             child: Lottie.asset(
-              // TODO: Swap out with new Animation
-              'packages/apptive_grid_form/assets/success.json',
+              'packages/apptive_grid_form/assets/saved.json',
               repeat: false,
             )),
         Text(
