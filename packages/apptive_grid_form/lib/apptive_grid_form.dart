@@ -211,9 +211,9 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   Widget build(BuildContext context) {
     if (_error != null) {
       return _buildError(context);
-    } else if(_saved) {
+    } else if (_saved) {
       return _buildSaved(context);
-  } else if (_success) {
+    } else if (_success) {
       return _buildSuccess(context);
     } else if (_formData == null) {
       return _buildLoading(context);

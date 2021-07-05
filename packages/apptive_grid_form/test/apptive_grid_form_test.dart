@@ -302,7 +302,8 @@ void main() {
         expect(find.text('Form Title'), findsOneWidget);
       });
 
-      testWidgets('Cache Response. Additional Answer shows Form', (tester) async {
+      testWidgets('Cache Response. Additional Answer shows Form',
+          (tester) async {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
@@ -317,8 +318,7 @@ void main() {
         when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
         when(() => client.performAction(action, formData))
-            .thenAnswer((_) async => http.Response('', 500)
-        );
+            .thenAnswer((_) async => http.Response('', 500));
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
@@ -409,8 +409,12 @@ void main() {
     setUp(() {
       httpClient = MockHttpClient();
 
-      when(() => httpClient.get(Uri.parse(env.url+formUri.uriString), headers: any(named: 'headers'))).thenAnswer((_) async => http.Response(jsonEncode(data.toJson()), 200));
-      when(() => httpClient.send(any())).thenAnswer((invocation) async => http.StreamedResponse(Stream.value([]), 400));
+      when(() => httpClient.get(Uri.parse(env.url + formUri.uriString),
+              headers: any(named: 'headers')))
+          .thenAnswer(
+              (_) async => http.Response(jsonEncode(data.toJson()), 200));
+      when(() => httpClient.send(any())).thenAnswer(
+          (invocation) async => http.StreamedResponse(Stream.value([]), 400));
     });
 
     testWidgets('No Cache, Error, Shows Error Screen', (tester) async {
@@ -437,14 +441,17 @@ void main() {
     testWidgets('Cache, Error, Shows Saved Screen', (tester) async {
       final cacheMap = <ActionItem>{};
       final cache = MockApptiveGridCache();
-      when(() => cache.addPendingActionItem(any())).thenAnswer((invocation) => cacheMap.add(invocation.positionalArguments[0]));
-      when(() => cache.removePendingActionItem(any())).thenAnswer((invocation) => cacheMap.remove(invocation.positionalArguments[0]));
-      when(() => cache.getPendingActionItems()).thenAnswer((invocation) => cacheMap.toList());
+      when(() => cache.addPendingActionItem(any())).thenAnswer(
+          (invocation) => cacheMap.add(invocation.positionalArguments[0]));
+      when(() => cache.removePendingActionItem(any())).thenAnswer(
+          (invocation) => cacheMap.remove(invocation.positionalArguments[0]));
+      when(() => cache.getPendingActionItems())
+          .thenAnswer((invocation) => cacheMap.toList());
 
-
-      final client = ApptiveGridClient.fromClient(httpClient, options: ApptiveGridOptions(
-        cache: cache,
-      ));
+      final client = ApptiveGridClient.fromClient(httpClient,
+          options: ApptiveGridOptions(
+            cache: cache,
+          ));
 
       final target = TestApp(
         client: client,
@@ -461,7 +468,11 @@ void main() {
 
       verify(() => httpClient.send(any())).called(1);
 
-      expect(find.text('The Form was saved and will be send at the next opportunity', skipOffstage: false), findsOneWidget);
+      expect(
+          find.text(
+              'The Form was saved and will be send at the next opportunity',
+              skipOffstage: false),
+          findsOneWidget);
     });
   });
 }
