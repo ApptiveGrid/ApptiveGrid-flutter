@@ -192,6 +192,8 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   dynamic _error;
 
+  bool _saved = false;
+
   @override
   void didUpdateWidget(covariant ApptiveGridFormData oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -209,7 +211,9 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   Widget build(BuildContext context) {
     if (_error != null) {
       return _buildError(context);
-    } else if (_success) {
+    } else if(_saved) {
+      return _buildSaved(context);
+  } else if (_success) {
       return _buildSuccess(context);
     } else if (_formData == null) {
       return _buildLoading(context);
@@ -286,6 +290,40 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 setState(() {
                   _success = false;
                   _error = null;
+                  _saved = false;
+                  _formData = widget.formData;
+                });
+              },
+              child: Text('Send Additional Answer')),
+        )
+      ],
+    );
+  }
+
+  Widget _buildSaved(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(32.0),
+      children: [
+        AspectRatio(
+            aspectRatio: 1,
+            child: Lottie.asset(
+              // TODO: Swap out with new Animation
+              'packages/apptive_grid_form/assets/success.json',
+              repeat: false,
+            )),
+        Text(
+          'The Form was saved and will be send at the next opportunity',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        Center(
+          child: TextButton(
+              onPressed: () {
+                widget.triggerReload?.call();
+                setState(() {
+                  _success = false;
+                  _error = null;
+                  _saved = false;
                   _formData = widget.formData;
                 });
               },
@@ -317,6 +355,7 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 setState(() {
                   _success = false;
                   _error = null;
+                  _saved = false;
                 });
               },
               child: Text('Back to Form')),
@@ -337,13 +376,19 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             });
           }
         } else {
-          // TODO: Add Screen to show if form was saved
-          _onError(response);
+          // FormData was saved to [ApptiveGridCache]
+          _onSavedOffline();
         }
       }).catchError((error) {
         _onError(error);
       });
     }
+  }
+
+  void _onSavedOffline() {
+    setState(() {
+      _saved = true;
+    });
   }
 
   void _onError(dynamic error) async {
