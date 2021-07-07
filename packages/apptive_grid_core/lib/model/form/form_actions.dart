@@ -36,20 +36,27 @@ class FormAction {
   int get hashCode => toString().hashCode;
 }
 
+/// Wrapper class to use in [ApptiveGridCache]
 class ActionItem {
+  /// Creates a new Action Item
   ActionItem({required this.action, required this.data});
-  ActionItem.fromJson(Map<String, dynamic> json) :
-    action = FormAction.fromJson(json['action']),
-    data = FormData.fromJson(json['data']);
 
+  /// Creates a ActionItem base on a [json] map
+  ActionItem.fromJson(Map<String, dynamic> json)
+      : action = FormAction.fromJson(json['action']),
+        data = FormData.fromJson(json['data']);
+
+  /// Action to be performed
   final FormAction action;
 
+  /// Data to be send in the Action
   final FormData data;
 
+  /// Serializes the ActionItem to a json map
   Map<String, dynamic> toJson() => {
-    'action': action.toJson(),
-    'data': data.toJson(),
-  };
+        'action': action.toJson(),
+        'data': data.toJson(),
+      };
 
   @override
   String toString() {

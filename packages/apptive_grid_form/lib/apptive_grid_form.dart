@@ -81,10 +81,6 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
   FormData? _formData;
   late ApptiveGridClient _client;
 
-  final _formKey = GlobalKey<FormState>();
-
-  bool _success = false;
-
   dynamic _error;
 
   @override
@@ -96,8 +92,127 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
 
   @override
   Widget build(BuildContext context) {
+    return ApptiveGridFormData(
+      formData: _formData,
+      error: _error,
+      titleStyle: widget.titleStyle,
+      contentPadding: widget.contentPadding,
+      titlePadding: widget.titlePadding,
+      hideTitle: widget.hideTitle,
+      onActionSuccess: widget.onActionSuccess,
+      onError: widget.onError,
+      triggerReload: _loadForm,
+    );
+  }
+
+  void _loadForm() {
+    _client.loadForm(formUri: widget.formUri).then((value) {
+      if (widget.onFormLoaded != null) {
+        widget.onFormLoaded!(value);
+      }
+      setState(() {
+        _formData = value;
+      });
+    }).catchError((error) {
+      _onError(error);
+    });
+  }
+
+  void _onError(dynamic error) async {
+    if (await widget.onError?.call(error) ?? true) {
+      setState(() {
+        _error = error;
+      });
+    }
+  }
+}
+
+/// A Widget to display [FormData]
+class ApptiveGridFormData extends StatefulWidget {
+  /// Creates a Widget to display [formData]
+  ///
+  /// if [error] is not null it will display a error
+  const ApptiveGridFormData(
+      {Key? key,
+      this.formData,
+      this.error,
+      this.titleStyle,
+      this.contentPadding,
+      this.titlePadding,
+      this.hideTitle = false,
+      this.onActionSuccess,
+      this.onError,
+      this.triggerReload})
+      : super(key: key);
+
+  /// [FormData] that should be displayed
+  final FormData? formData;
+
+  /// Error that should be displayed. Having a error will have priority over [formData]
+  final dynamic error;
+
+  /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
+  final TextStyle? titleStyle;
+
+  /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
+  final EdgeInsets? contentPadding;
+
+  /// Padding for the title. If no Padding is provided the [contentPadding] is used
+  final EdgeInsets? titlePadding;
+
+  /// Flag to hide the form title, default is false
+  final bool hideTitle;
+
+  /// Callback after [FormAction] completes Successfully
+  ///
+  /// If this returns false the default success screen is not shown.
+  /// This functionality can be used to do a custom Widget or Transition
+  final Future<bool> Function(FormAction)? onActionSuccess;
+
+  /// Callback if an Error occurs
+  ///
+  /// If this returns false the default error screen is not shown.
+  /// This functionality can be used to do a custom Widget or Transition
+  final Future<bool> Function(dynamic)? onError;
+
+  /// Will be called when [formData] should be reloaded
+  final void Function()? triggerReload;
+
+  @override
+  _ApptiveGridFormDataState createState() => _ApptiveGridFormDataState();
+}
+
+class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
+  FormData? _formData;
+  late ApptiveGridClient _client;
+
+  final _formKey = GlobalKey<FormState>();
+
+  bool _success = false;
+
+  dynamic _error;
+
+  bool _saved = false;
+
+  @override
+  void didUpdateWidget(covariant ApptiveGridFormData oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _formData = widget.formData;
+    _error = widget.error;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _client = ApptiveGrid.getClient(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     if (_error != null) {
       return _buildError(context);
+    } else if (_saved) {
+      return _buildSaved(context);
     } else if (_success) {
       return _buildSuccess(context);
     } else if (_formData == null) {
@@ -171,11 +286,44 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
         Center(
           child: TextButton(
               onPressed: () {
-                _loadForm();
+                widget.triggerReload?.call();
                 setState(() {
                   _success = false;
                   _error = null;
-                  _formData = null;
+                  _saved = false;
+                  _formData = widget.formData;
+                });
+              },
+              child: Text('Send Additional Answer')),
+        )
+      ],
+    );
+  }
+
+  Widget _buildSaved(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(32.0),
+      children: [
+        AspectRatio(
+            aspectRatio: 1,
+            child: Lottie.asset(
+              'packages/apptive_grid_form/assets/saved.json',
+              repeat: false,
+            )),
+        Text(
+          'The Form was saved and will be send at the next opportunity',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        Center(
+          child: TextButton(
+              onPressed: () {
+                widget.triggerReload?.call();
+                setState(() {
+                  _success = false;
+                  _error = null;
+                  _saved = false;
+                  _formData = widget.formData;
                 });
               },
               child: Text('Send Additional Answer')),
@@ -202,12 +350,11 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
         Center(
           child: TextButton(
               onPressed: () {
-                if (_formData == null) {
-                  _loadForm();
-                }
+                widget.triggerReload?.call();
                 setState(() {
                   _success = false;
                   _error = null;
+                  _saved = false;
                 });
               },
               child: Text('Back to Form')),
@@ -217,19 +364,6 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
   }
 
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
-
-  void _loadForm() {
-    _client.loadForm(formUri: widget.formUri).then((value) {
-      if (widget.onFormLoaded != null) {
-        widget.onFormLoaded!(value);
-      }
-      setState(() {
-        _formData = value;
-      });
-    }).catchError((error) {
-      _onError(error);
-    });
-  }
 
   void _performAction(FormAction action) {
     if (_formKey.currentState!.validate()) {
@@ -241,12 +375,19 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
             });
           }
         } else {
-          _onError(response);
+          // FormData was saved to [ApptiveGridCache]
+          _onSavedOffline();
         }
       }).catchError((error) {
         _onError(error);
       });
     }
+  }
+
+  void _onSavedOffline() {
+    setState(() {
+      _saved = true;
+    });
   }
 
   void _onError(dynamic error) async {

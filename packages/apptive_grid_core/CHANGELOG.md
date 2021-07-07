@@ -1,3 +1,6 @@
+## [0.2.6]
+* Add Option to cache Actions with ApptiveGridCache
+
 ## [0.2.5]
 * Fix Parsing of Enum Entries
 

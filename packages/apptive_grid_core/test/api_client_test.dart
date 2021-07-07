@@ -17,8 +17,9 @@ void main() {
     registerFallbackValue<Uri>(Uri());
     registerFallbackValue<Map<String, String>>(<String, String>{});
 
-    registerFallbackValue(ActionItem(action: FormAction('uri', 'method'), data: FormData('title', [], [],
-        {})));
+    registerFallbackValue(ActionItem(
+        action: FormAction('uri', 'method'),
+        data: FormData('title', [], [], {})));
   });
 
   setUp(() {
@@ -485,9 +486,14 @@ void main() {
     final cacheMap = <String, dynamic>{};
 
     setUp(() {
-      when(() => cache.addPendingActionItem(any())).thenAnswer((invocation) => cacheMap[invocation.positionalArguments[0].toString()] = (invocation.positionalArguments[0] as ActionItem).toJson());
-      when(() => cache.removePendingActionItem(any())).thenAnswer((invocation) => cacheMap.remove(cacheMap[invocation.positionalArguments[0].toString()]));
-      when(() => cache.getPendingActionItems()).thenAnswer((invocation) => cacheMap.values.map((e) => ActionItem.fromJson(e)).toList());
+      when(() => cache.addPendingActionItem(any())).thenAnswer((invocation) =>
+          cacheMap[invocation.positionalArguments[0].toString()] =
+              (invocation.positionalArguments[0] as ActionItem).toJson());
+      when(() => cache.removePendingActionItem(any())).thenAnswer(
+          (invocation) => cacheMap
+              .remove(cacheMap[invocation.positionalArguments[0].toString()]));
+      when(() => cache.getPendingActionItems()).thenAnswer((invocation) =>
+          cacheMap.values.map((e) => ActionItem.fromJson(e)).toList());
       cacheMap.clear();
     });
 
@@ -496,7 +502,8 @@ void main() {
         return StreamedResponse(Stream.value([]), 400);
       });
 
-     await expectLater((await client.performAction(action, data)).statusCode, 400);
+      await expectLater(
+          (await client.performAction(action, data)).statusCode, 400);
 
       verify(() => cache.addPendingActionItem(any())).called(1);
 
