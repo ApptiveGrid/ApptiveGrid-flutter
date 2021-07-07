@@ -11,8 +11,15 @@ import 'package:http/http.dart';
 import 'common.dart';
 
 void main() {
+  late ApptiveGridClient client;
   setUpAll(() {
     registerFallbackValue<FormData>(FormData('Title', [], [], {}));
+  });
+
+  setUp(() {
+    client = MockApptiveGridClient();
+
+    when(() => client.sendPendingActions()).thenAnswer((invocation) async {});
   });
 
   group('Text', () {
@@ -33,7 +40,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -83,7 +89,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -127,7 +132,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -188,7 +192,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -253,7 +256,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -297,7 +299,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -358,7 +359,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -402,7 +402,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -446,7 +445,6 @@ void main() {
       final formData = FormData('Title', [
         component,
       ], [], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -482,7 +480,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -526,7 +523,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -576,7 +572,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -620,7 +615,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -674,7 +668,6 @@ void main() {
       ], [
         action,
       ], {});
-      final client = MockApptiveGridClient();
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(

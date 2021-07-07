@@ -1,6 +1,7 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
 import 'mocks.dart';
@@ -141,6 +142,7 @@ void main() {
     testWidgets('withClient Uses Provided Client', (tester) async {
       late BuildContext context;
       final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions()).thenAnswer((_) async {});
       final target = ApptiveGrid.withClient(
         client: client,
         child: Builder(

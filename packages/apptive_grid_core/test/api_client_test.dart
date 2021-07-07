@@ -16,6 +16,10 @@ void main() {
     registerFallbackValue<BaseRequest>(Request('GET', Uri()));
     registerFallbackValue<Uri>(Uri());
     registerFallbackValue<Map<String, String>>(<String, String>{});
+
+    registerFallbackValue(ActionItem(
+        action: FormAction('uri', 'method'),
+        data: FormData('title', [], [], {})));
   });
 
   setUp(() {
@@ -463,6 +467,67 @@ void main() {
       expect(gridView.filter != null, true);
       expect(gridView.fields.length, 3);
       expect(gridView.rows.length, 1);
+    });
+  });
+
+  group('Caching Form Actions', () {
+    final httpClient = MockHttpClient();
+
+    final cache = MockApptiveGridCache();
+
+    final options = ApptiveGridOptions(cache: cache);
+
+    final client = ApptiveGridClient.fromClient(httpClient, options: options);
+
+    final action = FormAction('actionUri', 'POST');
+
+    final data = FormData('title', [], [], {});
+
+    final cacheMap = <String, dynamic>{};
+
+    setUp(() {
+      when(() => cache.addPendingActionItem(any())).thenAnswer((invocation) =>
+          cacheMap[invocation.positionalArguments[0].toString()] =
+              (invocation.positionalArguments[0] as ActionItem).toJson());
+      when(() => cache.removePendingActionItem(any())).thenAnswer(
+          (invocation) => cacheMap
+              .remove(cacheMap[invocation.positionalArguments[0].toString()]));
+      when(() => cache.getPendingActionItems()).thenAnswer((invocation) =>
+          cacheMap.values.map((e) => ActionItem.fromJson(e)).toList());
+      cacheMap.clear();
+    });
+
+    test('Fail, gets send from pending', () async {
+      when(() => httpClient.send(any())).thenAnswer((realInvocation) async {
+        return StreamedResponse(Stream.value([]), 400);
+      });
+
+      await expectLater(
+          (await client.performAction(action, data)).statusCode, 400);
+
+      verify(() => cache.addPendingActionItem(any())).called(1);
+
+      when(() => httpClient.send(any())).thenAnswer((realInvocation) async {
+        return StreamedResponse(Stream.value([]), 200);
+      });
+
+      await client.sendPendingActions();
+
+      verify(() => cache.removePendingActionItem(any())).called(1);
+    });
+
+    test('Resubmit fails does not crash', () async {
+      final actionItem = ActionItem(action: action, data: data);
+      cacheMap[actionItem.toString()] = actionItem.toJson();
+
+      when(() => httpClient.send(any())).thenAnswer((realInvocation) async {
+        return StreamedResponse(Stream.value([]), 400);
+      });
+
+      await client.sendPendingActions();
+
+      verifyNever(() => cache.removePendingActionItem(any()));
+      verifyNever(() => cache.addPendingActionItem(any()));
     });
   });
 }

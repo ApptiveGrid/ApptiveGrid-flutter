@@ -53,4 +53,23 @@ void main() {
       expect((a.hashCode - c.hashCode) == 0, false);
     });
   });
+
+  group('ActionItem', () {
+    test('Equality Test', () {
+      final actionA = FormAction('uri', 'method');
+      final actionB = FormAction('uri', 'methodB');
+
+      final data = FormData('title', [], [], {});
+
+      final a = ActionItem(action: actionA, data: data);
+      final b = ActionItem(action: actionA, data: data);
+      final c = ActionItem(action: actionB, data: data);
+
+      expect(a, b);
+      expect(a, isNot(c));
+
+      expect(a.hashCode, b.hashCode);
+      expect(a.hashCode, isNot(c.hashCode));
+    });
+  });
 }
