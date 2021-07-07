@@ -1,3 +1,6 @@
+## [0.2.6+1]
+* Catch more Errors to cache a FormAction
+
 ## [0.2.6]
 * Add Option to cache Actions with ApptiveGridCache
 
