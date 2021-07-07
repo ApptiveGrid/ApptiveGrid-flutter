@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -208,8 +209,9 @@ void main() {
         return StreamedResponse(Stream.value([]), 200);
       });
 
-      await apptiveGridClient.performAction(action, formData);
+      final response = await apptiveGridClient.performAction(action, formData);
 
+      expect(response.statusCode, 200);
       expect(calledRequest.method, action.method);
       expect(calledRequest.url.toString(),
           '${ApptiveGridEnvironment.production.url}${action.uri}');
@@ -514,6 +516,16 @@ void main() {
       await client.sendPendingActions();
 
       verify(() => cache.removePendingActionItem(any())).called(1);
+    });
+
+    test('Sending Throws Exception, Saves Action', () async {
+      when(() => httpClient.send(any()))
+          .thenThrow(SocketException('Socket Exception'));
+
+      await expectLater(
+          (await client.performAction(action, data)).statusCode, 400);
+
+      verify(() => cache.addPendingActionItem(any())).called(1);
     });
 
     test('Resubmit fails does not crash', () async {

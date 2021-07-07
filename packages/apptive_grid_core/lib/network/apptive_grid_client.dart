@@ -70,16 +70,33 @@ class ApptiveGridClient {
     final uri = Uri.parse('${options.environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
-    request.headers.addAll({HttpHeaders.contentTypeHeader: ContentType.json});
-    request.headers.addAll(headers);
-    final streamResponse = await _client.send(request);
-    final response = await http.Response.fromStream(streamResponse);
-    if (response.statusCode >= 400) {
+
+    final handleError = (error) async {
+      // TODO: Filter out Errors that happened because the Input was not correct
+      // in that case don't save the Action and throw the error
       if (saveToPendingItems && options.cache != null) {
         await options.cache!.addPendingActionItem(actionItem);
-        return response;
+        if (error is http.Response) {
+          return error;
+        } else {
+          return http.Response(error.toString(), 400);
+        }
       }
-      throw response;
+      throw error;
+    };
+    late http.Response response;
+    request.headers.addAll({HttpHeaders.contentTypeHeader: ContentType.json});
+    request.headers.addAll(headers);
+    try {
+      final streamResponse = await _client.send(request);
+      response = await http.Response.fromStream(streamResponse);
+    } catch (e) {
+      // Catch all Exception for compatibility Reasons between Web and non Web Apps
+      return handleError(e);
+    }
+
+    if (response.statusCode >= 400) {
+      return handleError(response);
     }
     // Action was performed successfully. Remove it from pending Actions
     await options.cache?.removePendingActionItem(actionItem);
