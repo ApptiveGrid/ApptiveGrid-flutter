@@ -1,3 +1,6 @@
+## [0.2.6]
+* Update apptive_grid_core
+
 ## [0.2.5]
 * Fix Parsing of Enum Entries
 

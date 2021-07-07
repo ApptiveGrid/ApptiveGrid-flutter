@@ -1,3 +1,7 @@
+## [0.2.6]
+* Update apptive_grid_core to support cached Action
+* Expose ApptiveGridFormData Widget to allow building Forms with custom DataSet
+
 ## [0.2.5]
 * Fix Parsing of Enum Entries
 
