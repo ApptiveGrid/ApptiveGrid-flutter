@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -114,6 +112,20 @@ void main() {
       final formData = FormData(title, [component], [action], schema);
 
       expect(FormData.fromJson(formData.toJson()), formData);
+    });
+  });
+
+  group('Validation', () {
+    test('toRequestObject contains Null Values', () {
+      final formData = FormData.fromJson(response);
+
+      expect(
+          formData
+              .toRequestObject()
+              .cast<dynamic, String?>()
+              .values
+              .where((element) => element == null || element.isEmpty),
+          isNot([]));
     });
   });
 
