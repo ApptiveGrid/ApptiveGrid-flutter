@@ -1,3 +1,6 @@
+## [0.2.6+2]
+* Send empty/null values when submitting a Form. Enables sending non-selected enum values
+
 ## [0.2.6+1]
 * Catch more Errors to cache a FormAction
 
