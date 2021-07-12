@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:json_schema2/json_schema2.dart';
 
 void main() {
   final title = 'title';
@@ -115,22 +114,6 @@ void main() {
       final formData = FormData(title, [component], [action], schema);
 
       expect(FormData.fromJson(formData.toJson()), formData);
-    });
-  });
-
-  group('Schema Validation', () {
-    test('toRequestObject matches Schema', () {
-      final schema = JsonSchema.createSchema(response['schema']);
-
-      final formData = FormData.fromJson(response);
-
-      expect(
-          schema.validateWithErrors(
-              jsonEncode(
-                formData.toRequestObject(),
-              ),
-              parseJson: true),
-          []);
     });
   });
 
