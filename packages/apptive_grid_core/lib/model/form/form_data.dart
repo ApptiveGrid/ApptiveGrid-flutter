@@ -48,7 +48,7 @@ class FormData {
   Map<String, dynamic> toRequestObject() {
     return Map.fromEntries(components.map((component) {
       return MapEntry(component.fieldId, component.data.schemaValue);
-    }).where((element) => element.value != null));
+    }));
   }
 
   @override
