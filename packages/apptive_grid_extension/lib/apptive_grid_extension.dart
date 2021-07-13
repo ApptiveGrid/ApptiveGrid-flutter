@@ -26,12 +26,8 @@ class _ApptiveGridExtensionState extends State<ApptiveGridExtension> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      print('Adding Event Listener');
       html.window.addEventListener('message', (event) {
-        print('Extension Received Event: $event');
         final message = (event as html.MessageEvent);
-        print('Received Message:');
-        print('Data: ${message.data}');
         if((message.data as Map).containsKey('grid')) {
           setState(() {
             _data = message.data;

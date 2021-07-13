@@ -76,8 +76,24 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
           if(_field == null)
             Center(child: Text('Select a column representing the data'),),
           if(_field != null)
-            PieChart(
-              dataMap: _calculateDataMap(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(_field!.name,
+                  style: Theme.of(context).textTheme.headline4,),
+                  const SizedBox(height: 16,),
+                  PieChart(
+                    dataMap: _calculateDataMap(),
+                    legendOptions: LegendOptions(
+                      showLegendsInRow: true,
+                      legendPosition: LegendPosition.bottom
+                    ),
+                  ),
+                ],
+              ),
             ),
         ],
       );
