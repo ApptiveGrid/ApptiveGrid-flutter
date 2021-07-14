@@ -6,8 +6,10 @@ void main() {
   runApp(
     ApptiveGrid(
       options: ApptiveGridOptions(
-        environment: ApptiveGridEnvironment.alpha,
-      ),
+          environment: ApptiveGridEnvironment.alpha,
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+          )),
       child: MyApp(),
     ),
   );

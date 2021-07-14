@@ -144,39 +144,35 @@ class EnumDataEntity extends DataEntity<String, String> {
 /// [DataEntity] representing an Object CrossReferencing to a different Grid
 class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
   /// Create a new CrossReference Data Entity
-  CrossReferenceDataEntity(
-      {String? displayValue, this.entityUri, required this.gridUri})
-      : _displayValue = displayValue;
+  CrossReferenceDataEntity({this.value, this.entityUri, required this.gridUri});
 
   /// Creates a new CrossReferenceDataEntity from a Json Response
   factory CrossReferenceDataEntity.fromJson(
           {required Map? jsonValue, required String gridUri}) =>
       CrossReferenceDataEntity(
-          displayValue: jsonValue?['displayValue'],
+          value: jsonValue?['displayValue'],
           entityUri: jsonValue?['uri'] != null
               ? EntityUri.fromUri(jsonValue?['uri'])
               : null,
           gridUri: GridUri.fromUri(gridUri));
 
-  final String? _displayValue;
+  @override
+  String? value;
 
   /// The [EntityUri] pointing to the Entity this is referencing
-  final EntityUri? entityUri;
+  EntityUri? entityUri;
 
   /// Pointing to the [Grid] this is referencing
   final GridUri gridUri;
 
   @override
   dynamic get schemaValue {
-    if (_displayValue == null || entityUri == null) {
+    if (value == null || entityUri == null) {
       return null;
     } else {
-      return {'displayValue': _displayValue, 'uri': entityUri?.uriString};
+      return {'displayValue': value, 'uri': entityUri?.uriString};
     }
   }
-
-  @override
-  String? get value => _displayValue;
 
   @override
   String toString() {

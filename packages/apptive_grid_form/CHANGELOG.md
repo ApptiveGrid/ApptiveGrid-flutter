@@ -1,3 +1,6 @@
+## [0.2.7]
+* Support CrossReferences in Forms. This still requires Authentication however it is already a first look at how this will look and work
+
 ## [0.2.6]
 * Update apptive_grid_core to support cached Action
 * Expose ApptiveGridFormData Widget to allow building Forms with custom DataSet

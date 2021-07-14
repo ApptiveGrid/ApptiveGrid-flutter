@@ -88,6 +88,21 @@ void main() {
       expect(widget.runtimeType, EnumFormWidget);
     });
 
+    test('CrossReferenceComponent', () {
+      final component = CrossReferenceFormComponent(
+        fieldId: 'id',
+        data: CrossReferenceDataEntity(
+            gridUri: GridUri(user: 'user', space: 'space', grid: 'grid')),
+        property: 'Property',
+        required: false,
+        options: FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, CrossReferenceFormWidget);
+    });
+
     test('ArgumentError', () {
       final component = UnknownComponent();
 

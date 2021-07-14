@@ -29,6 +29,9 @@ Widget fromModel(FormComponent component) {
       return EnumFormWidget(
         component: component as EnumFormComponent,
       );
+    case CrossReferenceDataEntity:
+      return CrossReferenceFormWidget(
+          component: component as CrossReferenceFormComponent);
     default:
       throw ArgumentError(
           'No Widget found for component $component. Please make sure you are you using the latest version of this package?');

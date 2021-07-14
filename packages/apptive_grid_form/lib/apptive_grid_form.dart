@@ -197,14 +197,26 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   @override
   void didUpdateWidget(covariant ApptiveGridFormData oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _formData = widget.formData;
-    _error = widget.error;
+    _updateView();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _client = ApptiveGrid.getClient(context);
+  }
+
+  void _updateView({bool resetFormData = true}) {
+    setState(() {
+      if (resetFormData) {
+        _formData = widget.formData != null
+            ? FormData.fromJson(widget.formData!.toJson())
+            : null;
+      }
+      _error = widget.error;
+      _success = false;
+      _saved = false;
+    });
   }
 
   @override
@@ -287,12 +299,7 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           child: TextButton(
               onPressed: () {
                 widget.triggerReload?.call();
-                setState(() {
-                  _success = false;
-                  _error = null;
-                  _saved = false;
-                  _formData = widget.formData;
-                });
+                _updateView();
               },
               child: Text('Send Additional Answer')),
         )
@@ -319,12 +326,7 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           child: TextButton(
               onPressed: () {
                 widget.triggerReload?.call();
-                setState(() {
-                  _success = false;
-                  _error = null;
-                  _saved = false;
-                  _formData = widget.formData;
-                });
+                _updateView();
               },
               child: Text('Send Additional Answer')),
         )
@@ -351,11 +353,7 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           child: TextButton(
               onPressed: () {
                 widget.triggerReload?.call();
-                setState(() {
-                  _success = false;
-                  _error = null;
-                  _saved = false;
-                });
+                _updateView(resetFormData: false);
               },
               child: Text('Back to Form')),
         )
