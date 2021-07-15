@@ -21,10 +21,15 @@ class ApptiveGridAuthenticator {
   Client? _authClient;
 
   TokenResponse? _token;
+  Credential? _credential;
 
   /// Override the token for testing purposes
   @visibleForTesting
   void setToken(TokenResponse token) => _token = token;
+
+  /// Override the Credential for testing purposes
+  @visibleForTesting
+  void setCredential(Credential credential) => _credential = credential;
 
   /// Override the [Client] for testing purposes
   @visibleForTesting
@@ -65,9 +70,9 @@ class ApptiveGridAuthenticator {
           urlLauncher: urlLauncher,
         );
 
-    final credential = await authenticator.authorize();
+    _credential = await authenticator.authorize();
 
-    _token = await credential?.getTokenResponse();
+    _token = await _credential?.getTokenResponse();
 
     try {
       await closeWebView();
@@ -77,7 +82,7 @@ class ApptiveGridAuthenticator {
       debugPrint('closeWebView is not available on this platform');
     }
 
-    return credential;
+    return _credential;
   }
 
   /// Checks the authentication status and performs actions depending on the status
@@ -91,16 +96,24 @@ class ApptiveGridAuthenticator {
       await authenticate();
     } else if (_token != null &&
         (_token?.expiresAt?.difference(DateTime.now()).inSeconds ?? 0) < 70) {
-      // Token is expired refresh it
-      final client = await _client;
-      final credential = client.createCredential(
-        accessToken: _token?.accessToken,
-        refreshToken: _token?.refreshToken,
-        expiresAt: _token?.expiresAt,
-      );
-
-      _token = await credential.getTokenResponse(true);
+      _token = await _credential?.getTokenResponse(true);
     }
+  }
+
+  /// Performs a call to Logout the User
+  ///
+  /// even if the Call Fails the token and credential will be cleared
+  Future<http.Response?> logout() async {
+    final logoutUrl = _credential?.generateLogoutUrl();
+    http.Response? response;
+    if (logoutUrl != null) {
+      response = await (httpClient ?? http.Client()).get(logoutUrl, headers: {
+        HttpHeaders.authorizationHeader: header!,
+      });
+    }
+    _token = null;
+    _credential = null;
+    return response;
   }
 
   /// If there is a authenticated User this will return the authentication header
@@ -110,6 +123,9 @@ class ApptiveGridAuthenticator {
       return '${token.tokenType} ${token.accessToken}';
     }
   }
+
+  /// Checks if the User is Authenticated
+  bool get isAuthenticated => _token != null;
 }
 
 /// Interface to provide common functionality for authorization operations

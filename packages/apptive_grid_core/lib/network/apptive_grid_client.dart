@@ -190,6 +190,14 @@ class ApptiveGridClient {
     return _authenticator.authenticate();
   }
 
+  /// Logs out the user
+  Future<void> logout() {
+    return _authenticator.logout();
+  }
+
+  /// Checks if the User is currently authenticated
+  bool get isAuthenticated => _authenticator.isAuthenticated;
+
   /// Tries to send pending [ActionItem]s that are stored in [options.cache]
   Future sendPendingActions() async {
     final pendingActions = await options.cache?.getPendingActionItems() ?? [];

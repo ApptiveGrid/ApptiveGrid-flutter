@@ -263,6 +263,26 @@ void main() {
 
       verify(() => authenticator.authenticate()).called(1);
     });
+
+    test('Logout calls Authenticator', () {
+      final authenticator = MockApptiveGridAuthenticator();
+      when(() => authenticator.logout()).thenAnswer((_) async {});
+      final client = ApptiveGridClient.fromClient(httpClient,
+          authenticator: authenticator);
+      client.logout();
+
+      verify(() => authenticator.logout()).called(1);
+    });
+
+    test('isAuthenticated calls Authenticator', () {
+      final authenticator = MockApptiveGridAuthenticator();
+      when(() => authenticator.isAuthenticated).thenAnswer((_) => true);
+      final client = ApptiveGridClient.fromClient(httpClient,
+          authenticator: authenticator);
+      client.isAuthenticated;
+
+      verify(() => authenticator.isAuthenticated).called(1);
+    });
   });
 
   group('/user/me', () {

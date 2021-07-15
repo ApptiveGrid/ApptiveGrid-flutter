@@ -192,6 +192,7 @@ void main() {
 
       await tester.tap(
         find.text('Date'),
+        warnIfMissed: false,
       );
       await tester.pumpAndSettle();
 
@@ -256,6 +257,7 @@ void main() {
 
       await tester.tap(
         find.text('Time'),
+        warnIfMissed: false,
       );
       await tester.pumpAndSettle();
 

@@ -7,7 +7,7 @@ String projectUrl = "https://api.bitbucket.org/2.0/repositories/$repositoryPath"
 Bitbucket bitbucket = new Bitbucket(this)
 Flutter flutter = new Flutter(this)
 String bitbucketCredentials = 'git-ac-flutter'
-Stage failedStage = Stage.Successful
+Stage failedStage
 
 pipeline {
   agent none
@@ -59,6 +59,7 @@ pipeline {
       post {
         success {
           script {
+            failedStage = Stage.Successful
             bitbucket.startBuildStateReporting(projectUrl)
           }
         }
@@ -89,20 +90,20 @@ pipeline {
         script {
           flutter.melosRun('test:all')
         }
-        junit "**/test_results/*.xml"
+        junit  skipPublishingChecks: true,  testResults: "**/test_results/*.xml"
       }
       post {
         failure {
           script {
             failedStage = Stage.UnitTest
-            throw Exception()
+            throw new Exception("Error in Tests");
 
           }
         }
         unstable {
           script {
             failedStage = Stage.UnitTest
-            throw Exception()
+            throw new Exception("Error in Tests");
           }
         }
       }

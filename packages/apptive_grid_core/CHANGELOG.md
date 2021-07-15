@@ -1,5 +1,6 @@
 ## [0.2.7]
 * Support CrossReferences in Forms. This still requires Authentication however it is already a first look at how this will look and work
+* Call ApptiveGridClient.logout() to logout the user
 
 ## [0.2.6+2]
 * Send empty/null values when submitting a Form. Enables sending non-selected enum values

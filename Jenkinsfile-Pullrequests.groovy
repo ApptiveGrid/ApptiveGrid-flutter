@@ -8,7 +8,7 @@ Bitbucket bitbucket = new Bitbucket(this)
 Flutter flutter = new Flutter(this)
 String targetBranch = null
 String bitbucketCredentials = 'git-ac-flutter'
-Stage failedStage = Stage.Successful
+Stage failedStage
 
 pipeline {
   agent none
@@ -66,6 +66,7 @@ pipeline {
       post {
         success {
           script {
+            failedStage = Stage.Successful
             bitbucket.startBuildStateReporting(projectUrl)
           }
         }
@@ -78,12 +79,14 @@ pipeline {
       }
       steps {
         script {
-          try {
-            flutter.melosRun('lint:all')
-          } catch (Exception e) {
+          flutter.melosRun('lint:all')
+        }
+      }
+      post {
+        failure {
+          script {
             failedStage = Stage.Lint
             currentBuild.result = 'UNSTABLE'
-            // Don't Abort Build here
           }
         }
       }
@@ -97,20 +100,22 @@ pipeline {
         script {
           flutter.melosRun('test:all')
         }
-        junit "**/test_results/*.xml"
+        junit  skipPublishingChecks: true,  testResults: "**/test_results/*.xml"
       }
       post {
         failure {
           script {
             failedStage = Stage.UnitTest
-            throw Exception()
+            throw new Exception("Error running tests")
 
           }
         }
         unstable {
           script {
-            failedStage = Stage.UnitTest
-            throw Exception()
+            if(failedStage != Stage.Lint) {
+              failedStage = Stage.UnitTest
+              throw new Exception("Error in Tests");
+            }
           }
         }
       }

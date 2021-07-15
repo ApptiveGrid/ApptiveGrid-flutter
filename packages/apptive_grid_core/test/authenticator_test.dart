@@ -82,6 +82,7 @@ void main() {
       final client = MockAuthClient();
       authenticator.setAuthClient(client);
       final credential = MockCredential();
+      authenticator.setCredential(credential);
       final newToken = TokenResponse.fromJson(
           {'token_type': 'Bearer', 'access_token': '12345'});
       when(
@@ -233,6 +234,46 @@ void main() {
       final client = await authenticator.authClient;
       expect(client.issuer!.metadata.toJson(),
           _zweidenkerIssuer.metadata.toJson());
+    });
+  });
+
+  group('Logout', () {
+    test('Logout calls http Client', () async {
+      final httpClient = MockHttpClient();
+      final authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
+      final logoutUri = Uri.parse('https://log.me/out');
+
+      final credential = MockCredential();
+      authenticator.setCredential(credential);
+      final token = TokenResponse.fromJson(
+          {'token_type': 'Bearer', 'access_token': '12345'});
+      authenticator.setToken(token);
+
+      when(() => credential.generateLogoutUrl())
+          .thenAnswer((invocation) => logoutUri);
+      when(() => httpClient.get(logoutUri, headers: any(named: 'headers')))
+          .thenAnswer((invocation) async => Response('', 200,
+              request: Request('GET', invocation.positionalArguments[0])));
+
+      final response = await authenticator.logout();
+      verify(() => httpClient.get(logoutUri, headers: any(named: 'headers')))
+          .called(1);
+      expect(response!.statusCode, 200);
+      expect(response.request!.url, logoutUri);
+    });
+  });
+
+  group('Is Authenticated', () {
+    test('isAuthentcated  returns Status of token', () async {
+      final authenticator = ApptiveGridAuthenticator();
+
+      expect(authenticator.isAuthenticated, false);
+
+      final token = TokenResponse.fromJson(
+          {'token_type': 'Bearer', 'access_token': '12345'});
+      authenticator.setToken(token);
+
+      expect(authenticator.isAuthenticated, true);
     });
   });
 }
