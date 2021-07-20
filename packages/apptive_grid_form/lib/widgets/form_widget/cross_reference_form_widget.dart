@@ -180,7 +180,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       return [
         ...[pleaseSelect, pleaseSelect],
         ..._grid!.rows
-            .map((row) => Text(row.entries.first.data.value.toString()))
+            .map((row) => Text(row.entries.first.data.value?.toString() ?? ''))
             .toList()
       ];
     }
