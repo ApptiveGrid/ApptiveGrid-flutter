@@ -123,6 +123,29 @@ void main() {
 
       expect(find.text('Property is required'), findsOneWidget);
     });
+
+    testWidgets('Empty null values', (tester) async {
+      final gridWithNull = Grid('Test', null, [
+        field
+      ], [
+        GridRow('row1', [GridEntry(field, StringDataEntity())]),
+      ]);
+
+      when(() => client.loadGrid(gridUri: gridUri))
+          .thenAnswer((_) async => gridWithNull);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.arrow_drop_down));
+      await tester.pumpAndSettle();
+
+      expect(find.text('null'), findsNothing);
+      await tester.tap(find.byType(GridRowWidget));
+      await tester.pumpAndSettle();
+
+      expect(find.text('null'), findsNothing);
+    });
   });
 
   group('GridRowDropdownDataItem', () {
