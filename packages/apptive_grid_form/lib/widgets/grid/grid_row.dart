@@ -38,7 +38,7 @@ class GridRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _GridRow(
-      labels: row.entries.map((e) => e.data.value.toString()).toList(),
+      labels: row.entries.map((e) => e.data.value?.toString()).toList(),
       cellSize: cellSize,
       textStyle: textStyle,
       color: color,
@@ -112,7 +112,7 @@ class _GridRow extends StatelessWidget {
     this.controller,
   }) : super(key: key);
 
-  final List<String> labels;
+  final List<String?> labels;
   final Size cellSize;
   final TextStyle? textStyle;
   final Color? color;
@@ -133,7 +133,7 @@ class _GridRow extends StatelessWidget {
               .map((label) => SizedBox(
                     width: cellSize.width,
                     child: Text(
-                      label,
+                      label ?? '',
                       style: textStyle,
                     ),
                   ))

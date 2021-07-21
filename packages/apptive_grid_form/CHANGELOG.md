@@ -1,3 +1,6 @@
+## [0.2.7+1]
+* Show `null` values as empty cells in CrossReferenceFormWidget
+
 ## [0.2.7]
 * Support CrossReferences in Forms. This still requires Authentication however it is already a first look at how this will look and work
 
