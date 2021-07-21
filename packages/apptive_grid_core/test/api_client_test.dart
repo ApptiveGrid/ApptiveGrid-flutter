@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -6,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
 
 import 'mocks.dart';
 
@@ -24,6 +26,11 @@ void main() {
   });
 
   setUp(() {
+    final mockUniLink = MockUniLinks();
+    UniLinksPlatform.instance = mockUniLink;
+    final stream = StreamController<String?>.broadcast();
+    when(() => mockUniLink.linkStream).thenAnswer((_) => stream.stream);
+
     apptiveGridClient = ApptiveGridClient.fromClient(httpClient);
   });
 
@@ -499,7 +506,7 @@ void main() {
 
     final options = ApptiveGridOptions(cache: cache);
 
-    final client = ApptiveGridClient.fromClient(httpClient, options: options);
+    late ApptiveGridClient client;
 
     final action = FormAction('actionUri', 'POST');
 
@@ -517,6 +524,7 @@ void main() {
       when(() => cache.getPendingActionItems()).thenAnswer((invocation) =>
           cacheMap.values.map((e) => ActionItem.fromJson(e)).toList());
       cacheMap.clear();
+      client = ApptiveGridClient.fromClient(httpClient, options: options);
     });
 
     test('Fail, gets send from pending', () async {

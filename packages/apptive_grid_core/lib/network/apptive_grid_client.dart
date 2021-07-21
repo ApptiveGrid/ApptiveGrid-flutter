@@ -30,6 +30,7 @@ class ApptiveGridClient {
   /// Close the connection on the httpClient
   void dispose() {
     _client.close();
+    _authenticator.dispose();
   }
 
   /// Headers that are used for multiple Calls

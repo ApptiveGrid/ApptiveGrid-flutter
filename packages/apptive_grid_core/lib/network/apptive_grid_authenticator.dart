@@ -7,7 +7,16 @@ class ApptiveGridAuthenticator {
   ApptiveGridAuthenticator(
       {this.options = const ApptiveGridOptions(), this.httpClient})
       : _uri = Uri.parse(
-            'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
+            'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}') {
+    if (!kIsWeb) {
+      _authCallbackSubscription = uni_links.uriLinkStream
+          .where((event) =>
+              event != null &&
+              event.scheme ==
+                  options.authenticationOptions.redirectScheme?.toLowerCase())
+          .listen((event) => _handleAuthRedirect(event!));
+    }
+  }
 
   /// [ApptiveGridOptions] used for getting the correct [ApptiveGridEnvironment.authRealm]
   /// and checking if authentication should automatically be handled
@@ -39,10 +48,12 @@ class ApptiveGridAuthenticator {
   @visibleForTesting
   Authenticator? testAuthenticator;
 
+  late final StreamSubscription<Uri?>? _authCallbackSubscription;
+
   Future<Client> get _client async {
     Future<Client> createClient() async {
       final issuer = await Issuer.discover(_uri, httpClient: httpClient);
-      return Client(issuer, 'web', httpClient: httpClient);
+      return Client(issuer, 'app', httpClient: httpClient, clientSecret: '');
     }
 
     return _authClient ??= await createClient();
@@ -57,19 +68,18 @@ class ApptiveGridAuthenticator {
   /// Returns [Credential] from the authentication call
   Future<Credential?> authenticate() async {
     final client = await _client;
-    Future<void> urlLauncher(String url) async {
-      if (await canLaunch(url)) {
-        await launch(url, forceWebView: true);
-      }
-    }
 
     final authenticator = testAuthenticator ??
         Authenticator(
           client,
           scopes: [],
-          urlLauncher: urlLauncher,
+          urlLauncher: _launchUrl,
+          redirectUri: options.authenticationOptions.redirectScheme != null
+              ? Uri(
+                  scheme: options.authenticationOptions.redirectScheme,
+                  host: Uri.parse(options.environment.url).host)
+              : null,
         );
-
     _credential = await authenticator.authorize();
 
     _token = await _credential?.getTokenResponse();
@@ -85,14 +95,35 @@ class ApptiveGridAuthenticator {
     return _credential;
   }
 
+  Future<void> _handleAuthRedirect(Uri uri) async {
+    final client = await _client;
+    client.createCredential(refreshToken: _token?.refreshToken);
+    final authenticator = testAuthenticator ??
+        Authenticator(
+          client, // coverage:ignore-line
+          redirectUri: options.authenticationOptions.redirectScheme != null
+              ? Uri(
+                  scheme: options.authenticationOptions.redirectScheme,
+                  host: Uri.parse(options.environment.url).host)
+              : null,
+          urlLauncher: _launchUrl,
+        );
+
+    await authenticator.processResult(uri.queryParameters);
+  }
+
+  /// Dispose any resources in the Authenticator
+  void dispose() {
+    _authCallbackSubscription?.cancel();
+  }
+
   /// Checks the authentication status and performs actions depending on the status
   ///
   /// If the User is not authenticated and [ApptiveGridAuthenticationOptions.autoAuthenticate] is true this will call [authenticate]
   ///
   /// If the token is expired it will refresh the token using the refresh token
   Future<void> checkAuthentication() async {
-    if (_token == null &&
-        options.authenticationOptions?.autoAuthenticate == true) {
+    if (_token == null && options.authenticationOptions.autoAuthenticate) {
       await authenticate();
     } else if (_token != null &&
         (_token?.expiresAt?.difference(DateTime.now()).inSeconds ?? 0) < 70) {
@@ -121,6 +152,16 @@ class ApptiveGridAuthenticator {
     final token = _token;
     if (token != null) {
       return '${token.tokenType} ${token.accessToken}';
+    }
+  }
+
+  Future<void> _launchUrl(String url) async {
+    if (await canLaunch(url)) {
+      try {
+        await launch(url);
+      } on PlatformException {
+        // Could not launch Url
+      }
     }
   }
 

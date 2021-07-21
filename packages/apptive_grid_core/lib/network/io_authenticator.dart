@@ -1,4 +1,4 @@
-import 'package:openid_client/openid_client_io.dart' as openid;
+import 'package:openid_client_fork/openid_client_io.dart' as openid;
 
 /// IO Implementation of Authenticator
 class Authenticator {
@@ -20,5 +20,11 @@ class Authenticator {
   /// Authorizes the client
   Future<openid.Credential?> authorize() {
     return _authenticator.authorize();
+  }
+
+  /// Process a Response retrieved from an outside Authentication.
+  /// For Example if the App was reopened by a Auth Redirect Link
+  Future<void> processResult(Map<String, String> result) async {
+    await openid.Authenticator.processResult(result);
   }
 }

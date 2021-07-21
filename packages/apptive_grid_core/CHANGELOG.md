@@ -1,3 +1,7 @@
+## [0.3.0]
+* AUTHENTICATION CHANGES
+    * In order to fully support Google OAuth you need to add a custom redirect Scheme to ApptiveGridAuthenticationOptions. Also make sure your App can be opened via a deeplink with that scheme
+
 ## [0.2.7]
 * Support CrossReferences in Forms. This still requires Authentication however it is already a first look at how this will look and work
 * Call ApptiveGridClient.logout() to logout the user

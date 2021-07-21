@@ -6,7 +6,7 @@ class ApptiveGridOptions {
   /// Creates a configuration
   const ApptiveGridOptions({
     this.environment = ApptiveGridEnvironment.production,
-    this.authenticationOptions,
+    this.authenticationOptions = const ApptiveGridAuthenticationOptions(),
     this.cache,
   });
 
@@ -14,7 +14,7 @@ class ApptiveGridOptions {
   final ApptiveGridEnvironment environment;
 
   /// Authentication for API
-  final ApptiveGridAuthenticationOptions? authenticationOptions;
+  final ApptiveGridAuthenticationOptions authenticationOptions;
 
   /// Implementation for Caching. Use this to cache/store values for faster initial Data
   /// This can also be used to enable offline mode sending
