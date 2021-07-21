@@ -16,12 +16,20 @@ class _EnumFormWidgetState extends State<EnumFormWidget> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
+      isExpanded: true,
       items: widget.component.data.options
           .map((e) => DropdownMenuItem(
                 value: e,
                 child: AbsorbPointer(absorbing: false, child: Text(e)),
               ))
           .toList(),
+      selectedItemBuilder: ((_) => widget.component.data.options
+          .map((e) => Text(
+                e,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ))
+          .toList()),
       onChanged: (newValue) {
         setState(() {
           widget.component.data.value = newValue;

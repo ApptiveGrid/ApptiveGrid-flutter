@@ -73,6 +73,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
   @override
   Widget build(BuildContext context) {
     return GridRowDropdownButtonFormField<GridRowDropdownDataItem?>(
+      isExpanded: true,
       items: _items(),
       onChanged: (newValue) {
         if (newValue?.entityUri != null) {
@@ -180,7 +181,11 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       return [
         ...[pleaseSelect, pleaseSelect],
         ..._grid!.rows
-            .map((row) => Text(row.entries.first.data.value?.toString() ?? ''))
+            .map((row) => Text(
+                  row.entries.first.data.value?.toString() ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ))
             .toList()
       ];
     }

@@ -135,6 +135,8 @@ class _GridRow extends StatelessWidget {
                     child: Text(
                       label ?? '',
                       style: textStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ))
               .toList(),
