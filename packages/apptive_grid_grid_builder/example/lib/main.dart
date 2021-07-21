@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 /// Set Up your Grid in Apptive grid using Text Columns
 /// | First Name | Last Name | imgUrl
 void main() async {
-  await enableWebAuth();
+  await enableWebAuth(ApptiveGridOptions());
   runApp(ApptiveGrid(
       options: ApptiveGridOptions(
         environment: ApptiveGridEnvironment.beta,
         authenticationOptions: ApptiveGridAuthenticationOptions(
           autoAuthenticate: true,
+          redirectScheme: 'apptivegrid',
         ),
       ),
       child: MyApp()));

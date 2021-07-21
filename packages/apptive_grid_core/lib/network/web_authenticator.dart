@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:html';
 import 'package:http/http.dart' as http;
 
-import 'package:openid_client/openid_client.dart';
+import 'package:openid_client_fork/openid_client.dart';
 
 /// Custom Authenticator for handling Authentication for Flutter Web
 class Authenticator {
@@ -16,7 +16,8 @@ class Authenticator {
     Iterable<String> scopes = const [],
     Uri? redirectUri,
   }) : _authenticator = _CustomAuthenticator(
-          client,
+          Client(client.issuer, 'web',
+              clientSecret: client.clientSecret, httpClient: client.httpClient),
           scopes: scopes,
           redirectedUri: redirectUri.toString(),
         );
@@ -33,6 +34,10 @@ class Authenticator {
       return credential;
     }
   }
+
+  /// Process a Response retrieved from an outside Authentication.
+  /// No-Op For Web implementation
+  Future<void> processResult(Map<String, String> result) async {}
 }
 
 /// Custom Implementation based on Authenticator from openid_client_browser to match specific criteria needed for ApptiveGrid
