@@ -1,3 +1,6 @@
+## [0.3.0+1]
+* Fix Overflow behavior for Selected Single Select, Selected CrossReference, Grid Cells in CrossReference Previews
+
 ## [0.3.0]
 * AUTHENTICATION CHANGES
     * In order to fully support Google OAuth you need to add a custom redirect Scheme to ApptiveGridAuthenticationOptions. Also make sure your App can be opened via a deeplink with that scheme
