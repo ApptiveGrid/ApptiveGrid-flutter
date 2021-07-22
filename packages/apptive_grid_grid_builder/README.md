@@ -28,19 +28,21 @@ void main() {
 ## Authentication
 
 Grids need Authentication. In order to authenticate a user either manually call `ApptiveGrid.getClient(context).authenticate()`.
-Alternatively you can set `autoAuthenticate` to `true` in `ApptiveGridAuthenticationOptions` in the `ApptiveGridOptions`
+In order to authenticate a user either manually call `ApptiveGrid.getClient(context).authenticate()`.
+Alternatively you can set `autoAuthenticate` to `true` in `ApptiveGridAuthenticationOptions` in the `ApptiveGridOptions` this will automatically trigger the process.
 ### Auth Redirect
 To get redirected by authentication you need to provide a custom `redirectScheme` in `ApptiveGridAuthenticationOptions`
 ```dart
 ApptiveGrid(
-      options: ApptiveGridOptions(
-        environment: ApptiveGridEnvironment.beta,
-        authenticationOptions: ApptiveGridAuthenticationOptions(
-          autoAuthenticate: true,
-          redirectScheme: 'apptivegrid'
-        ),
-      ),
-      child: MyApp()));
+  options: ApptiveGridOptions(
+    environment: ApptiveGridEnvironment.beta,
+    authenticationOptions: ApptiveGridAuthenticationOptions(
+      autoAuthenticate: true,
+      redirectScheme: 'apptivegrid'
+    ),
+  ),
+  child: MyApp(),
+));
 ```
 Also make sure that your app can be opened with that redirect Link. For more info check the documentation of [uni_links](https://pub.dev/packages/uni_links)
 ### Flutter Web
@@ -53,20 +55,18 @@ void main() async {
 }
 ```
 
-## Usage
-
-Add `ApptiveGridGridBuilder` to your widget tree. The `builder` behaves the same as `FutureBuilder`.
-
+### API Key Auth
+If you want to authenticate with an API Key, add a `ApptiveGridApiKey` to the `ApptiveGridAuthenticationOptions`
 ```dart
-ApptiveGridGridBuilder(
-    gridUri: GridUri(
-        user: 'USER_ID',
-        space: 'SPACE_ID',
-        grid: 'GRID_ID',
+ApptiveGridOptions(
+  environment: ApptiveGridEnvironment.alpha,
+  authenticationOptions: ApptiveGridAuthenticationOptions(
+    autoAuthenticate: true,
+    apiKey: ApptiveGridApiKey(
+      authKey: 'YOUR_AUTH_KEY',
+      password: 'YOUR_AUTH_KEY_PASSWORD',
     ),
-    builder: (context, snapshot) {
-        return YourWidget(gridData: snapshot.data);
-    }
-);
+  )
+)
 ```
 

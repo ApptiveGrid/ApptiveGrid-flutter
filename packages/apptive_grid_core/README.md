@@ -34,14 +34,15 @@ Alternatively you can set `autoAuthenticate` to `true` in `ApptiveGridAuthentica
 To get redirected by authentication you need to provide a custom `redirectScheme` in `ApptiveGridAuthenticationOptions`
 ```dart
 ApptiveGrid(
-      options: ApptiveGridOptions(
-        environment: ApptiveGridEnvironment.beta,
-        authenticationOptions: ApptiveGridAuthenticationOptions(
-          autoAuthenticate: true,
-          redirectScheme: 'apptivegrid'
-        ),
-      ),
-      child: MyApp()));
+  options: ApptiveGridOptions(
+    environment: ApptiveGridEnvironment.beta,
+    authenticationOptions: ApptiveGridAuthenticationOptions(
+      autoAuthenticate: true,
+      redirectScheme: 'apptivegrid'
+    ),
+  ),
+  child: MyApp(),
+));
 ```
 Also make sure that your app can be opened with that redirect Link. For more info check the documentation of [uni_links](https://pub.dev/packages/uni_links)
 ### Flutter Web
@@ -52,4 +53,19 @@ void main() async {
   await enableWebAuth(options);
   runApp(ApptiveGrid(child: MyApp()));
 }
+```
+
+### API Key Auth
+If you want to authenticate with an API Key, add a `ApptiveGridApiKey` to the `ApptiveGridAuthenticationOptions`
+```dart
+ApptiveGridOptions(
+  environment: ApptiveGridEnvironment.alpha,
+  authenticationOptions: ApptiveGridAuthenticationOptions(
+    autoAuthenticate: true,
+    apiKey: ApptiveGridApiKey(
+      authKey: 'YOUR_AUTH_KEY',
+      password: 'YOUR_AUTH_KEY_PASSWORD',
+    ),
+  )
+)
 ```

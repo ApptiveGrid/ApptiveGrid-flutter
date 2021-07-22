@@ -383,6 +383,37 @@ void main() {
       expect(resultCredential, credentialToken);
     });
   });
+
+  group('ApiKey Authentication', () {
+    final options = ApptiveGridOptions(
+        authenticationOptions: ApptiveGridAuthenticationOptions(
+      apiKey: ApptiveGridApiKey(authKey: 'authKey', password: 'password'),
+    ));
+
+    test('isAuthenticated', () {
+      final authenticator = ApptiveGridAuthenticator(options: options);
+
+      expect(authenticator.isAuthenticated, true);
+    });
+
+    test('Sets Header', () {
+      final authenticator = ApptiveGridAuthenticator(options: options);
+
+      expect(authenticator.header!.split(' ')[0], 'Basic');
+      expect(authenticator.header!.split(' ')[1],
+          base64Encode(utf8.encode('authKey:password')));
+    });
+
+    test('Check Authentication calls nothing', () async {
+      final httpClient = MockHttpClient();
+      final authenticator =
+          ApptiveGridAuthenticator(options: options, httpClient: httpClient);
+
+      await authenticator.checkAuthentication();
+
+      verifyZeroInteractions(httpClient);
+    });
+  });
 }
 
 Issuer get _zweidenkerIssuer => Issuer(

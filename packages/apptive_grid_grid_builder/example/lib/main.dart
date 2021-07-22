@@ -9,11 +9,13 @@ void main() async {
   await enableWebAuth(ApptiveGridOptions());
   runApp(ApptiveGrid(
       options: ApptiveGridOptions(
-        environment: ApptiveGridEnvironment.beta,
+        environment: ApptiveGridEnvironment.alpha,
         authenticationOptions: ApptiveGridAuthenticationOptions(
-          autoAuthenticate: true,
-          redirectScheme: 'apptivegrid',
-        ),
+            autoAuthenticate: true,
+            apiKey: ApptiveGridApiKey(
+              authKey: 'YOUR_AUTH_KEY',
+              password: 'YOUR_AUTH_KEY_PASSWORD',
+            )),
       ),
       child: MyApp()));
 }

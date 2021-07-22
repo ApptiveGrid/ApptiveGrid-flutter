@@ -7,6 +7,7 @@ class ApptiveGridAuthenticationOptions {
   const ApptiveGridAuthenticationOptions({
     this.autoAuthenticate = false,
     this.redirectScheme,
+    this.apiKey,
   });
 
   /// Determines whether or not the authentication process should be started automatically or not
@@ -17,4 +18,23 @@ class ApptiveGridAuthenticationOptions {
   /// Remember that you might need to add some native configurations so your app knows how to handle the redirect.
   /// For more Info check out https://pub.dev/packages/uni_links
   final String? redirectScheme;
+
+  /// [ApptiveGridApiKey] for authentication with an Api Key
+  ///
+  /// If this is not null it will be used instead of trying to authenticate using openid auth
+  final ApptiveGridApiKey? apiKey;
+}
+
+/// Model to Handle Api Key Authentication
+class ApptiveGridApiKey {
+  /// Creates a ApptiveGridApiKey Model
+  ///
+  /// You will get these values if you create a new ApiKey in your Profile in the ApptiveGrid App
+  const ApptiveGridApiKey({required this.authKey, required this.password});
+
+  /// Auth Key of the ApiKey
+  final String authKey;
+
+  /// Password of the ApiKey
+  final String password;
 }

@@ -119,14 +119,21 @@ class ApptiveGridAuthenticator {
 
   /// Checks the authentication status and performs actions depending on the status
   ///
+  /// If there is a [ApptiveGridAuthenticationOptions.apiKey] is set in [options] this will return without any Action
+  ///
   /// If the User is not authenticated and [ApptiveGridAuthenticationOptions.autoAuthenticate] is true this will call [authenticate]
   ///
   /// If the token is expired it will refresh the token using the refresh token
   Future<void> checkAuthentication() async {
-    if (_token == null && options.authenticationOptions.autoAuthenticate) {
-      await authenticate();
-    } else if (_token != null &&
-        (_token?.expiresAt?.difference(DateTime.now()).inSeconds ?? 0) < 70) {
+    if (_token == null) {
+      if (options.authenticationOptions.apiKey != null) {
+        // User has ApiKey provided
+        return;
+      } else if (options.authenticationOptions.autoAuthenticate) {
+        await authenticate();
+      }
+    } else if ((_token?.expiresAt?.difference(DateTime.now()).inSeconds ?? 0) <
+        70) {
       _token = await _credential?.getTokenResponse(true);
     }
   }
@@ -148,10 +155,16 @@ class ApptiveGridAuthenticator {
   }
 
   /// If there is a authenticated User this will return the authentication header
+  ///
+  /// User Authentication is prioritized over ApiKey Authentication
   String? get header {
-    final token = _token;
-    if (token != null) {
+    if (_token != null) {
+      final token = _token!;
       return '${token.tokenType} ${token.accessToken}';
+    }
+    if (options.authenticationOptions.apiKey != null) {
+      final apiKey = options.authenticationOptions.apiKey!;
+      return 'Basic ${base64Encode(utf8.encode('${apiKey.authKey}:${apiKey.password}'))}';
     }
   }
 
@@ -166,7 +179,8 @@ class ApptiveGridAuthenticator {
   }
 
   /// Checks if the User is Authenticated
-  bool get isAuthenticated => _token != null;
+  bool get isAuthenticated =>
+      options.authenticationOptions.apiKey != null || _token != null;
 }
 
 /// Interface to provide common functionality for authorization operations

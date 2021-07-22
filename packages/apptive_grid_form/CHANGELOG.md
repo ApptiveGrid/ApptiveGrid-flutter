@@ -1,3 +1,6 @@
+## [0.3.1]
+* Add support for Authenticating with an API Key
+
 ## [0.3.0+1]
 * Fix Overflow behavior for Selected Single Select, Selected CrossReference, Grid Cells in CrossReference Previews
 

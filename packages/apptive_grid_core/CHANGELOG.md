@@ -1,3 +1,6 @@
+## [0.3.1]
+* Add support for Authenticating with an API Key
+
 ## [0.3.0]
 * AUTHENTICATION CHANGES
     * In order to fully support Google OAuth you need to add a custom redirect Scheme to ApptiveGridAuthenticationOptions. Also make sure your App can be opened via a deeplink with that scheme
