@@ -570,4 +570,47 @@ void main() {
       verifyNever(() => cache.addPendingActionItem(any()));
     });
   });
+
+  group('EditLink', () {
+    final userId = 'userId';
+    final spaceId = 'spaceId';
+    final gridId = 'gridId';
+    final entityId = 'entityId';
+    final form = 'form';
+    final entityUri =
+        EntityUri(user: userId, space: spaceId, grid: gridId, entity: entityId);
+    final rawResponse = {
+      'uri': '/api/r/$form',
+    };
+    test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(() => httpClient.post(
+          Uri.parse(
+              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink'),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenAnswer((_) async => response);
+
+      final formUri = await apptiveGridClient.getEditLink(
+          entityUri: entityUri, formId: form);
+
+      expect(formUri.runtimeType, RedirectFormUri);
+      expect(formUri.uriString, '/api/a/$form');
+    });
+
+    test('400 Status throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(() => httpClient.post(
+          Uri.parse(
+              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink'),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenAnswer((_) async => response);
+
+      expect(
+          () =>
+              apptiveGridClient.getEditLink(entityUri: entityUri, formId: form),
+          throwsA(isInstanceOf<Response>()));
+    });
+  });
 }
