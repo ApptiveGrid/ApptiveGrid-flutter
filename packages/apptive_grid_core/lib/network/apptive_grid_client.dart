@@ -184,6 +184,27 @@ class ApptiveGridClient {
         .toList();
   }
 
+  /// Creates and returns a [FormUri] filled with the Data represented by [entityUri]
+  ///
+  /// Requires Authorization
+  /// throws [Response] if the request fails
+  Future<FormUri> getEditLink(
+      {required EntityUri entityUri, required String formId}) async {
+    await _authenticator.checkAuthentication();
+
+    final url =
+        Uri.parse('${options.environment.url}${entityUri.uriString}/EditLink');
+
+    final response = await _client.post(url,
+        headers: headers, body: jsonEncode({'formId': formId}));
+
+    if (response.statusCode >= 400) {
+      throw response;
+    }
+
+    return FormUri.fromUri((json.decode(response.body) as Map)['uri']);
+  }
+
   /// Authenticate the User
   ///
   /// This will open a Webpage for the User Auth
