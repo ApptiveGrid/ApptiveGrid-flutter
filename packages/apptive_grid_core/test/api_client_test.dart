@@ -243,9 +243,9 @@ void main() {
   });
 
   group('Headers', () {
-    test('No Authentication empty headers', () {
+    test('No Authentication only content type headers', () {
       final client = ApptiveGridClient();
-      expect(client.headers, {});
+      expect(client.headers, {HttpHeaders.contentTypeHeader: ContentType.json});
     });
 
     test('With Authentication has headers', () {
@@ -254,8 +254,10 @@ void main() {
           .thenReturn('Bearer dXNlcm5hbWU6cGFzc3dvcmQ=');
       final client = ApptiveGridClient.fromClient(httpClient,
           authenticator: authenticator);
-      expect(client.headers,
-          {HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ='});
+      expect(client.headers, {
+        HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ=',
+        HttpHeaders.contentTypeHeader: ContentType.json
+      });
     });
   });
 

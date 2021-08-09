@@ -37,6 +37,7 @@ class ApptiveGridClient {
   @visibleForTesting
   Map<String, String> get headers => (<String, String?>{
         HttpHeaders.authorizationHeader: _authenticator.header,
+        HttpHeaders.contentTypeHeader: ContentType.json,
       }..removeWhere((key, value) => value == null))
           .map((key, value) => MapEntry(key, value!));
 
@@ -86,7 +87,6 @@ class ApptiveGridClient {
       throw error;
     };
     late http.Response response;
-    request.headers.addAll({HttpHeaders.contentTypeHeader: ContentType.json});
     request.headers.addAll(headers);
     try {
       final streamResponse = await _client.send(request);
