@@ -220,11 +220,12 @@ class ApptiveGridClient {
   /// Checks if the User is currently authenticated
   bool get isAuthenticated => _authenticator.isAuthenticated;
 
-  void updateEnviornment(ApptiveGridEnvironment environment) {
+  /// Updates the Environment for the client and handle necessary changes in the Authenticator
+  Future<void> updateEnviornment(ApptiveGridEnvironment environment) async {
     final currentRealm = options.environment.authRealm;
 
     if (currentRealm != environment.authRealm) {
-      _authenticator.logout();
+      await _authenticator.logout();
     }
 
     options = options.copyWith(environment: environment);
