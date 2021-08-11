@@ -221,7 +221,7 @@ class ApptiveGridClient {
   bool get isAuthenticated => _authenticator.isAuthenticated;
 
   /// Updates the Environment for the client and handle necessary changes in the Authenticator
-  Future<void> updateEnviornment(ApptiveGridEnvironment environment) async {
+  Future<void> updateEnvironment(ApptiveGridEnvironment environment) async {
     final currentRealm = options.environment.authRealm;
 
     if (currentRealm != environment.authRealm) {

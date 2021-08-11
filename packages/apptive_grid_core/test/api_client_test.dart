@@ -639,7 +639,7 @@ void main() {
     test('switch url', () {
       expect(client.options.environment, ApptiveGridEnvironment.alpha);
 
-      client.updateEnviornment(ApptiveGridEnvironment.production);
+      client.updateEnvironment(ApptiveGridEnvironment.production);
 
       expect(client.options.environment, ApptiveGridEnvironment.production);
     });
@@ -647,7 +647,7 @@ void main() {
     test('switch authenticator environment', () {
       expect(authenticator.options.environment, ApptiveGridEnvironment.alpha);
 
-      client.updateEnviornment(ApptiveGridEnvironment.production);
+      client.updateEnvironment(ApptiveGridEnvironment.production);
 
       expect(
           authenticator.options.environment, ApptiveGridEnvironment.production);
