@@ -615,4 +615,42 @@ void main() {
           throwsA(isInstanceOf<Response>()));
     });
   });
+
+  group('Switch Stage', () {
+    late Client httpClient;
+    late ApptiveGridClient client;
+    late ApptiveGridOptions initialOptions;
+    late ApptiveGridAuthenticator authenticator;
+
+    setUp(() {
+      httpClient = MockHttpClient();
+      initialOptions =
+          ApptiveGridOptions(environment: ApptiveGridEnvironment.alpha);
+      authenticator = ApptiveGridAuthenticator(
+          options: initialOptions, httpClient: httpClient);
+      client = ApptiveGridClient.fromClient(httpClient,
+          options: initialOptions, authenticator: authenticator);
+
+      when(() => httpClient.send(any())).thenAnswer((invocation) async =>
+          StreamedResponse(Stream.value([]), 200,
+              request: invocation.positionalArguments[0] as BaseRequest));
+    });
+
+    test('switch url', () {
+      expect(client.options.environment, ApptiveGridEnvironment.alpha);
+
+      client.updateEnviornment(ApptiveGridEnvironment.production);
+
+      expect(client.options.environment, ApptiveGridEnvironment.production);
+    });
+
+    test('switch authenticator environment', () {
+      expect(authenticator.options.environment, ApptiveGridEnvironment.alpha);
+
+      client.updateEnviornment(ApptiveGridEnvironment.production);
+
+      expect(
+          authenticator.options.environment, ApptiveGridEnvironment.production);
+    });
+  });
 }

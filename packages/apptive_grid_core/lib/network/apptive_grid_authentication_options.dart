@@ -23,6 +23,22 @@ class ApptiveGridAuthenticationOptions {
   ///
   /// If this is not null it will be used instead of trying to authenticate using openid auth
   final ApptiveGridApiKey? apiKey;
+
+  @override
+  String toString() {
+    return 'ApptiveGridAuthenticationOptions(autoAuthenticate: $autoAuthenticate, redirectScheme: $redirectScheme, apiKey: $apiKey)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ApptiveGridAuthenticationOptions &&
+        autoAuthenticate == other.autoAuthenticate &&
+        redirectScheme == other.redirectScheme &&
+        apiKey == other.apiKey;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }
 
 /// Model to Handle Api Key Authentication
@@ -37,4 +53,19 @@ class ApptiveGridApiKey {
 
   /// Password of the ApiKey
   final String password;
+
+  @override
+  String toString() {
+    return 'ApptiveGridApiKey(authKey: $authKey, password: $password)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ApptiveGridApiKey &&
+        authKey == other.authKey &&
+        password == other.password;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

@@ -2,12 +2,9 @@ part of apptive_grid_network;
 
 /// Class for handling authentication related methods for ApptiveGrid
 class ApptiveGridAuthenticator {
-  /// Create a new [ApptiveGridAuthenticator]
-  /// [options] is used to get the [ApptiveGridEnvironment.authRealm] for the [_uri]
+  /// Create a new [ApptiveGridAuthenticator] for [apptiveGridClient]
   ApptiveGridAuthenticator(
-      {this.options = const ApptiveGridOptions(), this.httpClient})
-      : _uri = Uri.parse(
-            'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}') {
+      {this.options = const ApptiveGridOptions(), this.httpClient}) {
     if (!kIsWeb) {
       _authCallbackSubscription = uni_links.uriLinkStream
           .where((event) =>
@@ -20,9 +17,10 @@ class ApptiveGridAuthenticator {
 
   /// [ApptiveGridOptions] used for getting the correct [ApptiveGridEnvironment.authRealm]
   /// and checking if authentication should automatically be handled
-  final ApptiveGridOptions options;
+  ApptiveGridOptions options;
 
-  final Uri _uri;
+  Uri get _uri => Uri.parse(
+      'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
 
   /// Http Client that should be used for Auth Requests
   final http.Client? httpClient;
@@ -151,6 +149,8 @@ class ApptiveGridAuthenticator {
     }
     _token = null;
     _credential = null;
+    _authClient = null;
+
     return response;
   }
 

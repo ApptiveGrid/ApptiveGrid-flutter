@@ -19,4 +19,33 @@ class ApptiveGridOptions {
   /// Implementation for Caching. Use this to cache/store values for faster initial Data
   /// This can also be used to enable offline mode sending
   final ApptiveGridCache? cache;
+
+  /// Creates a copy of [ApptiveGridOptions] with the provided values
+  ApptiveGridOptions copyWith(
+      {ApptiveGridEnvironment? environment,
+      ApptiveGridAuthenticationOptions? authenticationOptions,
+      ApptiveGridCache? cache}) {
+    return ApptiveGridOptions(
+      environment: environment ?? this.environment,
+      authenticationOptions:
+          authenticationOptions ?? this.authenticationOptions,
+      cache: cache ?? this.cache,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'ApptiveGridOptions(environment: $environment, authenticationOptions: $authenticationOptions, cache: $cache)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ApptiveGridOptions &&
+        other.environment == environment &&
+        other.authenticationOptions == authenticationOptions &&
+        other.cache == other.cache;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

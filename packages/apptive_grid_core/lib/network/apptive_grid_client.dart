@@ -17,10 +17,10 @@ class ApptiveGridClient {
     this.options = const ApptiveGridOptions(),
     ApptiveGridAuthenticator? authenticator,
   })  : _client = httpClient,
-        _authenticator =
-            authenticator ?? ApptiveGridAuthenticator(options: options);
+        _authenticator = authenticator ??
+            ApptiveGridAuthenticator(options: options, httpClient: httpClient);
 
-  /// Current Environment the Api is connecting to
+  /// Configuraptions
   ApptiveGridOptions options;
 
   final ApptiveGridAuthenticator _authenticator;
@@ -219,6 +219,17 @@ class ApptiveGridClient {
 
   /// Checks if the User is currently authenticated
   bool get isAuthenticated => _authenticator.isAuthenticated;
+
+  void updateEnviornment(ApptiveGridEnvironment environment) {
+    final currentRealm = options.environment.authRealm;
+
+    if (currentRealm != environment.authRealm) {
+      _authenticator.logout();
+    }
+
+    options = options.copyWith(environment: environment);
+    _authenticator.options = options;
+  }
 
   /// Tries to send pending [ActionItem]s that are stored in [options.cache]
   Future sendPendingActions() async {
