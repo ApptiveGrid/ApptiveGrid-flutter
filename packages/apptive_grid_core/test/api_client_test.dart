@@ -243,9 +243,9 @@ void main() {
   });
 
   group('Headers', () {
-    test('No Authentication empty headers', () {
+    test('No Authentication only content type headers', () {
       final client = ApptiveGridClient();
-      expect(client.headers, {});
+      expect(client.headers, {HttpHeaders.contentTypeHeader: ContentType.json});
     });
 
     test('With Authentication has headers', () {
@@ -254,8 +254,10 @@ void main() {
           .thenReturn('Bearer dXNlcm5hbWU6cGFzc3dvcmQ=');
       final client = ApptiveGridClient.fromClient(httpClient,
           authenticator: authenticator);
-      expect(client.headers,
-          {HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ='});
+      expect(client.headers, {
+        HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ=',
+        HttpHeaders.contentTypeHeader: ContentType.json
+      });
     });
   });
 
@@ -568,6 +570,87 @@ void main() {
 
       verifyNever(() => cache.removePendingActionItem(any()));
       verifyNever(() => cache.addPendingActionItem(any()));
+    });
+  });
+
+  group('EditLink', () {
+    final userId = 'userId';
+    final spaceId = 'spaceId';
+    final gridId = 'gridId';
+    final entityId = 'entityId';
+    final form = 'form';
+    final entityUri =
+        EntityUri(user: userId, space: spaceId, grid: gridId, entity: entityId);
+    final rawResponse = {
+      'uri': '/api/r/$form',
+    };
+    test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(() => httpClient.post(
+          Uri.parse(
+              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink'),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenAnswer((_) async => response);
+
+      final formUri = await apptiveGridClient.getEditLink(
+          entityUri: entityUri, formId: form);
+
+      expect(formUri.runtimeType, RedirectFormUri);
+      expect(formUri.uriString, '/api/a/$form');
+    });
+
+    test('400 Status throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(() => httpClient.post(
+          Uri.parse(
+              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink'),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenAnswer((_) async => response);
+
+      expect(
+          () =>
+              apptiveGridClient.getEditLink(entityUri: entityUri, formId: form),
+          throwsA(isInstanceOf<Response>()));
+    });
+  });
+
+  group('Switch Stage', () {
+    late Client httpClient;
+    late ApptiveGridClient client;
+    late ApptiveGridOptions initialOptions;
+    late ApptiveGridAuthenticator authenticator;
+
+    setUp(() {
+      httpClient = MockHttpClient();
+      initialOptions =
+          ApptiveGridOptions(environment: ApptiveGridEnvironment.alpha);
+      authenticator = ApptiveGridAuthenticator(
+          options: initialOptions, httpClient: httpClient);
+      client = ApptiveGridClient.fromClient(httpClient,
+          options: initialOptions, authenticator: authenticator);
+
+      when(() => httpClient.send(any())).thenAnswer((invocation) async =>
+          StreamedResponse(Stream.value([]), 200,
+              request: invocation.positionalArguments[0] as BaseRequest));
+    });
+
+    test('switch url', () async {
+      expect(client.options.environment, ApptiveGridEnvironment.alpha);
+
+      await client.updateEnvironment(ApptiveGridEnvironment.production);
+
+      expect(client.options.environment, ApptiveGridEnvironment.production);
+    });
+
+    test('switch authenticator environment', () async {
+      expect(authenticator.options.environment, ApptiveGridEnvironment.alpha);
+
+      await client.updateEnvironment(ApptiveGridEnvironment.production);
+
+      expect(
+          authenticator.options.environment, ApptiveGridEnvironment.production);
     });
   });
 }

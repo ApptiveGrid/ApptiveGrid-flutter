@@ -1,3 +1,7 @@
+## [0.3.2]
+* Add support to get a EditLink for a EntityUri and a given formId
+* Add call in ApptiveGridClient to update Environment
+
 ## [0.3.1]
 * Add support for Authenticating with an API Key
 

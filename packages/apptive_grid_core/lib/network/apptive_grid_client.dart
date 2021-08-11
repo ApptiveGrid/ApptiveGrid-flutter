@@ -17,10 +17,10 @@ class ApptiveGridClient {
     this.options = const ApptiveGridOptions(),
     ApptiveGridAuthenticator? authenticator,
   })  : _client = httpClient,
-        _authenticator =
-            authenticator ?? ApptiveGridAuthenticator(options: options);
+        _authenticator = authenticator ??
+            ApptiveGridAuthenticator(options: options, httpClient: httpClient);
 
-  /// Current Environment the Api is connecting to
+  /// Configuraptions
   ApptiveGridOptions options;
 
   final ApptiveGridAuthenticator _authenticator;
@@ -37,6 +37,7 @@ class ApptiveGridClient {
   @visibleForTesting
   Map<String, String> get headers => (<String, String?>{
         HttpHeaders.authorizationHeader: _authenticator.header,
+        HttpHeaders.contentTypeHeader: ContentType.json,
       }..removeWhere((key, value) => value == null))
           .map((key, value) => MapEntry(key, value!));
 
@@ -86,7 +87,6 @@ class ApptiveGridClient {
       throw error;
     };
     late http.Response response;
-    request.headers.addAll({HttpHeaders.contentTypeHeader: ContentType.json});
     request.headers.addAll(headers);
     try {
       final streamResponse = await _client.send(request);
@@ -184,6 +184,27 @@ class ApptiveGridClient {
         .toList();
   }
 
+  /// Creates and returns a [FormUri] filled with the Data represented by [entityUri]
+  ///
+  /// Requires Authorization
+  /// throws [Response] if the request fails
+  Future<FormUri> getEditLink(
+      {required EntityUri entityUri, required String formId}) async {
+    await _authenticator.checkAuthentication();
+
+    final url =
+        Uri.parse('${options.environment.url}${entityUri.uriString}/EditLink');
+
+    final response = await _client.post(url,
+        headers: headers, body: jsonEncode({'formId': formId}));
+
+    if (response.statusCode >= 400) {
+      throw response;
+    }
+
+    return FormUri.fromUri((json.decode(response.body) as Map)['uri']);
+  }
+
   /// Authenticate the User
   ///
   /// This will open a Webpage for the User Auth
@@ -198,6 +219,18 @@ class ApptiveGridClient {
 
   /// Checks if the User is currently authenticated
   bool get isAuthenticated => _authenticator.isAuthenticated;
+
+  /// Updates the Environment for the client and handle necessary changes in the Authenticator
+  Future<void> updateEnvironment(ApptiveGridEnvironment environment) async {
+    final currentRealm = options.environment.authRealm;
+
+    if (currentRealm != environment.authRealm) {
+      await _authenticator.logout();
+    }
+
+    options = options.copyWith(environment: environment);
+    _authenticator.options = options;
+  }
 
   /// Tries to send pending [ActionItem]s that are stored in [options.cache]
   Future sendPendingActions() async {
