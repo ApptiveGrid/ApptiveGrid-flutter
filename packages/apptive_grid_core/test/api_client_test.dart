@@ -636,18 +636,18 @@ void main() {
               request: invocation.positionalArguments[0] as BaseRequest));
     });
 
-    test('switch url', () {
+    test('switch url', () async {
       expect(client.options.environment, ApptiveGridEnvironment.alpha);
 
-      client.updateEnvironment(ApptiveGridEnvironment.production);
+      await client.updateEnvironment(ApptiveGridEnvironment.production);
 
       expect(client.options.environment, ApptiveGridEnvironment.production);
     });
 
-    test('switch authenticator environment', () {
+    test('switch authenticator environment', () async {
       expect(authenticator.options.environment, ApptiveGridEnvironment.alpha);
 
-      client.updateEnvironment(ApptiveGridEnvironment.production);
+      await client.updateEnvironment(ApptiveGridEnvironment.production);
 
       expect(
           authenticator.options.environment, ApptiveGridEnvironment.production);
