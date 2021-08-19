@@ -7,7 +7,7 @@ class FormData {
     required this.name,
     required this.title,
     required this.components,
-    required this.actions,
+    this.actions = const [],
     required this.schema,
   });
 

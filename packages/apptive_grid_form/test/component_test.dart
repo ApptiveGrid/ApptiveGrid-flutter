@@ -5,15 +5,21 @@ import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'common.dart';
 
 void main() {
   late ApptiveGridClient client;
   setUpAll(() {
-    registerFallbackValue<FormData>(FormData('Title', [], [], {}));
+    registerFallbackValue<FormData>(FormData(
+      name: 'name',
+      title: 'title',
+      components: [],
+      actions: [],
+      schema: {},
+    ));
   });
 
   setUp(() {
@@ -56,14 +62,11 @@ void main() {
         required: false,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('string'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('string'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -109,14 +112,11 @@ void main() {
         required: true,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('string'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('string'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -156,14 +156,11 @@ void main() {
         required: false,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('string', format: 'date-time'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('string', format: 'date-time'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -221,14 +218,11 @@ void main() {
         required: false,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('string', format: 'date-time'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('string', format: 'date-time'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -290,14 +284,11 @@ void main() {
         required: true,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('string', format: 'date-time'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('string', format: 'date-time'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -337,14 +328,11 @@ void main() {
         required: false,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('string', format: 'date'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('string', format: 'date'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -401,14 +389,11 @@ void main() {
         required: true,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('string', format: 'date'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('string', format: 'date'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -448,14 +433,11 @@ void main() {
         required: false,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('integer'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('integer'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -497,12 +479,11 @@ void main() {
         required: false,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [],
-          getSchema('integer'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [],
+          schema: getSchema('integer'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -534,14 +515,11 @@ void main() {
         required: true,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('integer'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('integer'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -581,14 +559,11 @@ void main() {
         required: false,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('boolean'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('boolean'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -634,14 +609,11 @@ void main() {
         required: true,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('boolean'));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('boolean'));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -681,14 +653,11 @@ void main() {
         required: false,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('string', options: ['value', 'newValue']));
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('string', options: ['value', 'newValue']));
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -738,14 +707,11 @@ void main() {
         required: true,
       );
       final formData = FormData(
-          'Title',
-          [
-            component,
-          ],
-          [
-            action,
-          ],
-          getSchema('string', options: [
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('string', options: [
             'value',
           ]));
       final target = TestApp(

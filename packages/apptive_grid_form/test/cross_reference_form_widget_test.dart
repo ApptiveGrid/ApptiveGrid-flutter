@@ -18,12 +18,15 @@ void main() {
 
     final gridUri = GridUri(user: 'user', space: 'space', grid: 'grid');
     final field = GridField('field', 'Name', DataType.text);
-    final grid = Grid('Test', null, [
-      field
-    ], [
-      GridRow('row1', [GridEntry(field, StringDataEntity('First'))]),
-      GridRow('row2', [GridEntry(field, StringDataEntity('Second'))]),
-    ]);
+    final grid = Grid(
+      name: 'Test',
+      schema: null,
+      fields: [field],
+      rows: [
+        GridRow('row1', [GridEntry(field, StringDataEntity('First'))]),
+        GridRow('row2', [GridEntry(field, StringDataEntity('Second'))]),
+      ],
+    );
 
     setUp(() {
       client = MockApptiveGridClient();
@@ -125,9 +128,9 @@ void main() {
     });
 
     testWidgets('Empty null values', (tester) async {
-      final gridWithNull = Grid('Test', null, [
+      final gridWithNull = Grid(name: 'Test', schema: null, fields: [
         field
-      ], [
+      ], rows: [
         GridRow('row1', [GridEntry(field, StringDataEntity())]),
       ]);
 

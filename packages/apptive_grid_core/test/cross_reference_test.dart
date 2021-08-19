@@ -143,7 +143,8 @@ void main() {
             'type': 'entitySelect'
           }
         ],
-        'title': 'New title'
+        'name': 'New Name',
+        'title': 'New title',
       };
 
       final formData = FormData.fromJson(responseWithCrossReference);

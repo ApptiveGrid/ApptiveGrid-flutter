@@ -22,7 +22,12 @@ void main() {
 
     registerFallbackValue(ActionItem(
         action: FormAction('uri', 'method'),
-        data: FormData('title', [], [], {})));
+        data: FormData(
+            name: 'name',
+            title: 'title',
+            components: [],
+            actions: [],
+            schema: {})));
   });
 
   setUp(() {
@@ -65,6 +70,7 @@ void main() {
           'fieldId': '4zc4l48ffin5v8pa2emyx9s15'
         },
       ],
+      'name': 'Name',
       'title': 'Form'
     };
 
@@ -203,7 +209,12 @@ void main() {
         },
         'required': []
       };
-      final formData = FormData('Title', [component], [action], schema);
+      final formData = FormData(
+          name: 'Name',
+          title: 'Title',
+          components: [component],
+          actions: [action],
+          schema: schema);
 
       final request = Request(
           'POST', Uri.parse('${ApptiveGridEnvironment.production.url}/uri}'));
@@ -512,7 +523,13 @@ void main() {
 
     final action = FormAction('actionUri', 'POST');
 
-    final data = FormData('title', [], [], {});
+    final data = FormData(
+      name: 'Name',
+      title: 'title',
+      components: [],
+      actions: [],
+      schema: {},
+    );
 
     final cacheMap = <String, dynamic>{};
 

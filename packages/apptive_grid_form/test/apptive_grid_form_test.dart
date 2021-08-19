@@ -32,8 +32,12 @@ void main() {
       );
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
-          .thenAnswer(
-              (realInvocation) async => FormData('Form Title', [], [], {}));
+          .thenAnswer((realInvocation) async => FormData(
+              name: 'Form Name',
+              title: 'Form Title',
+              components: [],
+              actions: [],
+              schema: {}));
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -53,8 +57,12 @@ void main() {
       );
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
-          .thenAnswer(
-              (realInvocation) async => FormData('Form Title', [], [], {}));
+          .thenAnswer((realInvocation) async => FormData(
+              name: 'Form Name',
+              title: 'Form Title',
+              components: [],
+              actions: [],
+              schema: {}));
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -64,7 +72,12 @@ void main() {
   });
 
   testWidgets('OnLoadedCallback gets called', (tester) async {
-    final form = FormData('Form Title', [], [], {});
+    final form = FormData(
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        actions: [],
+        schema: {});
     final completer = Completer<FormData>();
     final target = TestApp(
       client: client,
@@ -98,7 +111,12 @@ void main() {
           ),
         ),
       );
-      final form = FormData('Form Title', [], [], {});
+      final form = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [],
+          schema: {});
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer((realInvocation) async => form);
 
@@ -123,7 +141,12 @@ void main() {
         ),
       );
       final action = FormAction('uri', 'method');
-      final formData = FormData('Form Title', [], [action], {});
+      final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [action],
+          schema: {});
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
@@ -150,7 +173,12 @@ void main() {
         ),
       );
       final action = FormAction('uri', 'method');
-      final formData = FormData('Form Title', [], [action], {});
+      final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [action],
+          schema: {});
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
@@ -229,7 +257,12 @@ void main() {
           ),
         );
         final action = FormAction('uri', 'method');
-        final formData = FormData('Form Title', [], [action], {});
+        final formData = FormData(
+            name: 'Form Name',
+            title: 'Form Title',
+            components: [],
+            actions: [action],
+            schema: {});
 
         when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
@@ -256,7 +289,12 @@ void main() {
           ),
         );
         final action = FormAction('uri', 'method');
-        final formData = FormData('Form Title', [], [action], {});
+        final formData = FormData(
+            name: 'Form Name',
+            title: 'Form Title',
+            components: [],
+            actions: [action],
+            schema: {});
 
         when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
@@ -283,7 +321,12 @@ void main() {
           ),
         );
         final action = FormAction('uri', 'method');
-        final formData = FormData('Form Title', [], [action], {});
+        final formData = FormData(
+            name: 'Form Name',
+            title: 'Form Title',
+            components: [],
+            actions: [action],
+            schema: {});
 
         when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
@@ -313,7 +356,12 @@ void main() {
           ),
         );
         final action = FormAction('uri', 'method');
-        final formData = FormData('Form Title', [], [action], {});
+        final formData = FormData(
+            name: 'Form Name',
+            title: 'Form Title',
+            components: [],
+            actions: [action],
+            schema: {});
 
         when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
@@ -348,7 +396,12 @@ void main() {
         ),
       );
       final action = FormAction('uri', 'method');
-      final formData = FormData('Form Title', [], [action], {});
+      final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [action],
+          schema: {});
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
@@ -376,7 +429,12 @@ void main() {
         ),
       );
       final action = FormAction('uri', 'method');
-      final formData = FormData('Form Title', [], [action], {});
+      final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [action],
+          schema: {});
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
@@ -396,7 +454,12 @@ void main() {
     late http.Client httpClient;
 
     final action = FormAction('actionUri', 'POST');
-    final data = FormData('Title', [], [action], {});
+    final data = FormData(
+        name: 'Form Name',
+        title: 'Title',
+        components: [],
+        actions: [action],
+        schema: {});
 
     final formUri = RedirectFormUri(form: 'form');
     final env = ApptiveGridEnvironment.production;
