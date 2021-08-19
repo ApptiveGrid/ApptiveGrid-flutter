@@ -1,3 +1,7 @@
+## [0.4.0]
+* **BREAKING CHANGE** `FormData` and `Grid` now take named constructor arguments to avoid confusion. Before the order of arguments did not have `schema` at the same part
+* Add `name` to `FormData`
+
 ## [0.3.2]
 * Add support to get a EditLink for a EntityUri and a given formId
 * Add call in ApptiveGridClient to update Environment
