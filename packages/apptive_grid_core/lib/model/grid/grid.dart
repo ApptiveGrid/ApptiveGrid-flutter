@@ -61,7 +61,13 @@ class GridUri extends ApptiveGridUri {
 /// Model for GridData
 class Grid {
   /// Creates a GridData Object
-  Grid(this.name, this.schema, this.fields, this.rows, {this.filter});
+  Grid({
+    required this.name,
+    required this.schema,
+    required this.fields,
+    required this.rows,
+    this.filter,
+  });
 
   /// Deserializes [json] into a [Grid] Object
   factory Grid.fromJson(Map<String, dynamic> json) {
@@ -79,7 +85,13 @@ class Grid {
         .map((e) => GridRow.fromJson(e, fields, schema))
         .toList();
     final filter = json['filter'];
-    return Grid(json['name'], schema, fields, entries, filter: filter);
+    return Grid(
+      name: json['name'],
+      schema: schema,
+      fields: fields,
+      rows: entries,
+      filter: filter,
+    );
   }
 
   /// Name of the Form

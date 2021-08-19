@@ -3,7 +3,13 @@ part of apptive_grid_model;
 /// Model for FormData
 class FormData {
   /// Creates a FormData Object
-  FormData(this.name, this.title, this.components, this.actions, this.schema);
+  FormData({
+    required this.name,
+    required this.title,
+    required this.components,
+    required this.actions,
+    required this.schema,
+  });
 
   /// Deserializes [json] into a FormData Object
   FormData.fromJson(Map<String, dynamic> json)
