@@ -59,7 +59,13 @@ void main() {
       final actionA = FormAction('uri', 'method');
       final actionB = FormAction('uri', 'methodB');
 
-      final data = FormData('title', [], [], {});
+      final data = FormData(
+        name: 'name',
+        title: 'title',
+        components: [],
+        actions: [],
+        schema: {},
+      );
 
       final a = ActionItem(action: actionA, data: data);
       final b = ActionItem(action: actionA, data: data);

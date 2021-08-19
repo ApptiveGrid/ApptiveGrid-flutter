@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final title = 'title';
+  final name = 'name';
   final response = {
     'schema': {
       'type': 'object',
@@ -76,6 +77,7 @@ void main() {
         'type': 'checkbox'
       }
     ],
+    'name': name,
     'title': title
   };
 
@@ -83,6 +85,7 @@ void main() {
     test('Successful', () {
       final formData = FormData.fromJson(response);
 
+      expect(formData.name, name);
       expect(formData.title, title);
 
       expect(formData.actions.length, 1);
@@ -109,7 +112,12 @@ void main() {
           property: 'NumberC',
           data: IntegerDataEntity());
 
-      final formData = FormData(title, [component], [action], schema);
+      final formData = FormData(
+          name: 'name',
+          title: title,
+          components: [component],
+          actions: [action],
+          schema: schema);
 
       expect(FormData.fromJson(formData.toJson()), formData);
     });
@@ -138,8 +146,18 @@ void main() {
         options: TextComponentOptions(),
         property: 'NumberC');
 
-    final a = FormData(title, [component], [action], schema);
-    final b = FormData(title, [component], [action], schema);
+    final a = FormData(
+        name: 'name',
+        title: title,
+        components: [component],
+        actions: [action],
+        schema: schema);
+    final b = FormData(
+        name: 'name',
+        title: title,
+        components: [component],
+        actions: [action],
+        schema: schema);
     final c = FormData.fromJson(response);
 
     test('a == b', () {
@@ -179,7 +197,8 @@ void main() {
           'type': 'textfield'
         }
       ],
-      'title': 'New title'
+      'name': 'Name',
+      'title': 'New title',
     };
     test('Form Without Actions parses correctly', () {
       final formData = FormData.fromJson(responseWithoutActions);
@@ -220,6 +239,7 @@ void main() {
             'type': 'entitySelect'
           }
         ],
+        'name': 'Name',
         'title': 'New title'
       };
 
@@ -272,6 +292,7 @@ void main() {
             'type': 'entitySelect'
           }
         ],
+        'name': 'Name',
         'title': 'New title'
       };
 

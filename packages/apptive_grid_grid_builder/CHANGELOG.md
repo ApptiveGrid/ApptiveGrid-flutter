@@ -1,3 +1,7 @@
+## [0.4.0]
+* **BREAKING CHANGE** `FormData` and `Grid` now take named constructor arguments to avoid confusion. Before the order of arguments did not have `schema` at the same part
+* Add `name` to `FormData`
+
 ## [0.3.1]
 * Add support for Authenticating with an API Key
 

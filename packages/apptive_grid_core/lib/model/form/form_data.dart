@@ -3,11 +3,18 @@ part of apptive_grid_model;
 /// Model for FormData
 class FormData {
   /// Creates a FormData Object
-  FormData(this.title, this.components, this.actions, this.schema);
+  FormData({
+    required this.name,
+    required this.title,
+    required this.components,
+    this.actions = const [],
+    required this.schema,
+  });
 
   /// Deserializes [json] into a FormData Object
   FormData.fromJson(Map<String, dynamic> json)
-      : title = json['title'],
+      : name = json['name'],
+        title = json['title'],
         components = (json['components'] as List)
             .map<FormComponent>(
                 (e) => FormComponent.fromJson(e, json['schema']))
@@ -18,6 +25,9 @@ class FormData {
                 .toList()
             : [],
         schema = json['schema'];
+
+  /// Name of the Form
+  final String name;
 
   /// Title of the Form
   final String title;
@@ -33,6 +43,7 @@ class FormData {
 
   /// Serializes [FormData] to json
   Map<String, dynamic> toJson() => {
+        'name': name,
         'title': title,
         'components': components.map((e) => e.toJson()).toList(),
         'actions': actions.map((e) => e.toJson()).toList(),
@@ -54,6 +65,7 @@ class FormData {
   @override
   bool operator ==(Object other) {
     return other is FormData &&
+        name == other.name &&
         title == other.title &&
         schema == other.schema &&
         f.listEquals(actions, other.actions) &&

@@ -41,7 +41,12 @@ void main() {
     final title = 'Title';
     when(() => client.loadGrid(
             gridUri: GridUri(user: user, space: space, grid: gridId)))
-        .thenAnswer((_) async => Grid(title, null, [], []));
+        .thenAnswer((_) async => Grid(
+              name: title,
+              schema: null,
+              fields: [],
+              rows: [],
+            ));
 
     await tester.pumpWidget(target);
     await tester.pump();
@@ -58,7 +63,12 @@ void main() {
           space: space,
           grid: gridId,
         ),
-        initialData: Grid('Initial Title', null, [], []),
+        initialData: Grid(
+          name: 'Initial Title',
+          schema: null,
+          fields: [],
+          rows: [],
+        ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
@@ -72,7 +82,12 @@ void main() {
     final title = 'Title';
     when(() => client.loadGrid(
             gridUri: GridUri(user: user, space: space, grid: gridId)))
-        .thenAnswer((_) async => Grid(title, null, [], []));
+        .thenAnswer((_) async => Grid(
+              name: title,
+              schema: null,
+              fields: [],
+              rows: [],
+            ));
 
     await tester.pumpWidget(target);
 
@@ -135,7 +150,12 @@ void main() {
     final title = 'Title';
     when(() => client.loadGrid(
             gridUri: GridUri(user: user, space: space, grid: gridId)))
-        .thenAnswer((_) async => Grid(title, null, [], []));
+        .thenAnswer((_) async => Grid(
+              name: title,
+              schema: null,
+              fields: [],
+              rows: [],
+            ));
 
     await tester.pumpWidget(target);
     await tester.pump();
