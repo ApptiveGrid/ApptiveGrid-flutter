@@ -46,6 +46,7 @@ class _TextFormWidgetState extends State<TextFormWidget> {
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       expands: widget.component.options.multi,
+      maxLines: widget.component.options.multi ? null : 1,
       decoration: InputDecoration(
         helperText: widget.component.options.description,
         helperMaxLines: 100,
