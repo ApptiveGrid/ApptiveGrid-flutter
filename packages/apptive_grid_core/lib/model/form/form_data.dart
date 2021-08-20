@@ -4,7 +4,7 @@ part of apptive_grid_model;
 class FormData {
   /// Creates a FormData Object
   FormData({
-    required this.name,
+    this.name,
     required this.title,
     required this.components,
     this.actions = const [],
@@ -27,7 +27,7 @@ class FormData {
         schema = json['schema'];
 
   /// Name of the Form
-  final String name;
+  final String? name;
 
   /// Title of the Form
   final String title;
