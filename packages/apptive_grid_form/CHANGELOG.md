@@ -1,3 +1,7 @@
+## [0.4.1]
+* Make [FormData.name] optional
+* Fix Multiline TextFields
+
 ## [0.4.0]
 * **BREAKING CHANGE** `FormData` and `Grid` now take named constructor arguments to avoid confusion. Before the order of arguments did not have `schema` at the same part
 * Add `name` to `FormData`
