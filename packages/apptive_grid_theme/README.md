@@ -11,8 +11,8 @@ import 'package:apptive_grid_theme/apptive_grid_theme.dart';
 @override
 Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ZweidenkerTheme().theme(),
-        darkTheme: ZweidenkerTheme().theme(brightness: Brightness.dark),
+        theme: ApptiveGridTheme(brightness: Brightness.light).create(),
+        darkTheme: ApptiveGridTheme(brightness: Brightness.dark).create(),
         home: MyWidget(),
     );
 }

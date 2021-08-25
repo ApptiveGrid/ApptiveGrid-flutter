@@ -10,21 +10,25 @@ import 'apptive_grid_colors.dart';
 ///
 /// A theme for all colors and fonts used in Apptive Grid apps
 class ApptiveGridTheme {
-  static const Color _lightWindowBackground = Color(0xFFF7F7F7);
+  /// Initializes the theme with a give brightnes
+  ApptiveGridTheme({required this.brightness});
 
-  Color get _darkWindowBackground {
-    if (Platform.isIOS) {
-      return Colors.black;
-    } else {
-      return const Color(0xFF282625);
-    }
-  }
+  /// The brightness of the theme
+  final Brightness brightness;
 
   /// Creates the theme
-  ThemeData theme({Brightness brightness = Brightness.light}) {
+  ThemeData theme() {
+    final darkWindowBackground;
+    if (Platform.isIOS) {
+      darkWindowBackground = Colors.black;
+    } else {
+      darkWindowBackground = const Color(0xFF282625);
+    }
+    final _windowBackground =
+        _withBrightness(light: Color(0xFFF7F7F7), dark: darkWindowBackground);
     final baseTheme =
-        brightness == Brightness.dark ? ThemeData.dark() : ThemeData.light();
-    final textTheme = _textTheme(baseTheme.textTheme, brightness);
+        _withBrightness(light: ThemeData.light(), dark: ThemeData.dark());
+    final textTheme = _textTheme(baseTheme.textTheme);
 
     return baseTheme.copyWith(
         primaryColor: ApptiveGridColors.apptiveGridBlue,
@@ -68,9 +72,7 @@ class ApptiveGridTheme {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
-        scaffoldBackgroundColor: brightness == Brightness.dark
-            ? _darkWindowBackground
-            : _lightWindowBackground,
+        scaffoldBackgroundColor: _windowBackground,
         textTheme: textTheme,
         cardTheme: baseTheme.cardTheme.copyWith(
           clipBehavior: Clip.hardEdge,
@@ -87,15 +89,14 @@ class ApptiveGridTheme {
             color: ApptiveGridColors.apptiveGridBlue,
           ),
           iconTheme: IconThemeData(
-              color: brightness == Brightness.dark
-                  ? Colors.white
-                  : ApptiveGridColors.darkGrey),
+              color: _withBrightness(
+                  light: ApptiveGridColors.darkGrey, dark: Colors.white)),
           brightness: brightness,
           textTheme: textTheme,
         ));
   }
 
-  TextTheme _textTheme(TextTheme baseTheme, Brightness brightness) {
+  TextTheme _textTheme(TextTheme baseTheme) {
     final newTheme = baseTheme.copyWith(
         bodyText1: const TextStyle(
           fontSize: 14,
@@ -113,13 +114,19 @@ class ApptiveGridTheme {
           fontWeight: FontWeight.bold,
         ));
     return newTheme.apply(
-      bodyColor: brightness == Brightness.dark
-          ? Colors.white54
-          : ApptiveGridColors.lightGrey,
-      displayColor: brightness == Brightness.dark
-          ? Colors.white
-          : ApptiveGridColors.darkGrey,
+      bodyColor: _withBrightness(
+          light: ApptiveGridColors.lightGrey, dark: Colors.white54),
+      displayColor: _withBrightness(
+          light: ApptiveGridColors.darkGrey, dark: Colors.white),
       fontFamily: 'DMSans',
     );
+  }
+
+  T _withBrightness<T>({required T light, required T dark}) {
+    if (brightness == Brightness.dark) {
+      return dark;
+    } else {
+      return light;
+    }
   }
 }
