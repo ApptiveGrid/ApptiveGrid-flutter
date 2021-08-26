@@ -6,7 +6,7 @@ class StringFormComponent extends FormComponent<StringDataEntity> {
   StringFormComponent(
       {required this.property,
       required this.data,
-      required this.options,
+      this.options = const TextComponentOptions(),
       required this.fieldId,
       this.required = false});
 

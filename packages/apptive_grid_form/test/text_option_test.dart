@@ -60,7 +60,7 @@ void main() {
         options: TextComponentOptions(),
       );
       final target = TestApp(
-        child: NumberFormWidget(
+        child: IntegerFormWidget(
           component: component,
         ),
       );
@@ -83,7 +83,7 @@ void main() {
         ),
       );
       final target = TestApp(
-        child: NumberFormWidget(
+        child: IntegerFormWidget(
           component: component,
         ),
       );

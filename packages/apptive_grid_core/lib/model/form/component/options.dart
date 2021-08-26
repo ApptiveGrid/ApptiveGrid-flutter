@@ -42,7 +42,7 @@ class FormComponentOptions {
 /// [FormComponentOptions] for Text Based Components
 class TextComponentOptions extends FormComponentOptions {
   /// Creates Options
-  TextComponentOptions(
+  const TextComponentOptions(
       {this.multi = false, this.placeholder, this.description, this.label});
 
   /// Deserializes [json] into [TextComponentOptions]

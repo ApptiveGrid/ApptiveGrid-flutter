@@ -39,6 +39,24 @@ void main() {
       expect(IntegerFormComponent.fromJson(component.toJson()), component);
     });
 
+    test('Decimal', () {
+      final options = TextComponentOptions(
+        multi: false,
+        placeholder: 'Placeholder',
+        label: 'Label',
+        description: 'Description',
+      );
+      final component = DecimalFormComponent(
+        fieldId: 'id',
+        property: 'Property',
+        data: DecimalDataEntity(30.0),
+        options: options,
+        required: true,
+      );
+
+      expect(DecimalFormComponent.fromJson(component.toJson()), component);
+    });
+
     test('Date', () {
       final options = FormComponentOptions.fromJson({});
       final component = DateFormComponent(

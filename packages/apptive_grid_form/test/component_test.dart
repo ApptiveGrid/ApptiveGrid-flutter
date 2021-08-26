@@ -459,7 +459,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(NumberFormWidget), findsOneWidget);
+      expect(find.byType(IntegerFormWidget), findsOneWidget);
 
       await tester.enterText(find.byType(TextFormField), '12');
       await tester.pumpAndSettle();
@@ -535,7 +535,133 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(NumberFormWidget), findsOneWidget);
+      expect(find.byType(IntegerFormWidget), findsOneWidget);
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      verifyNever(() => client.performAction(action, formData));
+      expect(find.text('Property is required'), findsOneWidget);
+    });
+  });
+
+  group('Decimal', () {
+    testWidgets('Value is send', (tester) async {
+      final action = FormAction(
+        'uri',
+        'method',
+      );
+      final component = DecimalFormComponent(
+        fieldId: 'id',
+        data: DecimalDataEntity(),
+        property: 'Property',
+        options: TextComponentOptions(),
+        required: false,
+      );
+      final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('number'));
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            form: 'formId',
+          ),
+        ),
+      );
+
+      final completer = Completer<FormData>();
+      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+          .thenAnswer((_) async => formData);
+      when(() => client.performAction(action, any()))
+          .thenAnswer((realInvocation) async {
+        completer.complete(realInvocation.positionalArguments[1]);
+        return Response('', 200);
+      });
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DecimalFormWidget), findsOneWidget);
+
+      await tester.enterText(find.byType(TextFormField), '12');
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      final result = await completer.future;
+      expect(result.components.first.data.value, 12);
+    });
+
+    testWidgets('Prefilled Value gets displayed', (tester) async {
+      final component = DecimalFormComponent(
+        fieldId: 'id',
+        data: DecimalDataEntity(47.11),
+        property: 'Property',
+        options: TextComponentOptions(),
+        required: false,
+      );
+      final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [],
+          schema: getSchema('number'));
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            form: 'formId',
+          ),
+        ),
+      );
+
+      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+          .thenAnswer((_) async => formData);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text('47.11'), findsOneWidget);
+    });
+
+    testWidgets('Required shows Error', (tester) async {
+      final action = FormAction(
+        'uri',
+        'method',
+      );
+      final component = DecimalFormComponent(
+        fieldId: 'id',
+        data: DecimalDataEntity(),
+        property: 'Property',
+        options: TextComponentOptions(),
+        required: true,
+      );
+      final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [component],
+          actions: [action],
+          schema: getSchema('number'));
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            form: 'formId',
+          ),
+        ),
+      );
+
+      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+          .thenAnswer((_) async => formData);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DecimalFormWidget), findsOneWidget);
 
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();

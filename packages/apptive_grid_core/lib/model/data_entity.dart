@@ -111,6 +111,18 @@ class IntegerDataEntity extends DataEntity<int, int> {
   int? get schemaValue => value;
 }
 
+/// [DataEntity] representing [double] Objects
+class DecimalDataEntity extends DataEntity<double, double> {
+  /// Creates a new DecimalDataEntity Object
+  DecimalDataEntity([this.value]);
+
+  @override
+  double? value;
+
+  @override
+  double? get schemaValue => value;
+}
+
 /// [DataEntity] representing an enum like Object
 class EnumDataEntity extends DataEntity<String, String> {
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
