@@ -29,7 +29,21 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, NumberFormWidget);
+      expect(widget.runtimeType, IntegerFormWidget);
+    });
+
+    test('DecimalComponent', () {
+      final component = DecimalFormComponent(
+        fieldId: 'id',
+        data: DecimalDataEntity(),
+        property: 'Property',
+        required: false,
+        options: TextComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, DecimalFormWidget);
     });
 
     test('DateComponent', () {

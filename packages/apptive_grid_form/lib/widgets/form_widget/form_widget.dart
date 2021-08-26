@@ -18,8 +18,12 @@ Widget fromModel(FormComponent component) {
         component: component as DateFormComponent,
       );
     case IntegerDataEntity:
-      return NumberFormWidget(
+      return IntegerFormWidget(
         component: component as IntegerFormComponent,
+      );
+    case DecimalDataEntity:
+      return DecimalFormWidget(
+        component: component as DecimalFormComponent,
       );
     case BooleanDataEntity:
       return CheckBoxFormWidget(

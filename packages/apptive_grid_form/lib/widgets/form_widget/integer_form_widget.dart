@@ -1,18 +1,19 @@
 part of apptive_grid_form_widgets;
 
 /// FormComponent Widget to display a [IntegerFormComponent]
-class NumberFormWidget extends StatefulWidget {
+class IntegerFormWidget extends StatefulWidget {
   /// Creates a [TextFormField] to show and edit an integer contained in [component]
-  const NumberFormWidget({Key? key, required this.component}) : super(key: key);
+  const IntegerFormWidget({Key? key, required this.component})
+      : super(key: key);
 
   /// Component this Widget should reflect
   final IntegerFormComponent component;
 
   @override
-  _NumberFormWidgetState createState() => _NumberFormWidgetState();
+  _IntegerFormWidgetState createState() => _IntegerFormWidgetState();
 }
 
-class _NumberFormWidgetState extends State<NumberFormWidget> {
+class _IntegerFormWidgetState extends State<IntegerFormWidget> {
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -50,7 +51,8 @@ class _NumberFormWidgetState extends State<NumberFormWidget> {
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       expands: widget.component.options.multi,
-      keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      keyboardType: TextInputType.numberWithOptions(signed: true),
       decoration: InputDecoration(
         helperText: widget.component.options.description,
         helperMaxLines: 100,

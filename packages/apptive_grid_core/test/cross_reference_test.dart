@@ -108,7 +108,7 @@ void main() {
   });
 
   group('FormComponent', () {
-    test('Direct eqauls from Json', () {
+    test('Direct equals from Json', () {
       final responseWithCrossReference = {
         'schema': {
           'type': 'object',

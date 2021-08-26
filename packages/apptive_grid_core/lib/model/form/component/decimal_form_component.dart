@@ -1,9 +1,9 @@
 part of apptive_grid_model;
 
-/// Model for a [FormComponent] representing [IntegerDataEntity]
-class IntegerFormComponent extends FormComponent<IntegerDataEntity> {
+/// Model for a [FormComponent] representing [DecimalDataEntity]
+class DecimalFormComponent extends FormComponent<DecimalDataEntity> {
   /// Creates a FormComponent
-  IntegerFormComponent({
+  DecimalFormComponent({
     required this.property,
     required this.data,
     required this.fieldId,
@@ -12,9 +12,9 @@ class IntegerFormComponent extends FormComponent<IntegerDataEntity> {
   });
 
   /// Deserializes [json] into a [FormComponent]
-  IntegerFormComponent.fromJson(Map<String, dynamic> json)
+  DecimalFormComponent.fromJson(Map<String, dynamic> json)
       : property = json['property'],
-        data = IntegerDataEntity(json['value']),
+        data = DecimalDataEntity(json['value']),
         options = TextComponentOptions.fromJson(json['options']),
         required = json['required'],
         fieldId = json['fieldId'];
@@ -22,7 +22,7 @@ class IntegerFormComponent extends FormComponent<IntegerDataEntity> {
   @override
   final String property;
   @override
-  IntegerDataEntity data;
+  DecimalDataEntity data;
   @override
   String fieldId;
   @override

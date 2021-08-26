@@ -35,6 +35,9 @@ class GridEntry {
         dataEntity = CrossReferenceDataEntity.fromJson(
             jsonValue: jsonData, gridUri: schema['gridUri']);
         break;
+      case DataType.decimal:
+        dataEntity = DecimalDataEntity(jsonData);
+        break;
     }
     return GridEntry(field, dataEntity);
   }

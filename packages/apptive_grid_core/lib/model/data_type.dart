@@ -14,6 +14,9 @@ enum DataType {
   /// Type to display [int] numbers
   integer,
 
+  /// Type to display [double] decimal numbers
+  decimal,
+
   /// Type to display [bool] values
   checkbox,
 
@@ -44,6 +47,8 @@ DataType dataTypeFromSchemaProperty({required dynamic schemaProperty}) {
       return DataType.text;
     case 'integer':
       return DataType.integer;
+    case 'number':
+      return DataType.decimal;
     case 'boolean':
       return DataType.checkbox;
     case 'object':

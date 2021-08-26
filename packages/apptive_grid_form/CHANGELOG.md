@@ -1,3 +1,6 @@
+## [0.4.2]
+* Adding support for Decimal Data
+
 ## [0.4.1]
 * Make [FormData.name] optional
 * Fix Multiline TextFields
