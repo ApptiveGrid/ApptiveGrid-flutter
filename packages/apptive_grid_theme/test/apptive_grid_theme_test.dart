@@ -126,7 +126,7 @@ void main() {
         (data) => IconButton(
               icon: Text(
                 'Test',
-                style: data.textTheme.bodyText1,
+                style: data.textTheme.button,
               ),
               onPressed: null,
             ),
