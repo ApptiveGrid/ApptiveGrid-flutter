@@ -15,11 +15,9 @@ class _TestApp extends StatelessWidget {
   final bool isDark;
   final AppBar? Function(ThemeData data) appBarBuilder;
 
-  final _lightData = ApptiveGridTheme(brightness: Brightness.light).theme();
-  final _darkData = ApptiveGridTheme(brightness: Brightness.dark).theme();
-  ThemeData get _themeData {
-    return isDark ? _darkData : _lightData;
-  }
+  late final _themeData = isDark
+      ? ApptiveGridTheme(brightness: Brightness.dark).theme()
+      : ApptiveGridTheme(brightness: Brightness.light).theme();
 
   @override
   Widget build(BuildContext context) {
