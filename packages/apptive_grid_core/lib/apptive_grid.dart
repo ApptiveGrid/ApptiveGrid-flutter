@@ -18,11 +18,11 @@ class ApptiveGrid extends StatefulWidget {
   ///
   /// Used testing to Provide a MockedClient
   @visibleForTesting
-  ApptiveGrid.withClient(
-      {required ApptiveGridClient client,
+  const ApptiveGrid.withClient(
+      {Key? key, required this.client,
       this.child,
       this.options = const ApptiveGridOptions()})
-      : client = client;
+      : super(key: key);
 
   /// Widget that should be wrapped. Normally this is something like [MaterialApp]
   final Widget? child;
