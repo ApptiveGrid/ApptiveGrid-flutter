@@ -5,7 +5,6 @@ part of apptive_grid_model;
 /// [T] type of the data used in Flutter
 /// [S] type used when sending Data back
 abstract class DataEntity<T, S> {
-
   /// Create a new DataEntity with [value]
   DataEntity([this.value]);
 
@@ -115,7 +114,6 @@ class EnumDataEntity extends DataEntity<String, String> {
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
   EnumDataEntity({String? value, this.options = const []}) : super(value);
 
-
   /// Possible options of the Data Entity
   List<String> options;
 
@@ -141,7 +139,9 @@ class EnumDataEntity extends DataEntity<String, String> {
 /// [DataEntity] representing an Object CrossReferencing to a different Grid
 class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
   /// Create a new CrossReference Data Entity
-  CrossReferenceDataEntity({String? value, this.entityUri, required this.gridUri}) : super(value);
+  CrossReferenceDataEntity(
+      {String? value, this.entityUri, required this.gridUri})
+      : super(value);
 
   /// Creates a new CrossReferenceDataEntity from a Json Response
   factory CrossReferenceDataEntity.fromJson(

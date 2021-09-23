@@ -46,7 +46,6 @@ void main() {
     };
   }
 
-
   group('Text', () {
     testWidgets('Value is send', (tester) async {
       final action = FormAction(

@@ -19,7 +19,8 @@ class ApptiveGrid extends StatefulWidget {
   /// Used testing to Provide a MockedClient
   @visibleForTesting
   const ApptiveGrid.withClient(
-      {Key? key, required this.client,
+      {Key? key,
+      required this.client,
       this.child,
       this.options = const ApptiveGridOptions()})
       : super(key: key);

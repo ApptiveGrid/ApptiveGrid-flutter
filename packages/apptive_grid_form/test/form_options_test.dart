@@ -34,8 +34,8 @@ void main() {
         fieldId: 'id',
         data: BooleanDataEntity(),
         property: property,
-        options:
-            const FormComponentOptions(label: customLabel, description: description),
+        options: const FormComponentOptions(
+            label: customLabel, description: description),
       );
       final target = TestApp(
         child: CheckBoxFormWidget(
@@ -80,8 +80,8 @@ void main() {
         fieldId: 'id',
         data: DateDataEntity(),
         property: property,
-        options:
-            const FormComponentOptions(label: customLabel, description: description),
+        options: const FormComponentOptions(
+            label: customLabel, description: description),
       );
       final target = TestApp(
         child: DateFormWidget(
@@ -126,8 +126,8 @@ void main() {
         fieldId: 'id',
         data: DateTimeDataEntity(),
         property: property,
-        options:
-            const FormComponentOptions(label: customLabel, description: description),
+        options: const FormComponentOptions(
+            label: customLabel, description: description),
       );
       final target = TestApp(
         child: DateTimeFormWidget(
@@ -172,8 +172,8 @@ void main() {
         fieldId: 'id',
         data: EnumDataEntity(),
         property: property,
-        options:
-            const FormComponentOptions(label: customLabel, description: description),
+        options: const FormComponentOptions(
+            label: customLabel, description: description),
       );
       final target = TestApp(
         child: EnumFormWidget(

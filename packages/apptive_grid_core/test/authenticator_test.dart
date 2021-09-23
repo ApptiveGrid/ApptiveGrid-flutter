@@ -35,7 +35,8 @@ void main() {
 
   group('Header', () {
     test('Has Token returns Token', () {
-      authenticator = ApptiveGridAuthenticator(options: const ApptiveGridOptions());
+      authenticator =
+          ApptiveGridAuthenticator(options: const ApptiveGridOptions());
       final token = TokenResponse.fromJson(
           {'token_type': 'Bearer', 'access_token': '12345'});
       authenticator.setToken(token);
@@ -44,7 +45,8 @@ void main() {
     });
 
     test('Has no Token returns null', () {
-      authenticator = ApptiveGridAuthenticator(options: const ApptiveGridOptions());
+      authenticator =
+          ApptiveGridAuthenticator(options: const ApptiveGridOptions());
       expect(authenticator.header, null);
     });
   });
@@ -378,8 +380,9 @@ void main() {
       final resultCredential = await completerResult
           .getTokenResponse()
           .timeout(const Duration(seconds: 5));
-      final credentialToken =
-          await credential.getTokenResponse().timeout(const Duration(seconds: 5));
+      final credentialToken = await credential
+          .getTokenResponse()
+          .timeout(const Duration(seconds: 5));
       expect(resultCredential, credentialToken);
     });
   });
