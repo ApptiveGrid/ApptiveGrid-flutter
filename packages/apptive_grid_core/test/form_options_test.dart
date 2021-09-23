@@ -37,7 +37,9 @@ void main() {
         'description': 'Description',
       });
       const c = FormComponentOptions(
-          label: 'Label', description: 'Other Description');
+        label: 'Label',
+        description: 'Other Description',
+      );
 
       test('a == b', () {
         expect(a == b, true);

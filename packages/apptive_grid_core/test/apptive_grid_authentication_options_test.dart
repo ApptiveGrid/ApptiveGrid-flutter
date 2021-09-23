@@ -6,9 +6,13 @@ void main() {
     group('Equality', () {
       test('Objects are equal', () {
         const optionsA = ApptiveGridAuthenticationOptions(
-            autoAuthenticate: true, redirectScheme: 'scheme');
+          autoAuthenticate: true,
+          redirectScheme: 'scheme',
+        );
         const optionsB = ApptiveGridAuthenticationOptions(
-            autoAuthenticate: true, redirectScheme: 'scheme');
+          autoAuthenticate: true,
+          redirectScheme: 'scheme',
+        );
 
         expect(optionsA, equals(optionsB));
         expect(optionsA.hashCode, equals(optionsB.hashCode));
@@ -16,9 +20,13 @@ void main() {
 
       test('Objects are not equal', () {
         const optionsA = ApptiveGridAuthenticationOptions(
-            autoAuthenticate: true, redirectScheme: 'scheme');
+          autoAuthenticate: true,
+          redirectScheme: 'scheme',
+        );
         const optionsB = ApptiveGridAuthenticationOptions(
-            autoAuthenticate: true, redirectScheme: 'differentScheme');
+          autoAuthenticate: true,
+          redirectScheme: 'differentScheme',
+        );
 
         expect(optionsA, isNot(equals(optionsB)));
         expect(optionsA.hashCode, isNot(equals(optionsB.hashCode)));

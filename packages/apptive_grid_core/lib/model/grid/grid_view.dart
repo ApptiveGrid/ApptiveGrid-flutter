@@ -20,10 +20,11 @@ class GridViewUri extends GridUri {
     }
     final match = matches.elementAt(0);
     return GridViewUri(
-        user: match.group(1)!,
-        space: match.group(2)!,
-        grid: match.group(3)!,
-        view: match.group(4)!);
+      user: match.group(1)!,
+      space: match.group(2)!,
+      grid: match.group(3)!,
+      view: match.group(4)!,
+    );
   }
 
   /// Id of the View this [GridViewUri] is representing

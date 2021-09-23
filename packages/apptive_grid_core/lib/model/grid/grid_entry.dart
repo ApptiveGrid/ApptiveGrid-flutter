@@ -9,7 +9,10 @@ class GridEntry {
   ///
   /// [field.type] is used for determining the [DataEntity] runtimeType of [data]
   factory GridEntry.fromJson(
-      dynamic jsonData, GridField field, dynamic schema) {
+    dynamic jsonData,
+    GridField field,
+    dynamic schema,
+  ) {
     DataEntity dataEntity;
     switch (field.type) {
       case DataType.text:
@@ -29,11 +32,15 @@ class GridEntry {
         break;
       case DataType.selectionBox:
         dataEntity = EnumDataEntity(
-            value: jsonData, options: schema['enum'].cast<String>());
+          value: jsonData,
+          options: schema['enum'].cast<String>(),
+        );
         break;
       case DataType.crossReference:
         dataEntity = CrossReferenceDataEntity.fromJson(
-            jsonValue: jsonData, gridUri: schema['gridUri']);
+          jsonValue: jsonData,
+          gridUri: schema['gridUri'],
+        );
         break;
       case DataType.decimal:
         dataEntity = DecimalDataEntity(jsonData);

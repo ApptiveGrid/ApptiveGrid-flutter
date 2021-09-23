@@ -106,7 +106,8 @@ void main() {
       final component = CrossReferenceFormComponent(
         fieldId: 'id',
         data: CrossReferenceDataEntity(
-            gridUri: GridUri(user: 'user', space: 'space', grid: 'grid')),
+          gridUri: GridUri(user: 'user', space: 'space', grid: 'grid'),
+        ),
         property: 'Property',
         required: false,
         options: const FormComponentOptions(),

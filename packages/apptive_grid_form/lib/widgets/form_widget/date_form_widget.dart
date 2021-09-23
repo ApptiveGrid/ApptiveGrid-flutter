@@ -5,7 +5,10 @@ class DateFormWidget extends StatefulWidget {
   /// Creates a Widget to display and select a Date contained in [component]
   ///
   /// Clicking on this will show a DatePicker using [showDatePicker]
-  const DateFormWidget({Key? key, required this.component}) : super(key: key);
+  const DateFormWidget({
+    Key? key,
+    required this.component,
+  }) : super(key: key);
 
   /// Component this Widget should reflect
   final DateFormComponent component;
@@ -35,7 +38,8 @@ class _DateFormWidgetState extends State<DateFormWidget> {
           initialDate: initialDate,
           firstDate: DateTime.fromMillisecondsSinceEpoch(0),
           lastDate: DateTime.fromMillisecondsSinceEpoch(
-              const Duration(days: 100000000).inMilliseconds),
+            const Duration(days: 100000000).inMilliseconds,
+          ),
         ).then((value) {
           if (value != null) {
             _formKey.currentState!.didChange(dateFormat.format(value));

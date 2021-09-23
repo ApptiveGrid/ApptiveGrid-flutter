@@ -10,19 +10,23 @@ void main() {
 multi-line
 string''';
     final target = TextFormWidget(
-        component: StringFormComponent(
-            property: 'Text',
-            data: StringDataEntity(
-              value,
-            ),
-            options: const TextComponentOptions(
-              multi: true,
-            ),
-            fieldId: 'Field'));
+      component: StringFormComponent(
+        property: 'Text',
+        data: StringDataEntity(
+          value,
+        ),
+        options: const TextComponentOptions(
+          multi: true,
+        ),
+        fieldId: 'Field',
+      ),
+    );
 
-    await tester.pumpWidget(TestApp(
-      child: target,
-    ));
+    await tester.pumpWidget(
+      TestApp(
+        child: target,
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text(value), findsOneWidget);

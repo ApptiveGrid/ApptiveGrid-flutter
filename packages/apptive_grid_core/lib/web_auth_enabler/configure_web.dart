@@ -12,7 +12,8 @@ Future<void> enableWebAuth(ApptiveGridOptions options) async {
   final url = window.location.href;
   if (url.contains('state=')) {
     final issuerUri = Uri.parse(
-        'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
+      'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}',
+    );
     final issuer = await openid.Issuer.discover(issuerUri);
     final client = openid.Client(issuer, 'web');
     final webAuthenticator = Authenticator(client, redirectUri: Uri.parse(url));

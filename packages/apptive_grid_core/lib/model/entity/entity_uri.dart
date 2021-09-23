@@ -3,11 +3,12 @@ part of apptive_grid_model;
 /// A Uri representation used for performing Grid based Api Calls
 class EntityUri extends ApptiveGridUri {
   /// Creates a new [EntityUri] based on known ids for [user], [space] and [grid]
-  EntityUri(
-      {required this.user,
-      required this.space,
-      required this.grid,
-      required this.entity});
+  EntityUri({
+    required this.user,
+    required this.space,
+    required this.grid,
+    required this.entity,
+  });
 
   /// Creates a new [EntityUri] based on a string [uri]
   /// Main usage of this is for [EntityUri] retrieved through other Api Calls
@@ -19,10 +20,11 @@ class EntityUri extends ApptiveGridUri {
     }
     final match = matches.elementAt(0);
     return EntityUri(
-        user: match.group(1)!,
-        space: match.group(2)!,
-        grid: match.group(3)!,
-        entity: match.group(4)!);
+      user: match.group(1)!,
+      space: match.group(2)!,
+      grid: match.group(3)!,
+      entity: match.group(4)!,
+    );
   }
 
   /// Id of the User that owns this Grid

@@ -24,7 +24,10 @@ class GridUri extends ApptiveGridUri {
       }
       final match = matches.elementAt(0);
       return GridUri(
-          user: match.group(1)!, space: match.group(2)!, grid: match.group(3)!);
+        user: match.group(1)!,
+        space: match.group(2)!,
+        grid: match.group(3)!,
+      );
     }
   }
 
@@ -75,12 +78,15 @@ class Grid {
     final names = json['fieldNames'] as List;
     final schema = json['schema'];
     final fields = List<GridField>.generate(
-        ids.length,
-        (i) => GridField(
-            ids[i],
-            names[i],
-            dataTypeFromSchemaProperty(
-                schemaProperty: schema['properties']['fields']['items'][i])));
+      ids.length,
+      (i) => GridField(
+        ids[i],
+        names[i],
+        dataTypeFromSchemaProperty(
+          schemaProperty: schema['properties']['fields']['items'][i],
+        ),
+      ),
+    );
     final entries = (json['entities'] as List)
         .map((e) => GridRow.fromJson(e, fields, schema))
         .toList();

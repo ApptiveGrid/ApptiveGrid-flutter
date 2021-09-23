@@ -3,8 +3,10 @@ part of apptive_grid_form_widgets;
 /// FormComponent Widget to display a [DecimalFormComponent]
 class DecimalFormWidget extends StatefulWidget {
   /// Creates a [TextFormField] to show and edit an integer contained in [component]
-  const DecimalFormWidget({Key? key, required this.component})
-      : super(key: key);
+  const DecimalFormWidget({
+    Key? key,
+    required this.component,
+  }) : super(key: key);
 
   /// Component this Widget should reflect
   final DecimalFormComponent component;
@@ -31,7 +33,8 @@ class _DecimalFormWidgetState extends State<DecimalFormWidget> {
           _controller.text = _controller.text
               .substring(0, max(0, _controller.text.length - 1));
           _controller.selection = TextSelection.fromPosition(
-              TextPosition(offset: _controller.text.length));
+            TextPosition(offset: _controller.text.length),
+          );
         }
       }
     });

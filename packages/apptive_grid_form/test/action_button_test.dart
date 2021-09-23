@@ -11,13 +11,16 @@ void main() {
 
     final completer = Completer<FormAction>();
 
-    await tester.pumpWidget(MaterialApp(
-      home: ActionButton(
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ActionButton(
           action: action,
           onPressed: (clickAction) {
             completer.complete(clickAction);
-          }),
-    ));
+          },
+        ),
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.byType(ActionButton));
 

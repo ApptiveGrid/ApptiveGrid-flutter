@@ -54,11 +54,12 @@ void main() {
       final spaceUri = SpaceUri(user: id, space: 'spaceId');
 
       final plain = User(
-          email: email,
-          lastName: lastName,
-          firstName: firstName,
-          id: id,
-          spaces: [spaceUri]);
+        email: email,
+        lastName: lastName,
+        firstName: firstName,
+        id: id,
+        spaces: [spaceUri],
+      );
 
       final jsonUser = User.fromJson({
         'id': 'id',
@@ -81,11 +82,12 @@ void main() {
       const email = 'jane.doe@zweidenker.de';
 
       final plain = User(
-          email: email,
-          lastName: lastName,
-          firstName: firstName,
-          id: id,
-          spaces: []);
+        email: email,
+        lastName: lastName,
+        firstName: firstName,
+        id: id,
+        spaces: [],
+      );
 
       final jsonUser = User.fromJson({
         'id': 'id',

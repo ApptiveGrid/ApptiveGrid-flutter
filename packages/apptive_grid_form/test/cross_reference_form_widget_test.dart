@@ -33,7 +33,11 @@ void main() {
       formKey = GlobalKey();
       final data = CrossReferenceDataEntity(gridUri: gridUri);
       final component = CrossReferenceFormComponent(
-          property: 'Property', data: data, fieldId: 'fieldId', required: true);
+        property: 'Property',
+        data: data,
+        fieldId: 'fieldId',
+        required: true,
+      );
 
       when(() => client.sendPendingActions()).thenAnswer((_) async {});
       when(() => client.loadGrid(gridUri: gridUri))
@@ -42,8 +46,9 @@ void main() {
       target = TestApp(
         client: client,
         child: Form(
-            key: formKey,
-            child: CrossReferenceFormWidget(component: component)),
+          key: formKey,
+          child: CrossReferenceFormWidget(component: component),
+        ),
       );
     });
 
@@ -61,8 +66,10 @@ void main() {
       // Filter
       await tester.enterText(find.byType(TextField), 'Sec');
       await tester.pumpAndSettle();
-      expect(find.text('First'),
-          findsOneWidget); // See above why one more than expected
+      expect(
+        find.text('First'),
+        findsOneWidget,
+      ); // See above why one more than expected
       expect(find.text('Second'), findsNWidgets(2));
     });
 
@@ -128,11 +135,14 @@ void main() {
     });
 
     testWidgets('Empty null values', (tester) async {
-      final gridWithNull = Grid(name: 'Test', schema: null, fields: [
-        field
-      ], rows: [
-        GridRow('row1', [GridEntry(field, StringDataEntity())]),
-      ]);
+      final gridWithNull = Grid(
+        name: 'Test',
+        schema: null,
+        fields: [field],
+        rows: [
+          GridRow('row1', [GridEntry(field, StringDataEntity())]),
+        ],
+      );
 
       when(() => client.loadGrid(gridUri: gridUri))
           .thenAnswer((_) async => gridWithNull);
@@ -154,13 +164,18 @@ void main() {
   group('GridRowDropdownDataItem', () {
     test('Equality', () {
       final entityUri = EntityUri(
-          user: 'user', space: 'space', grid: 'grid', entity: 'entity');
+        user: 'user',
+        space: 'space',
+        grid: 'grid',
+        entity: 'entity',
+      );
       const value = 'value';
       final a =
           GridRowDropdownDataItem(entityUri: entityUri, displayValue: value);
       final b = GridRowDropdownDataItem(
-          entityUri: EntityUri.fromUri(entityUri.uriString),
-          displayValue: value);
+        entityUri: EntityUri.fromUri(entityUri.uriString),
+        displayValue: value,
+      );
       final c = GridRowDropdownDataItem(
         entityUri: entityUri,
       );

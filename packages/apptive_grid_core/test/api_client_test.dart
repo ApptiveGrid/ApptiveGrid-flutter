@@ -20,14 +20,18 @@ void main() {
     registerFallbackValue<Uri>(Uri());
     registerFallbackValue<Map<String, String>>(<String, String>{});
 
-    registerFallbackValue(ActionItem(
+    registerFallbackValue(
+      ActionItem(
         action: FormAction('uri', 'method'),
         data: FormData(
-            name: 'name',
-            title: 'title',
-            components: [],
-            actions: [],
-            schema: {})));
+          name: 'name',
+          title: 'title',
+          components: [],
+          actions: [],
+          schema: {},
+        ),
+      ),
+    );
   });
 
   setUp(() {
@@ -81,7 +85,8 @@ void main() {
           .thenAnswer((_) async => response);
 
       final formData = await apptiveGridClient.loadForm(
-          formUri: RedirectFormUri(form: 'FormId'));
+        formUri: RedirectFormUri(form: 'FormId'),
+      );
 
       expect(formData.title, 'Form');
       expect(formData.components.length, 1);
@@ -92,17 +97,26 @@ void main() {
     test('DirectUri checks authentication', () async {
       final response = Response(json.encode(rawResponse), 200);
       final authenticator = MockApptiveGridAuthenticator();
-      final client = ApptiveGridClient.fromClient(httpClient,
-          authenticator: authenticator);
+      final client = ApptiveGridClient.fromClient(
+        httpClient,
+        authenticator: authenticator,
+      );
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer((_) async => response);
       when(() => authenticator.checkAuthentication())
           .thenAnswer((_) => Future.value());
 
-      unawaited(client.loadForm(
+      unawaited(
+        client.loadForm(
           formUri: DirectFormUri(
-              user: 'user', space: 'space', grid: 'grid', form: 'FormId')));
+            user: 'user',
+            space: 'space',
+            grid: 'grid',
+            form: 'FormId',
+          ),
+        ),
+      );
       verify(() => authenticator.checkAuthentication()).called(1);
     });
 
@@ -113,9 +127,11 @@ void main() {
           .thenAnswer((_) async => response);
 
       expect(
-          () => apptiveGridClient.loadForm(
-              formUri: RedirectFormUri(form: 'FormId')),
-          throwsA(isInstanceOf<Response>()));
+        () => apptiveGridClient.loadForm(
+          formUri: RedirectFormUri(form: 'FormId'),
+        ),
+        throwsA(isInstanceOf<Response>()),
+      );
     });
   });
 
@@ -160,13 +176,22 @@ void main() {
 
       final response = Response(json.encode(rawResponse), 200);
 
-      when(() => httpClient.get(
+      when(
+        () => httpClient.get(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
-          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
 
       final grid = await apptiveGridClient.loadGrid(
-          gridUri: GridUri(user: user, space: space, grid: gridId));
+        gridUri: GridUri(
+          user: user,
+          space: space,
+          grid: gridId,
+        ),
+      );
 
       expect(grid, isNot(null));
     });
@@ -178,15 +203,21 @@ void main() {
 
       final response = Response(json.encode(rawResponse), 400);
 
-      when(() => httpClient.get(
+      when(
+        () => httpClient.get(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId'),
-          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
 
       expect(
-          () => apptiveGridClient.loadGrid(
-              gridUri: GridUri(user: user, space: space, grid: gridId)),
-          throwsA(isInstanceOf<Response>()));
+        () => apptiveGridClient.loadGrid(
+          gridUri: GridUri(user: user, space: space, grid: gridId),
+        ),
+        throwsA(isInstanceOf<Response>()),
+      );
     });
   });
 
@@ -210,14 +241,17 @@ void main() {
         'required': []
       };
       final formData = FormData(
-          name: 'Name',
-          title: 'Title',
-          components: [component],
-          actions: [action],
-          schema: schema);
+        name: 'Name',
+        title: 'Title',
+        components: [component],
+        actions: [action],
+        schema: schema,
+      );
 
       final request = Request(
-          'POST', Uri.parse('${ApptiveGridEnvironment.production.url}/uri}'));
+        'POST',
+        Uri.parse('${ApptiveGridEnvironment.production.url}/uri}'),
+      );
       request.body = jsonEncode(jsonEncode(formData.toRequestObject()));
 
       late BaseRequest calledRequest;
@@ -231,10 +265,14 @@ void main() {
 
       expect(response.statusCode, 200);
       expect(calledRequest.method, action.method);
-      expect(calledRequest.url.toString(),
-          '${ApptiveGridEnvironment.production.url}${action.uri}');
-      expect(calledRequest.headers[HttpHeaders.contentTypeHeader],
-          ContentType.json);
+      expect(
+        calledRequest.url.toString(),
+        '${ApptiveGridEnvironment.production.url}${action.uri}',
+      );
+      expect(
+        calledRequest.headers[HttpHeaders.contentTypeHeader],
+        ContentType.json,
+      );
     });
   });
 
@@ -243,7 +281,9 @@ void main() {
       expect(ApptiveGridEnvironment.alpha.url, 'https://alpha.apptivegrid.de');
       expect(ApptiveGridEnvironment.beta.url, 'https://beta.apptivegrid.de');
       expect(
-          ApptiveGridEnvironment.production.url, 'https://app.apptivegrid.de');
+        ApptiveGridEnvironment.production.url,
+        'https://app.apptivegrid.de',
+      );
     });
 
     test('Check Auth Realm', () {
@@ -256,15 +296,19 @@ void main() {
   group('Headers', () {
     test('No Authentication only content type headers', () {
       final client = ApptiveGridClient();
-      expect(client.headers, {HttpHeaders.contentTypeHeader: ContentType.json});
+      expect(client.headers, {
+        HttpHeaders.contentTypeHeader: ContentType.json,
+      });
     });
 
     test('With Authentication has headers', () {
       final authenticator = MockApptiveGridAuthenticator();
       when(() => authenticator.header)
           .thenReturn('Bearer dXNlcm5hbWU6cGFzc3dvcmQ=');
-      final client = ApptiveGridClient.fromClient(httpClient,
-          authenticator: authenticator);
+      final client = ApptiveGridClient.fromClient(
+        httpClient,
+        authenticator: authenticator,
+      );
       expect(client.headers, {
         HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ=',
         HttpHeaders.contentTypeHeader: ContentType.json
@@ -277,8 +321,10 @@ void main() {
       final authenticator = MockApptiveGridAuthenticator();
       when(() => authenticator.authenticate())
           .thenAnswer((_) async => MockCredential());
-      final client = ApptiveGridClient.fromClient(httpClient,
-          authenticator: authenticator);
+      final client = ApptiveGridClient.fromClient(
+        httpClient,
+        authenticator: authenticator,
+      );
       client.authenticate();
 
       verify(() => authenticator.authenticate()).called(1);
@@ -287,8 +333,10 @@ void main() {
     test('Logout calls Authenticator', () {
       final authenticator = MockApptiveGridAuthenticator();
       when(() => authenticator.logout()).thenAnswer((_) async {});
-      final client = ApptiveGridClient.fromClient(httpClient,
-          authenticator: authenticator);
+      final client = ApptiveGridClient.fromClient(
+        httpClient,
+        authenticator: authenticator,
+      );
       client.logout();
 
       verify(() => authenticator.logout()).called(1);
@@ -297,8 +345,10 @@ void main() {
     test('isAuthenticated calls Authenticator', () {
       final authenticator = MockApptiveGridAuthenticator();
       when(() => authenticator.isAuthenticated).thenAnswer((_) => true);
-      final client = ApptiveGridClient.fromClient(httpClient,
-          authenticator: authenticator);
+      final client = ApptiveGridClient.fromClient(
+        httpClient,
+        authenticator: authenticator,
+      );
       client.isAuthenticated;
 
       verify(() => authenticator.isAuthenticated).called(1);
@@ -318,9 +368,12 @@ void main() {
     test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);
 
-      when(() => httpClient.get(
+      when(
+        () => httpClient.get(
           Uri.parse('${ApptiveGridEnvironment.production.url}/api/users/me'),
-          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
 
       final user = await apptiveGridClient.getMe();
 
@@ -330,12 +383,17 @@ void main() {
     test('400 Status throws Response', () async {
       final response = Response(json.encode(rawResponse), 400);
 
-      when(() => httpClient.get(
+      when(
+        () => httpClient.get(
           Uri.parse('${ApptiveGridEnvironment.production.url}/api/users/me'),
-          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
 
       expect(
-          () => apptiveGridClient.getMe(), throwsA(isInstanceOf<Response>()));
+        () => apptiveGridClient.getMe(),
+        throwsA(isInstanceOf<Response>()),
+      );
     });
   });
 
@@ -353,10 +411,14 @@ void main() {
     test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);
 
-      when(() => httpClient.get(
+      when(
+        () => httpClient.get(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
-          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
 
       final space = await apptiveGridClient.getSpace(spaceUri: spaceUri);
 
@@ -366,13 +428,19 @@ void main() {
     test('400 Status throws Response', () async {
       final response = Response(json.encode(rawResponse), 400);
 
-      when(() => httpClient.get(
+      when(
+        () => httpClient.get(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId'),
-          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
 
-      expect(() => apptiveGridClient.getSpace(spaceUri: spaceUri),
-          throwsA(isInstanceOf<Response>()));
+      expect(
+        () => apptiveGridClient.getSpace(spaceUri: spaceUri),
+        throwsA(isInstanceOf<Response>()),
+      );
     });
   });
 
@@ -390,30 +458,44 @@ void main() {
     test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);
 
-      when(() => httpClient.get(
+      when(
+        () => httpClient.get(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
-          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
 
       final forms = await apptiveGridClient.getForms(gridUri: gridUri);
 
       expect(forms.length, 2);
-      expect(forms[0].uriString,
-          '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0');
-      expect(forms[1].uriString,
-          '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1');
+      expect(
+        forms[0].uriString,
+        '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
+      );
+      expect(
+        forms[1].uriString,
+        '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1',
+      );
     });
 
     test('400 Status throws Response', () async {
       final response = Response(json.encode(rawResponse), 400);
 
-      when(() => httpClient.get(
+      when(
+        () => httpClient.get(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms'),
-          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
 
-      expect(() => apptiveGridClient.getForms(gridUri: gridUri),
-          throwsA(isInstanceOf<Response>()));
+      expect(
+        () => apptiveGridClient.getForms(gridUri: gridUri),
+        throwsA(isInstanceOf<Response>()),
+      );
     });
   });
 
@@ -431,30 +513,44 @@ void main() {
     test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);
 
-      when(() => httpClient.get(
+      when(
+        () => httpClient.get(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views'),
-          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
 
       final views = await apptiveGridClient.getGridViews(gridUri: gridUri);
 
       expect(views.length, 2);
-      expect(views[0].uriString,
-          '/api/users/id/spaces/spaceId/grids/gridId/views/$view0');
-      expect(views[1].uriString,
-          '/api/users/id/spaces/spaceId/grids/gridId/views/$view1');
+      expect(
+        views[0].uriString,
+        '/api/users/id/spaces/spaceId/grids/gridId/views/$view0',
+      );
+      expect(
+        views[1].uriString,
+        '/api/users/id/spaces/spaceId/grids/gridId/views/$view1',
+      );
     });
 
     test('400 Status throws Response', () async {
       final response = Response(json.encode(rawResponse), 400);
 
-      when(() => httpClient.get(
+      when(
+        () => httpClient.get(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views'),
-          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
 
-      expect(() => apptiveGridClient.getGridViews(gridUri: gridUri),
-          throwsA(isInstanceOf<Response>()));
+      expect(
+        () => apptiveGridClient.getGridViews(gridUri: gridUri),
+        throwsA(isInstanceOf<Response>()),
+      );
     });
 
     test('GridView parses Filters', () async {
@@ -497,14 +593,25 @@ void main() {
 
       final response = Response(json.encode(gridViewResponse), 200);
 
-      when(() => httpClient.get(
+      when(
+        () => httpClient.get(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view0'),
-          headers: any(named: 'headers'))).thenAnswer((_) async => response);
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view0',
+          ),
+          headers: any(
+            named: 'headers',
+          ),
+        ),
+      ).thenAnswer((_) async => response);
 
       final gridView = await apptiveGridClient.loadGrid(
-          gridUri: GridViewUri(
-              user: userId, space: spaceId, grid: gridId, view: view0));
+        gridUri: GridViewUri(
+          user: userId,
+          space: spaceId,
+          grid: gridId,
+          view: view0,
+        ),
+      );
 
       expect(gridView.filter != null, true);
       expect(gridView.fields.length, 3);
@@ -534,14 +641,18 @@ void main() {
     final cacheMap = <String, dynamic>{};
 
     setUp(() {
-      when(() => cache.addPendingActionItem(any())).thenAnswer((invocation) =>
-          cacheMap[invocation.positionalArguments[0].toString()] =
-              (invocation.positionalArguments[0] as ActionItem).toJson());
+      when(() => cache.addPendingActionItem(any())).thenAnswer(
+        (invocation) => cacheMap[invocation.positionalArguments[0].toString()] =
+            (invocation.positionalArguments[0] as ActionItem).toJson(),
+      );
       when(() => cache.removePendingActionItem(any())).thenAnswer(
-          (invocation) => cacheMap
-              .remove(cacheMap[invocation.positionalArguments[0].toString()]));
-      when(() => cache.getPendingActionItems()).thenAnswer((invocation) =>
-          cacheMap.values.map((e) => ActionItem.fromJson(e)).toList());
+        (invocation) => cacheMap
+            .remove(cacheMap[invocation.positionalArguments[0].toString()]),
+      );
+      when(() => cache.getPendingActionItems()).thenAnswer(
+        (invocation) =>
+            cacheMap.values.map((e) => ActionItem.fromJson(e)).toList(),
+      );
       cacheMap.clear();
       client = ApptiveGridClient.fromClient(httpClient, options: options);
     });
@@ -552,7 +663,9 @@ void main() {
       });
 
       await expectLater(
-          (await client.performAction(action, data)).statusCode, 400);
+        (await client.performAction(action, data)).statusCode,
+        400,
+      );
 
       verify(() => cache.addPendingActionItem(any())).called(1);
 
@@ -570,7 +683,9 @@ void main() {
           .thenThrow(const SocketException('Socket Exception'));
 
       await expectLater(
-          (await client.performAction(action, data)).statusCode, 400);
+        (await client.performAction(action, data)).statusCode,
+        400,
+      );
 
       verify(() => cache.addPendingActionItem(any())).called(1);
     });
@@ -604,14 +719,20 @@ void main() {
     test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);
 
-      when(() => httpClient.post(
+      when(
+        () => httpClient.post(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink'),
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink',
+          ),
           headers: any(named: 'headers'),
-          body: any(named: 'body'))).thenAnswer((_) async => response);
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => response);
 
       final formUri = await apptiveGridClient.getEditLink(
-          entityUri: entityUri, formId: form);
+        entityUri: entityUri,
+        formId: form,
+      );
 
       expect(formUri.runtimeType, RedirectFormUri);
       expect(formUri.uriString, '/api/a/$form');
@@ -620,16 +741,20 @@ void main() {
     test('400 Status throws Response', () async {
       final response = Response(json.encode(rawResponse), 400);
 
-      when(() => httpClient.post(
+      when(
+        () => httpClient.post(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink'),
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink',
+          ),
           headers: any(named: 'headers'),
-          body: any(named: 'body'))).thenAnswer((_) async => response);
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => response);
 
       expect(
-          () =>
-              apptiveGridClient.getEditLink(entityUri: entityUri, formId: form),
-          throwsA(isInstanceOf<Response>()));
+        () => apptiveGridClient.getEditLink(entityUri: entityUri, formId: form),
+        throwsA(isInstanceOf<Response>()),
+      );
     });
   });
 
@@ -644,13 +769,22 @@ void main() {
       initialOptions =
           const ApptiveGridOptions(environment: ApptiveGridEnvironment.alpha);
       authenticator = ApptiveGridAuthenticator(
-          options: initialOptions, httpClient: httpClient);
-      client = ApptiveGridClient.fromClient(httpClient,
-          options: initialOptions, authenticator: authenticator);
+        options: initialOptions,
+        httpClient: httpClient,
+      );
+      client = ApptiveGridClient.fromClient(
+        httpClient,
+        options: initialOptions,
+        authenticator: authenticator,
+      );
 
-      when(() => httpClient.send(any())).thenAnswer((invocation) async =>
-          StreamedResponse(Stream.value([]), 200,
-              request: invocation.positionalArguments[0] as BaseRequest));
+      when(() => httpClient.send(any())).thenAnswer(
+        (invocation) async => StreamedResponse(
+          Stream.value([]),
+          200,
+          request: invocation.positionalArguments[0] as BaseRequest,
+        ),
+      );
     });
 
     test('switch url', () async {
@@ -667,7 +801,9 @@ void main() {
       await client.updateEnvironment(ApptiveGridEnvironment.production);
 
       expect(
-          authenticator.options.environment, ApptiveGridEnvironment.production);
+        authenticator.options.environment,
+        ApptiveGridEnvironment.production,
+      );
     });
   });
 }

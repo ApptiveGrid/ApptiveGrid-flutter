@@ -30,7 +30,9 @@ enum DataType {
 /// Returns [DataType] that matching a certain schema [schemaProperty]
 ///
 /// throws [ArgumentError] if DataType is not supported yet
-DataType dataTypeFromSchemaProperty({required dynamic schemaProperty}) {
+DataType dataTypeFromSchemaProperty({
+  required dynamic schemaProperty,
+}) {
   final schemaType = schemaProperty['type'];
   final format = schemaProperty['format'];
   switch (schemaType) {
@@ -59,5 +61,6 @@ DataType dataTypeFromSchemaProperty({required dynamic schemaProperty}) {
       }
   }
   throw ArgumentError(
-      'No according DataType found for "$schemaType". Supported DataTypes are ${DataType.values}');
+    'No according DataType found for "$schemaType". Supported DataTypes are ${DataType.values}',
+  );
 }

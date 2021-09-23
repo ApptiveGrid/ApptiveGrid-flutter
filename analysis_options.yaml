@@ -11,3 +11,4 @@ linter:
     sort_constructors_first: true
     hash_and_equals: true
     avoid_print: true
+    require_trailing_commas: true

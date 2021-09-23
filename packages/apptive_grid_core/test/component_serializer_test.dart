@@ -122,14 +122,19 @@ void main() {
         fieldId: id,
         property: property,
         data: EnumDataEntity(
-            value: 'AG', options: ['GmbH', 'AG', 'Freiberuflich']),
+          value: 'AG',
+          options: ['GmbH', 'AG', 'Freiberuflich'],
+        ),
         required: true,
       );
 
       expect(
-          EnumFormComponent.fromJson(
-              jsonComponent.toJson(), schema['properties']![id]),
-          component);
+        EnumFormComponent.fromJson(
+          jsonComponent.toJson(),
+          schema['properties']![id],
+        ),
+        component,
+      );
     });
   });
 }

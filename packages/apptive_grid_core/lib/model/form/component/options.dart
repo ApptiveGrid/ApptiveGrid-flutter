@@ -3,7 +3,10 @@ part of apptive_grid_model;
 /// Abstract class for additional options for a [FormComponent]
 class FormComponentOptions {
   /// Enables const constructors
-  const FormComponentOptions({this.description, this.label});
+  const FormComponentOptions({
+    this.description,
+    this.label,
+  });
 
   /// Deserializes [json] into [TextComponentOptions]
   FormComponentOptions.fromJson(Map<String, dynamic> json)
@@ -42,12 +45,12 @@ class FormComponentOptions {
 /// [FormComponentOptions] for Text Based Components
 class TextComponentOptions extends FormComponentOptions {
   /// Creates Options
-  const TextComponentOptions(
-      {this.multi = false,
-      this.placeholder,
-      String? description,
-      String? label})
-      : super(
+  const TextComponentOptions({
+    this.multi = false,
+    this.placeholder,
+    String? description,
+    String? label,
+  }) : super(
           description: description,
           label: label,
         );

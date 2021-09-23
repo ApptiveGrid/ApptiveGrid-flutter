@@ -3,14 +3,18 @@ part of apptive_grid_network;
 /// Class for handling authentication related methods for ApptiveGrid
 class ApptiveGridAuthenticator {
   /// Create a new [ApptiveGridAuthenticator] for [apptiveGridClient]
-  ApptiveGridAuthenticator(
-      {this.options = const ApptiveGridOptions(), this.httpClient}) {
+  ApptiveGridAuthenticator({
+    this.options = const ApptiveGridOptions(),
+    this.httpClient,
+  }) {
     if (!kIsWeb) {
       _authCallbackSubscription = uni_links.uriLinkStream
-          .where((event) =>
-              event != null &&
-              event.scheme ==
-                  options.authenticationOptions.redirectScheme?.toLowerCase())
+          .where(
+            (event) =>
+                event != null &&
+                event.scheme ==
+                    options.authenticationOptions.redirectScheme?.toLowerCase(),
+          )
           .listen((event) => _handleAuthRedirect(event!));
     }
   }
@@ -20,7 +24,8 @@ class ApptiveGridAuthenticator {
   ApptiveGridOptions options;
 
   Uri get _uri => Uri.parse(
-      'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
+        'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}',
+      );
 
   /// Http Client that should be used for Auth Requests
   final http.Client? httpClient;
@@ -75,7 +80,8 @@ class ApptiveGridAuthenticator {
           redirectUri: options.authenticationOptions.redirectScheme != null
               ? Uri(
                   scheme: options.authenticationOptions.redirectScheme,
-                  host: Uri.parse(options.environment.url).host)
+                  host: Uri.parse(options.environment.url).host,
+                )
               : null,
         );
     _credential = await authenticator.authorize();
@@ -102,7 +108,8 @@ class ApptiveGridAuthenticator {
           redirectUri: options.authenticationOptions.redirectScheme != null
               ? Uri(
                   scheme: options.authenticationOptions.redirectScheme,
-                  host: Uri.parse(options.environment.url).host)
+                  host: Uri.parse(options.environment.url).host,
+                )
               : null,
           urlLauncher: _launchUrl,
         );
@@ -143,9 +150,12 @@ class ApptiveGridAuthenticator {
     final logoutUrl = _credential?.generateLogoutUrl();
     http.Response? response;
     if (logoutUrl != null) {
-      response = await (httpClient ?? http.Client()).get(logoutUrl, headers: {
-        HttpHeaders.authorizationHeader: header!,
-      });
+      response = await (httpClient ?? http.Client()).get(
+        logoutUrl,
+        headers: {
+          HttpHeaders.authorizationHeader: header!,
+        },
+      );
     }
     _token = null;
     _credential = null;

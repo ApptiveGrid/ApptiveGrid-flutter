@@ -139,19 +139,24 @@ class EnumDataEntity extends DataEntity<String, String> {
 /// [DataEntity] representing an Object CrossReferencing to a different Grid
 class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
   /// Create a new CrossReference Data Entity
-  CrossReferenceDataEntity(
-      {String? value, this.entityUri, required this.gridUri})
-      : super(value);
+  CrossReferenceDataEntity({
+    String? value,
+    this.entityUri,
+    required this.gridUri,
+  }) : super(value);
 
   /// Creates a new CrossReferenceDataEntity from a Json Response
-  factory CrossReferenceDataEntity.fromJson(
-          {required Map? jsonValue, required String gridUri}) =>
+  factory CrossReferenceDataEntity.fromJson({
+    required Map? jsonValue,
+    required String gridUri,
+  }) =>
       CrossReferenceDataEntity(
-          value: jsonValue?['displayValue'],
-          entityUri: jsonValue?['uri'] != null
-              ? EntityUri.fromUri(jsonValue?['uri'])
-              : null,
-          gridUri: GridUri.fromUri(gridUri));
+        value: jsonValue?['displayValue'],
+        entityUri: jsonValue?['uri'] != null
+            ? EntityUri.fromUri(jsonValue?['uri'])
+            : null,
+        gridUri: GridUri.fromUri(gridUri),
+      );
 
   /// The [EntityUri] pointing to the Entity this is referencing
   EntityUri? entityUri;

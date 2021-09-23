@@ -21,10 +21,14 @@ void main() {
     test('Malformatted Uri throws ArgumentError', () {
       const uri = '/api/users/123456';
       expect(
-          () => SpaceUri.fromUri(uri),
-          throwsA(predicate<ArgumentError>(
-              (e) => e.message == 'Could not parse SpaceUri $uri',
-              'ArgumentError with specific Message')));
+        () => SpaceUri.fromUri(uri),
+        throwsA(
+          predicate<ArgumentError>(
+            (e) => e.message == 'Could not parse SpaceUri $uri',
+            'ArgumentError with specific Message',
+          ),
+        ),
+      );
     });
   });
 

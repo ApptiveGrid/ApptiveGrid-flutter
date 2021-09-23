@@ -48,7 +48,11 @@ class SpaceUri extends ApptiveGridUri {
 class Space {
   /// Creates a new Space Model with a certain [id] and [name]
   /// [grids] is [List<GridUri>] pointing to the [Grid]s contained in this [Space]
-  Space({required this.id, required this.name, required this.grids});
+  Space({
+    required this.id,
+    required this.name,
+    required this.grids,
+  });
 
   /// Deserializes [json] into a [Space] Object
   Space.fromJson(Map<String, dynamic> json)

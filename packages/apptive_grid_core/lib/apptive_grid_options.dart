@@ -21,10 +21,11 @@ class ApptiveGridOptions {
   final ApptiveGridCache? cache;
 
   /// Creates a copy of [ApptiveGridOptions] with the provided values
-  ApptiveGridOptions copyWith(
-      {ApptiveGridEnvironment? environment,
-      ApptiveGridAuthenticationOptions? authenticationOptions,
-      ApptiveGridCache? cache}) {
+  ApptiveGridOptions copyWith({
+    ApptiveGridEnvironment? environment,
+    ApptiveGridAuthenticationOptions? authenticationOptions,
+    ApptiveGridCache? cache,
+  }) {
     return ApptiveGridOptions(
       environment: environment ?? this.environment,
       authenticationOptions:

@@ -38,7 +38,8 @@ void main() {
       authenticator =
           ApptiveGridAuthenticator(options: const ApptiveGridOptions());
       final token = TokenResponse.fromJson(
-          {'token_type': 'Bearer', 'access_token': '12345'});
+        {'token_type': 'Bearer', 'access_token': '12345'},
+      );
       authenticator.setToken(token);
 
       expect(authenticator.header, 'Bearer 12345');
@@ -73,7 +74,8 @@ void main() {
       authenticator.setAuthClient(client);
       final credential = MockCredential();
       final newToken = TokenResponse.fromJson(
-          {'token_type': 'Bearer', 'access_token': '12345'});
+        {'token_type': 'Bearer', 'access_token': '12345'},
+      );
       when(() => mockAuthBackend.authorize())
           .thenAnswer((invocation) async => credential);
       when(() => credential.getTokenResponse())
@@ -103,12 +105,14 @@ void main() {
       final credential = MockCredential();
       authenticator.setCredential(credential);
       final newToken = TokenResponse.fromJson(
-          {'token_type': 'Bearer', 'access_token': '12345'});
+        {'token_type': 'Bearer', 'access_token': '12345'},
+      );
       when(
         () => client.createCredential(
-            accessToken: any(named: 'accessToken'),
-            refreshToken: any(named: 'refreshToken'),
-            expiresAt: any(named: 'expiresAt')),
+          accessToken: any(named: 'accessToken'),
+          refreshToken: any(named: 'refreshToken'),
+          expiresAt: any(named: 'expiresAt'),
+        ),
       ).thenReturn(credential);
       when(() => mockAuthBackend.authorize())
           .thenAnswer((invocation) async => credential);
@@ -131,15 +135,17 @@ void main() {
     test('Opens Url', () async {
       final completer = Completer<String>();
       final urlLauncher = MockUrlLauncher();
-      when(() => urlLauncher.launch(
-            any(),
-            useSafariVC: any(named: 'useSafariVC'),
-            useWebView: any(named: 'useWebView'),
-            enableJavaScript: any(named: 'enableJavaScript'),
-            enableDomStorage: any(named: 'enableDomStorage'),
-            universalLinksOnly: any(named: 'universalLinksOnly'),
-            headers: any(named: 'headers'),
-          )).thenAnswer((invocation) async {
+      when(
+        () => urlLauncher.launch(
+          any(),
+          useSafariVC: any(named: 'useSafariVC'),
+          useWebView: any(named: 'useWebView'),
+          enableJavaScript: any(named: 'enableJavaScript'),
+          enableDomStorage: any(named: 'enableDomStorage'),
+          universalLinksOnly: any(named: 'universalLinksOnly'),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async {
         completer.complete(invocation.positionalArguments[0]);
         return true;
       });
@@ -155,23 +161,26 @@ void main() {
       unawaited(authenticator.authenticate());
       final launchedUrl = await completer.future;
       expect(
-          launchedUrl
-              .startsWith('https://iam.zweidenker.de/auth/realms/apptiveGrid/'),
-          true);
+        launchedUrl
+            .startsWith('https://iam.zweidenker.de/auth/realms/apptiveGrid/'),
+        true,
+      );
     });
 
     test('Missing Plugin Exception gets Caught', () async {
       final completer = Completer<String>();
       final urlLauncher = MockUrlLauncher();
-      when(() => urlLauncher.launch(
-            any(),
-            useSafariVC: any(named: 'useSafariVC'),
-            useWebView: any(named: 'useWebView'),
-            enableJavaScript: any(named: 'enableJavaScript'),
-            enableDomStorage: any(named: 'enableDomStorage'),
-            universalLinksOnly: any(named: 'universalLinksOnly'),
-            headers: any(named: 'headers'),
-          )).thenAnswer((invocation) async {
+      when(
+        () => urlLauncher.launch(
+          any(),
+          useSafariVC: any(named: 'useSafariVC'),
+          useWebView: any(named: 'useWebView'),
+          enableJavaScript: any(named: 'enableJavaScript'),
+          enableDomStorage: any(named: 'enableDomStorage'),
+          universalLinksOnly: any(named: 'universalLinksOnly'),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async {
         completer.complete(invocation.positionalArguments[0]);
         return true;
       });
@@ -187,7 +196,8 @@ void main() {
       authenticator.testAuthenticator = mockAuthBackend;
       final credential = MockCredential();
       final newToken = TokenResponse.fromJson(
-          {'token_type': 'Bearer', 'access_token': '12345'});
+        {'token_type': 'Bearer', 'access_token': '12345'},
+      );
       when(() => mockAuthBackend.authorize())
           .thenAnswer((invocation) async => credential);
       when(() => credential.getTokenResponse())
@@ -201,15 +211,17 @@ void main() {
     test('Unimplemented Error gets Caught', () async {
       final completer = Completer<String>();
       final urlLauncher = MockUrlLauncher();
-      when(() => urlLauncher.launch(
-            any(),
-            useSafariVC: any(named: 'useSafariVC'),
-            useWebView: any(named: 'useWebView'),
-            enableJavaScript: any(named: 'enableJavaScript'),
-            enableDomStorage: any(named: 'enableDomStorage'),
-            universalLinksOnly: any(named: 'universalLinksOnly'),
-            headers: any(named: 'headers'),
-          )).thenAnswer((invocation) async {
+      when(
+        () => urlLauncher.launch(
+          any(),
+          useSafariVC: any(named: 'useSafariVC'),
+          useWebView: any(named: 'useWebView'),
+          enableJavaScript: any(named: 'enableJavaScript'),
+          enableDomStorage: any(named: 'enableDomStorage'),
+          universalLinksOnly: any(named: 'universalLinksOnly'),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async {
         completer.complete(invocation.positionalArguments[0]);
         return true;
       });
@@ -224,7 +236,8 @@ void main() {
       authenticator.testAuthenticator = mockAuthBackend;
       final credential = MockCredential();
       final newToken = TokenResponse.fromJson(
-          {'token_type': 'Bearer', 'access_token': '12345'});
+        {'token_type': 'Bearer', 'access_token': '12345'},
+      );
       when(() => mockAuthBackend.authorize())
           .thenAnswer((invocation) async => credential);
       when(() => credential.getTokenResponse())
@@ -241,18 +254,23 @@ void main() {
       final httpClient = MockHttpClient();
       authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
       final discoveryUri = Uri.parse(
-          'https://iam.zweidenker.de/auth/realms/apptivegrid/.well-known/openid-configuration');
+        'https://iam.zweidenker.de/auth/realms/apptivegrid/.well-known/openid-configuration',
+      );
 
       when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
-          .thenAnswer((invocation) async => Response(
-                jsonEncode(_zweidenkerIssuer.metadata.toJson()),
-                200,
-                request: Request('GET', discoveryUri),
-              ));
+          .thenAnswer(
+        (invocation) async => Response(
+          jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+          200,
+          request: Request('GET', discoveryUri),
+        ),
+      );
 
       final client = await authenticator.authClient;
-      expect(client.issuer!.metadata.toJson(),
-          _zweidenkerIssuer.metadata.toJson());
+      expect(
+        client.issuer!.metadata.toJson(),
+        _zweidenkerIssuer.metadata.toJson(),
+      );
     });
   });
 
@@ -265,14 +283,20 @@ void main() {
       final credential = MockCredential();
       authenticator.setCredential(credential);
       final token = TokenResponse.fromJson(
-          {'token_type': 'Bearer', 'access_token': '12345'});
+        {'token_type': 'Bearer', 'access_token': '12345'},
+      );
       authenticator.setToken(token);
 
       when(() => credential.generateLogoutUrl())
           .thenAnswer((invocation) => logoutUri);
       when(() => httpClient.get(logoutUri, headers: any(named: 'headers')))
-          .thenAnswer((invocation) async => Response('', 200,
-              request: Request('GET', invocation.positionalArguments[0])));
+          .thenAnswer(
+        (invocation) async => Response(
+          '',
+          200,
+          request: Request('GET', invocation.positionalArguments[0]),
+        ),
+      );
 
       final response = await authenticator.logout();
       verify(() => httpClient.get(logoutUri, headers: any(named: 'headers')))
@@ -289,7 +313,8 @@ void main() {
       expect(authenticator.isAuthenticated, false);
 
       final token = TokenResponse.fromJson(
-          {'token_type': 'Bearer', 'access_token': '12345'});
+        {'token_type': 'Bearer', 'access_token': '12345'},
+      );
       authenticator.setToken(token);
 
       expect(authenticator.isAuthenticated, true);
@@ -306,27 +331,37 @@ void main() {
         'expires_in': tokenTime.microsecondsSinceEpoch
       });
       final httpClient = MockHttpClient();
-      when(() => httpClient.post(any(),
-              headers: any(named: 'headers'),
-              body: any(named: 'body'),
-              encoding: any(named: 'encoding')))
-          .thenAnswer((invocation) async => Response(
-              jsonEncode(tokenResponse.toJson()), 200,
-              request: Request('POST', invocation.positionalArguments[0])));
+      when(
+        () => httpClient.post(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).thenAnswer(
+        (invocation) async => Response(
+          jsonEncode(tokenResponse.toJson()),
+          200,
+          request: Request('POST', invocation.positionalArguments[0]),
+        ),
+      );
 
       final urlCompleter = Completer<String>();
       final urlLauncher = MockUrlLauncher();
-      when(() => urlLauncher.launch(
-            any(),
-            useSafariVC: any(named: 'useSafariVC'),
-            useWebView: any(named: 'useWebView'),
-            enableJavaScript: any(named: 'enableJavaScript'),
-            enableDomStorage: any(named: 'enableDomStorage'),
-            universalLinksOnly: any(named: 'universalLinksOnly'),
-            headers: any(named: 'headers'),
-          )).thenAnswer((invocation) async {
-        urlCompleter.complete(Uri.parse(invocation.positionalArguments[0])
-            .queryParameters['state']);
+      when(
+        () => urlLauncher.launch(
+          any(),
+          useSafariVC: any(named: 'useSafariVC'),
+          useWebView: any(named: 'useWebView'),
+          enableJavaScript: any(named: 'enableJavaScript'),
+          enableDomStorage: any(named: 'enableDomStorage'),
+          universalLinksOnly: any(named: 'universalLinksOnly'),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async {
+        urlCompleter.complete(
+          Uri.parse(invocation.positionalArguments[0]).queryParameters['state'],
+        );
         return true;
       });
       when(() => urlLauncher.canLaunch(any()))
@@ -338,9 +373,10 @@ void main() {
       const customScheme = 'customscheme';
       authenticator = ApptiveGridAuthenticator(
         options: const ApptiveGridOptions(
-            authenticationOptions: ApptiveGridAuthenticationOptions(
-          redirectScheme: customScheme,
-        )),
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            redirectScheme: customScheme,
+          ),
+        ),
         httpClient: httpClient,
       );
       final authClient = MockAuthClient();
@@ -357,15 +393,17 @@ void main() {
         'token': tokenResponse.toJson(),
         'nonce': null
       });
-      when(() => authClient.createCredential(
-            tokenType: any(named: 'tokenType'),
-            accessToken: any(named: 'accessToken'),
-          )).thenReturn(credential);
+      when(
+        () => authClient.createCredential(
+          tokenType: any(named: 'tokenType'),
+          accessToken: any(named: 'accessToken'),
+        ),
+      ).thenReturn(credential);
 
       final completer = Completer<Credential>();
-      unawaited(authenticator
-          .authenticate()
-          .then((value) => completer.complete(value)));
+      unawaited(
+        authenticator.authenticate().then((value) => completer.complete(value)),
+      );
       final state = await urlCompleter.future;
       final responseMap = {
         'state': state,
@@ -389,9 +427,10 @@ void main() {
 
   group('ApiKey Authentication', () {
     const options = ApptiveGridOptions(
-        authenticationOptions: ApptiveGridAuthenticationOptions(
-      apiKey: ApptiveGridApiKey(authKey: 'authKey', password: 'password'),
-    ));
+      authenticationOptions: ApptiveGridAuthenticationOptions(
+        apiKey: ApptiveGridApiKey(authKey: 'authKey', password: 'password'),
+      ),
+    );
 
     test('isAuthenticated', () {
       final authenticator = ApptiveGridAuthenticator(options: options);
@@ -403,8 +442,10 @@ void main() {
       final authenticator = ApptiveGridAuthenticator(options: options);
 
       expect(authenticator.header!.split(' ')[0], 'Basic');
-      expect(authenticator.header!.split(' ')[1],
-          base64Encode(utf8.encode('authKey:password')));
+      expect(
+        authenticator.header!.split(' ')[1],
+        base64Encode(utf8.encode('authKey:password')),
+      );
     });
 
     test('Check Authentication calls nothing', () async {

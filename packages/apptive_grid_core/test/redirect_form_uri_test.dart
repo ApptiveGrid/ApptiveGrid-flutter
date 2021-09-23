@@ -12,10 +12,14 @@ void main() {
     test('Malformatted Uri throws ArgumentError', () {
       const uri = '/api/a';
       expect(
-          () => RedirectFormUri.fromUri(uri),
-          throwsA(predicate<ArgumentError>(
-              (e) => e.message == 'Could not parse FormUri $uri',
-              'ArgumentError with specific Message')));
+        () => RedirectFormUri.fromUri(uri),
+        throwsA(
+          predicate<ArgumentError>(
+            (e) => e.message == 'Could not parse FormUri $uri',
+            'ArgumentError with specific Message',
+          ),
+        ),
+      );
     });
 
     test('From Generated Uri String matches original', () {

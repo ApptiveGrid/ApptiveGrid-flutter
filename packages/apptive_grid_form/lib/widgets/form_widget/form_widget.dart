@@ -35,9 +35,11 @@ Widget fromModel(FormComponent component) {
       );
     case CrossReferenceDataEntity:
       return CrossReferenceFormWidget(
-          component: component as CrossReferenceFormComponent);
+        component: component as CrossReferenceFormComponent,
+      );
     default:
       throw ArgumentError(
-          'No Widget found for component $component. Please make sure you are you using the latest version of this package?');
+        'No Widget found for component $component. Please make sure you are you using the latest version of this package?',
+      );
   }
 }

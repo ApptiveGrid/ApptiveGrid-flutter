@@ -90,9 +90,10 @@ void main() {
       final directEntity = DecimalDataEntity(47.11);
 
       final direct = DecimalFormComponent(
-          property: 'name',
-          data: directEntity,
-          fieldId: '3ftoqhqbct15h5o730uknpvp5');
+        property: 'name',
+        data: directEntity,
+        fieldId: '3ftoqhqbct15h5o730uknpvp5',
+      );
 
       expect(fromJson, direct);
       expect(fromJson.hashCode, direct.hashCode);

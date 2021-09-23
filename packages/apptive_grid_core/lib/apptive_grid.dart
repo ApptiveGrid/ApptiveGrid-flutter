@@ -9,21 +9,23 @@ import 'package:provider/provider.dart';
 /// It uses [Provider] to distribute dependencies to other ApptiveGrid Widgets
 class ApptiveGrid extends StatefulWidget {
   /// Creates Apptive grid
-  const ApptiveGrid(
-      {Key? key, this.child, this.options = const ApptiveGridOptions()})
-      : client = null,
+  const ApptiveGrid({
+    Key? key,
+    this.child,
+    this.options = const ApptiveGridOptions(),
+  })  : client = null,
         super(key: key);
 
   /// Creates ApptiveGrid with an defined ApptiveGridClient
   ///
   /// Used testing to Provide a MockedClient
   @visibleForTesting
-  const ApptiveGrid.withClient(
-      {Key? key,
-      required this.client,
-      this.child,
-      this.options = const ApptiveGridOptions()})
-      : super(key: key);
+  const ApptiveGrid.withClient({
+    Key? key,
+    required this.client,
+    this.child,
+    this.options = const ApptiveGridOptions(),
+  }) : super(key: key);
 
   /// Widget that should be wrapped. Normally this is something like [MaterialApp]
   final Widget? child;
@@ -43,8 +45,10 @@ class ApptiveGrid extends StatefulWidget {
   /// Get direct Access to [ApptiveGridClient]
   ///
   /// uses [Provider] to return the client
-  static ApptiveGridClient getClient(BuildContext context,
-      {bool listen = true}) {
+  static ApptiveGridClient getClient(
+    BuildContext context, {
+    bool listen = true,
+  }) {
     return Provider.of<ApptiveGridClient>(context, listen: listen);
   }
 }

@@ -18,8 +18,12 @@ class Authenticator {
     Iterable<String> scopes = const [],
     Uri? redirectUri,
   }) : _authenticator = _CustomAuthenticator(
-          Client(client.issuer, 'web',
-              clientSecret: client.clientSecret, httpClient: client.httpClient),
+          Client(
+            client.issuer,
+            'web',
+            clientSecret: client.clientSecret,
+            httpClient: client.httpClient,
+          ),
           scopes: scopes,
           redirectedUri: redirectUri.toString(),
         );
@@ -44,25 +48,35 @@ class Authenticator {
 
 /// Custom Implementation based on Authenticator from openid_client_browser to match specific criteria needed for ApptiveGrid
 class _CustomAuthenticator {
-  _CustomAuthenticator._(this.flow,
-      {String? redirectedUri, required Client client})
-      : credential = _credentialFromUri(flow,
-            redirectedUri: redirectedUri, client: client);
+  _CustomAuthenticator._(
+    this.flow, {
+    String? redirectedUri,
+    required Client client,
+  }) : credential = _credentialFromUri(
+          flow,
+          redirectedUri: redirectedUri,
+          client: client,
+        );
 
-  _CustomAuthenticator(client,
-      {Iterable<String> scopes = const [], String? redirectedUri})
-      : this._(
-            Flow.authorizationCode(client,
-                state: window.localStorage['openid_client:state'])
-              ..scopes.addAll(scopes)
-              ..redirectUri = Uri(
-                host: Uri.base.host,
-                scheme: Uri.base.scheme,
-                port: Uri.base.port,
-                fragment: null,
-              ),
-            redirectedUri: redirectedUri,
-            client: client);
+  _CustomAuthenticator(
+    client, {
+    Iterable<String> scopes = const [],
+    String? redirectedUri,
+  }) : this._(
+          Flow.authorizationCode(
+            client,
+            state: window.localStorage['openid_client:state'],
+          )
+            ..scopes.addAll(scopes)
+            ..redirectUri = Uri(
+              host: Uri.base.host,
+              scheme: Uri.base.scheme,
+              port: Uri.base.port,
+              fragment: null,
+            ),
+          redirectedUri: redirectedUri,
+          client: client,
+        );
 
   final Future<Credential?> credential;
 
@@ -89,8 +103,11 @@ class _CustomAuthenticator {
     window.localStorage.remove('openid_client:auth');
   }
 
-  static Future<Credential?> _credentialFromUri(Flow flow,
-      {String? redirectedUri, required Client client}) async {
+  static Future<Credential?> _credentialFromUri(
+    Flow flow, {
+    String? redirectedUri,
+    required Client client,
+  }) async {
     Map? q;
     if (window.localStorage.containsKey('openid_client:credential')) {
       /// Saved Credentials

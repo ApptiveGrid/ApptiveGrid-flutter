@@ -22,8 +22,10 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(true,
-          ApptiveGrid.getClient(context, listen: false) is ApptiveGridClient);
+      expect(
+        true,
+        ApptiveGrid.getClient(context, listen: false) is ApptiveGridClient,
+      );
     });
   });
 

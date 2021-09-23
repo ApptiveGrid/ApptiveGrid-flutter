@@ -122,8 +122,10 @@ void main() {
       expect(firstRow.entries[0].data.value, 'Hello');
       expect(firstRow.entries[1].data.value, 1);
       expect(firstRow.entries[7].data.value, 'Enum1');
-      expect((firstRow.entries[7].data as EnumDataEntity).options,
-          ['Enum1', 'Enum2']);
+      expect(
+        (firstRow.entries[7].data as EnumDataEntity).options,
+        ['Enum1', 'Enum2'],
+      );
     });
 
     test('From Json == To Json -> FromJson', () {

@@ -17,19 +17,22 @@ void main() {
       final cache = MockApptiveGridCache();
 
       const optionsA = ApptiveGridOptions(
-          authenticationOptions: authOptionsA, environment: env1);
+        authenticationOptions: authOptionsA,
+        environment: env1,
+      );
       final optionsB = optionsA.copyWith(
         environment: env2,
         authenticationOptions: authOptionsB,
         cache: cache,
       );
       expect(
-          optionsB,
-          ApptiveGridOptions(
-            environment: env2,
-            authenticationOptions: authOptionsB,
-            cache: cache,
-          ));
+        optionsB,
+        ApptiveGridOptions(
+          environment: env2,
+          authenticationOptions: authOptionsB,
+          cache: cache,
+        ),
+      );
     });
 
     test('No op stays the same', () {
@@ -40,7 +43,10 @@ void main() {
       final cache = MockApptiveGridCache();
 
       final optionsA = ApptiveGridOptions(
-          authenticationOptions: authOptionsA, environment: env1, cache: cache);
+        authenticationOptions: authOptionsA,
+        environment: env1,
+        cache: cache,
+      );
       final optionsB = optionsA.copyWith();
       expect(optionsB, optionsA);
     });
@@ -63,9 +69,10 @@ void main() {
         environment: ApptiveGridEnvironment.beta,
       );
       const optionsB = ApptiveGridOptions(
-          environment: ApptiveGridEnvironment.alpha,
-          authenticationOptions:
-              ApptiveGridAuthenticationOptions(autoAuthenticate: true));
+        environment: ApptiveGridEnvironment.alpha,
+        authenticationOptions:
+            ApptiveGridAuthenticationOptions(autoAuthenticate: true),
+      );
 
       expect(optionsA, isNot(equals(optionsB)));
       expect(optionsA.hashCode, isNot(equals(optionsB.hashCode)));
