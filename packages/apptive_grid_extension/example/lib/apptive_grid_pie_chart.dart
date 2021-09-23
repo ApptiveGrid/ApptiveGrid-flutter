@@ -41,15 +41,15 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
   @override
   void didUpdateWidget(covariant ApptiveGridPieChart oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(widget.grid.schema.toString() != oldWidget.grid.schema.toString()) {
-        setState(() {
-          if(_field != null && !widget.grid.fields.contains(_field)) {
-            _field = null;
-          }
-          _setUp();
-        });
-      }
+    if (widget.grid.schema.toString() != oldWidget.grid.schema.toString()) {
+      setState(() {
+        if (_field != null && !widget.grid.fields.contains(_field)) {
+          _field = null;
+        }
+        _setUp();
+      });
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,23 +58,24 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
         child: Text('You need a Column with a SingleSelect'),
       );
     } else {
-     return ListView(
-       shrinkWrap: true,
+      return ListView(
+        shrinkWrap: true,
         children: [
           if (_needsSelection)
-            FieldSelector(
-              label: 'DataRow',
-              onSelected: (value) {
-                setState(() {
-                  _field = value;
-                });
-              },
-              grid: widget.grid,
-              value: _field,
-              validator: (field) => field.type == DataType.selectionBox,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: FieldSelector(
+                label: 'Data',
+                onSelected: (value) {
+                  setState(() {
+                    _field = value;
+                  });
+                },
+                grid: widget.grid,
+                value: _field,
+                validator: (field) => field.type == DataType.selectionBox,
+              ),
             ),
-          if(_field == null)
-            Center(child: Text('Select a column representing the data'),),
           if(_field != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -83,13 +84,16 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(_field!.name,
-                  style: Theme.of(context).textTheme.headline4,),
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline4,),
                   const SizedBox(height: 16,),
                   PieChart(
                     dataMap: _calculateDataMap(),
                     legendOptions: LegendOptions(
-                      showLegendsInRow: true,
-                      legendPosition: LegendPosition.bottom
+                        showLegendsInRow: true,
+                        legendPosition: LegendPosition.bottom
                     ),
                   ),
                 ],
@@ -98,23 +102,24 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
         ],
       );
     }
+  }
+
+  Map<String, double> _calculateDataMap() {
+    final rows = widget.grid.rows;
+
+    final enumValues = (rows[0].entries
+        .firstWhere((element) => element.field == _field)
+        .data as EnumDataEntity).options;
+
+    return Map.fromEntries(enumValues.map((value) =>
+        MapEntry(value, rows
+            .where((row) =>
+        (row.entries.firstWhere((entry) =>
+        entry.field == _field).data as EnumDataEntity).value == value)
+            .length
+            .toDouble())));
+  }
 }
-
-Map<String, double> _calculateDataMap() {
-  final rows = widget.grid.rows;
-
-  final enumValues = (rows[0].entries
-      .firstWhere((element) => element.field == _field)
-      .data as EnumDataEntity).options;
-
-  return Map.fromEntries(enumValues.map((value) =>
-      MapEntry(value, rows
-          .where((row) =>
-      (row.entries.firstWhere((entry) =>
-      entry.field == _field).data as EnumDataEntity).value == value)
-          .length
-          .toDouble())));
-}}
 
 class FieldSelector extends StatefulWidget {
   const FieldSelector({Key? key,
@@ -150,9 +155,13 @@ class _FieldSelectorState extends State<FieldSelector> {
             value: widget.value,
             validator: (value) {
               if (value == null) {
-                return '${value} may not be null';
+                return 'Select a Column that should be displayed in the pie chart.';
               }
             },
+            decoration: InputDecoration(
+              errorMaxLines: 3,
+            ),
+            autovalidateMode: AutovalidateMode.always,
             onChanged: widget.onSelected,
             items: widget.grid.fields
                 .where(widget.validator)
