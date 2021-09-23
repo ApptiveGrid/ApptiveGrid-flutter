@@ -7,7 +7,7 @@ import 'common.dart';
 void main() {
   group('Text', () {
     testWidgets('Default Label is Property', (tester) async {
-      final property = 'Property';
+      const property = 'Property';
       final component = StringFormComponent(
         fieldId: 'id',
         data: StringDataEntity(),
@@ -27,8 +27,8 @@ void main() {
     });
 
     testWidgets('Custom Label is shown', (tester) async {
-      final property = 'Property';
-      final customLabel = 'CustomLabel';
+      const property = 'Property';
+      const customLabel = 'CustomLabel';
       final component = StringFormComponent(
         fieldId: 'id',
         data: StringDataEntity(),
@@ -52,7 +52,7 @@ void main() {
 
   group('Number', () {
     testWidgets('Default Label is Property', (tester) async {
-      final property = 'Property';
+      const property = 'Property';
       final component = IntegerFormComponent(
         fieldId: 'id',
         data: IntegerDataEntity(),
@@ -72,8 +72,8 @@ void main() {
     });
 
     testWidgets('Custom Label is shown', (tester) async {
-      final property = 'Property';
-      final customLabel = 'CustomLabel';
+      const property = 'Property';
+      const customLabel = 'CustomLabel';
       final component = IntegerFormComponent(
         fieldId: 'id',
         data: IntegerDataEntity(),

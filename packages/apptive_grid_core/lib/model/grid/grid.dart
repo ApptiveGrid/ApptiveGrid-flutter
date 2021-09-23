@@ -17,7 +17,7 @@ class GridUri extends ApptiveGridUri {
       // Try to parse as GridViewUri
       return GridViewUri.fromUri(uri);
     } on ArgumentError {
-      final regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)\b';
+      const regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)\b';
       final matches = RegExp(regex).allMatches(uri);
       if (matches.isEmpty || matches.elementAt(0).groupCount != 3) {
         throw ArgumentError('Could not parse GridUri $uri');

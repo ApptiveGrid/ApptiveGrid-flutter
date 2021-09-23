@@ -4,12 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Prefilled values', () {
     test('Text', () {
-      final property = 'property';
-      final id = 'id';
-      final value = 'value';
-      final placeholder = 'placeholder';
-      final description = 'description';
-      final label = 'label';
+      const property = 'property';
+      const id = 'id';
+      const value = 'value';
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
 
       final schema = {
         'properties': {
@@ -49,9 +49,9 @@ void main() {
     });
 
     test('DateTime', () {
-      final property = 'property';
+      const property = 'property';
       final value = DateTime(2020, 12, 7, 12, 0, 0);
-      final id = 'id';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -81,9 +81,9 @@ void main() {
     });
 
     test('Date', () {
-      final property = 'property';
+      const property = 'property';
       final value = DateTime(2020, 12, 7);
-      final id = 'id';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -113,12 +113,12 @@ void main() {
     });
 
     test('Number', () {
-      final property = 'property';
-      final value = 3;
-      final placeholder = 'placeholder';
-      final description = 'description';
-      final label = 'label';
-      final id = 'id';
+      const property = 'property';
+      const value = 3;
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -158,12 +158,12 @@ void main() {
     });
 
     test('Decimal', () {
-      final property = 'property';
-      final value = 47.11;
-      final placeholder = 'placeholder';
-      final description = 'description';
-      final label = 'label';
-      final id = 'id';
+      const property = 'property';
+      const value = 47.11;
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -203,11 +203,11 @@ void main() {
     });
 
     test('Checkbox', () {
-      final property = 'property';
-      final value = true;
-      final description = 'description';
-      final label = 'label';
-      final id = 'id';
+      const property = 'property';
+      const value = true;
+      const description = 'description';
+      const label = 'label';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -245,11 +245,11 @@ void main() {
 
   group('Null values (Empty Form)', () {
     test('Text', () {
-      final property = 'property';
-      final placeholder = 'placeholder';
-      final description = 'description';
-      final label = 'label';
-      final id = 'id';
+      const property = 'property';
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -281,8 +281,8 @@ void main() {
     });
 
     test('DateTime', () {
-      final property = 'property';
-      final id = 'id';
+      const property = 'property';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -307,8 +307,8 @@ void main() {
     });
 
     test('Date', () {
-      final property = 'property';
-      final id = 'id';
+      const property = 'property';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -333,11 +333,11 @@ void main() {
     });
 
     test('Number', () {
-      final property = 'property';
-      final placeholder = 'placeholder';
-      final description = 'description';
-      final label = 'label';
-      final id = 'id';
+      const property = 'property';
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -369,11 +369,11 @@ void main() {
     });
 
     test('Decimal', () {
-      final property = 'property';
-      final placeholder = 'placeholder';
-      final description = 'description';
-      final label = 'label';
-      final id = 'id';
+      const property = 'property';
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -405,8 +405,8 @@ void main() {
     });
 
     test('Checkbox', () {
-      final property = 'property';
-      final id = 'id';
+      const property = 'property';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -433,8 +433,8 @@ void main() {
     });
 
     test('Enum', () {
-      final property = 'property';
-      final id = 'id';
+      const property = 'property';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -466,8 +466,8 @@ void main() {
 
   group('Errors', () {
     test('Unknown Type throws', () {
-      final property = 'property';
-      final id = 'id';
+      const property = 'property';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -489,8 +489,8 @@ void main() {
     });
 
     test('Unknown Property throws', () {
-      final property = 'property';
-      final id = 'id';
+      const property = 'property';
+      const id = 'id';
 
       final schema = {
         'properties': {

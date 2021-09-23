@@ -333,7 +333,7 @@ void main() {
           .thenThrow(MissingPluginException());
       UrlLauncherPlatform.instance = urlLauncher;
 
-      final customScheme = 'customscheme';
+      const customScheme = 'customscheme';
       authenticator = ApptiveGridAuthenticator(
         options: ApptiveGridOptions(
             authenticationOptions: ApptiveGridAuthenticationOptions(

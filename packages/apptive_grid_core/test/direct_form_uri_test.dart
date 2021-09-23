@@ -14,7 +14,7 @@ void main() {
     });
 
     test('Malformatted Uri throws ArgumentError', () {
-      final uri = '/api/users/123456/spaces/asdfg/grids/1a2s3d4f';
+      const uri = '/api/users/123456/spaces/asdfg/grids/1a2s3d4f';
       expect(
           () => DirectFormUri.fromUri(uri),
           throwsA(predicate<ArgumentError>(

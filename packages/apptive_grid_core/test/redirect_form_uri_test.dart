@@ -10,7 +10,7 @@ void main() {
     });
 
     test('Malformatted Uri throws ArgumentError', () {
-      final uri = '/api/a';
+      const uri = '/api/a';
       expect(
           () => RedirectFormUri.fromUri(uri),
           throwsA(predicate<ArgumentError>(

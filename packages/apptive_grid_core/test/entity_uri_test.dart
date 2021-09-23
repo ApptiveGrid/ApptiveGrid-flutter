@@ -14,7 +14,7 @@ void main() {
     });
 
     test('Malformatted Uri throws ArgumentError', () {
-      final uri = '/api/users/123456/spaces/asdfg/grids/124124';
+      const uri = '/api/users/123456/spaces/asdfg/grids/124124';
       expect(
           () => EntityUri.fromUri(uri),
           throwsA(predicate<ArgumentError>(

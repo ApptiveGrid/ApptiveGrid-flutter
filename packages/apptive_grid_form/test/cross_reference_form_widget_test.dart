@@ -155,7 +155,7 @@ void main() {
     test('Equality', () {
       final entityUri = EntityUri(
           user: 'user', space: 'space', grid: 'grid', entity: 'entity');
-      final value = 'value';
+      const value = 'value';
       final a =
           GridRowDropdownDataItem(entityUri: entityUri, displayValue: value);
       final b = GridRowDropdownDataItem(

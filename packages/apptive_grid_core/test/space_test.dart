@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Parsing', () {
     test('From Json maps correctly', () {
-      final id = 'id';
-      final name = 'name';
+      const id = 'id';
+      const name = 'name';
       final grid = GridUri(user: 'user', space: id, grid: 'gridId');
 
       final jsonSpace = Space.fromJson({
@@ -39,8 +39,8 @@ void main() {
 
   group('Equality', () {
     test('Plain and From json equal', () {
-      final id = 'id';
-      final name = 'name';
+      const id = 'id';
+      const name = 'name';
       final grid = GridUri(user: 'user', space: id, grid: 'gridId');
 
       final plain = Space(id: id, name: name, grids: [grid]);
@@ -58,8 +58,8 @@ void main() {
     });
 
     test('Plain and From json not equal with different values', () {
-      final id = 'id';
-      final name = 'name';
+      const id = 'id';
+      const name = 'name';
 
       final plain = Space(id: id, name: name, grids: []);
 

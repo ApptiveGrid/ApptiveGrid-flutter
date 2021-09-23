@@ -13,7 +13,7 @@ class GridViewUri extends GridUri {
   /// Creates a new [GridViewUri] based on a string [uri]
   /// Main usage of this is for [GridViewUri] retrieved through other Api Calls
   factory GridViewUri.fromUri(String uri) {
-    final regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)/views/(\w+)\b';
+    const regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)/views/(\w+)\b';
     final matches = RegExp(regex).allMatches(uri);
     if (matches.isEmpty || matches.elementAt(0).groupCount != 4) {
       throw ArgumentError('Could not parse GridViewUri $uri');

@@ -462,7 +462,7 @@ void main() {
         schema: {});
 
     final formUri = RedirectFormUri(form: 'form');
-    final env = ApptiveGridEnvironment.production;
+    const env = ApptiveGridEnvironment.production;
 
     setUpAll(() {
       registerFallbackValue(http.Request('POST', Uri()));

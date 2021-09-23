@@ -154,9 +154,9 @@ void main() {
       'name': 'Contacts'
     };
     test('Success', () async {
-      final user = 'user';
-      final space = 'space';
-      final gridId = 'grid';
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
 
       final response = Response(json.encode(rawResponse), 200);
 
@@ -172,9 +172,9 @@ void main() {
     });
 
     test('400 Status throws Response', () async {
-      final user = 'user';
-      final space = 'space';
-      final gridId = 'grid';
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
 
       final response = Response(json.encode(rawResponse), 400);
 
@@ -193,8 +193,8 @@ void main() {
   group('performAction', () {
     test('Successful', () async {
       final action = FormAction('/uri', 'POST');
-      final property = 'Checkbox';
-      final id = 'id';
+      const property = 'Checkbox';
+      const id = 'id';
       final component = BooleanFormComponent(
         fieldId: id,
         property: property,
@@ -340,8 +340,8 @@ void main() {
   });
 
   group('get Space', () {
-    final userId = 'userId';
-    final spaceId = 'spaceId';
+    const userId = 'userId';
+    const spaceId = 'spaceId';
     final spaceUri = SpaceUri(user: userId, space: spaceId);
     final rawResponse = {
       'id': spaceId,
@@ -377,11 +377,11 @@ void main() {
   });
 
   group('get Forms', () {
-    final userId = 'userId';
-    final spaceId = 'spaceId';
-    final gridId = 'gridId';
-    final form0 = 'formId0';
-    final form1 = 'formId1';
+    const userId = 'userId';
+    const spaceId = 'spaceId';
+    const gridId = 'gridId';
+    const form0 = 'formId0';
+    const form1 = 'formId1';
     final gridUri = GridUri(user: userId, space: spaceId, grid: gridId);
     final rawResponse = [
       '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
@@ -418,11 +418,11 @@ void main() {
   });
 
   group('GridViews', () {
-    final userId = 'userId';
-    final spaceId = 'spaceId';
-    final gridId = 'gridId';
-    final view0 = 'viewId0';
-    final view1 = 'viewId1';
+    const userId = 'userId';
+    const spaceId = 'spaceId';
+    const gridId = 'gridId';
+    const view0 = 'viewId0';
+    const view1 = 'viewId1';
     final gridUri = GridUri(user: userId, space: spaceId, grid: gridId);
     final rawResponse = [
       '/api/users/id/spaces/spaceId/grids/gridId/views/$view0',
@@ -591,11 +591,11 @@ void main() {
   });
 
   group('EditLink', () {
-    final userId = 'userId';
-    final spaceId = 'spaceId';
-    final gridId = 'gridId';
-    final entityId = 'entityId';
-    final form = 'form';
+    const userId = 'userId';
+    const spaceId = 'spaceId';
+    const gridId = 'gridId';
+    const entityId = 'entityId';
+    const form = 'form';
     final entityUri =
         EntityUri(user: userId, space: spaceId, grid: gridId, entity: entityId);
     final rawResponse = {

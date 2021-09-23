@@ -6,7 +6,7 @@ import 'common.dart';
 
 void main() {
   testWidgets('Multiline TextFormWidget Displays', (tester) async {
-    final value = '''A
+    const value = '''A
 multi-line
 string''';
     final target = TextFormWidget(

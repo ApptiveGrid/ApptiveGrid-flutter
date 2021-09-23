@@ -14,7 +14,7 @@ void main() {
     });
 
     test('Malformatted Uri throws ArgumentError', () {
-      final uri = '/api/users/123456/spaces/asdfg/';
+      const uri = '/api/users/123456/spaces/asdfg/';
       expect(
           () => GridViewUri.fromUri(uri),
           throwsA(predicate<ArgumentError>(

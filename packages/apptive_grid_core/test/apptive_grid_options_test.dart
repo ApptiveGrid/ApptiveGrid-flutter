@@ -7,8 +7,8 @@ import 'mocks.dart';
 void main() {
   group('Copy', () {
     test('New Values get carried', () {
-      final env1 = ApptiveGridEnvironment.alpha;
-      final env2 = ApptiveGridEnvironment.production;
+      const env1 = ApptiveGridEnvironment.alpha;
+      const env2 = ApptiveGridEnvironment.production;
 
       final authOptionsA = ApptiveGridAuthenticationOptions();
       final authOptionsB =
@@ -33,7 +33,7 @@ void main() {
     });
 
     test('No op stays the same', () {
-      final env1 = ApptiveGridEnvironment.alpha;
+      const env1 = ApptiveGridEnvironment.alpha;
 
       final authOptionsA = ApptiveGridAuthenticationOptions();
 

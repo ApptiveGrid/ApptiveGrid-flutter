@@ -30,7 +30,7 @@ class FormComponentOptions {
   @override
   bool operator ==(Object other) {
     return other is FormComponentOptions &&
-        !(other is TextComponentOptions) &&
+        other is! TextComponentOptions &&
         description == other.description &&
         label == other.label;
   }

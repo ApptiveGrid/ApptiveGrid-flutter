@@ -97,8 +97,8 @@ void main() {
     });
 
     test('Enum', () {
-      final property = 'property';
-      final id = 'id';
+      const property = 'property';
+      const id = 'id';
 
       final schema = {
         'properties': {

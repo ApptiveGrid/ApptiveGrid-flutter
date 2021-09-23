@@ -12,7 +12,7 @@ class EntityUri extends ApptiveGridUri {
   /// Creates a new [EntityUri] based on a string [uri]
   /// Main usage of this is for [EntityUri] retrieved through other Api Calls
   factory EntityUri.fromUri(String uri) {
-    final regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)/entities/(\w+)\b';
+    const regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)/entities/(\w+)\b';
     final matches = RegExp(regex).allMatches(uri);
     if (matches.isEmpty || matches.elementAt(0).groupCount != 4) {
       throw ArgumentError('Could not parse EntityUri $uri');

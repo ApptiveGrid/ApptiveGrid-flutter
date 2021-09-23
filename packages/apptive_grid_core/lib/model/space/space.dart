@@ -11,7 +11,7 @@ class SpaceUri extends ApptiveGridUri {
   /// Creates a new [SpaceUri] based on a string [uri]
   /// Main usage of this is for [SpaceUri] retrieved through other Api Calls
   factory SpaceUri.fromUri(String uri) {
-    final regex = r'/api/users/(\w+)/spaces/(\w+)\b';
+    const regex = r'/api/users/(\w+)/spaces/(\w+)\b';
     final matches = RegExp(regex).allMatches(uri);
     if (matches.isEmpty || matches.elementAt(0).groupCount != 2) {
       throw ArgumentError('Could not parse SpaceUri $uri');

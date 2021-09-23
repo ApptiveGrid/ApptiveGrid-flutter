@@ -4,10 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Parsing', () {
     test('From Json maps correctly', () {
-      final id = 'id';
-      final firstName = 'Jane';
-      final lastName = 'Doe';
-      final email = 'jane.doe@zweidenker.de';
+      const id = 'id';
+      const firstName = 'Jane';
+      const lastName = 'Doe';
+      const email = 'jane.doe@zweidenker.de';
       final spaceUri = SpaceUri(user: id, space: 'spaceId');
 
       final jsonUser = User.fromJson({
@@ -47,10 +47,10 @@ void main() {
 
   group('Equality', () {
     test('Plain and From json equal', () {
-      final id = 'id';
-      final firstName = 'Jane';
-      final lastName = 'Doe';
-      final email = 'jane.doe@zweidenker.de';
+      const id = 'id';
+      const firstName = 'Jane';
+      const lastName = 'Doe';
+      const email = 'jane.doe@zweidenker.de';
       final spaceUri = SpaceUri(user: id, space: 'spaceId');
 
       final plain = User(
@@ -75,10 +75,10 @@ void main() {
     });
 
     test('Plain and From json not equal with different values', () {
-      final id = 'id';
-      final firstName = 'Jane';
-      final lastName = 'Doe';
-      final email = 'jane.doe@zweidenker.de';
+      const id = 'id';
+      const firstName = 'Jane';
+      const lastName = 'Doe';
+      const email = 'jane.doe@zweidenker.de';
 
       final plain = User(
           email: email,
