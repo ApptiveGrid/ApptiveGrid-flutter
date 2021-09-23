@@ -73,6 +73,7 @@ class ApptiveGridClient {
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
 
+    // ignore: prefer_function_declarations_over_variables
     final handleError = (error) async {
       // TODO: Filter out Errors that happened because the Input was not correct
       // in that case don't save the Action and throw the error
