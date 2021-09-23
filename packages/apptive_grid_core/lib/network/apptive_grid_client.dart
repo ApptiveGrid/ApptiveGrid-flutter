@@ -73,6 +73,7 @@ class ApptiveGridClient {
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
 
+    // ignore: prefer_function_declarations_over_variables
     final handleError = (error) async {
       // TODO: Filter out Errors that happened because the Input was not correct
       // in that case don't save the Action and throw the error
@@ -108,7 +109,9 @@ class ApptiveGridClient {
   ///
   /// Requires Authorization
   /// throws [Response] if the request fails
-  Future<Grid> loadGrid({required GridUri gridUri}) async {
+  Future<Grid> loadGrid({
+    required GridUri gridUri,
+  }) async {
     await _authenticator.checkAuthentication();
     final url = Uri.parse('${options.environment.url}${gridUri.uriString}');
     final response = await _client.get(url, headers: headers);
@@ -137,7 +140,9 @@ class ApptiveGridClient {
   ///
   /// Requires Authorization
   /// throws [Response] if the request fails
-  Future<Space> getSpace({required SpaceUri spaceUri}) async {
+  Future<Space> getSpace({
+    required SpaceUri spaceUri,
+  }) async {
     await _authenticator.checkAuthentication();
 
     final url = Uri.parse('${options.environment.url}${spaceUri.uriString}');
@@ -152,7 +157,9 @@ class ApptiveGridClient {
   ///
   /// Requires Authorization
   /// throws [Response] if the request fails
-  Future<List<FormUri>> getForms({required GridUri gridUri}) async {
+  Future<List<FormUri>> getForms({
+    required GridUri gridUri,
+  }) async {
     await _authenticator.checkAuthentication();
 
     final url =
@@ -170,7 +177,9 @@ class ApptiveGridClient {
   ///
   /// Requires Authorization
   /// throws [Response] if the request fails
-  Future<List<GridViewUri>> getGridViews({required GridUri gridUri}) async {
+  Future<List<GridViewUri>> getGridViews({
+    required GridUri gridUri,
+  }) async {
     await _authenticator.checkAuthentication();
 
     final url =
@@ -188,15 +197,22 @@ class ApptiveGridClient {
   ///
   /// Requires Authorization
   /// throws [Response] if the request fails
-  Future<FormUri> getEditLink(
-      {required EntityUri entityUri, required String formId}) async {
+  Future<FormUri> getEditLink({
+    required EntityUri entityUri,
+    required String formId,
+  }) async {
     await _authenticator.checkAuthentication();
 
     final url =
         Uri.parse('${options.environment.url}${entityUri.uriString}/EditLink');
 
-    final response = await _client.post(url,
-        headers: headers, body: jsonEncode({'formId': formId}));
+    final response = await _client.post(
+      url,
+      headers: headers,
+      body: jsonEncode({
+        'formId': formId,
+      }),
+    );
 
     if (response.statusCode >= 400) {
       throw response;

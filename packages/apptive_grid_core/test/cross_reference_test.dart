@@ -49,15 +49,17 @@ void main() {
 
       expect(grid.fields.length, 1);
       expect(
-          grid.rows[0].entries[0].data,
-          CrossReferenceDataEntity.fromJson(
-              jsonValue: {
-                'displayValue': 'Yeah!',
-                'uri':
-                    '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
-              },
-              gridUri:
-                  '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06'));
+        grid.rows[0].entries[0].data,
+        CrossReferenceDataEntity.fromJson(
+          jsonValue: {
+            'displayValue': 'Yeah!',
+            'uri':
+                '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+          },
+          gridUri:
+              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        ),
+      );
     });
 
     test('Grid serializes back to original Response', () {
@@ -71,34 +73,38 @@ void main() {
           as CrossReferenceDataEntity;
 
       expect(
-          dataEntity.gridUri.uriString,
-          (rawResponse['schema'] as Map)['properties']['fields']['items'][0]
-              ['gridUri']);
+        dataEntity.gridUri.uriString,
+        (rawResponse['schema'] as Map)['properties']['fields']['items'][0]
+            ['gridUri'],
+      );
     });
   });
 
   group('DataEntity', () {
     test('Equality', () {
       final a = CrossReferenceDataEntity.fromJson(
-          jsonValue: {
-            'displayValue': 'Yeah!',
-            'uri':
-                '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
-          },
-          gridUri:
-              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06');
+        jsonValue: {
+          'displayValue': 'Yeah!',
+          'uri':
+              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+        },
+        gridUri:
+            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+      );
       final b = CrossReferenceDataEntity.fromJson(
-          jsonValue: {
-            'displayValue': 'Yeah!',
-            'uri':
-                '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
-          },
-          gridUri:
-              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06');
+        jsonValue: {
+          'displayValue': 'Yeah!',
+          'uri':
+              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+        },
+        gridUri:
+            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+      );
       final c = CrossReferenceDataEntity.fromJson(
-          jsonValue: null,
-          gridUri:
-              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06');
+        jsonValue: null,
+        gridUri:
+            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+      );
       expect(a, b);
       expect(a, isNot(c));
 
@@ -152,18 +158,20 @@ void main() {
       final fromJson = formData.components[0] as CrossReferenceFormComponent;
 
       final directEntity = CrossReferenceDataEntity.fromJson(
-          jsonValue: {
-            'displayValue': 'Yeah!',
-            'uri':
-                '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
-          },
-          gridUri:
-              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06');
+        jsonValue: {
+          'displayValue': 'Yeah!',
+          'uri':
+              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+        },
+        gridUri:
+            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+      );
 
       final direct = CrossReferenceFormComponent(
-          property: 'name',
-          data: directEntity,
-          fieldId: '3ftoqhqbct15h5o730uknpvp5');
+        property: 'name',
+        data: directEntity,
+        fieldId: '3ftoqhqbct15h5o730uknpvp5',
+      );
 
       expect(fromJson, direct);
       expect(fromJson.hashCode, direct.hashCode);

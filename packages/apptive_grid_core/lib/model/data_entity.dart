@@ -5,6 +5,9 @@ part of apptive_grid_model;
 /// [T] type of the data used in Flutter
 /// [S] type used when sending Data back
 abstract class DataEntity<T, S> {
+  /// Create a new DataEntity with [value]
+  DataEntity([this.value]);
+
   /// The value of the Entity
   T? value;
 
@@ -30,10 +33,7 @@ abstract class DataEntity<T, S> {
 /// [DataEntity] representing [String] Objects
 class StringDataEntity extends DataEntity<String, String> {
   /// Creates a new StringDataEntity Object with value [value]
-  StringDataEntity([this.value]);
-
-  @override
-  String? value;
+  StringDataEntity([String? value]) : super(value);
 
   @override
   String? get schemaValue => value;
@@ -42,18 +42,17 @@ class StringDataEntity extends DataEntity<String, String> {
 /// [DataEntity] representing [DateTime] Objects
 class DateTimeDataEntity extends DataEntity<DateTime, String> {
   /// Creates a new DateTimeDataEntity Object with value [value]
-  DateTimeDataEntity([this.value]);
+  DateTimeDataEntity([DateTime? value]) : super(value);
 
   /// Creates a new DateTimeDataEntity Object from json
   /// [json] needs to be a Iso8601String
-  DateTimeDataEntity.fromJson(dynamic json) {
+  factory DateTimeDataEntity.fromJson(dynamic json) {
+    DateTime? jsonValue;
     if (json != null) {
-      value = DateTime.parse(json);
+      jsonValue = DateTime.parse(json);
     }
+    return DateTimeDataEntity(jsonValue);
   }
-
-  @override
-  DateTime? value;
 
   /// Returns [value] as a Iso8601 Date String
   @override
@@ -64,20 +63,19 @@ class DateTimeDataEntity extends DataEntity<DateTime, String> {
 /// Internally this is using [DateTime] ignoring the Time Part
 class DateDataEntity extends DataEntity<DateTime, String> {
   /// Creates a new DateTimeDataEntity Object with value [value]
-  DateDataEntity([this.value]);
+  DateDataEntity([DateTime? value]) : super(value);
 
   /// Creates a new DateTimeDataEntity Object from json
   /// [json] needs to be a Date String with Format yyyy-MM-dd
-  DateDataEntity.fromJson(dynamic json) {
+  factory DateDataEntity.fromJson(dynamic json) {
+    DateTime? jsonValue;
     if (json != null) {
-      value = _dateFormat.parse(json);
+      jsonValue = _dateFormat.parse(json);
     }
+    return DateDataEntity(jsonValue);
   }
 
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
-
-  @override
-  DateTime? value;
 
   /// Returns [value] formatted to yyyy-MM-dd
   @override
@@ -87,13 +85,7 @@ class DateDataEntity extends DataEntity<DateTime, String> {
 /// [DataEntity] representing [boolean] Objects
 class BooleanDataEntity extends DataEntity<bool, bool> {
   /// Creates a new BooleanDataEntity Object
-  BooleanDataEntity([value]) {
-    this.value = value ?? false;
-  }
-
-  /// defaults to false
-  @override
-  bool? value;
+  BooleanDataEntity([bool? value = false]) : super(value ?? false);
 
   @override
   bool? get schemaValue => value;
@@ -102,10 +94,7 @@ class BooleanDataEntity extends DataEntity<bool, bool> {
 /// [DataEntity] representing [int] Objects
 class IntegerDataEntity extends DataEntity<int, int> {
   /// Creates a new IntegerDataEntity Object
-  IntegerDataEntity([this.value]);
-
-  @override
-  int? value;
+  IntegerDataEntity([int? value]) : super(value);
 
   @override
   int? get schemaValue => value;
@@ -114,10 +103,7 @@ class IntegerDataEntity extends DataEntity<int, int> {
 /// [DataEntity] representing [double] Objects
 class DecimalDataEntity extends DataEntity<double, double> {
   /// Creates a new DecimalDataEntity Object
-  DecimalDataEntity([this.value]);
-
-  @override
-  double? value;
+  DecimalDataEntity([double? value]) : super(value);
 
   @override
   double? get schemaValue => value;
@@ -126,10 +112,7 @@ class DecimalDataEntity extends DataEntity<double, double> {
 /// [DataEntity] representing an enum like Object
 class EnumDataEntity extends DataEntity<String, String> {
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
-  EnumDataEntity({this.value, this.options = const []});
-
-  @override
-  String? value;
+  EnumDataEntity({String? value, this.options = const []}) : super(value);
 
   /// Possible options of the Data Entity
   List<String> options;
@@ -156,20 +139,24 @@ class EnumDataEntity extends DataEntity<String, String> {
 /// [DataEntity] representing an Object CrossReferencing to a different Grid
 class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
   /// Create a new CrossReference Data Entity
-  CrossReferenceDataEntity({this.value, this.entityUri, required this.gridUri});
+  CrossReferenceDataEntity({
+    String? value,
+    this.entityUri,
+    required this.gridUri,
+  }) : super(value);
 
   /// Creates a new CrossReferenceDataEntity from a Json Response
-  factory CrossReferenceDataEntity.fromJson(
-          {required Map? jsonValue, required String gridUri}) =>
+  factory CrossReferenceDataEntity.fromJson({
+    required Map? jsonValue,
+    required String gridUri,
+  }) =>
       CrossReferenceDataEntity(
-          value: jsonValue?['displayValue'],
-          entityUri: jsonValue?['uri'] != null
-              ? EntityUri.fromUri(jsonValue?['uri'])
-              : null,
-          gridUri: GridUri.fromUri(gridUri));
-
-  @override
-  String? value;
+        value: jsonValue?['displayValue'],
+        entityUri: jsonValue?['uri'] != null
+            ? EntityUri.fromUri(jsonValue?['uri'])
+            : null,
+        gridUri: GridUri.fromUri(gridUri),
+      );
 
   /// The [EntityUri] pointing to the Entity this is referencing
   EntityUri? entityUri;

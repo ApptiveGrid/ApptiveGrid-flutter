@@ -3,7 +3,10 @@ part of grid_row_dropdown;
 /// Data Item to use in Dropwdown Menu for [CrossReferenceFormWidget] to sync between a [GridRow] and [CrossReferenceDataEntity]
 class GridRowDropdownDataItem {
   /// Creates a new GridRowDropdownDataItem
-  GridRowDropdownDataItem({this.entityUri, this.displayValue});
+  GridRowDropdownDataItem({
+    this.entityUri,
+    this.displayValue,
+  });
 
   /// [EntityUri] representing the [GridRow]
   final EntityUri? entityUri;

@@ -3,12 +3,13 @@ part of apptive_grid_model;
 /// Model for a [FormComponent] representing [BooleanDataEntity]
 class BooleanFormComponent extends FormComponent<BooleanDataEntity> {
   /// Creates a FormComponent
-  BooleanFormComponent(
-      {required this.property,
-      required this.data,
-      required this.fieldId,
-      this.options = const FormComponentOptions(),
-      this.required = false});
+  BooleanFormComponent({
+    required this.property,
+    required this.data,
+    required this.fieldId,
+    this.options = const FormComponentOptions(),
+    this.required = false,
+  });
 
   /// Deserializes [json] into a [FormComponent]
   BooleanFormComponent.fromJson(Map<String, dynamic> json)

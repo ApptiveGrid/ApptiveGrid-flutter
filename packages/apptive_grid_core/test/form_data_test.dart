@@ -2,8 +2,8 @@ import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final title = 'title';
-  final name = 'name';
+  const title = 'title';
+  const name = 'name';
   final response = {
     'schema': {
       'type': 'object',
@@ -107,17 +107,19 @@ void main() {
       final action = FormAction('/uri', 'POST');
       final schema = response['schema'];
       final component = IntegerFormComponent(
-          fieldId: '4zc4l48ffin5v8pa2emyx9s15',
-          options: TextComponentOptions(),
-          property: 'NumberC',
-          data: IntegerDataEntity());
+        fieldId: '4zc4l48ffin5v8pa2emyx9s15',
+        options: const TextComponentOptions(),
+        property: 'NumberC',
+        data: IntegerDataEntity(),
+      );
 
       final formData = FormData(
-          name: 'name',
-          title: title,
-          components: [component],
-          actions: [action],
-          schema: schema);
+        name: 'name',
+        title: title,
+        components: [component],
+        actions: [action],
+        schema: schema,
+      );
 
       expect(FormData.fromJson(formData.toJson()), formData);
     });
@@ -128,12 +130,13 @@ void main() {
       final formData = FormData.fromJson(response);
 
       expect(
-          formData
-              .toRequestObject()
-              .cast<dynamic, String?>()
-              .values
-              .where((element) => element == null || element.isEmpty),
-          isNot([]));
+        formData
+            .toRequestObject()
+            .cast<dynamic, String?>()
+            .values
+            .where((element) => element == null || element.isEmpty),
+        isNot([]),
+      );
     });
   });
 
@@ -141,23 +144,26 @@ void main() {
     final action = FormAction('/uri', 'POST');
     final schema = response['schema'];
     final component = IntegerFormComponent(
-        fieldId: '4zc4l48ffin5v8pa2emyx9s15',
-        data: IntegerDataEntity(),
-        options: TextComponentOptions(),
-        property: 'NumberC');
+      fieldId: '4zc4l48ffin5v8pa2emyx9s15',
+      data: IntegerDataEntity(),
+      options: const TextComponentOptions(),
+      property: 'NumberC',
+    );
 
     final a = FormData(
-        name: 'name',
-        title: title,
-        components: [component],
-        actions: [action],
-        schema: schema);
+      name: 'name',
+      title: title,
+      components: [component],
+      actions: [action],
+      schema: schema,
+    );
     final b = FormData(
-        name: 'name',
-        title: title,
-        components: [component],
-        actions: [action],
-        schema: schema);
+      name: 'name',
+      title: title,
+      components: [component],
+      actions: [action],
+      schema: schema,
+    );
     final c = FormData.fromJson(response);
 
     test('a == b', () {
@@ -249,12 +255,15 @@ void main() {
       expect(formData.components[0].runtimeType, CrossReferenceFormComponent);
       expect(formData.components[0].data.value, null);
       expect(
-          (formData.components[0].data as CrossReferenceDataEntity).entityUri,
-          null);
+        (formData.components[0].data as CrossReferenceDataEntity).entityUri,
+        null,
+      );
       expect(
-          (formData.components[0].data as CrossReferenceDataEntity).gridUri,
-          GridUri.fromUri(
-              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06'));
+        (formData.components[0].data as CrossReferenceDataEntity).gridUri,
+        GridUri.fromUri(
+          '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        ),
+      );
     });
 
     test('Form with Cross Reference with prefilled Value parses', () {
@@ -302,13 +311,17 @@ void main() {
       expect(formData.components[0].runtimeType, CrossReferenceFormComponent);
       expect(formData.components[0].data.value, 'Yeah!');
       expect(
-          (formData.components[0].data as CrossReferenceDataEntity).entityUri,
-          EntityUri.fromUri(
-              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'));
+        (formData.components[0].data as CrossReferenceDataEntity).entityUri,
+        EntityUri.fromUri(
+          '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d',
+        ),
+      );
       expect(
-          (formData.components[0].data as CrossReferenceDataEntity).gridUri,
-          GridUri.fromUri(
-              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06'));
+        (formData.components[0].data as CrossReferenceDataEntity).gridUri,
+        GridUri.fromUri(
+          '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        ),
+      );
     });
   });
 }

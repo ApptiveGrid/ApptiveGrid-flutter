@@ -69,7 +69,9 @@ abstract class FormUri extends ApptiveGridUri {
 class RedirectFormUri extends FormUri {
   /// Create a FormUri accessed via a redirect Link from the ApptiveGrid UI Console
   /// for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [form]
-  RedirectFormUri({required this.form}) : super._();
+  RedirectFormUri({
+    required this.form,
+  }) : super._();
 
   /// Creates a FormUri based on a [uri]
   /// [uri] must match:
@@ -112,13 +114,13 @@ class RedirectFormUri extends FormUri {
 /// A FormUri for a Form represented by a direct Link
 class DirectFormUri extends FormUri {
   /// Create a FormUri with known attributes for [user], [space], [grid], [form]
-  DirectFormUri(
-      {required this.user,
-      required this.space,
-      required this.grid,
-      required this.form,
-      this.entity})
-      : super._();
+  DirectFormUri({
+    required this.user,
+    required this.space,
+    required this.grid,
+    required this.form,
+    this.entity,
+  }) : super._();
 
   /// Creates a FormUri based on a [uri]
   /// Creates a FormUri based on a [uri]
@@ -137,11 +139,12 @@ class DirectFormUri extends FormUri {
       entity = EntityUri.fromUri(parsed.queryParameters['uri']!);
     }
     return DirectFormUri(
-        user: match.group(1)!,
-        space: match.group(2)!,
-        grid: match.group(3)!,
-        form: match.group(4)!,
-        entity: entity);
+      user: match.group(1)!,
+      space: match.group(2)!,
+      grid: match.group(3)!,
+      form: match.group(4)!,
+      entity: entity,
+    );
   }
 
   static const _regex =
@@ -175,9 +178,16 @@ class DirectFormUri extends FormUri {
   }
 
   /// Returns a FormUri pointing to a Form prefilled with values for a certain [EntityUri]
-  FormUri forEntity({required EntityUri entity}) {
+  FormUri forEntity({
+    required EntityUri entity,
+  }) {
     return DirectFormUri(
-        user: user, space: space, grid: grid, form: form, entity: entity);
+      user: user,
+      space: space,
+      grid: grid,
+      form: form,
+      entity: entity,
+    );
   }
 
   @override

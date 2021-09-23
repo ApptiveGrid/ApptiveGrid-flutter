@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Parsing', () {
     test('Successful Parse', () {
-      final uri = '/api/a/3ojhtqiltc0kiylfp8nddmxmk';
-      final method = 'POST';
+      const uri = '/api/a/3ojhtqiltc0kiylfp8nddmxmk';
+      const method = 'POST';
 
       final json = {
         'uri': uri,
@@ -21,8 +21,8 @@ void main() {
 
   group('Serializing', () {
     test('toJson -> fromJson -> equals', () {
-      final uri = '/api/a/3ojhtqiltc0kiylfp8nddmxmk';
-      final method = 'POST';
+      const uri = '/api/a/3ojhtqiltc0kiylfp8nddmxmk';
+      const method = 'POST';
 
       final action = FormAction(uri, method);
 
@@ -31,8 +31,8 @@ void main() {
   });
 
   group('Equality', () {
-    final uri = '/api/a/3ojhtqiltc0kiylfp8nddmxmk';
-    final method = 'POST';
+    const uri = '/api/a/3ojhtqiltc0kiylfp8nddmxmk';
+    const method = 'POST';
 
     final json = {
       'uri': uri,

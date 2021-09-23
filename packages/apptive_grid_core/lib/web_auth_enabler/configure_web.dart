@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'dart:html';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
@@ -10,7 +12,8 @@ Future<void> enableWebAuth(ApptiveGridOptions options) async {
   final url = window.location.href;
   if (url.contains('state=')) {
     final issuerUri = Uri.parse(
-        'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}');
+      'https://iam.zweidenker.de/auth/realms/${options.environment.authRealm}',
+    );
     final issuer = await openid.Issuer.discover(issuerUri);
     final client = openid.Client(issuer, 'web');
     final webAuthenticator = Authenticator(client, redirectUri: Uri.parse(url));

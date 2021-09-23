@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Add A ApptiveGrid Widget to your Widget Tree to enable ApptiveGrid Functionality
 void main() async {
-  final options = ApptiveGridOptions(
+  const options = ApptiveGridOptions(
       environment: ApptiveGridEnvironment.beta,
       authenticationOptions: ApptiveGridAuthenticationOptions(
         autoAuthenticate: true,
@@ -54,7 +54,10 @@ class _MyAppState extends State<MyApp> {
 }
 
 class _UserSection extends StatefulWidget {
-  const _UserSection({Key? key, required this.onUserLoaded}) : super(key: key);
+  const _UserSection({
+    Key? key,
+    required this.onUserLoaded,
+  }) : super(key: key);
 
   final Function(User) onUserLoaded;
 
@@ -107,7 +110,10 @@ class _UserSectionState extends State<_UserSection> {
 }
 
 class _SpaceSection extends StatefulWidget {
-  const _SpaceSection({Key? key, required this.spaceUri}) : super(key: key);
+  const _SpaceSection({
+    Key? key,
+    required this.spaceUri,
+  }) : super(key: key);
 
   final SpaceUri spaceUri;
 

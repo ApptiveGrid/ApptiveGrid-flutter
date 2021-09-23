@@ -6,8 +6,10 @@ class DateTimeFormWidget extends StatefulWidget {
   ///
   /// Clicking on the Date part will show a DatePicker using [showDatePicker]
   /// Clicking on the Time part will show a TimePicker using [showTimePicker]
-  const DateTimeFormWidget({Key? key, required this.component})
-      : super(key: key);
+  const DateTimeFormWidget({
+    Key? key,
+    required this.component,
+  }) : super(key: key);
 
   /// Component this Widget should reflect
   final DateTimeFormComponent component;
@@ -64,7 +66,8 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                       initialDate: initialDate,
                       firstDate: DateTime.fromMillisecondsSinceEpoch(0),
                       lastDate: DateTime.fromMillisecondsSinceEpoch(
-                          Duration(days: 100000000).inMilliseconds),
+                        const Duration(days: 100000000).inMilliseconds,
+                      ),
                     ).then((value) {
                       if (value != null) {
                         state.didChange(value);
@@ -77,7 +80,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                   child: AbsorbPointer(
                     child: TextField(
                       controller: _dateController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Date',
                         border: InputBorder.none,
                         isDense: true,
@@ -100,14 +103,15 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                       if (value != null) {
                         setState(() {
                           final newDate = DateTime(
-                              initialDate.year,
-                              initialDate.month,
-                              initialDate.day,
-                              value.hour,
-                              value.minute,
-                              initialDate.second,
-                              initialDate.millisecond,
-                              initialDate.microsecond);
+                            initialDate.year,
+                            initialDate.month,
+                            initialDate.day,
+                            value.hour,
+                            value.minute,
+                            initialDate.second,
+                            initialDate.millisecond,
+                            initialDate.microsecond,
+                          );
                           widget.component.data.value = newDate;
                           state.didChange(newDate);
                         });
@@ -117,7 +121,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                   child: AbsorbPointer(
                     child: TextField(
                       controller: _timeController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Time',
                         isDense: true,
                         filled: false,

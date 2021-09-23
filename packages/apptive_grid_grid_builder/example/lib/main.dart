@@ -36,7 +36,9 @@ class MyApp extends StatelessWidget {
 }
 
 class _MyHomePage extends StatefulWidget {
-  _MyHomePage({Key? key}) : super(key: key);
+  _MyHomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();

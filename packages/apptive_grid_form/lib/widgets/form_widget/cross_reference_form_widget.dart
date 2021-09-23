@@ -3,8 +3,10 @@ part of apptive_grid_form_widgets;
 /// FormComponent Widget to display a [CrossReferenceFormComponent]
 class CrossReferenceFormWidget extends StatefulWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
-  const CrossReferenceFormWidget({Key? key, required this.component})
-      : super(key: key);
+  const CrossReferenceFormWidget({
+    Key? key,
+    required this.component,
+  }) : super(key: key);
 
   /// Component this Widget should reflect
   final CrossReferenceFormComponent component;
@@ -97,14 +99,15 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
               widget.component.data.value != null
           ? GridRowDropdownDataItem(
               entityUri: widget.component.data.entityUri,
-              displayValue: widget.component.data.value)
+              displayValue: widget.component.data.value,
+            )
           : null,
       decoration: InputDecoration(
-          helperText: widget.component.options.description,
-          helperMaxLines: 100,
-          labelText:
-              widget.component.options.label ?? widget.component.property,
-          errorText: _error?.toString()),
+        helperText: widget.component.options.description,
+        helperMaxLines: 100,
+        labelText: widget.component.options.label ?? widget.component.property,
+        errorText: _error?.toString(),
+      ),
     );
   }
 
@@ -118,7 +121,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               icon: Icon(Icons.search),
               hintText: 'Search',
               border: InputBorder.none,
@@ -144,20 +147,23 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       final items = _grid!.rows.map((row) {
         final gridUri = widget.component.data.gridUri;
         final entityUri = EntityUri(
-            user: gridUri.user,
-            space: gridUri.space,
-            grid: gridUri.grid,
-            entity: row.id);
+          user: gridUri.user,
+          space: gridUri.space,
+          grid: gridUri.grid,
+          entity: row.id,
+        );
         return GridRowDropdownMenuItem(
-            value: GridRowDropdownDataItem(
-                entityUri: entityUri,
-                displayValue: row.entries.first.data.value.toString()),
-            child: _RowMenuItem(
-              key: _keys[row.id],
-              grid: _grid!,
-              row: row,
-              controller: _controllers[row.id],
-            ));
+          value: GridRowDropdownDataItem(
+            entityUri: entityUri,
+            displayValue: row.entries.first.data.value.toString(),
+          ),
+          child: _RowMenuItem(
+            key: _keys[row.id],
+            grid: _grid!,
+            row: row,
+            controller: _controllers[row.id],
+          ),
+        );
       }).toList();
       return [searchBox, headerRow, ...items];
     }
@@ -166,26 +172,28 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
   List<Widget> _selectedItems(BuildContext context) {
     if (_error != null) {
       return [
-        Center(
+        const Center(
           child: Text('ERROR'),
         )
       ];
     } else if (_grid == null) {
       return [
-        Center(
+        const Center(
           child: Text('Loading Grid...'),
         )
       ];
     } else {
-      final pleaseSelect = Text('Select an entry');
+      const pleaseSelect = Text('Select an entry');
       return [
         ...[pleaseSelect, pleaseSelect],
         ..._grid!.rows
-            .map((row) => Text(
-                  row.entries.first.data.value?.toString() ?? '',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ))
+            .map(
+              (row) => Text(
+                row.entries.first.data.value?.toString() ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            )
             .toList()
       ];
     }
@@ -193,9 +201,12 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
 }
 
 class _RowMenuItem extends StatefulWidget {
-  const _RowMenuItem(
-      {Key? key, required this.grid, required this.row, this.controller})
-      : super(key: key);
+  const _RowMenuItem({
+    Key? key,
+    required this.grid,
+    required this.row,
+    this.controller,
+  }) : super(key: key);
 
   final Grid grid;
   final GridRow row;
@@ -217,20 +228,19 @@ class _RowMenuItemState extends State<_RowMenuItem> {
   @override
   Widget build(BuildContext context) {
     if (!widget.row.matchesFilter(_filter)) {
-      return SizedBox(
-        height: 0,
-      );
+      return const SizedBox();
     } else {
       final index = widget.grid.rows
           .where((row) => row.matchesFilter(_filter))
           .toList()
           .indexOf(widget.row);
       return GridRowWidget(
-          row: widget.row,
-          controller: widget.controller,
-          color: index % 2 != 0
-              ? Theme.of(context).hintColor.withOpacity(0.1)
-              : null);
+        row: widget.row,
+        controller: widget.controller,
+        color: index % 2 != 0
+            ? Theme.of(context).hintColor.withOpacity(0.1)
+            : null,
+      );
     }
   }
 }
@@ -240,12 +250,14 @@ extension _GridRowX on GridRow {
     if (filter == null || filter.isEmpty) return true;
 
     return entries
-        .where((entry) =>
-            entry.data.schemaValue
-                ?.toString()
-                .toLowerCase()
-                .contains(filter.toLowerCase()) ??
-            false)
+        .where(
+          (entry) =>
+              entry.data.schemaValue
+                  ?.toString()
+                  .toLowerCase()
+                  .contains(filter.toLowerCase()) ??
+              false,
+        )
         .isNotEmpty;
   }
 }
