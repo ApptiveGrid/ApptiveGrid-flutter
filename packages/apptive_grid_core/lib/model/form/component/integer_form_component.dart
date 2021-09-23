@@ -7,7 +7,7 @@ class IntegerFormComponent extends FormComponent<IntegerDataEntity> {
     required this.property,
     required this.data,
     required this.fieldId,
-    required this.options,
+    this.options = const TextComponentOptions(),
     this.required = false,
   });
 

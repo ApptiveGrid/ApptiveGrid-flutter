@@ -1,3 +1,20 @@
+## [0.4.3]
+* Update Lints
+
+## [0.4.1]
+* Make [FormData.name] optional
+
+## [0.4.0]
+* **BREAKING CHANGE** `FormData` and `Grid` now take named constructor arguments to avoid confusion. Before the order of arguments did not have `schema` at the same part
+* Add `name` to `FormData`
+
+## [0.3.1]
+* Add support for Authenticating with an API Key
+
+## [0.3.0]
+* AUTHENTICATION CHANGES
+    * In order to fully support Google OAuth you need to add a custom redirect Scheme to ApptiveGridAuthenticationOptions. Also make sure your App can be opened via a deeplink with that scheme
+
 ## [0.2.6]
 * Update apptive_grid_core
 

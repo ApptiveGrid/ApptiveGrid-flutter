@@ -6,13 +6,16 @@ import 'package:flutter/material.dart';
 /// Set Up your Grid in Apptive grid using Text Columns
 /// | First Name | Last Name | imgUrl
 void main() async {
-  await enableWebAuth();
+  await enableWebAuth(ApptiveGridOptions());
   runApp(ApptiveGrid(
       options: ApptiveGridOptions(
-        environment: ApptiveGridEnvironment.beta,
+        environment: ApptiveGridEnvironment.alpha,
         authenticationOptions: ApptiveGridAuthenticationOptions(
-          autoAuthenticate: true,
-        ),
+            autoAuthenticate: true,
+            apiKey: ApptiveGridApiKey(
+              authKey: 'YOUR_AUTH_KEY',
+              password: 'YOUR_AUTH_KEY_PASSWORD',
+            )),
       ),
       child: MyApp()));
 }
@@ -33,7 +36,9 @@ class MyApp extends StatelessWidget {
 }
 
 class _MyHomePage extends StatefulWidget {
-  _MyHomePage({Key? key}) : super(key: key);
+  _MyHomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();

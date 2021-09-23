@@ -12,12 +12,12 @@ class MockHttpClient extends Mock implements http.Client {}
 class MockApptiveGridCache extends Mock implements ApptiveGridCache {}
 
 class TestApp extends StatelessWidget {
-  const TestApp(
-      {Key? key,
-      this.client,
-      this.child,
-      this.options = const ApptiveGridOptions()})
-      : super(key: key);
+  const TestApp({
+    Key? key,
+    this.client,
+    this.child,
+    this.options = const ApptiveGridOptions(),
+  }) : super(key: key);
 
   final Widget? child;
 

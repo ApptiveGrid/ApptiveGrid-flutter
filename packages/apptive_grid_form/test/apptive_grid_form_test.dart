@@ -33,7 +33,14 @@ void main() {
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer(
-              (realInvocation) async => FormData('Form Title', [], [], {}));
+        (realInvocation) async => FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [],
+          schema: {},
+        ),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -54,7 +61,14 @@ void main() {
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer(
-              (realInvocation) async => FormData('Form Title', [], [], {}));
+        (realInvocation) async => FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [],
+          schema: {},
+        ),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -64,7 +78,13 @@ void main() {
   });
 
   testWidgets('OnLoadedCallback gets called', (tester) async {
-    final form = FormData('Form Title', [], [], {});
+    final form = FormData(
+      name: 'Form Name',
+      title: 'Form Title',
+      components: [],
+      actions: [],
+      schema: {},
+    );
     final completer = Completer<FormData>();
     final target = TestApp(
       client: client,
@@ -98,17 +118,24 @@ void main() {
           ),
         ),
       );
-      final form = FormData('Form Title', [], [], {});
+      final form = FormData(
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        actions: [],
+        schema: {},
+      );
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer((realInvocation) async => form);
 
       await tester.pumpWidget(target);
 
       expect(
-          find.byType(
-            CircularProgressIndicator,
-          ),
-          findsOneWidget);
+        find.byType(
+          CircularProgressIndicator,
+        ),
+        findsOneWidget,
+      );
     });
   });
 
@@ -123,7 +150,13 @@ void main() {
         ),
       );
       final action = FormAction('uri', 'method');
-      final formData = FormData('Form Title', [], [action], {});
+      final formData = FormData(
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        actions: [action],
+        schema: {},
+      );
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
@@ -150,7 +183,13 @@ void main() {
         ),
       );
       final action = FormAction('uri', 'method');
-      final formData = FormData('Form Title', [], [action], {});
+      final formData = FormData(
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        actions: [action],
+        schema: {},
+      );
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
@@ -187,7 +226,7 @@ void main() {
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
-        await tester.pumpAndSettle(Duration(seconds: 30));
+        await tester.pumpAndSettle(const Duration(seconds: 30));
 
         expect(find.byType(Lottie), findsOneWidget);
         expect(find.text('Oops! - Error', skipOffstage: false), findsOneWidget);
@@ -229,7 +268,13 @@ void main() {
           ),
         );
         final action = FormAction('uri', 'method');
-        final formData = FormData('Form Title', [], [action], {});
+        final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [action],
+          schema: {},
+        );
 
         when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
@@ -256,7 +301,13 @@ void main() {
           ),
         );
         final action = FormAction('uri', 'method');
-        final formData = FormData('Form Title', [], [action], {});
+        final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [action],
+          schema: {},
+        );
 
         when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
@@ -283,7 +334,13 @@ void main() {
           ),
         );
         final action = FormAction('uri', 'method');
-        final formData = FormData('Form Title', [], [action], {});
+        final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [action],
+          schema: {},
+        );
 
         when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
@@ -313,7 +370,13 @@ void main() {
           ),
         );
         final action = FormAction('uri', 'method');
-        final formData = FormData('Form Title', [], [action], {});
+        final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [action],
+          schema: {},
+        );
 
         when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
             .thenAnswer((realInvocation) async => formData);
@@ -348,7 +411,13 @@ void main() {
         ),
       );
       final action = FormAction('uri', 'method');
-      final formData = FormData('Form Title', [], [action], {});
+      final formData = FormData(
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        actions: [action],
+        schema: {},
+      );
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
@@ -376,7 +445,13 @@ void main() {
         ),
       );
       final action = FormAction('uri', 'method');
-      final formData = FormData('Form Title', [], [action], {});
+      final formData = FormData(
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        actions: [action],
+        schema: {},
+      );
 
       when(() => client.loadForm(formUri: RedirectFormUri(form: 'form')))
           .thenAnswer((realInvocation) async => formData);
@@ -396,10 +471,16 @@ void main() {
     late http.Client httpClient;
 
     final action = FormAction('actionUri', 'POST');
-    final data = FormData('Title', [], [action], {});
+    final data = FormData(
+      name: 'Form Name',
+      title: 'Title',
+      components: [],
+      actions: [action],
+      schema: {},
+    );
 
     final formUri = RedirectFormUri(form: 'form');
-    final env = ApptiveGridEnvironment.production;
+    const env = ApptiveGridEnvironment.production;
 
     setUpAll(() {
       registerFallbackValue(http.Request('POST', Uri()));
@@ -409,12 +490,17 @@ void main() {
     setUp(() {
       httpClient = MockHttpClient();
 
-      when(() => httpClient.get(Uri.parse(env.url + formUri.uriString),
-              headers: any(named: 'headers')))
-          .thenAnswer(
-              (_) async => http.Response(jsonEncode(data.toJson()), 200));
+      when(
+        () => httpClient.get(
+          Uri.parse(env.url + formUri.uriString),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer(
+        (_) async => http.Response(jsonEncode(data.toJson()), 200),
+      );
       when(() => httpClient.send(any())).thenAnswer(
-          (invocation) async => http.StreamedResponse(Stream.value([]), 400));
+        (invocation) async => http.StreamedResponse(Stream.value([]), 400),
+      );
     });
 
     testWidgets('No Cache, Error, Shows Error Screen', (tester) async {
@@ -442,16 +528,20 @@ void main() {
       final cacheMap = <ActionItem>{};
       final cache = MockApptiveGridCache();
       when(() => cache.addPendingActionItem(any())).thenAnswer(
-          (invocation) => cacheMap.add(invocation.positionalArguments[0]));
+        (invocation) => cacheMap.add(invocation.positionalArguments[0]),
+      );
       when(() => cache.removePendingActionItem(any())).thenAnswer(
-          (invocation) => cacheMap.remove(invocation.positionalArguments[0]));
+        (invocation) => cacheMap.remove(invocation.positionalArguments[0]),
+      );
       when(() => cache.getPendingActionItems())
           .thenAnswer((invocation) => cacheMap.toList());
 
-      final client = ApptiveGridClient.fromClient(httpClient,
-          options: ApptiveGridOptions(
-            cache: cache,
-          ));
+      final client = ApptiveGridClient.fromClient(
+        httpClient,
+        options: ApptiveGridOptions(
+          cache: cache,
+        ),
+      );
 
       final target = TestApp(
         client: client,
@@ -469,10 +559,12 @@ void main() {
       verify(() => httpClient.send(any())).called(1);
 
       expect(
-          find.text(
-              'The Form was saved and will be send at the next opportunity',
-              skipOffstage: false),
-          findsOneWidget);
+        find.text(
+          'The Form was saved and will be send at the next opportunity',
+          skipOffstage: false,
+        ),
+        findsOneWidget,
+      );
     });
   });
 }

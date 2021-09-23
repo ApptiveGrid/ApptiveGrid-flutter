@@ -17,14 +17,17 @@ class GridUri extends ApptiveGridUri {
       // Try to parse as GridViewUri
       return GridViewUri.fromUri(uri);
     } on ArgumentError {
-      final regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)\b';
+      const regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)\b';
       final matches = RegExp(regex).allMatches(uri);
       if (matches.isEmpty || matches.elementAt(0).groupCount != 3) {
         throw ArgumentError('Could not parse GridUri $uri');
       }
       final match = matches.elementAt(0);
       return GridUri(
-          user: match.group(1)!, space: match.group(2)!, grid: match.group(3)!);
+        user: match.group(1)!,
+        space: match.group(2)!,
+        grid: match.group(3)!,
+      );
     }
   }
 
@@ -61,7 +64,13 @@ class GridUri extends ApptiveGridUri {
 /// Model for GridData
 class Grid {
   /// Creates a GridData Object
-  Grid(this.name, this.schema, this.fields, this.rows, {this.filter});
+  Grid({
+    required this.name,
+    required this.schema,
+    required this.fields,
+    required this.rows,
+    this.filter,
+  });
 
   /// Deserializes [json] into a [Grid] Object
   factory Grid.fromJson(Map<String, dynamic> json) {
@@ -69,17 +78,26 @@ class Grid {
     final names = json['fieldNames'] as List;
     final schema = json['schema'];
     final fields = List<GridField>.generate(
-        ids.length,
-        (i) => GridField(
-            ids[i],
-            names[i],
-            dataTypeFromSchemaProperty(
-                schemaProperty: schema['properties']['fields']['items'][i])));
+      ids.length,
+      (i) => GridField(
+        ids[i],
+        names[i],
+        dataTypeFromSchemaProperty(
+          schemaProperty: schema['properties']['fields']['items'][i],
+        ),
+      ),
+    );
     final entries = (json['entities'] as List)
         .map((e) => GridRow.fromJson(e, fields, schema))
         .toList();
     final filter = json['filter'];
-    return Grid(json['name'], schema, fields, entries, filter: filter);
+    return Grid(
+      name: json['name'],
+      schema: schema,
+      fields: fields,
+      rows: entries,
+      filter: filter,
+    );
   }
 
   /// Name of the Form

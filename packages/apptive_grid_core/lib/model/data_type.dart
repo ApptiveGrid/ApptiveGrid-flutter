@@ -14,6 +14,9 @@ enum DataType {
   /// Type to display [int] numbers
   integer,
 
+  /// Type to display [double] decimal numbers
+  decimal,
+
   /// Type to display [bool] values
   checkbox,
 
@@ -27,7 +30,9 @@ enum DataType {
 /// Returns [DataType] that matching a certain schema [schemaProperty]
 ///
 /// throws [ArgumentError] if DataType is not supported yet
-DataType dataTypeFromSchemaProperty({required dynamic schemaProperty}) {
+DataType dataTypeFromSchemaProperty({
+  required dynamic schemaProperty,
+}) {
   final schemaType = schemaProperty['type'];
   final format = schemaProperty['format'];
   switch (schemaType) {
@@ -44,6 +49,8 @@ DataType dataTypeFromSchemaProperty({required dynamic schemaProperty}) {
       return DataType.text;
     case 'integer':
       return DataType.integer;
+    case 'number':
+      return DataType.decimal;
     case 'boolean':
       return DataType.checkbox;
     case 'object':
@@ -54,5 +61,6 @@ DataType dataTypeFromSchemaProperty({required dynamic schemaProperty}) {
       }
   }
   throw ArgumentError(
-      'No according DataType found for "$schemaType". Supported DataTypes are ${DataType.values}');
+    'No according DataType found for "$schemaType". Supported DataTypes are ${DataType.values}',
+  );
 }

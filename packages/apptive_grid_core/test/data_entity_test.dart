@@ -32,6 +32,21 @@ void main() {
     });
   });
 
+  group('Decimal', () {
+    test('Value is set', () {
+      final entity = DecimalDataEntity(47.11);
+
+      expect(entity.value, 47.11);
+      expect(entity.schemaValue, 47.11);
+    });
+
+    test('Default is null', () {
+      final entity = StringDataEntity();
+
+      expect(entity.value, null);
+    });
+  });
+
   group('Date', () {
     test('Value is set', () {
       final date = DateTime(
@@ -105,7 +120,7 @@ void main() {
 
   group('Enum', () {
     test('Value is set', () {
-      final value = 'value';
+      const value = 'value';
       final values = ['value', 'otherValue'];
       final entity = EnumDataEntity(value: value, options: values);
 

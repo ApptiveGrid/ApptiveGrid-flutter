@@ -4,9 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Equality', () {
     test('From Json equals direct', () {
-      final id = 'id';
+      const id = 'id';
       final field = GridField('fieldId', 'fieldName', DataType.text);
-      final value = 'value';
+      const value = 'value';
       final entries = <GridEntry>[
         GridEntry(field, StringDataEntity(value)),
       ];

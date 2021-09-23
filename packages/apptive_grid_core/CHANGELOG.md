@@ -1,3 +1,34 @@
+## [0.4.3]
+* Update Lints
+
+## [0.4.2]
+* Adding support for Decimal Data
+
+## [0.4.1]
+* Make [FormData.name] optional
+
+## [0.4.0]
+* **BREAKING CHANGE** `FormData` and `Grid` now take named constructor arguments to avoid confusion. Before the order of arguments did not have `schema` at the same part
+* Add `name` to `FormData`
+
+## [0.3.2]
+* Add support to get a EditLink for a EntityUri and a given formId
+* Add call in ApptiveGridClient to update Environment
+
+## [0.3.1]
+* Add support for Authenticating with an API Key
+
+## [0.3.0]
+* AUTHENTICATION CHANGES
+    * In order to fully support Google OAuth you need to add a custom redirect Scheme to ApptiveGridAuthenticationOptions. Also make sure your App can be opened via a deeplink with that scheme
+
+## [0.2.7]
+* Support CrossReferences in Forms. This still requires Authentication however it is already a first look at how this will look and work
+* Call ApptiveGridClient.logout() to logout the user
+
+## [0.2.6+2]
+* Send empty/null values when submitting a Form. Enables sending non-selected enum values
+
 ## [0.2.6+1]
 * Catch more Errors to cache a FormAction
 

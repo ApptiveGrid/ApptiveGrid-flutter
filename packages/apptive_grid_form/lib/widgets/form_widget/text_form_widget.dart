@@ -3,7 +3,10 @@ part of apptive_grid_form_widgets;
 /// FormComponent Widget to display a [StringFormComponent]
 class TextFormWidget extends StatefulWidget {
   /// Creates a [TextFormField] to show and edit Text contained in [component]
-  const TextFormWidget({Key? key, required this.component}) : super(key: key);
+  const TextFormWidget({
+    Key? key,
+    required this.component,
+  }) : super(key: key);
 
   /// Component this Widget should reflect
   final StringFormComponent component;
@@ -46,6 +49,7 @@ class _TextFormWidgetState extends State<TextFormWidget> {
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       expands: widget.component.options.multi,
+      maxLines: widget.component.options.multi ? null : 1,
       decoration: InputDecoration(
         helperText: widget.component.options.description,
         helperMaxLines: 100,

@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Components', () {
     test('Text', () {
-      final options = TextComponentOptions(
+      const options = TextComponentOptions(
         multi: false,
         placeholder: 'Placeholder',
         label: 'Label',
@@ -22,7 +22,7 @@ void main() {
     });
 
     test('Number', () {
-      final options = TextComponentOptions(
+      const options = TextComponentOptions(
         multi: false,
         placeholder: 'Placeholder',
         label: 'Label',
@@ -37,6 +37,24 @@ void main() {
       );
 
       expect(IntegerFormComponent.fromJson(component.toJson()), component);
+    });
+
+    test('Decimal', () {
+      const options = TextComponentOptions(
+        multi: false,
+        placeholder: 'Placeholder',
+        label: 'Label',
+        description: 'Description',
+      );
+      final component = DecimalFormComponent(
+        fieldId: 'id',
+        property: 'Property',
+        data: DecimalDataEntity(30.0),
+        options: options,
+        required: true,
+      );
+
+      expect(DecimalFormComponent.fromJson(component.toJson()), component);
     });
 
     test('Date', () {
@@ -79,8 +97,8 @@ void main() {
     });
 
     test('Enum', () {
-      final property = 'property';
-      final id = 'id';
+      const property = 'property';
+      const id = 'id';
 
       final schema = {
         'properties': {
@@ -104,14 +122,19 @@ void main() {
         fieldId: id,
         property: property,
         data: EnumDataEntity(
-            value: 'AG', options: ['GmbH', 'AG', 'Freiberuflich']),
+          value: 'AG',
+          options: ['GmbH', 'AG', 'Freiberuflich'],
+        ),
         required: true,
       );
 
       expect(
-          EnumFormComponent.fromJson(
-              jsonComponent.toJson(), schema['properties']![id]),
-          component);
+        EnumFormComponent.fromJson(
+          jsonComponent.toJson(),
+          schema['properties']![id],
+        ),
+        component,
+      );
     });
   });
 }

@@ -11,7 +11,7 @@ class SpaceUri extends ApptiveGridUri {
   /// Creates a new [SpaceUri] based on a string [uri]
   /// Main usage of this is for [SpaceUri] retrieved through other Api Calls
   factory SpaceUri.fromUri(String uri) {
-    final regex = r'/api/users/(\w+)/spaces/(\w+)\b';
+    const regex = r'/api/users/(\w+)/spaces/(\w+)\b';
     final matches = RegExp(regex).allMatches(uri);
     if (matches.isEmpty || matches.elementAt(0).groupCount != 2) {
       throw ArgumentError('Could not parse SpaceUri $uri');
@@ -48,7 +48,11 @@ class SpaceUri extends ApptiveGridUri {
 class Space {
   /// Creates a new Space Model with a certain [id] and [name]
   /// [grids] is [List<GridUri>] pointing to the [Grid]s contained in this [Space]
-  Space({required this.id, required this.name, required this.grids});
+  Space({
+    required this.id,
+    required this.name,
+    required this.grids,
+  });
 
   /// Deserializes [json] into a [Space] Object
   Space.fromJson(Map<String, dynamic> json)

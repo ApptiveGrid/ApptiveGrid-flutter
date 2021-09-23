@@ -132,18 +132,18 @@ class ApptiveGridFormData extends StatefulWidget {
   /// Creates a Widget to display [formData]
   ///
   /// if [error] is not null it will display a error
-  const ApptiveGridFormData(
-      {Key? key,
-      this.formData,
-      this.error,
-      this.titleStyle,
-      this.contentPadding,
-      this.titlePadding,
-      this.hideTitle = false,
-      this.onActionSuccess,
-      this.onError,
-      this.triggerReload})
-      : super(key: key);
+  const ApptiveGridFormData({
+    Key? key,
+    this.formData,
+    this.error,
+    this.titleStyle,
+    this.contentPadding,
+    this.titlePadding,
+    this.hideTitle = false,
+    this.onActionSuccess,
+    this.onError,
+    this.triggerReload,
+  }) : super(key: key);
 
   /// [FormData] that should be displayed
   final FormData? formData;
@@ -197,14 +197,28 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   @override
   void didUpdateWidget(covariant ApptiveGridFormData oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _formData = widget.formData;
-    _error = widget.error;
+    _updateView();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _client = ApptiveGrid.getClient(context);
+  }
+
+  void _updateView({
+    bool resetFormData = true,
+  }) {
+    setState(() {
+      if (resetFormData) {
+        _formData = widget.formData != null
+            ? FormData.fromJson(widget.formData!.toJson())
+            : null;
+      }
+      _error = widget.error;
+      _success = false;
+      _saved = false;
+    });
   }
 
   @override
@@ -253,14 +267,15 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           } else if (index < data.components.length + 1) {
             final componentIndex = index - 1;
             return Padding(
-                padding: widget.contentPadding ?? _defaultPadding,
-                child: fromModel(data.components[componentIndex]));
+              padding: widget.contentPadding ?? _defaultPadding,
+              child: fromModel(data.components[componentIndex]),
+            );
           } else {
             final actionIndex = index - 1 - data.components.length;
             return ActionButton(
               action: data.actions[actionIndex],
               onPressed: _performAction,
-              child: Text('Send'),
+              child: const Text('Send'),
             );
           }
         },
@@ -273,11 +288,12 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       padding: const EdgeInsets.all(32.0),
       children: [
         AspectRatio(
-            aspectRatio: 1,
-            child: Lottie.asset(
-              'packages/apptive_grid_form/assets/success.json',
-              repeat: false,
-            )),
+          aspectRatio: 1,
+          child: Lottie.asset(
+            'packages/apptive_grid_form/assets/success.json',
+            repeat: false,
+          ),
+        ),
         Text(
           'Thank You!',
           textAlign: TextAlign.center,
@@ -285,16 +301,12 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         ),
         Center(
           child: TextButton(
-              onPressed: () {
-                widget.triggerReload?.call();
-                setState(() {
-                  _success = false;
-                  _error = null;
-                  _saved = false;
-                  _formData = widget.formData;
-                });
-              },
-              child: Text('Send Additional Answer')),
+            onPressed: () {
+              widget.triggerReload?.call();
+              _updateView();
+            },
+            child: const Text('Send Additional Answer'),
+          ),
         )
       ],
     );
@@ -305,11 +317,12 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       padding: const EdgeInsets.all(32.0),
       children: [
         AspectRatio(
-            aspectRatio: 1,
-            child: Lottie.asset(
-              'packages/apptive_grid_form/assets/saved.json',
-              repeat: false,
-            )),
+          aspectRatio: 1,
+          child: Lottie.asset(
+            'packages/apptive_grid_form/assets/saved.json',
+            repeat: false,
+          ),
+        ),
         Text(
           'The Form was saved and will be send at the next opportunity',
           textAlign: TextAlign.center,
@@ -317,16 +330,12 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         ),
         Center(
           child: TextButton(
-              onPressed: () {
-                widget.triggerReload?.call();
-                setState(() {
-                  _success = false;
-                  _error = null;
-                  _saved = false;
-                  _formData = widget.formData;
-                });
-              },
-              child: Text('Send Additional Answer')),
+            onPressed: () {
+              widget.triggerReload?.call();
+              _updateView();
+            },
+            child: const Text('Send Additional Answer'),
+          ),
         )
       ],
     );
@@ -337,11 +346,12 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       padding: const EdgeInsets.all(32.0),
       children: [
         AspectRatio(
-            aspectRatio: 1,
-            child: Lottie.asset(
-              'packages/apptive_grid_form/assets/error.json',
-              repeat: false,
-            )),
+          aspectRatio: 1,
+          child: Lottie.asset(
+            'packages/apptive_grid_form/assets/error.json',
+            repeat: false,
+          ),
+        ),
         Text(
           'Oops! - Error',
           textAlign: TextAlign.center,
@@ -349,15 +359,12 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         ),
         Center(
           child: TextButton(
-              onPressed: () {
-                widget.triggerReload?.call();
-                setState(() {
-                  _success = false;
-                  _error = null;
-                  _saved = false;
-                });
-              },
-              child: Text('Back to Form')),
+            onPressed: () {
+              widget.triggerReload?.call();
+              _updateView(resetFormData: false);
+            },
+            child: const Text('Back to Form'),
+          ),
         )
       ],
     );

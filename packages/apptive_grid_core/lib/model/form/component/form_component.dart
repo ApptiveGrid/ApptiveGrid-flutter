@@ -56,7 +56,8 @@ abstract class FormComponent<T extends DataEntity> {
     final properties = schema['properties'][json['fieldId']];
     if (properties == null) {
       throw ArgumentError(
-          'No Schema Entry found for ${json['property']} with id ${json['fieldId']}');
+        'No Schema Entry found for ${json['property']} with id ${json['fieldId']}',
+      );
     }
     final dataType = dataTypeFromSchemaProperty(schemaProperty: properties);
     switch (dataType) {
@@ -74,6 +75,8 @@ abstract class FormComponent<T extends DataEntity> {
         return EnumFormComponent.fromJson(json, properties);
       case DataType.crossReference:
         return CrossReferenceFormComponent.fromJson(json, properties);
+      case DataType.decimal:
+        return DecimalFormComponent.fromJson(json);
     }
   }
 }

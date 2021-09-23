@@ -10,7 +10,7 @@ void main() {
         data: StringDataEntity(),
         property: 'Property',
         required: false,
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -24,12 +24,26 @@ void main() {
         data: IntegerDataEntity(),
         property: 'Property',
         required: false,
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
       );
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, NumberFormWidget);
+      expect(widget.runtimeType, IntegerFormWidget);
+    });
+
+    test('DecimalComponent', () {
+      final component = DecimalFormComponent(
+        fieldId: 'id',
+        data: DecimalDataEntity(),
+        property: 'Property',
+        required: false,
+        options: const TextComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, DecimalFormWidget);
     });
 
     test('DateComponent', () {
@@ -38,7 +52,7 @@ void main() {
         data: DateDataEntity(),
         property: 'Property',
         required: false,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -52,7 +66,7 @@ void main() {
         data: DateTimeDataEntity(),
         property: 'Property',
         required: false,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -66,7 +80,7 @@ void main() {
         data: BooleanDataEntity(),
         property: 'Property',
         required: false,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -80,12 +94,28 @@ void main() {
         data: EnumDataEntity(),
         property: 'Property',
         required: false,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
 
       final widget = fromModel(component);
 
       expect(widget.runtimeType, EnumFormWidget);
+    });
+
+    test('CrossReferenceComponent', () {
+      final component = CrossReferenceFormComponent(
+        fieldId: 'id',
+        data: CrossReferenceDataEntity(
+          gridUri: GridUri(user: 'user', space: 'space', grid: 'grid'),
+        ),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, CrossReferenceFormWidget);
     });
 
     test('ArgumentError', () {
@@ -98,7 +128,7 @@ void main() {
 
 class UnknownComponent extends FormComponent<UnknownDataEntity> {
   @override
-  FormComponentOptions get options => FormComponentOptions();
+  FormComponentOptions get options => const FormComponentOptions();
 
   @override
   String get property => 'Property';
@@ -114,6 +144,8 @@ class UnknownComponent extends FormComponent<UnknownDataEntity> {
 }
 
 class UnknownDataEntity extends DataEntity<String, String> {
+  UnknownDataEntity([String? value]) : super(value);
+
   @override
   String? get schemaValue => null;
 }

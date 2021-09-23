@@ -22,8 +22,10 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(true,
-          ApptiveGrid.getClient(context, listen: false) is ApptiveGridClient);
+      expect(
+        true,
+        ApptiveGrid.getClient(context, listen: false) is ApptiveGridClient,
+      );
     });
   });
 
@@ -31,7 +33,7 @@ void main() {
     group('Environment', () {
       testWidgets('Alpha', (tester) async {
         late BuildContext context;
-        final options = ApptiveGridOptions(
+        const options = ApptiveGridOptions(
           environment: ApptiveGridEnvironment.alpha,
         );
         final target = ApptiveGrid(
@@ -53,7 +55,7 @@ void main() {
 
       testWidgets('Beta', (tester) async {
         late BuildContext context;
-        final options = ApptiveGridOptions(
+        const options = ApptiveGridOptions(
           environment: ApptiveGridEnvironment.beta,
         );
         final target = ApptiveGrid(
@@ -75,7 +77,7 @@ void main() {
 
       testWidgets('Production', (tester) async {
         late BuildContext context;
-        final options = ApptiveGridOptions(
+        const options = ApptiveGridOptions(
           environment: ApptiveGridEnvironment.production,
         );
         final target = ApptiveGrid(
@@ -115,10 +117,10 @@ void main() {
 
       testWidgets('Authentication', (tester) async {
         late BuildContext context;
-        final authentication =
+        const authentication =
             ApptiveGridAuthenticationOptions(autoAuthenticate: true);
         final target = ApptiveGrid(
-          options: ApptiveGridOptions(
+          options: const ApptiveGridOptions(
             authenticationOptions: authentication,
           ),
           child: Builder(

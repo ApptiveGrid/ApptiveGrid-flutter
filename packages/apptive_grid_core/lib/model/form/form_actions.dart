@@ -39,7 +39,10 @@ class FormAction {
 /// Wrapper class to use in [ApptiveGridCache]
 class ActionItem {
   /// Creates a new Action Item
-  ActionItem({required this.action, required this.data});
+  ActionItem({
+    required this.action,
+    required this.data,
+  });
 
   /// Creates a ActionItem base on a [json] map
   ActionItem.fromJson(Map<String, dynamic> json)

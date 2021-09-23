@@ -39,9 +39,18 @@ void main() {
     );
 
     final title = 'Title';
-    when(() => client.loadGrid(
-            gridUri: GridUri(user: user, space: space, grid: gridId)))
-        .thenAnswer((_) async => Grid(title, null, [], []));
+    when(
+      () => client.loadGrid(
+        gridUri: GridUri(user: user, space: space, grid: gridId),
+      ),
+    ).thenAnswer(
+      (_) async => Grid(
+        name: title,
+        schema: null,
+        fields: [],
+        rows: [],
+      ),
+    );
 
     await tester.pumpWidget(target);
     await tester.pump();
@@ -58,7 +67,12 @@ void main() {
           space: space,
           grid: gridId,
         ),
-        initialData: Grid('Initial Title', null, [], []),
+        initialData: Grid(
+          name: 'Initial Title',
+          schema: null,
+          fields: [],
+          rows: [],
+        ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
@@ -70,9 +84,18 @@ void main() {
     );
 
     final title = 'Title';
-    when(() => client.loadGrid(
-            gridUri: GridUri(user: user, space: space, grid: gridId)))
-        .thenAnswer((_) async => Grid(title, null, [], []));
+    when(
+      () => client.loadGrid(
+        gridUri: GridUri(user: user, space: space, grid: gridId),
+      ),
+    ).thenAnswer(
+      (_) async => Grid(
+        name: title,
+        schema: null,
+        fields: [],
+        rows: [],
+      ),
+    );
 
     await tester.pumpWidget(target);
 
@@ -101,9 +124,11 @@ void main() {
       ),
     );
 
-    when(() => client.loadGrid(
-            gridUri: GridUri(user: user, space: space, grid: gridId)))
-        .thenAnswer((_) => Future.error(''));
+    when(
+      () => client.loadGrid(
+        gridUri: GridUri(user: user, space: space, grid: gridId),
+      ),
+    ).thenAnswer((_) => Future.error(''));
 
     await tester.pumpWidget(target);
     await tester.pump();
@@ -133,16 +158,28 @@ void main() {
     );
 
     final title = 'Title';
-    when(() => client.loadGrid(
-            gridUri: GridUri(user: user, space: space, grid: gridId)))
-        .thenAnswer((_) async => Grid(title, null, [], []));
+    when(
+      () => client.loadGrid(
+        gridUri: GridUri(user: user, space: space, grid: gridId),
+      ),
+    ).thenAnswer(
+      (_) async => Grid(
+        name: title,
+        schema: null,
+        fields: [],
+        rows: [],
+      ),
+    );
 
     await tester.pumpWidget(target);
     await tester.pump();
 
     await key.currentState!.reload();
 
-    verify(() => client.loadGrid(
-        gridUri: GridUri(user: user, space: space, grid: gridId))).called(2);
+    verify(
+      () => client.loadGrid(
+        gridUri: GridUri(user: user, space: space, grid: gridId),
+      ),
+    ).called(2);
   });
 }

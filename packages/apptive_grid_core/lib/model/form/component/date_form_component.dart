@@ -3,12 +3,13 @@ part of apptive_grid_model;
 /// Model for a [FormComponent] representing [DateDataEntity]
 class DateFormComponent extends FormComponent<DateDataEntity> {
   /// Creates a FormComponent
-  DateFormComponent(
-      {required this.property,
-      required this.data,
-      required this.fieldId,
-      this.options = const FormComponentOptions(),
-      this.required = false});
+  DateFormComponent({
+    required this.property,
+    required this.data,
+    required this.fieldId,
+    this.options = const FormComponentOptions(),
+    this.required = false,
+  });
 
   /// Deserializes [json] into a [FormComponent]
   DateFormComponent.fromJson(Map<String, dynamic> json)

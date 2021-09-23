@@ -3,7 +3,10 @@ part of apptive_grid_model;
 /// Abstract class for additional options for a [FormComponent]
 class FormComponentOptions {
   /// Enables const constructors
-  const FormComponentOptions({this.description, this.label});
+  const FormComponentOptions({
+    this.description,
+    this.label,
+  });
 
   /// Deserializes [json] into [TextComponentOptions]
   FormComponentOptions.fromJson(Map<String, dynamic> json)
@@ -30,7 +33,7 @@ class FormComponentOptions {
   @override
   bool operator ==(Object other) {
     return other is FormComponentOptions &&
-        !(other is TextComponentOptions) &&
+        other is! TextComponentOptions &&
         description == other.description &&
         label == other.label;
   }
@@ -42,29 +45,36 @@ class FormComponentOptions {
 /// [FormComponentOptions] for Text Based Components
 class TextComponentOptions extends FormComponentOptions {
   /// Creates Options
-  TextComponentOptions(
-      {this.multi = false, this.placeholder, this.description, this.label});
+  const TextComponentOptions({
+    this.multi = false,
+    this.placeholder,
+    String? description,
+    String? label,
+  }) : super(
+          description: description,
+          label: label,
+        );
 
   /// Deserializes [json] into [TextComponentOptions]
-  TextComponentOptions.fromJson(Map<String, dynamic> json)
-      : multi = json['multi'] ?? false,
-        placeholder = json['placeholder'],
-        description = json['description'],
-        label = json['label'];
+  factory TextComponentOptions.fromJson(Map<String, dynamic> json) {
+    final jsonMulti = json['multi'] ?? false;
+    final jsonPlaceholder = json['placeholder'];
+    final jsonDescription = json['description'];
+    final jsonLabel = json['label'];
 
-  /// Determines if the Textfield is growable defaults to false
+    return TextComponentOptions(
+      multi: jsonMulti,
+      placeholder: jsonPlaceholder,
+      description: jsonDescription,
+      label: jsonLabel,
+    );
+  }
+
+  /// Determines if the TextField is growable defaults to false
   final bool multi;
 
   /// Placeholder Text
   final String? placeholder;
-
-  /// Description that describes the Component
-  @override
-  final String? description;
-
-  /// Label to be used instead of [FormComponent.property]
-  @override
-  final String? label;
 
   /// Serializes [TextComponentOptions] to json
   @override

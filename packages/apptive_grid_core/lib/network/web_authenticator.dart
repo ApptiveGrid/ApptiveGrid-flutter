@@ -1,8 +1,10 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'dart:convert';
 import 'dart:html';
 import 'package:http/http.dart' as http;
 
-import 'package:openid_client/openid_client.dart';
+import 'package:openid_client_fork/openid_client.dart';
 
 /// Custom Authenticator for handling Authentication for Flutter Web
 class Authenticator {
@@ -16,7 +18,12 @@ class Authenticator {
     Iterable<String> scopes = const [],
     Uri? redirectUri,
   }) : _authenticator = _CustomAuthenticator(
-          client,
+          Client(
+            client.issuer,
+            'web',
+            clientSecret: client.clientSecret,
+            httpClient: client.httpClient,
+          ),
           scopes: scopes,
           redirectedUri: redirectUri.toString(),
         );
@@ -33,29 +40,43 @@ class Authenticator {
       return credential;
     }
   }
+
+  /// Process a Response retrieved from an outside Authentication.
+  /// No-Op For Web implementation
+  Future<void> processResult(Map<String, String> result) async {}
 }
 
 /// Custom Implementation based on Authenticator from openid_client_browser to match specific criteria needed for ApptiveGrid
 class _CustomAuthenticator {
-  _CustomAuthenticator._(this.flow,
-      {String? redirectedUri, required Client client})
-      : credential = _credentialFromUri(flow,
-            redirectedUri: redirectedUri, client: client);
+  _CustomAuthenticator._(
+    this.flow, {
+    String? redirectedUri,
+    required Client client,
+  }) : credential = _credentialFromUri(
+          flow,
+          redirectedUri: redirectedUri,
+          client: client,
+        );
 
-  _CustomAuthenticator(client,
-      {Iterable<String> scopes = const [], String? redirectedUri})
-      : this._(
-            Flow.authorizationCode(client,
-                state: window.localStorage['openid_client:state'])
-              ..scopes.addAll(scopes)
-              ..redirectUri = Uri(
-                host: Uri.base.host,
-                scheme: Uri.base.scheme,
-                port: Uri.base.port,
-                fragment: null,
-              ),
-            redirectedUri: redirectedUri,
-            client: client);
+  _CustomAuthenticator(
+    client, {
+    Iterable<String> scopes = const [],
+    String? redirectedUri,
+  }) : this._(
+          Flow.authorizationCode(
+            client,
+            state: window.localStorage['openid_client:state'],
+          )
+            ..scopes.addAll(scopes)
+            ..redirectUri = Uri(
+              host: Uri.base.host,
+              scheme: Uri.base.scheme,
+              port: Uri.base.port,
+              fragment: null,
+            ),
+          redirectedUri: redirectedUri,
+          client: client,
+        );
 
   final Future<Credential?> credential;
 
@@ -82,8 +103,11 @@ class _CustomAuthenticator {
     window.localStorage.remove('openid_client:auth');
   }
 
-  static Future<Credential?> _credentialFromUri(Flow flow,
-      {String? redirectedUri, required Client client}) async {
+  static Future<Credential?> _credentialFromUri(
+    Flow flow, {
+    String? redirectedUri,
+    required Client client,
+  }) async {
     Map? q;
     if (window.localStorage.containsKey('openid_client:credential')) {
       /// Saved Credentials

@@ -1,4 +1,9 @@
-include: package:pedantic/analysis_options.yaml
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - '**/example/lib/*.dart'
+    - '**/grid_row_dropdown.dart'
 
 linter:
   rules:
@@ -6,3 +11,4 @@ linter:
     sort_constructors_first: true
     hash_and_equals: true
     avoid_print: true
+    require_trailing_commas: true

@@ -13,12 +13,16 @@ void main() {
     });
 
     test('Malformatted Uri throws ArgumentError', () {
-      final uri = '/api/users/123456/spaces/asdfg/';
+      const uri = '/api/users/123456/spaces/asdfg/';
       expect(
-          () => GridUri.fromUri(uri),
-          throwsA(predicate<ArgumentError>(
-              (e) => e.message == 'Could not parse GridUri $uri',
-              'ArgumentError with specific Message')));
+        () => GridUri.fromUri(uri),
+        throwsA(
+          predicate<ArgumentError>(
+            (e) => e.message == 'Could not parse GridUri $uri',
+            'ArgumentError with specific Message',
+          ),
+        ),
+      );
     });
   });
 
