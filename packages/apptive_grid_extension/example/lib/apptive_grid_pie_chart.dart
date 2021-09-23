@@ -76,25 +76,25 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
                 validator: (field) => field.type == DataType.selectionBox,
               ),
             ),
-          if(_field != null)
+          if (_field != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_field!.name,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline4,),
-                  const SizedBox(height: 16,),
+                  Text(
+                    _field!.name,
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   PieChart(
                     dataMap: _calculateDataMap(),
                     legendOptions: LegendOptions(
                         showLegendsInRow: true,
-                        legendPosition: LegendPosition.bottom
-                    ),
+                        legendPosition: LegendPosition.bottom),
                   ),
                 ],
               ),
@@ -107,26 +107,33 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
   Map<String, double> _calculateDataMap() {
     final rows = widget.grid.rows;
 
-    final enumValues = (rows[0].entries
-        .firstWhere((element) => element.field == _field)
-        .data as EnumDataEntity).options;
+    final enumValues = (rows[0]
+            .entries
+            .firstWhere((element) => element.field == _field)
+            .data as EnumDataEntity)
+        .options;
 
-    return Map.fromEntries(enumValues.map((value) =>
-        MapEntry(value, rows
+    return Map.fromEntries(enumValues.map((value) => MapEntry(
+        value,
+        rows
             .where((row) =>
-        (row.entries.firstWhere((entry) =>
-        entry.field == _field).data as EnumDataEntity).value == value)
+                (row.entries.firstWhere((entry) => entry.field == _field).data
+                        as EnumDataEntity)
+                    .value ==
+                value)
             .length
             .toDouble())));
   }
 }
 
 class FieldSelector extends StatefulWidget {
-  const FieldSelector({Key? key,
-    required this.label,
-    required this.onSelected,
-    required this.grid,
-    this.value, required this.validator})
+  const FieldSelector(
+      {Key? key,
+      required this.label,
+      required this.onSelected,
+      required this.grid,
+      this.value,
+      required this.validator})
       : super(key: key);
 
   final String label;
@@ -166,7 +173,7 @@ class _FieldSelectorState extends State<FieldSelector> {
             items: widget.grid.fields
                 .where(widget.validator)
                 .map<DropdownMenuItem<GridField>>((e) =>
-                DropdownMenuItem<GridField>(value: e, child: Text(e.name)))
+                    DropdownMenuItem<GridField>(value: e, child: Text(e.name)))
                 .toList(),
           ),
         ),
