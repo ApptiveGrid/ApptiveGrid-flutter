@@ -43,28 +43,35 @@ class FormComponentOptions {
 class TextComponentOptions extends FormComponentOptions {
   /// Creates Options
   const TextComponentOptions(
-      {this.multi = false, this.placeholder, this.description, this.label});
+      {this.multi = false,
+      this.placeholder,
+      String? description,
+      String? label})
+      : super(
+          description: description,
+          label: label,
+        );
 
   /// Deserializes [json] into [TextComponentOptions]
-  TextComponentOptions.fromJson(Map<String, dynamic> json)
-      : multi = json['multi'] ?? false,
-        placeholder = json['placeholder'],
-        description = json['description'],
-        label = json['label'];
+  factory TextComponentOptions.fromJson(Map<String, dynamic> json) {
+    final jsonMulti = json['multi'] ?? false;
+    final jsonPlaceholder = json['placeholder'];
+    final jsonDescription = json['description'];
+    final jsonLabel = json['label'];
 
-  /// Determines if the Textfield is growable defaults to false
+    return TextComponentOptions(
+      multi: jsonMulti,
+      placeholder: jsonPlaceholder,
+      description: jsonDescription,
+      label: jsonLabel,
+    );
+  }
+
+  /// Determines if the TextField is growable defaults to false
   final bool multi;
 
   /// Placeholder Text
   final String? placeholder;
-
-  /// Description that describes the Component
-  @override
-  final String? description;
-
-  /// Label to be used instead of [FormComponent.property]
-  @override
-  final String? label;
 
   /// Serializes [TextComponentOptions] to json
   @override
