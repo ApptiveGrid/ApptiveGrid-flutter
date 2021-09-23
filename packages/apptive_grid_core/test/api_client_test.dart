@@ -567,7 +567,7 @@ void main() {
 
     test('Sending Throws Exception, Saves Action', () async {
       when(() => httpClient.send(any()))
-          .thenThrow(SocketException('Socket Exception'));
+          .thenThrow(const SocketException('Socket Exception'));
 
       await expectLater(
           (await client.performAction(action, data)).statusCode, 400);
@@ -642,7 +642,7 @@ void main() {
     setUp(() {
       httpClient = MockHttpClient();
       initialOptions =
-          ApptiveGridOptions(environment: ApptiveGridEnvironment.alpha);
+          const ApptiveGridOptions(environment: ApptiveGridEnvironment.alpha);
       authenticator = ApptiveGridAuthenticator(
           options: initialOptions, httpClient: httpClient);
       client = ApptiveGridClient.fromClient(httpClient,

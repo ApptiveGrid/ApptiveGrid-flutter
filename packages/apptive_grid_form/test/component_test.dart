@@ -57,7 +57,7 @@ void main() {
         fieldId: 'id',
         data: StringDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -107,7 +107,7 @@ void main() {
         fieldId: 'id',
         data: StringDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: true,
       );
       final formData = FormData(
@@ -151,7 +151,7 @@ void main() {
         fieldId: 'id',
         data: DateTimeDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -213,7 +213,7 @@ void main() {
         fieldId: 'id',
         data: DateTimeDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -279,7 +279,7 @@ void main() {
         fieldId: 'id',
         data: DateTimeDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: true,
       );
       final formData = FormData(
@@ -323,7 +323,7 @@ void main() {
         fieldId: 'id',
         data: DateDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -384,7 +384,7 @@ void main() {
         fieldId: 'id',
         data: DateDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: true,
       );
       final formData = FormData(
@@ -428,7 +428,7 @@ void main() {
         fieldId: 'id',
         data: IntegerDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -474,7 +474,7 @@ void main() {
         fieldId: 'id',
         data: IntegerDataEntity(123),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -510,7 +510,7 @@ void main() {
         fieldId: 'id',
         data: IntegerDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: true,
       );
       final formData = FormData(
@@ -554,7 +554,7 @@ void main() {
         fieldId: 'id',
         data: DecimalDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -600,7 +600,7 @@ void main() {
         fieldId: 'id',
         data: DecimalDataEntity(47.11),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -636,7 +636,7 @@ void main() {
         fieldId: 'id',
         data: DecimalDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: true,
       );
       final formData = FormData(
@@ -680,7 +680,7 @@ void main() {
         fieldId: 'id',
         data: BooleanDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -730,7 +730,7 @@ void main() {
         fieldId: 'id',
         data: BooleanDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: true,
       );
       final formData = FormData(
@@ -774,7 +774,7 @@ void main() {
         fieldId: 'id',
         data: EnumDataEntity(value: 'value', options: ['value', 'newValue']),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -828,7 +828,7 @@ void main() {
         fieldId: 'id',
         data: EnumDataEntity(options: ['value']),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: true,
       );
       final formData = FormData(

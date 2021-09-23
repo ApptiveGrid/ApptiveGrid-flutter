@@ -272,7 +272,7 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             return ActionButton(
               action: data.actions[actionIndex],
               onPressed: _performAction,
-              child: Text('Send'),
+              child: const Text('Send'),
             );
           }
         },
@@ -301,7 +301,7 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 widget.triggerReload?.call();
                 _updateView();
               },
-              child: Text('Send Additional Answer')),
+              child: const Text('Send Additional Answer')),
         )
       ],
     );
@@ -328,7 +328,7 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 widget.triggerReload?.call();
                 _updateView();
               },
-              child: Text('Send Additional Answer')),
+              child: const Text('Send Additional Answer')),
         )
       ],
     );
@@ -355,7 +355,7 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 widget.triggerReload?.call();
                 _updateView(resetFormData: false);
               },
-              child: Text('Back to Form')),
+              child: const Text('Back to Form')),
         )
       ],
     );

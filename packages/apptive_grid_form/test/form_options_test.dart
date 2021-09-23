@@ -12,7 +12,7 @@ void main() {
         fieldId: 'id',
         data: BooleanDataEntity(),
         property: property,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
       final target = TestApp(
         child: CheckBoxFormWidget(
@@ -35,7 +35,7 @@ void main() {
         data: BooleanDataEntity(),
         property: property,
         options:
-            FormComponentOptions(label: customLabel, description: description),
+            const FormComponentOptions(label: customLabel, description: description),
       );
       final target = TestApp(
         child: CheckBoxFormWidget(
@@ -58,7 +58,7 @@ void main() {
         fieldId: 'id',
         data: DateDataEntity(),
         property: property,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
       final target = TestApp(
         child: DateFormWidget(
@@ -81,7 +81,7 @@ void main() {
         data: DateDataEntity(),
         property: property,
         options:
-            FormComponentOptions(label: customLabel, description: description),
+            const FormComponentOptions(label: customLabel, description: description),
       );
       final target = TestApp(
         child: DateFormWidget(
@@ -104,7 +104,7 @@ void main() {
         fieldId: 'id',
         data: DateTimeDataEntity(),
         property: property,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
       final target = TestApp(
         child: DateTimeFormWidget(
@@ -127,7 +127,7 @@ void main() {
         data: DateTimeDataEntity(),
         property: property,
         options:
-            FormComponentOptions(label: customLabel, description: description),
+            const FormComponentOptions(label: customLabel, description: description),
       );
       final target = TestApp(
         child: DateTimeFormWidget(
@@ -150,7 +150,7 @@ void main() {
         fieldId: 'id',
         data: EnumDataEntity(),
         property: property,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
       final target = TestApp(
         child: EnumFormWidget(
@@ -173,7 +173,7 @@ void main() {
         data: EnumDataEntity(),
         property: property,
         options:
-            FormComponentOptions(label: customLabel, description: description),
+            const FormComponentOptions(label: customLabel, description: description),
       );
       final target = TestApp(
         child: EnumFormWidget(

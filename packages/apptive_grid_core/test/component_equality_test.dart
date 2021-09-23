@@ -6,7 +6,7 @@ void main() {
       fieldId: 'textId',
       property: 'Property',
       data: StringDataEntity('Value'),
-      options: TextComponentOptions(
+      options: const TextComponentOptions(
         label: 'Label',
       ),
       required: true);
@@ -14,7 +14,7 @@ void main() {
       fieldId: 'textId',
       property: 'Property',
       data: StringDataEntity('Value'),
-      options: TextComponentOptions(
+      options: const TextComponentOptions(
         label: 'Label',
       ),
       required: true);
@@ -23,7 +23,7 @@ void main() {
       fieldId: 'textC',
       property: 'Property',
       data: StringDataEntity(),
-      options: TextComponentOptions(
+      options: const TextComponentOptions(
         label: 'Label',
       ),
       required: false);
@@ -32,7 +32,7 @@ void main() {
       fieldId: 'number',
       property: 'Property',
       data: IntegerDataEntity(),
-      options: TextComponentOptions(
+      options: const TextComponentOptions(
         label: 'Label',
       ),
       required: false);
@@ -41,7 +41,7 @@ void main() {
     fieldId: 'date',
     property: 'Property',
     data: DateDataEntity(),
-    options: FormComponentOptions(),
+    options: const FormComponentOptions(),
     required: false,
   );
 
@@ -49,7 +49,7 @@ void main() {
     fieldId: 'dateTime',
     property: 'Property',
     data: DateTimeDataEntity(),
-    options: FormComponentOptions(),
+    options: const FormComponentOptions(),
     required: false,
   );
 
@@ -57,7 +57,7 @@ void main() {
     fieldId: 'checkBox',
     property: 'Property',
     data: BooleanDataEntity(),
-    options: FormComponentOptions(),
+    options: const FormComponentOptions(),
     required: false,
   );
 

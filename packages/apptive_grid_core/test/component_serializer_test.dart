@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Components', () {
     test('Text', () {
-      final options = TextComponentOptions(
+      const options = TextComponentOptions(
         multi: false,
         placeholder: 'Placeholder',
         label: 'Label',
@@ -22,7 +22,7 @@ void main() {
     });
 
     test('Number', () {
-      final options = TextComponentOptions(
+      const options = TextComponentOptions(
         multi: false,
         placeholder: 'Placeholder',
         label: 'Label',
@@ -40,7 +40,7 @@ void main() {
     });
 
     test('Decimal', () {
-      final options = TextComponentOptions(
+      const options = TextComponentOptions(
         multi: false,
         placeholder: 'Placeholder',
         label: 'Label',

@@ -12,7 +12,7 @@ void main() {
         fieldId: 'id',
         data: StringDataEntity(),
         property: property,
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
       );
       final target = TestApp(
         child: TextFormWidget(
@@ -33,7 +33,7 @@ void main() {
         fieldId: 'id',
         data: StringDataEntity(),
         property: property,
-        options: TextComponentOptions(
+        options: const TextComponentOptions(
           label: customLabel,
         ),
       );
@@ -57,7 +57,7 @@ void main() {
         fieldId: 'id',
         data: IntegerDataEntity(),
         property: property,
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
       );
       final target = TestApp(
         child: IntegerFormWidget(
@@ -78,7 +78,7 @@ void main() {
         fieldId: 'id',
         data: IntegerDataEntity(),
         property: property,
-        options: TextComponentOptions(
+        options: const TextComponentOptions(
           label: customLabel,
         ),
       );

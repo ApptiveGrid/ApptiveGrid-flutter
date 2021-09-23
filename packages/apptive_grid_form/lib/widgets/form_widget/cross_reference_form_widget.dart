@@ -118,7 +118,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               icon: Icon(Icons.search),
               hintText: 'Search',
               border: InputBorder.none,
@@ -166,18 +166,18 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
   List<Widget> _selectedItems(BuildContext context) {
     if (_error != null) {
       return [
-        Center(
+        const Center(
           child: Text('ERROR'),
         )
       ];
     } else if (_grid == null) {
       return [
-        Center(
+        const Center(
           child: Text('Loading Grid...'),
         )
       ];
     } else {
-      final pleaseSelect = Text('Select an entry');
+      const pleaseSelect = Text('Select an entry');
       return [
         ...[pleaseSelect, pleaseSelect],
         ..._grid!.rows
@@ -217,9 +217,7 @@ class _RowMenuItemState extends State<_RowMenuItem> {
   @override
   Widget build(BuildContext context) {
     if (!widget.row.matchesFilter(_filter)) {
-      return SizedBox(
-        height: 0,
-      );
+      return const SizedBox();
     } else {
       final index = widget.grid.rows
           .where((row) => row.matchesFilter(_filter))

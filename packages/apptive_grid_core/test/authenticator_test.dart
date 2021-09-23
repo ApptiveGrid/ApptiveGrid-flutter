@@ -35,7 +35,7 @@ void main() {
 
   group('Header', () {
     test('Has Token returns Token', () {
-      authenticator = ApptiveGridAuthenticator(options: ApptiveGridOptions());
+      authenticator = ApptiveGridAuthenticator(options: const ApptiveGridOptions());
       final token = TokenResponse.fromJson(
           {'token_type': 'Bearer', 'access_token': '12345'});
       authenticator.setToken(token);
@@ -44,7 +44,7 @@ void main() {
     });
 
     test('Has no Token returns null', () {
-      authenticator = ApptiveGridAuthenticator(options: ApptiveGridOptions());
+      authenticator = ApptiveGridAuthenticator(options: const ApptiveGridOptions());
       expect(authenticator.header, null);
     });
   });
@@ -57,7 +57,7 @@ void main() {
       UrlLauncherPlatform.instance = urlLauncher;
 
       authenticator = ApptiveGridAuthenticator(
-        options: ApptiveGridOptions(
+        options: const ApptiveGridOptions(
           authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
           ),
@@ -84,13 +84,13 @@ void main() {
 
     test('Expired Token Refreshes', () async {
       final authenticator =
-          ApptiveGridAuthenticator(options: ApptiveGridOptions());
+          ApptiveGridAuthenticator(options: const ApptiveGridOptions());
 
       // Current token should be Expired
       final now = DateTime.now();
       final token = MockToken();
       when(() => token.expiresAt)
-          .thenReturn(now.subtract(Duration(seconds: 20)));
+          .thenReturn(now.subtract(const Duration(seconds: 20)));
       authenticator.setToken(token);
 
       // Mock AuthBackend Return a new Token
@@ -335,7 +335,7 @@ void main() {
 
       const customScheme = 'customscheme';
       authenticator = ApptiveGridAuthenticator(
-        options: ApptiveGridOptions(
+        options: const ApptiveGridOptions(
             authenticationOptions: ApptiveGridAuthenticationOptions(
           redirectScheme: customScheme,
         )),
@@ -377,15 +377,15 @@ void main() {
       final completerResult = await completer.future;
       final resultCredential = await completerResult
           .getTokenResponse()
-          .timeout(Duration(seconds: 5));
+          .timeout(const Duration(seconds: 5));
       final credentialToken =
-          await credential.getTokenResponse().timeout(Duration(seconds: 5));
+          await credential.getTokenResponse().timeout(const Duration(seconds: 5));
       expect(resultCredential, credentialToken);
     });
   });
 
   group('ApiKey Authentication', () {
-    final options = ApptiveGridOptions(
+    const options = ApptiveGridOptions(
         authenticationOptions: ApptiveGridAuthenticationOptions(
       apiKey: ApptiveGridApiKey(authKey: 'authKey', password: 'password'),
     ));

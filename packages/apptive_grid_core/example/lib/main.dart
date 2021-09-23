@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Add A ApptiveGrid Widget to your Widget Tree to enable ApptiveGrid Functionality
 void main() async {
-  final options = ApptiveGridOptions(
+  const options = ApptiveGridOptions(
       environment: ApptiveGridEnvironment.beta,
       authenticationOptions: ApptiveGridAuthenticationOptions(
         autoAuthenticate: true,

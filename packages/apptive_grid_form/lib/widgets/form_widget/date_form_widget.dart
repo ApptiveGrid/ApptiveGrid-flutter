@@ -35,7 +35,7 @@ class _DateFormWidgetState extends State<DateFormWidget> {
           initialDate: initialDate,
           firstDate: DateTime.fromMillisecondsSinceEpoch(0),
           lastDate: DateTime.fromMillisecondsSinceEpoch(
-              Duration(days: 100000000).inMilliseconds),
+              const Duration(days: 100000000).inMilliseconds),
         ).then((value) {
           if (value != null) {
             _formKey.currentState!.didChange(dateFormat.format(value));

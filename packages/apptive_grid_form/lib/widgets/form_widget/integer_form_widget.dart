@@ -52,7 +52,7 @@ class _IntegerFormWidgetState extends State<IntegerFormWidget> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       expands: widget.component.options.multi,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      keyboardType: TextInputType.numberWithOptions(signed: true),
+      keyboardType: const TextInputType.numberWithOptions(signed: true),
       decoration: InputDecoration(
         helperText: widget.component.options.description,
         helperMaxLines: 100,

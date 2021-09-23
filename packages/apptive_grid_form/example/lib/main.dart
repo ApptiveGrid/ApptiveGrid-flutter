@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(
     ApptiveGrid(
-      options: ApptiveGridOptions(
+      options: const ApptiveGridOptions(
           environment: ApptiveGridEnvironment.alpha,
           authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('ApptiveGrid Forms'),
+          title: const Text('ApptiveGrid Forms'),
         ),
         body: ApptiveGridForm(
           formUri: RedirectFormUri(form: 'YOUR_FORM_ID'),

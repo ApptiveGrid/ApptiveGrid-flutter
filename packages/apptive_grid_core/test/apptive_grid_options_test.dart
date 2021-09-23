@@ -10,13 +10,13 @@ void main() {
       const env1 = ApptiveGridEnvironment.alpha;
       const env2 = ApptiveGridEnvironment.production;
 
-      final authOptionsA = ApptiveGridAuthenticationOptions();
-      final authOptionsB =
+      const authOptionsA = ApptiveGridAuthenticationOptions();
+      const authOptionsB =
           ApptiveGridAuthenticationOptions(autoAuthenticate: true);
 
       final cache = MockApptiveGridCache();
 
-      final optionsA = ApptiveGridOptions(
+      const optionsA = ApptiveGridOptions(
           authenticationOptions: authOptionsA, environment: env1);
       final optionsB = optionsA.copyWith(
         environment: env2,
@@ -35,7 +35,7 @@ void main() {
     test('No op stays the same', () {
       const env1 = ApptiveGridEnvironment.alpha;
 
-      final authOptionsA = ApptiveGridAuthenticationOptions();
+      const authOptionsA = ApptiveGridAuthenticationOptions();
 
       final cache = MockApptiveGridCache();
 
@@ -48,10 +48,10 @@ void main() {
 
   group('Equality', () {
     test('Objects are equal', () {
-      final optionsA = ApptiveGridOptions(
+      const optionsA = ApptiveGridOptions(
         environment: ApptiveGridEnvironment.beta,
       );
-      final optionsB =
+      const optionsB =
           ApptiveGridOptions(environment: ApptiveGridEnvironment.beta);
 
       expect(optionsA, equals(optionsB));
@@ -59,10 +59,10 @@ void main() {
     });
 
     test('Objects are not equal', () {
-      final optionsA = ApptiveGridOptions(
+      const optionsA = ApptiveGridOptions(
         environment: ApptiveGridEnvironment.beta,
       );
-      final optionsB = ApptiveGridOptions(
+      const optionsB = ApptiveGridOptions(
           environment: ApptiveGridEnvironment.alpha,
           authenticationOptions:
               ApptiveGridAuthenticationOptions(autoAuthenticate: true));

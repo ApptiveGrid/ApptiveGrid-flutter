@@ -55,7 +55,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 Expanded(

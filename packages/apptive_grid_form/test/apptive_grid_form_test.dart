@@ -215,7 +215,7 @@ void main() {
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
-        await tester.pumpAndSettle(Duration(seconds: 30));
+        await tester.pumpAndSettle(const Duration(seconds: 30));
 
         expect(find.byType(Lottie), findsOneWidget);
         expect(find.text('Oops! - Error', skipOffstage: false), findsOneWidget);

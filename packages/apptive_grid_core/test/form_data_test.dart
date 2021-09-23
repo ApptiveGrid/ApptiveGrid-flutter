@@ -108,7 +108,7 @@ void main() {
       final schema = response['schema'];
       final component = IntegerFormComponent(
           fieldId: '4zc4l48ffin5v8pa2emyx9s15',
-          options: TextComponentOptions(),
+          options: const TextComponentOptions(),
           property: 'NumberC',
           data: IntegerDataEntity());
 
@@ -143,7 +143,7 @@ void main() {
     final component = IntegerFormComponent(
         fieldId: '4zc4l48ffin5v8pa2emyx9s15',
         data: IntegerDataEntity(),
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         property: 'NumberC');
 
     final a = FormData(

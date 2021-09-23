@@ -15,7 +15,7 @@ string''';
             data: StringDataEntity(
               value,
             ),
-            options: TextComponentOptions(
+            options: const TextComponentOptions(
               multi: true,
             ),
             fieldId: 'Field'));
