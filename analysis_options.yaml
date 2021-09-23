@@ -2,6 +2,7 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
+    - '**/example/lib/*.dart'
     - '**/grid_row_dropdown.dart'
 
 linter:
