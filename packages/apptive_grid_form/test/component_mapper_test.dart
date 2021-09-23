@@ -143,6 +143,9 @@ class UnknownComponent extends FormComponent<UnknownDataEntity> {
 }
 
 class UnknownDataEntity extends DataEntity<String, String> {
+
+  UnknownDataEntity([String? value]) : super(value);
+
   @override
   String? get schemaValue => null;
 }
