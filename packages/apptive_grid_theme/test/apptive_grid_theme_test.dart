@@ -270,9 +270,12 @@ void main() {
     await _test(
       (data) => Center(
         child: Card(
-          child: Text(
-            'Test',
-            style: data.textTheme.bodyText1,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Test',
+              style: data.textTheme.bodyText1,
+            ),
           ),
         ),
       ),
@@ -284,10 +287,19 @@ void main() {
   testWidgets('Alert dialog theme', (widgetTester) async {
     await _test(
       (data) => AlertDialog(
-        title: Text(
-          'Test',
-          style: data.textTheme.bodyText1,
+        title: const Text(
+          'Title',
         ),
+        content: const Padding(
+          padding: EdgeInsets.all(8),
+          child: Text('Dialog Content'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: const Text('OK'),
+          )
+        ],
       ),
       'AlertDialog',
       widgetTester,
@@ -296,9 +308,12 @@ void main() {
 
   testWidgets('App bar theme', (widgetTester) async {
     await _test(
-      (data) => Text(
-        'Body',
-        style: data.textTheme.bodyText1,
+      (data) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          'Body',
+          style: data.textTheme.bodyText1,
+        ),
       ),
       'AppBar',
       widgetTester,
