@@ -34,6 +34,12 @@ class ApptiveGridTheme {
         _withBrightness(light: ThemeData.light(), dark: ThemeData.dark());
     final textTheme = _textTheme(baseTheme.textTheme);
 
+    final buttonShape =
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(4));
+    final baseButtonStyle = ButtonStyle(
+      shape: MaterialStateProperty.all(buttonShape),
+    );
+
     return baseTheme.copyWith(
       primaryColor: ApptiveGridColors.apptiveGridBlue,
       colorScheme: baseTheme.colorScheme.copyWith(
@@ -48,6 +54,40 @@ class ApptiveGridTheme {
       buttonTheme: baseTheme.buttonTheme.copyWith(
         buttonColor: ApptiveGridColors.apptiveGridBlue,
         textTheme: ButtonTextTheme.primary,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: baseButtonStyle.copyWith(
+          foregroundColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.disabled)) {
+              return ApptiveGridColors.lightGrey;
+            } else {
+              return Colors.white;
+            }
+          }),
+          backgroundColor:
+          MaterialStateProperty.resolveWith(_resolveButtonColor),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: baseButtonStyle.copyWith(
+            foregroundColor: MaterialStateProperty.resolveWith((states) {
+      if (states.contains(MaterialState.disabled)) {
+      return ApptiveGridColors.lightGrey;
+      } else {
+      return ApptiveGridColors.apptiveGridBlue;
+      }
+      }),
+            side: MaterialStateProperty.resolveWith((states) {
+              final color = _resolveButtonColor(states);
+              late final double width;
+              if (states.contains(MaterialState.pressed) ||
+                  states.contains(MaterialState.hovered)) {
+                width = 3;
+              } else {
+                width = 1;
+              }
+              return BorderSide(color: color, width: width);
+            })),
       ),
       hintColor: ApptiveGridColors.lightGrey.withOpacity(0.8),
       inputDecorationTheme: baseTheme.inputDecorationTheme.copyWith(
@@ -138,6 +178,16 @@ class ApptiveGridTheme {
       ),
       fontFamily: 'DMSans',
     );
+  }
+
+  Color _resolveButtonColor(Set<MaterialState> states) {
+    if (states.contains(MaterialState.disabled)) {
+      return ApptiveGridColors.lightGrey.withOpacity(_withBrightness(
+        light: 0.3,
+        dark: 0.3,
+      ));
+    }
+    return ApptiveGridColors.apptiveGridBlue;
   }
 
   T _withBrightness<T>({required T light, required T dark}) {

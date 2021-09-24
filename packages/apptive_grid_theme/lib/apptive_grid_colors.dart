@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Colors used by the [ApptiveGridTheme]
-class ApptiveGridColors {
+abstract class ApptiveGridColors {
   /// A blue with the hex code: FF1565C0
   static const Color apptiveGridBlue = Color(0xff1565c0);
 
