@@ -1,5 +1,5 @@
 name: apptive_grid_web_apptive
-description: A Flutter Package to create ApptiveGrid Extensions
+description: A Flutter Package to enable Flutter Apptives on ApptiveGrid Web
 version: 0.0.1
 homepage: https://apptivegrid.de
 publish_to: none
@@ -14,12 +14,8 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
-  mocktail: ^0.1.1
+  mocktail: ^0.1.4
   flutter_test:
     sdk: flutter
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
