@@ -109,93 +109,161 @@ void main() {
       matchesGoldenFile(_goldenFilePath(name, isDark: true)),
     );
 
-
     debugDisableShadows = true;
     tester.binding.window.clearAllTestValues();
   }
 
-  testWidgets('TextField theme', (widgetTester) async {
-    await _test(
-      (data) => Center(
-        child: TextField(
-          style: data.textTheme.bodyText1,
-          controller: TextEditingController(
-            text: 'Test',
+  group('Buttons', () {
+    testWidgets('ElevatedButton Enabled', (widgetTester) async {
+      await _test(
+        (data) => Center(
+          child: ElevatedButton(
+            onPressed: () {},
+            child: const Text(
+              'Enabled',
+            ),
           ),
         ),
-      ),
-      'TextField',
-      widgetTester,
-    );
-  });
+        'ElevatedButton_enabled',
+        widgetTester,
+      );
+    });
 
-  testWidgets('Elevated button theme', (widgetTester) async {
-    await _test(
-      (data) => Center(
-        child: ElevatedButton(
-          onPressed: () {},
-          child: const Text(
-            'Button',
+    testWidgets('ElevatedButton disabled', (widgetTester) async {
+      await _test(
+        (data) => const Center(
+          child: ElevatedButton(
+            onPressed: null,
+            child: Text(
+              'Disabled',
+            ),
           ),
         ),
-      ),
-      'ElevatedButton',
-      widgetTester,
-    );
-  });
+        'ElevatedButton_disabled',
+        widgetTester,
+      );
+    });
 
-  testWidgets('Text button theme', (widgetTester) async {
-    await _test(
-      (data) => Center(
-        child: TextButton(
-          onPressed: () {},
-          child: const Text(
-            'Button',
+    testWidgets('TextButton Enabled', (widgetTester) async {
+      await _test(
+        (data) => Center(
+          child: TextButton(
+            onPressed: () {},
+            child: const Text(
+              'Enabled',
+            ),
           ),
         ),
-      ),
-      'TextButton',
-      widgetTester,
-    );
-  });
+        'TextButton_enabled',
+        widgetTester,
+      );
+    });
 
-  testWidgets('Text form field theme', (widgetTester) async {
-    await _test(
-      (data) => Center(
-        child: TextFormField(
-          initialValue: 'Test',
-        ),
-      ),
-      'TextFormField',
-      widgetTester,
-    );
-  });
-
-  testWidgets('Popup menu button theme', (widgetTester) async {
-    await _test(
-      (data) => Center(
-        child: PopupMenuButton(
-          itemBuilder: (context) => [],
-        ),
-      ),
-      'PopupMenuButton',
-      widgetTester,
-    );
-  });
-
-  testWidgets('Icon button theme', (widgetTester) async {
-    await _test(
-      (data) => Center(
-        child: IconButton(
-          icon: const Icon(
-            ApptiveGridIcons.grid,
+    testWidgets('TextButton disabled', (widgetTester) async {
+      await _test(
+        (data) => const Center(
+          child: TextButton(
+            onPressed: null,
+            child: Text(
+              'Disabled',
+            ),
           ),
-          onPressed: () {},
         ),
-      ),
-      'IconButton',
-      widgetTester,
-    );
+        'TextButton_disabled',
+        widgetTester,
+      );
+    });
+
+    testWidgets('OutlinedButton Enabled', (widgetTester) async {
+      await _test(
+        (data) => Center(
+          child: OutlinedButton(
+            onPressed: () {},
+            child: const Text(
+              'Enabled',
+            ),
+          ),
+        ),
+        'OutlinedButton_enabled',
+        widgetTester,
+      );
+    });
+
+    testWidgets('OutlinedButton disabled', (widgetTester) async {
+      await _test(
+        (data) => const Center(
+          child: OutlinedButton(
+            onPressed: null,
+            child: Text(
+              'Disabled',
+            ),
+          ),
+        ),
+        'OutlinedButton_disabled',
+        widgetTester,
+      );
+    });
+
+    testWidgets('Icon button theme', (widgetTester) async {
+      await _test(
+        (data) => Center(
+          child: IconButton(
+            icon: const Icon(
+              ApptiveGridIcons.grid,
+            ),
+            onPressed: () {},
+          ),
+        ),
+        'IconButton',
+        widgetTester,
+      );
+    });
+  });
+
+  group('TextField', () {
+    testWidgets('TextField Empty', (widgetTester) async {
+      await _test(
+        (data) => Center(
+          child: TextFormField(
+            decoration: const InputDecoration(
+              hintText: 'Hint',
+            ),
+          ),
+        ),
+        'TextField_empty',
+        widgetTester,
+      );
+    });
+
+    testWidgets('TextField Filled', (widgetTester) async {
+      await _test(
+        (data) => Center(
+          child: TextFormField(
+            initialValue: 'Input',
+            decoration: const InputDecoration(
+              hintText: 'Hint',
+            ),
+          ),
+        ),
+        'TextField_filled',
+        widgetTester,
+      );
+    });
+
+    testWidgets('TextField Error', (widgetTester) async {
+      await _test(
+        (data) => Center(
+          child: TextFormField(
+            decoration: const InputDecoration(
+              hintText: 'Hint',
+              errorText: 'Error',
+            ),
+          ),
+        ),
+        'TextField_error',
+        widgetTester,
+      );
+    });
   });
 
   testWidgets('Card theme', (widgetTester) async {
