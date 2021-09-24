@@ -15,7 +15,7 @@ class ApptiveGridWebApptive extends StatefulWidget {
   /// [builder] gets called with a [ApptiveGridEvent] everytime the Data visible to the user in the main window is changed.
   /// It gets called either if the data is changed in a Grid or if the user switches to a different view,
   /// possibly changing which [Grid] is displayed
-  /// 
+  ///
   /// Received [ApptiveMessages] are passed into [messageController]
   const ApptiveGridWebApptive({
     Key? key,

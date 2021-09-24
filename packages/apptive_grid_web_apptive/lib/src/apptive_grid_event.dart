@@ -38,6 +38,7 @@ class ApptiveGridEvent {
 
   /// [ApptiveCall] for this event
   final ApptiveCall call;
+
   /// Data for this event
   final Grid grid;
 

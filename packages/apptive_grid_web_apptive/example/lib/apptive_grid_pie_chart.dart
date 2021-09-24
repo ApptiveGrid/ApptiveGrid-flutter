@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:apptive_grid_web_apptive/apptive_grid_web_apptive.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:flutter/material.dart';
@@ -93,8 +95,9 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
                   PieChart(
                     dataMap: _calculateDataMap(),
                     legendOptions: LegendOptions(
-                        showLegendsInRow: true,
-                        legendPosition: LegendPosition.bottom),
+                      showLegendsInRow: true,
+                      legendPosition: LegendPosition.bottom,
+                    ),
                   ),
                 ],
               ),
@@ -113,28 +116,36 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
             .data as EnumDataEntity)
         .options;
 
-    return Map.fromEntries(enumValues.map((value) => MapEntry(
-        value,
-        rows
-            .where((row) =>
-                (row.entries.firstWhere((entry) => entry.field == _field).data
-                        as EnumDataEntity)
-                    .value ==
-                value)
-            .length
-            .toDouble())));
+    return Map.fromEntries(
+      enumValues.map(
+        (value) => MapEntry(
+          value,
+          rows
+              .where(
+                (row) =>
+                    (row.entries
+                            .firstWhere((entry) => entry.field == _field)
+                            .data as EnumDataEntity)
+                        .value ==
+                    value,
+              )
+              .length
+              .toDouble(),
+        ),
+      ),
+    );
   }
 }
 
 class FieldSelector extends StatefulWidget {
-  const FieldSelector(
-      {Key? key,
-      required this.label,
-      required this.onSelected,
-      required this.grid,
-      this.value,
-      required this.validator})
-      : super(key: key);
+  const FieldSelector({
+    Key? key,
+    required this.label,
+    required this.onSelected,
+    required this.grid,
+    this.value,
+    required this.validator,
+  }) : super(key: key);
 
   final String label;
   final Grid grid;
@@ -172,8 +183,10 @@ class _FieldSelectorState extends State<FieldSelector> {
             onChanged: widget.onSelected,
             items: widget.grid.fields
                 .where(widget.validator)
-                .map<DropdownMenuItem<GridField>>((e) =>
-                    DropdownMenuItem<GridField>(value: e, child: Text(e.name)))
+                .map<DropdownMenuItem<GridField>>(
+                  (e) => DropdownMenuItem<GridField>(
+                      value: e, child: Text(e.name)),
+                )
                 .toList(),
           ),
         ),

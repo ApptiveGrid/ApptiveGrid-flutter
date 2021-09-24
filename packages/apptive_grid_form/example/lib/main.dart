@@ -1,22 +1,26 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(
-    ApptiveGrid(
-      options: const ApptiveGridOptions(
-          environment: ApptiveGridEnvironment.alpha,
-          authenticationOptions: ApptiveGridAuthenticationOptions(
-            autoAuthenticate: true,
-          )),
+    const ApptiveGrid(
+      options: ApptiveGridOptions(
+        environment: ApptiveGridEnvironment.alpha,
+        authenticationOptions: ApptiveGridAuthenticationOptions(
+          autoAuthenticate: true,
+        ),
+      ),
       child: MyApp(),
     ),
   );
 }
 
-/// Simply add a ApptiveGridForm Widget to your Widget Tree
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
