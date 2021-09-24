@@ -27,7 +27,7 @@ scripts:
         "flutter format . --set-exit-if-changed"
 
   test:all:
-    run: melos run test --no-select
+    run: melos run test --no-select && melos run test:web --no-select
 
   test:
     run: |
@@ -36,10 +36,24 @@ scripts:
     select-package:
       dir-exists:
         - test
-      ignore: "*example*"
+      ignore:
+        - "*web*"
+        - "*example*"
+
+  test:web:
+    run: |
+      melos exec -c 1 -- \
+        "mkdir -p test_results && flutter test --no-pub --platform=chrome --machine | tojunit -o MELOS_PACKAGE_PATH/test_results/output.xml"
+    select-package:
+      dir-exists:
+        - test
+      scope:
+        - "*web*"
+      ignore:
+        - "*example*"
 
   test:all_coverage:
-    run: melos run test:coverage --no-select
+    run: melos run test:coverage --no-select && melos run test:coverage_web --no-select
 
   test:coverage:
     run: |
@@ -48,7 +62,21 @@ scripts:
     select-package:
       dir-exists:
         - test
-      ignore: "*example*"
+      ignore:
+        - "*web*"
+        - "*example*"
+
+  test:coverage_web:
+    run: |
+      melos exec -c 1 -- \
+        "mkdir -p coverage && flutter test --no-pub --platform=chrome --coverage && genhtml coverage/lcov.info -o coverage/html"
+    select-package:
+      dir-exists:
+        - test
+      scope:
+        - "*web*"
+      ignore:
+        - "*example*"
 
   build:android:
     run: |
