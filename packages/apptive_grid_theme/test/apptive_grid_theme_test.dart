@@ -1,7 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:apptive_grid_theme/apptive_grid_theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class _TestApp extends StatelessWidget {
   _TestApp({
@@ -24,31 +27,66 @@ class _TestApp extends StatelessWidget {
     return MaterialApp(
       theme: _themeData,
       darkTheme: _themeData,
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: appBarBuilder(_themeData),
-        body: Theme(data: _themeData, child: childBuilder(_themeData)),
+        body: childBuilder(_themeData),
       ),
     );
   }
 }
 
+Future<void> loadFonts() async {
+  //https://github.com/flutter/flutter/issues/20907
+  if (Directory.current.path.endsWith('/test')) {
+    Directory.current = Directory.current.parent;
+  }
+
+  final bold = File('fonts/DMSans-Bold.ttf')
+      .readAsBytes()
+      .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
+  final medium = File('fonts/DMSans-Medium.ttf')
+      .readAsBytes()
+      .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
+  final regular = File('fonts/DMSans-Regular.ttf')
+      .readAsBytes()
+      .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
+  final fontLoader = FontLoader('DMSans')
+    ..addFont(bold)
+    ..addFont(medium)
+    ..addFont(regular);
+  await fontLoader.load();
+
+  final icons = File('fonts/ApptiveGridIcons.ttf')
+      .readAsBytes()
+      .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
+  final iconLoader = FontLoader('ApptiveGridIcons')..addFont(icons);
+  await iconLoader.load();
+}
+
 void main() {
   String _goldenFilePath(String name, {bool isDark = false}) =>
-      'goldenFiles/' + (isDark ? 'dark' : 'light') + '/' + name + '.png';
+      'goldenFiles/${name}_${isDark ? 'dark' : 'light'}.png';
 
-  void _test(
+  setUpAll(() async {
+    await loadFonts();
+  });
+
+  Future<void> _test(
     Widget Function(ThemeData data) testableBuilder,
     String name,
-    WidgetTester widgetTester, {
+    WidgetTester tester, {
     AppBar? Function(ThemeData data)? appBarBuilder,
   }) async {
+    debugDisableShadows = false;
     appBarBuilder ??= (data) => null;
     final testApp = _TestApp(
       appBarBuilder: appBarBuilder,
       childBuilder: testableBuilder,
     );
 
-    await widgetTester.pumpWidget(testApp);
+    await tester.pumpWidget(testApp);
+    await tester.pumpAndSettle();
     await expectLater(
       find.byType(_TestApp),
       matchesGoldenFile(_goldenFilePath(name)),
@@ -60,19 +98,25 @@ void main() {
       childBuilder: testableBuilder,
     );
 
-    await widgetTester.pumpWidget(testAppDark);
+    await tester.pumpWidget(testAppDark);
+    await tester.pumpAndSettle();
     await expectLater(
       find.byType(_TestApp),
       matchesGoldenFile(_goldenFilePath(name, isDark: true)),
     );
+
+
+    debugDisableShadows = true;
   }
 
   testWidgets('TextField theme', (widgetTester) async {
-    _test(
-      (data) => TextField(
-        style: data.textTheme.bodyText1,
-        controller: TextEditingController(
-          text: 'Test',
+    await _test(
+      (data) => Center(
+        child: TextField(
+          style: data.textTheme.bodyText1,
+          controller: TextEditingController(
+            text: 'Test',
+          ),
         ),
       ),
       'TextField',
@@ -81,13 +125,13 @@ void main() {
   });
 
   testWidgets('Elevated button theme', (widgetTester) async {
-    _test(
-      (data) => ElevatedButton(
-        onPressed: null,
-        style: data.elevatedButtonTheme.style,
-        child: Text(
-          'Button',
-          style: data.textTheme.button,
+    await _test(
+      (data) => Center(
+        child: ElevatedButton(
+          onPressed: () {},
+          child: const Text(
+            'Button',
+          ),
         ),
       ),
       'ElevatedButton',
@@ -96,13 +140,13 @@ void main() {
   });
 
   testWidgets('Text button theme', (widgetTester) async {
-    _test(
-      (data) => TextButton(
-        onPressed: null,
-        style: data.elevatedButtonTheme.style,
-        child: Text(
-          'Button',
-          style: data.textTheme.button,
+    await _test(
+      (data) => Center(
+        child: TextButton(
+          onPressed: () {},
+          child: const Text(
+            'Button',
+          ),
         ),
       ),
       'TextButton',
@@ -111,10 +155,11 @@ void main() {
   });
 
   testWidgets('Text form field theme', (widgetTester) async {
-    _test(
-      (data) => TextFormField(
-        initialValue: 'Test',
-        style: data.textTheme.bodyText1,
+    await _test(
+      (data) => Center(
+        child: TextFormField(
+          initialValue: 'Test',
+        ),
       ),
       'TextFormField',
       widgetTester,
@@ -122,9 +167,11 @@ void main() {
   });
 
   testWidgets('Popup menu button theme', (widgetTester) async {
-    _test(
-      (data) => PopupMenuButton(
-        itemBuilder: (context) => [],
+    await _test(
+      (data) => Center(
+        child: PopupMenuButton(
+          itemBuilder: (context) => [],
+        ),
       ),
       'PopupMenuButton',
       widgetTester,
@@ -132,13 +179,14 @@ void main() {
   });
 
   testWidgets('Icon button theme', (widgetTester) async {
-    _test(
-      (data) => IconButton(
-        icon: Text(
-          'Test',
-          style: data.textTheme.button,
+    await _test(
+      (data) => Center(
+        child: IconButton(
+          icon: const Icon(
+            ApptiveGridIcons.grid,
+          ),
+          onPressed: () {},
         ),
-        onPressed: null,
       ),
       'IconButton',
       widgetTester,
@@ -146,11 +194,13 @@ void main() {
   });
 
   testWidgets('Card theme', (widgetTester) async {
-    _test(
-      (data) => Card(
-        child: Text(
-          'Test',
-          style: data.textTheme.bodyText1,
+    await _test(
+      (data) => Center(
+        child: Card(
+          child: Text(
+            'Test',
+            style: data.textTheme.bodyText1,
+          ),
         ),
       ),
       'Card',
@@ -159,7 +209,7 @@ void main() {
   });
 
   testWidgets('Alert dialog theme', (widgetTester) async {
-    _test(
+    await _test(
       (data) => AlertDialog(
         title: Text(
           'Test',
@@ -172,7 +222,7 @@ void main() {
   });
 
   testWidgets('App bar theme', (widgetTester) async {
-    _test(
+    await _test(
       (data) => Text(
         'Body',
         style: data.textTheme.bodyText1,
@@ -189,82 +239,60 @@ void main() {
   });
 
   testWidgets('Text theme', (widgetTester) async {
-    _test(
-      (data) => Column(
-        children: [
-          Expanded(
-            child: Text(
-              'test',
+    await _test(
+      (data) => Center(
+        child: Column(
+          children: [
+            Text(
+              'BodyText1',
               style: data.textTheme.bodyText1,
             ),
-          ),
-          Expanded(
-            child: Text(
-              'test',
-              style: data.textTheme.bodyText2,
+            Text(
+              'BodyText2',
+              style: data.textTheme.bodyText1,
             ),
-          ),
-          Expanded(
-            child: Text(
-              'test',
+            Text(
+              'Caption',
               style: data.textTheme.caption,
             ),
-          ),
-          Expanded(
-            child: Text(
-              'test',
+            Text(
+              'Headline1',
               style: data.textTheme.headline1,
             ),
-          ),
-          Expanded(
-            child: Text(
-              'test',
+            Text(
+              'Headline2',
               style: data.textTheme.headline2,
             ),
-          ),
-          Expanded(
-            child: Text(
-              'test',
+            Text(
+              'Headline3',
               style: data.textTheme.headline3,
             ),
-          ),
-          Expanded(
-            child: Text(
-              'test',
+            Text(
+              'Headline4',
               style: data.textTheme.headline4,
             ),
-          ),
-          Expanded(
-            child: Text(
-              'test',
+            Text(
+              'Headline5',
               style: data.textTheme.headline5,
             ),
-          ),
-          Expanded(
-            child: Text(
-              'test',
+            Text(
+              'Headline6',
               style: data.textTheme.headline6,
             ),
-          ),
-          Expanded(
-            child: Text(
-              'test',
+            Text(
+              'Overline',
               style: data.textTheme.overline,
             ),
-          ),
-          Expanded(
-            child: Text(
-              'test',
+            Text(
+              'Subtitle1',
               style: data.textTheme.subtitle1,
             ),
-          ),
-          Expanded(
-            child: Text(
-              'test',
+            Text(
+              'Subtitle2',
               style: data.textTheme.subtitle2,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       'Text',
       widgetTester,
