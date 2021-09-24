@@ -24,7 +24,7 @@ dependency_overrides:
   pointycastle: 3.1.1
 
 dependencies:
-  apptive_grid_extension:
+  apptive_grid_web_apptive:
     path: ../
   flutter:
     sdk: flutter

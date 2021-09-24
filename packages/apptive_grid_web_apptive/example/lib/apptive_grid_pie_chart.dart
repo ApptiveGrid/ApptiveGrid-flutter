@@ -1,4 +1,4 @@
-import 'package:apptive_grid_extension/apptive_grid_extension.dart';
+import 'package:apptive_grid_web_apptive/apptive_grid_web_apptive.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:flutter/material.dart';
 

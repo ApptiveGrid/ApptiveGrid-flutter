@@ -6,12 +6,12 @@ import 'package:mocktail/mocktail.dart';
 class MockApptiveGridClient extends Mock implements ApptiveGridClient {}
 
 class TestApp extends StatelessWidget {
-  const TestApp(
-      {Key? key,
-      this.client,
-      this.child,
-      this.options = const ApptiveGridOptions()})
-      : super(key: key);
+  const TestApp({
+    Key? key,
+    this.client,
+    this.child,
+    this.options = const ApptiveGridOptions(),
+  }) : super(key: key);
 
   final Widget? child;
 

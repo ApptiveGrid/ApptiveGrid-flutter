@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
-
+/// Class for representing messages send between ApptiveGrid Web an the Apptive
 class ApptiveMessage {
+  /// Creates a new [ApptiveMessage] with [message]
   const ApptiveMessage({
     required this.message,
   });
 
+  /// Deserializes a [ApptiveMessage] from a [json] object
   factory ApptiveMessage.fromJson(dynamic json) {
     if (json is Map && json.containsKey('message')) {
       return ApptiveMessage(
@@ -15,6 +16,7 @@ class ApptiveMessage {
     }
   }
 
+  /// The [message] send
   final String message;
 
   @override
