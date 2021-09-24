@@ -22,9 +22,6 @@ flutter:
   generate: true
   uses-material-design: true
 
-  assets:
-    - assets/
-
   fonts:
     - family: DMSans
       fonts:
