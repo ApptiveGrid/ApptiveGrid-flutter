@@ -13,13 +13,15 @@ import 'common.dart';
 void main() {
   late ApptiveGridClient client;
   setUpAll(() {
-    registerFallbackValue<FormData>(FormData(
-      name: 'name',
-      title: 'title',
-      components: [],
-      actions: [],
-      schema: {},
-    ));
+    registerFallbackValue<FormData>(
+      FormData(
+        name: 'name',
+        title: 'title',
+        components: [],
+        actions: [],
+        schema: {},
+      ),
+    );
   });
 
   setUp(() {
@@ -28,8 +30,11 @@ void main() {
     when(() => client.sendPendingActions()).thenAnswer((invocation) async {});
   });
 
-  Map<String, dynamic> getSchema(String type,
-      {String? format, List<String>? options}) {
+  Map<String, dynamic> getSchema(
+    String type, {
+    String? format,
+    List<String>? options,
+  }) {
     final propertyMap = <String, dynamic>{'type': type};
     if (format != null) {
       propertyMap['format'] = format;
@@ -46,8 +51,6 @@ void main() {
     };
   }
 
-  ;
-
   group('Text', () {
     testWidgets('Value is send', (tester) async {
       final action = FormAction(
@@ -58,15 +61,16 @@ void main() {
         fieldId: 'id',
         data: StringDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: false,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('string'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('string'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -108,15 +112,16 @@ void main() {
         fieldId: 'id',
         data: StringDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: true,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('string'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('string'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -152,15 +157,16 @@ void main() {
         fieldId: 'id',
         data: DateTimeDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('string', format: 'date-time'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('string', format: 'date-time'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -214,15 +220,16 @@ void main() {
         fieldId: 'id',
         data: DateTimeDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('string', format: 'date-time'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('string', format: 'date-time'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -266,9 +273,15 @@ void main() {
       final result = await completer.future
           .then((data) => data.components.first.data.value as DateTime);
       expect(
-          DateTime(result.year, result.month, result.day, result.hour,
-              result.minute),
-          date);
+        DateTime(
+          result.year,
+          result.month,
+          result.day,
+          result.hour,
+          result.minute,
+        ),
+        date,
+      );
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -280,15 +293,16 @@ void main() {
         fieldId: 'id',
         data: DateTimeDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: true,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('string', format: 'date-time'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('string', format: 'date-time'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -324,15 +338,16 @@ void main() {
         fieldId: 'id',
         data: DateDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('string', format: 'date'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('string', format: 'date'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -385,15 +400,16 @@ void main() {
         fieldId: 'id',
         data: DateDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: true,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('string', format: 'date'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('string', format: 'date'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -429,15 +445,16 @@ void main() {
         fieldId: 'id',
         data: IntegerDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: false,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('integer'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('integer'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -475,15 +492,16 @@ void main() {
         fieldId: 'id',
         data: IntegerDataEntity(123),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: false,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [],
-          schema: getSchema('integer'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [],
+        schema: getSchema('integer'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -511,15 +529,16 @@ void main() {
         fieldId: 'id',
         data: IntegerDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: true,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('integer'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('integer'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -555,15 +574,16 @@ void main() {
         fieldId: 'id',
         data: DecimalDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: false,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('number'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('number'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -601,15 +621,16 @@ void main() {
         fieldId: 'id',
         data: DecimalDataEntity(47.11),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: false,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [],
-          schema: getSchema('number'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [],
+        schema: getSchema('number'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -637,15 +658,16 @@ void main() {
         fieldId: 'id',
         data: DecimalDataEntity(),
         property: 'Property',
-        options: TextComponentOptions(),
+        options: const TextComponentOptions(),
         required: true,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('number'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('number'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -681,15 +703,16 @@ void main() {
         fieldId: 'id',
         data: BooleanDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('boolean'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('boolean'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -731,15 +754,16 @@ void main() {
         fieldId: 'id',
         data: BooleanDataEntity(),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: true,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('boolean'));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('boolean'),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -775,15 +799,16 @@ void main() {
         fieldId: 'id',
         data: EnumDataEntity(value: 'value', options: ['value', 'newValue']),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('string', options: ['value', 'newValue']));
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema('string', options: ['value', 'newValue']),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -829,17 +854,21 @@ void main() {
         fieldId: 'id',
         data: EnumDataEntity(options: ['value']),
         property: 'Property',
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
         required: true,
       );
       final formData = FormData(
-          name: 'Form Name',
-          title: 'Form Title',
-          components: [component],
-          actions: [action],
-          schema: getSchema('string', options: [
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [component],
+        actions: [action],
+        schema: getSchema(
+          'string',
+          options: [
             'value',
-          ]));
+          ],
+        ),
+      );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(

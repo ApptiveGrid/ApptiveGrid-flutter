@@ -9,12 +9,19 @@ class GridRow {
   ///
   /// [fields] is used to map the correct type of [entries]
   factory GridRow.fromJson(
-      dynamic json, List<GridField> fields, dynamic schema) {
+    dynamic json,
+    List<GridField> fields,
+    dynamic schema,
+  ) {
     final data = json['fields'] as List;
     final entries = List<GridEntry>.generate(
-        data.length,
-        (i) => GridEntry.fromJson(
-            data[i], fields[i], schema['properties']['fields']['items'][i]));
+      data.length,
+      (i) => GridEntry.fromJson(
+        data[i],
+        fields[i],
+        schema['properties']['fields']['items'][i],
+      ),
+    );
     return GridRow(json['_id'], entries);
   }
 

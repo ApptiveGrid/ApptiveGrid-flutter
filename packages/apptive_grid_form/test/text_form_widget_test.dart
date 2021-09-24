@@ -6,23 +6,27 @@ import 'common.dart';
 
 void main() {
   testWidgets('Multiline TextFormWidget Displays', (tester) async {
-    final value = '''A
+    const value = '''A
 multi-line
 string''';
     final target = TextFormWidget(
-        component: StringFormComponent(
-            property: 'Text',
-            data: StringDataEntity(
-              value,
-            ),
-            options: TextComponentOptions(
-              multi: true,
-            ),
-            fieldId: 'Field'));
+      component: StringFormComponent(
+        property: 'Text',
+        data: StringDataEntity(
+          value,
+        ),
+        options: const TextComponentOptions(
+          multi: true,
+        ),
+        fieldId: 'Field',
+      ),
+    );
 
-    await tester.pumpWidget(TestApp(
-      child: target,
-    ));
+    await tester.pumpWidget(
+      TestApp(
+        child: target,
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text(value), findsOneWidget);

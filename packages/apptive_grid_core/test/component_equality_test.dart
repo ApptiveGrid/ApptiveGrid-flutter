@@ -3,45 +3,49 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final textA = StringFormComponent(
-      fieldId: 'textId',
-      property: 'Property',
-      data: StringDataEntity('Value'),
-      options: TextComponentOptions(
-        label: 'Label',
-      ),
-      required: true);
+    fieldId: 'textId',
+    property: 'Property',
+    data: StringDataEntity('Value'),
+    options: const TextComponentOptions(
+      label: 'Label',
+    ),
+    required: true,
+  );
   final textB = StringFormComponent(
-      fieldId: 'textId',
-      property: 'Property',
-      data: StringDataEntity('Value'),
-      options: TextComponentOptions(
-        label: 'Label',
-      ),
-      required: true);
+    fieldId: 'textId',
+    property: 'Property',
+    data: StringDataEntity('Value'),
+    options: const TextComponentOptions(
+      label: 'Label',
+    ),
+    required: true,
+  );
 
   final textC = StringFormComponent(
-      fieldId: 'textC',
-      property: 'Property',
-      data: StringDataEntity(),
-      options: TextComponentOptions(
-        label: 'Label',
-      ),
-      required: false);
+    fieldId: 'textC',
+    property: 'Property',
+    data: StringDataEntity(),
+    options: const TextComponentOptions(
+      label: 'Label',
+    ),
+    required: false,
+  );
 
   final number = IntegerFormComponent(
-      fieldId: 'number',
-      property: 'Property',
-      data: IntegerDataEntity(),
-      options: TextComponentOptions(
-        label: 'Label',
-      ),
-      required: false);
+    fieldId: 'number',
+    property: 'Property',
+    data: IntegerDataEntity(),
+    options: const TextComponentOptions(
+      label: 'Label',
+    ),
+    required: false,
+  );
 
   final date = DateFormComponent(
     fieldId: 'date',
     property: 'Property',
     data: DateDataEntity(),
-    options: FormComponentOptions(),
+    options: const FormComponentOptions(),
     required: false,
   );
 
@@ -49,7 +53,7 @@ void main() {
     fieldId: 'dateTime',
     property: 'Property',
     data: DateTimeDataEntity(),
-    options: FormComponentOptions(),
+    options: const FormComponentOptions(),
     required: false,
   );
 
@@ -57,7 +61,7 @@ void main() {
     fieldId: 'checkBox',
     property: 'Property',
     data: BooleanDataEntity(),
-    options: FormComponentOptions(),
+    options: const FormComponentOptions(),
     required: false,
   );
 

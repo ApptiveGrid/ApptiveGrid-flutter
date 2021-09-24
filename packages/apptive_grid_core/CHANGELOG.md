@@ -1,3 +1,6 @@
+## [0.4.3]
+* Update Lints
+
 ## [0.4.2]
 * Adding support for Decimal Data
 

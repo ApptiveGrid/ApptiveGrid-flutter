@@ -4,6 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('IO implementation works', () async {
-    await enableWebAuth(ApptiveGridOptions());
+    await enableWebAuth(const ApptiveGridOptions());
   });
 }

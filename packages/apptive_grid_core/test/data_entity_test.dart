@@ -120,7 +120,7 @@ void main() {
 
   group('Enum', () {
     test('Value is set', () {
-      final value = 'value';
+      const value = 'value';
       final values = ['value', 'otherValue'];
       final entity = EnumDataEntity(value: value, options: values);
 

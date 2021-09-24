@@ -17,7 +17,8 @@ class FormData {
         title = json['title'],
         components = (json['components'] as List)
             .map<FormComponent>(
-                (e) => FormComponent.fromJson(e, json['schema']))
+              (e) => FormComponent.fromJson(e, json['schema']),
+            )
             .toList(),
         actions = json['actions'] != null
             ? (json['actions'] as List)
@@ -57,9 +58,11 @@ class FormData {
 
   /// Creates a [Map] used to send this data back to a server
   Map<String, dynamic> toRequestObject() {
-    return Map.fromEntries(components.map((component) {
-      return MapEntry(component.fieldId, component.data.schemaValue);
-    }));
+    return Map.fromEntries(
+      components.map((component) {
+        return MapEntry(component.fieldId, component.data.schemaValue);
+      }),
+    );
   }
 
   @override

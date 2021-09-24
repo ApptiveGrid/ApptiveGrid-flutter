@@ -4,9 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Equality', () {
     test('is equal', () {
-      final id = 'id';
-      final name = 'name';
-      final type = DataType.text;
+      const id = 'id';
+      const name = 'name';
+      const type = DataType.text;
       final a = GridField(id, name, type);
       final b = GridField(id, name, type);
 
@@ -15,9 +15,9 @@ void main() {
     });
 
     test('is not equal', () {
-      final id = 'id';
-      final name = 'name';
-      final type = DataType.text;
+      const id = 'id';
+      const name = 'name';
+      const type = DataType.text;
       final a = GridField(id, name, type);
       final b = GridField(name, id, type);
 

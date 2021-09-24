@@ -3,8 +3,10 @@ part of apptive_grid_form_widgets;
 /// FormComponent Widget to display a [BooleanFormComponent]
 class CheckBoxFormWidget extends StatefulWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
-  const CheckBoxFormWidget({Key? key, required this.component})
-      : super(key: key);
+  const CheckBoxFormWidget({
+    Key? key,
+    required this.component,
+  }) : super(key: key);
 
   /// Component this Widget should reflect
   final BooleanFormComponent component;
@@ -38,8 +40,10 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
             filled: false,
           ),
           child: ColorFiltered(
-            colorFilter: ColorFilter.mode(Theme.of(context).errorColor,
-                state.hasError ? BlendMode.srcATop : BlendMode.dstIn),
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).errorColor,
+              state.hasError ? BlendMode.srcATop : BlendMode.dstIn,
+            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -55,12 +59,13 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 Expanded(
-                  child: Text(widget.component.options.label ??
-                      widget.component.property),
+                  child: Text(
+                    widget.component.options.label ?? widget.component.property,
+                  ),
                 ),
               ],
             ),

@@ -54,14 +54,20 @@ class ApptiveGridGridBuilderState extends State<ApptiveGridGridBuilder> {
   /// Call this to reload the data.
   ///
   /// For example used when doing pull to refresh
-  Future<void> reload({bool listen = false}) {
+  Future<void> reload({
+    bool listen = false,
+  }) {
     return ApptiveGrid.getClient(context, listen: listen)
         .loadGrid(gridUri: widget.gridUri)
-        .then((value) => setState(() {
-              _snapshot = AsyncSnapshot.withData(ConnectionState.done, value);
-            }))
-        .catchError((error) => setState(() {
-              _snapshot = AsyncSnapshot.withError(ConnectionState.none, error);
-            }));
+        .then(
+          (value) => setState(() {
+            _snapshot = AsyncSnapshot.withData(ConnectionState.done, value);
+          }),
+        )
+        .catchError(
+          (error) => setState(() {
+            _snapshot = AsyncSnapshot.withError(ConnectionState.none, error);
+          }),
+        );
   }
 }

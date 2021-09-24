@@ -5,20 +5,28 @@ void main() {
   group('AuthenticationOptions', () {
     group('Equality', () {
       test('Objects are equal', () {
-        final optionsA = ApptiveGridAuthenticationOptions(
-            autoAuthenticate: true, redirectScheme: 'scheme');
-        final optionsB = ApptiveGridAuthenticationOptions(
-            autoAuthenticate: true, redirectScheme: 'scheme');
+        const optionsA = ApptiveGridAuthenticationOptions(
+          autoAuthenticate: true,
+          redirectScheme: 'scheme',
+        );
+        const optionsB = ApptiveGridAuthenticationOptions(
+          autoAuthenticate: true,
+          redirectScheme: 'scheme',
+        );
 
         expect(optionsA, equals(optionsB));
         expect(optionsA.hashCode, equals(optionsB.hashCode));
       });
 
       test('Objects are not equal', () {
-        final optionsA = ApptiveGridAuthenticationOptions(
-            autoAuthenticate: true, redirectScheme: 'scheme');
-        final optionsB = ApptiveGridAuthenticationOptions(
-            autoAuthenticate: true, redirectScheme: 'differentScheme');
+        const optionsA = ApptiveGridAuthenticationOptions(
+          autoAuthenticate: true,
+          redirectScheme: 'scheme',
+        );
+        const optionsB = ApptiveGridAuthenticationOptions(
+          autoAuthenticate: true,
+          redirectScheme: 'differentScheme',
+        );
 
         expect(optionsA, isNot(equals(optionsB)));
         expect(optionsA.hashCode, isNot(equals(optionsB.hashCode)));
@@ -29,9 +37,9 @@ void main() {
   group('ApiKey', () {
     group('Equality', () {
       test('Objects are equal', () {
-        final keyA =
+        const keyA =
             ApptiveGridApiKey(authKey: 'authKey', password: 'password');
-        final keyB =
+        const keyB =
             ApptiveGridApiKey(authKey: 'authKey', password: 'password');
 
         expect(keyA, equals(keyB));
@@ -39,9 +47,9 @@ void main() {
       });
 
       test('Objects are not equal', () {
-        final keyA =
+        const keyA =
             ApptiveGridApiKey(authKey: 'authKey', password: 'password');
-        final keyB =
+        const keyB =
             ApptiveGridApiKey(authKey: 'authKey', password: 'passwortWithT');
 
         expect(keyA, isNot(equals(keyB)));

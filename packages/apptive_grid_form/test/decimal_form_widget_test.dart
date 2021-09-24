@@ -12,7 +12,10 @@ void main() {
       final target = TestApp(
         child: DecimalFormWidget(
           component: DecimalFormComponent(
-              data: dataEntity, fieldId: 'field', property: 'property'),
+            data: dataEntity,
+            fieldId: 'field',
+            property: 'property',
+          ),
         ),
       );
 
@@ -31,7 +34,10 @@ void main() {
       final target = TestApp(
         child: DecimalFormWidget(
           component: DecimalFormComponent(
-              data: dataEntity, fieldId: 'field', property: 'property'),
+            data: dataEntity,
+            fieldId: 'field',
+            property: 'property',
+          ),
         ),
       );
 

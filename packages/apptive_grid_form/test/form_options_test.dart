@@ -7,12 +7,12 @@ import 'common.dart';
 void main() {
   group('CheckBox', () {
     testWidgets('Default Label is Property', (tester) async {
-      final property = 'Property';
+      const property = 'Property';
       final component = BooleanFormComponent(
         fieldId: 'id',
         data: BooleanDataEntity(),
         property: property,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
       final target = TestApp(
         child: CheckBoxFormWidget(
@@ -27,15 +27,17 @@ void main() {
     });
 
     testWidgets('Custom Label and Description are shown', (tester) async {
-      final property = 'Property';
-      final customLabel = 'CustomLabel';
-      final description = 'Description';
+      const property = 'Property';
+      const customLabel = 'CustomLabel';
+      const description = 'Description';
       final component = BooleanFormComponent(
         fieldId: 'id',
         data: BooleanDataEntity(),
         property: property,
-        options:
-            FormComponentOptions(label: customLabel, description: description),
+        options: const FormComponentOptions(
+          label: customLabel,
+          description: description,
+        ),
       );
       final target = TestApp(
         child: CheckBoxFormWidget(
@@ -53,12 +55,12 @@ void main() {
 
   group('Date', () {
     testWidgets('Default Label is Property', (tester) async {
-      final property = 'Property';
+      const property = 'Property';
       final component = DateFormComponent(
         fieldId: 'id',
         data: DateDataEntity(),
         property: property,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
       final target = TestApp(
         child: DateFormWidget(
@@ -73,15 +75,17 @@ void main() {
     });
 
     testWidgets('Custom Label and Description are shown', (tester) async {
-      final property = 'Property';
-      final customLabel = 'CustomLabel';
-      final description = 'Description';
+      const property = 'Property';
+      const customLabel = 'CustomLabel';
+      const description = 'Description';
       final component = DateFormComponent(
         fieldId: 'id',
         data: DateDataEntity(),
         property: property,
-        options:
-            FormComponentOptions(label: customLabel, description: description),
+        options: const FormComponentOptions(
+          label: customLabel,
+          description: description,
+        ),
       );
       final target = TestApp(
         child: DateFormWidget(
@@ -99,12 +103,12 @@ void main() {
 
   group('DateTime', () {
     testWidgets('Default Label is Property', (tester) async {
-      final property = 'Property';
+      const property = 'Property';
       final component = DateTimeFormComponent(
         fieldId: 'id',
         data: DateTimeDataEntity(),
         property: property,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
       final target = TestApp(
         child: DateTimeFormWidget(
@@ -119,15 +123,17 @@ void main() {
     });
 
     testWidgets('Custom Label and Description are shown', (tester) async {
-      final property = 'Property';
-      final customLabel = 'CustomLabel';
-      final description = 'Description';
+      const property = 'Property';
+      const customLabel = 'CustomLabel';
+      const description = 'Description';
       final component = DateTimeFormComponent(
         fieldId: 'id',
         data: DateTimeDataEntity(),
         property: property,
-        options:
-            FormComponentOptions(label: customLabel, description: description),
+        options: const FormComponentOptions(
+          label: customLabel,
+          description: description,
+        ),
       );
       final target = TestApp(
         child: DateTimeFormWidget(
@@ -145,12 +151,12 @@ void main() {
 
   group('Enum', () {
     testWidgets('Default Label is Property', (tester) async {
-      final property = 'Property';
+      const property = 'Property';
       final component = EnumFormComponent(
         fieldId: 'id',
         data: EnumDataEntity(),
         property: property,
-        options: FormComponentOptions(),
+        options: const FormComponentOptions(),
       );
       final target = TestApp(
         child: EnumFormWidget(
@@ -165,15 +171,17 @@ void main() {
     });
 
     testWidgets('Custom Label and Description are shown', (tester) async {
-      final property = 'Property';
-      final customLabel = 'CustomLabel';
-      final description = 'Description';
+      const property = 'Property';
+      const customLabel = 'CustomLabel';
+      const description = 'Description';
       final component = EnumFormComponent(
         fieldId: 'id',
         data: EnumDataEntity(),
         property: property,
-        options:
-            FormComponentOptions(label: customLabel, description: description),
+        options: const FormComponentOptions(
+          label: customLabel,
+          description: description,
+        ),
       );
       final target = TestApp(
         child: EnumFormWidget(

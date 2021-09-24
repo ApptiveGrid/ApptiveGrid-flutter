@@ -7,40 +7,46 @@ import 'mocks.dart';
 void main() {
   group('Copy', () {
     test('New Values get carried', () {
-      final env1 = ApptiveGridEnvironment.alpha;
-      final env2 = ApptiveGridEnvironment.production;
+      const env1 = ApptiveGridEnvironment.alpha;
+      const env2 = ApptiveGridEnvironment.production;
 
-      final authOptionsA = ApptiveGridAuthenticationOptions();
-      final authOptionsB =
+      const authOptionsA = ApptiveGridAuthenticationOptions();
+      const authOptionsB =
           ApptiveGridAuthenticationOptions(autoAuthenticate: true);
 
       final cache = MockApptiveGridCache();
 
-      final optionsA = ApptiveGridOptions(
-          authenticationOptions: authOptionsA, environment: env1);
+      const optionsA = ApptiveGridOptions(
+        authenticationOptions: authOptionsA,
+        environment: env1,
+      );
       final optionsB = optionsA.copyWith(
         environment: env2,
         authenticationOptions: authOptionsB,
         cache: cache,
       );
       expect(
-          optionsB,
-          ApptiveGridOptions(
-            environment: env2,
-            authenticationOptions: authOptionsB,
-            cache: cache,
-          ));
+        optionsB,
+        ApptiveGridOptions(
+          environment: env2,
+          authenticationOptions: authOptionsB,
+          cache: cache,
+        ),
+      );
     });
 
     test('No op stays the same', () {
-      final env1 = ApptiveGridEnvironment.alpha;
+      const env1 = ApptiveGridEnvironment.alpha;
 
-      final authOptionsA = ApptiveGridAuthenticationOptions();
+      const authOptionsA = ApptiveGridAuthenticationOptions();
 
       final cache = MockApptiveGridCache();
 
       final optionsA = ApptiveGridOptions(
-          authenticationOptions: authOptionsA, environment: env1, cache: cache);
+        authenticationOptions: authOptionsA,
+        environment: env1,
+        cache: cache,
+      );
       final optionsB = optionsA.copyWith();
       expect(optionsB, optionsA);
     });
@@ -48,10 +54,10 @@ void main() {
 
   group('Equality', () {
     test('Objects are equal', () {
-      final optionsA = ApptiveGridOptions(
+      const optionsA = ApptiveGridOptions(
         environment: ApptiveGridEnvironment.beta,
       );
-      final optionsB =
+      const optionsB =
           ApptiveGridOptions(environment: ApptiveGridEnvironment.beta);
 
       expect(optionsA, equals(optionsB));
@@ -59,13 +65,14 @@ void main() {
     });
 
     test('Objects are not equal', () {
-      final optionsA = ApptiveGridOptions(
+      const optionsA = ApptiveGridOptions(
         environment: ApptiveGridEnvironment.beta,
       );
-      final optionsB = ApptiveGridOptions(
-          environment: ApptiveGridEnvironment.alpha,
-          authenticationOptions:
-              ApptiveGridAuthenticationOptions(autoAuthenticate: true));
+      const optionsB = ApptiveGridOptions(
+        environment: ApptiveGridEnvironment.alpha,
+        authenticationOptions:
+            ApptiveGridAuthenticationOptions(autoAuthenticate: true),
+      );
 
       expect(optionsA, isNot(equals(optionsB)));
       expect(optionsA.hashCode, isNot(equals(optionsB.hashCode)));

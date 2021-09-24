@@ -1,3 +1,6 @@
+## [0.4.3]
+* Update Lints
+
 ## [0.4.1]
 * Make [FormData.name] optional
 

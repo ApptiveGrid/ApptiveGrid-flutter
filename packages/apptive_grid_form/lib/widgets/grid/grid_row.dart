@@ -92,8 +92,9 @@ class HeaderRowWidget extends StatelessWidget {
       cellSize: cellSize,
       textStyle: textStyle ??
           TextStyle(
-              fontWeight: FontWeight.bold,
-              color: theme.primaryTextTheme.headline1!.color),
+            fontWeight: FontWeight.bold,
+            color: theme.primaryTextTheme.headline1!.color,
+          ),
       color: color ?? theme.primaryColor,
       padding: padding,
       controller: controller,
@@ -130,15 +131,17 @@ class _GridRow extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: labels
-              .map((label) => SizedBox(
-                    width: cellSize.width,
-                    child: Text(
-                      label ?? '',
-                      style: textStyle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ))
+              .map(
+                (label) => SizedBox(
+                  width: cellSize.width,
+                  child: Text(
+                    label ?? '',
+                    style: textStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              )
               .toList(),
         ),
       ),

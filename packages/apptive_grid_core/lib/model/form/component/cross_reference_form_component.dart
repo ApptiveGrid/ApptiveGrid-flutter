@@ -4,17 +4,19 @@ part of apptive_grid_model;
 class CrossReferenceFormComponent
     extends FormComponent<CrossReferenceDataEntity> {
   /// Creates a FormComponent
-  CrossReferenceFormComponent(
-      {required this.property,
-      required this.data,
-      required this.fieldId,
-      this.options = const FormComponentOptions(),
-      this.required = false});
+  CrossReferenceFormComponent({
+    required this.property,
+    required this.data,
+    required this.fieldId,
+    this.options = const FormComponentOptions(),
+    this.required = false,
+  });
 
   /// Deserializes [json] into a [FormComponent]
   CrossReferenceFormComponent.fromJson(
-      Map<String, dynamic> json, dynamic schema)
-      : property = json['property'],
+    Map<String, dynamic> json,
+    dynamic schema,
+  )   : property = json['property'],
         data = CrossReferenceDataEntity.fromJson(
           jsonValue: json['value'],
           gridUri: schema['gridUri'],

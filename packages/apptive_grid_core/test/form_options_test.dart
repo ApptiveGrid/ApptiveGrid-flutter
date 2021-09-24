@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('TextComponentOptions', () {
     group('Equality', () {
-      final a = TextComponentOptions(
+      const a = TextComponentOptions(
         label: 'Label',
         placeholder: 'Placeholder',
         description: 'Description',
@@ -14,7 +14,7 @@ void main() {
         'placeholder': 'Placeholder',
         'description': 'Description',
       });
-      final c = TextComponentOptions();
+      const c = TextComponentOptions();
 
       test('a == b', () {
         expect(a == b, true);
@@ -30,14 +30,16 @@ void main() {
 
   group('FormComponentOptions', () {
     group('Equality', () {
-      final a =
+      const a =
           FormComponentOptions(label: 'Label', description: 'Description');
       final b = FormComponentOptions.fromJson({
         'label': 'Label',
         'description': 'Description',
       });
-      final c = FormComponentOptions(
-          label: 'Label', description: 'Other Description');
+      const c = FormComponentOptions(
+        label: 'Label',
+        description: 'Other Description',
+      );
 
       test('a == b', () {
         expect(a == b, true);
