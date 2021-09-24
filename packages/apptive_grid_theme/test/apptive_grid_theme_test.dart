@@ -9,14 +9,14 @@ import 'package:flutter_test/flutter_test.dart';
 class _TestApp extends StatelessWidget {
   _TestApp({
     Key? key,
-    required this.appBarBuilder,
+    this.appBarBuilder,
     this.isDark = false,
     required this.childBuilder,
   }) : super(key: key);
 
   final Widget Function(ThemeData data) childBuilder;
   final bool isDark;
-  final AppBar? Function(ThemeData data) appBarBuilder;
+  final AppBar? Function(ThemeData data)? appBarBuilder;
 
   late final _themeData = isDark
       ? ApptiveGridTheme(brightness: Brightness.dark).theme()
@@ -29,8 +29,11 @@ class _TestApp extends StatelessWidget {
       darkTheme: _themeData,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: appBarBuilder(_themeData),
-        body: childBuilder(_themeData),
+        appBar: appBarBuilder?.call(_themeData),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: childBuilder(_themeData),
+        ),
       ),
     );
   }
@@ -79,7 +82,8 @@ void main() {
     AppBar? Function(ThemeData data)? appBarBuilder,
   }) async {
     debugDisableShadows = false;
-    appBarBuilder ??= (data) => null;
+    tester.binding.window.physicalSizeTestValue = const Size(720, 1290);
+
     final testApp = _TestApp(
       appBarBuilder: appBarBuilder,
       childBuilder: testableBuilder,
@@ -107,6 +111,7 @@ void main() {
 
 
     debugDisableShadows = true;
+    tester.binding.window.clearAllTestValues();
   }
 
   testWidgets('TextField theme', (widgetTester) async {
