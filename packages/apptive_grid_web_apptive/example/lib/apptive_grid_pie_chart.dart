@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:apptive_grid_web_apptive/apptive_grid_web_apptive.dart';
-import 'package:pie_chart/pie_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 class ApptiveGridPieChart extends StatefulWidget {
   const ApptiveGridPieChart({Key? key, required this.grid}) : super(key: key);
@@ -185,7 +185,9 @@ class _FieldSelectorState extends State<FieldSelector> {
                 .where(widget.validator)
                 .map<DropdownMenuItem<GridField>>(
                   (e) => DropdownMenuItem<GridField>(
-                      value: e, child: Text(e.name)),
+                    value: e,
+                    child: Text(e.name),
+                  ),
                 )
                 .toList(),
           ),
