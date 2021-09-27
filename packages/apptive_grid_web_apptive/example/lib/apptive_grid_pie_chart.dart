@@ -43,14 +43,18 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
   @override
   void didUpdateWidget(covariant ApptiveGridPieChart oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.grid.schema.toString() != oldWidget.grid.schema.toString()) {
-      setState(() {
-        if (_field != null && !widget.grid.fields.contains(_field)) {
+    setState(() {
+      final newFieldIds = widget.grid.fields.map((e) => e.id);
+      if (newFieldIds.contains(_field?.id)) {
+        _field = widget.grid.fields
+            .firstWhere((element) => element.id == _field?.id);
+      } else {
+        if (_field != null && !newFieldIds.contains(_field?.id)) {
           _field = null;
         }
         _setUp();
-      });
-    }
+      }
+    });
   }
 
   @override
@@ -112,7 +116,7 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
 
     final enumValues = (rows[0]
             .entries
-            .firstWhere((element) => element.field == _field)
+            .firstWhere((element) => element.field.id == _field?.id)
             .data as EnumDataEntity)
         .options;
 
@@ -124,7 +128,7 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
               .where(
                 (row) =>
                     (row.entries
-                            .firstWhere((entry) => entry.field == _field)
+                            .firstWhere((entry) => entry.field.id == _field?.id)
                             .data as EnumDataEntity)
                         .value ==
                     value,
