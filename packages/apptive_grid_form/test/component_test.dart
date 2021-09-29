@@ -75,13 +75,13 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -126,12 +126,12 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -171,13 +171,13 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -234,13 +234,13 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -307,12 +307,12 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -352,13 +352,13 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -414,12 +414,12 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -459,13 +459,13 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -506,12 +506,12 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -543,12 +543,12 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -588,13 +588,13 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -635,12 +635,12 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -672,12 +672,12 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -717,13 +717,13 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -768,12 +768,12 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -813,13 +813,13 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -873,12 +873,12 @@ void main() {
         client: client,
         child: ApptiveGridForm(
           formUri: RedirectFormUri(
-            form: 'formId',
+            components: ['formId'],
           ),
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(form: 'formId')))
+      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
