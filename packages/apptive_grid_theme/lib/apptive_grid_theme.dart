@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 export 'package:apptive_grid_theme/apptive_grid_colors.dart';
 export 'package:apptive_grid_theme/apptive_grid_icons_icons.dart';
 
-export 'package:apptive_grid_theme/apptive_grid_colors.dart';
-
-/// The Apptive Grid Theme
+/// The ApptiveGrid Theme
 ///
 /// A theme for all colors and fonts used in Apptive Grid apps
 class ApptiveGridTheme {
