@@ -81,9 +81,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
@@ -132,9 +132,9 @@ void main() {
         ),
       );
 
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -179,9 +179,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
@@ -243,9 +243,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
@@ -316,9 +316,9 @@ void main() {
         ),
       );
 
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -363,9 +363,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
@@ -425,9 +425,9 @@ void main() {
         ),
       );
 
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -472,9 +472,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
@@ -519,9 +519,9 @@ void main() {
         ),
       );
 
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -557,9 +557,9 @@ void main() {
         ),
       );
 
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -604,9 +604,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
@@ -651,9 +651,9 @@ void main() {
         ),
       );
 
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -689,9 +689,9 @@ void main() {
         ),
       );
 
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -736,9 +736,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
@@ -787,9 +787,9 @@ void main() {
         ),
       );
 
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -834,9 +834,9 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
@@ -894,9 +894,9 @@ void main() {
         ),
       );
 
-      when(() =>
-              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
-          .thenAnswer((_) async => formData);
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+      ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
