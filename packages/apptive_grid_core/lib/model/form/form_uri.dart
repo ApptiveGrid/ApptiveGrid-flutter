@@ -13,30 +13,6 @@ part of apptive_grid_model;
 abstract class FormUri extends ApptiveGridUri {
   FormUri._();
 
-  /// Create a FormUri accessed via a redirect Link from the ApptiveGrid UI Console
-  /// e.g. for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [form]
-  @Deprecated('Please use the RedirectFormUri Constructor directly')
-  factory FormUri.redirectForm({
-    required String form,
-  }) =>
-      RedirectFormUri(form: form);
-
-  /// Create a FormUri with known attributes for [user], [space], [grid], [form]
-  /// Mainly used when passed from other Api Calls
-  @Deprecated('Please use the DirectFormUri Constructor directly')
-  factory FormUri.directForm({
-    required String user,
-    required String space,
-    required String grid,
-    required String form,
-  }) =>
-      DirectFormUri(
-        user: user,
-        space: space,
-        grid: grid,
-        form: form,
-      );
-
   /// Creates a FormUri based on a [uri]
   /// [uri] must match either:
   /// /api/(r|a)/(\w+)\b for [RedirectFormUri]
@@ -68,9 +44,9 @@ abstract class FormUri extends ApptiveGridUri {
 /// A FormUri for a Form represented by a redirect Link
 class RedirectFormUri extends FormUri {
   /// Create a FormUri accessed via a redirect Link from the ApptiveGrid UI Console
-  /// for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [form]
+  /// for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [components]
   RedirectFormUri({
-    required this.form,
+    required this.components,
   }) : super._();
 
   /// Creates a FormUri based on a [uri]
@@ -78,33 +54,33 @@ class RedirectFormUri extends FormUri {
   /// /api/(r|a)/(\w+)\b
   factory RedirectFormUri.fromUri(String uri) {
     final matches = RegExp(_regex).allMatches(uri);
-    if (matches.isEmpty || matches.elementAt(0).groupCount != 2) {
+    if (matches.isEmpty || matches.elementAt(0).groupCount < 2) {
       throw ArgumentError('Could not parse FormUri $uri');
     }
     final match = matches.elementAt(0);
-    return RedirectFormUri(form: match.group(2)!);
+    return RedirectFormUri(components: match.group(2)!.split('/'));
   }
 
-  static const _regex = r'/api/(r|a)/(\w+)\b';
+  static const _regex = r'/api/(r|a)/((\w+/?)+)';
 
   /// Id this is representing
-  /// for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [form]
-  final String form;
+  /// for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [components]
+  final List<String> components;
 
   @override
-  String get uriString => '/api/a/$form';
+  String get uriString => '/api/a/${components.join('/')}';
 
   @override
   bool get needsAuthorization => false;
 
   @override
   String toString() {
-    return 'RedirectFormUri(form: $form)';
+    return 'RedirectFormUri(form: $components)';
   }
 
   @override
   bool operator ==(Object other) {
-    return other is RedirectFormUri && form == other.form;
+    return other is RedirectFormUri && f.listEquals(components, other.components);
   }
 
   @override
