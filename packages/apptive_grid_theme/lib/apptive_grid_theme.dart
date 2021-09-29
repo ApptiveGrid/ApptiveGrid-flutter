@@ -35,7 +35,7 @@ class ApptiveGridTheme {
     final textTheme = _textTheme(baseTheme.textTheme);
 
     final buttonShape =
-    RoundedRectangleBorder(borderRadius: BorderRadius.circular(4));
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(4));
     final baseButtonStyle = ButtonStyle(
       shape: MaterialStateProperty.all(buttonShape),
     );
@@ -65,29 +65,28 @@ class ApptiveGridTheme {
             }
           }),
           backgroundColor:
-          MaterialStateProperty.resolveWith(_resolveButtonColor),
+              MaterialStateProperty.resolveWith(_resolveButtonColor),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: baseButtonStyle.copyWith(
             foregroundColor: MaterialStateProperty.resolveWith((states) {
-      if (states.contains(MaterialState.disabled)) {
-      return ApptiveGridColors.lightGrey;
-      } else {
-      return ApptiveGridColors.apptiveGridBlue;
-      }
-      }),
-            side: MaterialStateProperty.resolveWith((states) {
-              final color = _resolveButtonColor(states);
-              late final double width;
-              if (states.contains(MaterialState.pressed) ||
-                  states.contains(MaterialState.hovered)) {
-                width = 3;
-              } else {
-                width = 1;
-              }
-              return BorderSide(color: color, width: width);
-            })),
+          if (states.contains(MaterialState.disabled)) {
+            return ApptiveGridColors.lightGrey;
+          } else {
+            return ApptiveGridColors.apptiveGridBlue;
+          }
+        }), side: MaterialStateProperty.resolveWith((states) {
+          final color = _resolveButtonColor(states);
+          late final double width;
+          if (states.contains(MaterialState.pressed) ||
+              states.contains(MaterialState.hovered)) {
+            width = 3;
+          } else {
+            width = 1;
+          }
+          return BorderSide(color: color, width: width);
+        })),
       ),
       hintColor: ApptiveGridColors.lightGrey.withOpacity(0.8),
       inputDecorationTheme: baseTheme.inputDecorationTheme.copyWith(
