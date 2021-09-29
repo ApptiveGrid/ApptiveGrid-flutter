@@ -81,7 +81,8 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -131,7 +132,8 @@ void main() {
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -177,7 +179,8 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -240,7 +243,8 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -312,7 +316,8 @@ void main() {
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -358,7 +363,8 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -419,7 +425,8 @@ void main() {
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -465,7 +472,8 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -511,7 +519,8 @@ void main() {
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -548,7 +557,8 @@ void main() {
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -594,7 +604,8 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -640,7 +651,8 @@ void main() {
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -677,7 +689,8 @@ void main() {
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -723,7 +736,8 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -773,7 +787,8 @@ void main() {
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -819,7 +834,8 @@ void main() {
       );
 
       final completer = Completer<FormData>();
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
       when(() => client.performAction(action, any()))
           .thenAnswer((realInvocation) async {
@@ -878,7 +894,8 @@ void main() {
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['formId'])))
           .thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);

@@ -42,9 +42,9 @@ void main() {
     });
 
     test('Updated Link Format Parses', () {
-        final uri = RedirectFormUri.fromUri('/api/a/787878/ababab');
+      final uri = RedirectFormUri.fromUri('/api/a/787878/ababab');
 
-        expect(uri.uriString, '/api/a/787878/ababab');
+      expect(uri.uriString, '/api/a/787878/ababab');
     });
   });
 

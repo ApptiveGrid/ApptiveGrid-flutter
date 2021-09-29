@@ -80,7 +80,8 @@ class RedirectFormUri extends FormUri {
 
   @override
   bool operator ==(Object other) {
-    return other is RedirectFormUri && f.listEquals(components, other.components);
+    return other is RedirectFormUri &&
+        f.listEquals(components, other.components);
   }
 
   @override

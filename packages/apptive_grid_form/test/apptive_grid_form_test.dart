@@ -31,7 +31,8 @@ void main() {
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['form'])))
           .thenAnswer(
         (realInvocation) async => FormData(
           name: 'Form Name',
@@ -59,7 +60,8 @@ void main() {
         ),
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['form'])))
           .thenAnswer(
         (realInvocation) async => FormData(
           name: 'Form Name',
@@ -125,7 +127,8 @@ void main() {
         actions: [],
         schema: {},
       );
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['form'])))
           .thenAnswer((realInvocation) async => form);
 
       await tester.pumpWidget(target);
@@ -158,7 +161,8 @@ void main() {
         schema: {},
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['form'])))
           .thenAnswer((realInvocation) async => formData);
       when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
@@ -191,7 +195,8 @@ void main() {
         schema: {},
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['form'])))
           .thenAnswer((realInvocation) async => formData);
       when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
@@ -205,7 +210,8 @@ void main() {
       await tester.tap(find.byType(TextButton, skipOffstage: false));
       await tester.pumpAndSettle();
 
-      verify(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+      verify(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['form'])))
           .called(2);
     });
   });
@@ -222,7 +228,8 @@ void main() {
           ),
         );
 
-        when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+        when(() =>
+                client.loadForm(formUri: RedirectFormUri(components: ['form'])))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -242,7 +249,8 @@ void main() {
             ),
           ),
         );
-        when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+        when(() =>
+                client.loadForm(formUri: RedirectFormUri(components: ['form'])))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -252,7 +260,8 @@ void main() {
         await tester.tap(find.byType(TextButton, skipOffstage: false));
         await tester.pumpAndSettle();
 
-        verify(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+        verify(() =>
+                client.loadForm(formUri: RedirectFormUri(components: ['form'])))
             .called(2);
       });
     });
@@ -276,7 +285,8 @@ void main() {
           schema: {},
         );
 
-        when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+        when(() =>
+                client.loadForm(formUri: RedirectFormUri(components: ['form'])))
             .thenAnswer((realInvocation) async => formData);
         when(() => client.performAction(action, formData))
             .thenAnswer((_) => Future.error(''));
@@ -309,7 +319,8 @@ void main() {
           schema: {},
         );
 
-        when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+        when(() =>
+                client.loadForm(formUri: RedirectFormUri(components: ['form'])))
             .thenAnswer((realInvocation) async => formData);
         when(() => client.performAction(action, formData))
             .thenAnswer((_) => Future.error(''));
@@ -342,7 +353,8 @@ void main() {
           schema: {},
         );
 
-        when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+        when(() =>
+                client.loadForm(formUri: RedirectFormUri(components: ['form'])))
             .thenAnswer((realInvocation) async => formData);
         when(() => client.performAction(action, formData))
             .thenAnswer((_) => Future.error(''));
@@ -378,7 +390,8 @@ void main() {
           schema: {},
         );
 
-        when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+        when(() =>
+                client.loadForm(formUri: RedirectFormUri(components: ['form'])))
             .thenAnswer((realInvocation) async => formData);
         when(() => client.performAction(action, formData))
             .thenAnswer((_) async => http.Response('', 500));
@@ -419,7 +432,8 @@ void main() {
         schema: {},
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['form'])))
           .thenAnswer((realInvocation) async => formData);
       when(() => client.performAction(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
@@ -453,7 +467,8 @@ void main() {
         schema: {},
       );
 
-      when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+      when(() =>
+              client.loadForm(formUri: RedirectFormUri(components: ['form'])))
           .thenAnswer((realInvocation) async => formData);
       when(() => client.performAction(action, formData))
           .thenAnswer((_) => Future.error(''));
