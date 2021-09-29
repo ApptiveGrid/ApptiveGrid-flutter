@@ -1,3 +1,6 @@
+## [0.5.0]
+* **BREAKING CHANGE** Supporting new Format for RedirectFormUris. `RedirectFormUris` now take a list of `component`
+
 ## [0.4.3]
 * Update Lints
 
