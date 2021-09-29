@@ -1,5 +1,5 @@
 name: apptive_grid_theme
-description: All theming for apps using AppiveGrid.
+description: All theming for apps using AppiveGrid. This includes colors, icons and fonts used by ApptiveGrid.
 version: 0.0.1
 homepage: https://www.apptivegrid.de
 publish_to: none
