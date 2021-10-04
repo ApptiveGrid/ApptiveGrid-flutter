@@ -85,7 +85,7 @@ void main() {
           .thenAnswer((_) async => response);
 
       final formData = await apptiveGridClient.loadForm(
-        formUri: RedirectFormUri(form: 'FormId'),
+        formUri: RedirectFormUri(components: ['FormId']),
       );
 
       expect(formData.title, 'Form');
@@ -128,7 +128,7 @@ void main() {
 
       expect(
         () => apptiveGridClient.loadForm(
-          formUri: RedirectFormUri(form: 'FormId'),
+          formUri: RedirectFormUri(components: ['FormId']),
         ),
         throwsA(isInstanceOf<Response>()),
       );

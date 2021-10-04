@@ -35,7 +35,7 @@ In order to display an ApptiveGrid Form in your App use the `ApptiveGridForm` Wi
         title: Text(widget.title),
       ),
       body: ApptiveGridForm(
-        formUri: RedirectFormUri(form: 'YOUR_FORM_ID'),
+        formUri: FormUri.fromUri('YOUR_FORM_URI'),
       ),
     );
   }
@@ -55,7 +55,7 @@ Widget build(BuildContext context) {
       title: Text(widget.title),
     ),
     body: ApptiveGridForm(
-      formUri: RedirectFormUri(form: 'YOUR_FORM_ID'),
+      formUri: FormUri.fromUri('YOUR_FORM_URI'),
       titleStyle: Theme.of(context).textTheme.headline6,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
       titlePadding: const EdgeInsets.all(16),

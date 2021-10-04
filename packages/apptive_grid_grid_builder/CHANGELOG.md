@@ -1,3 +1,7 @@
+## [0.5.0]
+* **BREAKING CHANGE** Supporting new Format for RedirectFormUris. `RedirectFormUris` now take a list of `component`
+* Remove deprecated constructors `FormUri.redirectUri` and `FormUri.directUri`
+
 ## [0.4.3]
 * Update Lints
 
