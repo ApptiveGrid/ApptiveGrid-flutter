@@ -90,7 +90,7 @@ pipeline {
         script {
           flutter.melosRun('test:all')
         }
-        junit  skipPublishingChecks: true,  testResults: "**/test_results/*.xml"
+        junit  skipPublishingChecks: true,  testResults: "**/packages/**/test_results/*.xml"
       }
       post {
         failure {
