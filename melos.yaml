@@ -33,7 +33,7 @@ scripts:
   test:
     run: |
       melos exec -c 1 -- \
-        "mkdir -p test_results && flutter test --machine | tojunit -o MELOS_PACKAGE_PATH/test_results/output.xml"
+        "mkdir -p test_results && flutter test --machine --no-pub | tojunit -o MELOS_PACKAGE_PATH/test_results/output.xml"
     select-package:
       dir-exists:
         - test
