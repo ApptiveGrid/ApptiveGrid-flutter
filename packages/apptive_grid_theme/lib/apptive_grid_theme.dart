@@ -70,23 +70,25 @@ class ApptiveGridTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: baseButtonStyle.copyWith(
-            foregroundColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.disabled)) {
-            return ApptiveGridColors.lightGrey;
-          } else {
-            return ApptiveGridColors.apptiveGridBlue;
-          }
-        }), side: MaterialStateProperty.resolveWith((states) {
-          final color = _resolveButtonColor(states);
-          late final double width;
-          if (states.contains(MaterialState.pressed) ||
-              states.contains(MaterialState.hovered)) {
-            width = 3;
-          } else {
-            width = 1;
-          }
-          return BorderSide(color: color, width: width);
-        })),
+          foregroundColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.disabled)) {
+              return ApptiveGridColors.lightGrey;
+            } else {
+              return ApptiveGridColors.apptiveGridBlue;
+            }
+          }),
+          side: MaterialStateProperty.resolveWith((states) {
+            final color = _resolveButtonColor(states);
+            late final double width;
+            if (states.contains(MaterialState.pressed) ||
+                states.contains(MaterialState.hovered)) {
+              width = 3;
+            } else {
+              width = 1;
+            }
+            return BorderSide(color: color, width: width);
+          }),
+        ),
       ),
       hintColor: ApptiveGridColors.lightGrey.withOpacity(0.8),
       inputDecorationTheme: baseTheme.inputDecorationTheme.copyWith(
@@ -181,10 +183,12 @@ class ApptiveGridTheme {
 
   Color _resolveButtonColor(Set<MaterialState> states) {
     if (states.contains(MaterialState.disabled)) {
-      return ApptiveGridColors.lightGrey.withOpacity(_withBrightness(
-        light: 0.3,
-        dark: 0.3,
-      ));
+      return ApptiveGridColors.lightGrey.withOpacity(
+        _withBrightness(
+          light: 0.3,
+          dark: 0.3,
+        ),
+      );
     }
     return ApptiveGridColors.apptiveGridBlue;
   }
