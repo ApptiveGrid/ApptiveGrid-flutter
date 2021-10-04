@@ -28,7 +28,7 @@ scripts:
         "flutter format . --set-exit-if-changed"
 
   test:all:
-    run: melos run test --no-select && melos run test:web --no-select
+    run: melos run test --no-select # && melos run test:web --no-select
 
   test:
     run: |
@@ -54,7 +54,7 @@ scripts:
         - "*example*"
 
   test:all_coverage:
-    run: melos run test:coverage --no-select && melos run test:coverage_web --no-select
+    run: melos run test:coverage --no-select # && melos run test:coverage_web --no-select
 
   test:coverage:
     run: |
