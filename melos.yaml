@@ -20,6 +20,7 @@ scripts:
         "dart pub publish --dry-run"
     select-package:
       ignore: "*example*"
+      no-private: true
 
   lint:format:
     run: |
