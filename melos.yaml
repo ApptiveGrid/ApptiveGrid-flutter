@@ -86,13 +86,9 @@ scripts:
   # build sometimes without the `--no-pub` switch. Careful: `melos bootstrap` after.
   build:example_android_pub:
     run: |
-      melos exec -c 6 --fail-fast -- \
+      melos exec -c 6 --dir-exists="android" --scope="example" --fail-fast -- \
         "flutter build apk"
     description: Build a specific example app for Android.
-    select-package:
-      dir-exists:
-        - android
-      scope: "example"
 
   build:ios:
     run: |
@@ -103,10 +99,6 @@ scripts:
   # build sometimes without the `--no-pub` switch. Careful: `melos bootstrap` after.
   build:example_ios_pub:
     run: |
-      melos exec -c 6 --fail-fast -- \
+      melos exec -c 6 --dir-exists="ios" --scope="example" --fail-fast -- \
         "flutter build ios --no-codesign"
     description: Build a specific example app for iOS.
-    select-package:
-      dir-exists:
-        - ios
-      scope: "example"
