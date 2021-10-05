@@ -84,7 +84,7 @@ pipeline {
 
     stage('Flutter Tests') {
       agent {
-        label 'android-build || ios-build'
+        label 'ios-build'
       }
       steps {
         script {
@@ -96,7 +96,7 @@ pipeline {
         failure {
           script {
             failedStage = Stage.UnitTest
-            archiveArtifacts '**/test/failures'
+            archiveArtifacts artifacts: '**/test/failures/*', allowEmptyArchive: true
             throw new Exception("Error in Tests");
 
           }
@@ -104,7 +104,7 @@ pipeline {
         unstable {
           script {
             failedStage = Stage.UnitTest
-            archiveArtifacts '**/test/failures'
+            archiveArtifacts artifacts: '**/test/failures/*', allowEmptyArchive: true
             throw new Exception("Error in Tests");
           }
         }
