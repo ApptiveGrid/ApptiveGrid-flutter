@@ -119,7 +119,7 @@ class ApptiveGridTheme {
         ),
       ),
       dialogTheme: baseTheme.dialogTheme.copyWith(
-        titleTextStyle: textTheme.headline6,
+        titleTextStyle: textTheme.headline4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       scaffoldBackgroundColor: _windowBackground,
@@ -145,7 +145,8 @@ class ApptiveGridTheme {
           ),
         ),
         brightness: brightness,
-        textTheme: textTheme,
+        titleTextStyle: textTheme.headline3,
+        toolbarTextStyle: textTheme.headline3,
       ),
     );
   }
@@ -155,17 +156,30 @@ class ApptiveGridTheme {
       bodyText1: const TextStyle(
         fontSize: 14,
       ),
-      headline3: const TextStyle(
+      bodyText2: const TextStyle(
+        fontSize: 12,
+      ),
+      headline1: const TextStyle(
         fontSize: 44,
         fontWeight: FontWeight.bold,
       ),
-      headline5: const TextStyle(
+      headline2: const TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+      ),
+      headline3: const TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.bold,
       ),
-      headline6: const TextStyle(
+      headline4: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
+      ),
+      headline5: const TextStyle(
+        fontSize: 20,
+      ),
+      headline6: const TextStyle(
+        fontSize: 16,
       ),
     );
     return newTheme.apply(

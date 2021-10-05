@@ -268,13 +268,12 @@ void main() {
 
   testWidgets('Card theme', (widgetTester) async {
     await _test(
-      (data) => Center(
+      (data) => const Center(
         child: Card(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0),
             child: Text(
               'Test',
-              style: data.textTheme.bodyText1,
             ),
           ),
         ),
@@ -308,19 +307,17 @@ void main() {
 
   testWidgets('App bar theme', (widgetTester) async {
     await _test(
-      (data) => Padding(
-        padding: const EdgeInsets.all(8.0),
+      (data) => const Padding(
+        padding: EdgeInsets.all(8.0),
         child: Text(
           'Body',
-          style: data.textTheme.bodyText1,
         ),
       ),
       'AppBar',
       widgetTester,
       appBarBuilder: (data) => AppBar(
-        title: Text(
+        title: const Text(
           'Test',
-          style: data.textTheme.headline5,
         ),
       ),
     );
@@ -337,7 +334,7 @@ void main() {
             ),
             Text(
               'BodyText2',
-              style: data.textTheme.bodyText1,
+              style: data.textTheme.bodyText2,
             ),
             Text(
               'Caption',
