@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 /// Add A ApptiveGrid Widget to your Widget Tree to enable ApptiveGrid Functionality
 void main() async {
   const options = ApptiveGridOptions(
-      environment: ApptiveGridEnvironment.beta,
-      authenticationOptions: ApptiveGridAuthenticationOptions(
-        autoAuthenticate: true,
-        redirectScheme: 'apptivegrid',
-      ));
+    environment: ApptiveGridEnvironment.beta,
+    authenticationOptions: ApptiveGridAuthenticationOptions(
+      autoAuthenticate: true,
+      redirectScheme: 'apptivegrid',
+    ),
+  );
   await enableWebAuth(options);
   runApp(ApptiveGrid(options: options, child: MyApp()));
 }
@@ -29,26 +30,30 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Builder(builder: (context) {
-        return Scaffold(
-          body: ListView(
-            children: [
-              Text(
-                'User',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-              _UserSection(
-                  onUserLoaded: (user) => setState(() => _user = user)),
-              if (_user != null)
+      home: Builder(
+        builder: (context) {
+          return Scaffold(
+            body: ListView(
+              children: [
                 Text(
-                  'Spaces',
+                  'User',
                   style: Theme.of(context).textTheme.headline4,
                 ),
-              ...((_user?.spaces) ?? []).map((e) => _SpaceSection(spaceUri: e)),
-            ],
-          ),
-        );
-      }),
+                _UserSection(
+                  onUserLoaded: (user) => setState(() => _user = user),
+                ),
+                if (_user != null)
+                  Text(
+                    'Spaces',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ...((_user?.spaces) ?? [])
+                    .map((e) => _SpaceSection(spaceUri: e)),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -128,8 +133,9 @@ class _SpaceSectionState extends State<_SpaceSection> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _spaceFuture = ApptiveGrid.getClient(context).getSpace(
-        spaceUri:
-            SpaceUri(user: widget.spaceUri.user, space: widget.spaceUri.space));
+      spaceUri:
+          SpaceUri(user: widget.spaceUri.user, space: widget.spaceUri.space),
+    );
   }
 
   @override
