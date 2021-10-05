@@ -3,6 +3,7 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - '**/grid_row_dropdown.dart'
+    - '**/apptive_grid_icons_icons.dart'
 
 linter:
   rules:
@@ -11,3 +12,4 @@ linter:
     hash_and_equals: true
     avoid_print: true
     require_trailing_commas: true
+    always_use_package_imports: true
