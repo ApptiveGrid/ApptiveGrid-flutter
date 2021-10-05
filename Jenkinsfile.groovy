@@ -84,7 +84,7 @@ pipeline {
 
     stage('Flutter Tests') {
       agent {
-        label 'android-build || ios-build'
+        label 'ios-build'
       }
       steps {
         script {
