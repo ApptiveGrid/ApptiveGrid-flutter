@@ -106,7 +106,7 @@ pipeline {
         failure {
           script {
             failedStage = Stage.UnitTest
-            archiveArtifacts '**/test/failures'
+            archiveArtifacts '**/test/failures/*.png', allowEmptyArchive: true
             throw new Exception("Error running tests")
           }
         }
@@ -114,7 +114,7 @@ pipeline {
           script {
             if(failedStage != Stage.Lint) {
               failedStage = Stage.UnitTest
-              archiveArtifacts '**/test/failures'
+              archiveArtifacts '**/test/failures/*.png', allowEmptyArchive: true
               throw new Exception("Error in Tests");
             }
           }
