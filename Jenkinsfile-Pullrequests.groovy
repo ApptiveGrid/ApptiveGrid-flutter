@@ -106,14 +106,15 @@ pipeline {
         failure {
           script {
             failedStage = Stage.UnitTest
+            archiveArtifacts '**/test/failures'
             throw new Exception("Error running tests")
-
           }
         }
         unstable {
           script {
             if(failedStage != Stage.Lint) {
               failedStage = Stage.UnitTest
+              archiveArtifacts '**/test/failures'
               throw new Exception("Error in Tests");
             }
           }

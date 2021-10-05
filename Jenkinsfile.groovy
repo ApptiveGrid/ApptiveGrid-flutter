@@ -96,6 +96,7 @@ pipeline {
         failure {
           script {
             failedStage = Stage.UnitTest
+            archiveArtifacts '**/test/failures'
             throw new Exception("Error in Tests");
 
           }
@@ -103,6 +104,7 @@ pipeline {
         unstable {
           script {
             failedStage = Stage.UnitTest
+            archiveArtifacts '**/test/failures'
             throw new Exception("Error in Tests");
           }
         }
