@@ -33,11 +33,24 @@ scripts:
   test:
     run: |
       melos exec -c 1 -- \
-        "mkdir -p test_results && flutter test --machine | tojunit -o MELOS_PACKAGE_PATH/test_results/output.xml"
+        "mkdir -p test_results && flutter test --machine --no-pub | tojunit -o MELOS_PACKAGE_PATH/test_results/output.xml"
     select-package:
       dir-exists:
         - test
-      ignore: "*example*"
+      ignore:
+        - "*example*"
+
+  test:web:
+    run: |
+      melos exec -c 1 -- \
+        "mkdir -p test_results && flutter test --no-pub --platform=chrome --machine | tojunit -o MELOS_PACKAGE_PATH/test_results/output.xml"
+    select-package:
+      dir-exists:
+        - test
+      scope:
+        - "*web*"
+      ignore:
+        - "*example*"
 
   test:all_coverage:
     run: melos run test:coverage --no-select
@@ -49,7 +62,20 @@ scripts:
     select-package:
       dir-exists:
         - test
-      ignore: "*example*"
+      ignore:
+        - "*example*"
+
+  test:coverage_web:
+    run: |
+      melos exec -c 1 -- \
+        "mkdir -p coverage && flutter test --no-pub --platform=chrome --coverage && genhtml coverage/lcov.info -o coverage/html"
+    select-package:
+      dir-exists:
+        - test
+      scope:
+        - "*web*"
+      ignore:
+        - "*example*"
 
   build:android:
     run: |
@@ -60,13 +86,9 @@ scripts:
   # build sometimes without the `--no-pub` switch. Careful: `melos bootstrap` after.
   build:example_android_pub:
     run: |
-      melos exec -c 6 --fail-fast -- \
+      melos exec -c 6 --dir-exists="android" --scope="example" --fail-fast -- \
         "flutter build apk"
     description: Build a specific example app for Android.
-    select-package:
-      dir-exists:
-        - android
-      scope: "example"
 
   build:ios:
     run: |
@@ -77,10 +99,6 @@ scripts:
   # build sometimes without the `--no-pub` switch. Careful: `melos bootstrap` after.
   build:example_ios_pub:
     run: |
-      melos exec -c 6 --fail-fast -- \
+      melos exec -c 6 --dir-exists="ios" --scope="example" --fail-fast -- \
         "flutter build ios --no-codesign"
     description: Build a specific example app for iOS.
-    select-package:
-      dir-exists:
-        - ios
-      scope: "example"
