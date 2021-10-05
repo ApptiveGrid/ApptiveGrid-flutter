@@ -10,7 +10,7 @@ export 'package:apptive_grid_theme/apptive_grid_icons_icons.dart';
 
 /// The ApptiveGrid Theme
 ///
-/// A theme for all colors and fonts used in Apptive Grid apps
+/// A theme for all colors and fonts used in ApptiveGrid apps
 class ApptiveGridTheme {
   /// Initializes the theme with a give brightness
   ApptiveGridTheme({required this.brightness});

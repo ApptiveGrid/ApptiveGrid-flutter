@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Apptive Grid',
+      title: 'ApptiveGrid',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

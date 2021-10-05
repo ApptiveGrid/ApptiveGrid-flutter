@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Shows a contact List
 ///
-/// Set Up your Grid in Apptive grid using Text Columns
+/// Set Up your Grid in ApptiveGrid using Text Columns
 /// | First Name | Last Name | imgUrl
 void main() async {
   await enableWebAuth(ApptiveGridOptions());
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Apptive grid',
+      title: 'ApptiveGrid',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
