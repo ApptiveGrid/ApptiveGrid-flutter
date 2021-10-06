@@ -19,7 +19,7 @@ class ApptiveGridIcons {
   ApptiveGridIcons._();
 
   static const _kFontFam = 'ApptiveGridIcons';
-  static const String? _kFontPkg = null;
+  static const String? _kFontPkg = 'apptive_grid_theme';
 
   static const IconData more =
       IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);

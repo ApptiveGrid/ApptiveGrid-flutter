@@ -1,10 +1,8 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:apptive_grid_theme/apptive_grid_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 
 class _TestApp extends StatelessWidget {
   _TestApp({
@@ -39,41 +37,9 @@ class _TestApp extends StatelessWidget {
   }
 }
 
-Future<void> loadFonts() async {
-  //https://github.com/flutter/flutter/issues/20907
-  if (Directory.current.path.endsWith('/test')) {
-    Directory.current = Directory.current.parent;
-  }
-
-  final bold = File('fonts/DMSans-Bold.ttf')
-      .readAsBytes()
-      .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
-  final medium = File('fonts/DMSans-Medium.ttf')
-      .readAsBytes()
-      .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
-  final regular = File('fonts/DMSans-Regular.ttf')
-      .readAsBytes()
-      .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
-  final fontLoader = FontLoader('DMSans')
-    ..addFont(bold)
-    ..addFont(medium)
-    ..addFont(regular);
-  await fontLoader.load();
-
-  final icons = File('fonts/ApptiveGridIcons.ttf')
-      .readAsBytes()
-      .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
-  final iconLoader = FontLoader('ApptiveGridIcons')..addFont(icons);
-  await iconLoader.load();
-}
-
 void main() {
   String _goldenFilePath(String name, {bool isDark = false}) =>
       'goldenFiles/${name}_${isDark ? 'dark' : 'light'}.png';
-
-  setUpAll(() async {
-    await loadFonts();
-  });
 
   Future<void> _test(
     Widget Function(ThemeData data) testableBuilder,
@@ -81,6 +47,7 @@ void main() {
     WidgetTester tester, {
     AppBar? Function(ThemeData data)? appBarBuilder,
   }) async {
+    await loadAppFonts();
     debugDisableShadows = false;
     tester.binding.window.physicalSizeTestValue = const Size(720, 1290);
 
@@ -209,7 +176,7 @@ void main() {
         (data) => Center(
           child: IconButton(
             icon: const Icon(
-              ApptiveGridIcons.grid,
+              Icons.add,
             ),
             onPressed: () {},
           ),
