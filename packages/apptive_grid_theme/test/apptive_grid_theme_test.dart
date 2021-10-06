@@ -209,7 +209,7 @@ void main() {
         (data) => Center(
           child: IconButton(
             icon: const Icon(
-              ApptiveGridIcons.grid,
+              Icons.add,
             ),
             onPressed: () {},
           ),
