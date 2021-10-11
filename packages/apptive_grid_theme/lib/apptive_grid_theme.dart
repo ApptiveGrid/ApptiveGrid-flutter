@@ -1,9 +1,8 @@
 library apptive_grid_theme;
 
-import 'dart:io';
-
 import 'package:apptive_grid_theme/apptive_grid_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 export 'package:apptive_grid_theme/apptive_grid_colors.dart';
 export 'package:apptive_grid_theme/apptive_grid_icons_icons.dart';
@@ -21,7 +20,7 @@ class ApptiveGridTheme {
   /// Creates the theme
   ThemeData theme() {
     late final Color darkWindowBackground;
-    if (Platform.isIOS) {
+    if (UniversalPlatform.isIOS) {
       darkWindowBackground = Colors.black;
     } else {
       darkWindowBackground = const Color(0xFF282625);
