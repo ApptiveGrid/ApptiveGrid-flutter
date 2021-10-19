@@ -64,6 +64,7 @@ scripts:
         - test
       ignore:
         - "*example*"
+        - "*web*"
 
   test:coverage_web:
     run: |
