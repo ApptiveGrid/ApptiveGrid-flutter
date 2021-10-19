@@ -1,3 +1,6 @@
+## 0.0.2+1
+* Specify `package` for `TextStyle`
+
 ## 0.0.2
 * Add Example Readme
 * Add support for web
