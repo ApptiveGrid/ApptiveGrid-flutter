@@ -151,34 +151,43 @@ class ApptiveGridTheme {
   }
 
   TextTheme _textTheme(TextTheme baseTheme) {
+    const fontPackage = 'apptive_grid_theme';
     final newTheme = baseTheme.copyWith(
       bodyText1: const TextStyle(
         fontSize: 14,
+        package: fontPackage,
       ),
       bodyText2: const TextStyle(
         fontSize: 12,
+        package: fontPackage,
       ),
       headline1: const TextStyle(
         fontSize: 44,
         fontWeight: FontWeight.bold,
+        package: fontPackage,
       ),
       headline2: const TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.bold,
+        package: fontPackage,
       ),
       headline3: const TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.bold,
+        package: fontPackage,
       ),
       headline4: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
+        package: fontPackage,
       ),
       headline5: const TextStyle(
         fontSize: 20,
+        package: fontPackage,
       ),
       headline6: const TextStyle(
         fontSize: 16,
+        package: fontPackage,
       ),
     );
     return newTheme.apply(

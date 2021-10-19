@@ -1,3 +1,6 @@
+## 0.6.0
+* Upgrade to [Provider](https://pub.dev/packages/provider) 6.0.1
+
 ## [0.5.0]
 * **BREAKING CHANGE** Supporting new Format for RedirectFormUris. `RedirectFormUris` now take a list of `component`
 

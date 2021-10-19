@@ -13,7 +13,7 @@ import 'common.dart';
 void main() {
   late ApptiveGridClient client;
   setUpAll(() {
-    registerFallbackValue<FormData>(
+    registerFallbackValue(
       FormData(
         name: 'name',
         title: 'title',
