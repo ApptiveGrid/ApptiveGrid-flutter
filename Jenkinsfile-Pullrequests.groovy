@@ -1,4 +1,4 @@
-@Library('zweidenker-lib@1.9.0')
+@Library('zweidenker-lib@1.10.3')
 import de.zweidenker.*
 
 String repositoryPath = "2denker/active-grid-flutter"

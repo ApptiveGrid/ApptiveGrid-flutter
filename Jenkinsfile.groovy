@@ -1,10 +1,11 @@
-@Library('zweidenker-lib@1.9.0')
+@Library('zweidenker-lib@1.10.3')
 import de.zweidenker.*
 
 String repositoryPath = "2denker/active-grid-flutter"
 String projectUrl = "https://api.bitbucket.org/2.0/repositories/$repositoryPath"
 
 Bitbucket bitbucket = new Bitbucket(this)
+Slack slack = new Slack()
 Flutter flutter = new Flutter(this)
 String bitbucketCredentials = 'git-ac-flutter'
 Stage failedStage
@@ -171,6 +172,7 @@ pipeline {
           currentBuild.result = 'FAILURE'
           bitbucket.reportBuildResult(projectUrl, BuildState.FAILED)
         }
+        slack.report('addThumbnail', 'flutterSlackWebhook')
       }
       node('ios-build') {
         deleteDir()
