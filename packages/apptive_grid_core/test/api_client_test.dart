@@ -16,9 +16,9 @@ void main() {
   late ApptiveGridClient apptiveGridClient;
 
   setUpAll(() {
-    registerFallbackValue<BaseRequest>(Request('GET', Uri()));
-    registerFallbackValue<Uri>(Uri());
-    registerFallbackValue<Map<String, String>>(<String, String>{});
+    registerFallbackValue(Request('GET', Uri()));
+    registerFallbackValue(Uri());
+    registerFallbackValue(<String, String>{});
 
     registerFallbackValue(
       ActionItem(

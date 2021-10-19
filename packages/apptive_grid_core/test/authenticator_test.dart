@@ -129,7 +129,7 @@ void main() {
 
   group('Authenticate', () {
     setUpAll(() {
-      registerFallbackValue<Map<String, String>>(<String, String>{});
+      registerFallbackValue(<String, String>{});
     });
 
     test('Opens Url', () async {
