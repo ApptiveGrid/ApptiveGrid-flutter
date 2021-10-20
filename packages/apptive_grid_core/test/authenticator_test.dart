@@ -157,6 +157,7 @@ void main() {
       authenticator = ApptiveGridAuthenticator();
       final authClient = MockAuthClient();
       when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.clientId).thenReturn('Id');
       authenticator.setAuthClient(authClient);
       unawaited(authenticator.authenticate());
       final launchedUrl = await completer.future;
@@ -263,12 +264,12 @@ void main() {
           jsonEncode(_zweidenkerIssuer.metadata.toJson()),
           200,
           request: Request('GET', discoveryUri),
-        ),
+          headers: {HttpHeaders.contentTypeHeader: ContentType.json},),
       );
 
       final client = await authenticator.authClient;
       expect(
-        client.issuer!.metadata.toJson(),
+        client.issuer.metadata.toJson(),
         _zweidenkerIssuer.metadata.toJson(),
       );
     });
@@ -343,6 +344,7 @@ void main() {
           jsonEncode(tokenResponse.toJson()),
           200,
           request: Request('POST', invocation.positionalArguments[0]),
+          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
         ),
       );
 
@@ -387,7 +389,7 @@ void main() {
       when(() => authClient.httpClient).thenReturn(httpClient);
 
       final credential = Credential.fromJson({
-        'issuer': authClient.issuer!.metadata.toJson(),
+        'issuer': authClient.issuer.metadata.toJson(),
         'client_id': authClient.clientId,
         'client_secret': authClient.clientSecret,
         'token': tokenResponse.toJson(),

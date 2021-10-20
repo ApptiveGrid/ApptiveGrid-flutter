@@ -105,7 +105,7 @@ class ApptiveGridAuthenticator {
 
   Future<void> _handleAuthRedirect(Uri uri) async {
     final client = await _client;
-    client.createCredential(refreshToken: _token?.refreshToken);
+    client.createCredential(refreshToken: _token?.refreshToken,);
     final authenticator = testAuthenticator ??
         Authenticator(
           client, // coverage:ignore-line
@@ -136,7 +136,7 @@ class ApptiveGridAuthenticator {
   Future<void> checkAuthentication() async {
     if (_token == null) {
       await Future.value(
-              options.authenticationOptions.authenticationStorage?.token)
+              options.authenticationOptions.authenticationStorage?.token,)
           .then((credentialString) async {
         final jsonCredential = jsonDecode(credentialString ?? 'null');
         if (jsonCredential != null) {
