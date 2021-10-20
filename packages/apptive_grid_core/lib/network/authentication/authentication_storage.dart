@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_secure_storage_platform_interface/flutter_secure_storage_platform_interface.dart';
 
 /// Providing an interface to store User Credentials across sessions
 abstract class AuthenticationStorage {
@@ -30,7 +28,8 @@ class FlutterSecureStorageCredentialStorage implements AuthenticationStorage {
   );
 
   @override
-  FutureOr<String?> get credential => _flutterSecureStorage.read(key: _credentialKey);
+  FutureOr<String?> get credential =>
+      _flutterSecureStorage.read(key: _credentialKey);
 
   @override
   FutureOr<void> saveCredential(String? credential) {

@@ -592,13 +592,19 @@ void main() {
         'uses FlutterSecureStorage', () async {
       final secureStorage = MockSecureStorage();
       FlutterSecureStoragePlatform.instance = secureStorage;
-      when(() => secureStorage.write(
+      when(
+        () => secureStorage.write(
           key: any(named: 'key'),
           value: any(named: 'value'),
-          options: any(named: 'options'))).thenAnswer((_) async {});
-      when(() => secureStorage.read(
+          options: any(named: 'options'),
+        ),
+      ).thenAnswer((_) async {});
+      when(
+        () => secureStorage.read(
           key: any(named: 'key'),
-          options: any(named: 'options'))).thenAnswer((_) async => null);
+          options: any(named: 'options'),
+        ),
+      ).thenAnswer((_) async => null);
 
       final testAuthenticator = MockAuthenticator();
 
@@ -621,12 +627,19 @@ void main() {
 
       await authenticator.checkAuthentication();
 
-      verify(() => secureStorage.write(
+      verify(
+        () => secureStorage.write(
           key: any(named: 'key'),
           value: any(named: 'value'),
-          options: any(named: 'options'))).called(1);
-      verify(() => secureStorage.read(
-          key: any(named: 'key'), options: any(named: 'options'))).called(1);
+          options: any(named: 'options'),
+        ),
+      ).called(1);
+      verify(
+        () => secureStorage.read(
+          key: any(named: 'key'),
+          options: any(named: 'options'),
+        ),
+      ).called(1);
     });
   });
 }

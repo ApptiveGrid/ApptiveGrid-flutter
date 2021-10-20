@@ -29,7 +29,8 @@ class ApptiveGridAuthenticator {
     this.options = const ApptiveGridOptions(),
     this.httpClient,
     required AuthenticationStorage? storage,
-  }) : _authenticationStorage = storage, _authCallbackSubscription = null;
+  })  : _authenticationStorage = storage,
+        _authCallbackSubscription = null;
 
   /// [ApptiveGridOptions] used for getting the correct [ApptiveGridEnvironment.authRealm]
   /// and checking if authentication should automatically be handled

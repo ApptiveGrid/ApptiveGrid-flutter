@@ -39,4 +39,6 @@ class MockApptiveGridCache extends Mock implements ApptiveGridCache {}
 
 class MockAuthenticationStorage extends Mock implements AuthenticationStorage {}
 
-class MockSecureStorage extends Mock with MockPlatformInterfaceMixin implements FlutterSecureStoragePlatform {}
+class MockSecureStorage extends Mock
+    with MockPlatformInterfaceMixin
+    implements FlutterSecureStoragePlatform {}
