@@ -3,7 +3,7 @@
 import 'dart:html';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/network/web_authenticator.dart';
+import 'package:apptive_grid_core/network/authentication/web_authenticator.dart';
 import 'package:openid_client_fork/openid_client.dart' as openid;
 
 /// Enable Authentication for Flutter Web

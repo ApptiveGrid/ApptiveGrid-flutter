@@ -1,6 +1,6 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_core/cache/apptive_grid_cache.dart';
-import 'package:apptive_grid_core/network/io_authenticator.dart'
+import 'package:apptive_grid_core/network/authentication/io_authenticator.dart'
     if (dart.library.html) 'package:apptive_grid_core/network/web_authenticator.dart';
 
 import 'package:http/http.dart';
