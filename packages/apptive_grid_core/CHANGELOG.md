@@ -1,4 +1,4 @@
-## 0.6.1
+## 0.6.1-beta.1
 * Add `persistCredentials` to enable storing credentials across sessions
 
 ## 0.6.0
