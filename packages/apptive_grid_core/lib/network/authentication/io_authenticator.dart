@@ -1,10 +1,10 @@
-import 'package:openid_client_fork/openid_client_io.dart' as openid;
+import 'package:openid_client/openid_client_io.dart' as openid;
 
 /// IO Implementation of Authenticator
 class Authenticator {
   /// Creates an Authenticator
   Authenticator(
-    openid.Client? client, {
+    openid.Client client, {
     required Function(String) urlLauncher,
     Iterable<String> scopes = const [],
     Uri? redirectUri,

@@ -5,7 +5,7 @@ import 'package:apptive_grid_core/network/authentication/io_authenticator.dart'
 
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:openid_client_fork/openid_client.dart' as openid;
+import 'package:openid_client/openid_client.dart' as openid;
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';

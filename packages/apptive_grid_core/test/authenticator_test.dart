@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:openid_client_fork/openid_client.dart';
+import 'package:openid_client/openid_client.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';

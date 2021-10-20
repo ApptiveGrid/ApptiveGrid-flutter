@@ -9,7 +9,7 @@ import 'package:apptive_grid_core/network/authentication/authentication_storage.
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:openid_client_fork/openid_client.dart';
+import 'package:openid_client/openid_client.dart';
 import 'package:uni_links/uni_links.dart' as uni_links;
 import 'package:apptive_grid_core/network/authentication/io_authenticator.dart'
     if (dart.library.html) 'package:apptive_grid_core/network/authentication/web_authenticator.dart';
