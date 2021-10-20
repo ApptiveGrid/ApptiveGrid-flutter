@@ -1,3 +1,6 @@
+## 0.6.1
+* Add `persistCredentials` to enable storing credentials across sessions
+
 ## 0.6.0
 * Upgrade to [Provider](https://pub.dev/packages/provider) 6.0.1
 
@@ -31,7 +34,7 @@
 
 ## [0.2.7]
 * Support CrossReferences in Forms. This still requires Authentication however it is already a first look at how this will look and work
-* Call ApptiveGridClient.logout() to logout the user
+* Call ApptiveGridClient.logout() to log out the user
 
 ## [0.2.6+2]
 * Send empty/null values when submitting a Form. Enables sending non-selected enum values
