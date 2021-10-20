@@ -17,7 +17,19 @@ class ApptiveGridAuthenticator {
           )
           .listen((event) => _handleAuthRedirect(event!));
     }
+
+    if (options.authenticationOptions.persistCredentials) {
+      _authenticationStorage = const FlutterSecureStorageCredentialStorage();
+    }
   }
+
+  /// Creates an [ApptiveGridAuthenticator] with a specific [AuthenticationStorage]
+  @visibleForTesting
+  ApptiveGridAuthenticator.withAuthenticationStorage({
+    this.options = const ApptiveGridOptions(),
+    this.httpClient,
+    required AuthenticationStorage? storage,
+  }) : _authenticationStorage = storage, _authCallbackSubscription = null;
 
   /// [ApptiveGridOptions] used for getting the correct [ApptiveGridEnvironment.authRealm]
   /// and checking if authentication should automatically be handled
@@ -35,6 +47,8 @@ class ApptiveGridAuthenticator {
   TokenResponse? _token;
   Credential? _credential;
 
+  AuthenticationStorage? _authenticationStorage;
+
   /// Override the token for testing purposes
   @visibleForTesting
   void setToken(TokenResponse? token) => _token = token;
@@ -42,7 +56,7 @@ class ApptiveGridAuthenticator {
   /// Override the Credential for testing purposes
   @visibleForTesting
   void setCredential(Credential? credential) {
-    options.authenticationOptions.authenticationStorage?.saveCredential(
+    _authenticationStorage?.saveCredential(
       credential != null ? jsonEncode(credential.toJson()) : null,
     );
     _credential = credential;
@@ -139,7 +153,7 @@ class ApptiveGridAuthenticator {
   Future<void> checkAuthentication() async {
     if (_token == null) {
       await Future.value(
-        options.authenticationOptions.authenticationStorage?.credential,
+        _authenticationStorage?.credential,
       ).then((credentialString) async {
         final jsonCredential = jsonDecode(credentialString ?? 'null');
         if (jsonCredential != null) {
