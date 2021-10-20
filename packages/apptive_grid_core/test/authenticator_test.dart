@@ -485,7 +485,7 @@ void main() {
         ),
       );
 
-      when(() => storage.saveToken(any())).thenAnswer((_) {});
+      when(() => storage.saveCredential(any())).thenAnswer((_) {});
       when(() => testAuthenticator.authorize())
           .thenAnswer((_) async => credential);
 
@@ -493,7 +493,7 @@ void main() {
 
       await authenticator.authenticate();
 
-      verify(() => storage.saveToken(jsonEncode(jsonCredential))).called(1);
+      verify(() => storage.saveCredential(jsonEncode(jsonCredential))).called(1);
     });
 
     test(
@@ -540,7 +540,7 @@ void main() {
       );
       authenticator.testAuthenticator = testAuthenticator;
 
-      when(() => storage.token)
+      when(() => storage.credential)
           .thenAnswer((invocation) => jsonEncode(credential.toJson()));
 
       await authenticator.checkAuthentication();
@@ -572,7 +572,7 @@ void main() {
           .thenAnswer((_) async => MockToken());
       when(() => testAuthenticator.authorize())
           .thenAnswer((invocation) async => credential);
-      when(() => storage.token).thenAnswer((_) => null);
+      when(() => storage.credential).thenAnswer((_) => null);
 
       await authenticator.checkAuthentication();
 

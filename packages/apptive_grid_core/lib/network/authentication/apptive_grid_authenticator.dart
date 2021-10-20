@@ -42,8 +42,9 @@ class ApptiveGridAuthenticator {
   /// Override the Credential for testing purposes
   @visibleForTesting
   void setCredential(Credential? credential) {
-    options.authenticationOptions.authenticationStorage
-        ?.saveToken(jsonEncode(credential?.toJson()));
+    options.authenticationOptions.authenticationStorage?.saveCredential(
+      credential != null ? jsonEncode(credential.toJson()) : null,
+    );
     _credential = credential;
   }
 
@@ -138,7 +139,7 @@ class ApptiveGridAuthenticator {
   Future<void> checkAuthentication() async {
     if (_token == null) {
       await Future.value(
-        options.authenticationOptions.authenticationStorage?.token,
+        options.authenticationOptions.authenticationStorage?.credential,
       ).then((credentialString) async {
         final jsonCredential = jsonDecode(credentialString ?? 'null');
         if (jsonCredential != null) {

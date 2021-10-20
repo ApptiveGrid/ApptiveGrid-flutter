@@ -25,6 +25,7 @@ class ApptiveGridAuthenticationOptions {
   /// If this is not null it will be used instead of trying to authenticate using openid auth
   final ApptiveGridApiKey? apiKey;
 
+  /// Use this to store UserCredentials across sessions
   final AuthenticationStorage? authenticationStorage;
 
   @override
