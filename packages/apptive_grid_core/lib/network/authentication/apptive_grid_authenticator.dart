@@ -37,11 +37,15 @@ class ApptiveGridAuthenticator {
 
   /// Override the token for testing purposes
   @visibleForTesting
-  void setToken(TokenResponse token) => _token = token;
+  void setToken(TokenResponse? token) => _token = token;
 
   /// Override the Credential for testing purposes
   @visibleForTesting
-  void setCredential(Credential credential) => _credential = credential;
+  void setCredential(Credential? credential) {
+    options.authenticationOptions.authenticationStorage
+        ?.saveToken(jsonEncode(credential?.toJson()));
+    _credential = credential;
+  }
 
   /// Override the [Client] for testing purposes
   @visibleForTesting
@@ -84,9 +88,9 @@ class ApptiveGridAuthenticator {
                 )
               : null,
         );
-    _credential = await authenticator.authorize();
+    setCredential(await authenticator.authorize());
 
-    _token = await _credential?.getTokenResponse();
+    setToken(await _credential?.getTokenResponse());
 
     try {
       await closeWebView();
@@ -131,15 +135,30 @@ class ApptiveGridAuthenticator {
   /// If the token is expired it will refresh the token using the refresh token
   Future<void> checkAuthentication() async {
     if (_token == null) {
-      if (options.authenticationOptions.apiKey != null) {
-        // User has ApiKey provided
-        return;
-      } else if (options.authenticationOptions.autoAuthenticate) {
-        await authenticate();
-      }
+      await Future.value(
+              options.authenticationOptions.authenticationStorage?.token)
+          .then((credentialString) async {
+        final jsonCredential = jsonDecode(credentialString ?? 'null');
+        if (jsonCredential != null) {
+          final credential = Credential.fromJson(
+            jsonCredential,
+            httpClient: httpClient,
+          );
+          setCredential(credential);
+          final token = await credential.getTokenResponse();
+          setToken(token);
+        } else {
+          if (options.authenticationOptions.apiKey != null) {
+            // User has ApiKey provided
+            return;
+          } else if (options.authenticationOptions.autoAuthenticate) {
+            await authenticate();
+          }
+        }
+      });
     } else if ((_token?.expiresAt?.difference(DateTime.now()).inSeconds ?? 0) <
         70) {
-      _token = await _credential?.getTokenResponse(true);
+      setToken(await _credential?.getTokenResponse(true));
     }
   }
 
@@ -157,8 +176,8 @@ class ApptiveGridAuthenticator {
         },
       );
     }
-    _token = null;
-    _credential = null;
+    setToken(null);
+    setCredential(null);
     _authClient = null;
 
     return response;

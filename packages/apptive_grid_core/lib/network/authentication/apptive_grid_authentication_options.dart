@@ -8,6 +8,7 @@ class ApptiveGridAuthenticationOptions {
     this.autoAuthenticate = false,
     this.redirectScheme,
     this.apiKey,
+    this.authenticationStorage,
   });
 
   /// Determines whether or not the authentication process should be started automatically or not
@@ -24,9 +25,11 @@ class ApptiveGridAuthenticationOptions {
   /// If this is not null it will be used instead of trying to authenticate using openid auth
   final ApptiveGridApiKey? apiKey;
 
+  final AuthenticationStorage? authenticationStorage;
+
   @override
   String toString() {
-    return 'ApptiveGridAuthenticationOptions(autoAuthenticate: $autoAuthenticate, redirectScheme: $redirectScheme, apiKey: $apiKey)';
+    return 'ApptiveGridAuthenticationOptions(autoAuthenticate: $autoAuthenticate, redirectScheme: $redirectScheme, apiKey: $apiKey, authenticationStorage: $authenticationStorage)';
   }
 
   @override
@@ -34,7 +37,8 @@ class ApptiveGridAuthenticationOptions {
     return other is ApptiveGridAuthenticationOptions &&
         autoAuthenticate == other.autoAuthenticate &&
         redirectScheme == other.redirectScheme &&
-        apiKey == other.apiKey;
+        apiKey == other.apiKey &&
+        authenticationStorage == other.authenticationStorage;
   }
 
   @override
