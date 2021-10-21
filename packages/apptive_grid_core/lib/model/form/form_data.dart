@@ -70,7 +70,7 @@ class FormData {
     return other is FormData &&
         name == other.name &&
         title == other.title &&
-        schema == other.schema &&
+        schema.toString() == other.schema.toString() &&
         f.listEquals(actions, other.actions) &&
         f.listEquals(components, other.components);
   }

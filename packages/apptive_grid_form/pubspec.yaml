@@ -14,7 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  apptive_grid_core: ^0.6.0
+  apptive_grid_core: ^0.6.0+1
 
 dev_dependencies:
   flutter_lints: ^1.0.4

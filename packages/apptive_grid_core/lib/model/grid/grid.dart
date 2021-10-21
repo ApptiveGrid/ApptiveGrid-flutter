@@ -134,7 +134,7 @@ class Grid {
   bool operator ==(Object other) {
     return other is Grid &&
         name == other.name &&
-        schema == other.schema &&
+        schema.toString() == other.schema.toString() &&
         f.listEquals(fields, other.fields) &&
         f.listEquals(rows, other.rows);
   }
