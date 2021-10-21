@@ -1,4 +1,7 @@
-## 0.6.0
+## [0.7.0]
+* **BREAKING CHANGE** Added `FormData` to `onActionSuccess` callback to receive the data that was successfully send
+
+## [0.6.0]
 * Upgrade to [Provider](https://pub.dev/packages/provider) 6.0.1
 
 ## [0.5.0]
