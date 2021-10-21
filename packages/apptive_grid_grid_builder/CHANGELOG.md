@@ -1,4 +1,7 @@
-## 0.6.0
+## [0.7.0-beta.1]
+* **BREAKING CHANGE** Requires minSdkVersion for Android to be at least 18
+* 
+## [0.6.0]
 * Upgrade to [Provider](https://pub.dev/packages/provider) 6.0.1
 
 ## [0.5.0]

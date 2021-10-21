@@ -1,3 +1,6 @@
+## [0.8.0-beta.1]
+* **BREAKING CHANGE** Requires minSdkVersion for Android to be at least 18
+
 ## [0.7.0]
 * **BREAKING CHANGE** Added `FormData` to `onActionSuccess` callback to receive the data that was successfully send
 

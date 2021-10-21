@@ -1,6 +1,5 @@
-## 0.7.0-beta.1
-* Add `persistCredentials` to enable storing credentials across sessions
-* **BREAKING CHANGE** Requires minSdk for Android to be at least 18
+## [0.7.0-beta.1]
+* **BREAKING CHANGE** Requires minSdkVersion for Android to be at least 18
 
 ## [0.6.0+1]
 * Check equality of `schema` of `Grid` and `FormData` based on`toString()` representation reach a clearer equality
