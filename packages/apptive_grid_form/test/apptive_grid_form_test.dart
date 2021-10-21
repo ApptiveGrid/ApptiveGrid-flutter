@@ -418,7 +418,7 @@ void main() {
           formUri: RedirectFormUri(
             components: ['form'],
           ),
-          onActionSuccess: (action) async {
+          onActionSuccess: (action, data) async {
             return false;
           },
         ),

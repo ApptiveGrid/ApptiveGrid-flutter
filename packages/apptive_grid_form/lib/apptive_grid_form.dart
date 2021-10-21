@@ -65,7 +65,7 @@ class ApptiveGridForm extends StatefulWidget {
   ///
   /// If this returns false the default success screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
-  final Future<bool> Function(FormAction)? onActionSuccess;
+  final Future<bool> Function(FormAction, FormData)? onActionSuccess;
 
   /// Callback if an Error occurs
   ///
@@ -167,7 +167,7 @@ class ApptiveGridFormData extends StatefulWidget {
   ///
   /// If this returns false the default success screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
-  final Future<bool> Function(FormAction)? onActionSuccess;
+  final Future<bool> Function(FormAction, FormData)? onActionSuccess;
 
   /// Callback if an Error occurs
   ///
@@ -376,7 +376,7 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     if (_formKey.currentState!.validate()) {
       _client.performAction(action, _formData!).then((response) async {
         if (response.statusCode < 400) {
-          if (await widget.onActionSuccess?.call(action) ?? true) {
+          if (await widget.onActionSuccess?.call(action, _formData!) ?? true) {
             setState(() {
               _success = true;
             });
