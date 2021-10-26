@@ -1,3 +1,6 @@
+## [0.7.1]
+* Adding a way to get [currentData] of a FormWidget
+
 ## [0.7.0]
 * **BREAKING CHANGE** Added `FormData` to `onActionSuccess` callback to receive the data that was successfully send
 

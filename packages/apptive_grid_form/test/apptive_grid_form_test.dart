@@ -15,6 +15,17 @@ import 'common.dart';
 void main() {
   late ApptiveGridClient client;
 
+  setUpAll(() {
+    registerFallbackValue(RedirectFormUri(components: ['components']));
+    registerFallbackValue(http.Request('POST', Uri()));
+    registerFallbackValue(
+      ActionItem(
+        action: FormAction('', ''),
+        data: FormData(title: '', components: [], schema: null),
+      ),
+    );
+  });
+
   setUp(() {
     client = MockApptiveGridClient();
     when(() => client.sendPendingActions()).thenAnswer((_) async {});
@@ -373,6 +384,18 @@ void main() {
 
       testWidgets('Cache Response. Additional Answer shows Form',
           (tester) async {
+        final cacheMap = <ActionItem>{};
+        final cache = MockApptiveGridCache();
+        when(() => cache.addPendingActionItem(any())).thenAnswer(
+          (invocation) => cacheMap.add(invocation.positionalArguments[0]),
+        );
+        when(() => cache.removePendingActionItem(any())).thenAnswer(
+          (invocation) => cacheMap.remove(invocation.positionalArguments[0]),
+        );
+        when(() => cache.getPendingActionItems())
+            .thenAnswer((invocation) => cacheMap.toList());
+        when(() => client.options)
+            .thenAnswer((invocation) => ApptiveGridOptions(cache: cache));
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
@@ -406,6 +429,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Form Title'), findsOneWidget);
+        verify(() => client.loadForm(formUri: any(named: 'formUri'))).called(2);
       });
     });
   });
@@ -579,6 +603,124 @@ void main() {
           skipOffstage: false,
         ),
         findsOneWidget,
+      );
+    });
+  });
+
+  group('Current Data', () {
+    testWidgets('Current Data returns data', (tester) async {
+      final key = GlobalKey<ApptiveGridFormDataState>();
+      final form = FormData(
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        actions: [],
+        schema: {},
+      );
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          key: key,
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+        ),
+      );
+
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer((realInvocation) async => form);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        (tester.state(find.byType(ApptiveGridForm)) as ApptiveGridFormState)
+            .currentData,
+        equals(form),
+      );
+    });
+
+    testWidgets(
+        'Action Success '
+        'Current Data returns null', (tester) async {
+      final key = GlobalKey<ApptiveGridFormDataState>();
+      final action = FormAction('uri', 'method');
+      final formData = FormData(
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        actions: [action],
+        schema: {},
+      );
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          key: key,
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+        ),
+      );
+
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.performAction(action, formData))
+          .thenAnswer((_) async => http.Response('', 200));
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(
+        (tester.state(find.byType(ApptiveGridForm)) as ApptiveGridFormState)
+            .currentData,
+        equals(null),
+      );
+    });
+
+    testWidgets(
+        'Action Error '
+        'Current Data data', (tester) async {
+      final key = GlobalKey<ApptiveGridFormDataState>();
+      final action = FormAction('uri', 'method');
+      final formData = FormData(
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        actions: [action],
+        schema: {},
+      );
+      final target = TestApp(
+        client: client,
+        options: const ApptiveGridOptions(
+          cache: null,
+        ),
+        child: ApptiveGridForm(
+          key: key,
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+        ),
+      );
+
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.performAction(action, formData))
+          .thenAnswer((_) async => http.Response('', 400));
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(
+        (tester.state(find.byType(ApptiveGridForm)) as ApptiveGridFormState)
+            .currentData,
+        equals(formData),
       );
     });
   });
