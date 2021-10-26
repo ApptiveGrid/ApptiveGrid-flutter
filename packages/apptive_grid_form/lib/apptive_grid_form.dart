@@ -74,14 +74,19 @@ class ApptiveGridForm extends StatefulWidget {
   final Future<bool> Function(dynamic)? onError;
 
   @override
-  _ApptiveGridFormState createState() => _ApptiveGridFormState();
+  ApptiveGridFormState createState() => ApptiveGridFormState();
 }
 
-class _ApptiveGridFormState extends State<ApptiveGridForm> {
+/// [State] for an [ApptiveGridForm]. Use this to access [currentData] to get the most up to date version
+class ApptiveGridFormState extends State<ApptiveGridForm> {
   FormData? _formData;
   late ApptiveGridClient _client;
 
   dynamic _error;
+
+  final _dataKey = GlobalKey<ApptiveGridFormDataState>();
+  /// Returns the data currently being edited
+  FormData? get currentData => _dataKey.currentState?.currentData;
 
   @override
   void didChangeDependencies() {
@@ -93,6 +98,7 @@ class _ApptiveGridFormState extends State<ApptiveGridForm> {
   @override
   Widget build(BuildContext context) {
     return ApptiveGridFormData(
+      key: _dataKey,
       formData: _formData,
       error: _error,
       titleStyle: widget.titleStyle,
@@ -179,10 +185,13 @@ class ApptiveGridFormData extends StatefulWidget {
   final void Function()? triggerReload;
 
   @override
-  _ApptiveGridFormDataState createState() => _ApptiveGridFormDataState();
+  ApptiveGridFormDataState createState() => ApptiveGridFormDataState();
 }
 
-class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
+/// [State] for [ApptiveGridFormData]
+///
+/// Use this to access [currentData]
+class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   FormData? _formData;
   late ApptiveGridClient _client;
 
@@ -193,6 +202,15 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   dynamic _error;
 
   bool _saved = false;
+
+  /// Returns the current [FormData] held in this Widget
+  FormData? get currentData {
+    if (!_success && !_saved) {
+      return _formData;
+    } else {
+      return null;
+    }
+  }
 
   @override
   void didUpdateWidget(covariant ApptiveGridFormData oldWidget) {
@@ -392,9 +410,11 @@ class _ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   }
 
   void _onSavedOffline() {
-    setState(() {
-      _saved = true;
-    });
+    if(mounted) {
+      setState(() {
+        _saved = ApptiveGrid.getClient(context, listen: false).options.cache != null;
+      });
+    }
   }
 
   void _onError(dynamic error) async {
