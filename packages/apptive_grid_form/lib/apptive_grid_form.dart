@@ -85,6 +85,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
   dynamic _error;
 
   final _dataKey = GlobalKey<ApptiveGridFormDataState>();
+
   /// Returns the data currently being edited
   FormData? get currentData => _dataKey.currentState?.currentData;
 
@@ -410,9 +411,10 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   }
 
   void _onSavedOffline() {
-    if(mounted) {
+    if (mounted) {
       setState(() {
-        _saved = ApptiveGrid.getClient(context, listen: false).options.cache != null;
+        _saved =
+            ApptiveGrid.getClient(context, listen: false).options.cache != null;
       });
     }
   }
