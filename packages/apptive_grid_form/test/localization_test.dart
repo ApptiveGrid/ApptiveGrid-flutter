@@ -1,11 +1,9 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/translation/l10n/translation_de.dart' as de;
+import 'package:apptive_grid_form/translation/l10n/translation_en.dart' as en;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:intl/intl.dart';
-
-import 'package:apptive_grid_form/translation/l10n/translation_de.dart' as de;
-import 'package:apptive_grid_form/translation/l10n/translation_en.dart' as en;
 
 void main() {
   testWidgets('Uses Locale from App', (tester) async {
@@ -21,7 +19,7 @@ void main() {
         child: Builder(
           builder: (buildContext) {
             context = buildContext;
-            return SizedBox();
+            return const SizedBox();
           },
         ),
       ),
@@ -31,7 +29,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(ApptiveGridLocalization.of(context),
-        isInstanceOf<de.ApptiveGridLocalizedTranslation>());
+        isInstanceOf<de.ApptiveGridLocalizedTranslation>(),);
   });
 
   testWidgets('Default locale is en', (tester) async {
@@ -49,6 +47,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(ApptiveGridLocalization.of(context),
-        isInstanceOf<en.ApptiveGridLocalizedTranslation>());
+        isInstanceOf<en.ApptiveGridLocalizedTranslation>(),);
   });
 }

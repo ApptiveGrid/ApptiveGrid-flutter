@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:apptive_grid_form/translation/l10n/translation_de.dart' as de;
 import 'package:apptive_grid_form/translation/l10n/translation_en.dart' as en;
 
+/// Provides Translations for ApptiveGridForm Widgets
 class ApptiveGridLocalization extends StatelessWidget {
+  /// Creates a wrapper around a Form so that the descendants can use localized Strings
   const ApptiveGridLocalization({
     Key? key,
     required this.child,
   }) : super(key: key);
 
+  /// The child that should be wrapped
   final Widget child;
 
   @override
@@ -21,6 +24,9 @@ class ApptiveGridLocalization extends StatelessWidget {
     );
   }
 
+  /// Returns an [ApptiveGridTranslation] best matching the current App [Locale]
+  ///
+  /// If the Locale is not supported it defaults to an english translation
   static ApptiveGridTranslation? of(BuildContext context) {
     final _InheritedApptiveGridTranslation? inheritedTranslation = context
         .dependOnInheritedWidgetOfExactType<_InheritedApptiveGridTranslation>();
@@ -28,7 +34,7 @@ class ApptiveGridLocalization extends StatelessWidget {
         ?.translation(Localizations.maybeLocaleOf(context));
   }
 
-  /// Checks if given [locale] is supported by its langaugeCode
+  /// Checks if given [locale] is supported by its languageCode
   static bool isSupported(Locale locale) => _isSupported(locale);
 
   static bool _isSupported(Locale locale) {
@@ -40,7 +46,7 @@ class ApptiveGridLocalization extends StatelessWidget {
     return false;
   }
 
-  /// List of currently supported locales by Wiredash
+  /// List of currently supported locales by ApptiveGridForm
   static List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
