@@ -37,7 +37,8 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
     return FormField<DateTime>(
       validator: (input) {
         if (widget.component.required && input == null) {
-          return ApptiveGridLocalization.of(context)?.fieldIsRequired(widget.component.property) ?? '${widget.component.property} is required';
+          return ApptiveGridLocalization.of(context)!
+              .fieldIsRequired(widget.component.property);
         } else {
           return null;
         }

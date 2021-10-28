@@ -335,7 +335,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               widget.triggerReload?.call();
               _updateView();
             },
-            child: Text(localization.additionalAnswer,),
+            child: Text(
+              localization.additionalAnswer,
+            ),
           ),
         )
       ],

@@ -54,7 +54,8 @@ class _DecimalFormWidgetState extends State<DecimalFormWidget> {
       controller: _controller,
       validator: (input) {
         if (widget.component.required && (input == null || input.isEmpty)) {
-          return ApptiveGridLocalization.of(context)?.fieldIsRequired(widget.component.property) ?? '${widget.component.property} is required';
+          return ApptiveGridLocalization.of(context)!
+              .fieldIsRequired(widget.component.property);
         } else {
           return null;
         }

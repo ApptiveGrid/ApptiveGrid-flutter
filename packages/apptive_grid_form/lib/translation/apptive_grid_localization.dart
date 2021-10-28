@@ -1,14 +1,14 @@
 import 'package:apptive_grid_form/translation/apptive_grid_translation.dart';
 import 'package:flutter/material.dart';
 
-import 'l10n/translation_de.dart' as de;
-import 'l10n/translation_en.dart' as en;
+import 'package:apptive_grid_form/translation/l10n/translation_de.dart' as de;
+import 'package:apptive_grid_form/translation/l10n/translation_en.dart' as en;
 
 class ApptiveGridLocalization extends StatelessWidget {
   const ApptiveGridLocalization({
-   Key? key,
-   required this.child,
-}) : super(key: key);
+    Key? key,
+    required this.child,
+  }) : super(key: key);
 
   final Widget child;
 
@@ -16,7 +16,7 @@ class ApptiveGridLocalization extends StatelessWidget {
   Widget build(BuildContext context) {
     return _InheritedApptiveGridTranslation(
       child: Builder(
-        builder: (_) => child
+        builder: (_) => child,
       ),
     );
   }
@@ -24,7 +24,8 @@ class ApptiveGridLocalization extends StatelessWidget {
   static ApptiveGridTranslation? of(BuildContext context) {
     final _InheritedApptiveGridTranslation? inheritedTranslation = context
         .dependOnInheritedWidgetOfExactType<_InheritedApptiveGridTranslation>();
-    return inheritedTranslation?.translation(Localizations.maybeLocaleOf(context));
+    return inheritedTranslation
+        ?.translation(Localizations.maybeLocaleOf(context));
   }
 
   /// Checks if given [locale] is supported by its langaugeCode
@@ -55,15 +56,15 @@ class _InheritedApptiveGridTranslation extends InheritedWidget {
   }) : super(key: key, child: child) {
     final defaultTranslations = <Locale, ApptiveGridTranslation>{
       const Locale.fromSubtags(languageCode: 'en'):
-      const en.ApptiveGridLocalizedTranslation(),
+          const en.ApptiveGridLocalizedTranslation(),
       const Locale.fromSubtags(languageCode: 'de'):
-      const de.ApptiveGridLocalizedTranslation(),
+          const de.ApptiveGridLocalizedTranslation(),
     };
     _translations.addAll(defaultTranslations);
   }
 
   final Map<Locale, ApptiveGridTranslation> _translations =
-  <Locale, ApptiveGridTranslation>{};
+      <Locale, ApptiveGridTranslation>{};
 
   ApptiveGridTranslation translation(Locale? locale) {
     if (locale != null) {
@@ -71,7 +72,7 @@ class _InheritedApptiveGridTranslation extends InheritedWidget {
         return _translations[locale]!;
       } else if (ApptiveGridLocalization.isSupported(locale)) {
         final translation = _translations[
-        Locale.fromSubtags(languageCode: locale.languageCode)];
+            Locale.fromSubtags(languageCode: locale.languageCode)];
         if (translation != null) {
           return translation;
         }
