@@ -150,7 +150,10 @@ class ApptiveGridTheme {
         brightness: brightness,
         titleTextStyle: textTheme.headline3,
         toolbarTextStyle: textTheme.headline3,
-        systemOverlayStyle: _withBrightness(light: SystemUiOverlayStyle.dark, dark: SystemUiOverlayStyle.light),
+        systemOverlayStyle: _withBrightness(
+          light: SystemUiOverlayStyle.dark,
+          dark: SystemUiOverlayStyle.light,
+        ),
         backwardsCompatibility: false,
       ),
     );
