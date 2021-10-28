@@ -599,7 +599,7 @@ void main() {
 
       expect(
         find.text(
-          'The Form was saved and will be send at the next opportunity',
+          'The form was saved and will be send at the next opportunity',
           skipOffstage: false,
         ),
         findsOneWidget,
