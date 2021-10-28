@@ -2,6 +2,7 @@ library apptive_grid_theme;
 
 import 'package:apptive_grid_theme/apptive_grid_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 export 'package:apptive_grid_theme/apptive_grid_colors.dart';
@@ -149,6 +150,8 @@ class ApptiveGridTheme {
         brightness: brightness,
         titleTextStyle: textTheme.headline3,
         toolbarTextStyle: textTheme.headline3,
+        systemOverlayStyle: _withBrightness(light: SystemUiOverlayStyle.dark, dark: SystemUiOverlayStyle.light),
+        backwardsCompatibility: false,
       ),
     );
   }
