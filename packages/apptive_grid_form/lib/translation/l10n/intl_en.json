@@ -1,0 +1,11 @@
+{
+    "actionSend": "Submit",
+    "additionalAnswer": "Submit more answers",
+    "backToForm": "Back to form",
+    "loadingGrid": "Loading Grid",
+    "selectEntry": "Choose Entry",
+    "fieldIsRequired": "$fieldName must not be empty",
+    "sendSuccess": "Thank You!",
+    "savedForLater": "The form was saved and will be send at the next opportunity",
+    "errorTitle": "Oops! - Error"
+}

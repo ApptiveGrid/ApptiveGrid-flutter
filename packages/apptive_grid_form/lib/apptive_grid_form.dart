@@ -1,12 +1,15 @@
 library apptive_grid_form;
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 
 export 'package:apptive_grid_core/apptive_grid_core.dart';
+export 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
+export 'package:apptive_grid_form/translation/apptive_grid_translation.dart';
 
 /// A Widget to display a ApptiveGrid Form
 ///
