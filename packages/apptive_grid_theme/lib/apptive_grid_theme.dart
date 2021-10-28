@@ -54,6 +54,9 @@ class ApptiveGridTheme {
         buttonColor: ApptiveGridColors.apptiveGridBlue,
         textTheme: ButtonTextTheme.primary,
       ),
+      floatingActionButtonTheme: baseTheme.floatingActionButtonTheme.copyWith(
+        foregroundColor: Colors.white,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: baseButtonStyle.copyWith(
           foregroundColor: MaterialStateProperty.resolveWith((states) {
