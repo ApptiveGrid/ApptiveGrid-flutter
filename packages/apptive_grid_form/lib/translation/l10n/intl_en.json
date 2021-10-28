@@ -6,6 +6,6 @@
     "selectEntry": "Choose Entry",
     "fieldIsRequired": "$fieldName must not be empty",
     "sendSuccess": "Thank You!",
-    "savedForLater": "The form was saved and will be send at the next opportunity",
+    "savedForLater": "The form was saved and will be sent at the next opportunity",
     "errorTitle": "Oops! - Error"
 }

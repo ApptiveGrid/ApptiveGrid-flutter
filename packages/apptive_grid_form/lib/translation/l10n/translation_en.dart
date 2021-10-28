@@ -21,7 +21,7 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get sendSuccess => "Thank You!";
   @override
   String get savedForLater =>
-      "The form was saved and will be send at the next opportunity";
+      "The form was saved and will be sent at the next opportunity";
   @override
   String get errorTitle => "Oops! - Error";
 }
