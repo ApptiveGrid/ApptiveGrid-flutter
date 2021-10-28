@@ -28,8 +28,10 @@ void main() {
     await tester.pumpWidget(target);
     await tester.pumpAndSettle();
 
-    expect(ApptiveGridLocalization.of(context),
-        isInstanceOf<de.ApptiveGridLocalizedTranslation>(),);
+    expect(
+      ApptiveGridLocalization.of(context),
+      isInstanceOf<de.ApptiveGridLocalizedTranslation>(),
+    );
   });
 
   testWidgets('Default locale is en', (tester) async {
@@ -46,7 +48,9 @@ void main() {
     await tester.pumpWidget(target);
     await tester.pumpAndSettle();
 
-    expect(ApptiveGridLocalization.of(context),
-        isInstanceOf<en.ApptiveGridLocalizedTranslation>(),);
+    expect(
+      ApptiveGridLocalization.of(context),
+      isInstanceOf<en.ApptiveGridLocalizedTranslation>(),
+    );
   });
 }
