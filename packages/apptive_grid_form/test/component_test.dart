@@ -145,7 +145,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verifyNever(() => client.performAction(action, formData));
-      expect(find.text('Property is required'), findsOneWidget);
+      expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
@@ -329,7 +329,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verifyNever(() => client.performAction(action, formData));
-      expect(find.text('Property is required'), findsOneWidget);
+      expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
@@ -438,7 +438,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verifyNever(() => client.performAction(action, formData));
-      expect(find.text('Property is required'), findsOneWidget);
+      expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
@@ -570,7 +570,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verifyNever(() => client.performAction(action, formData));
-      expect(find.text('Property is required'), findsOneWidget);
+      expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
@@ -702,7 +702,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verifyNever(() => client.performAction(action, formData));
-      expect(find.text('Property is required'), findsOneWidget);
+      expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
@@ -907,7 +907,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verifyNever(() => client.performAction(action, formData));
-      expect(find.text('Property is required'), findsOneWidget);
+      expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 }

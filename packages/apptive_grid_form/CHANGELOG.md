@@ -1,3 +1,6 @@
+## [0.7.2]
+* Adding translations to Forms. Right now English and German are supported
+
 ## [0.7.1]
 * Adding a way to get [currentData] of a FormWidget
 

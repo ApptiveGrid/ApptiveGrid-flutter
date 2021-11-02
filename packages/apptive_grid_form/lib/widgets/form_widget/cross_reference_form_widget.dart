@@ -88,7 +88,8 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       validator: (value) {
         if (widget.component.required &&
             (value?.entityUri == null || value?.displayValue == null)) {
-          return '${widget.component.property} is required';
+          return ApptiveGridLocalization.of(context)!
+              .fieldIsRequired(widget.component.property);
         } else {
           return null;
         }
@@ -170,6 +171,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
   }
 
   List<Widget> _selectedItems(BuildContext context) {
+    final localization = ApptiveGridLocalization.of(context)!;
     if (_error != null) {
       return [
         const Center(
@@ -178,12 +180,12 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       ];
     } else if (_grid == null) {
       return [
-        const Center(
-          child: Text('Loading Grid...'),
+        Center(
+          child: Text(localization.loadingGrid),
         )
       ];
     } else {
-      const pleaseSelect = Text('Select an entry');
+      final pleaseSelect = Text(localization.selectEntry);
       return [
         ...[pleaseSelect, pleaseSelect],
         ..._grid!.rows

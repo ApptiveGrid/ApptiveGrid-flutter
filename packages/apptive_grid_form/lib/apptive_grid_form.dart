@@ -1,12 +1,15 @@
 library apptive_grid_form;
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 
 export 'package:apptive_grid_core/apptive_grid_core.dart';
+export 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
+export 'package:apptive_grid_form/translation/apptive_grid_translation.dart';
 
 /// A Widget to display a ApptiveGrid Form
 ///
@@ -242,17 +245,23 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   @override
   Widget build(BuildContext context) {
-    if (_error != null) {
-      return _buildError(context);
-    } else if (_saved) {
-      return _buildSaved(context);
-    } else if (_success) {
-      return _buildSuccess(context);
-    } else if (_formData == null) {
-      return _buildLoading(context);
-    } else {
-      return _buildForm(context, _formData!);
-    }
+    return ApptiveGridLocalization(
+      child: Builder(
+        builder: (buildContext) {
+          if (_error != null) {
+            return _buildError(buildContext);
+          } else if (_saved) {
+            return _buildSaved(buildContext);
+          } else if (_success) {
+            return _buildSuccess(buildContext);
+          } else if (_formData == null) {
+            return _buildLoading(buildContext);
+          } else {
+            return _buildForm(buildContext, _formData!);
+          }
+        },
+      ),
+    );
   }
 
   Widget _buildLoading(BuildContext context) {
@@ -262,6 +271,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   }
 
   Widget _buildForm(BuildContext context, FormData data) {
+    final localization = ApptiveGridLocalization.of(context)!;
     return Form(
       key: _formKey,
       child: ListView.builder(
@@ -294,7 +304,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             return ActionButton(
               action: data.actions[actionIndex],
               onPressed: _performAction,
-              child: const Text('Send'),
+              child: Text(localization.actionSend),
             );
           }
         },
@@ -303,6 +313,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   }
 
   Widget _buildSuccess(BuildContext context) {
+    final localization = ApptiveGridLocalization.of(context)!;
     return ListView(
       padding: const EdgeInsets.all(32.0),
       children: [
@@ -314,7 +325,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           ),
         ),
         Text(
-          'Thank You!',
+          localization.sendSuccess,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline4,
         ),
@@ -324,7 +335,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               widget.triggerReload?.call();
               _updateView();
             },
-            child: const Text('Send Additional Answer'),
+            child: Text(
+              localization.additionalAnswer,
+            ),
           ),
         )
       ],
@@ -332,6 +345,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   }
 
   Widget _buildSaved(BuildContext context) {
+    final localization = ApptiveGridLocalization.of(context)!;
     return ListView(
       padding: const EdgeInsets.all(32.0),
       children: [
@@ -343,7 +357,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           ),
         ),
         Text(
-          'The Form was saved and will be send at the next opportunity',
+          localization.savedForLater,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline4,
         ),
@@ -353,7 +367,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               widget.triggerReload?.call();
               _updateView();
             },
-            child: const Text('Send Additional Answer'),
+            child: Text(localization.additionalAnswer),
           ),
         )
       ],
@@ -361,6 +375,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   }
 
   Widget _buildError(BuildContext context) {
+    final localization = ApptiveGridLocalization.of(context)!;
     return ListView(
       padding: const EdgeInsets.all(32.0),
       children: [
@@ -372,7 +387,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           ),
         ),
         Text(
-          'Oops! - Error',
+          localization.errorTitle,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline4,
         ),
@@ -382,7 +397,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               widget.triggerReload?.call();
               _updateView(resetFormData: false);
             },
-            child: const Text('Back to Form'),
+            child: Text(localization.backToForm),
           ),
         )
       ],
