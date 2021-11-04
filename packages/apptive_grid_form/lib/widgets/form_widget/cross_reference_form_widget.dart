@@ -116,15 +116,16 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
     if (_error != null || _grid == null) {
       return null;
     } else {
+      final localization = ApptiveGridLocalization.of(context)!;
       final searchBox = GridRowDropdownMenuItem(
         enabled: false,
         value: null,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextField(
-            decoration: const InputDecoration(
-              icon: Icon(Icons.search),
-              hintText: 'Search',
+            decoration: InputDecoration(
+              icon: const Icon(Icons.search),
+              hintText: localization.crossRefSearch,
               border: InputBorder.none,
             ),
             onChanged: (input) {
