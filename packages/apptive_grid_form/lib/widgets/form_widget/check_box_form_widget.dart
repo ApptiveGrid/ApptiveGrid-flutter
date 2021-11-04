@@ -46,7 +46,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
               state.hasError ? BlendMode.srcATop : BlendMode.dstIn,
             ),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
                   height: 24,
