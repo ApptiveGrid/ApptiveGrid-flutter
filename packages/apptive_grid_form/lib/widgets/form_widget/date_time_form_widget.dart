@@ -45,6 +45,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       builder: (state) {
+        final localization = ApptiveGridLocalization.of(context)!;
         return InputDecorator(
           decoration: InputDecoration(
             helperText: widget.component.options.description,
@@ -80,8 +81,8 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                   child: AbsorbPointer(
                     child: TextField(
                       controller: _dateController,
-                      decoration: const InputDecoration(
-                        hintText: 'Date',
+                      decoration: InputDecoration(
+                        hintText: localization.dateTimeFieldDate,
                         border: InputBorder.none,
                         isDense: true,
                         filled: false,
@@ -121,8 +122,8 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                   child: AbsorbPointer(
                     child: TextField(
                       controller: _timeController,
-                      decoration: const InputDecoration(
-                        hintText: 'Time',
+                      decoration: InputDecoration(
+                        hintText: localization.dateTimeFieldTime,
                         isDense: true,
                         filled: false,
                         border: InputBorder.none,

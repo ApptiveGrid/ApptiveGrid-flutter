@@ -24,4 +24,12 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
       "Das Formular wurde gespeichert und wird bei der nächsten Gelegenheit gesendet.";
   @override
   String get errorTitle => "Oops! - Fehler";
+  @override
+  String get crossRefSearch => "Suchen";
+  @override
+  String get dateTimeFieldDate => "Datum";
+  @override
+  String get dateTimeFieldTime => "Zeit";
+  @override
+  String get checkboxRequired => "Pflichtfeld";
 }

@@ -29,4 +29,16 @@ abstract class ApptiveGridTranslation {
 
   /// Indicates that a Field with [fieldName] must be filled in order to send a form
   String fieldIsRequired(String fieldName);
+
+  /// Search Hint for Cross Reference Search
+  String get crossRefSearch;
+
+  /// Label of date section in a DateTime Picker
+  String get dateTimeFieldDate;
+
+  /// Label of time section in a DateTime Picker
+  String get dateTimeFieldTime;
+
+  /// Message if a [CheckboxFormWidget] is required
+  String get checkboxRequired;
 }

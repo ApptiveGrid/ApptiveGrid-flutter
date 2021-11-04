@@ -7,5 +7,9 @@
     "fieldIsRequired": "$fieldName darf nicht leer sein",
     "sendSuccess": "Vielen Dank!",
     "savedForLater": "Das Formular wurde gespeichert und wird bei der nächsten Gelegenheit gesendet.",
-    "errorTitle": "Oops! - Fehler"
+    "errorTitle": "Oops! - Fehler",
+    "crossRefSearch": "Suchen",
+    "dateTimeFieldDate": "Datum",
+    "dateTimeFieldTime": "Zeit",
+    "checkboxRequired": "Pflichtfeld"
 }
