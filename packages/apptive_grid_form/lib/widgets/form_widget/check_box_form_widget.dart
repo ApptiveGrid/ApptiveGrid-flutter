@@ -36,6 +36,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
             errorText: state.errorText,
             contentPadding: EdgeInsets.zero,
             border: InputBorder.none,
+            errorBorder: InputBorder.none,
             isDense: true,
             filled: false,
           ),
