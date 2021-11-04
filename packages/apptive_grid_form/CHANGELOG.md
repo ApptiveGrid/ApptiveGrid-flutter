@@ -1,3 +1,10 @@
+## [0.7.3]
+* Add missing translations
+  * Hints for DateTimeFormWidget
+* Adjust CheckboxForm Widget
+  * Remove Error Border
+  * Adjust alignment of checkbox and label
+
 ## [0.7.2]
 * Adding translations to Forms. Right now English and German are supported
 
