@@ -45,11 +45,9 @@ void main() {
 
       target = TestApp(
         client: client,
-        child: ApptiveGridLocalization(
-          child: Form(
-            key: formKey,
-            child: CrossReferenceFormWidget(component: component),
-          ),
+        child: Form(
+          key: formKey,
+          child: CrossReferenceFormWidget(component: component),
         ),
       );
     });
