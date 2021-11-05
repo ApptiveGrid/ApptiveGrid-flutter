@@ -22,13 +22,12 @@ class _DateFormWidgetState extends State<DateFormWidget> {
   final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final dateFormat = DateFormat.yMd();
+  Widget build(BuildContext context) {
+    final locale = Localizations.maybeLocaleOf(context)?.toString();
+    final dateFormat = DateFormat.yMd(locale);
     if (widget.component.data.value != null) {
       final dateString = dateFormat.format(widget.component.data.value!);
-      _controller.text = dateString;
+       _controller.text = dateString;
     }
     return InkWell(
       onTap: () {
@@ -66,7 +65,7 @@ class _DateFormWidgetState extends State<DateFormWidget> {
             helperText: widget.component.options.description,
             helperMaxLines: 100,
             labelText:
-                widget.component.options.label ?? widget.component.property,
+            widget.component.options.label ?? widget.component.property,
           ),
         ),
       ),
