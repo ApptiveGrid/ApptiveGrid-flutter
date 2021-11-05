@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Localization', () {
     final date = DateTime(2021, 11, 5, 16, 32);
-    
+
     testWidgets('en_US has American Date Format', (tester) async {
       const locale = Locale('en', 'US');
 
@@ -23,9 +23,10 @@ void main() {
           child: ApptiveGridLocalization(
             child: DateTimeFormWidget(
               component: DateTimeFormComponent(
-                  property: 'property',
-                  data: DateTimeDataEntity(date),
-                  fieldId: 'fieldId'),
+                property: 'property',
+                data: DateTimeDataEntity(date),
+                fieldId: 'fieldId',
+              ),
             ),
           ),
         ),
@@ -52,9 +53,10 @@ void main() {
           child: ApptiveGridLocalization(
             child: DateTimeFormWidget(
               component: DateTimeFormComponent(
-                  property: 'property',
-                  data: DateTimeDataEntity(date),
-                  fieldId: 'fieldId'),
+                property: 'property',
+                data: DateTimeDataEntity(date),
+                fieldId: 'fieldId',
+              ),
             ),
           ),
         ),

@@ -23,9 +23,10 @@ void main() {
           child: ApptiveGridLocalization(
             child: DateFormWidget(
               component: DateFormComponent(
-                  property: 'property',
-                  data: DateDataEntity(date),
-                  fieldId: 'fieldId'),
+                property: 'property',
+                data: DateDataEntity(date),
+                fieldId: 'fieldId',
+              ),
             ),
           ),
         ),
@@ -51,9 +52,10 @@ void main() {
           child: ApptiveGridLocalization(
             child: DateFormWidget(
               component: DateFormComponent(
-                  property: 'property',
-                  data: DateDataEntity(date),
-                  fieldId: 'fieldId'),
+                property: 'property',
+                data: DateDataEntity(date),
+                fieldId: 'fieldId',
+              ),
             ),
           ),
         ),
