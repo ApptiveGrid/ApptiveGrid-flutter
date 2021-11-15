@@ -475,7 +475,7 @@ void main() {
         {'token_type': 'Bearer', 'access_token': '12345'},
       );
 
-      when(() => credential.getTokenResponse())
+      when(() => credential.getTokenResponse(any()))
           .thenAnswer((invocation) async => token);
       when(() => credential.toJson()).thenReturn(jsonCredential);
       authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
@@ -530,6 +530,21 @@ void main() {
           accessToken: any(named: 'accessToken'),
         ),
       ).thenReturn(credential);
+      when(
+        () => httpClient.post(
+          any(),
+          body: any(named: 'body'),
+          headers: any(named: 'headers'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).thenAnswer(
+        (invocation) async => Response(
+          jsonEncode(tokenResponse.toJson()),
+          200,
+          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+          request: Request('POST', invocation.positionalArguments[0]),
+        ),
+      );
 
       final testAuthenticator = MockAuthenticator();
 
@@ -542,6 +557,7 @@ void main() {
           ),
         ),
         storage: storage,
+        httpClient: httpClient,
       );
       authenticator.testAuthenticator = testAuthenticator;
 
@@ -575,7 +591,7 @@ void main() {
 
       final credential = MockCredential();
       when(() => credential.toJson()).thenAnswer((_) => <String, dynamic>{});
-      when(() => credential.getTokenResponse())
+      when(() => credential.getTokenResponse(any()))
           .thenAnswer((_) async => MockToken());
       when(() => testAuthenticator.authorize())
           .thenAnswer((invocation) async => credential);
