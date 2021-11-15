@@ -17,7 +17,20 @@ class ApptiveGridAuthenticator {
           )
           .listen((event) => _handleAuthRedirect(event!));
     }
+
+    if (options.authenticationOptions.persistCredentials) {
+      _authenticationStorage = const FlutterSecureStorageCredentialStorage();
+    }
   }
+
+  /// Creates an [ApptiveGridAuthenticator] with a specific [AuthenticationStorage]
+  @visibleForTesting
+  ApptiveGridAuthenticator.withAuthenticationStorage({
+    this.options = const ApptiveGridOptions(),
+    this.httpClient,
+    required AuthenticationStorage? storage,
+  })  : _authenticationStorage = storage,
+        _authCallbackSubscription = null;
 
   /// [ApptiveGridOptions] used for getting the correct [ApptiveGridEnvironment.authRealm]
   /// and checking if authentication should automatically be handled
@@ -35,13 +48,20 @@ class ApptiveGridAuthenticator {
   TokenResponse? _token;
   Credential? _credential;
 
+  AuthenticationStorage? _authenticationStorage;
+
   /// Override the token for testing purposes
   @visibleForTesting
-  void setToken(TokenResponse token) => _token = token;
+  void setToken(TokenResponse? token) => _token = token;
 
   /// Override the Credential for testing purposes
   @visibleForTesting
-  void setCredential(Credential credential) => _credential = credential;
+  void setCredential(Credential? credential) {
+    _authenticationStorage?.saveCredential(
+      credential != null ? jsonEncode(credential.toJson()) : null,
+    );
+    _credential = credential;
+  }
 
   /// Override the [Client] for testing purposes
   @visibleForTesting
@@ -84,9 +104,9 @@ class ApptiveGridAuthenticator {
                 )
               : null,
         );
-    _credential = await authenticator.authorize();
+    setCredential(await authenticator.authorize());
 
-    _token = await _credential?.getTokenResponse();
+    setToken(await _credential?.getTokenResponse());
 
     try {
       await closeWebView();
@@ -101,7 +121,9 @@ class ApptiveGridAuthenticator {
 
   Future<void> _handleAuthRedirect(Uri uri) async {
     final client = await _client;
-    client.createCredential(refreshToken: _token?.refreshToken);
+    client.createCredential(
+      refreshToken: _token?.refreshToken,
+    );
     final authenticator = testAuthenticator ??
         Authenticator(
           client, // coverage:ignore-line
@@ -131,15 +153,30 @@ class ApptiveGridAuthenticator {
   /// If the token is expired it will refresh the token using the refresh token
   Future<void> checkAuthentication() async {
     if (_token == null) {
-      if (options.authenticationOptions.apiKey != null) {
-        // User has ApiKey provided
-        return;
-      } else if (options.authenticationOptions.autoAuthenticate) {
-        await authenticate();
-      }
+      await Future.value(
+        _authenticationStorage?.credential,
+      ).then((credentialString) async {
+        final jsonCredential = jsonDecode(credentialString ?? 'null');
+        if (jsonCredential != null) {
+          final credential = Credential.fromJson(
+            jsonCredential,
+            httpClient: httpClient,
+          );
+          setCredential(credential);
+          final token = await credential.getTokenResponse();
+          setToken(token);
+        } else {
+          if (options.authenticationOptions.apiKey != null) {
+            // User has ApiKey provided
+            return;
+          } else if (options.authenticationOptions.autoAuthenticate) {
+            await authenticate();
+          }
+        }
+      });
     } else if ((_token?.expiresAt?.difference(DateTime.now()).inSeconds ?? 0) <
         70) {
-      _token = await _credential?.getTokenResponse(true);
+      setToken(await _credential?.getTokenResponse(true));
     }
   }
 
@@ -157,8 +194,8 @@ class ApptiveGridAuthenticator {
         },
       );
     }
-    _token = null;
-    _credential = null;
+    setToken(null);
+    setCredential(null);
     _authClient = null;
 
     return response;

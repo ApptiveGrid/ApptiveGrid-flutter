@@ -3,8 +3,8 @@
 import 'dart:html';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/network/web_authenticator.dart';
-import 'package:openid_client_fork/openid_client.dart' as openid;
+import 'package:apptive_grid_core/network/authentication/web_authenticator.dart';
+import 'package:openid_client/openid_client.dart' as openid;
 
 /// Enable Authentication for Flutter Web
 /// This checks if the Flutter App was redirected to by the Authentication Server and request an AccessToken

@@ -1,3 +1,6 @@
+## [0.8.0]
+* **BREAKING CHANGE** Requires minSdkVersion for Android to be at least 18
+
 ## [0.7.3+1]
 * Use Locale for DateTime Formats in [DateFormWidget] and [DateTimeFormWidget]
 
