@@ -1,0 +1,15 @@
+{
+    "actionSend": "Einsenden",
+    "additionalAnswer": "Weitere Antwort senden",
+    "backToForm": "Zurück zum Formular",
+    "loadingGrid": "Grid wird geladen",
+    "selectEntry": "Eintrag auswählen",
+    "fieldIsRequired": "$fieldName darf nicht leer sein",
+    "sendSuccess": "Vielen Dank!",
+    "savedForLater": "Das Formular wurde gespeichert und wird bei der nächsten Gelegenheit gesendet.",
+    "errorTitle": "Oops! - Fehler",
+    "crossRefSearch": "Suchen",
+    "dateTimeFieldDate": "Datum",
+    "dateTimeFieldTime": "Zeit",
+    "checkboxRequired": "Pflichtfeld"
+}

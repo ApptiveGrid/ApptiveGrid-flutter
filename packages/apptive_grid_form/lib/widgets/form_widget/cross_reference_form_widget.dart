@@ -88,7 +88,8 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       validator: (value) {
         if (widget.component.required &&
             (value?.entityUri == null || value?.displayValue == null)) {
-          return '${widget.component.property} is required';
+          return ApptiveGridLocalization.of(context)!
+              .fieldIsRequired(widget.component.property);
         } else {
           return null;
         }
@@ -115,15 +116,16 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
     if (_error != null || _grid == null) {
       return null;
     } else {
+      final localization = ApptiveGridLocalization.of(context)!;
       final searchBox = GridRowDropdownMenuItem(
         enabled: false,
         value: null,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextField(
-            decoration: const InputDecoration(
-              icon: Icon(Icons.search),
-              hintText: 'Search',
+            decoration: InputDecoration(
+              icon: const Icon(Icons.search),
+              hintText: localization.crossRefSearch,
               border: InputBorder.none,
             ),
             onChanged: (input) {
@@ -170,6 +172,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
   }
 
   List<Widget> _selectedItems(BuildContext context) {
+    final localization = ApptiveGridLocalization.of(context)!;
     if (_error != null) {
       return [
         const Center(
@@ -178,12 +181,12 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       ];
     } else if (_grid == null) {
       return [
-        const Center(
-          child: Text('Loading Grid...'),
+        Center(
+          child: Text(localization.loadingGrid),
         )
       ];
     } else {
-      const pleaseSelect = Text('Select an entry');
+      final pleaseSelect = Text(localization.selectEntry);
       return [
         ...[pleaseSelect, pleaseSelect],
         ..._grid!.rows

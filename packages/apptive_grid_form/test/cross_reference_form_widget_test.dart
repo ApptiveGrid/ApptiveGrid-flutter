@@ -110,7 +110,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.text('Loading Grid...'), findsOneWidget);
+      expect(find.text('Loading Grid'), findsOneWidget);
 
       // Does not open Popup
       await tester.tap(find.byIcon(Icons.arrow_drop_down));
@@ -131,7 +131,7 @@ void main() {
       formKey.currentState?.validate();
       await tester.pumpAndSettle();
 
-      expect(find.text('Property is required'), findsOneWidget);
+      expect(find.text('Property must not be empty'), findsOneWidget);
     });
 
     testWidgets('Empty null values', (tester) async {

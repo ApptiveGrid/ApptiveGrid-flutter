@@ -1,3 +1,7 @@
+## 0.0.2+2
+* Fix Status Bar Icon Color
+* Fix `FloatingActionButton` Icon Color
+
 ## 0.0.2+1
 * Specify `package` for `TextStyle`
 

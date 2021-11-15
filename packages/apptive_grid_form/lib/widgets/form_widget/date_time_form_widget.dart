@@ -23,28 +23,28 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
   final TextEditingController _timeController = TextEditingController();
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     if (widget.component.data.value != null) {
-      final dateFormat = DateFormat.yMd();
+      final locale = Localizations.maybeLocaleOf(context)?.toString();
+      final dateFormat = DateFormat.yMd(locale);
       final dateString = dateFormat.format(widget.component.data.value!);
       _dateController.text = dateString;
-      final timeFormat = DateFormat.jm();
+      final timeFormat = DateFormat.jm(locale);
       final timeString = timeFormat.format(widget.component.data.value!);
       _timeController.text = timeString;
     }
     return FormField<DateTime>(
       validator: (input) {
         if (widget.component.required && input == null) {
-          // TODO: Make this Message configurable
-          return '${widget.component.property} is required';
+          return ApptiveGridLocalization.of(context)!
+              .fieldIsRequired(widget.component.property);
         } else {
           return null;
         }
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       builder: (state) {
+        final localization = ApptiveGridLocalization.of(context)!;
         return InputDecorator(
           decoration: InputDecoration(
             helperText: widget.component.options.description,
@@ -80,8 +80,8 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                   child: AbsorbPointer(
                     child: TextField(
                       controller: _dateController,
-                      decoration: const InputDecoration(
-                        hintText: 'Date',
+                      decoration: InputDecoration(
+                        hintText: localization.dateTimeFieldDate,
                         border: InputBorder.none,
                         isDense: true,
                         filled: false,
@@ -121,8 +121,8 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
                   child: AbsorbPointer(
                     child: TextField(
                       controller: _timeController,
-                      decoration: const InputDecoration(
-                        hintText: 'Time',
+                      decoration: InputDecoration(
+                        hintText: localization.dateTimeFieldTime,
                         isDense: true,
                         filled: false,
                         border: InputBorder.none,

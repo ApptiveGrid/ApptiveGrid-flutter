@@ -1,4 +1,4 @@
-## [0.7.0-beta.1]
+## [0.7.0]
 * **BREAKING CHANGE** Requires minSdkVersion for Android to be at least 18
 
 ## [0.6.0+1]

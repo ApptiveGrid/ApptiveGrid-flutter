@@ -44,7 +44,8 @@ class _EnumFormWidgetState extends State<EnumFormWidget> {
       },
       validator: (value) {
         if (widget.component.required && value == null) {
-          return '${widget.component.property} is required';
+          return ApptiveGridLocalization.of(context)!
+              .fieldIsRequired(widget.component.property);
         } else {
           return null;
         }

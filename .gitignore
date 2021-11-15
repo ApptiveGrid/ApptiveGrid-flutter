@@ -56,3 +56,4 @@ packages/*/pubspec.lock
 melos_*.iml
 **/test_results
 packages/**/example/pubspec.lock
+packages/apptive_grid_form/tool/poeditor.properties

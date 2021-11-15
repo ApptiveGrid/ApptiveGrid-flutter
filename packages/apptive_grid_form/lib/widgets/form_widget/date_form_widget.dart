@@ -22,10 +22,9 @@ class _DateFormWidgetState extends State<DateFormWidget> {
   final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final dateFormat = DateFormat.yMd();
+  Widget build(BuildContext context) {
+    final locale = Localizations.maybeLocaleOf(context)?.toString();
+    final dateFormat = DateFormat.yMd(locale);
     if (widget.component.data.value != null) {
       final dateString = dateFormat.format(widget.component.data.value!);
       _controller.text = dateString;
@@ -55,8 +54,8 @@ class _DateFormWidgetState extends State<DateFormWidget> {
           controller: _controller,
           validator: (input) {
             if (widget.component.required && (input == null || input.isEmpty)) {
-              // TODO: Make this Message configurable
-              return '${widget.component.property} is required';
+              return ApptiveGridLocalization.of(context)!
+                  .fieldIsRequired(widget.component.property);
             } else {
               return null;
             }
