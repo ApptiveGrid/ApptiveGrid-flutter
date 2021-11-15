@@ -23,14 +23,13 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
   final TextEditingController _timeController = TextEditingController();
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     if (widget.component.data.value != null) {
-      final dateFormat = DateFormat.yMd();
+      final locale = Localizations.maybeLocaleOf(context)?.toString();
+      final dateFormat = DateFormat.yMd(locale);
       final dateString = dateFormat.format(widget.component.data.value!);
       _dateController.text = dateString;
-      final timeFormat = DateFormat.jm();
+      final timeFormat = DateFormat.jm(locale);
       final timeString = timeFormat.format(widget.component.data.value!);
       _timeController.text = timeString;
     }

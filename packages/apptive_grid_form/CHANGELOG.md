@@ -1,3 +1,6 @@
+## [0.7.3+1]
+* Use Locale for DateTime Formats in [DateFormWidget] and [DateTimeFormWidget]
+
 ## [0.7.3]
 * Add missing translations
   * Hints for DateTimeFormWidget
