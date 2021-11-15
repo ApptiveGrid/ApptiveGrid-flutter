@@ -572,6 +572,79 @@ void main() {
 
     test(
         'Storage Provided '
+        'Saved Credential Invalid '
+        'Calls authenticate', () async {
+      final tokenTime = DateTime.now();
+      final httpClient = MockHttpClient();
+      final authClient = MockAuthClient();
+      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.clientSecret).thenReturn('');
+      when(() => authClient.clientId).thenReturn('test');
+      when(() => authClient.httpClient).thenReturn(httpClient);
+
+      final tokenResponse = TokenResponse.fromJson({
+        'token_type': 'Bearer',
+        'access_token': '12345',
+        'expires_at': tokenTime.millisecondsSinceEpoch,
+        'expires_in': tokenTime.microsecondsSinceEpoch
+      });
+      final credential = Credential.fromJson({
+        'issuer': authClient.issuer.metadata.toJson(),
+        'client_id': authClient.clientId,
+        'client_secret': authClient.clientSecret,
+        'token': tokenResponse.toJson(),
+        'nonce': null
+      });
+      when(
+        () => authClient.createCredential(
+          tokenType: any(named: 'tokenType'),
+          accessToken: any(named: 'accessToken'),
+        ),
+      ).thenReturn(credential);
+      when(
+        () => httpClient.post(
+          any(),
+          body: any(named: 'body'),
+          headers: any(named: 'headers'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).thenAnswer(
+        (invocation) => Future.error(OpenIdException('Invalid Token', 'Test')),
+      );
+
+      final testAuthenticator = MockAuthenticator();
+
+      final storage = MockAuthenticationStorage();
+      authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
+        options: const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+            persistCredentials: true,
+          ),
+        ),
+        storage: storage,
+        httpClient: httpClient,
+      );
+      authenticator.testAuthenticator = testAuthenticator;
+      authenticator.setAuthClient(MockAuthClient());
+
+      when(() => storage.credential)
+          .thenAnswer((invocation) => jsonEncode(credential.toJson()));
+      final authCredential = MockCredential();
+      when(() => authCredential.getTokenResponse(any()))
+          .thenAnswer((invocation) async => tokenResponse);
+      when(() => testAuthenticator.authorize())
+          .thenAnswer((_) async => authCredential);
+      when(() => authCredential.toJson()).thenReturn({});
+
+      await authenticator.checkAuthentication();
+
+      verify(testAuthenticator.authorize).called(1);
+      expect(authenticator.isAuthenticated, true);
+    });
+
+    test(
+        'Storage Provided '
         'No Stored '
         'Authenticate is called', () async {
       final testAuthenticator = MockAuthenticator();
