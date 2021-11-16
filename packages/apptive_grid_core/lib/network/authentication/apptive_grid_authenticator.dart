@@ -163,15 +163,20 @@ class ApptiveGridAuthenticator {
             httpClient: httpClient,
           );
           setCredential(credential);
-          final token = await credential.getTokenResponse();
-          setToken(token);
-        } else {
-          if (options.authenticationOptions.apiKey != null) {
-            // User has ApiKey provided
+          try {
+            final token = await credential.getTokenResponse(true);
+            setToken(token);
             return;
-          } else if (options.authenticationOptions.autoAuthenticate) {
-            await authenticate();
+          } on OpenIdException catch (_) {
+            setCredential(null);
+            debugPrint('Could not refresh saved token');
           }
+        }
+        if (options.authenticationOptions.apiKey != null) {
+          // User has ApiKey provided
+          return;
+        } else if (options.authenticationOptions.autoAuthenticate) {
+          await authenticate();
         }
       });
     } else if ((_token?.expiresAt?.difference(DateTime.now()).inSeconds ?? 0) <

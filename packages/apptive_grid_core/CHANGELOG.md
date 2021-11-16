@@ -1,3 +1,6 @@
+## [0.7.0+1]
+* Refresh saved token after restoring also handling errors that might occur during that process
+
 ## [0.7.0]
 * **BREAKING CHANGE** Requires minSdkVersion for Android to be at least 18
 
