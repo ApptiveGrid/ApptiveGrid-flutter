@@ -191,21 +191,20 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 }
 
 /// [DataEntity] representing an array of Attachements
-class AttachmentDataEntity extends DataEntity<Set<Attachment>, dynamic> {
-  /// Create a new CrossReference Data Entity
+class AttachmentDataEntity extends DataEntity<List<Attachment>, dynamic> {
+  /// Create a new Attachment Data Entity
   AttachmentDataEntity(
-    Set<Attachment> value,
+    List<Attachment> value,
   ) : super(value);
 
-  /// Creates a new CrossReferenceDataEntity from a Json Response
+  /// Creates a new AttachmentDataEntity from a Json Response
   factory AttachmentDataEntity.fromJson(
-    Map? jsonValue,
-  ) =>
-      AttachmentDataEntity(
-        (jsonValue?['attachments'] as List?)
+    List? jsonValue,
+  ) => AttachmentDataEntity(
+        jsonValue
                 ?.map((attachment) => Attachment.fromJson(attachment))
-                .toSet() ??
-            {},
+                .toList() ??
+            [],
       );
 
   @override
@@ -224,7 +223,7 @@ class AttachmentDataEntity extends DataEntity<Set<Attachment>, dynamic> {
 
   @override
   bool operator ==(Object other) {
-    return other is AttachmentDataEntity && f.setEquals(value, other.value);
+    return other is AttachmentDataEntity && f.listEquals(value, other.value);
   }
 
   @override
