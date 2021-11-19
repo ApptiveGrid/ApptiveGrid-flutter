@@ -37,6 +37,10 @@ Widget fromModel(FormComponent component) {
       return CrossReferenceFormWidget(
         component: component as CrossReferenceFormComponent,
       );
+    case AttachmentDataEntity:
+      return AttachmentFormWidget(
+        component: component as AttachmentFormComponent,
+      );
     default:
       throw ArgumentError(
         'No Widget found for component $component. Please make sure you are you using the latest version of this package?',

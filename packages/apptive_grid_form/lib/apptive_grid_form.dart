@@ -3,9 +3,11 @@ library apptive_grid_form;
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
+import 'package:apptive_grid_form/widgets/form_widget/attachment_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 export 'package:apptive_grid_core/apptive_grid_core.dart';
 export 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
@@ -207,6 +209,8 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   bool _saved = false;
 
+  late AttachmentManager _attachmentManager;
+
   /// Returns the current [FormData] held in this Widget
   FormData? get currentData {
     if (!_success && !_saved) {
@@ -214,6 +218,12 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     } else {
       return null;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _attachmentManager = AttachmentManager(_formData);
   }
 
   @override
@@ -236,6 +246,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         _formData = widget.formData != null
             ? FormData.fromJson(widget.formData!.toJson())
             : null;
+        _attachmentManager = AttachmentManager(_formData);
       }
       _error = widget.error;
       _success = false;
@@ -272,42 +283,45 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   Widget _buildForm(BuildContext context, FormData data) {
     final localization = ApptiveGridLocalization.of(context)!;
-    return Form(
-      key: _formKey,
-      child: ListView.builder(
-        itemCount: 1 + data.components.length + data.actions.length,
-        itemBuilder: (context, index) {
-          // Title
-          if (index == 0) {
-            if (widget.hideTitle) {
-              return const SizedBox();
-            } else {
+    return Provider<AttachmentManager>.value(
+      value: _attachmentManager,
+      child: Form(
+        key: _formKey,
+        child: ListView.builder(
+          itemCount: 1 + data.components.length + data.actions.length,
+          itemBuilder: (context, index) {
+            // Title
+            if (index == 0) {
+              if (widget.hideTitle) {
+                return const SizedBox();
+              } else {
+                return Padding(
+                  padding: widget.titlePadding ??
+                      widget.contentPadding ??
+                      _defaultPadding,
+                  child: Text(
+                    data.title,
+                    style: widget.titleStyle ??
+                        Theme.of(context).textTheme.headline5,
+                  ),
+                );
+              }
+            } else if (index < data.components.length + 1) {
+              final componentIndex = index - 1;
               return Padding(
-                padding: widget.titlePadding ??
-                    widget.contentPadding ??
-                    _defaultPadding,
-                child: Text(
-                  data.title,
-                  style: widget.titleStyle ??
-                      Theme.of(context).textTheme.headline5,
-                ),
+                padding: widget.contentPadding ?? _defaultPadding,
+                child: fromModel(data.components[componentIndex]),
+              );
+            } else {
+              final actionIndex = index - 1 - data.components.length;
+              return ActionButton(
+                action: data.actions[actionIndex],
+                onPressed: _performAction,
+                child: Text(localization.actionSend),
               );
             }
-          } else if (index < data.components.length + 1) {
-            final componentIndex = index - 1;
-            return Padding(
-              padding: widget.contentPadding ?? _defaultPadding,
-              child: fromModel(data.components[componentIndex]),
-            );
-          } else {
-            final actionIndex = index - 1 - data.components.length;
-            return ActionButton(
-              action: data.actions[actionIndex],
-              onPressed: _performAction,
-              child: Text(localization.actionSend),
-            );
-          }
-        },
+          },
+        ),
       ),
     );
   }
@@ -406,7 +420,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
-  void _performAction(FormAction action) {
+  Future<void> _performAction(FormAction action) async {
     if (_formKey.currentState!.validate()) {
       _client.performAction(action, _formData!).then((response) async {
         if (response.statusCode < 400) {

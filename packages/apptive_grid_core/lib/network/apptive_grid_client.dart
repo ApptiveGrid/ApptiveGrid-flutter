@@ -20,7 +20,7 @@ class ApptiveGridClient {
         _authenticator = authenticator ??
             ApptiveGridAuthenticator(options: options, httpClient: httpClient);
 
-  /// Configuraptions
+  /// Configurations
   ApptiveGridOptions options;
 
   final ApptiveGridAuthenticator _authenticator;
@@ -48,6 +48,43 @@ class ApptiveGridClient {
   Future<FormData> loadForm({
     required FormUri formUri,
   }) async {
+    /*return FormData(
+      title: 'Title',
+      components: [
+        AttachmentFormComponent(
+          property: 'Property',
+          data: AttachmentDataEntity({
+            Attachment(
+              name: 'Attachment',
+              type: 'image/png',
+              url: Uri(),
+            ),
+          }),
+          fieldId: '4zc4l48ffin5v8pa2emyx9s15',
+        ),
+      ],
+      schema: {
+        'type': 'object',
+        'properties': {
+          '4zc4l48ffin5v8pa2emyx9s15': {
+            'type': 'object',
+            'objectType': 'attachment',
+            'properties': {
+              'smallThumbnail': {'type': 'string'},
+              'url': {'type': 'string'},
+              'largeThumbnail': {'type': 'string'},
+              'name': {'type': 'string'},
+              'type': {'type': 'string'}
+            },
+            'required': ['url', 'type']
+          },
+        },
+        'required': []
+      },
+      actions: [
+        FormAction('haha', 'POST'),
+      ],
+    );*/
     if (formUri.needsAuthorization) {
       await _authenticator.checkAuthentication();
     }
@@ -68,6 +105,8 @@ class ApptiveGridClient {
     FormData formData, {
     bool saveToPendingItems = true,
   }) async {
+    await _performAttachmentActions(formData.attachmentActions);
+    //return http.Response('', 200);
     final actionItem = ActionItem(action: action, data: formData);
     final uri = Uri.parse('${options.environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
@@ -103,6 +142,25 @@ class ApptiveGridClient {
     // Action was performed successfully. Remove it from pending Actions
     await options.cache?.removePendingActionItem(actionItem);
     return response;
+  }
+
+  Future _performAttachmentActions(Map<Attachment, AttachmentAction> actions) {
+    return Future.wait(
+      actions.values.map((action) {
+        switch (action.type) {
+          case AttachmentActionType.add:
+            return _uploadAttachment(action as AddAttachmentAction);
+          case AttachmentActionType.delete:
+            debugPrint('Delete Attachment ${action.attachment}');
+            return Future.value();
+          case AttachmentActionType.rename:
+            debugPrint(
+              'Rename Attachment ${action.attachment} to "${action.attachment.name}"',
+            );
+            return Future.value();
+        }
+      }),
+    );
   }
 
   /// Loads a [Grid] represented by [gridUri]
@@ -263,5 +321,67 @@ class ApptiveGridClient {
         // Was not able to submit this action
       }
     }
+  }
+
+  // Attachments
+  String get _signedUrlApiEndpoint {
+    final endpoint = options
+        .attachmentConfigurations[options.environment]?.signedUrlApiEndpoint;
+    if (endpoint != null) {
+      return endpoint;
+    } else {
+      throw ArgumentError(
+        'In order to use Attachments you need to specify AttachmentConfigurations in ApptiveGridOptions',
+      );
+    }
+  }
+
+  String get _attachmentApiEndpoint {
+    final endpoint = options
+        .attachmentConfigurations[options.environment]?.attachmentApiEndpoint;
+    if (endpoint != null) {
+      return endpoint;
+    } else {
+      throw ArgumentError(
+        'In order to use Attachments you need to specify AttachmentConfigurations in ApptiveGridOptions',
+      );
+    }
+  }
+
+  Uri createAttachmentUrl(String name) {
+    return Uri.parse(
+      '$_attachmentApiEndpoint$name?${DateTime.now().millisecondsSinceEpoch}',
+    );
+  }
+
+  Future _uploadAttachment(AddAttachmentAction action) async {
+    await _authenticator.checkAuthentication();
+
+    final baseUri = Uri.parse(_signedUrlApiEndpoint);
+    final uri = Uri(
+      scheme: baseUri.scheme,
+      host: baseUri.host,
+      path: baseUri.path,
+      queryParameters: {
+        'fileName': action.attachment.name,
+        'fileType': action.attachment.type,
+      },
+    );
+
+    return http.get(uri, headers: headers).then((response) {
+      if (response.statusCode < 400) {
+        return http
+            .put(
+          Uri.parse(jsonDecode(response.body)['uploadURL']),
+          body: action.byteData,
+        )
+            .then((value) {
+          debugPrint('Uploaded Successfully');
+          return value;
+        });
+      } else {
+        throw response;
+      }
+    });
   }
 }

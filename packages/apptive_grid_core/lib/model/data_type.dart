@@ -25,6 +25,8 @@ enum DataType {
 
   /// Type to display CrossReference Values
   crossReference,
+
+  attachment,
 }
 
 /// Returns [DataType] that matching a certain schema [schemaProperty]
@@ -58,7 +60,19 @@ DataType dataTypeFromSchemaProperty({
       switch (objectType) {
         case 'entityreference':
           return DataType.crossReference;
+        case 'attachment':
+          return DataType.attachment;
       }
+      break;
+    case 'array':
+      final itemType = schemaProperty['items']['objectType'];
+      switch (itemType) {
+        case 'entityreference':
+          return DataType.crossReference;
+        case 'attachment':
+          return DataType.attachment;
+      }
+      break;
   }
   throw ArgumentError(
     'No according DataType found for "$schemaType". Supported DataTypes are ${DataType.values}',

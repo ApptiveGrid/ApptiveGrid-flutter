@@ -9,6 +9,7 @@ class FormData {
     required this.components,
     this.actions = const [],
     required this.schema,
+    this.attachmentActions = const {},
   });
 
   /// Deserializes [json] into a FormData Object
@@ -25,7 +26,15 @@ class FormData {
                 .map((e) => FormAction.fromJson(e))
                 .toList()
             : [],
-        schema = json['schema'];
+        schema = json['schema'],
+        attachmentActions = json['attachmentActions'] != null
+            ? Map.fromEntries(
+                (json['attachmentActions'] as List).map((entry) {
+                  final action = AttachmentAction.fromJson(entry);
+                  return MapEntry(action.attachment, action);
+                }).toList(),
+              )
+            : {};
 
   /// Name of the Form
   final String? name;
@@ -41,6 +50,8 @@ class FormData {
 
   /// Schema used to deserialize [components] and verify data send back to the server
   final dynamic schema;
+
+  final Map<Attachment, AttachmentAction> attachmentActions;
 
   /// Serializes [FormData] to json
   Map<String, dynamic> toJson() => {
