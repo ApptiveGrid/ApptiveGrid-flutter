@@ -51,6 +51,7 @@ class FormData {
   /// Schema used to deserialize [components] and verify data send back to the server
   final dynamic schema;
 
+  /// Actions related to Attachments that need to b performed before submitting a form
   final Map<Attachment, AttachmentAction> attachmentActions;
 
   /// Serializes [FormData] to json

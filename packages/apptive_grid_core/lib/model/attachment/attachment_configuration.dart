@@ -1,11 +1,16 @@
 part of apptive_grid_model;
 
+/// Configuration for ApiEndpoints to support Attachments
+///
+/// More Info on how to optain these configurations will be provided later
 class AttachmentConfiguration {
+  /// Creates a new AttachmentConfiguration
   AttachmentConfiguration({
     required this.signedUrlApiEndpoint,
     required this.attachmentApiEndpoint,
   });
 
+  /// Creates a new AttachmentConfiguration from json
   factory AttachmentConfiguration.fromJson(Map<String, dynamic> json) {
     return AttachmentConfiguration(
       signedUrlApiEndpoint: json['signedUrl'],
@@ -13,7 +18,10 @@ class AttachmentConfiguration {
     );
   }
 
+  /// Endpoint used to generate an upload url
   final String signedUrlApiEndpoint;
+
+  /// Endpoint to store data at
   final String attachmentApiEndpoint;
 
   @override
@@ -32,6 +40,9 @@ class AttachmentConfiguration {
   int get hashCode => toString().hashCode;
 }
 
+/// Converts a [configString] to an actual map of [ApptiveGridEnvironment] and [ApptiveGridConfiguration]
+///
+/// More Info on how to get a [configString] will follow later
 Map<ApptiveGridEnvironment, AttachmentConfiguration?>
     attachmentConfigurationMapFromConfigString(String configString) {
   final json =

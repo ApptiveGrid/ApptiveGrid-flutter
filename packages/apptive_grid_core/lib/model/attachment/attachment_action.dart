@@ -1,17 +1,29 @@
 part of apptive_grid_model;
 
+/// Attachment actions that can be performed before uploading an attachment to apptive grid
 enum AttachmentActionType {
+  /// Add a new Attachment
   add,
+
+  /// Delete an existing Attachment
   delete,
+
+  /// Rename an Attachment
   rename,
 }
 
+/// Abstract class describing an Attachment Action
 abstract class AttachmentAction {
+  /// Creates a new Action of a specific [type] for an [attachment]
   AttachmentAction(this.attachment, this.type);
 
+  /// [Attachment] this action is performed on
   final Attachment attachment;
+
+  /// [AttachmentActionType] of this action
   final AttachmentActionType type;
 
+  /// Create a specific AttachmentAction from a json file
   static AttachmentAction fromJson(dynamic json) {
     final type = AttachmentActionType.values.firstWhere(
       (element) => element.toString() == json['type'],
@@ -37,13 +49,17 @@ abstract class AttachmentAction {
     }
   }
 
+  /// Serializes an AttachmentAction to json
   Map<String, dynamic> toJson();
 }
 
+/// Implementation of an [AttachmentAction] for [AttachmentActionType.add]
 class AddAttachmentAction extends AttachmentAction {
+  /// Creates an Add Action to upload [byteData] for [attachment]
   AddAttachmentAction({required this.byteData, required attachment})
       : super(attachment, AttachmentActionType.add);
 
+  /// Data for new Attachment
   final Uint8List? byteData;
 
   @override
@@ -54,7 +70,9 @@ class AddAttachmentAction extends AttachmentAction {
       };
 }
 
+/// Implementation of an [AttachmentAction] for [AttachmentActionType.delete]
 class DeleteAttachmentAction extends AttachmentAction {
+  /// Creates an Action to delete [attachment]
   DeleteAttachmentAction({required attachment})
       : super(attachment, AttachmentActionType.delete);
 
@@ -65,10 +83,13 @@ class DeleteAttachmentAction extends AttachmentAction {
       };
 }
 
+/// Implementation of an [AttachmentAction] for [AttachmentActionType.delete]
 class RenameAttachmentAction extends AttachmentAction {
+  /// Creates an action to change the name of an [attachment] to [newName]
   RenameAttachmentAction({required this.newName, required attachment})
       : super(attachment, AttachmentActionType.rename);
 
+  /// New name of an attachment
   final String newName;
 
   @override

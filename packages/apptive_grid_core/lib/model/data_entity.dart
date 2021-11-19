@@ -200,7 +200,8 @@ class AttachmentDataEntity extends DataEntity<List<Attachment>, dynamic> {
   /// Creates a new AttachmentDataEntity from a Json Response
   factory AttachmentDataEntity.fromJson(
     List? jsonValue,
-  ) => AttachmentDataEntity(
+  ) =>
+      AttachmentDataEntity(
         jsonValue
                 ?.map((attachment) => Attachment.fromJson(attachment))
                 .toList() ??

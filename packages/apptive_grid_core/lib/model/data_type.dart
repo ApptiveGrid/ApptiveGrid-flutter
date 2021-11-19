@@ -26,6 +26,7 @@ enum DataType {
   /// Type to display CrossReference Values
   crossReference,
 
+  /// Type for Attachments
   attachment,
 }
 

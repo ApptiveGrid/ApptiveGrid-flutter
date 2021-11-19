@@ -23,6 +23,10 @@ class ApptiveGridOptions {
   /// This can also be used to enable offline mode sending
   final ApptiveGridCache? cache;
 
+  /// Configurations for Attachments
+  ///
+  /// this can be specified directly or properly you want to use the Helper Function
+  /// [attachmentConfigurationMapFromConfigString] which takes in your configuration
   final Map<ApptiveGridEnvironment, AttachmentConfiguration?>
       attachmentConfigurations;
 

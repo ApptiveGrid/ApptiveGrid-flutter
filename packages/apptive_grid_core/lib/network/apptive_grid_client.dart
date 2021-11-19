@@ -348,6 +348,9 @@ class ApptiveGridClient {
     }
   }
 
+  /// Creates an url where an attachment should be saved
+  ///
+  /// TODO: Do not Use Name
   Uri createAttachmentUrl(String name) {
     return Uri.parse(
       '$_attachmentApiEndpoint$name?${DateTime.now().millisecondsSinceEpoch}',
