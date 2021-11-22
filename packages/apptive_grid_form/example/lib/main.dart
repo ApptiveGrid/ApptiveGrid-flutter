@@ -10,7 +10,7 @@ void main() {
       options: ApptiveGridOptions(
         environment: ApptiveGridEnvironment.alpha,
         attachmentConfigurations: attachmentConfigurationMapFromConfigString(
-          'YOUR ATTACHMENT CONFIGURATION'
+          'YOUR ATTACHMENT CONFIGURATION',
         ),
         authenticationOptions: const ApptiveGridAuthenticationOptions(
           autoAuthenticate: true,
