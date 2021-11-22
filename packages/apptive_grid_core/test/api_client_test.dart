@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -273,6 +274,384 @@ void main() {
         calledRequest.headers[HttpHeaders.contentTypeHeader],
         ContentType.json,
       );
+    });
+
+    test('Error without Cache throws Response', () async {
+      final action = FormAction('/uri', 'POST');
+      const property = 'Checkbox';
+      const id = 'id';
+      final component = BooleanFormComponent(
+        fieldId: id,
+        property: property,
+        data: BooleanDataEntity(true),
+        options: FormComponentOptions.fromJson({}),
+        required: false,
+      );
+      final schema = {
+        'type': 'object',
+        'properties': {
+          id: {'type': 'boolean'},
+        },
+        'required': []
+      };
+      final formData = FormData(
+        name: 'Name',
+        title: 'Title',
+        components: [component],
+        actions: [action],
+        schema: schema,
+      );
+
+      final request = Request(
+        'POST',
+        Uri.parse('${ApptiveGridEnvironment.production.url}/uri}'),
+      );
+      request.body = jsonEncode(jsonEncode(formData.toRequestObject()));
+
+      when(() => httpClient.send(any())).thenAnswer(
+        (realInvocation) async => StreamedResponse(Stream.value([]), 400),
+      );
+
+      await expectLater(
+        () async => await apptiveGridClient.performAction(action, formData),
+        throwsA(isInstanceOf<Response>()),
+      );
+    });
+
+    group('Attachments', () {
+      group('No Attachment Config', () {
+        late ApptiveGridClient client;
+        late Client httpClient;
+        late ApptiveGridAuthenticator authenticator;
+
+        setUp(() {
+          httpClient = MockHttpClient();
+          authenticator = MockApptiveGridAuthenticator();
+          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.checkAuthentication())
+              .thenAnswer((_) async {});
+          client = ApptiveGridClient.fromClient(
+            httpClient,
+            options: const ApptiveGridOptions(
+              environment: ApptiveGridEnvironment.production,
+              authenticationOptions: ApptiveGridAuthenticationOptions(
+                autoAuthenticate: true,
+              ),
+            ),
+            authenticator: authenticator,
+          );
+        });
+
+        test('Create Attachment Uri, throws Error', () {
+          expect(
+            () => client.createAttachmentUrl('Name'),
+            throwsA(isInstanceOf<ArgumentError>()),
+          );
+        });
+
+        test('Upload Attachment, throws Error', () {
+          final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
+          final action = FormAction('actionUri', 'POST');
+          final bytes = Uint8List(10);
+          final formData = FormData(
+            title: 'Title',
+            components: [
+              AttachmentFormComponent(
+                property: 'property',
+                data: AttachmentDataEntity([attachment]),
+                fieldId: 'fieldId',
+              ),
+            ],
+            schema: null,
+            actions: [action],
+            attachmentActions: {
+              attachment:
+                  AddAttachmentAction(byteData: bytes, attachment: attachment)
+            },
+          );
+
+          expect(
+            () => client.performAction(action, formData),
+            throwsArgumentError,
+          );
+        });
+      });
+
+      group('With Attachment Config', () {
+        late ApptiveGridClient client;
+        late Client httpClient;
+        late ApptiveGridAuthenticator authenticator;
+
+        const attachmentConfig = {
+          ApptiveGridEnvironment.production: AttachmentConfiguration(
+            attachmentApiEndpoint: 'attachmentEndpoint.com/',
+            signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
+          )
+        };
+
+        setUp(() {
+          httpClient = MockHttpClient();
+          authenticator = MockApptiveGridAuthenticator();
+          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.checkAuthentication())
+              .thenAnswer((_) async {});
+          client = ApptiveGridClient.fromClient(
+            httpClient,
+            options: const ApptiveGridOptions(
+              attachmentConfigurations: attachmentConfig,
+              environment: ApptiveGridEnvironment.production,
+              authenticationOptions: ApptiveGridAuthenticationOptions(
+                autoAuthenticate: true,
+              ),
+            ),
+            authenticator: authenticator,
+          );
+        });
+
+        test('Creates Attachment Uri based on config', () {
+          const name = 'FileName';
+          expect(
+            client.createAttachmentUrl(name).toString(),
+            predicate<String>(
+              (uriString) =>
+                  uriString.startsWith('attachmentEndpoint.com/$name?'),
+            ),
+          );
+        });
+
+        group('Upload Data', () {
+          final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
+          final action = FormAction('actionUri', 'POST');
+          final bytes = Uint8List(10);
+          final attachmentAction =
+              AddAttachmentAction(byteData: bytes, attachment: attachment);
+          final formData = FormData(
+            title: 'Title',
+            components: [
+              AttachmentFormComponent(
+                property: 'property',
+                data: AttachmentDataEntity([attachment]),
+                fieldId: 'fieldId',
+              ),
+            ],
+            schema: null,
+            actions: [action],
+            attachmentActions: {attachment: attachmentAction},
+          );
+
+          test('Getting Upload Url fails', () async {
+            final response = Response('body', 400);
+            final baseUri = Uri.parse(
+              attachmentConfig[ApptiveGridEnvironment.production]!
+                  .signedUrlApiEndpoint,
+            );
+            final uri = Uri(
+              scheme: baseUri.scheme,
+              host: baseUri.host,
+              path: baseUri.path,
+              queryParameters: {
+                'fileName': attachmentAction.attachment.name,
+                'fileType': attachmentAction.attachment.type,
+              },
+            );
+            when(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .thenAnswer((_) async => response);
+
+            expect(
+              () async => await client.performAction(action, formData),
+              throwsA(equals(response)),
+            );
+          });
+
+          test('Upload Bytes success', () async {
+            final uploadUri = Uri.parse('uploadUrl.com/data');
+            final getResponse =
+                Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
+            final putResponse = Response('Success', 200);
+            final baseUri = Uri.parse(
+              attachmentConfig[ApptiveGridEnvironment.production]!
+                  .signedUrlApiEndpoint,
+            );
+            final uri = Uri(
+              scheme: baseUri.scheme,
+              host: baseUri.host,
+              path: baseUri.path,
+              queryParameters: {
+                'fileName': attachmentAction.attachment.name,
+                'fileType': attachmentAction.attachment.type,
+              },
+            );
+            when(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .thenAnswer((_) async => getResponse);
+            when(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).thenAnswer((_) async => putResponse);
+            when(() => httpClient.send(any())).thenAnswer(
+              (realInvocation) async => StreamedResponse(Stream.value([]), 200),
+            );
+
+            await client.performAction(action, formData);
+
+            verify(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .called(1);
+            verify(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).called(1);
+            verify(() => httpClient.send(any())).called(1);
+          });
+
+          test('Upload Fails throws Response', () async {
+            final uploadUri = Uri.parse('uploadUrl.com/data');
+            final getResponse =
+                Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
+            final putResponse = Response('Error', 500);
+            final baseUri = Uri.parse(
+              attachmentConfig[ApptiveGridEnvironment.production]!
+                  .signedUrlApiEndpoint,
+            );
+            final uri = Uri(
+              scheme: baseUri.scheme,
+              host: baseUri.host,
+              path: baseUri.path,
+              queryParameters: {
+                'fileName': attachmentAction.attachment.name,
+                'fileType': attachmentAction.attachment.type,
+              },
+            );
+            when(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .thenAnswer((_) async => getResponse);
+            when(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).thenAnswer((_) async => putResponse);
+
+            await expectLater(
+              () async => await client.performAction(action, formData),
+              throwsA(equals(putResponse)),
+            );
+
+            verify(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .called(1);
+            verify(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).called(1);
+            verifyNever(() => httpClient.send(any()));
+          });
+        });
+
+        group(
+            'TODO: NO OP ACTIONS '
+            'These tests might need addition changes once the actions do more. '
+            'For Now Check that formAction is performed', () {
+          late ApptiveGridClient client;
+          late Client httpClient;
+          late ApptiveGridAuthenticator authenticator;
+
+          const attachmentConfig = {
+            ApptiveGridEnvironment.production: AttachmentConfiguration(
+              attachmentApiEndpoint: 'attachmentEndpoint.com/',
+              signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
+            )
+          };
+
+          setUp(() {
+            httpClient = MockHttpClient();
+            authenticator = MockApptiveGridAuthenticator();
+            when(() => authenticator.isAuthenticated).thenReturn(true);
+            when(() => authenticator.checkAuthentication())
+                .thenAnswer((_) async {});
+            client = ApptiveGridClient.fromClient(
+              httpClient,
+              options: const ApptiveGridOptions(
+                attachmentConfigurations: attachmentConfig,
+                environment: ApptiveGridEnvironment.production,
+                authenticationOptions: ApptiveGridAuthenticationOptions(
+                  autoAuthenticate: true,
+                ),
+              ),
+              authenticator: authenticator,
+            );
+          });
+          test('Rename Action', () async {
+            final attachment =
+                Attachment(name: 'name', url: Uri(), type: 'type');
+            final action = FormAction('actionUri', 'POST');
+            final attachmentAction = RenameAttachmentAction(
+              newName: 'NewName',
+              attachment: attachment,
+            );
+            final formData = FormData(
+              title: 'Title',
+              components: [
+                AttachmentFormComponent(
+                  property: 'property',
+                  data: AttachmentDataEntity([attachment]),
+                  fieldId: 'fieldId',
+                ),
+              ],
+              schema: null,
+              actions: [action],
+              attachmentActions: {attachment: attachmentAction},
+            );
+
+            when(() => httpClient.send(any())).thenAnswer(
+              (realInvocation) async => StreamedResponse(Stream.value([]), 200),
+            );
+
+            await client.performAction(action, formData);
+
+            verify(() => httpClient.send(any())).called(1);
+          });
+
+          test('Delete Action', () async {
+            final attachment =
+                Attachment(name: 'name', url: Uri(), type: 'type');
+            final action = FormAction('actionUri', 'POST');
+            final attachmentAction =
+                DeleteAttachmentAction(attachment: attachment);
+            final formData = FormData(
+              title: 'Title',
+              components: [
+                AttachmentFormComponent(
+                  property: 'property',
+                  data: AttachmentDataEntity([attachment]),
+                  fieldId: 'fieldId',
+                ),
+              ],
+              schema: null,
+              actions: [action],
+              attachmentActions: {attachment: attachmentAction},
+            );
+
+            when(() => httpClient.send(any())).thenAnswer(
+              (realInvocation) async => StreamedResponse(Stream.value([]), 200),
+            );
+
+            await client.performAction(action, formData);
+
+            verify(() => httpClient.send(any())).called(1);
+          });
+        });
+      });
     });
   });
 

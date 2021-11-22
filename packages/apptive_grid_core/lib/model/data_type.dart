@@ -61,15 +61,11 @@ DataType dataTypeFromSchemaProperty({
       switch (objectType) {
         case 'entityreference':
           return DataType.crossReference;
-        case 'attachment':
-          return DataType.attachment;
       }
       break;
     case 'array':
       final itemType = schemaProperty['items']['objectType'];
       switch (itemType) {
-        case 'entityreference':
-          return DataType.crossReference;
         case 'attachment':
           return DataType.attachment;
       }

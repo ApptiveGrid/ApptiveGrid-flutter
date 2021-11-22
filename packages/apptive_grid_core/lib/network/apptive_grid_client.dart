@@ -371,16 +371,20 @@ class ApptiveGridClient {
       },
     );
 
-    return http.get(uri, headers: headers).then((response) {
+    return _client.get(uri, headers: headers).then((response) {
       if (response.statusCode < 400) {
-        return http
+        return _client
             .put(
           Uri.parse(jsonDecode(response.body)['uploadURL']),
           body: action.byteData,
         )
-            .then((value) {
-          debugPrint('Uploaded Successfully');
-          return value;
+            .then((putResponse) {
+          if (putResponse.statusCode < 400) {
+            debugPrint('Uploaded Successfully');
+            return putResponse;
+          } else {
+            throw putResponse;
+          }
         });
       } else {
         throw response;

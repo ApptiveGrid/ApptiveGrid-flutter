@@ -169,4 +169,49 @@ void main() {
       expect(selection.hashCode - unEqualSelection.hashCode == 0, false);
     });
   });
+
+  group('Attachment', () {
+    test('Value is set', () {
+      final attachments = <Attachment>[
+        Attachment(name: 'one', url: Uri.parse('one'), type: 'image/png'),
+        Attachment(name: 'two', url: Uri.parse('two'), type: 'image/png'),
+      ];
+      final entity = AttachmentDataEntity(attachments);
+
+      expect(entity.value, attachments);
+      expect(
+        entity.schemaValue,
+        attachments.map((attachment) => attachment.toJson()),
+      );
+    });
+
+    test('From Json', () {
+      final attachments = <Attachment>[
+        Attachment(name: 'one', url: Uri.parse('one'), type: 'image/png'),
+        Attachment(name: 'two', url: Uri.parse('two'), type: 'image/png'),
+      ];
+      final direct = AttachmentDataEntity(attachments);
+
+      final fromJson = AttachmentDataEntity.fromJson(
+        attachments.map((attachment) => attachment.toJson()).toList(),
+      );
+
+      expect(direct, equals(fromJson));
+      expect(direct.hashCode, equals(fromJson.hashCode));
+    });
+
+    test('Null json is Empty List', () {
+      final entity = AttachmentDataEntity.fromJson(null);
+
+      expect(entity.value, equals([]));
+      expect(entity.schemaValue, isNull);
+    });
+
+    test('Default is Empty List', () {
+      final entity = AttachmentDataEntity();
+
+      expect(entity.value, equals([]));
+      expect(entity.schemaValue, isNull);
+    });
+  });
 }

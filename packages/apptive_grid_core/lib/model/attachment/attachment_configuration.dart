@@ -5,7 +5,7 @@ part of apptive_grid_model;
 /// More Info on how to optain these configurations will be provided later
 class AttachmentConfiguration {
   /// Creates a new AttachmentConfiguration
-  AttachmentConfiguration({
+  const AttachmentConfiguration({
     required this.signedUrlApiEndpoint,
     required this.attachmentApiEndpoint,
   });

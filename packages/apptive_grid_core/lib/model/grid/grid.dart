@@ -70,6 +70,7 @@ class Grid {
     required this.fields,
     required this.rows,
     this.filter,
+    this.sorting,
   });
 
   /// Deserializes [json] into a [Grid] Object
@@ -91,12 +92,14 @@ class Grid {
         .map((e) => GridRow.fromJson(e, fields, schema))
         .toList();
     final filter = json['filter'];
+    final sorting = json['sorting'];
     return Grid(
       name: json['name'],
       schema: schema,
       fields: fields,
       rows: entries,
       filter: filter,
+      sorting: sorting,
     );
   }
 
@@ -108,6 +111,9 @@ class Grid {
 
   /// Filter applied to this GridView. If this is not null the Grid is actually a GridView
   final dynamic filter;
+
+  /// Sorting applied to this GridView. If this is not null the Grid is actually a GridView
+  final dynamic sorting;
 
   /// List of [GridField] representing the Columns the Grid has
   final List<GridField> fields;
@@ -123,11 +129,12 @@ class Grid {
         'fieldIds': fields.map((e) => e.id).toList(),
         'fieldNames': fields.map((e) => e.name).toList(),
         if (filter != null) 'filter': filter,
+        if (sorting != null) 'sorting': sorting,
       };
 
   @override
   String toString() {
-    return 'GridData(name: $name, fields: $fields, rows: $rows, filter: $filter)';
+    return 'GridData(name: $name, fields: $fields, rows: $rows, filter: $filter, sorting: $sorting)';
   }
 
   @override
@@ -136,7 +143,9 @@ class Grid {
         name == other.name &&
         schema.toString() == other.schema.toString() &&
         f.listEquals(fields, other.fields) &&
-        f.listEquals(rows, other.rows);
+        f.listEquals(rows, other.rows) &&
+        filter.toString() == other.filter.toString() &&
+        sorting.toString() == other.sorting.toString();
   }
 
   @override
