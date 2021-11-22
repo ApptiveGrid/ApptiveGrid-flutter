@@ -1,3 +1,9 @@
+## [0.7.0+1]
+* Refresh saved token after restoring also handling errors that might occur during that process
+
+## [0.7.0]
+* **BREAKING CHANGE** Requires minSdkVersion for Android to be at least 18
+
 ## [0.6.0+1]
 * Check equality of `schema` of `Grid` and `FormData` based on`toString()` representation reach a clearer equality
 
@@ -34,7 +40,7 @@
 
 ## [0.2.7]
 * Support CrossReferences in Forms. This still requires Authentication however it is already a first look at how this will look and work
-* Call ApptiveGridClient.logout() to logout the user
+* Call ApptiveGridClient.logout() to log out the user
 
 ## [0.2.6+2]
 * Send empty/null values when submitting a Form. Enables sending non-selected enum values

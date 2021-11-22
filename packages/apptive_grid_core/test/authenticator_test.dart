@@ -4,10 +4,11 @@ import 'dart:convert';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage_platform_interface/flutter_secure_storage_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:openid_client_fork/openid_client.dart';
+import 'package:openid_client/openid_client.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
@@ -87,7 +88,7 @@ void main() {
     });
 
     test('Expired Token Refreshes', () async {
-      final authenticator =
+      authenticator =
           ApptiveGridAuthenticator(options: const ApptiveGridOptions());
 
       // Current token should be Expired
@@ -157,6 +158,7 @@ void main() {
       authenticator = ApptiveGridAuthenticator();
       final authClient = MockAuthClient();
       when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.clientId).thenReturn('Id');
       authenticator.setAuthClient(authClient);
       unawaited(authenticator.authenticate());
       final launchedUrl = await completer.future;
@@ -263,12 +265,13 @@ void main() {
           jsonEncode(_zweidenkerIssuer.metadata.toJson()),
           200,
           request: Request('GET', discoveryUri),
+          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
         ),
       );
 
       final client = await authenticator.authClient;
       expect(
-        client.issuer!.metadata.toJson(),
+        client.issuer.metadata.toJson(),
         _zweidenkerIssuer.metadata.toJson(),
       );
     });
@@ -277,7 +280,7 @@ void main() {
   group('Logout', () {
     test('Logout calls http Client', () async {
       final httpClient = MockHttpClient();
-      final authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
+      authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
       final logoutUri = Uri.parse('https://log.me/out');
 
       final credential = MockCredential();
@@ -307,8 +310,8 @@ void main() {
   });
 
   group('Is Authenticated', () {
-    test('isAuthentcated  returns Status of token', () async {
-      final authenticator = ApptiveGridAuthenticator();
+    test('isAuthenticated  returns Status of token', () async {
+      authenticator = ApptiveGridAuthenticator();
 
       expect(authenticator.isAuthenticated, false);
 
@@ -343,6 +346,7 @@ void main() {
           jsonEncode(tokenResponse.toJson()),
           200,
           request: Request('POST', invocation.positionalArguments[0]),
+          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
         ),
       );
 
@@ -387,7 +391,7 @@ void main() {
       when(() => authClient.httpClient).thenReturn(httpClient);
 
       final credential = Credential.fromJson({
-        'issuer': authClient.issuer!.metadata.toJson(),
+        'issuer': authClient.issuer.metadata.toJson(),
         'client_id': authClient.clientId,
         'client_secret': authClient.clientSecret,
         'token': tokenResponse.toJson(),
@@ -433,13 +437,13 @@ void main() {
     );
 
     test('isAuthenticated', () {
-      final authenticator = ApptiveGridAuthenticator(options: options);
+      authenticator = ApptiveGridAuthenticator(options: options);
 
       expect(authenticator.isAuthenticated, true);
     });
 
     test('Sets Header', () {
-      final authenticator = ApptiveGridAuthenticator(options: options);
+      authenticator = ApptiveGridAuthenticator(options: options);
 
       expect(authenticator.header!.split(' ')[0], 'Basic');
       expect(
@@ -450,12 +454,281 @@ void main() {
 
     test('Check Authentication calls nothing', () async {
       final httpClient = MockHttpClient();
-      final authenticator =
+      authenticator =
           ApptiveGridAuthenticator(options: options, httpClient: httpClient);
 
       await authenticator.checkAuthentication();
 
       verifyZeroInteractions(httpClient);
+    });
+  });
+
+  group('Token Storage', () {
+    test(
+        'Storage Provided '
+        'Credential gets saved', () async {
+      final storage = MockAuthenticationStorage();
+      final testAuthenticator = MockAuthenticator();
+      final credential = MockCredential();
+      final jsonCredential = {'mock': 'credential'};
+      final token = TokenResponse.fromJson(
+        {'token_type': 'Bearer', 'access_token': '12345'},
+      );
+
+      when(() => credential.getTokenResponse(any()))
+          .thenAnswer((invocation) async => token);
+      when(() => credential.toJson()).thenReturn(jsonCredential);
+      authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
+        options: const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+            persistCredentials: true,
+          ),
+        ),
+        storage: storage,
+      );
+
+      when(() => storage.saveCredential(any())).thenAnswer((_) {});
+      when(() => testAuthenticator.authorize())
+          .thenAnswer((_) async => credential);
+
+      authenticator.testAuthenticator = testAuthenticator;
+
+      await authenticator.authenticate();
+
+      verify(() => storage.saveCredential(jsonEncode(jsonCredential)))
+          .called(1);
+    });
+
+    test(
+        'Storage Provided '
+        'Credential gets restored', () async {
+      final tokenTime = DateTime.now();
+      final httpClient = MockHttpClient();
+      final authClient = MockAuthClient();
+      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.clientSecret).thenReturn('');
+      when(() => authClient.clientId).thenReturn('test');
+      when(() => authClient.httpClient).thenReturn(httpClient);
+
+      final tokenResponse = TokenResponse.fromJson({
+        'token_type': 'Bearer',
+        'access_token': '12345',
+        'expires_at': tokenTime.millisecondsSinceEpoch,
+        'expires_in': tokenTime.microsecondsSinceEpoch
+      });
+      final credential = Credential.fromJson({
+        'issuer': authClient.issuer.metadata.toJson(),
+        'client_id': authClient.clientId,
+        'client_secret': authClient.clientSecret,
+        'token': tokenResponse.toJson(),
+        'nonce': null
+      });
+      when(
+        () => authClient.createCredential(
+          tokenType: any(named: 'tokenType'),
+          accessToken: any(named: 'accessToken'),
+        ),
+      ).thenReturn(credential);
+      when(
+        () => httpClient.post(
+          any(),
+          body: any(named: 'body'),
+          headers: any(named: 'headers'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).thenAnswer(
+        (invocation) async => Response(
+          jsonEncode(tokenResponse.toJson()),
+          200,
+          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+          request: Request('POST', invocation.positionalArguments[0]),
+        ),
+      );
+
+      final testAuthenticator = MockAuthenticator();
+
+      final storage = MockAuthenticationStorage();
+      authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
+        options: const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+            persistCredentials: true,
+          ),
+        ),
+        storage: storage,
+        httpClient: httpClient,
+      );
+      authenticator.testAuthenticator = testAuthenticator;
+
+      when(() => storage.credential)
+          .thenAnswer((invocation) => jsonEncode(credential.toJson()));
+
+      await authenticator.checkAuthentication();
+
+      verifyNever(testAuthenticator.authorize);
+      expect(authenticator.isAuthenticated, true);
+    });
+
+    test(
+        'Storage Provided '
+        'Saved Credential Invalid '
+        'Calls authenticate', () async {
+      final tokenTime = DateTime.now();
+      final httpClient = MockHttpClient();
+      final authClient = MockAuthClient();
+      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.clientSecret).thenReturn('');
+      when(() => authClient.clientId).thenReturn('test');
+      when(() => authClient.httpClient).thenReturn(httpClient);
+
+      final tokenResponse = TokenResponse.fromJson({
+        'token_type': 'Bearer',
+        'access_token': '12345',
+        'expires_at': tokenTime.millisecondsSinceEpoch,
+        'expires_in': tokenTime.microsecondsSinceEpoch
+      });
+      final credential = Credential.fromJson({
+        'issuer': authClient.issuer.metadata.toJson(),
+        'client_id': authClient.clientId,
+        'client_secret': authClient.clientSecret,
+        'token': tokenResponse.toJson(),
+        'nonce': null
+      });
+      when(
+        () => authClient.createCredential(
+          tokenType: any(named: 'tokenType'),
+          accessToken: any(named: 'accessToken'),
+        ),
+      ).thenReturn(credential);
+      when(
+        () => httpClient.post(
+          any(),
+          body: any(named: 'body'),
+          headers: any(named: 'headers'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).thenAnswer(
+        (invocation) => Future.error(OpenIdException('Invalid Token', 'Test')),
+      );
+
+      final testAuthenticator = MockAuthenticator();
+
+      final storage = MockAuthenticationStorage();
+      authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
+        options: const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+            persistCredentials: true,
+          ),
+        ),
+        storage: storage,
+        httpClient: httpClient,
+      );
+      authenticator.testAuthenticator = testAuthenticator;
+      authenticator.setAuthClient(MockAuthClient());
+
+      when(() => storage.credential)
+          .thenAnswer((invocation) => jsonEncode(credential.toJson()));
+      final authCredential = MockCredential();
+      when(() => authCredential.getTokenResponse(any()))
+          .thenAnswer((invocation) async => tokenResponse);
+      when(() => testAuthenticator.authorize())
+          .thenAnswer((_) async => authCredential);
+      when(() => authCredential.toJson()).thenReturn({});
+
+      await authenticator.checkAuthentication();
+
+      verify(testAuthenticator.authorize).called(1);
+      expect(authenticator.isAuthenticated, true);
+    });
+
+    test(
+        'Storage Provided '
+        'No Stored '
+        'Authenticate is called', () async {
+      final testAuthenticator = MockAuthenticator();
+
+      final storage = MockAuthenticationStorage();
+
+      authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
+        options: const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+            persistCredentials: true,
+          ),
+        ),
+        storage: storage,
+      );
+      authenticator.testAuthenticator = testAuthenticator;
+
+      final credential = MockCredential();
+      when(() => credential.toJson()).thenAnswer((_) => <String, dynamic>{});
+      when(() => credential.getTokenResponse(any()))
+          .thenAnswer((_) async => MockToken());
+      when(() => testAuthenticator.authorize())
+          .thenAnswer((invocation) async => credential);
+      when(() => storage.credential).thenAnswer((_) => null);
+
+      await authenticator.checkAuthentication();
+
+      verify(testAuthenticator.authorize).called(1);
+      expect(authenticator.isAuthenticated, true);
+    });
+
+    test(
+        'Default Secure Storage '
+        'uses FlutterSecureStorage', () async {
+      final secureStorage = MockSecureStorage();
+      FlutterSecureStoragePlatform.instance = secureStorage;
+      when(
+        () => secureStorage.write(
+          key: any(named: 'key'),
+          value: any(named: 'value'),
+          options: any(named: 'options'),
+        ),
+      ).thenAnswer((_) async {});
+      when(
+        () => secureStorage.read(
+          key: any(named: 'key'),
+          options: any(named: 'options'),
+        ),
+      ).thenAnswer((_) async => null);
+
+      final testAuthenticator = MockAuthenticator();
+
+      authenticator = ApptiveGridAuthenticator(
+        options: const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+            persistCredentials: true,
+          ),
+        ),
+      );
+      authenticator.testAuthenticator = testAuthenticator;
+
+      final credential = MockCredential();
+      when(() => credential.toJson()).thenAnswer((_) => <String, dynamic>{});
+      when(() => credential.getTokenResponse())
+          .thenAnswer((_) async => MockToken());
+      when(() => testAuthenticator.authorize())
+          .thenAnswer((invocation) async => credential);
+
+      await authenticator.checkAuthentication();
+
+      verify(
+        () => secureStorage.write(
+          key: any(named: 'key'),
+          value: any(named: 'value'),
+          options: any(named: 'options'),
+        ),
+      ).called(1);
+      verify(
+        () => secureStorage.read(
+          key: any(named: 'key'),
+          options: any(named: 'options'),
+        ),
+      ).called(1);
     });
   });
 }

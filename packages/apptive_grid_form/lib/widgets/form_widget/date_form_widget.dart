@@ -22,10 +22,9 @@ class _DateFormWidgetState extends State<DateFormWidget> {
   final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final dateFormat = DateFormat.yMd();
+  Widget build(BuildContext context) {
+    final locale = Localizations.maybeLocaleOf(context)?.toString();
+    final dateFormat = DateFormat.yMd(locale);
     if (widget.component.data.value != null) {
       final dateString = dateFormat.format(widget.component.data.value!);
       _controller.text = dateString;

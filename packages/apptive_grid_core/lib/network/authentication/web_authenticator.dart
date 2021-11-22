@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:html';
 import 'package:http/http.dart' as http;
 
-import 'package:openid_client_fork/openid_client.dart';
+import 'package:openid_client/openid_client.dart';
 
 /// Custom Authenticator for handling Authentication for Flutter Web
 class Authenticator {
@@ -132,7 +132,7 @@ class _CustomAuthenticator {
         q.containsKey('id_token')) {
       final code = q['code'];
       final json = await http.post(
-        client.issuer!.metadata.tokenEndpoint!,
+        client.issuer.metadata.tokenEndpoint!,
         body: {
           'grant_type': 'authorization_code',
           'code': code,
@@ -147,7 +147,7 @@ class _CustomAuthenticator {
       );
       final token = TokenResponse.fromJson(jsonDecode(json.body));
       final credential = Credential.fromJson({
-        'issuer': client.issuer!.metadata.toJson(),
+        'issuer': client.issuer.metadata.toJson(),
         'client_id': client.clientId,
         'client_secret': client.clientSecret,
         'token': token.toJson(),

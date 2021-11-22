@@ -8,6 +8,7 @@ class ApptiveGridAuthenticationOptions {
     this.autoAuthenticate = false,
     this.redirectScheme,
     this.apiKey,
+    this.persistCredentials = false,
   });
 
   /// Determines whether or not the authentication process should be started automatically or not
@@ -24,9 +25,13 @@ class ApptiveGridAuthenticationOptions {
   /// If this is not null it will be used instead of trying to authenticate using openid auth
   final ApptiveGridApiKey? apiKey;
 
+  /// Determines whether or not credentials are saved across sessions.
+  /// Internally this uses [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage)
+  final bool persistCredentials;
+
   @override
   String toString() {
-    return 'ApptiveGridAuthenticationOptions(autoAuthenticate: $autoAuthenticate, redirectScheme: $redirectScheme, apiKey: $apiKey)';
+    return 'ApptiveGridAuthenticationOptions(autoAuthenticate: $autoAuthenticate, redirectScheme: $redirectScheme, apiKey: $apiKey, authenticationStorage: $persistCredentials)';
   }
 
   @override
@@ -34,7 +39,8 @@ class ApptiveGridAuthenticationOptions {
     return other is ApptiveGridAuthenticationOptions &&
         autoAuthenticate == other.autoAuthenticate &&
         redirectScheme == other.redirectScheme &&
-        apiKey == other.apiKey;
+        apiKey == other.apiKey &&
+        persistCredentials == other.persistCredentials;
   }
 
   @override
