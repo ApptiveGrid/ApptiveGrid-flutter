@@ -1,4 +1,4 @@
-## [0.9.0-alpha.1]
+## [0.8.0-alpha.1]
 * Preview support for attachments
 
 ## [0.7.0]
