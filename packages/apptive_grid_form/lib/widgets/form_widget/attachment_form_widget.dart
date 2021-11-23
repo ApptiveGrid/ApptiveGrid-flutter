@@ -33,46 +33,60 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       builder: (formState) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ...(widget.component.data.value?.map(
-                      (attachment) => Row(
-                        children: [
-                          Expanded(
-                            child: Text(attachment.name),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              Provider.of<AttachmentManager>(
-                                context,
-                                listen: false,
-                              ).removeAttachment(attachment);
-                              widget.component.data.value?.remove(attachment);
-                              setState(() {});
-                            },
-                            icon: const Icon(Icons.close),
-                          ),
-                        ],
-                      ),
-                    ) ??
-                    [])
-                .toList(),
-            TextButton(
-              onPressed: () {
-                _pickFile();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.add),
-                  // TODO: Translate
-                  Text('Add Attachment'),
-                ],
-              ),
-            )
-          ],
+        return InputDecorator(
+          decoration: InputDecoration(
+            label: Text(
+              widget.component.options.label ?? widget.component.property,
+            ),
+            helperText: widget.component.options.description,
+            helperMaxLines: 100,
+            errorText: formState.errorText,
+            contentPadding: EdgeInsets.zero,
+            border: InputBorder.none,
+            errorBorder: InputBorder.none,
+            isDense: true,
+            filled: false,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ...(widget.component.data.value?.map(
+                        (attachment) => Row(
+                          children: [
+                            Expanded(
+                              child: Text(attachment.name),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Provider.of<AttachmentManager>(
+                                  context,
+                                  listen: false,
+                                ).removeAttachment(attachment);
+                                widget.component.data.value?.remove(attachment);
+                                setState(() {});
+                              },
+                              icon: const Icon(Icons.close),
+                            ),
+                          ],
+                        ),
+                      ) ??
+                      [])
+                  .toList(),
+              TextButton(
+                onPressed: () {
+                  _pickFile();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.add),
+                    Text(ApptiveGridLocalization.of(context)!.addAttachment),
+                  ],
+                ),
+              )
+            ],
+          ),
         );
       },
     );

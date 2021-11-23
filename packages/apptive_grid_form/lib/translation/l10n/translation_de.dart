@@ -32,4 +32,6 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get dateTimeFieldTime => "Zeit";
   @override
   String get checkboxRequired => "Pflichtfeld";
+  @override
+  String get addAttachment => "Datei hochladen";
 }

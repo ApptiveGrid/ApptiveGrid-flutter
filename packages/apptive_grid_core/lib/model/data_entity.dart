@@ -193,9 +193,9 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 /// [DataEntity] representing an array of Attachements
 class AttachmentDataEntity extends DataEntity<List<Attachment>, dynamic> {
   /// Create a new Attachment Data Entity
-  AttachmentDataEntity(
-    List<Attachment> value,
-  ) : super(value);
+  AttachmentDataEntity([
+    List<Attachment>? value,
+  ]) : super(value ?? []);
 
   /// Creates a new AttachmentDataEntity from a Json Response
   factory AttachmentDataEntity.fromJson(

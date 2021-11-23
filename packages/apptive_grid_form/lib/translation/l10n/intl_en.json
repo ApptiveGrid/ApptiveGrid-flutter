@@ -11,5 +11,6 @@
     "crossRefSearch": "Search",
     "dateTimeFieldDate": "Date",
     "dateTimeFieldTime": "Time",
-    "checkboxRequired": "Required"
+    "checkboxRequired": "Required",
+    "addAttachment": "Add attachment"
 }

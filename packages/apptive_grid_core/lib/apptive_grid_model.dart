@@ -1,5 +1,6 @@
 library apptive_grid_model;
 
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:typed_data';
 

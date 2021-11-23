@@ -48,43 +48,6 @@ class ApptiveGridClient {
   Future<FormData> loadForm({
     required FormUri formUri,
   }) async {
-    /*return FormData(
-      title: 'Title',
-      components: [
-        AttachmentFormComponent(
-          property: 'Property',
-          data: AttachmentDataEntity({
-            Attachment(
-              name: 'Attachment',
-              type: 'image/png',
-              url: Uri(),
-            ),
-          }),
-          fieldId: '4zc4l48ffin5v8pa2emyx9s15',
-        ),
-      ],
-      schema: {
-        'type': 'object',
-        'properties': {
-          '4zc4l48ffin5v8pa2emyx9s15': {
-            'type': 'object',
-            'objectType': 'attachment',
-            'properties': {
-              'smallThumbnail': {'type': 'string'},
-              'url': {'type': 'string'},
-              'largeThumbnail': {'type': 'string'},
-              'name': {'type': 'string'},
-              'type': {'type': 'string'}
-            },
-            'required': ['url', 'type']
-          },
-        },
-        'required': []
-      },
-      actions: [
-        FormAction('haha', 'POST'),
-      ],
-    );*/
     if (formUri.needsAuthorization) {
       await _authenticator.checkAuthentication();
     }
@@ -105,47 +68,70 @@ class ApptiveGridClient {
     FormData formData, {
     bool saveToPendingItems = true,
   }) async {
-    await _performAttachmentActions(formData.attachmentActions);
-    //return http.Response('', 200);
     final actionItem = ActionItem(action: action, data: formData);
+
+    final attachmentActions =
+        await _performAttachmentActions(formData.attachmentActions).catchError(
+      (error) => _handleActionError(
+        error,
+        actionItem: actionItem,
+        saveToPendingItems: saveToPendingItems,
+      ),
+    );
+    if (attachmentActions.statusCode >= 400) {
+      return attachmentActions;
+    }
     final uri = Uri.parse('${options.environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
-
-    // ignore: prefer_function_declarations_over_variables
-    final handleError = (error) async {
-      // TODO: Filter out Errors that happened because the Input was not correct
-      // in that case don't save the Action and throw the error
-      if (saveToPendingItems && options.cache != null) {
-        await options.cache!.addPendingActionItem(actionItem);
-        if (error is http.Response) {
-          return error;
-        } else {
-          return http.Response(error.toString(), 400);
-        }
-      }
-      throw error;
-    };
     late http.Response response;
     request.headers.addAll(headers);
     try {
       final streamResponse = await _client.send(request);
       response = await http.Response.fromStream(streamResponse);
-    } catch (e) {
+    } catch (error) {
       // Catch all Exception for compatibility Reasons between Web and non Web Apps
-      return handleError(e);
+      return _handleActionError(
+        error,
+        actionItem: actionItem,
+        saveToPendingItems: saveToPendingItems,
+      );
     }
 
     if (response.statusCode >= 400) {
-      return handleError(response);
+      return _handleActionError(
+        response,
+        actionItem: actionItem,
+        saveToPendingItems: saveToPendingItems,
+      );
     }
     // Action was performed successfully. Remove it from pending Actions
     await options.cache?.removePendingActionItem(actionItem);
     return response;
   }
 
-  Future _performAttachmentActions(Map<Attachment, AttachmentAction> actions) {
-    return Future.wait(
+  Future<http.Response> _handleActionError(
+    Object error, {
+    required ActionItem actionItem,
+    required bool saveToPendingItems,
+  }) async {
+    // TODO: Filter out Errors that happened because the Input was not correct
+    // in that case don't save the Action and throw the error
+    if (saveToPendingItems && options.cache != null) {
+      await options.cache!.addPendingActionItem(actionItem);
+      if (error is http.Response) {
+        return error;
+      } else {
+        return http.Response(error.toString(), 400);
+      }
+    }
+    throw error;
+  }
+
+  Future<http.Response> _performAttachmentActions(
+    Map<Attachment, AttachmentAction> actions,
+  ) async {
+    await Future.wait(
       actions.values.map((action) {
         switch (action.type) {
           case AttachmentActionType.add:
@@ -161,6 +147,7 @@ class ApptiveGridClient {
         }
       }),
     );
+    return http.Response('AttachmentActionSuccess', 200);
   }
 
   /// Loads a [Grid] represented by [gridUri]
@@ -371,16 +358,21 @@ class ApptiveGridClient {
       },
     );
 
-    return http.get(uri, headers: headers).then((response) {
+    return _client.get(uri, headers: headers).then((response) {
       if (response.statusCode < 400) {
-        return http
+        return _client
             .put(
           Uri.parse(jsonDecode(response.body)['uploadURL']),
+          headers: {HttpHeaders.contentTypeHeader: action.attachment.type},
           body: action.byteData,
         )
-            .then((value) {
-          debugPrint('Uploaded Successfully');
-          return value;
+            .then((putResponse) {
+          if (putResponse.statusCode < 400) {
+            debugPrint('Uploaded Successfully');
+            return putResponse;
+          } else {
+            throw putResponse;
+          }
         });
       } else {
         throw response;

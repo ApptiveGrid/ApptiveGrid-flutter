@@ -223,6 +223,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   @override
   void initState() {
     super.initState();
+    _formData = widget.formData;
     _attachmentManager = AttachmentManager(_formData);
   }
 

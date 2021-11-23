@@ -123,6 +123,56 @@ void main() {
 
       expect(FormData.fromJson(formData.toJson()), formData);
     });
+
+    test('AttachmentActions get Restored', () {
+      final action = FormAction('/uri', 'POST');
+      final schema = {
+        'type': 'object',
+        'properties': {
+          '4zc4l48ffin5v8pa2emyx9s15': {
+            'type': 'array',
+            'items': {
+              'type': 'object',
+              'properties': {
+                'smallThumbnail': {'type': 'string'},
+                'url': {'type': 'string'},
+                'largeThumbnail': {'type': 'string'},
+                'name': {'type': 'string'},
+                'type': {'type': 'string'}
+              },
+              'required': ['url', 'type'],
+              'objectType': 'attachment'
+            }
+          },
+        },
+        'required': []
+      };
+      final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
+      final component = AttachmentFormComponent(
+        fieldId: '4zc4l48ffin5v8pa2emyx9s15',
+        options: const TextComponentOptions(),
+        property: 'NumberC',
+        data: AttachmentDataEntity([attachment]),
+      );
+
+      final formData = FormData(
+        name: 'name',
+        title: title,
+        components: [component],
+        actions: [action],
+        schema: schema,
+      );
+
+      final attachmentAction =
+          RenameAttachmentAction(newName: 'newName', attachment: attachment);
+
+      formData.attachmentActions[attachment] = attachmentAction;
+
+      expect(
+        FormData.fromJson(formData.toJson()).attachmentActions,
+        equals({attachment: attachmentAction}),
+      );
+    });
   });
 
   group('Validation', () {

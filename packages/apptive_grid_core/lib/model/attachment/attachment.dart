@@ -8,7 +8,7 @@ class Attachment {
     required this.url,
     required this.type,
     this.smallThumbnail,
-    this.bigThumbnail,
+    this.largeThumbnail,
   });
 
   /// Deserializes [json] into an Attachment Object
@@ -19,8 +19,8 @@ class Attachment {
         smallThumbnail = json['smallThumbnail'] != null
             ? Uri.parse(json['smallThumbnail'])
             : null,
-        bigThumbnail = json['bigThumbnail'] != null
-            ? Uri.parse(json['bigThumbnail'])
+        largeThumbnail = json['largeThumbnail'] != null
+            ? Uri.parse(json['largeThumbnail'])
             : null;
 
   /// Name of the Attachment
@@ -35,16 +35,16 @@ class Attachment {
   /// Uri for a small thumbnail
   final Uri? smallThumbnail;
 
-  /// Uri for a big thumbnail
-  final Uri? bigThumbnail;
+  /// Uri for a large thumbnail
+  final Uri? largeThumbnail;
 
   /// Serializes [Attachment] to json
   Map<String, dynamic> toJson() => {
         'name': name,
         'url': url.toString(),
         'type': type,
-        'smallThumbnail': smallThumbnail.toString(),
-        'bigThumbnail': bigThumbnail.toString(),
+        'smallThumbnail': smallThumbnail?.toString(),
+        'largeThumbnail': largeThumbnail?.toString(),
       };
 
   @override
@@ -56,10 +56,10 @@ class Attachment {
   bool operator ==(Object other) {
     return other is Attachment &&
         name == other.name &&
-        url == other.url &&
+        url.toString() == other.url.toString() &&
         type == other.type &&
-        smallThumbnail == other.smallThumbnail &&
-        bigThumbnail == other.bigThumbnail;
+        smallThumbnail.toString() == other.smallThumbnail.toString() &&
+        largeThumbnail.toString() == other.largeThumbnail.toString();
   }
 
   @override

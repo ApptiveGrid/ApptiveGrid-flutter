@@ -36,7 +36,9 @@ abstract class AttachmentAction {
     switch (type) {
       case AttachmentActionType.add:
         return AddAttachmentAction(
-          byteData: Uint8List.fromList(json['byteData']),
+          byteData: json['byteData'] != null
+              ? Uint8List.fromList(json['byteData'].cast<int>())
+              : null,
           attachment: attachment,
         );
       case AttachmentActionType.delete:
@@ -66,8 +68,23 @@ class AddAttachmentAction extends AttachmentAction {
   Map<String, dynamic> toJson() => {
         'type': type.toString(),
         'attachment': attachment.toJson(),
-        'byteData': byteData,
+        'byteData': byteData?.toList(growable: false),
       };
+
+  @override
+  String toString() {
+    return 'AddAttachmentAction(byteData(byteSize): ${byteData?.lengthInBytes}, attachment: $attachment)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AddAttachmentAction &&
+        other.attachment == attachment &&
+        f.listEquals(other.byteData?.toList(), byteData?.toList());
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }
 
 /// Implementation of an [AttachmentAction] for [AttachmentActionType.delete]
@@ -81,6 +98,19 @@ class DeleteAttachmentAction extends AttachmentAction {
         'type': type.toString(),
         'attachment': attachment.toJson(),
       };
+
+  @override
+  String toString() {
+    return 'DeleteAttachmentAction(attachment: $attachment)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DeleteAttachmentAction && other.attachment == attachment;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }
 
 /// Implementation of an [AttachmentAction] for [AttachmentActionType.delete]
@@ -98,4 +128,19 @@ class RenameAttachmentAction extends AttachmentAction {
         'attachment': attachment.toJson(),
         'newName': newName,
       };
+
+  @override
+  String toString() {
+    return 'RenameAttachmentAction(newName: $newName, attachment: $attachment)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is RenameAttachmentAction &&
+        other.attachment == attachment &&
+        other.newName == newName;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }
