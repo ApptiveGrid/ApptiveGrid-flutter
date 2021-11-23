@@ -48,43 +48,6 @@ class ApptiveGridClient {
   Future<FormData> loadForm({
     required FormUri formUri,
   }) async {
-    /*return FormData(
-      title: 'Title',
-      components: [
-        AttachmentFormComponent(
-          property: 'Property',
-          data: AttachmentDataEntity({
-            Attachment(
-              name: 'Attachment',
-              type: 'image/png',
-              url: Uri(),
-            ),
-          }),
-          fieldId: '4zc4l48ffin5v8pa2emyx9s15',
-        ),
-      ],
-      schema: {
-        'type': 'object',
-        'properties': {
-          '4zc4l48ffin5v8pa2emyx9s15': {
-            'type': 'object',
-            'objectType': 'attachment',
-            'properties': {
-              'smallThumbnail': {'type': 'string'},
-              'url': {'type': 'string'},
-              'largeThumbnail': {'type': 'string'},
-              'name': {'type': 'string'},
-              'type': {'type': 'string'}
-            },
-            'required': ['url', 'type']
-          },
-        },
-        'required': []
-      },
-      actions: [
-        FormAction('haha', 'POST'),
-      ],
-    );*/
     if (formUri.needsAuthorization) {
       await _authenticator.checkAuthentication();
     }
