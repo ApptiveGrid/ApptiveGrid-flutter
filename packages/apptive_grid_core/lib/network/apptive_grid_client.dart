@@ -20,7 +20,7 @@ class ApptiveGridClient {
         _authenticator = authenticator ??
             ApptiveGridAuthenticator(options: options, httpClient: httpClient);
 
-  /// Configuraptions
+  /// Configurations
   ApptiveGridOptions options;
 
   final ApptiveGridAuthenticator _authenticator;
@@ -69,40 +69,85 @@ class ApptiveGridClient {
     bool saveToPendingItems = true,
   }) async {
     final actionItem = ActionItem(action: action, data: formData);
+
+    final attachmentActions =
+        await _performAttachmentActions(formData.attachmentActions).catchError(
+      (error) => _handleActionError(
+        error,
+        actionItem: actionItem,
+        saveToPendingItems: saveToPendingItems,
+      ),
+    );
+    if (attachmentActions.statusCode >= 400) {
+      return attachmentActions;
+    }
     final uri = Uri.parse('${options.environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
-
-    // ignore: prefer_function_declarations_over_variables
-    final handleError = (error) async {
-      // TODO: Filter out Errors that happened because the Input was not correct
-      // in that case don't save the Action and throw the error
-      if (saveToPendingItems && options.cache != null) {
-        await options.cache!.addPendingActionItem(actionItem);
-        if (error is http.Response) {
-          return error;
-        } else {
-          return http.Response(error.toString(), 400);
-        }
-      }
-      throw error;
-    };
     late http.Response response;
     request.headers.addAll(headers);
     try {
       final streamResponse = await _client.send(request);
       response = await http.Response.fromStream(streamResponse);
-    } catch (e) {
+    } catch (error) {
       // Catch all Exception for compatibility Reasons between Web and non Web Apps
-      return handleError(e);
+      return _handleActionError(
+        error,
+        actionItem: actionItem,
+        saveToPendingItems: saveToPendingItems,
+      );
     }
 
     if (response.statusCode >= 400) {
-      return handleError(response);
+      return _handleActionError(
+        response,
+        actionItem: actionItem,
+        saveToPendingItems: saveToPendingItems,
+      );
     }
     // Action was performed successfully. Remove it from pending Actions
     await options.cache?.removePendingActionItem(actionItem);
     return response;
+  }
+
+  Future<http.Response> _handleActionError(
+    Object error, {
+    required ActionItem actionItem,
+    required bool saveToPendingItems,
+  }) async {
+    // TODO: Filter out Errors that happened because the Input was not correct
+    // in that case don't save the Action and throw the error
+    if (saveToPendingItems && options.cache != null) {
+      await options.cache!.addPendingActionItem(actionItem);
+      if (error is http.Response) {
+        return error;
+      } else {
+        return http.Response(error.toString(), 400);
+      }
+    }
+    throw error;
+  }
+
+  Future<http.Response> _performAttachmentActions(
+    Map<Attachment, AttachmentAction> actions,
+  ) async {
+    await Future.wait(
+      actions.values.map((action) {
+        switch (action.type) {
+          case AttachmentActionType.add:
+            return _uploadAttachment(action as AddAttachmentAction);
+          case AttachmentActionType.delete:
+            debugPrint('Delete Attachment ${action.attachment}');
+            return Future.value();
+          case AttachmentActionType.rename:
+            debugPrint(
+              'Rename Attachment ${action.attachment} to "${action.attachment.name}"',
+            );
+            return Future.value();
+        }
+      }),
+    );
+    return http.Response('AttachmentActionSuccess', 200);
   }
 
   /// Loads a [Grid] represented by [gridUri]
@@ -263,5 +308,75 @@ class ApptiveGridClient {
         // Was not able to submit this action
       }
     }
+  }
+
+  // Attachments
+  String get _signedUrlApiEndpoint {
+    final endpoint = options
+        .attachmentConfigurations[options.environment]?.signedUrlApiEndpoint;
+    if (endpoint != null) {
+      return endpoint;
+    } else {
+      throw ArgumentError(
+        'In order to use Attachments you need to specify AttachmentConfigurations in ApptiveGridOptions',
+      );
+    }
+  }
+
+  String get _attachmentApiEndpoint {
+    final endpoint = options
+        .attachmentConfigurations[options.environment]?.attachmentApiEndpoint;
+    if (endpoint != null) {
+      return endpoint;
+    } else {
+      throw ArgumentError(
+        'In order to use Attachments you need to specify AttachmentConfigurations in ApptiveGridOptions',
+      );
+    }
+  }
+
+  /// Creates an url where an attachment should be saved
+  ///
+  /// TODO: Do not Use Name
+  Uri createAttachmentUrl(String name) {
+    return Uri.parse(
+      '$_attachmentApiEndpoint$name?${DateTime.now().millisecondsSinceEpoch}',
+    );
+  }
+
+  Future _uploadAttachment(AddAttachmentAction action) async {
+    await _authenticator.checkAuthentication();
+
+    final baseUri = Uri.parse(_signedUrlApiEndpoint);
+    final uri = Uri(
+      scheme: baseUri.scheme,
+      host: baseUri.host,
+      path: baseUri.path,
+      queryParameters: {
+        'fileName': action.attachment.name,
+        'fileType': action.attachment.type,
+      },
+    );
+
+    return _client.get(uri, headers: headers).then((response) {
+      if (response.statusCode < 400) {
+        return _client
+            .put(
+          Uri.parse(jsonDecode(response.body)['uploadURL']),
+          headers: {HttpHeaders.contentTypeHeader: action.attachment.type},
+          body: action.byteData,
+        )
+            .then((putResponse) {
+          if (putResponse.statusCode < 400) {
+            debugPrint('Uploaded Successfully');
+            return putResponse;
+          } else {
+            throw putResponse;
+          }
+        });
+      } else {
+        throw response;
+      }
+    });
   }
 }

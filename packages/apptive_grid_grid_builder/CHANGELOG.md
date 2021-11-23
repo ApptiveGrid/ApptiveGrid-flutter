@@ -1,3 +1,6 @@
+## [0.8.0-alpha.1]
+* Preview support for attachments
+
 ## [0.7.0]
 * **BREAKING CHANGE** Requires minSdkVersion for Android to be at least 18
 

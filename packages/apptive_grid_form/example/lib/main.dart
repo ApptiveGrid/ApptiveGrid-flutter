@@ -6,14 +6,18 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(
-    const ApptiveGrid(
+    ApptiveGrid(
       options: ApptiveGridOptions(
         environment: ApptiveGridEnvironment.alpha,
-        authenticationOptions: ApptiveGridAuthenticationOptions(
+        attachmentConfigurations: attachmentConfigurationMapFromConfigString(
+          'YOUR ATTACHMENT CONFIGURATION',
+        ),
+        authenticationOptions: const ApptiveGridAuthenticationOptions(
           autoAuthenticate: true,
+          redirectScheme: 'apptivegrid',
         ),
       ),
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }

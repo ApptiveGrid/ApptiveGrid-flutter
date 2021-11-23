@@ -9,7 +9,8 @@ class FormData {
     required this.components,
     this.actions = const [],
     required this.schema,
-  });
+    Map<Attachment, AttachmentAction>? attachmentActions,
+  }) : attachmentActions = attachmentActions ?? HashMap();
 
   /// Deserializes [json] into a FormData Object
   FormData.fromJson(Map<String, dynamic> json)
@@ -25,7 +26,15 @@ class FormData {
                 .map((e) => FormAction.fromJson(e))
                 .toList()
             : [],
-        schema = json['schema'];
+        schema = json['schema'],
+        attachmentActions = json['attachmentActions'] != null
+            ? Map.fromEntries(
+                (json['attachmentActions'] as List).map((entry) {
+                  final action = AttachmentAction.fromJson(entry);
+                  return MapEntry(action.attachment, action);
+                }).toList(),
+              )
+            : HashMap();
 
   /// Name of the Form
   final String? name;
@@ -42,6 +51,9 @@ class FormData {
   /// Schema used to deserialize [components] and verify data send back to the server
   final dynamic schema;
 
+  /// Actions related to Attachments that need to b performed before submitting a form
+  final Map<Attachment, AttachmentAction> attachmentActions;
+
   /// Serializes [FormData] to json
   Map<String, dynamic> toJson() => {
         'name': name,
@@ -49,6 +61,8 @@ class FormData {
         'components': components.map((e) => e.toJson()).toList(),
         'actions': actions.map((e) => e.toJson()).toList(),
         'schema': schema,
+        'attachmentActions':
+            attachmentActions.values.map((e) => e.toJson()).toList(),
       };
 
   @override
@@ -72,7 +86,8 @@ class FormData {
         title == other.title &&
         schema.toString() == other.schema.toString() &&
         f.listEquals(actions, other.actions) &&
-        f.listEquals(components, other.components);
+        f.listEquals(components, other.components) &&
+        f.mapEquals(attachmentActions, other.attachmentActions);
   }
 
   @override

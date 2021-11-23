@@ -77,6 +77,8 @@ abstract class FormComponent<T extends DataEntity> {
         return CrossReferenceFormComponent.fromJson(json, properties);
       case DataType.decimal:
         return DecimalFormComponent.fromJson(json);
+      case DataType.attachment:
+        return AttachmentFormComponent.fromJson(json);
     }
   }
 }

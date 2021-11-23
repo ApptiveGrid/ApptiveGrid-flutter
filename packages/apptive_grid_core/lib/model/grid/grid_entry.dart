@@ -45,6 +45,9 @@ class GridEntry {
       case DataType.decimal:
         dataEntity = DecimalDataEntity(jsonData);
         break;
+      case DataType.attachment:
+        dataEntity = AttachmentDataEntity.fromJson(jsonData);
+        break;
     }
     return GridEntry(field, dataEntity);
   }

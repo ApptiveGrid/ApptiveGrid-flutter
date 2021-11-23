@@ -175,7 +175,7 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 
   @override
   String toString() {
-    return 'CrossReferenceDataEntity(displayValue: $value, enitytUri: $entityUri, gridUri: $gridUri)}';
+    return 'CrossReferenceDataEntity(displayValue: $value, entityUri: $entityUri, gridUri: $gridUri)}';
   }
 
   @override
@@ -184,6 +184,47 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
         value == other.value &&
         entityUri == other.entityUri &&
         gridUri == other.gridUri;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
+}
+
+/// [DataEntity] representing an array of Attachements
+class AttachmentDataEntity extends DataEntity<List<Attachment>, dynamic> {
+  /// Create a new Attachment Data Entity
+  AttachmentDataEntity([
+    List<Attachment>? value,
+  ]) : super(value ?? []);
+
+  /// Creates a new AttachmentDataEntity from a Json Response
+  factory AttachmentDataEntity.fromJson(
+    List? jsonValue,
+  ) =>
+      AttachmentDataEntity(
+        jsonValue
+                ?.map((attachment) => Attachment.fromJson(attachment))
+                .toList() ??
+            [],
+      );
+
+  @override
+  dynamic get schemaValue {
+    if (value == null || value!.isEmpty) {
+      return null;
+    } else {
+      return value!.map((e) => e.toJson()).toList();
+    }
+  }
+
+  @override
+  String toString() {
+    return 'AttachmentDataEntity(attachments: $value)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AttachmentDataEntity && f.listEquals(value, other.value);
   }
 
   @override

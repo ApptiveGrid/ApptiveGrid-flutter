@@ -1,3 +1,6 @@
+## [0.8.0-alpha.1]
+* Preview support for attachments
+
 ## [0.7.0+1]
 * Refresh saved token after restoring also handling errors that might occur during that process
 
