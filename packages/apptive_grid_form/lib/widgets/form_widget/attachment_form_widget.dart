@@ -34,17 +34,19 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       builder: (formState) {
         return InputDecorator(
-            decoration: InputDecoration(
-              label: Text(widget.component.options.label ?? widget.component.property),
-              helperText: widget.component.options.description,
-              helperMaxLines: 100,
-              errorText: formState.errorText,
-              contentPadding: EdgeInsets.zero,
-              border: InputBorder.none,
-              errorBorder: InputBorder.none,
-              isDense: true,
-              filled: false,
+          decoration: InputDecoration(
+            label: Text(
+              widget.component.options.label ?? widget.component.property,
             ),
+            helperText: widget.component.options.description,
+            helperMaxLines: 100,
+            errorText: formState.errorText,
+            contentPadding: EdgeInsets.zero,
+            border: InputBorder.none,
+            errorBorder: InputBorder.none,
+            isDense: true,
+            filled: false,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,

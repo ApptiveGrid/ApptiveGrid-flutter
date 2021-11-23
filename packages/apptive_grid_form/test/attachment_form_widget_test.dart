@@ -13,7 +13,8 @@ import 'common.dart';
 void main() {
   setUpAll(() {
     registerFallbackValue(
-      FormData(title: 'title', components: [], schema: null),);
+      FormData(title: 'title', components: [], schema: null),
+    );
   });
 
   group('Add attachment', () {
@@ -23,27 +24,26 @@ void main() {
       final filePicker = MockFilePicker();
       final attachmentUri = Uri.parse('attachmenturl.com');
       when(
-            () =>
-            filePicker.pickFiles(
-              dialogTitle: any(named: 'dialogTitle'),
-              allowMultiple: true,
-              withData: true,
-              type: FileType.any,
-            ),
+        () => filePicker.pickFiles(
+          dialogTitle: any(named: 'dialogTitle'),
+          allowMultiple: true,
+          withData: true,
+          type: FileType.any,
+        ),
       ).thenAnswer(
-            (invocation) async =>
-            FilePickerResult([
-              PlatformFile(
-                name: filename,
-                size: bytes.lengthInBytes,
-                bytes: bytes,
-              ),
-            ]),
+        (invocation) async => FilePickerResult([
+          PlatformFile(
+            name: filename,
+            size: bytes.lengthInBytes,
+            bytes: bytes,
+          ),
+        ]),
       );
       FilePicker.platform = filePicker;
 
       final data = AttachmentDataEntity(
-        [Attachment(name: filename, url: attachmentUri, type: 'image/png')],);
+        [Attachment(name: filename, url: attachmentUri, type: 'image/png')],
+      );
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
         title: 'title',
@@ -51,7 +51,8 @@ void main() {
           AttachmentFormComponent(
             property: 'property',
             data: AttachmentDataEntity(),
-            fieldId: 'fieldId',)
+            fieldId: 'fieldId',
+          )
         ],
         actions: [action],
         schema: null,
@@ -96,34 +97,35 @@ void main() {
       final attachmentUri1 = Uri.parse('$filename1.com');
       final attachmentUri2 = Uri.parse('$filename2.com');
       when(
-            () =>
-            filePicker.pickFiles(
-              dialogTitle: any(named: 'dialogTitle'),
-              allowMultiple: true,
-              withData: true,
-              type: FileType.any,
-            ),
+        () => filePicker.pickFiles(
+          dialogTitle: any(named: 'dialogTitle'),
+          allowMultiple: true,
+          withData: true,
+          type: FileType.any,
+        ),
       ).thenAnswer(
-            (invocation) async =>
-            FilePickerResult([
-              PlatformFile(
-                name: filename1,
-                size: bytes.lengthInBytes,
-                bytes: bytes,
-              ),
-              PlatformFile(
-                name: filename2,
-                size: bytes.lengthInBytes,
-                bytes: bytes,
-              ),
-            ]),
+        (invocation) async => FilePickerResult([
+          PlatformFile(
+            name: filename1,
+            size: bytes.lengthInBytes,
+            bytes: bytes,
+          ),
+          PlatformFile(
+            name: filename2,
+            size: bytes.lengthInBytes,
+            bytes: bytes,
+          ),
+        ]),
       );
       FilePicker.platform = filePicker;
 
       final attachment1 =
-      Attachment(name: filename1, url: attachmentUri1, type: 'image/png');
+          Attachment(name: filename1, url: attachmentUri1, type: 'image/png');
       final attachment2 = Attachment(
-        name: filename2, url: attachmentUri2, type: 'application/pdf',);
+        name: filename2,
+        url: attachmentUri2,
+        type: 'application/pdf',
+      );
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
         title: 'title',
@@ -131,7 +133,8 @@ void main() {
           AttachmentFormComponent(
             property: 'property',
             data: AttachmentDataEntity(),
-            fieldId: 'fieldId',)
+            fieldId: 'fieldId',
+          )
         ],
         actions: [action],
         schema: null,
@@ -140,8 +143,10 @@ void main() {
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
       when(() => client.performAction(action, any()))
           .thenAnswer((_) async => Response('body', 200));
-      when(() => client.createAttachmentUrl(any())).thenAnswer((invocation) =>
-          Uri.parse('${invocation.positionalArguments.first}.com'),);
+      when(() => client.createAttachmentUrl(any())).thenAnswer(
+        (invocation) =>
+            Uri.parse('${invocation.positionalArguments.first}.com'),
+      );
 
       final target = TestApp(
         client: client,
@@ -165,7 +170,7 @@ void main() {
           verify(() => client.performAction(action, captureAny())).captured;
       expect(captured.length, 1);
       final submittedData =
-      captured.first.components.first.data as AttachmentDataEntity;
+          captured.first.components.first.data as AttachmentDataEntity;
       expect(submittedData.value!.length, 2);
       expect(submittedData.value!.first, equals(attachment1));
       expect(submittedData.value!.last, equals(attachment2));
@@ -179,26 +184,26 @@ void main() {
       final filePicker = MockFilePicker();
       final attachmentUri = Uri.parse('attachmenturl.com');
       when(
-            () =>
-            filePicker.pickFiles(
-              dialogTitle: any(named: 'dialogTitle'),
-              allowMultiple: true,
-              withData: true,
-              type: FileType.any,
-            ),
+        () => filePicker.pickFiles(
+          dialogTitle: any(named: 'dialogTitle'),
+          allowMultiple: true,
+          withData: true,
+          type: FileType.any,
+        ),
       ).thenAnswer(
-            (invocation) async =>
-            FilePickerResult([
-              PlatformFile(
-                name: filename,
-                size: bytes.lengthInBytes,
-                bytes: bytes,
-              ),
-            ]),
+        (invocation) async => FilePickerResult([
+          PlatformFile(
+            name: filename,
+            size: bytes.lengthInBytes,
+            bytes: bytes,
+          ),
+        ]),
       );
       FilePicker.platform = filePicker;
 
-      final data = AttachmentDataEntity([],);
+      final data = AttachmentDataEntity(
+        [],
+      );
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
         title: 'title',
@@ -206,7 +211,8 @@ void main() {
           AttachmentFormComponent(
             property: 'property',
             data: AttachmentDataEntity(),
-            fieldId: 'fieldId',)
+            fieldId: 'fieldId',
+          )
         ],
         actions: [action],
         schema: null,
@@ -250,8 +256,13 @@ void main() {
       final attachmentUri = Uri.parse('attachmenturl.com');
 
       final attachment = Attachment(
-          name: filename, url: attachmentUri, type: 'image/png',);
-      final data = AttachmentDataEntity([],);
+        name: filename,
+        url: attachmentUri,
+        type: 'image/png',
+      );
+      final data = AttachmentDataEntity(
+        [],
+      );
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
         title: 'title',
@@ -259,7 +270,8 @@ void main() {
           AttachmentFormComponent(
             property: 'property',
             data: AttachmentDataEntity([attachment]),
-            fieldId: 'fieldId',)
+            fieldId: 'fieldId',
+          )
         ],
         actions: [action],
         schema: null,
@@ -293,7 +305,6 @@ void main() {
 
   group('Options', () {
     testWidgets('Attachment is required shows message', (tester) async {
-
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
         title: 'title',
@@ -302,7 +313,8 @@ void main() {
             property: 'Property',
             data: AttachmentDataEntity(),
             fieldId: 'fieldId',
-          required: true)
+            required: true,
+          )
         ],
         actions: [action],
         schema: null,
@@ -325,7 +337,10 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      expect(find.text('Property must not be empty', skipOffstage: true), findsOneWidget);
+      expect(
+        find.text('Property must not be empty', skipOffstage: true),
+        findsOneWidget,
+      );
     });
   });
 }
