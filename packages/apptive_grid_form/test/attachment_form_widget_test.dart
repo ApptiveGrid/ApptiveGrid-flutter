@@ -73,8 +73,8 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pump();
-      expect(find.text('Add Attachment', skipOffstage: false), findsOneWidget);
-      await tester.tap(find.text('Add Attachment'));
+      expect(find.text('Add attachment', skipOffstage: false), findsOneWidget);
+      await tester.tap(find.text('Add attachment'));
 
       await tester.pumpAndSettle();
 
@@ -157,8 +157,8 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pump();
-      expect(find.text('Add Attachment', skipOffstage: false), findsOneWidget);
-      await tester.tap(find.text('Add Attachment'));
+      expect(find.text('Add attachment', skipOffstage: false), findsOneWidget);
+      await tester.tap(find.text('Add attachment'));
 
       await tester.pumpAndSettle();
 
@@ -233,8 +233,8 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pump();
-      expect(find.text('Add Attachment', skipOffstage: false), findsOneWidget);
-      await tester.tap(find.text('Add Attachment'));
+      expect(find.text('Add attachment', skipOffstage: false), findsOneWidget);
+      await tester.tap(find.text('Add attachment'));
 
       await tester.pumpAndSettle();
       await tester.tap(find.byIcon(Icons.close));
