@@ -339,6 +339,7 @@ class ApptiveGridClient {
         return _client
             .put(
           Uri.parse(jsonDecode(response.body)['uploadURL']),
+          headers: {HttpHeaders.contentTypeHeader: action.attachment.type},
           body: action.byteData,
         )
             .then((putResponse) {
