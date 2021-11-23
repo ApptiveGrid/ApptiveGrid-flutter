@@ -41,4 +41,7 @@ abstract class ApptiveGridTranslation {
 
   /// Message if a [CheckboxFormWidget] is required
   String get checkboxRequired;
+
+  /// Action to add an Attachment
+  String get addAttachment;
 }

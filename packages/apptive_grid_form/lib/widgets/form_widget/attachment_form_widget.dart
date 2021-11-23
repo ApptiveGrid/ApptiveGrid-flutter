@@ -77,10 +77,9 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.add),
-                    // TODO: Translate
-                    Text('Add Attachment'),
+                  children: [
+                    const Icon(Icons.add),
+                    Text(ApptiveGridLocalization.of(context)!.addAttachment),
                   ],
                 ),
               )
