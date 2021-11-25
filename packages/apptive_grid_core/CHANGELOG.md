@@ -1,5 +1,12 @@
+## [0.8.0-alpha.2]
+* Include Fixes from [0.7.1]
+
 ## [0.8.0-alpha.1]
 * Preview support for attachments
+
+## [0.7.1]
+* Fix Timezone Issues with `DateTimeDataEntities`
+* Fix parsing error if receiving a non float decimal value from the backend
 
 ## [0.7.0+1]
 * Refresh saved token after restoring also handling errors that might occur during that process

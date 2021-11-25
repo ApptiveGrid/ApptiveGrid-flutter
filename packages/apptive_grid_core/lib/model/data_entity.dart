@@ -49,14 +49,14 @@ class DateTimeDataEntity extends DataEntity<DateTime, String> {
   factory DateTimeDataEntity.fromJson(dynamic json) {
     DateTime? jsonValue;
     if (json != null) {
-      jsonValue = DateTime.parse(json);
+      jsonValue = DateTime.parse(json).toLocal();
     }
     return DateTimeDataEntity(jsonValue);
   }
 
   /// Returns [value] as a Iso8601 Date String
   @override
-  String? get schemaValue => value?.toIso8601String();
+  String? get schemaValue => value?.toUtc().toIso8601String();
 }
 
 /// [DataEntity] representing a Date
@@ -103,7 +103,7 @@ class IntegerDataEntity extends DataEntity<int, int> {
 /// [DataEntity] representing [double] Objects
 class DecimalDataEntity extends DataEntity<double, double> {
   /// Creates a new DecimalDataEntity Object
-  DecimalDataEntity([double? value]) : super(value);
+  DecimalDataEntity([num? value]) : super(value?.toDouble());
 
   @override
   double? get schemaValue => value;
