@@ -1,3 +1,7 @@
+## [0.7.1]
+* Fix Timezone Issues with `DateTimeDataEntities`
+* Fix parsing error if receiving a non float decimal value from the backend
+
 ## [0.7.0+1]
 * Refresh saved token after restoring also handling errors that might occur during that process
 
