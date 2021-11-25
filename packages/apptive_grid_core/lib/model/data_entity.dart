@@ -49,14 +49,14 @@ class DateTimeDataEntity extends DataEntity<DateTime, String> {
   factory DateTimeDataEntity.fromJson(dynamic json) {
     DateTime? jsonValue;
     if (json != null) {
-      jsonValue = DateTime.parse(json);
+      jsonValue = DateTime.parse(json).toLocal();
     }
     return DateTimeDataEntity(jsonValue);
   }
 
   /// Returns [value] as a Iso8601 Date String
   @override
-  String? get schemaValue => value?.toIso8601String();
+  String? get schemaValue => value?.toUtc().toIso8601String();
 }
 
 /// [DataEntity] representing a Date

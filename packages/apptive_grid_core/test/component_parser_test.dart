@@ -61,7 +61,7 @@ void main() {
       final json = {
         'property': property,
         'fieldId': id,
-        'value': value.toIso8601String(),
+        'value': value.toUtc().toIso8601String(),
         'required': true,
         'options': <String, dynamic>{},
         'type': 'datePicker'
@@ -74,7 +74,7 @@ void main() {
       expect(parsedComponent.data.value, value);
       expect(parsedComponent.required, true);
       expect(parsedComponent.data.runtimeType, DateTimeDataEntity);
-      expect(parsedComponent.data.schemaValue, value.toIso8601String());
+      expect(parsedComponent.data.schemaValue, value.toUtc().toIso8601String());
 
       final parsedOptions = parsedComponent.options;
       expect(const FormComponentOptions(), parsedOptions);
