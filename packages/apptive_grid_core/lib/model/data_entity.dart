@@ -103,7 +103,7 @@ class IntegerDataEntity extends DataEntity<int, int> {
 /// [DataEntity] representing [double] Objects
 class DecimalDataEntity extends DataEntity<double, double> {
   /// Creates a new DecimalDataEntity Object
-  DecimalDataEntity([double? value]) : super(value);
+  DecimalDataEntity([num? value]) : super(value?.toDouble());
 
   @override
   double? get schemaValue => value;

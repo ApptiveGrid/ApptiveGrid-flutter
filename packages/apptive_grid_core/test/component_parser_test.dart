@@ -202,6 +202,51 @@ void main() {
       expect(parsedOptions.label, label);
     });
 
+    test('Decimal with non float number', () {
+      const property = 'property';
+      const value = 47;
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+      const id = 'id';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'number',
+          }
+        }
+      };
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': value,
+        'required': true,
+        'options': {
+          'multi': true,
+          'placeholder': placeholder,
+          'description': description,
+          'label': label
+        },
+        'type': 'textfield'
+      };
+
+      final parsedComponent = FormComponent.fromJson(json, schema);
+
+      expect(parsedComponent.runtimeType, DecimalFormComponent);
+      expect(parsedComponent.property, property);
+      expect(parsedComponent.data.value, 47.0);
+      expect(parsedComponent.required, true);
+      expect(parsedComponent.data.runtimeType, DecimalDataEntity);
+      expect(parsedComponent.data.schemaValue, 47.0);
+
+      final parsedOptions = parsedComponent.options as TextComponentOptions;
+      expect(parsedOptions.multi, true);
+      expect(parsedOptions.placeholder, placeholder);
+      expect(parsedOptions.description, description);
+      expect(parsedOptions.label, label);
+    });
+
     test('Checkbox', () {
       const property = 'property';
       const value = true;
