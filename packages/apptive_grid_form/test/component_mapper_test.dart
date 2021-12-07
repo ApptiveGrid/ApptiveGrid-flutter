@@ -102,6 +102,20 @@ void main() {
       expect(widget.runtimeType, EnumFormWidget);
     });
 
+    test('EnumCollectionComponent', () {
+      final component = EnumCollectionFormComponent(
+        fieldId: 'id',
+        data: EnumCollectionDataEntity(),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, EnumCollectionFormWidget);
+    });
+
     test('CrossReferenceComponent', () {
       final component = CrossReferenceFormComponent(
         fieldId: 'id',

@@ -196,4 +196,52 @@ void main() {
       expect(find.text(description), findsOneWidget);
     });
   });
+
+  group('EnumCollection', () {
+    testWidgets('Default Label is Property', (tester) async {
+      const property = 'Property';
+      final component = EnumCollectionFormComponent(
+        fieldId: 'id',
+        data: EnumCollectionDataEntity(),
+        property: property,
+        options: const FormComponentOptions(),
+      );
+      final target = TestApp(
+        child: EnumCollectionFormWidget(
+          component: component,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text(property), findsOneWidget);
+    });
+
+    testWidgets('Custom Label and Description are shown', (tester) async {
+      const property = 'Property';
+      const customLabel = 'CustomLabel';
+      const description = 'Description';
+      final component = EnumCollectionFormComponent(
+        fieldId: 'id',
+        data: EnumCollectionDataEntity(),
+        property: property,
+        options: const FormComponentOptions(
+          label: customLabel,
+          description: description,
+        ),
+      );
+      final target = TestApp(
+        child: EnumCollectionFormWidget(
+          component: component,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text(customLabel), findsOneWidget);
+      expect(find.text(description), findsOneWidget);
+    });
+  });
 }
