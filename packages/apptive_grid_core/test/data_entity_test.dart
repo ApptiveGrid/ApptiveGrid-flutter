@@ -121,7 +121,7 @@ void main() {
   group('Enum', () {
     test('Value is set', () {
       const value = 'value';
-      final values = ['value', 'otherValue'];
+      final values = {'value', 'otherValue'};
       final entity = EnumDataEntity(value: value, options: values);
 
       expect(entity.value, value);
@@ -137,6 +137,64 @@ void main() {
     });
   });
 
+  group('EnumCollection', () {
+    test('Value is set', () {
+      const value = 'value';
+      final values = {'value', 'otherValue'};
+      final entity = EnumCollectionDataEntity(value: {value}, options: values);
+
+      expect(entity.value, {value});
+      expect(entity.options, values);
+      expect(entity.schemaValue, [value]);
+    });
+
+    test('Default is empty list', () {
+      final entity = EnumCollectionDataEntity();
+
+      expect(entity.value, <String>{});
+      expect(entity.options, <String>{});
+      expect(entity.schemaValue, null);
+    });
+
+    group('Equality', () {
+      test('Equals', () {
+        final a =
+            EnumCollectionDataEntity(value: {'A', 'B'}, options: {'A', 'B'});
+        final b =
+            EnumCollectionDataEntity(value: {'A', 'B'}, options: {'A', 'B'});
+
+        expect(a, equals(b));
+        expect(a.hashCode, equals(b.hashCode));
+      });
+
+      test(
+          'Different Order Value Set '
+          'equals but different Hashcode', () {
+        final a =
+            EnumCollectionDataEntity(value: {'A', 'B'}, options: {'A', 'B'});
+        final b =
+            EnumCollectionDataEntity(value: {'B', 'A'}, options: {'A', 'B'});
+
+        expect(a, equals(b));
+        expect(a.hashCode, isNot(equals(b.hashCode)));
+      });
+
+      test('Unequals', () {
+        final a =
+            EnumCollectionDataEntity(value: {'A', 'B'}, options: {'A', 'B'});
+        final b = EnumCollectionDataEntity(value: {
+          'B',
+        }, options: {
+          'A',
+          'B'
+        });
+
+        expect(a, isNot(equals(b)));
+        expect(a.hashCode, isNot(equals(b.hashCode)));
+      });
+    });
+  });
+
   group('Equality', () {
     final string = StringDataEntity('Value');
     final stringEquals = StringDataEntity('Value');
@@ -146,11 +204,11 @@ void main() {
     final dateTime = DateTimeDataEntity.fromJson('2020-03-03T12:12:12.000');
     final boolean = BooleanDataEntity(true);
     final selection =
-        EnumDataEntity(value: 'value', options: ['value', 'otherValue']);
+        EnumDataEntity(value: 'value', options: {'value', 'otherValue'});
     final equalSelection =
-        EnumDataEntity(value: 'value', options: ['value', 'otherValue']);
+        EnumDataEntity(value: 'value', options: {'value', 'otherValue'});
     final unEqualSelection =
-        EnumDataEntity(value: 'otherValue', options: ['value', 'otherValue']);
+        EnumDataEntity(value: 'otherValue', options: {'value', 'otherValue'});
 
     test('equals', () {
       expect(string == stringEquals, true);

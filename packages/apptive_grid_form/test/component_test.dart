@@ -812,7 +812,7 @@ void main() {
       );
       final component = EnumFormComponent(
         fieldId: 'id',
-        data: EnumDataEntity(value: 'value', options: ['value', 'newValue']),
+        data: EnumDataEntity(value: 'value', options: {'value', 'newValue'}),
         property: 'Property',
         options: const FormComponentOptions(),
         required: false,
@@ -868,7 +868,7 @@ void main() {
       );
       final component = EnumFormComponent(
         fieldId: 'id',
-        data: EnumDataEntity(options: ['value']),
+        data: EnumDataEntity(options: {'value'}),
         property: 'Property',
         options: const FormComponentOptions(),
         required: true,

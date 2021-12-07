@@ -21,7 +21,10 @@ enum DataType {
   checkbox,
 
   /// Type to display enum values
-  selectionBox,
+  singleSelect,
+
+  /// Select Multiple Values from List of possible Values
+  enumCollection,
 
   /// Type to display CrossReference Values
   crossReference,
@@ -41,7 +44,7 @@ DataType dataTypeFromSchemaProperty({
   switch (schemaType) {
     case 'string':
       if (schemaProperty['enum'] != null) {
-        return DataType.selectionBox;
+        return DataType.singleSelect;
       }
       switch (format) {
         case 'date-time':
@@ -61,15 +64,24 @@ DataType dataTypeFromSchemaProperty({
       switch (objectType) {
         case 'entityreference':
           return DataType.crossReference;
-      }
-      break;
-    case 'array':
-      final itemType = schemaProperty['items']['objectType'];
-      switch (itemType) {
         case 'attachment':
           return DataType.attachment;
       }
       break;
+    case 'array':
+      final itemType =
+          dataTypeFromSchemaProperty(schemaProperty: schemaProperty['items']);
+      switch (itemType) {
+        // TODO: Adjust for new Schema Type
+        case DataType.attachment:
+          return DataType.attachment;
+        case DataType.singleSelect:
+          return DataType.enumCollection;
+        default:
+          throw ArgumentError(
+            'No defined Array type for type: $itemType',
+          );
+      }
   }
   throw ArgumentError(
     'No according DataType found for "$schemaType". Supported DataTypes are ${DataType.values}',

@@ -71,7 +71,7 @@ abstract class FormComponent<T extends DataEntity> {
         return IntegerFormComponent.fromJson(json);
       case DataType.checkbox:
         return BooleanFormComponent.fromJson(json);
-      case DataType.selectionBox:
+      case DataType.singleSelect:
         return EnumFormComponent.fromJson(json, properties);
       case DataType.crossReference:
         return CrossReferenceFormComponent.fromJson(json, properties);
@@ -79,6 +79,8 @@ abstract class FormComponent<T extends DataEntity> {
         return DecimalFormComponent.fromJson(json);
       case DataType.attachment:
         return AttachmentFormComponent.fromJson(json);
+      case DataType.enumCollection:
+        return EnumCollectionFormComponent.fromJson(json, properties);
     }
   }
 }

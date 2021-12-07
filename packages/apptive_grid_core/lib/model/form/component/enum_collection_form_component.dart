@@ -1,9 +1,10 @@
 part of apptive_grid_model;
 
-/// Model for a [FormComponent] representing [EnumDataEntity]
-class EnumFormComponent extends FormComponent<EnumDataEntity> {
+/// Model for a [FormComponent] representing [EnumCollectionDataEntity]
+class EnumCollectionFormComponent
+    extends FormComponent<EnumCollectionDataEntity> {
   /// Creates a FormComponent
-  EnumFormComponent({
+  EnumCollectionFormComponent({
     required this.property,
     required this.data,
     required this.fieldId,
@@ -12,11 +13,13 @@ class EnumFormComponent extends FormComponent<EnumDataEntity> {
   });
 
   /// Deserializes [json] into a [FormComponent]
-  EnumFormComponent.fromJson(Map<String, dynamic> json, dynamic schema)
+  EnumCollectionFormComponent.fromJson(
+      Map<String, dynamic> json, dynamic schema)
       : property = json['property'],
-        data = EnumDataEntity(
-          value: json['value'],
-          options: (schema['enum'].cast<String>() as List<String>).toSet(),
+        data = EnumCollectionDataEntity(
+          value: (json['value']?.cast<String>() as List<String>).toSet(),
+          options:
+              (schema['items']['enum'].cast<String>() as List<String>).toSet(),
         ),
         options = FormComponentOptions.fromJson(json['options']),
         required = json['required'],
@@ -25,7 +28,7 @@ class EnumFormComponent extends FormComponent<EnumDataEntity> {
   @override
   final String property;
   @override
-  EnumDataEntity data;
+  EnumCollectionDataEntity data;
   @override
   final String fieldId;
   @override

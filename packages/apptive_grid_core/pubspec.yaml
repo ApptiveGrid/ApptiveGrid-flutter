@@ -1,6 +1,6 @@
 name: apptive_grid_core
 description: Core Library for ApptiveGrid used to provide general ApptiveGrid functionality to other Packages or Apps
-version: 0.8.0-alpha.2
+version: 0.8.0-alpha.3
 homepage: https://www.apptivegrid.de
 
 environment:

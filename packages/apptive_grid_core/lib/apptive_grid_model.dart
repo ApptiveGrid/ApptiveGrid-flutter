@@ -26,6 +26,7 @@ part 'model/form/component/integer_form_component.dart';
 part 'model/form/component/decimal_form_component.dart';
 part 'model/form/component/date_form_component.dart';
 part 'model/form/component/enum_form_component.dart';
+part 'model/form/component/enum_collection_form_component.dart';
 part 'model/form/component/cross_reference_form_component.dart';
 part 'model/form/component/options.dart';
 part 'model/form/form_actions.dart';
