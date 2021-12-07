@@ -559,14 +559,14 @@ void main() {
       };
 
       expect(
-          () => FormComponent.fromJson(json, schema),
-          throwsA(
-            predicate<ArgumentError>(
-              (e) =>
-                  e.message == 'No defined Array type for type: DataType.text',
-              'ArgumentError with specific Message',
-            ),
-          ));
+        () => FormComponent.fromJson(json, schema),
+        throwsA(
+          predicate<ArgumentError>(
+            (e) => e.message == 'No defined Array type for type: DataType.text',
+            'ArgumentError with specific Message',
+          ),
+        ),
+      );
     });
 
     test('Unknown Property throws', () {

@@ -13,15 +13,19 @@ void main() {
       FormData(title: 'title', components: [], schema: null),
     );
   });
-  
+
   testWidgets('Options get a chip', (tester) async {
     final component = EnumCollectionFormComponent(
-        property: 'Property',
-        data: EnumCollectionDataEntity(value: {}, options: {
+      property: 'Property',
+      data: EnumCollectionDataEntity(
+        value: {},
+        options: {
           'A',
           'B',
-        }),
-        fieldId: 'fieldId');
+        },
+      ),
+      fieldId: 'fieldId',
+    );
 
     final target = TestApp(
       child: EnumCollectionFormWidget(component: component),
@@ -32,20 +36,27 @@ void main() {
 
     for (final option in component.data.options) {
       expect(
-          find.ancestor(
-              of: find.text(option), matching: find.byType(ChoiceChip)),
-          findsOneWidget);
+        find.ancestor(
+          of: find.text(option),
+          matching: find.byType(ChoiceChip),
+        ),
+        findsOneWidget,
+      );
     }
   });
 
   testWidgets('Tapping on chips updates value', (tester) async {
     final component = EnumCollectionFormComponent(
-        property: 'Property',
-        data: EnumCollectionDataEntity(value: {}, options: {
+      property: 'Property',
+      data: EnumCollectionDataEntity(
+        value: {},
+        options: {
           'A',
           'B',
-        }),
-        fieldId: 'fieldId');
+        },
+      ),
+      fieldId: 'fieldId',
+    );
 
     final target = TestApp(
       child: EnumCollectionFormWidget(component: component),
@@ -67,13 +78,17 @@ void main() {
 
   testWidgets('Required Status Updates', (tester) async {
     final component = EnumCollectionFormComponent(
-        property: 'Property',
-        data: EnumCollectionDataEntity(value: {}, options: {
+      property: 'Property',
+      data: EnumCollectionDataEntity(
+        value: {},
+        options: {
           'A',
           'B',
-        }),
-        fieldId: 'fieldId',
-    required: true,);
+        },
+      ),
+      fieldId: 'fieldId',
+      required: true,
+    );
 
     final action = FormAction('formAction', 'POST');
     final formData = FormData(
@@ -89,8 +104,7 @@ void main() {
     when(() => client.performAction(action, any()))
         .thenAnswer((_) async => Response('body', 200));
     when(() => client.createAttachmentUrl(any())).thenAnswer(
-          (invocation) =>
-          Uri.parse('${invocation.positionalArguments.first}.com'),
+      (invocation) => Uri.parse('${invocation.positionalArguments.first}.com'),
     );
 
     final target = TestApp(
@@ -122,9 +136,9 @@ void main() {
     );
 
     final capturedData =
-    verify(() => client.performAction(action, captureAny<FormData>()))
-        .captured
-        .first as FormData;
+        verify(() => client.performAction(action, captureAny<FormData>()))
+            .captured
+            .first as FormData;
     expect(capturedData.components.first.data.value, {'A'});
   });
 }

@@ -353,7 +353,7 @@ void main() {
 
   testWidgets('Chips', (widgetTester) async {
     await _test(
-          (data) => Center(
+      (data) => Center(
         child: Column(
           children: [
             const Chip(
@@ -365,12 +365,12 @@ void main() {
             ChoiceChip(
               label: const Text('Choice Chip, Selected'),
               selected: true,
-              onSelected: (_){},
+              onSelected: (_) {},
             ),
             ChoiceChip(
               label: const Text('Choice Chip, UnSelected'),
               selected: false,
-              onSelected: (_){},
+              onSelected: (_) {},
             ),
             const ChoiceChip(
               label: Text('Choice Chip, Selected, no Callback'),
@@ -380,8 +380,8 @@ void main() {
               label: Text('Choice Chip, UnSelected, no Callback'),
               selected: false,
             ),
-            FilterChip(label: const Text('FilterChip'), onSelected: (_){}),
-            ActionChip(label: const Text('ActionChip'), onPressed: (){}),
+            FilterChip(label: const Text('FilterChip'), onSelected: (_) {}),
+            ActionChip(label: const Text('ActionChip'), onPressed: () {}),
           ],
         ),
       ),

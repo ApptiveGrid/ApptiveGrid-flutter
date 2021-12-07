@@ -14,8 +14,9 @@ class EnumCollectionFormComponent
 
   /// Deserializes [json] into a [FormComponent]
   EnumCollectionFormComponent.fromJson(
-      Map<String, dynamic> json, dynamic schema)
-      : property = json['property'],
+    Map<String, dynamic> json,
+    dynamic schema,
+  )   : property = json['property'],
         data = EnumCollectionDataEntity(
           value: (json['value']?.cast<String>() as List<String>).toSet(),
           options:

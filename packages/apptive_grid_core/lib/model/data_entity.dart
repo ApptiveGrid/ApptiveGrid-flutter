@@ -139,13 +139,16 @@ class EnumDataEntity extends DataEntity<String, String> {
 /// [DataEntity] representing an enum like Object
 class EnumCollectionDataEntity extends DataEntity<Set<String>, List<String>> {
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
-  EnumCollectionDataEntity._(
-      {required Set<String> value, this.options = const {}})
-      : super(value);
+  EnumCollectionDataEntity._({
+    required Set<String> value,
+    this.options = const {},
+  }) : super(value);
 
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
-  factory EnumCollectionDataEntity(
-      {Set<String>? value, Set<String> options = const {}}) {
+  factory EnumCollectionDataEntity({
+    Set<String>? value,
+    Set<String> options = const {},
+  }) {
     return EnumCollectionDataEntity._(value: value ?? {}, options: options);
   }
 

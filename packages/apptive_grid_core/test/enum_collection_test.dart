@@ -99,14 +99,14 @@ void main() {
 
       final fromJson = formData.components.first as EnumCollectionFormComponent;
 
-      final directEntity = EnumCollectionDataEntity(value: {
-        'AG',
-        'GmbH'
-      }, options: {
-        'GmbH',
-        'AG',
-        'Freiberuflich',
-      });
+      final directEntity = EnumCollectionDataEntity(
+        value: {'AG', 'GmbH'},
+        options: {
+          'GmbH',
+          'AG',
+          'Freiberuflich',
+        },
+      );
 
       final direct = EnumCollectionFormComponent(
         property: 'New field',

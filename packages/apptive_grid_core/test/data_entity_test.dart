@@ -182,12 +182,12 @@ void main() {
       test('Unequals', () {
         final a =
             EnumCollectionDataEntity(value: {'A', 'B'}, options: {'A', 'B'});
-        final b = EnumCollectionDataEntity(value: {
-          'B',
-        }, options: {
-          'A',
-          'B'
-        });
+        final b = EnumCollectionDataEntity(
+          value: {
+            'B',
+          },
+          options: {'A', 'B'},
+        );
 
         expect(a, isNot(equals(b)));
         expect(a.hashCode, isNot(equals(b.hashCode)));

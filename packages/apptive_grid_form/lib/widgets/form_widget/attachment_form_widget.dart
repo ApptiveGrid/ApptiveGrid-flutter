@@ -16,7 +16,6 @@ class AttachmentFormWidget extends StatefulWidget {
 }
 
 class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
-
   @override
   Widget build(BuildContext context) {
     return FormField<AttachmentDataEntity>(
