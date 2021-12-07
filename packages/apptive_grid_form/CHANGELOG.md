@@ -1,3 +1,6 @@
+## [0.9.0-alpha.2]
+* Fix Required Form Field not updating if required
+
 ## [0.9.0-alpha.1]
 * Preview support for attachments
 

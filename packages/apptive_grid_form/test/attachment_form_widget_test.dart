@@ -343,7 +343,8 @@ void main() {
       );
     });
 
-    testWidgets('Attachment is required shows message '
+    testWidgets(
+        'Attachment is required shows message '
         'adding attachment '
         'sends action', (tester) async {
       const filename = 'Filename.png';
@@ -351,14 +352,14 @@ void main() {
       final filePicker = MockFilePicker();
       final attachmentUri = Uri.parse('attachmenturl.com');
       when(
-            () => filePicker.pickFiles(
+        () => filePicker.pickFiles(
           dialogTitle: any(named: 'dialogTitle'),
           allowMultiple: true,
           withData: true,
           type: FileType.any,
         ),
       ).thenAnswer(
-            (invocation) async => FilePickerResult([
+        (invocation) async => FilePickerResult([
           PlatformFile(
             name: filename,
             size: bytes.lengthInBytes,
@@ -421,7 +422,10 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      final capturedData = verify(() => client.performAction(action, captureAny<FormData>())).captured.first as FormData;
+      final capturedData =
+          verify(() => client.performAction(action, captureAny<FormData>()))
+              .captured
+              .first as FormData;
       expect(capturedData.components.first.data, data);
     });
   });

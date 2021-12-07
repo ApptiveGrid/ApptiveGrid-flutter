@@ -76,7 +76,9 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
                   .toList(),
               TextButton(
                 onPressed: () {
-                  _pickFile().then((value) => formState.didChange(widget.component.data));
+                  _pickFile().then(
+                    (value) => formState.didChange(widget.component.data),
+                  );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
