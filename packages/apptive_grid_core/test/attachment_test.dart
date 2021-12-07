@@ -54,6 +54,47 @@ void main() {
       },
       'name': 'Grid 4 View'
     };
+    final rawResponseWithNullValue = {
+      'fieldNames': ['name'],
+      'sorting': [],
+      'entities': [
+        {
+          'fields': [
+            null,
+          ],
+          '_id': '619b63e84a391314968da9a0'
+        },
+      ],
+      'fieldIds': ['80vw5xpimeeuxmoiftfqepbvc'],
+      'filter': {},
+      'schema': {
+        'type': 'object',
+        'properties': {
+          'fields': {
+            'type': 'array',
+            'items': [
+              {
+                'type': 'array',
+                'items': {
+                  'type': 'object',
+                  'properties': {
+                    'smallThumbnail': {'type': 'string'},
+                    'url': {'type': 'string'},
+                    'largeThumbnail': {'type': 'string'},
+                    'name': {'type': 'string'},
+                    'type': {'type': 'string'}
+                  },
+                  'required': ['url', 'type'],
+                  'objectType': 'attachment'
+                }
+              }
+            ]
+          },
+          '_id': {'type': 'string'}
+        }
+      },
+      'name': 'Grid 4 View'
+    };
 
     test('Grid Parses Correctly', () {
       final grid = Grid.fromJson(rawResponse);
@@ -72,6 +113,16 @@ void main() {
             }
           ],
         ),
+      );
+    });
+
+    test('Grid With null value Parses Correctly', () {
+      final grid = Grid.fromJson(rawResponseWithNullValue);
+
+      expect(grid.fields.length, 1);
+      expect(
+        grid.rows[0].entries[0].data,
+        AttachmentDataEntity(),
       );
     });
 
