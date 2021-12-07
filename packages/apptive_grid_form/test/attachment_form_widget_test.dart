@@ -342,5 +342,87 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets('Attachment is required shows message '
+        'adding attachment '
+        'sends action', (tester) async {
+      const filename = 'Filename.png';
+      final bytes = Uint8List(10);
+      final filePicker = MockFilePicker();
+      final attachmentUri = Uri.parse('attachmenturl.com');
+      when(
+            () => filePicker.pickFiles(
+          dialogTitle: any(named: 'dialogTitle'),
+          allowMultiple: true,
+          withData: true,
+          type: FileType.any,
+        ),
+      ).thenAnswer(
+            (invocation) async => FilePickerResult([
+          PlatformFile(
+            name: filename,
+            size: bytes.lengthInBytes,
+            bytes: bytes,
+          ),
+        ]),
+      );
+      FilePicker.platform = filePicker;
+
+      final data = AttachmentDataEntity(
+        [Attachment(name: filename, url: attachmentUri, type: 'image/png')],
+      );
+      final action = FormAction('formAction', 'POST');
+      final formData = FormData(
+        title: 'title',
+        components: [
+          AttachmentFormComponent(
+            property: 'Property',
+            data: AttachmentDataEntity(),
+            fieldId: 'fieldId',
+            required: true,
+          )
+        ],
+        actions: [action],
+        schema: null,
+      );
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.performAction(action, any()))
+          .thenAnswer((_) async => Response('body', 200));
+      when(() => client.createAttachmentUrl(filename))
+          .thenReturn(attachmentUri);
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Property must not be empty', skipOffstage: true),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('Add attachment'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Property must not be empty', skipOffstage: true),
+        findsNothing,
+      );
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      final capturedData = verify(() => client.performAction(action, captureAny<FormData>())).captured.first as FormData;
+      expect(capturedData.components.first.data, data);
+    });
   });
 }
