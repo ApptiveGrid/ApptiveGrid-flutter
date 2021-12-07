@@ -64,6 +64,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
                                   listen: false,
                                 ).removeAttachment(attachment);
                                 widget.component.data.value?.remove(attachment);
+                                formState.didChange(widget.component.data);
                                 setState(() {});
                               },
                               icon: const Icon(Icons.close),
@@ -75,7 +76,9 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
                   .toList(),
               TextButton(
                 onPressed: () {
-                  _pickFile();
+                  _pickFile().then(
+                    (value) => formState.didChange(widget.component.data),
+                  );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
