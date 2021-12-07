@@ -1,3 +1,6 @@
+## 0.0.3
+* Add `ChipTheme`
+
 ## 0.0.2+2
 * Fix Status Bar Icon Color
 * Fix `FloatingActionButton` Icon Color

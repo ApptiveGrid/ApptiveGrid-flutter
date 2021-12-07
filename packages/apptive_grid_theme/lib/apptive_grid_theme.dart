@@ -156,6 +156,12 @@ class ApptiveGridTheme {
         ),
         backwardsCompatibility: false,
       ),
+      chipTheme: baseTheme.chipTheme.copyWith(
+        selectedColor: ApptiveGridColors.apptiveGridBlue,
+        secondaryLabelStyle: baseTheme.chipTheme.secondaryLabelStyle
+            .copyWith(color: Colors.white),
+        secondarySelectedColor: ApptiveGridColors.apptiveGridBlue,
+      ),
     );
   }
 
