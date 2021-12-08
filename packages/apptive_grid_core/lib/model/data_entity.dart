@@ -269,3 +269,23 @@ class AttachmentDataEntity extends DataEntity<List<Attachment>, dynamic> {
   @override
   int get hashCode => toString().hashCode;
 }
+
+/// [DataEntity] representing [Geolocation]s
+class GeolocationDataEntity extends DataEntity<Geolocation, List<double>> {
+  /// Creates a new GeolocationDataEntity Object with value [value]
+  GeolocationDataEntity([Geolocation? value]) : super(value);
+
+  /// Creates a new GeolocationDataEntity Object from json
+  /// [json] needs to be an array of double
+  factory GeolocationDataEntity.fromJson(dynamic json) {
+    Geolocation? jsonValue;
+    if (json != null && json is List) {
+      jsonValue = Geolocation(latitude: json.last.toDouble(), longitude: json.first.toDouble());
+    }
+    return GeolocationDataEntity(jsonValue);
+  }
+
+  /// Returns [value] coordinates in a array
+  @override
+  List<double>? get schemaValue => value == null ? null : [value!.longitude, value!.latitude];
+}

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /// Add A ApptiveGrid Widget to your Widget Tree to enable ApptiveGrid Functionality
 void main() async {
   const options = ApptiveGridOptions(
-    environment: ApptiveGridEnvironment.beta,
+    environment: ApptiveGridEnvironment.alpha,
     authenticationOptions: ApptiveGridAuthenticationOptions(
       autoAuthenticate: true,
       redirectScheme: 'apptivegrid',
@@ -152,7 +152,7 @@ class _SpaceSectionState extends State<_SpaceSection> {
                     Text(space.name),
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: space.grids.map((e) => Text(e.grid)).toList(),
+                      children: space.grids.map((e) => _GridSection(gridUri: e)).toList(),
                     )
                   ],
                 );
@@ -170,5 +170,63 @@ class _SpaceSectionState extends State<_SpaceSection> {
         : Center(
             child: CircularProgressIndicator(),
           );
+  }
+}
+
+class _GridSection extends StatefulWidget {
+  const _GridSection({
+    Key? key,
+    required this.gridUri,
+  }) : super(key: key);
+
+  final GridUri gridUri;
+
+  @override
+  _GridSectionState createState() => _GridSectionState();
+}
+
+class _GridSectionState extends State<_GridSection> {
+  Future<Grid>? _gridFuture;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _gridFuture = ApptiveGrid.getClient(context).loadGrid(
+      gridUri: widget.gridUri,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _gridFuture != null
+        ? FutureBuilder<Grid>(
+      future: _gridFuture,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final grid = snapshot.data!;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(grid.name),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: grid.rows.map((e) => Text(e.entries.first.data.value.toString())).toList(),
+              )
+            ],
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text(snapshot.error.toString()),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    )
+        : Center(
+      child: CircularProgressIndicator(),
+    );
   }
 }

@@ -31,6 +31,9 @@ enum DataType {
 
   /// Type for Attachments
   attachment,
+
+  /// Type for geolocations
+  geolocation,
 }
 
 /// Returns [DataType] that matching a certain schema [schemaProperty]
@@ -69,14 +72,24 @@ DataType dataTypeFromSchemaProperty({
       }
       break;
     case 'array':
+      if (schemaProperty['items'] is List &&
+          f.setEquals((schemaProperty['items'].map<DataType>((item) =>
+              dataTypeFromSchemaProperty(schemaProperty: item))
+          as Iterable<DataType>)
+              .toSet(), {DataType.decimal})) {
+        return DataType.geolocation;
+      }
+
       final itemType =
           dataTypeFromSchemaProperty(schemaProperty: schemaProperty['items']);
       switch (itemType) {
-        // TODO: Adjust for new Schema Type
         case DataType.attachment:
           return DataType.attachment;
         case DataType.singleSelect:
           return DataType.enumCollection;
+        case DataType.decimal:
+          // TODO:  This will get a custom datatype in the future
+          return DataType.geolocation;
         default:
           throw ArgumentError(
             'No defined Array type for type: $itemType',
