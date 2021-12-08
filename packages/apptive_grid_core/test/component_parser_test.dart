@@ -505,7 +505,7 @@ void main() {
       expect(parsedComponent.data.value, 'AG');
       expect(
         (parsedComponent.data as EnumDataEntity).options,
-        ['GmbH', 'AG', 'Freiberuflich'],
+        {'GmbH', 'AG', 'Freiberuflich'},
       );
       expect(parsedComponent.data.schemaValue, 'AG');
     });
@@ -519,7 +519,7 @@ void main() {
       final schema = {
         'properties': {
           id: {
-            'type': 'unkown',
+            'type': 'unknown',
           }
         }
       };
@@ -529,10 +529,44 @@ void main() {
         'value': null,
         'required': true,
         'options': <String, dynamic>{},
-        'type': 'unkown'
+        'type': 'unknown'
       };
 
       expect(() => FormComponent.fromJson(json, schema), throwsArgumentError);
+    });
+
+    test('Unknown Array Type throws', () {
+      const property = 'property';
+      const id = 'id';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'array',
+            'items': {
+              'type': 'string',
+            }
+          }
+        }
+      };
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': null,
+        'required': true,
+        'options': <String, dynamic>{},
+        'type': 'unknown'
+      };
+
+      expect(
+        () => FormComponent.fromJson(json, schema),
+        throwsA(
+          predicate<ArgumentError>(
+            (e) => e.message == 'No defined Array type for type: DataType.text',
+            'ArgumentError with specific Message',
+          ),
+        ),
+      );
     });
 
     test('Unknown Property throws', () {

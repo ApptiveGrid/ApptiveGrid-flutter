@@ -16,12 +16,9 @@ class AttachmentFormWidget extends StatefulWidget {
 }
 
 class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
-  final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
-
   @override
   Widget build(BuildContext context) {
     return FormField<AttachmentDataEntity>(
-      key: _formKey,
       validator: (attachments) {
         if (widget.component.required &&
             (attachments?.value == null || attachments!.value!.isEmpty)) {

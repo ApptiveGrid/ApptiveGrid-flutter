@@ -41,6 +41,10 @@ Widget fromModel(FormComponent component) {
       return AttachmentFormWidget(
         component: component as AttachmentFormComponent,
       );
+    case EnumCollectionDataEntity:
+      return EnumCollectionFormWidget(
+        component: component as EnumCollectionFormComponent,
+      );
     default:
       throw ArgumentError(
         'No Widget found for component $component. Please make sure you are you using the latest version of this package?',

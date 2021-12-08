@@ -103,7 +103,7 @@ class Grid {
     );
   }
 
-  /// Name of the Form
+  /// Name of the Grid
   final String name;
 
   /// Schema used for deserializing and validating data send back to the server

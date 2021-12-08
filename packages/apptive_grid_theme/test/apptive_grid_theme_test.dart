@@ -350,4 +350,43 @@ void main() {
       widgetTester,
     );
   });
+
+  testWidgets('Chips', (widgetTester) async {
+    await _test(
+      (data) => Center(
+        child: Column(
+          children: [
+            const Chip(
+              label: Text('Chip'),
+            ),
+            const InputChip(
+              label: Text('InputChip'),
+            ),
+            ChoiceChip(
+              label: const Text('Choice Chip, Selected'),
+              selected: true,
+              onSelected: (_) {},
+            ),
+            ChoiceChip(
+              label: const Text('Choice Chip, UnSelected'),
+              selected: false,
+              onSelected: (_) {},
+            ),
+            const ChoiceChip(
+              label: Text('Choice Chip, Selected, no Callback'),
+              selected: true,
+            ),
+            const ChoiceChip(
+              label: Text('Choice Chip, UnSelected, no Callback'),
+              selected: false,
+            ),
+            FilterChip(label: const Text('FilterChip'), onSelected: (_) {}),
+            ActionChip(label: const Text('ActionChip'), onPressed: () {}),
+          ],
+        ),
+      ),
+      'Chips',
+      widgetTester,
+    );
+  });
 }

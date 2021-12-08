@@ -112,10 +112,10 @@ class DecimalDataEntity extends DataEntity<double, double> {
 /// [DataEntity] representing an enum like Object
 class EnumDataEntity extends DataEntity<String, String> {
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
-  EnumDataEntity({String? value, this.options = const []}) : super(value);
+  EnumDataEntity({String? value, this.options = const {}}) : super(value);
 
   /// Possible options of the Data Entity
-  List<String> options;
+  Set<String> options;
 
   @override
   String? get schemaValue => value;
@@ -129,7 +129,46 @@ class EnumDataEntity extends DataEntity<String, String> {
   bool operator ==(Object other) {
     return other is EnumDataEntity &&
         value == (other).value &&
-        f.listEquals(options, (other).options);
+        f.setEquals(options, (other).options);
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
+}
+
+/// [DataEntity] representing an enum like Object
+class EnumCollectionDataEntity extends DataEntity<Set<String>, List<String>> {
+  /// Creates a new EnumDataEntity Object with [value] out of possible [options]
+  EnumCollectionDataEntity._({
+    required Set<String> value,
+    this.options = const {},
+  }) : super(value);
+
+  /// Creates a new EnumDataEntity Object with [value] out of possible [options]
+  factory EnumCollectionDataEntity({
+    Set<String>? value,
+    Set<String> options = const {},
+  }) {
+    return EnumCollectionDataEntity._(value: value ?? {}, options: options);
+  }
+
+  /// Possible options of the Data Entity
+  Set<String> options;
+
+  @override
+  List<String>? get schemaValue =>
+      value == null || value!.isEmpty ? null : value!.toList();
+
+  @override
+  String toString() {
+    return '$runtimeType(value: $value, values: $options)}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EnumCollectionDataEntity &&
+        f.setEquals(value, other.value) &&
+        f.setEquals(options, other.options);
   }
 
   @override
@@ -190,7 +229,7 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
   int get hashCode => toString().hashCode;
 }
 
-/// [DataEntity] representing an array of Attachements
+/// [DataEntity] representing an array of Attachments
 class AttachmentDataEntity extends DataEntity<List<Attachment>, dynamic> {
   /// Create a new Attachment Data Entity
   AttachmentDataEntity([

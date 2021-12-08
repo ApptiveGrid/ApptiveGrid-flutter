@@ -1,3 +1,7 @@
+## [0.9.0-alpha.3]
+* **BREAKING CHANGE** `DataType.selectionBox` is now `DataType.singleSelect`
+* Add support for `DataType.enumCollection`
+
 ## [0.9.0-alpha.2]
 * Fix Required Form Field not updating if required
 

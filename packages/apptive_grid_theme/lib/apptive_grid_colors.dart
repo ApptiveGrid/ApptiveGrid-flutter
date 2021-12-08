@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 /// Colors used by the [ApptiveGridTheme]
 abstract class ApptiveGridColors {
+  /// Empty private constructor to prevent IDE Autocomplete
+  ApptiveGridColors._();
+
   /// This is the primary color of ApptiveGrid with the hex code: FF1565C0
   static const Color apptiveGridBlue = Color(0xff1565c0);
 
