@@ -16,10 +16,7 @@ class ApptiveGrid extends StatefulWidget {
   })  : client = null,
         super(key: key);
 
-  /// Creates ApptiveGrid with an defined ApptiveGridClient
-  ///
-  /// Used testing to Provide a MockedClient
-  @visibleForTesting
+  /// Creates ApptiveGrid with a shared defined ApptiveGridClient
   const ApptiveGrid.withClient({
     Key? key,
     required this.client,

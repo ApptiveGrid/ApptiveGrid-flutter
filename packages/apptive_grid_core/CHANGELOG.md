@@ -1,5 +1,6 @@
 ## [0.8.0-alpha.4]
 * Add support for `DataType.geolocation`
+* Make `ApptiveGrid.withClient` public
 
 ## [0.8.0-alpha.3]
 * **BREAKING CHANGE** `DataType.selectionBox` is now `DataType.singleSelect`
