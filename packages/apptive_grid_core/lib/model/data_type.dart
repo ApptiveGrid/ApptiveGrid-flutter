@@ -69,17 +69,11 @@ DataType dataTypeFromSchemaProperty({
           return DataType.crossReference;
         case 'attachment':
           return DataType.attachment;
+        case 'geolocation':
+          return DataType.geolocation;
       }
       break;
     case 'array':
-      if (schemaProperty['items'] is List &&
-          f.setEquals((schemaProperty['items'].map<DataType>((item) =>
-              dataTypeFromSchemaProperty(schemaProperty: item))
-          as Iterable<DataType>)
-              .toSet(), {DataType.decimal})) {
-        return DataType.geolocation;
-      }
-
       final itemType =
           dataTypeFromSchemaProperty(schemaProperty: schemaProperty['items']);
       switch (itemType) {
@@ -87,9 +81,6 @@ DataType dataTypeFromSchemaProperty({
           return DataType.attachment;
         case DataType.singleSelect:
           return DataType.enumCollection;
-        case DataType.decimal:
-          // TODO:  This will get a custom datatype in the future
-          return DataType.geolocation;
         default:
           throw ArgumentError(
             'No defined Array type for type: $itemType',
