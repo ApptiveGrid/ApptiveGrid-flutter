@@ -32,8 +32,14 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
         return Provider<LocationManager>(
           create: (providerContext) {
             return LocationManager(
-              googleApiKey: 'TODO get this from a config',
-            );
+                configuration: ApptiveGrid.getOptions(providerContext)
+                        .formWidgetConfigurations
+                        .firstWhere(
+                            (element) =>
+                                element is GeolocationFormWidgetConfiguration,
+                            orElse: () => throw Exception(
+                                'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget'))
+                    as GeolocationFormWidgetConfiguration);
           },
           builder: (_, __) => InputDecorator(
             decoration: InputDecoration(

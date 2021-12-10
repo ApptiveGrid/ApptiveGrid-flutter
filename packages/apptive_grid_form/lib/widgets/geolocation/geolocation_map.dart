@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:apptive_grid_core/apptive_grid_model.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -55,6 +57,7 @@ class _GeolocationMapState extends State<GeolocationMap> {
             }
           : {},
       onTap: _locationSelected,
+      gestureRecognizers: {Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())},
     );
   }
 

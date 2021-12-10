@@ -11,6 +11,7 @@ class ApptiveGridOptions {
     this.authenticationOptions = const ApptiveGridAuthenticationOptions(),
     this.cache,
     this.attachmentConfigurations = const {},
+    this.formWidgetConfigurations = const [],
   });
 
   /// Determines the API endpoint used
@@ -30,6 +31,8 @@ class ApptiveGridOptions {
   final Map<ApptiveGridEnvironment, AttachmentConfiguration?>
       attachmentConfigurations;
 
+  final List<FormWidgetConfiguration> formWidgetConfigurations;
+
   /// Creates a copy of [ApptiveGridOptions] with the provided values
   ApptiveGridOptions copyWith({
     ApptiveGridEnvironment? environment,
@@ -37,6 +40,7 @@ class ApptiveGridOptions {
     ApptiveGridCache? cache,
     Map<ApptiveGridEnvironment, AttachmentConfiguration>?
         attachmentConfigurations,
+    List<FormWidgetConfiguration>? formWidgetConfigurations,
   }) {
     return ApptiveGridOptions(
       environment: environment ?? this.environment,
@@ -45,6 +49,7 @@ class ApptiveGridOptions {
       cache: cache ?? this.cache,
       attachmentConfigurations:
           attachmentConfigurations ?? this.attachmentConfigurations,
+      formWidgetConfigurations: formWidgetConfigurations ?? this.formWidgetConfigurations,
     );
   }
 
@@ -64,4 +69,8 @@ class ApptiveGridOptions {
 
   @override
   int get hashCode => toString().hashCode;
+}
+
+abstract class FormWidgetConfiguration {
+  const FormWidgetConfiguration();
 }

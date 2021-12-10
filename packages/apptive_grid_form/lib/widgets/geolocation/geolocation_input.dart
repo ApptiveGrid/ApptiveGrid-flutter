@@ -29,7 +29,9 @@ class GeolocationInputState extends State<GeolocationInput> {
   void initState() {
     super.initState();
     if (widget.location != null) {
-      _updateTextField(widget.location);
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        _updateTextField(widget.location);
+      });
     }
   }
 

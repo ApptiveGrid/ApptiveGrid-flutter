@@ -51,6 +51,10 @@ class ApptiveGrid extends StatefulWidget {
   }) {
     return Provider.of<ApptiveGridClient>(context, listen: listen);
   }
+
+  static ApptiveGridOptions getOptions(BuildContext context) {
+    return Provider.of<ApptiveGridClient>(context, listen: false).options;
+  }
 }
 
 class _ApptiveGridState extends State<ApptiveGrid> {
@@ -68,8 +72,13 @@ class _ApptiveGridState extends State<ApptiveGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<ApptiveGridClient>.value(
-      value: _client,
+    return MultiProvider(
+      providers: [
+        Provider<ApptiveGridClient>.value(
+          value: _client,
+        ),
+        Provider.value(value: widget.options),
+      ],
       child: widget.child,
     );
   }
