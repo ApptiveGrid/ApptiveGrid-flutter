@@ -44,4 +44,8 @@ abstract class ApptiveGridTranslation {
 
   /// Action to add an Attachment
   String get addAttachment;
+
+  String get searchLocation;
+
+  String get searchLocationNoResult;
 }

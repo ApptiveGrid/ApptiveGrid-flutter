@@ -12,6 +12,10 @@ dependencies:
   file_picker: ^4.2.0
   flutter:
     sdk: flutter
+  flutter_typeahead: ^3.2.3
+  geolocator: ^8.0.0
+  google_maps_flutter: ^2.1.1
+  google_maps_webservice: ^0.0.20-nullsafety.5
   intl: ^0.17.0
   linked_scroll_controller: ^0.2.0
   lottie: ^1.2.1
