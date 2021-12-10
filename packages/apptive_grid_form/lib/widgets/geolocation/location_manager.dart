@@ -53,9 +53,10 @@ class LocationManager {
     List<String> locationType = const [],
   }) {
     return _googleMapsGeocoding.searchByLocation(
-        Location(lat: location.latitude, lng: location.longitude),
-        language: language,
-        resultType: resultType,
-        locationType: locationType);
+      Location(lat: location.latitude, lng: location.longitude),
+      language: language,
+      resultType: resultType,
+      locationType: locationType,
+    );
   }
 }

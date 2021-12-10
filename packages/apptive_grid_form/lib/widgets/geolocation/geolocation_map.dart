@@ -23,7 +23,7 @@ class _GeolocationMapState extends State<GeolocationMap> {
   @override
   void didUpdateWidget(covariant GeolocationMap oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(widget.location != null && widget.location != oldWidget.location) {
+    if (widget.location != null && widget.location != oldWidget.location) {
       _moveToNewPosition(widget.location!);
     }
   }
@@ -68,8 +68,12 @@ class _GeolocationMapState extends State<GeolocationMap> {
   }
 
   void _moveToNewPosition(Geolocation location) {
-    _mapCompleter.future.then((controller) => controller.animateCamera(CameraUpdate.newLatLng(
-      LatLng(location.latitude, location.longitude),
-    ),),);
+    _mapCompleter.future.then(
+      (controller) => controller.animateCamera(
+        CameraUpdate.newLatLng(
+          LatLng(location.latitude, location.longitude),
+        ),
+      ),
+    );
   }
 }

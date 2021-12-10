@@ -1,11 +1,9 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/widgets/geolocation/location_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:google_maps_webservice/geocoding.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:provider/provider.dart';
-
-import 'location_manager.dart';
 
 class GeolocationInput extends StatefulWidget {
   const GeolocationInput({
@@ -18,10 +16,10 @@ class GeolocationInput extends StatefulWidget {
   final void Function(Geolocation?)? onLocationChanged;
 
   @override
-  geolocationInputState createState() => geolocationInputState();
+  GeolocationInputState createState() => GeolocationInputState();
 }
 
-class geolocationInputState extends State<GeolocationInput> {
+class GeolocationInputState extends State<GeolocationInput> {
   LocationManager? _locationManager;
   Geolocation? _currentTextLocation;
 
@@ -85,9 +83,9 @@ class geolocationInputState extends State<GeolocationInput> {
               }
 
               final placeLocation = (await _locationManager?.getPlaceDetails(
-                      suggestion.placeId!,
-                      language:
-                          Localizations.maybeLocaleOf(context)?.languageCode))
+                suggestion.placeId!,
+                language: Localizations.maybeLocaleOf(context)?.languageCode,
+              ))
                   ?.result
                   .geometry
                   ?.location;
@@ -104,7 +102,7 @@ class geolocationInputState extends State<GeolocationInput> {
         ),
         IconButton(
           onPressed: _selectCurrentLocation,
-          icon: Icon(Icons.my_location),
+          icon: const Icon(Icons.my_location),
         ),
       ],
     );
@@ -114,7 +112,9 @@ class geolocationInputState extends State<GeolocationInput> {
     final position = await _locationManager?.getCurrentPosition();
     if (position != null) {
       final location = Geolocation(
-          latitude: position.latitude, longitude: position.longitude);
+        latitude: position.latitude,
+        longitude: position.longitude,
+      );
       widget.onLocationChanged?.call(location);
 
       if (mounted) {
@@ -127,15 +127,17 @@ class geolocationInputState extends State<GeolocationInput> {
     if (location != null) {
       final results = (await _locationManager?.getPlaceByLocation(
         location,
-        language: Localizations
-            .localeOf(context)
-            .languageCode,
-      ))?.results;
+        language: Localizations.localeOf(context).languageCode,
+      ))
+          ?.results;
 
-      if (results != null && results.isNotEmpty && results.first.formattedAddress != null) {
+      if (results != null &&
+          results.isNotEmpty &&
+          results.first.formattedAddress != null) {
         _locationBoxController.text = results.first.formattedAddress!;
       } else {
-        _locationBoxController.text = '${location.latitude},${location.longitude}';
+        _locationBoxController.text =
+            '${location.latitude},${location.longitude}';
       }
     } else {
       _locationBoxController.clear();
@@ -143,12 +145,13 @@ class geolocationInputState extends State<GeolocationInput> {
     _currentTextLocation = location;
   }
 
-
   Future<List<Prediction>> _getQueryProposals(String query) async {
     Location? location;
     if (widget.location != null) {
       location = Location(
-          lat: widget.location!.latitude, lng: widget.location!.longitude);
+        lat: widget.location!.latitude,
+        lng: widget.location!.longitude,
+      );
     }
     final language = Localizations.localeOf(context).languageCode;
     final response = await _locationManager?.queryAutocomplete(

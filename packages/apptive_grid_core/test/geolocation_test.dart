@@ -11,7 +11,10 @@ void main() {
       "entities": [
         {
           "fields": [
-            {'lon': 6.944374229580692, 'lat': 50.90713366617792,},
+            {
+              'lon': 6.944374229580692,
+              'lat': 50.90713366617792,
+            },
           ],
           "_id": "61b08a87aa660541e58f58ef"
         }
@@ -27,19 +30,10 @@ void main() {
               {
                 "type": "object",
                 "properties": {
-                  "lat": {
-                    "type": "number",
-                    "format": "double"
-                  },
-                  "lon": {
-                    "type": "number",
-                    "format": "double"
-                  }
+                  "lat": {"type": "number", "format": "double"},
+                  "lon": {"type": "number", "format": "double"}
                 },
-                "required": [
-                  "lat",
-                  "lon"
-                ],
+                "required": ["lat", "lon"],
                 "objectType": "geolocation"
               }
             ]
@@ -69,19 +63,10 @@ void main() {
               {
                 "type": "object",
                 "properties": {
-                  "lat": {
-                    "type": "number",
-                    "format": "double"
-                  },
-                  "lon": {
-                    "type": "number",
-                    "format": "double"
-                  }
+                  "lat": {"type": "number", "format": "double"},
+                  "lon": {"type": "number", "format": "double"}
                 },
-                "required": [
-                  "lat",
-                  "lon"
-                ],
+                "required": ["lat", "lon"],
                 "objectType": "geolocation"
               }
             ]
@@ -99,7 +84,10 @@ void main() {
       expect(
         grid.rows[0].entries[0].data,
         GeolocationDataEntity.fromJson(
-          {'lon': 6.944374229580692, 'lat': 50.90713366617792,},
+          {
+            'lon': 6.944374229580692,
+            'lat': 50.90713366617792,
+          },
         ),
       );
     });
@@ -133,19 +121,10 @@ void main() {
             "78lnph2fb2olm9jtc696d66q9": {
               "type": "object",
               "properties": {
-                "lat": {
-                  "type": "number",
-                  "format": "double"
-                },
-                "lon": {
-                  "type": "number",
-                  "format": "double"
-                }
+                "lat": {"type": "number", "format": "double"},
+                "lon": {"type": "number", "format": "double"}
               },
-              "required": [
-                "lat",
-                "lon"
-              ],
+              "required": ["lat", "lon"],
               "objectType": "geolocation"
             }
           },
@@ -156,7 +135,10 @@ void main() {
         "components": [
           {
             "property": "Location",
-            "value": {'lon': 6.944374229580692, 'lat': 50.90713366617792,},
+            "value": {
+              'lon': 6.944374229580692,
+              'lat': 50.90713366617792,
+            },
             "required": false,
             "options": {"label": null, "description": null},
             "fieldId": "78lnph2fb2olm9jtc696d66q9",
@@ -173,7 +155,7 @@ void main() {
       final fromJson = formData.components[0] as GeolocationFormComponent;
 
       final directEntity = GeolocationDataEntity(
-        Geolocation(
+        const Geolocation(
           longitude: 6.944374229580692,
           latitude: 50.90713366617792,
         ),
@@ -192,13 +174,16 @@ void main() {
 
   group('Geolocation', () {
     test('Equality', () {
-      final one = Geolocation(
+      const one = Geolocation(
         latitude: 47,
         longitude: 11,
       );
 
       final two = Geolocation.fromJson(
-        {'lon': 11, 'lat': 47,},
+        {
+          'lon': 11,
+          'lat': 47,
+        },
       );
 
       expect(one, equals(two));

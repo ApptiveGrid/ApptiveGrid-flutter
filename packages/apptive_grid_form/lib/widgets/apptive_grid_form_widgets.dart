@@ -2,8 +2,6 @@ library apptive_grid_form_widgets;
 
 import 'dart:math';
 
-import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/widgets/form_widget/attachment_manager.dart';
 import 'package:apptive_grid_form/widgets/form_widget/grid_row_dropdown/grid_row_dropdown_library.dart';

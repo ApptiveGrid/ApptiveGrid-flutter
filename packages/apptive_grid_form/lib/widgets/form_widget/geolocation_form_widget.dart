@@ -32,7 +32,8 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
         return Provider<LocationManager>(
           create: (providerContext) {
             return LocationManager(
-                googleApiKey: 'TODO get this from a config');
+              googleApiKey: 'TODO get this from a config',
+            );
           },
           builder: (_, __) => InputDecorator(
             decoration: InputDecoration(
@@ -49,35 +50,42 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
               filled: false,
             ),
             child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  GeolocationInput(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                GeolocationInput(
+                  location: widget.component.data.value,
+                  onLocationChanged: (newLocation) {
+                    _updateLocation(
+                      formState: formState,
+                      location: newLocation,
+                    );
+                  },
+                ),
+                AspectRatio(
+                  aspectRatio: 3 / 2,
+                  child: GeolocationMap(
                     location: widget.component.data.value,
                     onLocationChanged: (newLocation) {
                       _updateLocation(
-                          formState: formState, location: newLocation);
+                        formState: formState,
+                        location: newLocation,
+                      );
                     },
                   ),
-                  AspectRatio(
-                    aspectRatio: 3 / 2,
-                    child: GeolocationMap(
-                      location: widget.component.data.value,
-                      onLocationChanged: (newLocation) {
-                        _updateLocation(
-                            formState: formState, location: newLocation);
-                      },
-                    ),
-                  ),
-                ]),
+                ),
+              ],
+            ),
           ),
         );
       },
     );
   }
 
-  void _updateLocation(
-      {required FormFieldState formState, Geolocation? location}) {
+  void _updateLocation({
+    required FormFieldState formState,
+    Geolocation? location,
+  }) {
     setState(() {
       widget.component.data.value = location;
     });

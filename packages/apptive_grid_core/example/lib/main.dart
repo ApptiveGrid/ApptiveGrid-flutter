@@ -152,7 +152,9 @@ class _SpaceSectionState extends State<_SpaceSection> {
                     Text(space.name),
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: space.grids.map((e) => _GridSection(gridUri: e)).toList(),
+                      children: space.grids
+                          .map((e) => _GridSection(gridUri: e))
+                          .toList(),
                     )
                   ],
                 );
@@ -200,33 +202,37 @@ class _GridSectionState extends State<_GridSection> {
   Widget build(BuildContext context) {
     return _gridFuture != null
         ? FutureBuilder<Grid>(
-      future: _gridFuture,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final grid = snapshot.data!;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(grid.name),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: grid.rows.map((e) => Text(e.entries.first.data.value.toString())).toList(),
-              )
-            ],
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text(snapshot.error.toString()),
-          );
-        } else {
-          return Center(
+            future: _gridFuture,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final grid = snapshot.data!;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(grid.name),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: grid.rows
+                          .map(
+                            (e) => Text(e.entries.first.data.value.toString()),
+                          )
+                          .toList(),
+                    )
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text(snapshot.error.toString()),
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          )
+        : Center(
             child: CircularProgressIndicator(),
           );
-        }
-      },
-    )
-        : Center(
-      child: CircularProgressIndicator(),
-    );
   }
 }
