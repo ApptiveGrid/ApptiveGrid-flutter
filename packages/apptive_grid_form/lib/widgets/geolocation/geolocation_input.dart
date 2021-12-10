@@ -1,8 +1,10 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
-import 'package:apptive_grid_form/widgets/geolocation/location_manager.dart';
+import 'package:apptive_grid_form/managers/location_manager.dart';
+import 'package:apptive_grid_form/managers/permission_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class GeolocationInput extends StatefulWidget {
@@ -22,6 +24,8 @@ class GeolocationInput extends StatefulWidget {
 class GeolocationInputState extends State<GeolocationInput> {
   LocationManager? _locationManager;
   Geolocation? _currentTextLocation;
+
+  PermissionStatus? _myLocationPermission;
 
   final _locationBoxController = TextEditingController();
 
@@ -102,27 +106,39 @@ class GeolocationInputState extends State<GeolocationInput> {
             },
           ),
         ),
-        IconButton(
-          onPressed: _selectCurrentLocation,
-          icon: const Icon(Icons.my_location),
-        ),
+        if (_myLocationPermission != PermissionStatus.permanentlyDenied)
+          IconButton(
+            onPressed: _selectCurrentLocation,
+            icon: const Icon(Icons.my_location),
+          ),
       ],
     );
   }
 
-  Future<void> _selectCurrentLocation() async {
-    final position = await _locationManager?.getCurrentPosition();
-    if (position != null) {
-      final location = Geolocation(
-        latitude: position.latitude,
-        longitude: position.longitude,
-      );
-      widget.onLocationChanged?.call(location);
+  void _selectCurrentLocation() {
+    Provider.of<PermissionManager>(context, listen: false)
+        .requestPermission(Permission.locationWhenInUse)
+        .then((status) async {
+      if (status == PermissionStatus.granted) {
+        final position = await _locationManager?.getCurrentPosition();
+        if (position != null) {
+          final location = Geolocation(
+            latitude: position.latitude,
+            longitude: position.longitude,
+          );
+          widget.onLocationChanged?.call(location);
 
-      if (mounted) {
-        _updateTextField(location);
+          if (mounted) {
+            _updateTextField(location);
+          }
+        }
       }
-    }
+      if (mounted) {
+        setState(() {
+          _myLocationPermission = status;
+        });
+      }
+    });
   }
 
   Future<void> _updateTextField(Geolocation? location) async {

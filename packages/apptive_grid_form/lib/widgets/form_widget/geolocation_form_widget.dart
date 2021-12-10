@@ -29,18 +29,23 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       builder: (formState) {
-        return Provider<LocationManager>(
-          create: (providerContext) {
-            return LocationManager(
-                configuration: ApptiveGrid.getOptions(providerContext)
-                        .formWidgetConfigurations
-                        .firstWhere(
-                            (element) =>
-                                element is GeolocationFormWidgetConfiguration,
-                            orElse: () => throw Exception(
-                                'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget'))
-                    as GeolocationFormWidgetConfiguration);
-          },
+        return MultiProvider(
+          providers: [
+            Provider<LocationManager>(
+              create: (providerContext) {
+                return LocationManager(
+                    configuration: ApptiveGrid.getOptions(providerContext)
+                            .formWidgetConfigurations
+                            .firstWhere(
+                                (element) => element
+                                    is GeolocationFormWidgetConfiguration,
+                                orElse: () => throw Exception(
+                                    'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget'))
+                        as GeolocationFormWidgetConfiguration);
+              },
+            ),
+            Provider.value(value: const PermissionManager()),
+          ],
           builder: (_, __) => InputDecorator(
             decoration: InputDecoration(
               label: Text(

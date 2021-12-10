@@ -3,11 +3,12 @@ library apptive_grid_form_widgets;
 import 'dart:math';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/managers/permission_manager.dart';
 import 'package:apptive_grid_form/widgets/form_widget/attachment_manager.dart';
 import 'package:apptive_grid_form/widgets/form_widget/grid_row_dropdown/grid_row_dropdown_library.dart';
 import 'package:apptive_grid_form/widgets/geolocation/geolocation_input.dart';
 import 'package:apptive_grid_form/widgets/geolocation/geolocation_map.dart';
-import 'package:apptive_grid_form/widgets/geolocation/location_manager.dart';
+import 'package:apptive_grid_form/managers/location_manager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';

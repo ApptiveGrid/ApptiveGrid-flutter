@@ -59,5 +59,7 @@
     <true/>
     <key>LSSupportsOpeningDocumentsInPlace</key>
     <true/>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Get your current location on the map</string>
 </dict>
 </plist>
