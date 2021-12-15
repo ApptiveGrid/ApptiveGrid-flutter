@@ -19,6 +19,10 @@ void main() {
   late StreamController<String?> streamController;
   late ApptiveGridAuthenticator authenticator;
 
+  final discoveryUri = Uri.parse(
+    'https://iam.zweidenker.de/auth/realms/apptivegrid/.well-known/openid-configuration',
+  );
+
   setUpAll(() {
     registerFallbackValue(Uri());
 
@@ -193,6 +197,7 @@ void main() {
       UrlLauncherPlatform.instance = urlLauncher;
 
       authenticator = ApptiveGridAuthenticator();
+
       // Mock AuthBackend Return a new Token
       final mockAuthBackend = MockAuthenticator();
       authenticator.testAuthenticator = mockAuthBackend;
@@ -255,9 +260,6 @@ void main() {
     test('Creates new Client', () async {
       final httpClient = MockHttpClient();
       authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
-      final discoveryUri = Uri.parse(
-        'https://iam.zweidenker.de/auth/realms/apptivegrid/.well-known/openid-configuration',
-      );
 
       when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
           .thenAnswer(
@@ -467,6 +469,7 @@ void main() {
     test(
         'Storage Provided '
         'Credential gets saved', () async {
+      final httpClient = MockHttpClient();
       final storage = MockAuthenticationStorage();
       final testAuthenticator = MockAuthenticator();
       final credential = MockCredential();
@@ -478,7 +481,17 @@ void main() {
       when(() => credential.getTokenResponse(any()))
           .thenAnswer((invocation) async => token);
       when(() => credential.toJson()).thenReturn(jsonCredential);
+      when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
+          .thenAnswer(
+            (invocation) async => Response(
+          jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+          200,
+          request: Request('GET', discoveryUri),
+          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+        ),
+      );
       authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
+        httpClient: httpClient,
         options: const ApptiveGridOptions(
           authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
@@ -612,6 +625,7 @@ void main() {
         (invocation) => Future.error(OpenIdException('Invalid Token', 'Test')),
       );
 
+
       final testAuthenticator = MockAuthenticator();
 
       final storage = MockAuthenticationStorage();
@@ -651,7 +665,19 @@ void main() {
 
       final storage = MockAuthenticationStorage();
 
+      final httpClient = MockHttpClient();
+      when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
+          .thenAnswer(
+            (invocation) async => Response(
+          jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+          200,
+          request: Request('GET', discoveryUri),
+          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+        ),
+      );
+
       authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
+        httpClient: httpClient,
         options: const ApptiveGridOptions(
           authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
@@ -697,7 +723,18 @@ void main() {
 
       final testAuthenticator = MockAuthenticator();
 
+      final httpClient = MockHttpClient();
+      when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
+          .thenAnswer(
+            (invocation) async => Response(
+          jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+          200,
+          request: Request('GET', discoveryUri),
+          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+        ),
+      );
       authenticator = ApptiveGridAuthenticator(
+        httpClient: httpClient,
         options: const ApptiveGridOptions(
           authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
