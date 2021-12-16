@@ -712,7 +712,7 @@ void main() {
             final putResponse = Response('Success', 200);
             final baseUri = Uri.parse(
               attachmentConfig[ApptiveGridEnvironment.production]!
-                  .signedUrlApiEndpoint,
+                  .signedUrlFormApiEndpoint!,
             );
             final uri = Uri(
               scheme: baseUri.scheme,
