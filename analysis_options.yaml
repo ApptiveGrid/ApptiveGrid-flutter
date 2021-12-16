@@ -7,7 +7,7 @@ analyzer:
 
 linter:
   rules:
-    public_member_api_docs: false
+    public_member_api_docs: true
     sort_constructors_first: true
     hash_and_equals: true
     avoid_print: true

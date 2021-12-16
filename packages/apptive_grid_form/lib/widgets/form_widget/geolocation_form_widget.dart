@@ -2,7 +2,9 @@ part of apptive_grid_form_widgets;
 
 /// FormComponent Widget to display a [GeolocationFormComponent]
 class GeolocationFormWidget extends StatefulWidget {
-  /// Creates a [Checkbox] to display a boolean value contained in [component]
+  /// Creates elements to display a [Geolocation] value contained in [component]
+  ///
+  /// Shows a [GeolocationInput] and [GeolocationMap] Widget to allow the user to change the value
   const GeolocationFormWidget({
     Key? key,
     required this.component,

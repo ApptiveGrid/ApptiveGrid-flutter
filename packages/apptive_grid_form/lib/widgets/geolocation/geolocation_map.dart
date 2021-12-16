@@ -9,11 +9,25 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+/// Widget Used for handling user Input for a location
+///
+/// Displays the currently selected [location] as a Marker on a [GoogleMap]
+/// Allows the user to select a new location by tapping a point on the Map
+/// Allows the user to change the location by dragging and releasing the marker on a new Location
 class GeolocationMap extends StatefulWidget {
+  /// Creates a new MapWidget
   const GeolocationMap({Key? key, this.location, this.onLocationChanged})
       : super(key: key);
 
+  /// Currently select [Geolocation]
+  ///
+  /// `null` if no location is set
   final Geolocation? location;
+
+  /// Called when the User changes the Location using this Widget
+  ///
+  /// Called with a [Geolocation] if the user either selects a location
+  /// by clicking the map or dragging the currently selected lcoation to a new place
   final void Function(Geolocation?)? onLocationChanged;
 
   @override

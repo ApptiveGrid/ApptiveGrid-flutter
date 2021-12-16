@@ -7,21 +7,36 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+/// Widget Used for handling user Input for a location
+///
+/// Gives users the ability to search for a Location by Text
+/// Also gives the user the ability to set the current location as the desired location
 class GeolocationInput extends StatefulWidget {
+
+  /// Creates the Input Widget
   const GeolocationInput({
     Key? key,
     this.location,
     this.onLocationChanged,
   }) : super(key: key);
 
+  /// Currently select [Geolocation]
+  ///
+  /// `null` if no location is set
   final Geolocation? location;
+
+  /// Called when the User changes the Location using this Widget
+  ///
+  /// Called with a [Geolocation] if the user either selects a location from search or to the user's current location
+  ///
+  /// Called with `null` if the user clears the currently selected Location
   final void Function(Geolocation?)? onLocationChanged;
 
   @override
-  GeolocationInputState createState() => GeolocationInputState();
+  _GeolocationInputState createState() => _GeolocationInputState();
 }
 
-class GeolocationInputState extends State<GeolocationInput> {
+class _GeolocationInputState extends State<GeolocationInput> {
   LocationManager? _locationManager;
   Geolocation? _currentTextLocation;
 

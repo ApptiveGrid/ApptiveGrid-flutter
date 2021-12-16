@@ -31,6 +31,17 @@ class ApptiveGridOptions {
   final Map<ApptiveGridEnvironment, AttachmentConfiguration?>
       attachmentConfigurations;
 
+  /// Add a list of [FormWidgetConfiguration] used for different FormWidgets when using [apptive_grid_form](https://pub.dev/packages/apptive_grid_form)
+  ///
+  /// For example in order to use [DataType.geolocation] in a Form you should add
+  ///
+  /// ```dart
+  /// formWidgetConfigurations: [
+  ///   const GeolocationFormWidgetConfiguration(
+  ///     placesApiKey: 'YOUR_PLACES_API_KEY',
+  ///   )
+  /// ]
+  /// ```
   final List<FormWidgetConfiguration> formWidgetConfigurations;
 
   /// Creates a copy of [ApptiveGridOptions] with the provided values
@@ -72,6 +83,8 @@ class ApptiveGridOptions {
   int get hashCode => toString().hashCode;
 }
 
+/// A Configuration for FormWidgets needed for certain [DataType]s with [apptive_grid_form](https://pub.dev/packages/apptive_grid_form)
 abstract class FormWidgetConfiguration {
+  /// Enable const constructor for children
   const FormWidgetConfiguration();
 }

@@ -3,7 +3,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/geocoding.dart';
 import 'package:google_maps_webservice/places.dart';
 
+/// Manager for handling Location based Requests and Services
 class LocationManager {
+  /// Creates a new [LocationManager] with [configuration]
+  ///
+  /// If [configuration.geocodingApiKey] is null [configuration.placesApiKey] is used for Geocoding requests
+  /// this allows to use the same Api Key for both Services if the Scopes are set correctly on the Google Developer Console
+  /// You can adjust the scopes for the api keys here:
+  /// https://console.cloud.google.com/google/maps-apis/credentials
   LocationManager({required GeolocationFormWidgetConfiguration configuration})
       : _googleMapsPlaces = GoogleMapsPlaces(
           apiKey: configuration.placesApiKey,
@@ -17,9 +24,15 @@ class LocationManager {
   final GoogleMapsPlaces _googleMapsPlaces;
   final GoogleMapsGeocoding _googleMapsGeocoding;
 
+  /// Returns the current User Position using [Geolocator]
+  ///
+  /// Make sure that the User has given the required permissions
   Future<Position> getCurrentPosition() =>
       Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
 
+  /// Queries the GooglePlaces Autocomplete Service
+  ///
+  /// /// Uses [GoogleMapsPlaces.queryAutocomplete]
   Future<PlacesAutocompleteResponse> queryAutocomplete(
     String input, {
     num? offset,
@@ -36,6 +49,9 @@ class LocationManager {
     );
   }
 
+  /// Queries the GooglePlaces API for Details for [placeId]
+  ///
+  /// Uses [GoogleMapsPlaces.getDetailsByPlaceId]
   Future<PlacesDetailsResponse> getPlaceDetails(
     String placeId, {
     String? sessionToken,
@@ -52,6 +68,9 @@ class LocationManager {
     );
   }
 
+  /// Queries the GoogleGeocoding API for [location]
+  ///
+  /// Uses [GoogleMapsGeocoding.getPlaceByLocation]
   Future<GeocodingResponse> getPlaceByLocation(
     Geolocation location, {
     String? language,

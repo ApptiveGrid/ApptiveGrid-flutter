@@ -49,6 +49,9 @@ class ApptiveGrid extends StatefulWidget {
     return Provider.of<ApptiveGridClient>(context, listen: listen);
   }
 
+  /// Returns the [ApptiveGridOptions] associated with this [ApptiveGrid] widget
+  ///
+  /// uses [Provider] to return the options
   static ApptiveGridOptions getOptions(BuildContext context) {
     return Provider.of<ApptiveGridClient>(context, listen: false).options;
   }

@@ -5,6 +5,7 @@ class Geolocation {
   /// Creates a new [Geolocation] with [latitude] and [longitude]
   const Geolocation({required this.latitude, required this.longitude});
 
+  /// Creates a new Geolocation from a [json] respones
   factory Geolocation.fromJson(dynamic json) {
     return Geolocation(
       latitude: (json['lat'] as num).toDouble(),
@@ -12,6 +13,7 @@ class Geolocation {
     );
   }
 
+  /// Creates a json map expected by the server
   Map<String, double> toJson() => {
         'lat': latitude,
         'lon': longitude,
