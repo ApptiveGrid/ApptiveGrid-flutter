@@ -12,5 +12,7 @@
     "dateTimeFieldDate": "Datum",
     "dateTimeFieldTime": "Zeit",
     "checkboxRequired": "Pflichtfeld",
-    "addAttachment": "Datei hochladen"
+    "addAttachment": "Datei hochladen",
+    "searchLocation": "Adresse suchen",
+    "searchLocationNoResult": "Keine Ergebnisse"
 }

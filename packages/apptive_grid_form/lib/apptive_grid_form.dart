@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 export 'package:apptive_grid_core/apptive_grid_core.dart';
 export 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
 export 'package:apptive_grid_form/translation/apptive_grid_translation.dart';
+export 'package:apptive_grid_form/configurations/form_widget_configurations.dart';
 
 /// A Widget to display a ApptiveGrid Form
 ///

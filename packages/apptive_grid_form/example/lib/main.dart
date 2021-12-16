@@ -9,12 +9,17 @@ void main() {
       options: ApptiveGridOptions(
         environment: ApptiveGridEnvironment.alpha,
         attachmentConfigurations: attachmentConfigurationMapFromConfigString(
-          'YOUR ATTACHMENT CONFIGURATION',
+          'YOUR_ATTACHMENT_CONFIGURATION',
         ),
         authenticationOptions: const ApptiveGridAuthenticationOptions(
           autoAuthenticate: true,
           redirectScheme: 'apptivegrid',
         ),
+        formWidgetConfigurations: [
+          const GeolocationFormWidgetConfiguration(
+            placesApiKey: 'YOUR_PLACES_API_KEY',
+          )
+        ],
       ),
       child: const MyApp(),
     ),

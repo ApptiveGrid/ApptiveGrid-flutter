@@ -1,3 +1,6 @@
+## [0.9.0-alpha.4]
+* Add support for Geolocation Form Widgets
+
 ## [0.9.0-alpha.3]
 * **BREAKING CHANGE** `DataType.selectionBox` is now `DataType.singleSelect`
 * Add support for `DataType.enumCollection`

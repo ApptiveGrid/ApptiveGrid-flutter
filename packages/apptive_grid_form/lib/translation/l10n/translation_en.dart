@@ -34,4 +34,8 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get checkboxRequired => "Required";
   @override
   String get addAttachment => "Add attachment";
+  @override
+  String get searchLocation => "Search location";
+  @override
+  String get searchLocationNoResult => "No results";
 }

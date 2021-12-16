@@ -1,3 +1,6 @@
+## [0.8.0-alpha.2]
+* Adds support for MultiEnum and Geolocation Types
+
 ## [0.8.0-alpha.1]
 * Preview support for attachments
 
