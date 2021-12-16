@@ -38,7 +38,9 @@ scripts:
       dir-exists:
         - test
       ignore:
+        - "*_theme*"
         - "*example*"
+        - "*web*"
 
   test:web:
     run: |
@@ -55,6 +57,14 @@ scripts:
   test:all_coverage:
     run: melos run test:coverage --no-select
 
+  test:goldens:
+    run: |
+      melos exec -c 1 -- \
+        "mkdir -p test_results && flutter test --no-pub"
+    select-package:
+      dir-exists:
+        - test/goldenFiles
+
   test:coverage:
     run: |
       melos exec -c 1 -- \
@@ -65,6 +75,7 @@ scripts:
       ignore:
         - "*example*"
         - "*web*"
+        - "*_theme*"
 
   test:coverage_web:
     run: |
