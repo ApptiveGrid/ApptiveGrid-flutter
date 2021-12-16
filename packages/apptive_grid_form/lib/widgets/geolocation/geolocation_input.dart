@@ -90,7 +90,7 @@ class GeolocationInputState extends State<GeolocationInput> {
                         onPressed: () {
                           _locationBoxController.clear();
                         },
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                         iconSize: 16,
                       ),
                 hintText: translations.searchLocation,

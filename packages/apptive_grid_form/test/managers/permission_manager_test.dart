@@ -1,7 +1,6 @@
 import 'package:apptive_grid_form/managers/permission_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
 
 import '../common.dart';
@@ -20,13 +19,15 @@ void main() {
       PermissionHandlerPlatform.instance = permissionHandler;
 
       final permission = Permission.camera;
-      final permissionStatus = PermissionStatus.granted;
+      const permissionStatus = PermissionStatus.granted;
 
       when(() => permissionHandler.requestPermissions([permission]))
           .thenAnswer((invocation) async => {permission: permissionStatus});
 
-      expect(await permissionManager.requestPermission(Permission.camera),
-          permissionStatus);
+      expect(
+        await permissionManager.requestPermission(Permission.camera),
+        permissionStatus,
+      );
     });
   });
 
@@ -37,13 +38,15 @@ void main() {
       PermissionHandlerPlatform.instance = permissionHandler;
 
       final permission = Permission.camera;
-      final permissionStatus = PermissionStatus.granted;
+      const permissionStatus = PermissionStatus.granted;
 
       when(() => permissionHandler.checkPermissionStatus(permission))
           .thenAnswer((invocation) async => permissionStatus);
 
-      expect(await permissionManager.checkPermission(Permission.camera),
-          permissionStatus);
+      expect(
+        await permissionManager.checkPermission(Permission.camera),
+        permissionStatus,
+      );
     });
   });
 

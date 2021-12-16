@@ -1,7 +1,7 @@
 // ignore: depend_on_referenced_packages
 import 'package:permission_handler/permission_handler.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart'
-as platform;
+    as platform;
 
 class PermissionManager {
   const PermissionManager();

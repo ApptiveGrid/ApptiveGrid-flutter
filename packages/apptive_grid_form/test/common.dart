@@ -24,12 +24,12 @@ class MockGeolocator extends Mock
     implements GeolocatorPlatform {}
 
 class MockPermissionHandler extends Mock
-  with MockPlatformInterfaceMixin
-implements PermissionHandlerPlatform {}
+    with MockPlatformInterfaceMixin
+    implements PermissionHandlerPlatform {}
 
 class MockMapPlatform extends Mock
-with MockPlatformInterfaceMixin
-implements GoogleMapsFlutterPlatform {}
+    with MockPlatformInterfaceMixin
+    implements GoogleMapsFlutterPlatform {}
 
 class TestApp extends StatelessWidget {
   const TestApp({

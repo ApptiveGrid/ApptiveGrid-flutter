@@ -5,8 +5,14 @@ import 'package:google_maps_webservice/places.dart';
 
 class LocationManager {
   LocationManager({required GeolocationFormWidgetConfiguration configuration})
-      : _googleMapsPlaces = GoogleMapsPlaces(apiKey: configuration.placesApiKey, httpClient: configuration.httpClient),
-        _googleMapsGeocoding = GoogleMapsGeocoding(apiKey: configuration.geocodingApiKey ?? configuration.placesApiKey, httpClient: configuration.httpClient);
+      : _googleMapsPlaces = GoogleMapsPlaces(
+          apiKey: configuration.placesApiKey,
+          httpClient: configuration.httpClient,
+        ),
+        _googleMapsGeocoding = GoogleMapsGeocoding(
+          apiKey: configuration.geocodingApiKey ?? configuration.placesApiKey,
+          httpClient: configuration.httpClient,
+        );
 
   final GoogleMapsPlaces _googleMapsPlaces;
   final GoogleMapsGeocoding _googleMapsGeocoding;

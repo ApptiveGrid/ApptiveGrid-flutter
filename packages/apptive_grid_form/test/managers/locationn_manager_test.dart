@@ -18,19 +18,22 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(Uri());
-    registerFallbackValue(LocationSettings(
-      accuracy: LocationAccuracy.medium,
-      timeLimit: null,
-    ));
+    registerFallbackValue(
+      const LocationSettings(
+        accuracy: LocationAccuracy.medium,
+        timeLimit: null,
+      ),
+    );
   });
 
   setUp(() {
     httpClient = MockHttpClient();
     locationManager = LocationManager(
-        configuration: GeolocationFormWidgetConfiguration.withHttpClient(
-      placesApiKey: 'placesApiKey',
-      httpClient: httpClient,
-    ));
+      configuration: GeolocationFormWidgetConfiguration.withHttpClient(
+        placesApiKey: 'placesApiKey',
+        httpClient: httpClient,
+      ),
+    );
   });
 
   group('getCurrentPosition', () {
@@ -40,23 +43,28 @@ void main() {
       GeolocatorPlatform.instance = geolocator;
 
       final position = Position(
-          longitude: 0,
-          latitude: 0,
-          timestamp: DateTime.now(),
-          accuracy: 12,
-          altitude: 12,
-          heading: 12,
-          speed: 12,
-          speedAccuracy: 12);
-      when(() =>
-              geolocator.getCurrentPosition(locationSettings: any(named: 'locationSettings')))
-          .thenAnswer((_) async => position);
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.now(),
+        accuracy: 12,
+        altitude: 12,
+        heading: 12,
+        speed: 12,
+        speedAccuracy: 12,
+      );
+      when(
+        () => geolocator.getCurrentPosition(
+          locationSettings: any(named: 'locationSettings'),
+        ),
+      ).thenAnswer((_) async => position);
 
       expect(await locationManager.getCurrentPosition(), equals(position));
 
-      verify(() =>
-              geolocator.getCurrentPosition(locationSettings: any(named: 'locationSettings')))
-          .called(1);
+      verify(
+        () => geolocator.getCurrentPosition(
+          locationSettings: any(named: 'locationSettings'),
+        ),
+      ).called(1);
     });
   });
 
@@ -67,47 +75,76 @@ void main() {
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer(
-              (_) async => Response(jsonEncode(response.toJson()), 200));
+        (_) async => Response(jsonEncode(response.toJson()), 200),
+      );
 
-      expect((await locationManager.queryAutocomplete('input')).toJson(), equals(response.toJson()));
+      expect(
+        (await locationManager.queryAutocomplete('input')).toJson(),
+        equals(response.toJson()),
+      );
 
-      final capturedUri = verify(() => httpClient.get(captureAny<Uri>(), headers: any(named: 'headers'))).captured.first as Uri;
+      final capturedUri = verify(
+        () => httpClient.get(captureAny<Uri>(), headers: any(named: 'headers')),
+      ).captured.first as Uri;
 
       expect(capturedUri.host, 'maps.googleapis.com');
-      expect(capturedUri.pathSegments, ['maps', 'api', 'place', 'queryautocomplete', 'json']);
+      expect(
+        capturedUri.pathSegments,
+        ['maps', 'api', 'place', 'queryautocomplete', 'json'],
+      );
     });
   });
 
   group('getPlaceDetails', () {
     test('getPlaceDetails calls places service', () async {
-      final response =
-      PlacesDetailsResponse(status: 'OK', result: PlaceDetails(name: 'name', placeId: 'placeId'), htmlAttributions: []);
+      final response = PlacesDetailsResponse(
+        status: 'OK',
+        result: PlaceDetails(name: 'name', placeId: 'placeId'),
+        htmlAttributions: [],
+      );
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer(
-              (_) async => Response(jsonEncode(response.toJson()), 200));
+        (_) async => Response(jsonEncode(response.toJson()), 200),
+      );
 
-      expect((await locationManager.getPlaceDetails('input')).toJson().toString(), equals(response.toJson().toString()));
+      expect(
+        (await locationManager.getPlaceDetails('input')).toJson().toString(),
+        equals(response.toJson().toString()),
+      );
 
-      final capturedUri = verify(() => httpClient.get(captureAny<Uri>(), headers: any(named: 'headers'))).captured.first as Uri;
+      final capturedUri = verify(
+        () => httpClient.get(captureAny<Uri>(), headers: any(named: 'headers')),
+      ).captured.first as Uri;
 
       expect(capturedUri.host, 'maps.googleapis.com');
-      expect(capturedUri.pathSegments, ['maps', 'api', 'place', 'details', 'json']);
+      expect(
+        capturedUri.pathSegments,
+        ['maps', 'api', 'place', 'details', 'json'],
+      );
     });
   });
 
   group('getPlaceByLocation', () {
     test('getPlaceByLocation calls places service', () async {
-      final response =
-      GeocodingResponse(status: 'OK', results: []);
+      final response = GeocodingResponse(status: 'OK', results: []);
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer(
-              (_) async => Response(jsonEncode(response.toJson()), 200));
+        (_) async => Response(jsonEncode(response.toJson()), 200),
+      );
 
-      expect((await locationManager.getPlaceByLocation(const Geolocation(latitude: 0, longitude: 0))).toJson(), equals(response.toJson()));
+      expect(
+        (await locationManager.getPlaceByLocation(
+          const Geolocation(latitude: 0, longitude: 0),
+        ))
+            .toJson(),
+        equals(response.toJson()),
+      );
 
-      final capturedUri = verify(() => httpClient.get(captureAny<Uri>(), headers: any(named: 'headers'))).captured.first as Uri;
+      final capturedUri = verify(
+        () => httpClient.get(captureAny<Uri>(), headers: any(named: 'headers')),
+      ).captured.first as Uri;
 
       expect(capturedUri.host, 'maps.googleapis.com');
       expect(capturedUri.pathSegments, ['maps', 'api', 'geocode', 'json']);

@@ -23,7 +23,8 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
     if (_error != null) {
       return const Center(
         child: Text(
-            'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget'),
+          'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget',
+        ),
       );
     }
     return FormField<GeolocationDataEntity>(
@@ -44,17 +45,20 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
                 final configuration = ApptiveGrid.getOptions(providerContext)
                     .formWidgetConfigurations
                     .firstWhere(
-                        (element) =>
-                            element is GeolocationFormWidgetConfiguration,
-                        orElse: () {
-                          WidgetsBinding.instance?.addPostFrameCallback((_) {
-                            setState(() {
-                              _error = Exception(
-                                  'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget');
-                            });
-                          });
-                  return GeolocationFormWidgetConfiguration(placesApiKey: '');
-                }) as GeolocationFormWidgetConfiguration;
+                  (element) => element is GeolocationFormWidgetConfiguration,
+                  orElse: () {
+                    WidgetsBinding.instance?.addPostFrameCallback((_) {
+                      setState(() {
+                        _error = Exception(
+                          'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget',
+                        );
+                      });
+                    });
+                    return const GeolocationFormWidgetConfiguration(
+                      placesApiKey: '',
+                    );
+                  },
+                ) as GeolocationFormWidgetConfiguration;
                 return LocationManager(configuration: configuration);
               },
             ),

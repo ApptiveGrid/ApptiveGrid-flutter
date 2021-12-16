@@ -30,10 +30,12 @@ class _GeolocationMapState extends State<GeolocationMap> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Provider.of<PermissionManager>(context).checkPermission(Permission.locationWhenInUse).then((status) {
-       setState(() {
-         _myLocationEnabled = status == PermissionStatus.granted;
-       });
+    Provider.of<PermissionManager>(context)
+        .checkPermission(Permission.locationWhenInUse)
+        .then((status) {
+      setState(() {
+        _myLocationEnabled = status == PermissionStatus.granted;
+      });
     });
   }
 
@@ -73,7 +75,9 @@ class _GeolocationMapState extends State<GeolocationMap> {
             }
           : {},
       onTap: _locationSelected,
-      gestureRecognizers: {Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())},
+      gestureRecognizers: {
+        Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())
+      },
     );
   }
 

@@ -208,7 +208,9 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        ApptiveGrid.getOptions(context).formWidgetConfigurations.firstWhere((element) => element is _StubFormWidgetConfiguration),
+        ApptiveGrid.getOptions(context)
+            .formWidgetConfigurations
+            .firstWhere((element) => element is _StubFormWidgetConfiguration),
         equals(config),
       );
     });

@@ -483,7 +483,7 @@ void main() {
       when(() => credential.toJson()).thenReturn(jsonCredential);
       when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
           .thenAnswer(
-            (invocation) async => Response(
+        (invocation) async => Response(
           jsonEncode(_zweidenkerIssuer.metadata.toJson()),
           200,
           request: Request('GET', discoveryUri),
@@ -625,7 +625,6 @@ void main() {
         (invocation) => Future.error(OpenIdException('Invalid Token', 'Test')),
       );
 
-
       final testAuthenticator = MockAuthenticator();
 
       final storage = MockAuthenticationStorage();
@@ -668,7 +667,7 @@ void main() {
       final httpClient = MockHttpClient();
       when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
           .thenAnswer(
-            (invocation) async => Response(
+        (invocation) async => Response(
           jsonEncode(_zweidenkerIssuer.metadata.toJson()),
           200,
           request: Request('GET', discoveryUri),
@@ -726,7 +725,7 @@ void main() {
       final httpClient = MockHttpClient();
       when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
           .thenAnswer(
-            (invocation) async => Response(
+        (invocation) async => Response(
           jsonEncode(_zweidenkerIssuer.metadata.toJson()),
           200,
           request: Request('GET', discoveryUri),

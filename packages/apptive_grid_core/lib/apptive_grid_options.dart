@@ -49,7 +49,8 @@ class ApptiveGridOptions {
       cache: cache ?? this.cache,
       attachmentConfigurations:
           attachmentConfigurations ?? this.attachmentConfigurations,
-      formWidgetConfigurations: formWidgetConfigurations ?? this.formWidgetConfigurations,
+      formWidgetConfigurations:
+          formWidgetConfigurations ?? this.formWidgetConfigurations,
     );
   }
 
