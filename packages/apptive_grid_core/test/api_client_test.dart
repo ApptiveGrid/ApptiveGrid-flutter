@@ -652,6 +652,121 @@ void main() {
           });
         });
       });
+
+      group('With Form Attachment Config', () {
+        late ApptiveGridClient client;
+        late Client httpClient;
+        late ApptiveGridAuthenticator authenticator;
+
+        const attachmentConfig = {
+          ApptiveGridEnvironment.production: AttachmentConfiguration(
+            attachmentApiEndpoint: 'attachmentEndpoint.com/',
+            signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
+            signedUrlFormApiEndpoint: 'signedUrlFormApiEndpoint.com/',
+          )
+        };
+
+        setUp(() {
+          httpClient = MockHttpClient();
+          authenticator = MockApptiveGridAuthenticator();
+          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.checkAuthentication())
+              .thenAnswer((_) async {});
+          client = ApptiveGridClient.fromClient(
+            httpClient,
+            options: const ApptiveGridOptions(
+              attachmentConfigurations: attachmentConfig,
+              environment: ApptiveGridEnvironment.production,
+              authenticationOptions: ApptiveGridAuthenticationOptions(
+                autoAuthenticate: true,
+              ),
+            ),
+            authenticator: authenticator,
+          );
+        });
+
+        group('Upload Data', () {
+          final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
+          final action = FormAction('actionUri', 'POST');
+          final bytes = Uint8List(10);
+          final attachmentAction =
+              AddAttachmentAction(byteData: bytes, attachment: attachment);
+          final formData = FormData(
+            title: 'Title',
+            components: [
+              AttachmentFormComponent(
+                property: 'property',
+                data: AttachmentDataEntity([attachment]),
+                fieldId: 'fieldId',
+              ),
+            ],
+            schema: null,
+            actions: [action],
+            attachmentActions: {attachment: attachmentAction},
+          );
+
+          test('Creates upload Url without headers', () async {
+            final uploadUri = Uri.parse('uploadUrl.com/data');
+            final getResponse =
+                Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
+            final putResponse = Response('Success', 200);
+            final baseUri = Uri.parse(
+              attachmentConfig[ApptiveGridEnvironment.production]!
+                  .signedUrlFormApiEndpoint!,
+            );
+            final uri = Uri(
+              scheme: baseUri.scheme,
+              host: baseUri.host,
+              path: baseUri.path,
+              queryParameters: {
+                'fileName': attachmentAction.attachment.name,
+                'fileType': attachmentAction.attachment.type,
+              },
+            );
+            when(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .thenAnswer((_) async => getResponse);
+            when(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).thenAnswer((_) async => putResponse);
+            when(() => httpClient.send(any())).thenAnswer(
+              (realInvocation) async => StreamedResponse(Stream.value([]), 200),
+            );
+
+            await client.performAction(action, formData);
+
+            final captures = verify(
+              () => httpClient.get(
+                captureAny(),
+                headers: captureAny(named: 'headers'),
+              ),
+            ).captured;
+            final capturedUri = captures.first as Uri;
+            final capturedHeaders = captures[1] as Map<String, String>;
+            expect(
+              capturedUri.host,
+              Uri.parse(
+                attachmentConfig[ApptiveGridEnvironment.production]!
+                    .signedUrlFormApiEndpoint!,
+              ).host,
+            );
+            expect(capturedHeaders[HttpHeaders.authorizationHeader], isNull);
+            verify(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).called(1);
+            verify(() => httpClient.send(captureAny())).called(1);
+          });
+        });
+      });
     });
   });
 

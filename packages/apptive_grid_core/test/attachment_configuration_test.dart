@@ -21,15 +21,16 @@ void main() {
   group('From Configuration String', () {
     test('Parses complete Map', () {
       final configMap = attachmentConfigurationMapFromConfigString(
-        'ewogICAgImFscGhhIjogewogICAgICAgICJzaWduZWRVcmwiOiAiaHR0cHM6Ly9zaWduZWRVcmxFbmRwb2ludC5jb20vYWxwaGEiLAogICAgICAgICJzdG9yYWdlVXJsIjogImh0dHBzOi8vYXR0YWNobWVudEFwaUVuZHBvaW50LmNvbS9hbHBoYSIKICAgIH0sCiAgICAiYmV0YSI6IHsKICAgICAgICAic2lnbmVkVXJsIjogImh0dHBzOi8vc2lnbmVkVXJsRW5kcG9pbnQuY29tL2JldGEiLAogICAgICAgICJzdG9yYWdlVXJsIjogImh0dHBzOi8vYXR0YWNobWVudEFwaUVuZHBvaW50LmNvbS9iZXRhIgogICAgfSwKICAgICJwcm9kdWN0aW9uIjogewogICAgICAgICJzaWduZWRVcmwiOiAiaHR0cHM6Ly9zaWduZWRVcmxFbmRwb2ludC5jb20vcHJvZHVjdGlvbiIsCiAgICAgICAgInN0b3JhZ2VVcmwiOiAiaHR0cHM6Ly9hdHRhY2htZW50QXBpRW5kcG9pbnQuY29tL3Byb2R1Y3Rpb24iCiAgICB9Cn0=',
+        'ewogICAgImFscGhhIjogewogICAgICAgICJzaWduZWRVcmwiOiAiaHR0cHM6Ly9hbHBoYS51cGxvYWQuY29tL3VwbG9hZHMiLAogICAgICAgICJzaWduZWRVcmxGb3JtIjogImh0dHBzOi8vYWxwaGEuZm9ybS51cGxvYWQuY29tL3VwbG9hZHMiLAogICAgICAgICJzdG9yYWdlVXJsIjogImh0dHBzOi8vYWxwaGEuc3RvcmFnZS5jb20vIgogICAgfSwKICAgICJiZXRhIjogewogICAgICAgICJzaWduZWRVcmwiOiAiaHR0cHM6Ly9iZXRhLnVwbG9hZC5jb20vdXBsb2FkcyIsCiAgICAgICAgInNpZ25lZFVybEZvcm0iOiAiaHR0cHM6Ly9iZXRhLmZvcm0udXBsb2FkLmNvbS91cGxvYWRzIiwKICAgICAgICAic3RvcmFnZVVybCI6ICJodHRwczovL2JldGEuc3RvcmFnZS5jb20vIgogICAgfSwKICAgICJwcm9kdWN0aW9uIjogewogICAgICAgICJzaWduZWRVcmwiOiAiaHR0cHM6Ly9wcm9kdWN0aW9uLnVwbG9hZC5jb20vdXBsb2FkcyIsCiAgICAgICAgInNpZ25lZFVybEZvcm0iOiAiaHR0cHM6Ly9wcm9kdWN0aW9uLmZvcm0udXBsb2FkLmNvbS91cGxvYWRzIiwKICAgICAgICAic3RvcmFnZVVybCI6ICJodHRwczovL3Byb2R1Y3Rpb24uc3RvcmFnZS5jb20vIgogICAgfQp9',
       );
 
       expect(
         configMap[ApptiveGridEnvironment.alpha],
         equals(
           const AttachmentConfiguration(
-            signedUrlApiEndpoint: 'https://signedUrlEndpoint.com/alpha',
-            attachmentApiEndpoint: 'https://attachmentApiEndpoint.com/alpha',
+            signedUrlApiEndpoint: "https://alpha.upload.com/uploads",
+            signedUrlFormApiEndpoint: "https://alpha.form.upload.com/uploads",
+            attachmentApiEndpoint: "https://alpha.storage.com/",
           ),
         ),
       );
@@ -37,8 +38,9 @@ void main() {
         configMap[ApptiveGridEnvironment.beta],
         equals(
           const AttachmentConfiguration(
-            signedUrlApiEndpoint: 'https://signedUrlEndpoint.com/beta',
-            attachmentApiEndpoint: 'https://attachmentApiEndpoint.com/beta',
+            signedUrlApiEndpoint: "https://beta.upload.com/uploads",
+            signedUrlFormApiEndpoint: "https://beta.form.upload.com/uploads",
+            attachmentApiEndpoint: "https://beta.storage.com/",
           ),
         ),
       );
@@ -46,9 +48,10 @@ void main() {
         configMap[ApptiveGridEnvironment.production],
         equals(
           const AttachmentConfiguration(
-            signedUrlApiEndpoint: 'https://signedUrlEndpoint.com/production',
-            attachmentApiEndpoint:
-                'https://attachmentApiEndpoint.com/production',
+            signedUrlApiEndpoint: "https://production.upload.com/uploads",
+            signedUrlFormApiEndpoint:
+                "https://production.form.upload.com/uploads",
+            attachmentApiEndpoint: "https://production.storage.com/",
           ),
         ),
       );

@@ -24,7 +24,7 @@ void main() {
 
       expect(
         ApptiveGrid.getClient(context, listen: false),
-        isNot(null),
+        isNot(isNull),
       );
     });
 

@@ -18,7 +18,8 @@ class EnumCollectionFormComponent
     dynamic schema,
   )   : property = json['property'],
         data = EnumCollectionDataEntity(
-          value: (json['value']?.cast<String>() as List<String>).toSet(),
+          value:
+              (json['value']?.cast<String>() as List<String>?)?.toSet() ?? {},
           options:
               (schema['items']['enum'].cast<String>() as List<String>).toSet(),
         ),

@@ -8,12 +8,14 @@ class AttachmentConfiguration {
   const AttachmentConfiguration({
     required this.signedUrlApiEndpoint,
     required this.attachmentApiEndpoint,
+    this.signedUrlFormApiEndpoint,
   });
 
   /// Creates a new AttachmentConfiguration from json
   factory AttachmentConfiguration.fromJson(Map<String, dynamic> json) {
     return AttachmentConfiguration(
       signedUrlApiEndpoint: json['signedUrl'],
+      signedUrlFormApiEndpoint: json['signedUrlForm'],
       attachmentApiEndpoint: json['storageUrl'],
     );
   }
@@ -21,19 +23,24 @@ class AttachmentConfiguration {
   /// Endpoint used to generate an upload url
   final String signedUrlApiEndpoint;
 
+  /// Endpoint used to generate an upload url for forms
+  /// this endpoint should work without authentication
+  final String? signedUrlFormApiEndpoint;
+
   /// Endpoint to store data at
   final String attachmentApiEndpoint;
 
   @override
   String toString() {
-    return 'AttachmentConfiguration(signedUrlApiEndpoint: $signedUrlApiEndpoint, attachmentApiEndpoint: $attachmentApiEndpoint)';
+    return 'AttachmentConfiguration(signedUrlApiEndpoint: $signedUrlApiEndpoint, signedUrlFormApiEndpoint: $signedUrlFormApiEndpoint, attachmentApiEndpoint: $attachmentApiEndpoint)';
   }
 
   @override
   bool operator ==(Object other) {
     return other is AttachmentConfiguration &&
         signedUrlApiEndpoint == other.signedUrlApiEndpoint &&
-        attachmentApiEndpoint == other.attachmentApiEndpoint;
+        attachmentApiEndpoint == other.attachmentApiEndpoint &&
+        signedUrlFormApiEndpoint == other.signedUrlFormApiEndpoint;
   }
 
   @override

@@ -70,8 +70,10 @@ class ApptiveGridClient {
   }) async {
     final actionItem = ActionItem(action: action, data: formData);
 
-    final attachmentActions =
-        await _performAttachmentActions(formData.attachmentActions).catchError(
+    final attachmentActions = await _performAttachmentActions(
+      formData.attachmentActions,
+      fromForm: true,
+    ).catchError(
       (error) => _handleActionError(
         error,
         actionItem: actionItem,
@@ -129,13 +131,17 @@ class ApptiveGridClient {
   }
 
   Future<http.Response> _performAttachmentActions(
-    Map<Attachment, AttachmentAction> actions,
-  ) async {
+    Map<Attachment, AttachmentAction> actions, {
+    bool fromForm = false,
+  }) async {
     await Future.wait(
       actions.values.map((action) {
         switch (action.type) {
           case AttachmentActionType.add:
-            return _uploadAttachment(action as AddAttachmentAction);
+            return _uploadAttachment(
+              action as AddAttachmentAction,
+              fromForm: fromForm,
+            );
           case AttachmentActionType.delete:
             debugPrint('Delete Attachment ${action.attachment}');
             return Future.value();
@@ -323,6 +329,11 @@ class ApptiveGridClient {
     }
   }
 
+  String? get _signedUrlFormApiEndpoint {
+    return options.attachmentConfigurations[options.environment]
+        ?.signedUrlFormApiEndpoint;
+  }
+
   String get _attachmentApiEndpoint {
     final endpoint = options
         .attachmentConfigurations[options.environment]?.attachmentApiEndpoint;
@@ -344,10 +355,24 @@ class ApptiveGridClient {
     );
   }
 
-  Future _uploadAttachment(AddAttachmentAction action) async {
-    await _authenticator.checkAuthentication();
+  /// Uploads an [Attachment] defined in [action]
+  ///
+  /// [fromForm] determines if this attachment can be added without the need for authentication
+  ///
+  /// In order for no authentication [fromForm] needs to be `true` and [AttachmentConfiguration.signedUrlFormApiEndpoint] needs to be non null
+  /// for the current [ApptiveGridStage] in [ApptiveGridOptions.attachmentConfigurations] in [options]
+  Future _uploadAttachment(
+    AddAttachmentAction action, {
+    bool fromForm = false,
+  }) async {
+    final requireAuth = !fromForm || _signedUrlFormApiEndpoint == null;
+    if (requireAuth) {
+      await _authenticator.checkAuthentication();
+    }
 
-    final baseUri = Uri.parse(_signedUrlApiEndpoint);
+    final baseUri = Uri.parse(
+      requireAuth ? _signedUrlApiEndpoint : _signedUrlFormApiEndpoint!,
+    );
     final uri = Uri(
       scheme: baseUri.scheme,
       host: baseUri.host,
@@ -357,8 +382,8 @@ class ApptiveGridClient {
         'fileType': action.attachment.type,
       },
     );
-
-    return _client.get(uri, headers: headers).then((response) {
+    final createUrlHeaders = requireAuth ? headers : <String, String>{};
+    return _client.get(uri, headers: createUrlHeaders).then((response) {
       if (response.statusCode < 400) {
         return _client
             .put(
