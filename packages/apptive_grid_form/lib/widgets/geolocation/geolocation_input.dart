@@ -142,11 +142,15 @@ class _GeolocationInputState extends State<GeolocationInput> {
             },
           ),
         ),
-        if (_myLocationPermission != PermissionStatus.permanentlyDenied)
+        if (_myLocationPermission != PermissionStatus.permanentlyDenied) ...[
+          const SizedBox(
+            width: 4,
+          ),
           IconButton(
             onPressed: _selectCurrentLocation,
             icon: const Icon(Icons.my_location),
           ),
+        ]
       ],
     );
   }

@@ -93,6 +93,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
                     );
                   },
                 ),
+                const SizedBox(height: 4),
                 AspectRatio(
                   aspectRatio: 3 / 2,
                   child: GeolocationMap(
