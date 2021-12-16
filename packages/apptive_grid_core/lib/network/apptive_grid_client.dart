@@ -70,8 +70,10 @@ class ApptiveGridClient {
   }) async {
     final actionItem = ActionItem(action: action, data: formData);
 
-    final attachmentActions =
-        await _performAttachmentActions(formData.attachmentActions, fromForm: true).catchError(
+    final attachmentActions = await _performAttachmentActions(
+      formData.attachmentActions,
+      fromForm: true,
+    ).catchError(
       (error) => _handleActionError(
         error,
         actionItem: actionItem,
@@ -136,7 +138,10 @@ class ApptiveGridClient {
       actions.values.map((action) {
         switch (action.type) {
           case AttachmentActionType.add:
-            return _uploadAttachment(action as AddAttachmentAction, fromForm: fromForm);
+            return _uploadAttachment(
+              action as AddAttachmentAction,
+              fromForm: fromForm,
+            );
           case AttachmentActionType.delete:
             debugPrint('Delete Attachment ${action.attachment}');
             return Future.value();
@@ -365,7 +370,9 @@ class ApptiveGridClient {
       await _authenticator.checkAuthentication();
     }
 
-    final baseUri = Uri.parse(requireAuth ? _signedUrlApiEndpoint : _signedUrlFormApiEndpoint!);
+    final baseUri = Uri.parse(
+      requireAuth ? _signedUrlApiEndpoint : _signedUrlFormApiEndpoint!,
+    );
     final uri = Uri(
       scheme: baseUri.scheme,
       host: baseUri.host,

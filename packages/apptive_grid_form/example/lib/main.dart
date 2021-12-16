@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:flutter/material.dart';
 

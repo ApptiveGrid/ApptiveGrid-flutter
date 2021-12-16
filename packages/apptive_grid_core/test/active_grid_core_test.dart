@@ -23,8 +23,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        true,
-        ApptiveGrid.getClient(context, listen: false) is ApptiveGridClient,
+        ApptiveGrid.getClient(context, listen: false),
+        isNot(isNull),
       );
     });
   });

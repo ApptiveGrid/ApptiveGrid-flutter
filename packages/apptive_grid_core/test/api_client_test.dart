@@ -685,13 +685,12 @@ void main() {
           );
         });
 
-
         group('Upload Data', () {
           final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
           final action = FormAction('actionUri', 'POST');
           final bytes = Uint8List(10);
           final attachmentAction =
-          AddAttachmentAction(byteData: bytes, attachment: attachment);
+              AddAttachmentAction(byteData: bytes, attachment: attachment);
           final formData = FormData(
             title: 'Title',
             components: [
@@ -706,11 +705,10 @@ void main() {
             attachmentActions: {attachment: attachmentAction},
           );
 
-
           test('Creates upload Url without headers', () async {
             final uploadUri = Uri.parse('uploadUrl.com/data');
             final getResponse =
-            Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
+                Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
             final putResponse = Response('Success', 200);
             final baseUri = Uri.parse(
               attachmentConfig[ApptiveGridEnvironment.production]!
@@ -728,7 +726,7 @@ void main() {
             when(() => httpClient.get(uri, headers: any(named: 'headers')))
                 .thenAnswer((_) async => getResponse);
             when(
-                  () => httpClient.put(
+              () => httpClient.put(
                 uploadUri,
                 headers: any(named: 'headers'),
                 body: bytes,
@@ -736,18 +734,29 @@ void main() {
               ),
             ).thenAnswer((_) async => putResponse);
             when(() => httpClient.send(any())).thenAnswer(
-                  (realInvocation) async => StreamedResponse(Stream.value([]), 200),
+              (realInvocation) async => StreamedResponse(Stream.value([]), 200),
             );
 
             await client.performAction(action, formData);
 
-            final captures = verify(() => httpClient.get(captureAny(), headers: captureAny(named: 'headers'))).captured;
+            final captures = verify(
+              () => httpClient.get(
+                captureAny(),
+                headers: captureAny(named: 'headers'),
+              ),
+            ).captured;
             final capturedUri = captures.first as Uri;
             final capturedHeaders = captures[1] as Map<String, String>;
-            expect(capturedUri.host, Uri.parse(attachmentConfig[ApptiveGridEnvironment.production]!.signedUrlFormApiEndpoint!).host);
+            expect(
+              capturedUri.host,
+              Uri.parse(
+                attachmentConfig[ApptiveGridEnvironment.production]!
+                    .signedUrlFormApiEndpoint!,
+              ).host,
+            );
             expect(capturedHeaders[HttpHeaders.authorizationHeader], isNull);
             verify(
-                  () => httpClient.put(
+              () => httpClient.put(
                 uploadUri,
                 headers: any(named: 'headers'),
                 body: bytes,
