@@ -1,7 +1,6 @@
 library apptive_grid_grid_builder;
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:flutter/material.dart';
 
 export 'package:apptive_grid_core/apptive_grid_core.dart';

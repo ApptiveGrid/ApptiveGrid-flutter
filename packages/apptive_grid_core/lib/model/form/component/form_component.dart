@@ -81,6 +81,8 @@ abstract class FormComponent<T extends DataEntity> {
         return AttachmentFormComponent.fromJson(json);
       case DataType.enumCollection:
         return EnumCollectionFormComponent.fromJson(json, properties);
+      case DataType.geolocation:
+        return GeolocationFormComponent.fromJson(json);
     }
   }
 }

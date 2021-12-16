@@ -12,5 +12,7 @@
     "dateTimeFieldDate": "Date",
     "dateTimeFieldTime": "Time",
     "checkboxRequired": "Required",
-    "addAttachment": "Add attachment"
+    "addAttachment": "Add attachment",
+    "searchLocation": "Search location",
+    "searchLocationNoResult": "No results"
 }

@@ -31,6 +31,9 @@ enum DataType {
 
   /// Type for Attachments
   attachment,
+
+  /// Type for geolocations
+  geolocation,
 }
 
 /// Returns [DataType] that matching a certain schema [schemaProperty]
@@ -66,13 +69,14 @@ DataType dataTypeFromSchemaProperty({
           return DataType.crossReference;
         case 'attachment':
           return DataType.attachment;
+        case 'geolocation':
+          return DataType.geolocation;
       }
       break;
     case 'array':
       final itemType =
           dataTypeFromSchemaProperty(schemaProperty: schemaProperty['items']);
       switch (itemType) {
-        // TODO: Adjust for new Schema Type
         case DataType.attachment:
           return DataType.attachment;
         case DataType.singleSelect:

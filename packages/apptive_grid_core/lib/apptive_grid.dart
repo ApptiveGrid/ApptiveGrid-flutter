@@ -16,10 +16,7 @@ class ApptiveGrid extends StatefulWidget {
   })  : client = null,
         super(key: key);
 
-  /// Creates ApptiveGrid with an defined ApptiveGridClient
-  ///
-  /// Used testing to Provide a MockedClient
-  @visibleForTesting
+  /// Creates ApptiveGrid with a shared defined ApptiveGridClient
   const ApptiveGrid.withClient({
     Key? key,
     required this.client,
@@ -51,6 +48,13 @@ class ApptiveGrid extends StatefulWidget {
   }) {
     return Provider.of<ApptiveGridClient>(context, listen: listen);
   }
+
+  /// Returns the [ApptiveGridOptions] associated with this [ApptiveGrid] widget
+  ///
+  /// uses [Provider] to return the options
+  static ApptiveGridOptions getOptions(BuildContext context) {
+    return Provider.of<ApptiveGridClient>(context, listen: false).options;
+  }
 }
 
 class _ApptiveGridState extends State<ApptiveGrid> {
@@ -68,8 +72,13 @@ class _ApptiveGridState extends State<ApptiveGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<ApptiveGridClient>.value(
-      value: _client,
+    return MultiProvider(
+      providers: [
+        Provider<ApptiveGridClient>.value(
+          value: _client,
+        ),
+        Provider.value(value: widget.options),
+      ],
       child: widget.child,
     );
   }

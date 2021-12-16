@@ -55,6 +55,10 @@ class GridEntry {
           options:
               (schema['items']['enum'].cast<String>() as List<String>).toSet(),
         );
+        break;
+      case DataType.geolocation:
+        dataEntity = GeolocationDataEntity.fromJson(jsonData);
+        break;
     }
     return GridEntry(field, dataEntity);
   }

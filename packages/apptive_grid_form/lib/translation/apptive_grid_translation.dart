@@ -44,4 +44,10 @@ abstract class ApptiveGridTranslation {
 
   /// Action to add an Attachment
   String get addAttachment;
+
+  /// Hint in Location Search Field
+  String get searchLocation;
+
+  /// Message displayed when no matching Location Search result is found for a search input
+  String get searchLocationNoResult;
 }

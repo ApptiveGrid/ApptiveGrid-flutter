@@ -23,8 +23,30 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        true,
-        ApptiveGrid.getClient(context, listen: false) is ApptiveGridClient,
+        ApptiveGrid.getClient(context, listen: false),
+        isNot(null),
+      );
+    });
+
+    testWidgets('ApptiveGridClient', (tester) async {
+      late BuildContext context;
+      const options = ApptiveGridOptions();
+      final target = ApptiveGrid(
+        options: options,
+        child: Builder(
+          builder: (buildContext) {
+            context = buildContext;
+            return Container();
+          },
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        ApptiveGrid.getOptions(context),
+        equals(options),
       );
     });
   });
@@ -163,4 +185,38 @@ void main() {
       expect(providedClient, client);
     });
   });
+
+  group('FormWidgetConfigurations', () {
+    testWidgets('Options contain FormWidgetConfigs', (tester) async {
+      const config = _StubFormWidgetConfiguration();
+
+      const options = ApptiveGridOptions(
+        formWidgetConfigurations: [config],
+      );
+      late final BuildContext context;
+      final target = ApptiveGrid(
+        options: options,
+        child: Builder(
+          builder: (buildContext) {
+            context = buildContext;
+            return Container();
+          },
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        ApptiveGrid.getOptions(context)
+            .formWidgetConfigurations
+            .firstWhere((element) => element is _StubFormWidgetConfiguration),
+        equals(config),
+      );
+    });
+  });
+}
+
+class _StubFormWidgetConfiguration extends FormWidgetConfiguration {
+  const _StubFormWidgetConfiguration() : super();
 }
