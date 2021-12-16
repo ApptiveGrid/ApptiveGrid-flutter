@@ -3,6 +3,7 @@ import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
@@ -25,6 +26,10 @@ class MockGeolocator extends Mock
 class MockPermissionHandler extends Mock
   with MockPlatformInterfaceMixin
 implements PermissionHandlerPlatform {}
+
+class MockMapPlatform extends Mock
+with MockPlatformInterfaceMixin
+implements GoogleMapsFlutterPlatform {}
 
 class TestApp extends StatelessWidget {
   const TestApp({
@@ -60,7 +65,7 @@ class TestApp extends StatelessWidget {
   ApptiveGridClient get _fallbackClient {
     final client = MockApptiveGridClient();
     when(() => client.sendPendingActions()).thenAnswer((invocation) async {});
-
+    when(() => client.options).thenReturn(options);
     return client;
   }
 }

@@ -16,8 +16,16 @@ class GeolocationFormWidget extends StatefulWidget {
 }
 
 class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
+  dynamic _error;
+
   @override
   Widget build(BuildContext context) {
+    if (_error != null) {
+      return const Center(
+        child: Text(
+            'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget'),
+      );
+    }
     return FormField<GeolocationDataEntity>(
       validator: (selection) {
         if (widget.component.required && (selection?.value == null)) {
@@ -33,15 +41,21 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
           providers: [
             Provider<LocationManager>(
               create: (providerContext) {
-                return LocationManager(
-                    configuration: ApptiveGrid.getOptions(providerContext)
-                            .formWidgetConfigurations
-                            .firstWhere(
-                                (element) => element
-                                    is GeolocationFormWidgetConfiguration,
-                                orElse: () => throw Exception(
-                                    'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget'))
-                        as GeolocationFormWidgetConfiguration);
+                final configuration = ApptiveGrid.getOptions(providerContext)
+                    .formWidgetConfigurations
+                    .firstWhere(
+                        (element) =>
+                            element is GeolocationFormWidgetConfiguration,
+                        orElse: () {
+                          WidgetsBinding.instance?.addPostFrameCallback((_) {
+                            setState(() {
+                              _error = Exception(
+                                  'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget');
+                            });
+                          });
+                  return GeolocationFormWidgetConfiguration(placesApiKey: '');
+                }) as GeolocationFormWidgetConfiguration;
+                return LocationManager(configuration: configuration);
               },
             ),
             Provider.value(value: const PermissionManager()),

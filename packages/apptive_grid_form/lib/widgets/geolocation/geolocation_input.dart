@@ -37,6 +37,13 @@ class GeolocationInputState extends State<GeolocationInput> {
         _updateTextField(widget.location);
       });
     }
+    _locationBoxController.addListener(() {
+      if (_locationBoxController.text.isEmpty && widget.location != null) {
+        _updateTextField(null);
+        widget.onLocationChanged?.call(null);
+      }
+      setState(() {});
+    });
   }
 
   @override
@@ -51,6 +58,12 @@ class GeolocationInputState extends State<GeolocationInput> {
     if (widget.location != _currentTextLocation) {
       _updateTextField(widget.location);
     }
+  }
+
+  @override
+  void dispose() {
+    _locationBoxController.dispose();
+    super.dispose();
   }
 
   @override
@@ -71,6 +84,15 @@ class GeolocationInputState extends State<GeolocationInput> {
                   Icons.search,
                   color: Theme.of(context).textTheme.headline1!.color,
                 ),
+                suffixIcon: _locationBoxController.text.isEmpty
+                    ? null
+                    : IconButton(
+                        onPressed: () {
+                          _locationBoxController.clear();
+                        },
+                        icon: Icon(Icons.clear),
+                        iconSize: 16,
+                      ),
                 hintText: translations.searchLocation,
               ),
             ),
@@ -155,7 +177,7 @@ class GeolocationInputState extends State<GeolocationInput> {
         _locationBoxController.text = results.first.formattedAddress!;
       } else {
         _locationBoxController.text =
-            '${location.latitude},${location.longitude}';
+            '${location.latitude}, ${location.longitude}';
       }
     } else {
       _locationBoxController.clear();
