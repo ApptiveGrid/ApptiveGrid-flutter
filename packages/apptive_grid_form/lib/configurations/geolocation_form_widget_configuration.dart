@@ -25,6 +25,7 @@ class GeolocationFormWidgetConfiguration extends FormWidgetConfiguration {
 
   /// Api Key used for request for the Google Places Api
   final String placesApiKey;
+
   /// Api Key used for requests for Geocoding
   final String? geocodingApiKey;
 

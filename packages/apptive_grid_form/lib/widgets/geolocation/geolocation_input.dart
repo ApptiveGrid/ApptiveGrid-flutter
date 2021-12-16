@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 /// Gives users the ability to search for a Location by Text
 /// Also gives the user the ability to set the current location as the desired location
 class GeolocationInput extends StatefulWidget {
-
   /// Creates the Input Widget
   const GeolocationInput({
     Key? key,
