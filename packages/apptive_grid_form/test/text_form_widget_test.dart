@@ -31,4 +31,39 @@ string''';
 
     expect(find.text(value), findsOneWidget);
   });
+
+  testWidgets('Multiline TextFormWidget Displays in FormData Widget',
+      (tester) async {
+    const value = '''A
+multi-line
+string''';
+    final formData = FormData(
+        title: 'Title',
+        components: [
+          StringFormComponent(
+            property: 'Text',
+            data: StringDataEntity(
+              value,
+            ),
+            options: const TextComponentOptions(
+              multi: true,
+            ),
+            fieldId: 'Field',
+          ),
+        ],
+        schema: null);
+
+    final target = ApptiveGridFormData(
+      formData: formData,
+    );
+
+    await tester.pumpWidget(
+      TestApp(
+        child: target,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text(value), findsOneWidget);
+  });
 }

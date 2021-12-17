@@ -34,9 +34,7 @@ class _TextFormWidgetState extends State<TextFormWidget> {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return TextFormField(
       controller: _controller,
       validator: (input) {
@@ -48,7 +46,7 @@ class _TextFormWidgetState extends State<TextFormWidget> {
         }
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      expands: widget.component.options.multi,
+      minLines: widget.component.options.multi ? 3 : 1,
       maxLines: widget.component.options.multi ? null : 1,
       decoration: InputDecoration(
         helperText: widget.component.options.description,
