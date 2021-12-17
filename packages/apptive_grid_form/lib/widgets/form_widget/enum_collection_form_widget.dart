@@ -46,6 +46,7 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget> {
             filled: false,
           ),
           child: Wrap(
+            spacing: 4,
             children: widget.component.data.options
                 .map(
                   (e) => ChoiceChip(
