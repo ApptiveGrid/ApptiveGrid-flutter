@@ -38,20 +38,21 @@ string''';
 multi-line
 string''';
     final formData = FormData(
-        title: 'Title',
-        components: [
-          StringFormComponent(
-            property: 'Text',
-            data: StringDataEntity(
-              value,
-            ),
-            options: const TextComponentOptions(
-              multi: true,
-            ),
-            fieldId: 'Field',
+      title: 'Title',
+      components: [
+        StringFormComponent(
+          property: 'Text',
+          data: StringDataEntity(
+            value,
           ),
-        ],
-        schema: null);
+          options: const TextComponentOptions(
+            multi: true,
+          ),
+          fieldId: 'Field',
+        ),
+      ],
+      schema: null,
+    );
 
     final target = ApptiveGridFormData(
       formData: formData,
