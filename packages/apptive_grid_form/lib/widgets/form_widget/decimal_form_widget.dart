@@ -47,9 +47,7 @@ class _DecimalFormWidgetState extends State<DecimalFormWidget> {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return TextFormField(
       controller: _controller,
       validator: (input) {
