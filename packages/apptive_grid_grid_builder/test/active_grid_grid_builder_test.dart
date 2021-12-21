@@ -1,7 +1,6 @@
+import 'package:apptive_grid_grid_builder/apptive_grid_grid_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:apptive_grid_grid_builder/apptive_grid_grid_builder.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'common.dart';
@@ -12,6 +11,13 @@ void main() {
   final gridId = 'grid';
 
   late ApptiveGridClient client;
+
+  setUpAll(() {
+    registerFallbackValue(GridUri(user: 'user', space: 'space', grid: 'grid'));
+    registerFallbackValue(
+      [ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)],
+    );
+  });
 
   setUp(() {
     client = MockApptiveGridClient();
@@ -182,4 +188,146 @@ void main() {
       ),
     ).called(2);
   });
+
+  group('Sorting', () {
+    testWidgets('Sorting is applied', (tester) async {
+      final sorting = [
+        ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)
+      ];
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridGridBuilder(
+          sorting: sorting,
+          gridUri: GridUri(
+            user: user,
+            space: space,
+            grid: gridId,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(snapshot.data!.name);
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        ),
+      );
+
+      final title = 'Title';
+      when(
+        () => client.loadGrid(
+          gridUri: GridUri(user: user, space: space, grid: gridId),
+          sorting: sorting,
+        ),
+      ).thenAnswer(
+        (_) async => Grid(
+          name: title,
+          schema: null,
+          fields: [],
+          rows: [],
+        ),
+      );
+
+      await tester.pumpWidget(target);
+
+      final capturedSorting = verify(
+        () => client.loadGrid(
+          gridUri: any(named: 'gridUri'),
+          sorting: captureAny(named: 'sorting'),
+        ),
+      ).captured.first as List<ApptiveGridSorting>;
+      expect(capturedSorting, equals(sorting));
+    });
+
+    testWidgets('Switching Sorting triggers reload', (tester) async {
+      final sorting = [
+        ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)
+      ];
+      final target = TestApp(
+        client: client,
+        child: _SortingSwitcher(
+          gridUri: GridUri(user: user, space: space, grid: gridId),
+          sorting1: sorting,
+          sorting2: [
+            ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.desc)
+          ],
+        ),
+      );
+
+      final title = 'Title';
+      when(
+        () => client.loadGrid(
+          gridUri: GridUri(user: user, space: space, grid: gridId),
+          sorting: any(named: 'sorting'),
+        ),
+      ).thenAnswer(
+        (_) async => Grid(
+          name: title,
+          schema: null,
+          fields: [],
+          rows: [],
+        ),
+      );
+
+      await tester.pumpWidget(target);
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => client.loadGrid(
+          gridUri: any(named: 'gridUri'),
+          sorting: any(named: 'sorting'),
+        ),
+      ).called(2);
+    });
+  });
+}
+
+class _SortingSwitcher extends StatefulWidget {
+  const _SortingSwitcher({
+    Key? key,
+    required this.sorting1,
+    required this.sorting2,
+    required this.gridUri,
+  }) : super(key: key);
+
+  final List<ApptiveGridSorting> sorting1;
+  final List<ApptiveGridSorting> sorting2;
+
+  final GridUri gridUri;
+
+  @override
+  _SortingSwitcherState createState() => _SortingSwitcherState();
+}
+
+class _SortingSwitcherState extends State<_SortingSwitcher> {
+  late List<ApptiveGridSorting> _sorting;
+
+  @override
+  void initState() {
+    super.initState();
+    _sorting = widget.sorting1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              _sorting = widget.sorting2;
+            });
+          },
+          child: Text('Switch Sorting'),
+        ),
+        ApptiveGridGridBuilder(
+          sorting: _sorting,
+          gridUri: widget.gridUri,
+          builder: (_, __) => const SizedBox(),
+        ),
+      ],
+    );
+  }
 }
