@@ -1089,14 +1089,21 @@ void main() {
 
       when(
         () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view0',
-          ),
+          any(),
           headers: any(
             named: 'headers',
           ),
         ),
-      ).thenAnswer((_) async => response);
+      ).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+        if (uri.path.endsWith('/views/$view0')) {
+          return response;
+        } else if (uri.path.endsWith('entities')) {
+          return Response(json.encode(gridViewResponse['entities']), 200);
+        } else {
+          throw Exception();
+        }
+      });
 
       final gridView = await apptiveGridClient.loadGrid(
         gridUri: GridViewUri(
@@ -1110,6 +1117,106 @@ void main() {
       expect(gridView.filter != null, true);
       expect(gridView.fields.length, 3);
       expect(gridView.rows.length, 1);
+    });
+
+    test('GridView sorting gets applied in request', () async {
+      final rawGridViewResponse = {
+        'fieldNames': ['First Name', 'Last Name', 'imgUrl'],
+        'entities': [
+          {
+            'fields': [
+              'Adam',
+              'Riese',
+              'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
+            ],
+            '_id': '60c9c997f8eeb8636c8140c4'
+          }
+        ],
+        'fieldIds': [
+          '9fqx8om03flgh8d4m1l953x29',
+          '9fqx8okgtzoafyanblvfg61cl',
+          '9fqx8on7ee2hq5iv20vcu9svw'
+        ],
+        'filter': {
+          '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
+        },
+        'schema': {
+          'type': 'object',
+          'properties': {
+            'fields': {
+              'type': 'array',
+              'items': [
+                {'type': 'string'},
+                {'type': 'string'},
+                {'type': 'string'}
+              ]
+            },
+            '_id': {'type': 'string'}
+          }
+        },
+        'name': 'New grid view'
+      };
+
+      final rawGridViewEntitiesResponse = [
+        {
+          'fields': [
+            'Adam',
+            'Riese',
+            'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
+          ],
+          '_id': '60c9c997f8eeb8636c8140c4'
+        }
+      ];
+
+      final gridViewResponse = Response(json.encode(rawGridViewResponse), 200);
+      final gridViewEntitiesResponse =
+          Response(json.encode(rawGridViewEntitiesResponse), 200);
+
+      when(
+        () => httpClient.get(
+          any(),
+          headers: any(
+            named: 'headers',
+          ),
+        ),
+      ).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+        if (uri.path.endsWith('/views/$view0')) {
+          return gridViewResponse;
+        } else if (uri.path.endsWith('entities')) {
+          return gridViewEntitiesResponse;
+        } else {
+          throw Exception();
+        }
+      });
+
+      await apptiveGridClient.loadGrid(
+        sorting: [
+          const ApptiveGridSorting(
+            fieldId: '9fqx8om03flgh8d4m1l953x29',
+            order: SortOrder.desc,
+          )
+        ],
+        gridUri: GridViewUri(
+          user: userId,
+          space: spaceId,
+          grid: gridId,
+          view: view0,
+        ),
+      );
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (uri) =>
+                  uri.path.endsWith('/entities') &&
+                  uri.queryParameters.containsKey('sorting'),
+            ),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
     });
   });
 

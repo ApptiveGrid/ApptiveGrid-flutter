@@ -158,18 +158,49 @@ class ApptiveGridClient {
 
   /// Loads a [Grid] represented by [gridUri]
   ///
+  /// [sorting] defines the order in which items will be returned
+  /// The order of [ApptiveGridSorting] in [sorting] will rank the order in which values should be sorted
+  ///
   /// Requires Authorization
   /// throws [Response] if the request fails
   Future<Grid> loadGrid({
     required GridUri gridUri,
+    List<ApptiveGridSorting>? sorting,
   }) async {
     await _authenticator.checkAuthentication();
-    final url = Uri.parse('${options.environment.url}${gridUri.uriString}');
-    final response = await _client.get(url, headers: headers);
-    if (response.statusCode >= 400) {
-      throw response;
+    final gridViewUrl =
+        Uri.parse('${options.environment.url}${gridUri.uriString}');
+
+    final gridViewResponse = await _client.get(gridViewUrl, headers: headers);
+    if (gridViewResponse.statusCode >= 400) {
+      throw gridViewResponse;
     }
-    return Grid.fromJson(json.decode(response.body));
+
+    final initialGrid = Grid.fromJson(json.decode(gridViewResponse.body));
+
+    if (gridUri is GridViewUri) {
+      Uri url = Uri.parse(
+        '${options.environment.url}/api/users/${gridUri.user}/spaces/${gridUri.space}/grids/${gridUri.grid}/entities?viewId=${gridUri.view}&layout=indexed',
+      );
+      // Apply Sorting
+      if (sorting != null) {
+        final queryParams = Map<String, dynamic>.from(url.queryParameters);
+        queryParams['sorting'] =
+            jsonEncode(sorting.map((e) => e.toRequestObject()).toList());
+        url = url.replace(queryParameters: queryParams);
+      }
+
+      final response = await _client.get(url, headers: headers);
+      if (response.statusCode >= 400) {
+        throw response;
+      }
+      final entities = json.decode(response.body);
+      final gridToParse = initialGrid.toJson();
+      gridToParse['entities'] = entities;
+      return Grid.fromJson(gridToParse);
+    } else {
+      return initialGrid;
+    }
   }
 
   /// Get the [User] that is authenticated

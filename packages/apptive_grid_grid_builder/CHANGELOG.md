@@ -1,3 +1,6 @@
+## [0.8.0-alpha.3]
+* Add `sorting` parameter to ApptiveGridGridBuilder
+
 ## [0.8.0-alpha.2]
 * Adds support for MultiEnum and Geolocation Types
 
