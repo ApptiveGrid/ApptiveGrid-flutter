@@ -1,3 +1,6 @@
+## [0.8.0-alpha.5]
+* Add Sorting to loading a Grid
+
 ## [0.8.0-alpha.4]
 * Add support for `DataType.geolocation`
 * Make `ApptiveGrid.withClient` public
