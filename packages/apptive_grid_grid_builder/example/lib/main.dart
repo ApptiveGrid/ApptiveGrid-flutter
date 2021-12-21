@@ -51,11 +51,38 @@ class _MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<_MyHomePage> {
   final GlobalKey<ApptiveGridGridBuilderState> _builderKey = GlobalKey();
 
+  List<ApptiveGridSorting>? _sorting;
+
+  SortOrder _order = SortOrder.asc;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Grid Builder'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              late final SortOrder newOrder;
+              if (_order == SortOrder.asc) {
+                newOrder = SortOrder.desc;
+              } else {
+                newOrder = SortOrder.asc;
+              }
+              setState(() {
+                if (_sorting != null) {
+                  _sorting = [_sorting!.first.copyWith(order: newOrder)];
+                  _order = newOrder;
+                }
+              });
+            },
+            icon: Icon(
+              _order == SortOrder.asc
+                  ? Icons.arrow_drop_up
+                  : Icons.arrow_drop_down,
+            ),
+          )
+        ],
       ),
       // Add the ApptiveGridGridBuilder to your Widget Tree
       body: ApptiveGridGridBuilder(
@@ -65,6 +92,7 @@ class _MyHomePageState extends State<_MyHomePage> {
           space: 'SPACE_ID',
           grid: 'GRID_ID',
         ),
+        sorting: _sorting,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -75,6 +103,27 @@ class _MyHomePageState extends State<_MyHomePage> {
               child: CircularProgressIndicator(),
             );
           } else {
+            if (_sorting == null) {
+              WidgetsBinding.instance?.addPostFrameCallback((_) {
+                late final ApptiveGridSorting newSorting;
+                if (snapshot.data!.fields.first.type == DataType.geolocation) {
+                  newSorting = DistanceApptiveGridSorting(
+                    fieldId: snapshot.data!.fields.first.id,
+                    order: _order,
+                    location:
+                        Geolocation(latitude: 50.938757, longitude: 6.954399),
+                  );
+                } else {
+                  newSorting = ApptiveGridSorting(
+                    fieldId: snapshot.data!.fields.first.id,
+                    order: _order,
+                  );
+                }
+                setState(() {
+                  _sorting = [newSorting];
+                });
+              });
+            }
             return RefreshIndicator(
               onRefresh: () {
                 return _builderKey.currentState?.reload() ?? Future.value();
@@ -87,48 +136,8 @@ class _MyHomePageState extends State<_MyHomePage> {
                 itemBuilder: (context, index) {
                   final row = snapshot.data!.rows[index];
                   return ListTile(
-                    leading: Padding(
-                      padding: const EdgeInsets.fromLTRB(4, 4, 4, 8),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10000),
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Image.network(
-                            row.entries
-                                    .firstWhere(
-                                      (element) =>
-                                          element.field.name == 'imgUrl',
-                                    )
-                                    .data
-                                    .value ??
-                                '',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    title: Row(
-                      children: [
-                        Text(
-                          row.entries
-                              .firstWhere(
-                                (element) => element.field.name == 'First Name',
-                              )
-                              .data
-                              .value,
-                        ),
-                        Text(' '),
-                        Text(
-                          row.entries
-                              .firstWhere(
-                                (element) => element.field.name == 'Last Name',
-                              )
-                              .data
-                              .value,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
+                    title: Text(row.entries[1].data.schemaValue),
+                    subtitle: Text(row.entries[0].data.value.toString()),
                   );
                 },
               ),
