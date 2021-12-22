@@ -26,6 +26,7 @@ part 'form_widget/decimal_form_widget.dart';
 part 'form_widget/enum_collection_form_widget.dart';
 part 'form_widget/enum_form_widget.dart';
 part 'form_widget/geolocation_form_widget.dart';
+part 'form_widget/multi_cross_reference_form_widget.dart';
 part 'form_widget/text_form_widget.dart';
 part 'form_widget/integer_form_widget.dart';
 part 'form_widget/cross_reference_form_widget.dart';

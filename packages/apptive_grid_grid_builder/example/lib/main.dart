@@ -1,10 +1,8 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:apptive_grid_grid_builder/apptive_grid_grid_builder.dart';
 import 'package:flutter/material.dart';
 
-/// Shows a contact List
-///
-/// Set Up your Grid in ApptiveGrid using Text Columns
-/// | First Name | Last Name | imgUrl
 void main() async {
   await enableWebAuth(ApptiveGridOptions());
   runApp(
@@ -24,7 +22,7 @@ void main() async {
   );
 }
 
-///
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
