@@ -60,7 +60,10 @@ class GridEntry {
         dataEntity = GeolocationDataEntity.fromJson(jsonData);
         break;
       case DataType.multiCrossReference:
-        dataEntity = MultiCrossReferenceDataEntity.fromJson(jsonValue: jsonData, gridUri: schema['items']['gridUri']);
+        dataEntity = MultiCrossReferenceDataEntity.fromJson(
+          jsonValue: jsonData,
+          gridUri: schema['items']['gridUri'],
+        );
         break;
     }
     return GridEntry(field, dataEntity);

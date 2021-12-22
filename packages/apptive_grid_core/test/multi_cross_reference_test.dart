@@ -155,14 +155,12 @@ void main() {
             'value': [
               {
                 'displayValue': 'Yeah!',
-                'uri': '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d',
+                'uri':
+                    '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d',
               }
             ],
             'required': false,
-            'options': {
-              'label': null,
-              'description': null
-            },
+            'options': {'label': null, 'description': null},
             'fieldId': '3ftoqhqbct15h5o730uknpvp5',
             'type': 'multiSelectDropdown'
           }

@@ -83,9 +83,10 @@ class _MultiCrossReferenceFormWidgetState
           setState(() {
             widget.component.data.value = [
               CrossReferenceDataEntity(
-                  value: newValue?.displayValue,
-                  gridUri: widget.component.data.gridUri,
-                  entityUri: newValue?.entityUri)
+                value: newValue?.displayValue,
+                gridUri: widget.component.data.gridUri,
+                entityUri: newValue?.entityUri,
+              )
             ];
           });
         }
@@ -101,7 +102,8 @@ class _MultiCrossReferenceFormWidgetState
       },
       selectedItemBuilder: _selectedItems,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      value: widget.component.data.value != null && widget.component.data.value!.isNotEmpty
+      value: widget.component.data.value != null &&
+              widget.component.data.value!.isNotEmpty
           ? GridRowDropdownDataItem(
               entityUri: widget.component.data.value!.first.entityUri,
               displayValue: widget.component.data.value!.first.value,

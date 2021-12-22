@@ -306,11 +306,14 @@ class MultiCrossReferenceDataEntity
   }) {
     return MultiCrossReferenceDataEntity(
       references: jsonValue
-          ?.map(
-            (e) => CrossReferenceDataEntity.fromJson(
-                jsonValue: e, gridUri: gridUri,),
-          )
-          .toList() ?? [],
+              ?.map(
+                (e) => CrossReferenceDataEntity.fromJson(
+                  jsonValue: e,
+                  gridUri: gridUri,
+                ),
+              )
+              .toList() ??
+          [],
       gridUri: GridUri.fromUri(gridUri),
     );
   }
@@ -323,7 +326,9 @@ class MultiCrossReferenceDataEntity
     if (value == null || value!.isEmpty) {
       return null;
     } else {
-      return value!.map((crossReference) => crossReference.schemaValue).toList();
+      return value!
+          .map((crossReference) => crossReference.schemaValue)
+          .toList();
     }
   }
 
