@@ -31,6 +31,8 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
 
   final _popupKey = GlobalKey<PopupMenuButtonState>();
 
+  final _imagePicker = ImagePicker();
+
   @override
   void initState() {
     super.initState();
@@ -117,7 +119,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
     final result = await FilePicker.platform
         .pickFiles(allowMultiple: true, withData: true, type: FileType.any);
 
-    if (result != null) {
+    if (result != null || result!.files.isNotEmpty) {
       final newAttachments = <Attachment>[];
       for (final file in result.files) {
         final attachment = Attachment(
@@ -131,11 +133,13 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
         newAttachments.add(attachment);
       }
       return newAttachments;
+    } else {
+      return null;
     }
   }
 
   Future<List<Attachment>?> _pickFromImageLibrary() async {
-    final result = await ImagePicker().pickMultiImage();
+    final result = await _imagePicker.pickMultiImage();
 
     if (result != null && result.isNotEmpty) {
       final newAttachments = <Attachment>[];
@@ -152,11 +156,13 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
         newAttachments.add(attachment);
       }
       return newAttachments;
+    } else {
+      return null;
     }
   }
 
   Future<List<Attachment>?> _takePicture() async {
-    final file = await ImagePicker().pickImage(source: ImageSource.camera);
+    final file = await _imagePicker.pickImage(source: ImageSource.camera);
 
     if (file != null) {
       final newAttachment = Attachment(
@@ -169,6 +175,8 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
       Provider.of<AttachmentManager>(context, listen: false)
           .addAttachment(newAttachment, bytes);
       return [newAttachment];
+    } else {
+      return null;
     }
   }
 }
