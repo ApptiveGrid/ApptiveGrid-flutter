@@ -132,6 +132,22 @@ void main() {
       expect(widget.runtimeType, CrossReferenceFormWidget);
     });
 
+    test('MultiCrossReferenceComponent', () {
+      final component = MultiCrossReferenceFormComponent(
+        fieldId: 'id',
+        data: MultiCrossReferenceDataEntity(
+          gridUri: GridUri(user: 'user', space: 'space', grid: 'grid'),
+        ),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, MultiCrossReferenceFormWidget);
+    });
+
     test('ArgumentError', () {
       final component = UnknownComponent();
 

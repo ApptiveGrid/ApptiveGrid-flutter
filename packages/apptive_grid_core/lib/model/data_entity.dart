@@ -214,7 +214,7 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 
   @override
   String toString() {
-    return 'CrossReferenceDataEntity(displayValue: $value, entityUri: $entityUri, gridUri: $gridUri)}';
+    return 'CrossReferenceDataEntity(displayValue: $value, entityUri: $entityUri, gridUri: $gridUri)';
   }
 
   @override
@@ -288,4 +288,62 @@ class GeolocationDataEntity extends DataEntity<Geolocation, dynamic> {
   /// Returns [value] coordinates in a array
   @override
   dynamic get schemaValue => value?.toJson();
+}
+
+/// [DataEntity] representing a list of objects CrossReferencing to a different Grid
+class MultiCrossReferenceDataEntity
+    extends DataEntity<List<CrossReferenceDataEntity>, dynamic> {
+  /// Create a new CrossReference Data Entity
+  MultiCrossReferenceDataEntity({
+    List<CrossReferenceDataEntity>? references,
+    required this.gridUri,
+  }) : super(references ?? []);
+
+  /// Creates a new MultiCrossReferenceDataEntity from a Json Response
+  factory MultiCrossReferenceDataEntity.fromJson({
+    required List? jsonValue,
+    required String gridUri,
+  }) {
+    return MultiCrossReferenceDataEntity(
+      references: jsonValue
+              ?.map(
+                (e) => CrossReferenceDataEntity.fromJson(
+                  jsonValue: e,
+                  gridUri: gridUri,
+                ),
+              )
+              .toList() ??
+          [],
+      gridUri: GridUri.fromUri(gridUri),
+    );
+  }
+
+  /// Pointing to the [Grid] this is referencing
+  final GridUri gridUri;
+
+  @override
+  dynamic get schemaValue {
+    if (value == null || value!.isEmpty) {
+      return null;
+    } else {
+      return value!
+          .map((crossReference) => crossReference.schemaValue)
+          .toList();
+    }
+  }
+
+  @override
+  String toString() {
+    return 'MultiCrossReferenceDataEntity(references: $value, gridUri: $gridUri)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is MultiCrossReferenceDataEntity &&
+        f.listEquals(value, other.value) &&
+        gridUri == other.gridUri;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

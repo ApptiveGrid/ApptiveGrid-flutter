@@ -49,6 +49,10 @@ Widget fromModel(FormComponent component) {
       return GeolocationFormWidget(
         component: component as GeolocationFormComponent,
       );
+    case MultiCrossReferenceDataEntity:
+      return MultiCrossReferenceFormWidget(
+        component: component as MultiCrossReferenceFormComponent,
+      );
     default:
       throw ArgumentError(
         'No Widget found for component $component. Please make sure you are you using the latest version of this package?',

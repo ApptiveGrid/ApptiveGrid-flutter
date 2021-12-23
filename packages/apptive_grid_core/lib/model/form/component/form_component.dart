@@ -83,6 +83,8 @@ abstract class FormComponent<T extends DataEntity> {
         return EnumCollectionFormComponent.fromJson(json, properties);
       case DataType.geolocation:
         return GeolocationFormComponent.fromJson(json);
+      case DataType.multiCrossReference:
+        return MultiCrossReferenceFormComponent.fromJson(json, properties);
     }
   }
 }

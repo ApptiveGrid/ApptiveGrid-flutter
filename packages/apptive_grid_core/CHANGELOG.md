@@ -1,3 +1,6 @@
+## [0.8.0-alpha.6]
+* Add support for `DataType.multiCrossReference`
+
 ## [0.8.0-alpha.5]
 * Add Sorting to loading a Grid
 

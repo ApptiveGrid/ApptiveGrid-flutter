@@ -1,3 +1,7 @@
+## [0.9.0-alpha.6]
+* Add support for `DataType.multiCrossReference`
+* The Form Widget only offers very basic support for now. It only supports selecting single Values from CrossReferenced Grids
+
 ## [0.9.0-alpha.5]
 * Fix Multiline Text FormWidgets
 * Add Spacing for EnumCollection
