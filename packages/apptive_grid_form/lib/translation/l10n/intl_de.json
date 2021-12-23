@@ -14,5 +14,8 @@
     "checkboxRequired": "Pflichtfeld",
     "addAttachment": "Datei hochladen",
     "searchLocation": "Adresse suchen",
-    "searchLocationNoResult": "Keine Ergebnisse"
+    "searchLocationNoResult": "Keine Ergebnisse",
+    "attachmentSourceGallery": "Fotomediathek",
+    "attachmentSourceCamera": "Foto od. Video. aufnehmen",
+    "attachmentSourceFiles": "Dateien auswählen"
 }

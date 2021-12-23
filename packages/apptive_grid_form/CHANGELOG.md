@@ -1,6 +1,7 @@
 ## [0.9.0-alpha.6]
 * Add support for `DataType.multiCrossReference`
 * The Form Widget only offers very basic support for now. It only supports selecting single Values from CrossReferenced Grids
+* Adjust Attachment Form Widget to offer more options to select attachments from camera, gallery and files
 
 ## [0.9.0-alpha.5]
 * Fix Multiline Text FormWidgets

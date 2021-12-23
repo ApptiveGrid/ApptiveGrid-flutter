@@ -50,4 +50,13 @@ abstract class ApptiveGridTranslation {
 
   /// Message displayed when no matching Location Search result is found for a search input
   String get searchLocationNoResult;
+
+  /// Prompt to add Attachments from Image Gallery
+  String get attachmentSourceGallery;
+
+  /// Prompt to take a picture with the camera to use as an attachment
+  String get attachmentSourceCamera;
+
+  /// Prompt to get files to use as attachments
+  String get attachmentSourceFiles;
 }
