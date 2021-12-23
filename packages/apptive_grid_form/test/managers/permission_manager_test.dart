@@ -18,7 +18,7 @@ void main() {
 
       PermissionHandlerPlatform.instance = permissionHandler;
 
-      final permission = Permission.camera;
+      const permission = Permission.camera;
       const permissionStatus = PermissionStatus.granted;
 
       when(() => permissionHandler.requestPermissions([permission]))
@@ -37,7 +37,7 @@ void main() {
 
       PermissionHandlerPlatform.instance = permissionHandler;
 
-      final permission = Permission.camera;
+      const permission = Permission.camera;
       const permissionStatus = PermissionStatus.granted;
 
       when(() => permissionHandler.checkPermissionStatus(permission))

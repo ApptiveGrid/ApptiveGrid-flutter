@@ -11,10 +11,15 @@ import 'package:permission_handler_platform_interface/permission_handler_platfor
 import 'package:provider/provider.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+/// [PopupMenuButton] that presents different options to pick Attachments.
+///
+/// Users can chosse to add Attachment from Camera, Image Gallery and Files
 class AddAttachmentButton extends StatefulWidget {
+  /// Creates a new PopupMenuButton
   const AddAttachmentButton({Key? key, this.onAttachmentsAdded})
       : super(key: key);
 
+  /// Callback invoked when the user has added new Attachments
   final void Function(List<Attachment>?)? onAttachmentsAdded;
 
   @override
@@ -23,6 +28,8 @@ class AddAttachmentButton extends StatefulWidget {
 
 class _AddAttachmentButtonState extends State<AddAttachmentButton> {
   bool _hasCamera = false;
+
+  final _popupKey = GlobalKey<PopupMenuButtonState>();
 
   @override
   void initState() {
@@ -47,6 +54,8 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
   Widget build(BuildContext context) {
     final l10n = ApptiveGridLocalization.of(context)!;
     return PopupMenuButton<_SourceOption>(
+      enableFeedback: false,
+      key: _popupKey,
       itemBuilder: (context) {
         return [
           if (_hasCamera)
@@ -91,12 +100,15 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
           widget.onAttachmentsAdded?.call(attachments);
         }
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.add),
-          Text(l10n.addAttachment),
-        ],
+      child: TextButton(
+        onPressed: _popupKey.currentState?.showButtonMenu,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.add),
+            Text(l10n.addAttachment),
+          ],
+        ),
       ),
     );
   }
@@ -129,10 +141,11 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
       final newAttachments = <Attachment>[];
       for (final file in result) {
         final attachment = Attachment(
-            name: file.name,
-            url: ApptiveGrid.getClient(context, listen: false)
-                .createAttachmentUrl(file.name),
-            type: file.mimeType ?? lookupMimeType(file.name) ?? '',);
+          name: file.name,
+          url: ApptiveGrid.getClient(context, listen: false)
+              .createAttachmentUrl(file.name),
+          type: file.mimeType ?? lookupMimeType(file.name) ?? '',
+        );
         final bytes = await file.readAsBytes();
         Provider.of<AttachmentManager>(context, listen: false)
             .addAttachment(attachment, bytes);
@@ -147,10 +160,11 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
 
     if (file != null) {
       final newAttachment = Attachment(
-          name: file.name,
-          url: ApptiveGrid.getClient(context, listen: false)
-              .createAttachmentUrl(file.name),
-          type: file.mimeType ?? lookupMimeType(file.name) ?? '',);
+        name: file.name,
+        url: ApptiveGrid.getClient(context, listen: false)
+            .createAttachmentUrl(file.name),
+        type: file.mimeType ?? lookupMimeType(file.name) ?? '',
+      );
       final bytes = await file.readAsBytes();
       Provider.of<AttachmentManager>(context, listen: false)
           .addAttachment(newAttachment, bytes);
@@ -160,9 +174,11 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
 }
 
 class _SourceOptionPopupItem extends StatelessWidget {
-  const _SourceOptionPopupItem(
-      {Key? key, required this.label, required this.icon,})
-      : super(key: key);
+  const _SourceOptionPopupItem({
+    Key? key,
+    required this.label,
+    required this.icon,
+  }) : super(key: key);
 
   final String label;
   final IconData icon;
@@ -172,7 +188,7 @@ class _SourceOptionPopupItem extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label),
+        Flexible(child: Text(label)),
         Icon(icon),
       ],
     );
@@ -184,7 +200,7 @@ enum _SourceOption { files, gallery, camera }
 extension _SourceOptionX on _SourceOption {
   IconData get icon {
     final isApple = UniversalPlatform.isMacOS || UniversalPlatform.isIOS;
-    switch(this) {
+    switch (this) {
       case _SourceOption.files:
         if (isApple) {
           return CupertinoIcons.folder;

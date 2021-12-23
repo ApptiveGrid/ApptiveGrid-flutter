@@ -62,7 +62,8 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
                                     context,
                                     listen: false,
                                   ).removeAttachment(attachment);
-                                  widget.component.data.value?.remove(attachment);
+                                  widget.component.data.value
+                                      ?.remove(attachment);
                                   formState.didChange(widget.component.data);
                                   setState(() {});
                                 },
@@ -74,7 +75,8 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
                         [])
                     .toList(),
                 AddAttachmentButton(
-                  onAttachmentsAdded: _attachmentsAdded,
+                  onAttachmentsAdded: (newAttachments) =>
+                      _attachmentsAdded(newAttachments, formState),
                 )
               ],
             ),
@@ -84,10 +86,14 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
     );
   }
 
-  void _attachmentsAdded(List<Attachment>? attachments) {
+  void _attachmentsAdded(
+    List<Attachment>? attachments,
+    FormFieldState<AttachmentDataEntity> formState,
+  ) {
     if (attachments != null) {
       setState(() {
         widget.component.data.value?.addAll(attachments);
+        formState.didChange(widget.component.data);
       });
     }
   }
