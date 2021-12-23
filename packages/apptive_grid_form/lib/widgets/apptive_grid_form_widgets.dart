@@ -4,18 +4,17 @@ import 'dart:math';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/managers/permission_manager.dart';
+import 'package:apptive_grid_form/widgets/form_widget/attachment/add_attachment_button.dart';
 import 'package:apptive_grid_form/widgets/form_widget/attachment_manager.dart';
 import 'package:apptive_grid_form/widgets/form_widget/grid_row_dropdown/grid_row_dropdown_library.dart';
 import 'package:apptive_grid_form/widgets/geolocation/geolocation_input.dart';
 import 'package:apptive_grid_form/widgets/geolocation/geolocation_map.dart';
 import 'package:apptive_grid_form/managers/location_manager.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
-import 'package:mime/mime.dart';
 
 part 'form_widget/form_widget.dart';
 part 'form_widget/attachment_form_widget.dart';
