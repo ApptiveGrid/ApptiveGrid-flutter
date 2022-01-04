@@ -18,7 +18,7 @@ void main() {
         formWidgetConfigurations: [
           const GeolocationFormWidgetConfiguration(
             placesApiKey: 'YOUR_PLACES_API_KEY',
-          )
+          ),
         ],
       ),
       child: const MyApp(),
