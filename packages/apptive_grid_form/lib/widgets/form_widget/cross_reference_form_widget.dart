@@ -209,11 +209,16 @@ class _RowMenuItem extends StatefulWidget {
     required this.grid,
     required this.row,
     this.controller,
+    this.initiallySelected = false,
+    this.selectionChanged,
   }) : super(key: key);
 
   final Grid grid;
   final GridRow row;
   final ScrollController? controller;
+
+  final bool initiallySelected;
+  final void Function(bool)? selectionChanged;
 
   @override
   _RowMenuItemState createState() => _RowMenuItemState();
@@ -221,6 +226,14 @@ class _RowMenuItem extends StatefulWidget {
 
 class _RowMenuItemState extends State<_RowMenuItem> {
   String? _filter;
+
+  late bool _selected;
+
+  @override
+  void initState() {
+    super.initState();
+    _selected = widget.initiallySelected;
+  }
 
   void updateFilter(String filter) {
     setState(() {
@@ -240,6 +253,13 @@ class _RowMenuItemState extends State<_RowMenuItem> {
       return GridRowWidget(
         row: widget.row,
         controller: widget.controller,
+        selected: _selected,
+        onSelectionChanged: widget.selectionChanged != null ? (selected) {
+          widget.selectionChanged?.call(selected);
+          setState(() {
+            _selected = selected;
+          });
+        } : null,
         color: index % 2 != 0
             ? Theme.of(context).hintColor.withOpacity(0.1)
             : null,

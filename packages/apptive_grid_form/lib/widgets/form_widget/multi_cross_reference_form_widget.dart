@@ -160,16 +160,33 @@ class _MultiCrossReferenceFormWidgetState
           grid: gridUri.grid,
           entity: row.id,
         );
+        final displayValue = row.entries.first.data.value.toString();
         return GridRowDropdownMenuItem(
           value: GridRowDropdownDataItem(
             entityUri: entityUri,
-            displayValue: row.entries.first.data.value.toString(),
+            displayValue: displayValue,
           ),
+          enabled: false,
           child: _RowMenuItem(
             key: _keys[row.id],
             grid: _grid!,
             row: row,
             controller: _controllers[row.id],
+            initiallySelected: widget.component.data.value!.map((entity) => entity.entityUri).contains(entityUri),
+            selectionChanged: (selected) {
+              debugPrint('Selected ${row.entries.first.data.schemaValue} $selected');
+              setState(() {
+                if (selected) {
+                  widget.component.data.value!.add(CrossReferenceDataEntity(
+                    value: displayValue,
+                    gridUri: widget.component.data.gridUri,
+                    entityUri: entityUri,
+                  ),);
+                } else {
+                  widget.component.data.value!.removeWhere((element) => element.entityUri == entityUri);
+                }
+              });
+            },
           ),
         );
       }).toList();
@@ -197,8 +214,8 @@ class _MultiCrossReferenceFormWidgetState
         ...[pleaseSelect, pleaseSelect],
         ..._grid!.rows
             .map(
-              (row) => Text(
-                row.entries.first.data.value?.toString() ?? '',
+              (_) => Text(
+                widget.component.data.value!.map((e) => e.value ?? '').join(', '),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

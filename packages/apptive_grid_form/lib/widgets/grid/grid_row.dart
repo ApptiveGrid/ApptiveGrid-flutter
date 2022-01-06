@@ -11,7 +11,7 @@ class GridRowWidget extends StatelessWidget {
     this.textStyle,
     this.color,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
-    this.controller,
+    this.controller, this.selected = false, this.onSelectionChanged,
   }) : super(key: key);
 
   /// Row to be displayed
@@ -35,15 +35,28 @@ class GridRowWidget extends StatelessWidget {
   /// It is recommended that this controller is part of a [LinkedScrollControllerGroup] to sync scrolling across the whole grid representation
   final ScrollController? controller;
 
+  final bool selected;
+
+  final void Function(bool)? onSelectionChanged;
+
   @override
   Widget build(BuildContext context) {
-    return _GridRow(
-      labels: row.entries.map((e) => e.data.value?.toString()).toList(),
-      cellSize: cellSize,
-      textStyle: textStyle,
-      color: color,
-      padding: padding,
-      controller: controller,
+    final selectedColor = Theme.of(context).primaryColor;
+    return GestureDetector(
+      onTap: onSelectionChanged != null ? () => onSelectionChanged!.call(!selected) : null,
+      child: DecoratedBox(
+        decoration: selected ? BoxDecoration(
+          color: selectedColor.withOpacity(0.3),
+        ) : const BoxDecoration(),
+        child: _GridRow(
+          labels: row.entries.map((e) => e.data.value?.toString()).toList(),
+          cellSize: cellSize,
+          textStyle: textStyle,
+          color: color,
+          padding: padding,
+          controller: controller,
+        ),
+      ),
     );
   }
 }
