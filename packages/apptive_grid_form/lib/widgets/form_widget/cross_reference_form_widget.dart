@@ -85,8 +85,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
         _filterController.query = '';
       },
       validator: (value) {
-        if (widget.component.required &&
-            (value != null)) {
+        if (widget.component.required && (value != null)) {
           return ApptiveGridLocalization.of(context)!
               .fieldIsRequired(widget.component.property);
         } else {
@@ -138,41 +137,42 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       );
 
       final list = GridRowDropdownMenuItem<CrossReferenceDataEntity?>(
-          value: widget.component.data,
-          enabled: false,
-          child: ListView.builder(
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              itemCount: _grid!.rows.length,
-              itemBuilder: (context, index) {
-                final row = _grid!.rows[index];
-                final gridUri = widget.component.data.gridUri;
-                final entityUri = EntityUri(
-                  user: gridUri.user,
-                  space: gridUri.space,
-                  grid: gridUri.grid,
-                  entity: row.id,
-                );
-                return _RowMenuItem(
-                  key: ValueKey(widget.component.fieldId + row.id),
-                  grid: _grid!,
-                  row: row,
-                  controller: _controllers[row.id],
-                  initiallySelected:
-                      widget.component.data.entityUri == entityUri,
-                  filterController: _filterController,
-                  onSelectionChanged: (_) {
-                    setState(() {
-                      widget.component.data.value =
-                          row.entries.first.data.value.toString();
-                      widget.component.data.entityUri = entityUri;
-                    });
-                    if (_dropdownKey.currentContext != null) {
-                      Navigator.pop(_dropdownKey.currentContext!);
-                    }
-                  },
-                );
-              }));
+        value: widget.component.data,
+        enabled: false,
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
+          itemCount: _grid!.rows.length,
+          itemBuilder: (context, index) {
+            final row = _grid!.rows[index];
+            final gridUri = widget.component.data.gridUri;
+            final entityUri = EntityUri(
+              user: gridUri.user,
+              space: gridUri.space,
+              grid: gridUri.grid,
+              entity: row.id,
+            );
+            return _RowMenuItem(
+              key: ValueKey(widget.component.fieldId + row.id),
+              grid: _grid!,
+              row: row,
+              controller: _controllers[row.id],
+              initiallySelected: widget.component.data.entityUri == entityUri,
+              filterController: _filterController,
+              onSelectionChanged: (_) {
+                setState(() {
+                  widget.component.data.value =
+                      row.entries.first.data.value.toString();
+                  widget.component.data.entityUri = entityUri;
+                });
+                if (_dropdownKey.currentContext != null) {
+                  Navigator.pop(_dropdownKey.currentContext!);
+                }
+              },
+            );
+          },
+        ),
+      );
       return [searchBox, headerRow, list];
     }
   }

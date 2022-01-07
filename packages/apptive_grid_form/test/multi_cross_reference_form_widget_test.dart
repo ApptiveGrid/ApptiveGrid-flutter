@@ -159,30 +159,4 @@ void main() {
       expect(find.text('null'), findsNothing);
     });
   });
-
-  group('GridRowDropdownDataItem', () {
-    test('Equality', () {
-      final entityUri = EntityUri(
-        user: 'user',
-        space: 'space',
-        grid: 'grid',
-        entity: 'entity',
-      );
-      const value = 'value';
-      final a =
-          GridRowDropdownDataItem(entityUri: entityUri, displayValue: value);
-      final b = GridRowDropdownDataItem(
-        entityUri: EntityUri.fromUri(entityUri.uriString),
-        displayValue: value,
-      );
-      final c = GridRowDropdownDataItem(
-        entityUri: entityUri,
-      );
-
-      expect(a, b);
-      expect(a.hashCode, b.hashCode);
-      expect(a, isNot(c));
-      expect(a.hashCode, isNot(c.hashCode));
-    });
-  });
 }
