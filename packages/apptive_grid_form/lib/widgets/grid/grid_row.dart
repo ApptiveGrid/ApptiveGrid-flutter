@@ -2,7 +2,7 @@ part of apptive_grid_form_widgets;
 
 /// Widget to display a [GridRow]
 /// Multiple of these in a Vertical Layout will display a full Grid
-class GridRowWidget extends StatelessWidget {
+class GridRowWidget extends StatefulWidget {
   /// Creates a new RowWidget
   const GridRowWidget({
     Key? key,
@@ -11,7 +11,10 @@ class GridRowWidget extends StatelessWidget {
     this.textStyle,
     this.color,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
-    this.controller, this.selected = false, this.onSelectionChanged,
+    this.scrollController,
+    this.selected = false,
+    this.onSelectionChanged,
+    this.filterController,
   }) : super(key: key);
 
   /// Row to be displayed
@@ -33,33 +36,96 @@ class GridRowWidget extends StatelessWidget {
 
   /// ScrollController handling the horizontal scroll of the row
   /// It is recommended that this controller is part of a [LinkedScrollControllerGroup] to sync scrolling across the whole grid representation
-  final ScrollController? controller;
+  final ScrollController? scrollController;
 
   final bool selected;
 
   final void Function(bool)? onSelectionChanged;
 
+  final FilterController? filterController;
+
+  @override
+  State<GridRowWidget> createState() => _GridRowWidgetState();
+}
+
+class _GridRowWidgetState extends State<GridRowWidget> {
+  late final FilterListener _listener;
+
+  late bool _visible;
+
+  @override
+  void initState() {
+    super.initState();
+    _visible = widget.row.matchesFilter(widget.filterController?.query);
+    _listener = () {
+      final visible = widget.row.matchesFilter(widget.filterController?.query);
+      setState(() {
+        _visible = visible;
+      });
+    };
+    widget.filterController?.addListener(_listener);
+  }
+
+  @override
+  void dispose() {
+    widget.filterController?.removeListener(_listener);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!_visible) {
+      return const SizedBox();
+    }
     final selectedColor = Theme.of(context).primaryColor;
-    return GestureDetector(
-      onTap: onSelectionChanged != null ? () => onSelectionChanged!.call(!selected) : null,
+    return InkWell(
+      onTap: widget.onSelectionChanged != null
+          ? () => widget.onSelectionChanged!.call(!widget.selected)
+          : null,
       child: DecoratedBox(
-        decoration: selected ? BoxDecoration(
-          color: selectedColor.withOpacity(0.3),
-        ) : const BoxDecoration(),
+        decoration: widget.selected
+            ? BoxDecoration(
+                color: selectedColor.withOpacity(0.3),
+              )
+            : const BoxDecoration(),
         child: _GridRow(
-          labels: row.entries.map((e) => e.data.value?.toString()).toList(),
-          cellSize: cellSize,
-          textStyle: textStyle,
-          color: color,
-          padding: padding,
-          controller: controller,
+          labels:
+              widget.row.entries.map((e) => e.data.value?.toString()).toList(),
+          cellSize: widget.cellSize,
+          textStyle: widget.textStyle,
+          color: widget.color,
+          padding: widget.padding,
+          controller: widget.scrollController,
         ),
       ),
     );
   }
 }
+
+class FilterController {
+  final Set<FilterListener> _listeners = {};
+
+  String? _query;
+
+  String? get query => _query;
+
+  set query(String? query) {
+    _query = query;
+    _notifyListeners();
+  }
+
+  void addListener(FilterListener listener) => _listeners.add(listener);
+
+  void removeListener(FilterListener listener) => _listeners.remove(listener);
+
+  void _notifyListeners() {
+    for (final listener in _listeners) {
+      listener();
+    }
+  }
+}
+
+typedef FilterListener = void Function();
 
 /// Widget to display a Header Row for a [Grid] given the grids [fields]
 class HeaderRowWidget extends StatelessWidget {

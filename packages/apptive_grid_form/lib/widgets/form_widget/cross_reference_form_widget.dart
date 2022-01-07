@@ -24,7 +24,10 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       LinkedScrollControllerGroup();
   final _controllers = <String, ScrollController>{};
   ScrollController? _headerController;
-  final _keys = <String, GlobalKey<_RowMenuItemState>>{};
+
+  final _filterController = FilterController();
+
+  final _dropdownKey = GlobalKey();
 
   @override
   void didChangeDependencies() {
@@ -55,8 +58,6 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       for (final row in value.rows) {
         _controllers[row.id]?.dispose();
         _controllers[row.id] = _scrollControllerGroup.addAndGet();
-
-        _keys[row.id] ??= GlobalKey();
       }
       _headerController?.dispose();
       _headerController = _scrollControllerGroup.addAndGet();
@@ -74,20 +75,18 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GridRowDropdownButtonFormField<GridRowDropdownDataItem?>(
+    return GridRowDropdownButtonFormField<CrossReferenceDataEntity?>(
+      key: _dropdownKey,
       isExpanded: true,
       items: _items(),
-      onChanged: (newValue) {
-        if (newValue?.entityUri != null) {
-          setState(() {
-            widget.component.data.value = newValue?.displayValue;
-            widget.component.data.entityUri = newValue?.entityUri;
-          });
-        }
+      menuMaxHeight: MediaQuery.of(context).size.height * 0.95,
+      onChanged: (_) {},
+      onTap: () {
+        _filterController.query = '';
       },
       validator: (value) {
         if (widget.component.required &&
-            (value?.entityUri == null || value?.displayValue == null)) {
+            (value != null)) {
           return ApptiveGridLocalization.of(context)!
               .fieldIsRequired(widget.component.property);
         } else {
@@ -96,13 +95,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       },
       selectedItemBuilder: _selectedItems,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      value: widget.component.data.entityUri != null &&
-              widget.component.data.value != null
-          ? GridRowDropdownDataItem(
-              entityUri: widget.component.data.entityUri,
-              displayValue: widget.component.data.value,
-            )
-          : null,
+      value: widget.component.data,
       decoration: InputDecoration(
         helperText: widget.component.options.description,
         helperMaxLines: 100,
@@ -112,7 +105,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
     );
   }
 
-  List<GridRowDropdownMenuItem<GridRowDropdownDataItem?>>? _items() {
+  List<GridRowDropdownMenuItem<CrossReferenceDataEntity?>>? _items() {
     if (_error != null || _grid == null) {
       return null;
     } else {
@@ -129,9 +122,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
               border: InputBorder.none,
             ),
             onChanged: (input) {
-              for (final key in _keys.values) {
-                key.currentState?.updateFilter(input);
-              }
+              _filterController.query = input;
             },
           ),
         ),
@@ -146,28 +137,43 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
         ),
       );
 
-      final items = _grid!.rows.map((row) {
-        final gridUri = widget.component.data.gridUri;
-        final entityUri = EntityUri(
-          user: gridUri.user,
-          space: gridUri.space,
-          grid: gridUri.grid,
-          entity: row.id,
-        );
-        return GridRowDropdownMenuItem(
-          value: GridRowDropdownDataItem(
-            entityUri: entityUri,
-            displayValue: row.entries.first.data.value.toString(),
-          ),
-          child: _RowMenuItem(
-            key: _keys[row.id],
-            grid: _grid!,
-            row: row,
-            controller: _controllers[row.id],
-          ),
-        );
-      }).toList();
-      return [searchBox, headerRow, ...items];
+      final list = GridRowDropdownMenuItem<CrossReferenceDataEntity?>(
+          value: widget.component.data,
+          enabled: false,
+          child: ListView.builder(
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              itemCount: _grid!.rows.length,
+              itemBuilder: (context, index) {
+                final row = _grid!.rows[index];
+                final gridUri = widget.component.data.gridUri;
+                final entityUri = EntityUri(
+                  user: gridUri.user,
+                  space: gridUri.space,
+                  grid: gridUri.grid,
+                  entity: row.id,
+                );
+                return _RowMenuItem(
+                  key: ValueKey(widget.component.fieldId + row.id),
+                  grid: _grid!,
+                  row: row,
+                  controller: _controllers[row.id],
+                  initiallySelected:
+                      widget.component.data.entityUri == entityUri,
+                  filterController: _filterController,
+                  onSelectionChanged: (_) {
+                    setState(() {
+                      widget.component.data.value =
+                          row.entries.first.data.value.toString();
+                      widget.component.data.entityUri = entityUri;
+                    });
+                    if (_dropdownKey.currentContext != null) {
+                      Navigator.pop(_dropdownKey.currentContext!);
+                    }
+                  },
+                );
+              }));
+      return [searchBox, headerRow, list];
     }
   }
 
@@ -189,15 +195,11 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
       final pleaseSelect = Text(localization.selectEntry);
       return [
         ...[pleaseSelect, pleaseSelect],
-        ..._grid!.rows
-            .map(
-              (row) => Text(
-                row.entries.first.data.value?.toString() ?? '',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            )
-            .toList()
+        Text(
+          widget.component.data.value?.toString() ?? '',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ];
     }
   }
@@ -210,61 +212,67 @@ class _RowMenuItem extends StatefulWidget {
     required this.row,
     this.controller,
     this.initiallySelected = false,
-    this.selectionChanged,
+    this.onSelectionChanged,
+    this.filterController,
   }) : super(key: key);
 
   final Grid grid;
   final GridRow row;
   final ScrollController? controller;
+  final FilterController? filterController;
 
   final bool initiallySelected;
-  final void Function(bool)? selectionChanged;
+  final void Function(bool)? onSelectionChanged;
 
   @override
   _RowMenuItemState createState() => _RowMenuItemState();
 }
 
 class _RowMenuItemState extends State<_RowMenuItem> {
-  String? _filter;
-
   late bool _selected;
+
+  late final FilterListener _listener;
 
   @override
   void initState() {
     super.initState();
     _selected = widget.initiallySelected;
+    _listener = () {
+      setState(() {
+        // Set State to update color
+      });
+    };
+    widget.filterController?.addListener(_listener);
   }
 
-  void updateFilter(String filter) {
-    setState(() {
-      _filter = filter;
-    });
+  @override
+  void dispose() {
+    widget.filterController?.removeListener(_listener);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.row.matchesFilter(_filter)) {
-      return const SizedBox();
-    } else {
-      final index = widget.grid.rows
-          .where((row) => row.matchesFilter(_filter))
-          .toList()
-          .indexOf(widget.row);
-      return GridRowWidget(
-        row: widget.row,
-        controller: widget.controller,
-        selected: _selected,
-        onSelectionChanged: widget.selectionChanged != null ? (selected) {
-          widget.selectionChanged?.call(selected);
-          setState(() {
-            _selected = selected;
-          });
-        } : null,
-        color: index % 2 != 0
-            ? Theme.of(context).hintColor.withOpacity(0.1)
-            : null,
-      );
-    }
+    final index = widget.grid.rows
+        .where((row) => row.matchesFilter(widget.filterController?.query))
+        .toList()
+        .indexOf(widget.row);
+    return GridRowWidget(
+      row: widget.row,
+      scrollController: widget.controller,
+      selected: _selected,
+      onSelectionChanged: widget.onSelectionChanged != null
+          ? (selected) {
+              widget.onSelectionChanged?.call(selected);
+              setState(() {
+                _selected = selected;
+              });
+            }
+          : null,
+      color:
+          index % 2 != 0 ? Theme.of(context).hintColor.withOpacity(0.04) : null,
+      filterController: widget.filterController,
+    );
   }
 }
 
@@ -272,15 +280,14 @@ extension _GridRowX on GridRow {
   bool matchesFilter(String? filter) {
     if (filter == null || filter.isEmpty) return true;
 
-    return entries
-        .where(
-          (entry) =>
-              entry.data.schemaValue
-                  ?.toString()
-                  .toLowerCase()
-                  .contains(filter.toLowerCase()) ??
-              false,
-        )
-        .isNotEmpty;
+    final filterResult = entries.where(
+      (entry) =>
+          entry.data.schemaValue
+              ?.toString()
+              .toLowerCase()
+              .contains(filter.toLowerCase()) ??
+          false,
+    );
+    return filterResult.isNotEmpty;
   }
 }
