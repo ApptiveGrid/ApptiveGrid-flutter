@@ -81,10 +81,12 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-          find.descendant(
-              of: find.byType(MultiCrossReferenceFormWidget),
-              matching: find.text('First')),
-          findsOneWidget);
+        find.descendant(
+          of: find.byType(MultiCrossReferenceFormWidget),
+          matching: find.text('First'),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Select Multiple Widgets', (tester) async {
@@ -100,10 +102,12 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-          find.descendant(
-              of: find.byType(MultiCrossReferenceFormWidget),
-              matching: find.text('First, Second')),
-          findsOneWidget);
+        find.descendant(
+          of: find.byType(MultiCrossReferenceFormWidget),
+          matching: find.text('First, Second'),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('De-Select Item Widgets', (tester) async {
@@ -121,10 +125,12 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-          find.descendant(
-              of: find.byType(MultiCrossReferenceFormWidget),
-              matching: find.text('Second')),
-          findsOneWidget);
+        find.descendant(
+          of: find.byType(MultiCrossReferenceFormWidget),
+          matching: find.text('Second'),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Loading Grid has Error, displays error', (tester) async {

@@ -13,7 +13,7 @@ class CrossReferenceFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CrossReferenceDropdownButtonFormField<CrossReferenceDataEntity>(
+    return _CrossReferenceDropdownButtonFormField<CrossReferenceDataEntity>(
       component: component,
       selectedItemBuilder: (data) => Text(
         data?.value?.toString() ?? '',

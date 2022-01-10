@@ -1,11 +1,8 @@
-import 'package:apptive_grid_form/apptive_grid_form.dart';
-import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
-import 'package:flutter/material.dart';
-import 'package:linked_scroll_controller/linked_scroll_controller.dart';
+part of apptive_grid_form_widgets;
 
-class CrossReferenceDropdownButtonFormField<T extends DataEntity>
+class _CrossReferenceDropdownButtonFormField<T extends DataEntity>
     extends StatefulWidget {
-  CrossReferenceDropdownButtonFormField({
+  _CrossReferenceDropdownButtonFormField({
     Key? key,
     required this.component,
     required this.selectedItemBuilder,
@@ -23,18 +20,18 @@ class CrossReferenceDropdownButtonFormField<T extends DataEntity>
   final void Function(
     CrossReferenceDataEntity entity,
     bool selected,
-    CrossReferenceDropdownButtonFormFieldState<T> state,
+    _CrossReferenceDropdownButtonFormFieldState<T> state,
   ) onSelected;
 
   final bool Function(EntityUri)? isSelected;
 
   @override
-  CrossReferenceDropdownButtonFormFieldState<T> createState() =>
-      CrossReferenceDropdownButtonFormFieldState<T>();
+  _CrossReferenceDropdownButtonFormFieldState<T> createState() =>
+      _CrossReferenceDropdownButtonFormFieldState<T>();
 }
 
-class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
-    extends State<CrossReferenceDropdownButtonFormField<T>> {
+class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
+    extends State<_CrossReferenceDropdownButtonFormField<T>> {
   Grid? _grid;
   dynamic _error;
 

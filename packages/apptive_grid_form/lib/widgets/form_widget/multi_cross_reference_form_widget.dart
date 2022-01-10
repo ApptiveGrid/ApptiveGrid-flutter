@@ -13,7 +13,8 @@ class MultiCrossReferenceFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CrossReferenceDropdownButtonFormField<MultiCrossReferenceDataEntity>(
+    return _CrossReferenceDropdownButtonFormField<
+        MultiCrossReferenceDataEntity>(
       component: component,
       selectedItemBuilder: (data) => Text(
         data!.value!.map((e) => e.value ?? '').join(', '),

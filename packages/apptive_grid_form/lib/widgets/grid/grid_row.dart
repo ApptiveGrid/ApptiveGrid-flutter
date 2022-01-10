@@ -38,10 +38,15 @@ class GridRowWidget extends StatefulWidget {
   /// It is recommended that this controller is part of a [LinkedScrollControllerGroup] to sync scrolling across the whole grid representation
   final ScrollController? scrollController;
 
+  /// Determines if the current row is selected.
+  /// If it is selected there will be a Overlay in the App Primary Color on this Widget
   final bool selected;
 
+  /// Called when the Row is clicked.
+  /// Will be called with ![selected]
   final void Function(bool)? onSelectionChanged;
 
+  /// The FilterController that determines if this row should be shown
   final FilterController? filterController;
 
   @override
@@ -102,20 +107,25 @@ class _GridRowWidgetState extends State<GridRowWidget> {
   }
 }
 
+/// Controller to notify [FilterListener]s when a Filter changed so that [GridRowWidget]s can be shown/hidden
 class FilterController {
   final Set<FilterListener> _listeners = {};
 
   String? _query;
 
+  /// Returns the current filter query
   String? get query => _query;
 
+  /// Setting the query will notify all registered [FilterListener]s
   set query(String? query) {
     _query = query;
     _notifyListeners();
   }
 
+  /// Adds a [FilterListener]
   void addListener(FilterListener listener) => _listeners.add(listener);
 
+  /// Removes a [FilterListener]
   void removeListener(FilterListener listener) => _listeners.remove(listener);
 
   void _notifyListeners() {
@@ -125,6 +135,7 @@ class FilterController {
   }
 }
 
+/// Listener invoked when [FilterController.query] changes
 typedef FilterListener = void Function();
 
 /// Widget to display a Header Row for a [Grid] given the grids [fields]
@@ -228,7 +239,11 @@ class _GridRow extends StatelessWidget {
   }
 }
 
+/// Extension for [GridRow]
 extension GridRowX on GridRow {
+  /// Checks if a [GridRow] matches a given [filter]
+  /// This will check if there is a [GridEntry] where the corresponding [DataEntity.schemaValue] contains [filter].
+  /// This check is performed case insensitive
   bool matchesFilter(String? filter) {
     if (filter == null || filter.isEmpty) return true;
 
