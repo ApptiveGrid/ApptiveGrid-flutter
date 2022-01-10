@@ -80,7 +80,39 @@ void main() {
       await tester.tap(find.text('First').last);
       await tester.pumpAndSettle();
 
-      expect(find.text('First'), findsOneWidget);
+      expect(find.descendant(of: find.byType(MultiCrossReferenceFormWidget), matching: find.text('First')), findsOneWidget);
+    });
+
+    testWidgets('Select Multiple Widgets', (tester) async {
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.arrow_drop_down));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('First').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Second').last);
+      await tester.pumpAndSettle();
+
+      expect(find.descendant(of: find.byType(MultiCrossReferenceFormWidget), matching: find.text('First, Second')), findsOneWidget);
+    });
+
+    testWidgets('De-Select Item Widgets', (tester) async {
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.arrow_drop_down));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('First').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Second').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('First').last);
+      await tester.pumpAndSettle();
+
+      expect(find.descendant(of: find.byType(MultiCrossReferenceFormWidget), matching: find.text('Second')), findsOneWidget);
     });
 
     testWidgets('Loading Grid has Error, displays error', (tester) async {
