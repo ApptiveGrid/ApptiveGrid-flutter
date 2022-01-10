@@ -227,3 +227,19 @@ class _GridRow extends StatelessWidget {
     );
   }
 }
+
+extension GridRowX on GridRow {
+  bool matchesFilter(String? filter) {
+    if (filter == null || filter.isEmpty) return true;
+
+    final filterResult = entries.where(
+      (entry) =>
+          entry.data.schemaValue
+              ?.toString()
+              .toLowerCase()
+              .contains(filter.toLowerCase()) ??
+          false,
+    );
+    return filterResult.isNotEmpty;
+  }
+}
