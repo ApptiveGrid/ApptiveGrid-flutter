@@ -75,7 +75,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GridRowDropdownButtonFormField<CrossReferenceDataEntity?>(
+    return DropdownButtonFormField<CrossReferenceDataEntity?>(
       key: _dropdownKey,
       isExpanded: true,
       items: _items(),
@@ -104,12 +104,12 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
     );
   }
 
-  List<GridRowDropdownMenuItem<CrossReferenceDataEntity?>>? _items() {
+  List<DropdownMenuItem<CrossReferenceDataEntity?>>? _items() {
     if (_error != null || _grid == null) {
       return null;
     } else {
       final localization = ApptiveGridLocalization.of(context)!;
-      final searchBox = GridRowDropdownMenuItem(
+      final searchBox = DropdownMenuItem(
         enabled: false,
         value: null,
         child: Padding(
@@ -127,7 +127,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
         ),
       );
 
-      final headerRow = GridRowDropdownMenuItem(
+      final headerRow = DropdownMenuItem(
         enabled: false,
         value: null,
         child: HeaderRowWidget(
@@ -136,7 +136,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
         ),
       );
 
-      final list = GridRowDropdownMenuItem<CrossReferenceDataEntity?>(
+      final list = DropdownMenuItem<CrossReferenceDataEntity?>(
         value: widget.component.data,
         enabled: false,
         child: ListView.builder(
@@ -162,7 +162,7 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
               onSelectionChanged: (_) {
                 setState(() {
                   widget.component.data.value =
-                      row.entries.first.data.value.toString();
+                      row.entries.first.data.value;
                   widget.component.data.entityUri = entityUri;
                 });
                 if (_dropdownKey.currentContext != null) {
@@ -197,8 +197,6 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
         ...[pleaseSelect, pleaseSelect],
         Text(
           widget.component.data.value?.toString() ?? '',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
         ),
       ];
     }

@@ -74,7 +74,7 @@ class _MultiCrossReferenceFormWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return GridRowDropdownButtonFormField<List<CrossReferenceDataEntity>?>(
+    return DropdownButtonFormField<List<CrossReferenceDataEntity>?>(
       isExpanded: true,
       items: _items(),
       menuMaxHeight: MediaQuery.of(context).size.height * 0.95,
@@ -102,12 +102,12 @@ class _MultiCrossReferenceFormWidgetState
     );
   }
 
-  List<GridRowDropdownMenuItem<List<CrossReferenceDataEntity>?>>? _items() {
+  List<DropdownMenuItem<List<CrossReferenceDataEntity>?>>? _items() {
     if (_error != null || _grid == null) {
       return null;
     } else {
       final localization = ApptiveGridLocalization.of(context)!;
-      final searchBox = GridRowDropdownMenuItem(
+      final searchBox = DropdownMenuItem(
         enabled: false,
         value: null,
         child: Padding(
@@ -125,7 +125,7 @@ class _MultiCrossReferenceFormWidgetState
         ),
       );
 
-      final headerRow = GridRowDropdownMenuItem(
+      final headerRow = DropdownMenuItem(
         enabled: false,
         value: null,
         child: HeaderRowWidget(
@@ -134,7 +134,7 @@ class _MultiCrossReferenceFormWidgetState
         ),
       );
 
-      final list = GridRowDropdownMenuItem(
+      final list = DropdownMenuItem(
         value: widget.component.data.value,
         enabled: false,
         child: ListView.builder(
@@ -150,7 +150,7 @@ class _MultiCrossReferenceFormWidgetState
               grid: gridUri.grid,
               entity: row.id,
             );
-            final displayValue = row.entries.first.data.value.toString();
+            final displayValue = row.entries.first.data.value;
             return _RowMenuItem(
               key: ValueKey(widget.component.fieldId + row.id),
               grid: _grid!,
