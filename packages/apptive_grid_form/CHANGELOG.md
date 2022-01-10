@@ -1,3 +1,17 @@
+## [0.9.0]
+
+### Breaking Changes
+* `DataType.selectionBox` is now `DataType.singleSelect`
+* Due to new external dependencies there is some additional setup required. Please see the README for more details
+
+### New Data Types
+* `DataType.attachment`
+* `DataType.enumCollection`
+* `Data.multiCrossReference`
+
+### Bugfixes
+* Fixed Multiline Text FormWidgets
+
 ## [0.9.0-alpha.7]
 * Add proper support for [DataType.multiCrossReference] in Forms
 

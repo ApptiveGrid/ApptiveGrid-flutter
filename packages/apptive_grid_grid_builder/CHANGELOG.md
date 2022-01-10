@@ -1,3 +1,16 @@
+### [0.8.0]
+
+### Breaking Changes
+* `DataType.selectionBox` is now `DataType.singleSelect`
+
+### New Data Types
+* `DataType.attachment`
+* `DataType.enumCollection`
+* `Data.multiCrossReference`
+
+### New Features
+* Added support for sorting when loading a Grid
+
 ## [0.8.0-alpha.3]
 * Add `sorting` parameter to ApptiveGridGridBuilder
 
