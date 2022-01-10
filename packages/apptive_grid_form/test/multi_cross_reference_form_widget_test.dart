@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
-import 'package:apptive_grid_form/widgets/form_widget/grid_row_dropdown/grid_row_dropdown_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -58,18 +57,17 @@ void main() {
       await tester.tap(find.byIcon(Icons.arrow_drop_down));
       await tester.pumpAndSettle();
 
-      // Dropdown creates multiple instances. Thus expecting one entry more than actually expected
-      expect(find.text('First'), findsNWidgets(2));
-      expect(find.text('Second'), findsNWidgets(2));
+      expect(find.text('First'), findsNWidgets(1));
+      expect(find.text('Second'), findsNWidgets(1));
 
       // Filter
       await tester.enterText(find.byType(TextField), 'Sec');
       await tester.pumpAndSettle();
       expect(
         find.text('First'),
-        findsOneWidget,
-      ); // See above why one more than expected
-      expect(find.text('Second'), findsNWidgets(2));
+        findsNothing,
+      );
+      expect(find.text('Second'), findsNWidgets(1));
     });
 
     testWidgets('Select Widget', (tester) async {
@@ -82,7 +80,57 @@ void main() {
       await tester.tap(find.text('First').last);
       await tester.pumpAndSettle();
 
-      expect(find.text('First'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(MultiCrossReferenceFormWidget),
+          matching: find.text('First'),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Select Multiple Widgets', (tester) async {
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.arrow_drop_down));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('First').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Second').last);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(
+          of: find.byType(MultiCrossReferenceFormWidget),
+          matching: find.text('First, Second'),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('De-Select Item Widgets', (tester) async {
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.arrow_drop_down));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('First').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Second').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('First').last);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(
+          of: find.byType(MultiCrossReferenceFormWidget),
+          matching: find.text('Second'),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Loading Grid has Error, displays error', (tester) async {
@@ -157,32 +205,6 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('null'), findsNothing);
-    });
-  });
-
-  group('GridRowDropdownDataItem', () {
-    test('Equality', () {
-      final entityUri = EntityUri(
-        user: 'user',
-        space: 'space',
-        grid: 'grid',
-        entity: 'entity',
-      );
-      const value = 'value';
-      final a =
-          GridRowDropdownDataItem(entityUri: entityUri, displayValue: value);
-      final b = GridRowDropdownDataItem(
-        entityUri: EntityUri.fromUri(entityUri.uriString),
-        displayValue: value,
-      );
-      final c = GridRowDropdownDataItem(
-        entityUri: entityUri,
-      );
-
-      expect(a, b);
-      expect(a.hashCode, b.hashCode);
-      expect(a, isNot(c));
-      expect(a.hashCode, isNot(c.hashCode));
     });
   });
 }

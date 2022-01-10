@@ -1,3 +1,6 @@
+## [0.9.0-alpha.7]
+* Add proper support for [DataType.multiCrossReference] in Forms
+
 ## [0.9.0-alpha.6]
 * Add support for `DataType.multiCrossReference`
 * The Form Widget only offers very basic support for now. It only supports selecting single Values from CrossReferenced Grids

@@ -2,7 +2,7 @@ part of apptive_grid_form_widgets;
 
 /// Widget to display a [GridRow]
 /// Multiple of these in a Vertical Layout will display a full Grid
-class GridRowWidget extends StatelessWidget {
+class GridRowWidget extends StatefulWidget {
   /// Creates a new RowWidget
   const GridRowWidget({
     Key? key,
@@ -11,7 +11,10 @@ class GridRowWidget extends StatelessWidget {
     this.textStyle,
     this.color,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
-    this.controller,
+    this.scrollController,
+    this.selected = false,
+    this.onSelectionChanged,
+    this.filterController,
   }) : super(key: key);
 
   /// Row to be displayed
@@ -33,20 +36,107 @@ class GridRowWidget extends StatelessWidget {
 
   /// ScrollController handling the horizontal scroll of the row
   /// It is recommended that this controller is part of a [LinkedScrollControllerGroup] to sync scrolling across the whole grid representation
-  final ScrollController? controller;
+  final ScrollController? scrollController;
+
+  /// Determines if the current row is selected.
+  /// If it is selected there will be a Overlay in the App Primary Color on this Widget
+  final bool selected;
+
+  /// Called when the Row is clicked.
+  /// Will be called with ![selected]
+  final void Function(bool)? onSelectionChanged;
+
+  /// The FilterController that determines if this row should be shown
+  final FilterController? filterController;
+
+  @override
+  State<GridRowWidget> createState() => _GridRowWidgetState();
+}
+
+class _GridRowWidgetState extends State<GridRowWidget> {
+  late final FilterListener _listener;
+
+  late bool _visible;
+
+  @override
+  void initState() {
+    super.initState();
+    _visible = widget.row.matchesFilter(widget.filterController?.query);
+    _listener = () {
+      final visible = widget.row.matchesFilter(widget.filterController?.query);
+      setState(() {
+        _visible = visible;
+      });
+    };
+    widget.filterController?.addListener(_listener);
+  }
+
+  @override
+  void dispose() {
+    widget.filterController?.removeListener(_listener);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return _GridRow(
-      labels: row.entries.map((e) => e.data.value?.toString()).toList(),
-      cellSize: cellSize,
-      textStyle: textStyle,
-      color: color,
-      padding: padding,
-      controller: controller,
+    if (!_visible) {
+      return const SizedBox();
+    }
+    final selectedColor = Theme.of(context).primaryColor;
+    return InkWell(
+      onTap: widget.onSelectionChanged != null
+          ? () => widget.onSelectionChanged!.call(!widget.selected)
+          : null,
+      child: DecoratedBox(
+        decoration: widget.selected
+            ? BoxDecoration(
+                color: selectedColor.withOpacity(0.3),
+              )
+            : const BoxDecoration(),
+        child: _GridRow(
+          labels:
+              widget.row.entries.map((e) => e.data.value?.toString()).toList(),
+          cellSize: widget.cellSize,
+          textStyle: widget.textStyle,
+          color: widget.color,
+          padding: widget.padding,
+          controller: widget.scrollController,
+        ),
+      ),
     );
   }
 }
+
+/// Controller to notify [FilterListener]s when a Filter changed so that [GridRowWidget]s can be shown/hidden
+class FilterController {
+  final Set<FilterListener> _listeners = {};
+
+  String? _query;
+
+  /// Returns the current filter query
+  String? get query => _query;
+
+  /// Setting the query will notify all registered [FilterListener]s
+  set query(String? query) {
+    _query = query;
+    _notifyListeners();
+  }
+
+  /// Adds a [FilterListener]
+  void addListener(FilterListener listener) => _listeners.add(listener);
+
+  /// Removes a [FilterListener]
+  void removeListener(FilterListener listener) => _listeners.remove(listener);
+
+  void _notifyListeners() {
+    for (final listener in _listeners) {
+      listener();
+    }
+  }
+}
+
+/// Listener invoked when [FilterController.query] changes
+typedef FilterListener = void Function();
 
 /// Widget to display a Header Row for a [Grid] given the grids [fields]
 class HeaderRowWidget extends StatelessWidget {
@@ -146,5 +236,25 @@ class _GridRow extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Extension for [GridRow]
+extension GridRowX on GridRow {
+  /// Checks if a [GridRow] matches a given [filter]
+  /// This will check if there is a [GridEntry] where the corresponding [DataEntity.schemaValue] contains [filter].
+  /// This check is performed case insensitive
+  bool matchesFilter(String? filter) {
+    if (filter == null || filter.isEmpty) return true;
+
+    final filterResult = entries.where(
+      (entry) =>
+          entry.data.schemaValue
+              ?.toString()
+              .toLowerCase()
+              .contains(filter.toLowerCase()) ??
+          false,
+    );
+    return filterResult.isNotEmpty;
   }
 }
