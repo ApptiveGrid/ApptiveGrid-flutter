@@ -9,9 +9,9 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 export 'package:apptive_grid_core/apptive_grid_core.dart';
+export 'package:apptive_grid_form/configurations/form_widget_configurations.dart';
 export 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
 export 'package:apptive_grid_form/translation/apptive_grid_translation.dart';
-export 'package:apptive_grid_form/configurations/form_widget_configurations.dart';
 
 /// A Widget to display a ApptiveGrid Form
 ///
@@ -318,19 +318,21 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             } else {
               return Padding(
                 padding: widget.contentPadding ?? _defaultPadding,
-                child: Builder(builder: (_) {
-                  final actionIndex = index - 1 - data.components.length;
-                  final action = data.actions[actionIndex];
-                  if (_actionsInProgress.contains(action)) {
-                    return const CircularProgressIndicator.adaptive();
-                  } else {
-                    return ActionButton(
-                      action: data.actions[actionIndex],
-                      onPressed: _performAction,
-                      child: Text(localization.actionSend),
-                    );
-                  }
-                }),
+                child: Builder(
+                  builder: (_) {
+                    final actionIndex = index - 1 - data.components.length;
+                    final action = data.actions[actionIndex];
+                    if (_actionsInProgress.contains(action)) {
+                      return const CircularProgressIndicator.adaptive();
+                    } else {
+                      return ActionButton(
+                        action: data.actions[actionIndex],
+                        onPressed: _performAction,
+                        child: Text(localization.actionSend),
+                      );
+                    }
+                  },
+                ),
               );
             }
           },
