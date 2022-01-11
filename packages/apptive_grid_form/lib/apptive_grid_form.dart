@@ -316,22 +316,22 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 child: fromModel(data.components[componentIndex]),
               );
             } else {
-              return Padding(padding: widget.contentPadding ?? _defaultPadding,
-              child: Builder(
-                builder: (_)
-              {
-                final actionIndex = index - 1 - data.components.length;
-                final action = data.actions[actionIndex];
-                if (_actionsInProgress.contains(action)) {
-                  return const CircularProgressIndicator.adaptive();
-                } else {
-                  return ActionButton(
-                    action: data.actions[actionIndex],
-                    onPressed: _performAction,
-                    child: Text(localization.actionSend),
-                  );
-                }
-              }),);
+              return Padding(
+                padding: widget.contentPadding ?? _defaultPadding,
+                child: Builder(builder: (_) {
+                  final actionIndex = index - 1 - data.components.length;
+                  final action = data.actions[actionIndex];
+                  if (_actionsInProgress.contains(action)) {
+                    return const CircularProgressIndicator.adaptive();
+                  } else {
+                    return ActionButton(
+                      action: data.actions[actionIndex],
+                      onPressed: _performAction,
+                      child: Text(localization.actionSend),
+                    );
+                  }
+                }),
+              );
             }
           },
         ),
