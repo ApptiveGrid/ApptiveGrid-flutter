@@ -280,7 +280,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   Widget _buildLoading(BuildContext context) {
     return const Center(
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator.adaptive(),
     );
   }
 
