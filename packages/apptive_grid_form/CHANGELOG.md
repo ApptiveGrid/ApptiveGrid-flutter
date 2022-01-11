@@ -1,3 +1,6 @@
+## [0.9.0-alpha.8]
+* Show Loading Indicator while submitting a Form
+
 ## [0.9.0-alpha.7]
 * Add proper support for [DataType.multiCrossReference] in Forms
 

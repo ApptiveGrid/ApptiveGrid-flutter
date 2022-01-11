@@ -9,9 +9,9 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 export 'package:apptive_grid_core/apptive_grid_core.dart';
+export 'package:apptive_grid_form/configurations/form_widget_configurations.dart';
 export 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
 export 'package:apptive_grid_form/translation/apptive_grid_translation.dart';
-export 'package:apptive_grid_form/configurations/form_widget_configurations.dart';
 
 /// A Widget to display a ApptiveGrid Form
 ///
@@ -211,6 +211,8 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   late AttachmentManager _attachmentManager;
 
+  final Set<FormAction> _actionsInProgress = {};
+
   /// Returns the current [FormData] held in this Widget
   FormData? get currentData {
     if (!_success && !_saved) {
@@ -278,7 +280,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   Widget _buildLoading(BuildContext context) {
     return const Center(
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator.adaptive(),
     );
   }
 
@@ -314,11 +316,23 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 child: fromModel(data.components[componentIndex]),
               );
             } else {
-              final actionIndex = index - 1 - data.components.length;
-              return ActionButton(
-                action: data.actions[actionIndex],
-                onPressed: _performAction,
-                child: Text(localization.actionSend),
+              return Padding(
+                padding: widget.contentPadding ?? _defaultPadding,
+                child: Builder(
+                  builder: (_) {
+                    final actionIndex = index - 1 - data.components.length;
+                    final action = data.actions[actionIndex];
+                    if (_actionsInProgress.contains(action)) {
+                      return const CircularProgressIndicator.adaptive();
+                    } else {
+                      return ActionButton(
+                        action: data.actions[actionIndex],
+                        onPressed: _performAction,
+                        child: Text(localization.actionSend),
+                      );
+                    }
+                  },
+                ),
               );
             }
           },
@@ -422,6 +436,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
   Future<void> _performAction(FormAction action) async {
+    setState(() {
+      _actionsInProgress.add(action);
+    });
     if (_formKey.currentState!.validate()) {
       _client.performAction(action, _formData!).then((response) async {
         if (response.statusCode < 400) {
@@ -436,6 +453,14 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         }
       }).catchError((error) {
         _onError(error);
+      }).whenComplete(() {
+        setState(() {
+          _actionsInProgress.remove(action);
+        });
+      });
+    } else {
+      setState(() {
+        _actionsInProgress.remove(action);
       });
     }
   }
