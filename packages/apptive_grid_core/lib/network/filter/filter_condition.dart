@@ -96,7 +96,7 @@ class SubstringFilter extends _FieldFilterCondition {
 
 class EqualFilter extends FilterCondition {
   const EqualFilter(
-      {required String this.fieldId, required this.value,})
+      {required this.fieldId, required this.value,})
       : super();
 
   final String fieldId;
