@@ -8,6 +8,7 @@ import 'package:apptive_grid_core/apptive_grid_options.dart';
 import 'package:apptive_grid_core/network/authentication/authentication_storage.dart';
 import 'package:apptive_grid_core/network/authentication/io_authenticator.dart'
     if (dart.library.html) 'package:apptive_grid_core/network/authentication/web_authenticator.dart';
+import 'package:apptive_grid_core/network/filter/filter_condition.dart';
 import 'package:apptive_grid_core/network/sorting/apptive_grid_sorting.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 export 'package:apptive_grid_core/network/authentication/web_auth_enabler/web_auth_enabler.dart';
 export 'package:apptive_grid_core/network/sorting/apptive_grid_sorting.dart';
+export 'package:apptive_grid_core/network/filter/filter_condition.dart';
 
 part 'network/apptive_grid_client.dart';
 

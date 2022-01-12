@@ -14,6 +14,7 @@ class ApptiveGridGridBuilder extends StatefulWidget {
     required this.gridUri,
     this.initialData,
     this.sorting,
+    this.filter,
     required this.builder,
   }) : super(key: key);
 
@@ -28,6 +29,8 @@ class ApptiveGridGridBuilder extends StatefulWidget {
 
   /// List of [ApptiveGridSorting] that should be applied
   final List<ApptiveGridSorting>? sorting;
+
+  final FilterCondition? filter;
 
   @override
   ApptiveGridGridBuilderState createState() => ApptiveGridGridBuilderState();
@@ -70,7 +73,11 @@ class ApptiveGridGridBuilderState extends State<ApptiveGridGridBuilder> {
     bool listen = false,
   }) {
     return ApptiveGrid.getClient(context, listen: listen)
-        .loadGrid(gridUri: widget.gridUri, sorting: widget.sorting)
+        .loadGrid(
+          gridUri: widget.gridUri,
+          sorting: widget.sorting,
+          filter: widget.filter,
+        )
         .then(
           (value) => setState(() {
             _snapshot = AsyncSnapshot.withData(ConnectionState.done, value);

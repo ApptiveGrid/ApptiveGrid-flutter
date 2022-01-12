@@ -30,6 +30,14 @@ abstract class DataEntity<T, S> {
   int get hashCode => toString().hashCode;
 }
 
+abstract class ComparableDataEntity<T, S> extends DataEntity<T, S> {
+  ComparableDataEntity([T? value]) : super(value);
+}
+
+abstract class CollectionDataEntity<T, S> extends DataEntity<T, S> {
+  CollectionDataEntity([T? value]) : super(value);
+}
+
 /// [DataEntity] representing [String] Objects
 class StringDataEntity extends DataEntity<String, String> {
   /// Creates a new StringDataEntity Object with value [value]
@@ -40,7 +48,7 @@ class StringDataEntity extends DataEntity<String, String> {
 }
 
 /// [DataEntity] representing [DateTime] Objects
-class DateTimeDataEntity extends DataEntity<DateTime, String> {
+class DateTimeDataEntity extends ComparableDataEntity<DateTime, String> {
   /// Creates a new DateTimeDataEntity Object with value [value]
   DateTimeDataEntity([DateTime? value]) : super(value);
 
@@ -61,7 +69,7 @@ class DateTimeDataEntity extends DataEntity<DateTime, String> {
 
 /// [DataEntity] representing a Date
 /// Internally this is using [DateTime] ignoring the Time Part
-class DateDataEntity extends DataEntity<DateTime, String> {
+class DateDataEntity extends ComparableDataEntity<DateTime, String> {
   /// Creates a new DateTimeDataEntity Object with value [value]
   DateDataEntity([DateTime? value]) : super(value);
 
@@ -92,7 +100,7 @@ class BooleanDataEntity extends DataEntity<bool, bool> {
 }
 
 /// [DataEntity] representing [int] Objects
-class IntegerDataEntity extends DataEntity<int, int> {
+class IntegerDataEntity extends ComparableDataEntity<int, int> {
   /// Creates a new IntegerDataEntity Object
   IntegerDataEntity([int? value]) : super(value);
 
@@ -101,7 +109,7 @@ class IntegerDataEntity extends DataEntity<int, int> {
 }
 
 /// [DataEntity] representing [double] Objects
-class DecimalDataEntity extends DataEntity<double, double> {
+class DecimalDataEntity extends ComparableDataEntity<double, double> {
   /// Creates a new DecimalDataEntity Object
   DecimalDataEntity([num? value]) : super(value?.toDouble());
 
