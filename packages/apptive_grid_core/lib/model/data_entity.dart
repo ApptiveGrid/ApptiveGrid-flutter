@@ -145,7 +145,7 @@ class EnumDataEntity extends DataEntity<String, String> {
 }
 
 /// [DataEntity] representing an enum like Object
-class EnumCollectionDataEntity extends DataEntity<Set<String>, List<String>> {
+class EnumCollectionDataEntity extends CollectionDataEntity<Set<String>, List<String>> {
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
   EnumCollectionDataEntity._({
     required Set<String> value,
@@ -238,7 +238,7 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 }
 
 /// [DataEntity] representing an array of Attachments
-class AttachmentDataEntity extends DataEntity<List<Attachment>, dynamic> {
+class AttachmentDataEntity extends CollectionDataEntity<List<Attachment>, dynamic> {
   /// Create a new Attachment Data Entity
   AttachmentDataEntity([
     List<Attachment>? value,
@@ -300,7 +300,7 @@ class GeolocationDataEntity extends DataEntity<Geolocation, dynamic> {
 
 /// [DataEntity] representing a list of objects CrossReferencing to a different Grid
 class MultiCrossReferenceDataEntity
-    extends DataEntity<List<CrossReferenceDataEntity>, dynamic> {
+    extends CollectionDataEntity<List<CrossReferenceDataEntity>, dynamic> {
   /// Create a new CrossReference Data Entity
   MultiCrossReferenceDataEntity({
     List<CrossReferenceDataEntity>? references,
