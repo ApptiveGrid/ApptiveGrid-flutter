@@ -71,7 +71,7 @@ void main() {
           equals(
             jsonEncode({
               'fieldId': {
-                '\$any': ['2', '3']
+                '\$hasAnyOf': ['2', '3']
               }
             }),
           ),
@@ -89,7 +89,7 @@ void main() {
           equals(
             jsonEncode({
               'fieldId': {
-                '\$all': ['2', '3']
+                '\$hasAllOf': ['2', '3']
               }
             }),
           ),
@@ -107,7 +107,7 @@ void main() {
           equals(
             jsonEncode({
               'fieldId': {
-                '\$none': ['2', '3']
+                '\$hasNoneOf': ['2', '3']
               }
             }),
           ),
@@ -264,7 +264,7 @@ void main() {
               },
               {
                 'fieldId1': {
-                  '\$any': ['2', '3']
+                  '\$hasAnyOf': ['2', '3']
                 }
               },
             ]
@@ -296,7 +296,7 @@ void main() {
               },
               {
                 'fieldId1': {
-                  '\$any': ['2', '3']
+                  '\$hasAnyOf': ['2', '3']
                 }
               },
             ]

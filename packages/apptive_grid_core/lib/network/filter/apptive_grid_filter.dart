@@ -103,11 +103,11 @@ extension _FieldOperatorX on _FieldOperator {
       case _FieldOperator.lesserThan:
         return 'lt';
       case _FieldOperator.any:
-        return 'any';
+        return 'hasAnyOf';
       case _FieldOperator.all:
-        return 'all';
+        return 'hasAllOf';
       case _FieldOperator.none:
-        return 'none';
+        return 'hasNoneOf';
     }
   }
 }
