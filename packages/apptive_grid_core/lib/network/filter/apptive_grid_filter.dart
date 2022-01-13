@@ -1,4 +1,5 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:flutter/foundation.dart';
 
 /// Filter to load a Grid with a specific Filter
 ///
@@ -24,6 +25,11 @@ abstract class ApptiveGridFilter {
 
   /// Creates a Map Object that can be send to the Backend. (Should be json encoded)
   Map<String, dynamic> toJson();
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
 enum _ComposeOperator {
@@ -34,18 +40,28 @@ enum _ComposeOperator {
 /// Super class for Filter Compositions to combine multiple filters
 abstract class _FilterComposition extends ApptiveGridFilter {
   const _FilterComposition._({
-    required this.conditions,
     required this.operator,
+    required this.conditions,
   }) : super._();
 
-  final List<ApptiveGridFilter> conditions;
   final _ComposeOperator operator;
+  final List<ApptiveGridFilter> conditions;
 
   @override
   Map<String, dynamic> toJson() => {
         '\$${operator.name}':
             conditions.map((condition) => condition.toJson()).toList(),
       };
+
+  @override
+  bool operator ==(Object other) {
+    return other is _FilterComposition &&
+        operator == other.operator &&
+        listEquals(conditions, other.conditions);
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }
 
 /// Creates a Filter that checks that all [conditions] are true
@@ -99,14 +115,14 @@ extension _FieldOperatorX on _FieldOperator {
 /// Filter to check for a single Field with [fieldId]
 abstract class _FieldFilter extends ApptiveGridFilter {
   const _FieldFilter._({
+    required this.operator,
     required this.fieldId,
     required this.value,
-    required this.operator,
   }) : super._();
 
+  final _FieldOperator operator;
   final String fieldId;
   final DataEntity value;
-  final _FieldOperator operator;
 
   @override
   Map<String, dynamic> toJson() {
@@ -117,6 +133,17 @@ abstract class _FieldFilter extends ApptiveGridFilter {
       fieldId: {'\$${operator.operation}': value.schemaValue}
     };
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _FieldFilter &&
+        operator == other.operator &&
+        fieldId == other.fieldId &&
+        value == other.value;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }
 
 /// Filter to check for a Substring

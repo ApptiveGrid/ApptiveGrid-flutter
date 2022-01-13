@@ -116,6 +116,129 @@ void main() {
     });
   });
 
+  group('Equality', () {
+    group('Composition', () {
+      test('Equality', () {
+        final a = AndFilterComposition(
+          conditions: [
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value')),
+            EqualsFilter(
+              fieldId: 'fieldId1',
+              value: StringDataEntity('value1'),
+            ),
+          ],
+        );
+
+        final b = AndFilterComposition(
+          conditions: [
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value')),
+            EqualsFilter(
+              fieldId: 'fieldId1',
+              value: StringDataEntity('value1'),
+            ),
+          ],
+        );
+
+        expect(a, equals(b));
+        expect(a.hashCode, equals(b.hashCode));
+      });
+
+      test('Different Type', () {
+        final a = AndFilterComposition(
+          conditions: [
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value')),
+            EqualsFilter(
+              fieldId: 'fieldId1',
+              value: StringDataEntity('value1'),
+            ),
+          ],
+        );
+
+        final b = OrFilterComposition(
+          conditions: [
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value')),
+            EqualsFilter(
+              fieldId: 'fieldId1',
+              value: StringDataEntity('value1'),
+            ),
+          ],
+        );
+
+        expect(a, isNot(equals(b)));
+        expect(a.hashCode, isNot(equals(b.hashCode)));
+      });
+
+      test('Different Conditions', () {
+        final a = OrFilterComposition(
+          conditions: [
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value')),
+            EqualsFilter(
+              fieldId: 'fieldId1',
+              value: StringDataEntity('value1'),
+            ),
+          ],
+        );
+
+        final b = OrFilterComposition(
+          conditions: [
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value')),
+            EqualsFilter(
+              fieldId: 'fieldId1',
+              value: StringDataEntity('value2'),
+            ),
+          ],
+        );
+
+        expect(a, isNot(equals(b)));
+        expect(a.hashCode, isNot(equals(b.hashCode)));
+      });
+    });
+
+    group('FieldFilter', () {
+      test('Equality', () {
+        final a =
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'));
+        final b =
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'));
+
+        expect(a, equals(b));
+        expect(a.hashCode, equals(b.hashCode));
+      });
+
+      test('Different Operator', () {
+        final a =
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'));
+        final b = SubstringFilter(
+          fieldId: 'fieldId',
+          value: StringDataEntity('value'),
+        );
+
+        expect(a, isNot(equals(b)));
+        expect(a.hashCode, isNot(equals(b.hashCode)));
+      });
+
+      test('Different Value', () {
+        final a =
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'));
+        final b =
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value1'));
+
+        expect(a, isNot(equals(b)));
+        expect(a.hashCode, isNot(equals(b.hashCode)));
+      });
+
+      test('Different Field', () {
+        final a =
+            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'));
+        final b =
+            EqualsFilter(fieldId: 'fieldId1', value: StringDataEntity('value'));
+
+        expect(a, isNot(equals(b)));
+        expect(a.hashCode, isNot(equals(b.hashCode)));
+      });
+    });
+  });
+
   group('Combination produces correct json', () {
     test('And', () async {
       expect(
