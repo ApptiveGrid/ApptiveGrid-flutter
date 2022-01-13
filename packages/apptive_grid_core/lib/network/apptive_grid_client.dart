@@ -166,6 +166,7 @@ class ApptiveGridClient {
   Future<Grid> loadGrid({
     required GridUri gridUri,
     List<ApptiveGridSorting>? sorting,
+    ApptiveGridFilter? filter,
   }) async {
     await _authenticator.checkAuthentication();
     final gridViewUrl =
@@ -187,6 +188,13 @@ class ApptiveGridClient {
         final queryParams = Map<String, dynamic>.from(url.queryParameters);
         queryParams['sorting'] =
             jsonEncode(sorting.map((e) => e.toRequestObject()).toList());
+        url = url.replace(queryParameters: queryParams);
+      }
+
+      // Apply Filter
+      if (filter != null) {
+        final queryParams = Map<String, dynamic>.from(url.queryParameters);
+        queryParams['filter'] = jsonEncode(filter.toJson());
         url = url.replace(queryParameters: queryParams);
       }
 

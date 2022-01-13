@@ -1,3 +1,6 @@
+## [0.8.0-alpha.7]
+* Add support for `ApptiveGridFilter`
+
 ## [0.8.0-alpha.6]
 * Add support for `DataType.multiCrossReference`
 

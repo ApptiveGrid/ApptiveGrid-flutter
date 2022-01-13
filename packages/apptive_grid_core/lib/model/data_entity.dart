@@ -30,6 +30,18 @@ abstract class DataEntity<T, S> {
   int get hashCode => toString().hashCode;
 }
 
+/// Class for DataEntities that are support in Comparison Filters like [LesserThanFilter] and [GreaterThanFilter]
+abstract class ComparableDataEntity<T, S> extends DataEntity<T, S> {
+  /// Creates a new DataEntity with [value]
+  ComparableDataEntity([T? value]) : super(value);
+}
+
+/// Class for DataEntities that support Collection Filters like [AnyOfFilter], [AllOfFilter] and [NoneOfFilter]
+abstract class CollectionDataEntity<T, S> extends DataEntity<T, S> {
+  /// Creates a new DataEntity with [value]
+  CollectionDataEntity([T? value]) : super(value);
+}
+
 /// [DataEntity] representing [String] Objects
 class StringDataEntity extends DataEntity<String, String> {
   /// Creates a new StringDataEntity Object with value [value]
@@ -40,7 +52,7 @@ class StringDataEntity extends DataEntity<String, String> {
 }
 
 /// [DataEntity] representing [DateTime] Objects
-class DateTimeDataEntity extends DataEntity<DateTime, String> {
+class DateTimeDataEntity extends ComparableDataEntity<DateTime, String> {
   /// Creates a new DateTimeDataEntity Object with value [value]
   DateTimeDataEntity([DateTime? value]) : super(value);
 
@@ -61,7 +73,7 @@ class DateTimeDataEntity extends DataEntity<DateTime, String> {
 
 /// [DataEntity] representing a Date
 /// Internally this is using [DateTime] ignoring the Time Part
-class DateDataEntity extends DataEntity<DateTime, String> {
+class DateDataEntity extends ComparableDataEntity<DateTime, String> {
   /// Creates a new DateTimeDataEntity Object with value [value]
   DateDataEntity([DateTime? value]) : super(value);
 
@@ -92,7 +104,7 @@ class BooleanDataEntity extends DataEntity<bool, bool> {
 }
 
 /// [DataEntity] representing [int] Objects
-class IntegerDataEntity extends DataEntity<int, int> {
+class IntegerDataEntity extends ComparableDataEntity<int, int> {
   /// Creates a new IntegerDataEntity Object
   IntegerDataEntity([int? value]) : super(value);
 
@@ -101,7 +113,7 @@ class IntegerDataEntity extends DataEntity<int, int> {
 }
 
 /// [DataEntity] representing [double] Objects
-class DecimalDataEntity extends DataEntity<double, double> {
+class DecimalDataEntity extends ComparableDataEntity<double, double> {
   /// Creates a new DecimalDataEntity Object
   DecimalDataEntity([num? value]) : super(value?.toDouble());
 
@@ -137,7 +149,8 @@ class EnumDataEntity extends DataEntity<String, String> {
 }
 
 /// [DataEntity] representing an enum like Object
-class EnumCollectionDataEntity extends DataEntity<Set<String>, List<String>> {
+class EnumCollectionDataEntity
+    extends CollectionDataEntity<Set<String>, List<String>> {
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
   EnumCollectionDataEntity._({
     required Set<String> value,
@@ -230,7 +243,8 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 }
 
 /// [DataEntity] representing an array of Attachments
-class AttachmentDataEntity extends DataEntity<List<Attachment>, dynamic> {
+class AttachmentDataEntity
+    extends CollectionDataEntity<List<Attachment>, dynamic> {
   /// Create a new Attachment Data Entity
   AttachmentDataEntity([
     List<Attachment>? value,
@@ -292,7 +306,7 @@ class GeolocationDataEntity extends DataEntity<Geolocation, dynamic> {
 
 /// [DataEntity] representing a list of objects CrossReferencing to a different Grid
 class MultiCrossReferenceDataEntity
-    extends DataEntity<List<CrossReferenceDataEntity>, dynamic> {
+    extends CollectionDataEntity<List<CrossReferenceDataEntity>, dynamic> {
   /// Create a new CrossReference Data Entity
   MultiCrossReferenceDataEntity({
     List<CrossReferenceDataEntity>? references,
