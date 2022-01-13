@@ -30,11 +30,15 @@ abstract class DataEntity<T, S> {
   int get hashCode => toString().hashCode;
 }
 
+/// Class for DataEntities that are support in Comparison Filters like [LesserThanFilter] and [GreaterThanFilter]
 abstract class ComparableDataEntity<T, S> extends DataEntity<T, S> {
+  /// Creates a new DataEntity with [value]
   ComparableDataEntity([T? value]) : super(value);
 }
 
+/// Class for DataEntities that support Collection Filters like [AnyOfFilter], [AllOfFilter] and [NoneOfFilter]
 abstract class CollectionDataEntity<T, S> extends DataEntity<T, S> {
+  /// Creates a new DataEntity with [value]
   CollectionDataEntity([T? value]) : super(value);
 }
 
@@ -145,7 +149,8 @@ class EnumDataEntity extends DataEntity<String, String> {
 }
 
 /// [DataEntity] representing an enum like Object
-class EnumCollectionDataEntity extends CollectionDataEntity<Set<String>, List<String>> {
+class EnumCollectionDataEntity
+    extends CollectionDataEntity<Set<String>, List<String>> {
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
   EnumCollectionDataEntity._({
     required Set<String> value,
@@ -238,7 +243,8 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 }
 
 /// [DataEntity] representing an array of Attachments
-class AttachmentDataEntity extends CollectionDataEntity<List<Attachment>, dynamic> {
+class AttachmentDataEntity
+    extends CollectionDataEntity<List<Attachment>, dynamic> {
   /// Create a new Attachment Data Entity
   AttachmentDataEntity([
     List<Attachment>? value,

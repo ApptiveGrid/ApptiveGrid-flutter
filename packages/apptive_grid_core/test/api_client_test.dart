@@ -1291,7 +1291,10 @@ void main() {
       });
 
       await apptiveGridClient.loadGrid(
-        filter: SubstringFilter(fieldId: '9fqx8om03flgh8d4m1l953x29', value: StringDataEntity('a')),
+        filter: SubstringFilter(
+          fieldId: '9fqx8om03flgh8d4m1l953x29',
+          value: StringDataEntity('a'),
+        ),
         gridUri: GridViewUri(
           user: userId,
           space: spaceId,

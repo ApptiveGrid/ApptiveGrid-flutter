@@ -120,7 +120,7 @@ void main() {
     test('And', () async {
       expect(
         jsonEncode(
-          AndFilterCondition(
+          AndFilterComposition(
             conditions: [
               EqualFilter(fieldId: 'fieldId', value: StringDataEntity('value')),
               AnyOfFilter(
@@ -149,7 +149,7 @@ void main() {
     test('Or', () async {
       expect(
         jsonEncode(
-          OrFilterCondition(
+          OrFilterComposition(
             conditions: [
               EqualFilter(fieldId: 'fieldId', value: StringDataEntity('value')),
               AnyOfFilter(

@@ -30,7 +30,8 @@ class ApptiveGridGridBuilder extends StatefulWidget {
   /// List of [ApptiveGridSorting] that should be applied
   final List<ApptiveGridSorting>? sorting;
 
-  final FilterCondition? filter;
+  /// [ApptiveGridFilter] that should be used to filter entities
+  final ApptiveGridFilter? filter;
 
   @override
   ApptiveGridGridBuilderState createState() => ApptiveGridGridBuilderState();

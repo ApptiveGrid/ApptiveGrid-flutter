@@ -166,7 +166,7 @@ class ApptiveGridClient {
   Future<Grid> loadGrid({
     required GridUri gridUri,
     List<ApptiveGridSorting>? sorting,
-    FilterCondition? filter,
+    ApptiveGridFilter? filter,
   }) async {
     await _authenticator.checkAuthentication();
     final gridViewUrl =
