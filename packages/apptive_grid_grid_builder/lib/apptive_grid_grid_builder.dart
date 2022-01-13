@@ -43,9 +43,9 @@ class ApptiveGridGridBuilderState extends State<ApptiveGridGridBuilder> {
 
   @override
   void initState() {
+    super.initState();
     _snapshot =
         AsyncSnapshot<Grid?>.withData(ConnectionState.none, widget.initialData);
-    super.initState();
   }
 
   @override
@@ -57,7 +57,8 @@ class ApptiveGridGridBuilderState extends State<ApptiveGridGridBuilder> {
   @override
   void didUpdateWidget(covariant ApptiveGridGridBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!listEquals(oldWidget.sorting, widget.sorting)) {
+    if (!listEquals(oldWidget.sorting, widget.sorting) ||
+        oldWidget.filter != widget.filter) {
       reload(listen: false);
     }
   }
