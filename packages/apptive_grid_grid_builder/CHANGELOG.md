@@ -1,3 +1,6 @@
+## [0.8.0-alpha.4]
+* Add support for `ApptiveGridFilter` through `filter` argument
+
 ## [0.8.0-alpha.3]
 * Add `sorting` parameter to ApptiveGridGridBuilder
 
