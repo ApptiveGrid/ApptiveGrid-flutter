@@ -282,6 +282,56 @@ void main() {
       ).called(2);
     });
   });
+
+  group('Filter', () {
+    testWidgets('Filter is applied', (tester) async {
+      final filter =
+          EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'));
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridGridBuilder(
+          filter: filter,
+          gridUri: GridUri(
+            user: user,
+            space: space,
+            grid: gridId,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(snapshot.data!.name);
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        ),
+      );
+
+      final title = 'Title';
+      when(
+        () => client.loadGrid(
+          gridUri: GridUri(user: user, space: space, grid: gridId),
+          filter: filter,
+        ),
+      ).thenAnswer(
+        (_) async => Grid(
+          name: title,
+          schema: null,
+          fields: [],
+          rows: [],
+        ),
+      );
+
+      await tester.pumpWidget(target);
+
+      final capturedSorting = verify(
+        () => client.loadGrid(
+          gridUri: any(named: 'gridUri'),
+          filter: captureAny(named: 'filter'),
+        ),
+      ).captured.first as ApptiveGridFilter;
+      expect(capturedSorting, equals(filter));
+    });
+  });
 }
 
 class _SortingSwitcher extends StatefulWidget {
