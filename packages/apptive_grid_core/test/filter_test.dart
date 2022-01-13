@@ -24,7 +24,7 @@ void main() {
     test('Equal', () async {
       expect(
         jsonEncode(
-          EqualFilter(fieldId: 'fieldId', value: StringDataEntity('value'))
+          EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'))
               .toJson(),
         ),
         equals(jsonEncode({'fieldId': 'value'})),
@@ -122,7 +122,10 @@ void main() {
         jsonEncode(
           AndFilterComposition(
             conditions: [
-              EqualFilter(fieldId: 'fieldId', value: StringDataEntity('value')),
+              EqualsFilter(
+                fieldId: 'fieldId',
+                value: StringDataEntity('value'),
+              ),
               AnyOfFilter(
                 fieldId: 'fieldId1',
                 value: EnumCollectionDataEntity(value: {'2', '3'}),
@@ -151,7 +154,10 @@ void main() {
         jsonEncode(
           OrFilterComposition(
             conditions: [
-              EqualFilter(fieldId: 'fieldId', value: StringDataEntity('value')),
+              EqualsFilter(
+                fieldId: 'fieldId',
+                value: StringDataEntity('value'),
+              ),
               AnyOfFilter(
                 fieldId: 'fieldId1',
                 value: EnumCollectionDataEntity(value: {'2', '3'}),

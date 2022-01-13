@@ -8,7 +8,7 @@ import 'package:apptive_grid_core/apptive_grid_core.dart';
 /// [AndFilterComposition], [OrFilterComposition]
 ///
 /// Available for all [DataEntity]
-/// [EqualFilter]
+/// [EqualsFilter]
 ///
 /// String Filter
 /// [SubstringFilter]
@@ -135,9 +135,9 @@ class SubstringFilter extends _FieldFilter {
 }
 
 /// Filter to check if a [GridField]'s value is equal to [value]
-class EqualFilter extends _FieldFilter {
+class EqualsFilter extends _FieldFilter {
   /// Creates a Filter that checks if [DataEntity.value] equals the [fieldId] [GridField]
-  const EqualFilter({
+  const EqualsFilter({
     required String fieldId,
     required DataEntity value,
   }) : super._(
