@@ -38,6 +38,7 @@ enum DataType {
   /// Type for Multi Cross References
   multiCrossReference,
 
+  /// Type for UserReferences. Used for createdBy
   userReference,
 }
 

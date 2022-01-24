@@ -773,9 +773,10 @@ void main() {
         title: 'Form Data',
         components: [
           UserReferenceFormComponent(
-              property: 'Created By',
-              data: UserReferenceDataEntity(),
-              fieldId: 'field3'),
+            property: 'Created By',
+            data: UserReferenceDataEntity(),
+            fieldId: 'field3',
+          ),
         ],
         schema: {
           'properties': {

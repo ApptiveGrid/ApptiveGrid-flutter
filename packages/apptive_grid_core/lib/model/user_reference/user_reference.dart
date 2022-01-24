@@ -2,6 +2,7 @@ part of apptive_grid_model;
 
 /// Object representing a UserReference
 class UserReference {
+  /// Creates a new UserReference
   const UserReference({
     this.displayValue = '',
     required this.id,
@@ -20,19 +21,30 @@ class UserReference {
     );
   }
 
+  /// Maps the [UserReference] to a format the server can understand
   Map<String, String?> toJson() => {
-        'displayValue': displayValue,
+        'displayValue': displayValue ?? '',
         'id': id,
-        'name': name,
+        'name': name ?? '',
         'type': type.backendType,
       };
 
+  /// Display Value for the Reference
+  /// If [type] is [UserReferenceType.user] this will be the First Name Last Name of the user
   final String? displayValue;
 
+  /// Id of the user
+  ///
+  /// Can be a Userid, FormId, ApiCredentials id
   final String id;
 
+  /// Name of the User
+  ///
+  /// If [type] is [UserReferenceType.user] this will be the email of the user
+  /// If [type] is [UserReferenceType.apiCredentials] this will be the name of the api credentials
   final String? name;
 
+  /// Type of the creating user
   final UserReferenceType type;
 
   @override
@@ -53,9 +65,15 @@ class UserReference {
   int get hashCode => toString().hashCode;
 }
 
+/// Different types that have created a specific entity
 enum UserReferenceType {
+  /// The entity was created by a logged in user
   user,
+
+  /// The entity was submitted via a form by a non logged in user
   formLink,
+
+  /// The entity was created using api credentials
   apiCredentials,
 }
 
