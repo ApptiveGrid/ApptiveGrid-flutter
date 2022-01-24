@@ -53,6 +53,8 @@ Widget fromModel(FormComponent component) {
       return MultiCrossReferenceFormWidget(
         component: component as MultiCrossReferenceFormComponent,
       );
+    case UserReferenceDataEntity:
+      return const UserReferenceFormWidget();
     default:
       throw ArgumentError(
         'No Widget found for component $component. Please make sure you are you using the latest version of this package?',

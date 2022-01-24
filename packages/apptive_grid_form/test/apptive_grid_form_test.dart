@@ -765,4 +765,56 @@ void main() {
       expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
     });
   });
+
+  group('User Reference', () {
+    testWidgets('UserReference Form Widget is build without padding',
+        (tester) async {
+      final formData = FormData(
+        title: 'Form Data',
+        components: [
+          UserReferenceFormComponent(
+              property: 'Created By',
+              data: UserReferenceDataEntity(),
+              fieldId: 'field3'),
+        ],
+        schema: {
+          'properties': {
+            'field3': {
+              'type': 'object',
+              'properties': {
+                'displayValue': {'type': 'string'},
+                'id': {'type': 'string'},
+                'type': {'type': 'string'},
+                'name': {'type': 'string'}
+              },
+              'objectType': 'userReference'
+            },
+          },
+        },
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+        ),
+      );
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer((realInvocation) async => formData);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.ancestor(
+          of: find.byType(UserReferenceFormWidget),
+          matching: find.byType(Padding),
+        ),
+        findsNothing,
+      );
+    });
+  });
 }
