@@ -361,3 +361,23 @@ class MultiCrossReferenceDataEntity
   @override
   int get hashCode => toString().hashCode;
 }
+
+/// [DataEntity] representing [UserReference]s
+class UserReferenceDataEntity extends DataEntity<UserReference, dynamic> {
+  /// Creates a new GeolocationDataEntity Object with value [value]
+  UserReferenceDataEntity([UserReference? value]) : super(value);
+
+  /// Creates a new GeolocationDataEntity Object from json
+  /// [json] needs to be an array of double
+  factory UserReferenceDataEntity.fromJson(dynamic json) {
+    UserReference? jsonValue;
+    if (json != null) {
+      jsonValue = UserReference.fromJson(json);
+    }
+    return UserReferenceDataEntity(jsonValue);
+  }
+
+  /// Returns [value] coordinates in a array
+  @override
+  dynamic get schemaValue => value?.toJson();
+}

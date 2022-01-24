@@ -65,6 +65,9 @@ class GridEntry {
           gridUri: schema['items']['gridUri'],
         );
         break;
+      case DataType.userReference:
+        dataEntity = UserReferenceDataEntity.fromJson(jsonData);
+        break;
     }
     return GridEntry(field, dataEntity);
   }

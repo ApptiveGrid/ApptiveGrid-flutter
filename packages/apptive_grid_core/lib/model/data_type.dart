@@ -37,6 +37,8 @@ enum DataType {
 
   /// Type for Multi Cross References
   multiCrossReference,
+
+  userReference,
 }
 
 /// Returns [DataType] that matching a certain schema [schemaProperty]
@@ -74,8 +76,13 @@ DataType dataTypeFromSchemaProperty({
           return DataType.attachment;
         case 'geolocation':
           return DataType.geolocation;
+        case 'userReference':
+          return DataType.userReference;
+        default:
+          throw ArgumentError(
+            'No defined Object type for type: $objectType',
+          );
       }
-      break;
     case 'array':
       final itemType =
           dataTypeFromSchemaProperty(schemaProperty: schemaProperty['items']);
