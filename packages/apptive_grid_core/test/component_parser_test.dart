@@ -569,6 +569,39 @@ void main() {
       );
     });
 
+    test('Unknown Object Type throws', () {
+      const property = 'property';
+      const id = 'id';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'object',
+            "properties": <String, dynamic>{},
+            "objectType": "unknown"
+          }
+        }
+      };
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': null,
+        'required': true,
+        'options': <String, dynamic>{},
+        'type': 'unknown'
+      };
+
+      expect(
+        () => FormComponent.fromJson(json, schema),
+        throwsA(
+          predicate<ArgumentError>(
+            (e) => e.message == 'No defined Object type for type: unknown',
+            'ArgumentError with specific Message',
+          ),
+        ),
+      );
+    });
+
     test('Unknown Property throws', () {
       const property = 'property';
       const id = 'id';

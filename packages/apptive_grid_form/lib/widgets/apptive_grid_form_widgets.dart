@@ -29,6 +29,7 @@ part 'form_widget/text_form_widget.dart';
 part 'form_widget/integer_form_widget.dart';
 part 'form_widget/cross_reference_form_widget.dart';
 part 'form_widget/cross_reference/cross_reference_dropdown_button_form_field.dart';
+part 'form_widget/user_reference_form_widget.dart';
 
 part 'actions/action_button.dart';
 part 'package:apptive_grid_form/widgets/grid/grid_row.dart';
