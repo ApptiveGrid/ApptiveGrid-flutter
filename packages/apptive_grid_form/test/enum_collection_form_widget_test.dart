@@ -84,7 +84,8 @@ void main() {
         components: [
           EnumCollectionFormComponent(
             property: 'Property',
-            data: EnumCollectionDataEntity(value: {'A', 'B'}, options: {'A', 'B', 'C'}),
+            data: EnumCollectionDataEntity(
+                value: {'A', 'B'}, options: {'A', 'B', 'C'}),
             fieldId: 'fieldId',
             required: true,
           )
@@ -144,7 +145,8 @@ void main() {
       when(() => client.performAction(action, any()))
           .thenAnswer((_) async => Response('body', 200));
       when(() => client.createAttachmentUrl(any())).thenAnswer(
-            (invocation) => Uri.parse('${invocation.positionalArguments.first}.com'),
+        (invocation) =>
+            Uri.parse('${invocation.positionalArguments.first}.com'),
       );
 
       final target = TestApp(
@@ -176,9 +178,9 @@ void main() {
       );
 
       final capturedData =
-      verify(() => client.performAction(action, captureAny<FormData>()))
-          .captured
-          .first as FormData;
+          verify(() => client.performAction(action, captureAny<FormData>()))
+              .captured
+              .first as FormData;
       expect(capturedData.components.first.data.value, {'A'});
     });
   });

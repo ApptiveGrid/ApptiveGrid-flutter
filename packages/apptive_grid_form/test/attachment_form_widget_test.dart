@@ -697,7 +697,8 @@ void main() {
         components: [
           AttachmentFormComponent(
             property: 'Property',
-            data: AttachmentDataEntity([Attachment(name: 'name', url: Uri(), type: 'image/png')]),
+            data: AttachmentDataEntity(
+                [Attachment(name: 'name', url: Uri(), type: 'image/png')]),
             fieldId: 'fieldId',
             required: true,
           )
