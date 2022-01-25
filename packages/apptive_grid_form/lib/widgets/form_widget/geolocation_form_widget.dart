@@ -39,6 +39,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
         }
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      initialValue: widget.component.data,
       builder: (formState) {
         return MultiProvider(
           providers: [
