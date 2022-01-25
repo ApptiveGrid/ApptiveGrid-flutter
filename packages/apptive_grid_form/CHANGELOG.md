@@ -1,8 +1,11 @@
+@@ [0.9.0-alpha.9]
+* Add Support for `DataType.createdBy`
+
 ## [0.9.0-alpha.8]
 * Show Loading Indicator while submitting a Form
 
 ## [0.9.0-alpha.7]
-* Add proper support for [DataType.multiCrossReference] in Forms
+* Add proper support for `DataType.multiCrossReference` in Forms
 
 ## [0.9.0-alpha.6]
 * Add support for `DataType.multiCrossReference`
@@ -30,7 +33,7 @@
 * **BREAKING CHANGE** Requires minSdkVersion for Android to be at least 18
 
 ## [0.7.3+1]
-* Use Locale for DateTime Formats in [DateFormWidget] and [DateTimeFormWidget]
+* Use Locale for DateTime Formats in `DateFormWidget` and `DateTimeFormWidget`
 
 ## [0.7.3]
 * Add missing translations
@@ -43,7 +46,7 @@
 * Adding translations to Forms. Right now English and German are supported
 
 ## [0.7.1]
-* Adding a way to get [currentData] of a FormWidget
+* Adding a way to get `currentData` of a FormWidget
 
 ## [0.7.0]
 * **BREAKING CHANGE** Added `FormData` to `onActionSuccess` callback to receive the data that was successfully send

@@ -148,6 +148,27 @@ void main() {
       expect(widget.runtimeType, MultiCrossReferenceFormWidget);
     });
 
+    test('UserReferenceComponent', () {
+      final component = UserReferenceFormComponent(
+        fieldId: 'id',
+        data: UserReferenceDataEntity(
+          const UserReference(
+            id: 'userId',
+            type: UserReferenceType.user,
+            displayValue: 'Jane Doe',
+            name: 'jane.doe@2denker.de',
+          ),
+        ),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, UserReferenceFormWidget);
+    });
+
     test('ArgumentError', () {
       final component = UnknownComponent();
 

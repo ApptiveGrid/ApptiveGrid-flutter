@@ -1,3 +1,6 @@
+## [0.8.0-alpha.9]
+* Add Support for `DataType.createdBy`
+
 ## [0.8.0-alpha.8]
 * Fix Collection Filter Operators
 

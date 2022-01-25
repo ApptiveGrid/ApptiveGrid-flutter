@@ -361,3 +361,23 @@ class MultiCrossReferenceDataEntity
   @override
   int get hashCode => toString().hashCode;
 }
+
+/// [DataEntity] representing [UserReference]s
+class UserReferenceDataEntity extends DataEntity<UserReference, dynamic> {
+  /// Creates a new UserReferenceDataEntity Object with value [value]
+  UserReferenceDataEntity([UserReference? value]) : super(value);
+
+  /// Creates a new UserReferenceDataEntity Object from json
+  /// [json] needs to be an object that is parsed with [UserReference.fromJson]
+  factory UserReferenceDataEntity.fromJson(dynamic json) {
+    UserReference? jsonValue;
+    if (json != null) {
+      jsonValue = UserReference.fromJson(json);
+    }
+    return UserReferenceDataEntity(jsonValue);
+  }
+
+  /// Returns [value] as a json object map
+  @override
+  dynamic get schemaValue => value?.toJson();
+}

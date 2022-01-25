@@ -311,10 +311,21 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               }
             } else if (index < data.components.length + 1) {
               final componentIndex = index - 1;
-              return Padding(
-                padding: widget.contentPadding ?? _defaultPadding,
-                child: fromModel(data.components[componentIndex]),
-              );
+              final component = fromModel(data.components[componentIndex]);
+              if (component is UserReferenceFormWidget) {
+                // UserReference Widget should be invisible in the Form
+                // So returning without any Padding
+                return component;
+              } else {
+                return Padding(
+                  padding: widget.contentPadding ?? _defaultPadding,
+                  child: Builder(
+                    builder: (context) {
+                      return fromModel(data.components[componentIndex]);
+                    },
+                  ),
+                );
+              }
             } else {
               return Padding(
                 padding: widget.contentPadding ?? _defaultPadding,
