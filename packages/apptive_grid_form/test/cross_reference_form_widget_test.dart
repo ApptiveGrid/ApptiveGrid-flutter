@@ -4,11 +4,17 @@ import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'common.dart';
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(FormData(title: 'title', components: [], schema: {}));
+    registerFallbackValue(GridUri(user: 'user', space: 'space', grid: 'grid'));
+  });
+
   group('FormWidget', () {
     late ApptiveGridClient client;
     late Widget target;
@@ -155,6 +161,53 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('null'), findsNothing);
+    });
+  });
+
+  group('Validation', () {
+    testWidgets('is required but filled sends', (tester) async {
+      final action = FormAction('formAction', 'POST');
+      final formData = FormData(
+        title: 'title',
+        components: [
+          CrossReferenceFormComponent(
+            property: 'Property',
+            data: CrossReferenceDataEntity(
+              value: 'CrossRef',
+              gridUri: GridUri(user: 'user', space: 'space', grid: 'grid'),
+              entityUri: EntityUri(user: 'user', space: 'space', grid: 'grid', entity: 'entity'),
+
+            ),
+            fieldId: 'fieldId',
+            required: true,
+          )
+        ],
+        actions: [action],
+        schema: null,
+      );
+      final client = MockApptiveGridClient();
+      when(() => client.loadGrid(gridUri: any(named: 'gridUri'))).thenAnswer((invocation) async => Grid(name: 'name', schema: {}, fields: [], rows: []));
+      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.performAction(action, any()))
+          .thenAnswer((_) async => Response('body', 200));
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Property must not be empty', skipOffstage: true),
+        findsNothing,
+      );
     });
   });
 }
