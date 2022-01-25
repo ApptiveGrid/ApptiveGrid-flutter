@@ -229,10 +229,11 @@ void main() {
                   value: 'CrossRef',
                   gridUri: GridUri(user: 'user', space: 'space', grid: 'grid'),
                   entityUri: EntityUri(
-                      user: 'user',
-                      space: 'space',
-                      grid: 'grid',
-                      entity: 'entity'),
+                    user: 'user',
+                    space: 'space',
+                    grid: 'grid',
+                    entity: 'entity',
+                  ),
                 ),
               ],
             ),
@@ -245,8 +246,9 @@ void main() {
       );
       final client = MockApptiveGridClient();
       when(() => client.loadGrid(gridUri: any(named: 'gridUri'))).thenAnswer(
-          (invocation) async =>
-              Grid(name: 'name', schema: {}, fields: [], rows: []));
+        (invocation) async =>
+            Grid(name: 'name', schema: {}, fields: [], rows: []),
+      );
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
       when(() => client.performAction(action, any()))
           .thenAnswer((_) async => Response('body', 200));

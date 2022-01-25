@@ -85,7 +85,9 @@ void main() {
           EnumCollectionFormComponent(
             property: 'Property',
             data: EnumCollectionDataEntity(
-                value: {'A', 'B'}, options: {'A', 'B', 'C'}),
+              value: {'A', 'B'},
+              options: {'A', 'B', 'C'},
+            ),
             fieldId: 'fieldId',
             required: true,
           )
