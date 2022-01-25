@@ -4,7 +4,7 @@ part of apptive_grid_model;
 class UserReference {
   /// Creates a new UserReference
   const UserReference({
-    this.displayValue = '',
+    this.displayValue,
     required this.id,
     this.name = '',
     required this.type,
@@ -25,7 +25,7 @@ class UserReference {
   Map<String, String?> toJson() => {
         'displayValue': displayValue ?? '',
         'id': id,
-        'name': name ?? '',
+        'name': name,
         'type': type.backendType,
       };
 
@@ -42,7 +42,7 @@ class UserReference {
   ///
   /// If [type] is [UserReferenceType.user] this will be the email of the user
   /// If [type] is [UserReferenceType.apiCredentials] this will be the name of the api credentials
-  final String? name;
+  final String name;
 
   /// Type of the creating user
   final UserReferenceType type;
