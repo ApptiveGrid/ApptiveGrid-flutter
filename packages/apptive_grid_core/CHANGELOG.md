@@ -1,5 +1,6 @@
 ## [0.8.0-alpha.9]
 * Add Support for `DataType.createdBy`
+* Add call to retrieve a single entity
 
 ## [0.8.0-alpha.8]
 * Fix Collection Filter Operators

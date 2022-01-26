@@ -1457,6 +1457,54 @@ void main() {
     });
   });
 
+  group('Get Entity', () {
+    const userId = 'userId';
+    const spaceId = 'spaceId';
+    const gridId = 'gridId';
+    const entityId = 'entityId';
+    final entityUri =
+        EntityUri(user: userId, space: spaceId, grid: gridId, entity: entityId);
+    final rawResponse = {
+      '4um33znbt8l6x0vzvo0mperwj': null,
+      '_id': 'entityId',
+      '5kmhd05jzdd48jaxbds8yn3js': 'Test',
+    };
+    test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      final entity = await apptiveGridClient.getEntity(entityUri: entityUri);
+
+      expect(entity, rawResponse);
+    });
+
+    test('400 Status throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      expect(
+        () => apptiveGridClient.getEntity(entityUri: entityUri),
+        throwsA(isInstanceOf<Response>()),
+      );
+    });
+  });
+
   group('Switch Stage', () {
     late Client httpClient;
     late ApptiveGridClient client;
