@@ -690,6 +690,47 @@ void main() {
       );
     });
 
+    testWidgets('Attachment is required but filled sends', (tester) async {
+      final action = FormAction('formAction', 'POST');
+      final formData = FormData(
+        title: 'title',
+        components: [
+          AttachmentFormComponent(
+            property: 'Property',
+            data: AttachmentDataEntity(
+              [Attachment(name: 'name', url: Uri(), type: 'image/png')],
+            ),
+            fieldId: 'fieldId',
+            required: true,
+          )
+        ],
+        actions: [action],
+        schema: null,
+      );
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.performAction(action, any()))
+          .thenAnswer((_) async => Response('body', 200));
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Property must not be empty', skipOffstage: true),
+        findsNothing,
+      );
+    });
+
     testWidgets(
         'Attachment is required shows message '
         'adding attachment '

@@ -76,69 +76,114 @@ void main() {
     expect(component.data.value, <String>{});
   });
 
-  testWidgets('Required Status Updates', (tester) async {
-    final component = EnumCollectionFormComponent(
-      property: 'Property',
-      data: EnumCollectionDataEntity(
-        value: {},
-        options: {
-          'A',
-          'B',
-        },
-      ),
-      fieldId: 'fieldId',
-      required: true,
-    );
+  group('Validation', () {
+    testWidgets('is required but filled sends', (tester) async {
+      final action = FormAction('formAction', 'POST');
+      final formData = FormData(
+        title: 'title',
+        components: [
+          EnumCollectionFormComponent(
+            property: 'Property',
+            data: EnumCollectionDataEntity(
+              value: {'A', 'B'},
+              options: {'A', 'B', 'C'},
+            ),
+            fieldId: 'fieldId',
+            required: true,
+          )
+        ],
+        actions: [action],
+        schema: null,
+      );
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.performAction(action, any()))
+          .thenAnswer((_) async => Response('body', 200));
 
-    final action = FormAction('formAction', 'POST');
-    final formData = FormData(
-      title: 'title',
-      components: [
-        component,
-      ],
-      actions: [action],
-      schema: null,
-    );
-    final client = MockApptiveGridClient();
-    when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-    when(() => client.performAction(action, any()))
-        .thenAnswer((_) async => Response('body', 200));
-    when(() => client.createAttachmentUrl(any())).thenAnswer(
-      (invocation) => Uri.parse('${invocation.positionalArguments.first}.com'),
-    );
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
 
-    final target = TestApp(
-      client: client,
-      child: ApptiveGridFormData(
-        formData: formData,
-      ),
-    );
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
 
-    await tester.pumpWidget(target);
-    await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(ActionButton));
-    await tester.pump();
+      expect(
+        find.text('Property must not be empty', skipOffstage: true),
+        findsNothing,
+      );
+    });
 
-    expect(
-      find.text('Property must not be empty', skipOffstage: true),
-      findsOneWidget,
-    );
+    testWidgets('Required Status Updates', (tester) async {
+      final component = EnumCollectionFormComponent(
+        property: 'Property',
+        data: EnumCollectionDataEntity(
+          value: {},
+          options: {
+            'A',
+            'B',
+          },
+        ),
+        fieldId: 'fieldId',
+        required: true,
+      );
 
-    await tester.tap(find.text('A'));
-    await tester.pump();
-    await tester.tap(find.byType(ActionButton));
-    await tester.pump();
+      final action = FormAction('formAction', 'POST');
+      final formData = FormData(
+        title: 'title',
+        components: [
+          component,
+        ],
+        actions: [action],
+        schema: null,
+      );
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.performAction(action, any()))
+          .thenAnswer((_) async => Response('body', 200));
+      when(() => client.createAttachmentUrl(any())).thenAnswer(
+        (invocation) =>
+            Uri.parse('${invocation.positionalArguments.first}.com'),
+      );
 
-    expect(
-      find.text('Property must not be empty', skipOffstage: true),
-      findsNothing,
-    );
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
 
-    final capturedData =
-        verify(() => client.performAction(action, captureAny<FormData>()))
-            .captured
-            .first as FormData;
-    expect(capturedData.components.first.data.value, {'A'});
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pump();
+
+      expect(
+        find.text('Property must not be empty', skipOffstage: true),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('A'));
+      await tester.pump();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pump();
+
+      expect(
+        find.text('Property must not be empty', skipOffstage: true),
+        findsNothing,
+      );
+
+      final capturedData =
+          verify(() => client.performAction(action, captureAny<FormData>()))
+              .captured
+              .first as FormData;
+      expect(capturedData.components.first.data.value, {'A'});
+    });
   });
 }

@@ -1,5 +1,6 @@
 @@ [0.9.0-alpha.9]
 * Add Support for `DataType.createdBy`
+* Fix required validation not wrking for all types if Form has initial data
 
 ## [0.9.0-alpha.8]
 * Show Loading Indicator while submitting a Form
