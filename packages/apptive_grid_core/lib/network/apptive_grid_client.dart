@@ -351,6 +351,11 @@ class ApptiveGridClient {
   /// Checks if the User is currently authenticated
   bool get isAuthenticated => _authenticator.isAuthenticated;
 
+
+  Future<void> setUserToken(Map<String, dynamic> tokenResponse) async {
+    return _authenticator.setUserToken(tokenResponse);
+  }
+
   /// Updates the Environment for the client and handle necessary changes in the Authenticator
   Future<void> updateEnvironment(ApptiveGridEnvironment environment) async {
     final currentRealm = options.environment.authRealm;

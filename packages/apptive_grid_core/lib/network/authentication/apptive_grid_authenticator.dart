@@ -54,6 +54,19 @@ class ApptiveGridAuthenticator {
   @visibleForTesting
   void setToken(TokenResponse? token) => _token = token;
 
+  Future<void> setUserToken(Map<String, dynamic> tokenResponse) async {
+    final token = TokenResponse.fromJson(tokenResponse);
+    final client = await _client;
+    final credential = Credential.fromJson({
+      'issuer': client.issuer.metadata.toJson(),
+      'client_id': client.clientId,
+      'client_secret': client.clientSecret,
+      'token': token.toJson(),
+    });
+    setCredential(credential);
+    setToken(token);
+  }
+
   /// Override the Credential for testing purposes
   @visibleForTesting
   void setCredential(Credential? credential) {
