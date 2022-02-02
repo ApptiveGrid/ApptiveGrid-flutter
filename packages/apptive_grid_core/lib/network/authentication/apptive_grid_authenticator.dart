@@ -20,6 +20,9 @@ class ApptiveGridAuthenticator {
 
     if (options.authenticationOptions.persistCredentials) {
       _authenticationStorage = const FlutterSecureStorageCredentialStorage();
+      checkAuthentication().then((_) => _setupCompleter.complete());
+    } else {
+      _setupCompleter.complete();
     }
   }
 
@@ -30,7 +33,9 @@ class ApptiveGridAuthenticator {
     this.httpClient,
     required AuthenticationStorage? storage,
   })  : _authenticationStorage = storage,
-        _authCallbackSubscription = null;
+        _authCallbackSubscription = null {
+    _setupCompleter.complete();
+  }
 
   /// [ApptiveGridOptions] used for getting the correct [ApptiveGridEnvironment.authRealm]
   /// and checking if authentication should automatically be handled
@@ -49,6 +54,8 @@ class ApptiveGridAuthenticator {
   Credential? _credential;
 
   AuthenticationStorage? _authenticationStorage;
+
+  final _setupCompleter = Completer();
 
   /// Override the token for testing purposes
   @visibleForTesting
@@ -183,6 +190,8 @@ class ApptiveGridAuthenticator {
           } on OpenIdException catch (_) {
             setCredential(null);
             debugPrint('Could not refresh saved token');
+          } catch (error) {
+            debugPrint('Error refreshing token: $error');
           }
         }
         if (options.authenticationOptions.apiKey != null) {
@@ -202,19 +211,22 @@ class ApptiveGridAuthenticator {
   ///
   /// even if the Call Fails the token and credential will be cleared
   Future<http.Response?> logout() async {
-    final logoutUrl = _credential?.generateLogoutUrl();
     http.Response? response;
-    if (logoutUrl != null) {
-      response = await (httpClient ?? http.Client()).get(
-        logoutUrl,
-        headers: {
-          HttpHeaders.authorizationHeader: header!,
-        },
-      );
+    try {
+      final logoutUrl = _credential?.generateLogoutUrl();
+      if (logoutUrl != null) {
+        response = await (httpClient ?? http.Client()).get(
+          logoutUrl,
+          headers: {
+            HttpHeaders.authorizationHeader: header!,
+          },
+        );
+      }
+    } catch (_) {
+      setToken(null);
+      setCredential(null);
+      _authClient = null;
     }
-    setToken(null);
-    setCredential(null);
-    _authClient = null;
 
     return response;
   }
@@ -244,8 +256,11 @@ class ApptiveGridAuthenticator {
   }
 
   /// Checks if the User is Authenticated
-  bool get isAuthenticated =>
-      options.authenticationOptions.apiKey != null || _token != null;
+  Future<bool> get isAuthenticated => _setupCompleter.future.then(
+      (_) => options.authenticationOptions.apiKey != null || _token != null);
+
+  Future<bool> get isAuthenticatedWithToken =>
+      _setupCompleter.future.then((_) => _token != null);
 }
 
 /// Interface to provide common functionality for authorization operations

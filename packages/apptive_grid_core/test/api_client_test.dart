@@ -327,7 +327,7 @@ void main() {
         setUp(() {
           httpClient = MockHttpClient();
           authenticator = MockApptiveGridAuthenticator();
-          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.isAuthenticated).thenAnswer((_) async => true);
           when(() => authenticator.checkAuthentication())
               .thenAnswer((_) async {});
           client = ApptiveGridClient.fromClient(
@@ -392,7 +392,7 @@ void main() {
         setUp(() {
           httpClient = MockHttpClient();
           authenticator = MockApptiveGridAuthenticator();
-          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.isAuthenticated).thenAnswer((_) async => true);
           when(() => authenticator.checkAuthentication())
               .thenAnswer((_) async {});
           client = ApptiveGridClient.fromClient(
@@ -576,7 +576,7 @@ void main() {
           setUp(() {
             httpClient = MockHttpClient();
             authenticator = MockApptiveGridAuthenticator();
-            when(() => authenticator.isAuthenticated).thenReturn(true);
+            when(() => authenticator.isAuthenticated).thenAnswer((_) async => true);
             when(() => authenticator.checkAuthentication())
                 .thenAnswer((_) async {});
             client = ApptiveGridClient.fromClient(
@@ -669,7 +669,7 @@ void main() {
         setUp(() {
           httpClient = MockHttpClient();
           authenticator = MockApptiveGridAuthenticator();
-          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.isAuthenticated).thenAnswer((_) async => true);
           when(() => authenticator.checkAuthentication())
               .thenAnswer((_) async {});
           client = ApptiveGridClient.fromClient(
@@ -838,7 +838,7 @@ void main() {
 
     test('isAuthenticated calls Authenticator', () {
       final authenticator = MockApptiveGridAuthenticator();
-      when(() => authenticator.isAuthenticated).thenAnswer((_) => true);
+      when(() => authenticator.isAuthenticated).thenAnswer((_) async => true);
       final client = ApptiveGridClient.fromClient(
         httpClient,
         authenticator: authenticator,
