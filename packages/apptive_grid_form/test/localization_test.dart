@@ -13,6 +13,7 @@ void main() {
       supportedLocales: const [Locale('de')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
       home: ApptiveGridLocalization(

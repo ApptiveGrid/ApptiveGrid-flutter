@@ -53,6 +53,7 @@ void main() {
         supportedLocales: const [locale],
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate
         ],
         home: Material(

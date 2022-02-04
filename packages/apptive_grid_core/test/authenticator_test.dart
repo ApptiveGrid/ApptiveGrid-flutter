@@ -315,14 +315,14 @@ void main() {
     test('isAuthenticated  returns Status of token', () async {
       authenticator = ApptiveGridAuthenticator();
 
-      expect(authenticator.isAuthenticated, false);
+      expect(await authenticator.isAuthenticated, false);
 
       final token = TokenResponse.fromJson(
         {'token_type': 'Bearer', 'access_token': '12345'},
       );
       authenticator.setToken(token);
 
-      expect(authenticator.isAuthenticated, true);
+      expect(await authenticator.isAuthenticated, true);
     });
   });
 
@@ -438,10 +438,10 @@ void main() {
       ),
     );
 
-    test('isAuthenticated', () {
+    test('isAuthenticated', () async {
       authenticator = ApptiveGridAuthenticator(options: options);
 
-      expect(authenticator.isAuthenticated, true);
+      expect(await authenticator.isAuthenticated, true);
     });
 
     test('Sets Header', () {
@@ -580,7 +580,7 @@ void main() {
       await authenticator.checkAuthentication();
 
       verifyNever(testAuthenticator.authorize);
-      expect(authenticator.isAuthenticated, true);
+      expect(await authenticator.isAuthenticated, true);
     });
 
     test(
@@ -653,7 +653,7 @@ void main() {
       await authenticator.checkAuthentication();
 
       verify(testAuthenticator.authorize).called(1);
-      expect(authenticator.isAuthenticated, true);
+      expect(await authenticator.isAuthenticated, true);
     });
 
     test(
@@ -698,7 +698,7 @@ void main() {
       await authenticator.checkAuthentication();
 
       verify(testAuthenticator.authorize).called(1);
-      expect(authenticator.isAuthenticated, true);
+      expect(await authenticator.isAuthenticated, true);
     });
 
     test(
@@ -758,13 +758,13 @@ void main() {
           value: any(named: 'value'),
           options: any(named: 'options'),
         ),
-      ).called(1);
+      ).called(2); // Creation of Authenticator reloads credential
       verify(
         () => secureStorage.read(
           key: any(named: 'key'),
           options: any(named: 'options'),
         ),
-      ).called(1);
+      ).called(2); // Value is read also at creation of authenticator
     });
   });
 }
