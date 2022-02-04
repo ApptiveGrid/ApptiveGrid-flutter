@@ -826,7 +826,7 @@ void main() {
 
     test('Logout calls Authenticator', () {
       final authenticator = MockApptiveGridAuthenticator();
-      when(() => authenticator.logout()).thenAnswer((_) async {});
+      when(() => authenticator.logout()).thenAnswer((_) async => null);
       final client = ApptiveGridClient.fromClient(
         httpClient,
         authenticator: authenticator,

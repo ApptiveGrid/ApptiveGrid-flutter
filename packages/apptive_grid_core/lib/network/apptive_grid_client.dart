@@ -351,8 +351,14 @@ class ApptiveGridClient {
   /// Checks if the User is currently authenticated
   Future<bool> get isAuthenticated => _authenticator.isAuthenticated;
 
-  Future<bool> get isAuthenticatedWithToken => _authenticator.isAuthenticatedWithToken;
+  /// Checks if the User is currently authenticated with a Token.
+  /// Returns true if the user is logged in as a user.
+  /// Will return false if there is no authentication set or if the authentication is done using a [ApptiveGridApiKey]
+  Future<bool> get isAuthenticatedWithToken =>
+      _authenticator.isAuthenticatedWithToken;
 
+  /// Authenticates by setting a token
+  /// [tokenResponse] needs to be a JWT
   Future<void> setUserToken(Map<String, dynamic> tokenResponse) async {
     return _authenticator.setUserToken(tokenResponse);
   }

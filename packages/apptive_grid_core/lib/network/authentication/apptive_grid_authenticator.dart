@@ -61,6 +61,8 @@ class ApptiveGridAuthenticator {
   @visibleForTesting
   void setToken(TokenResponse? token) => _token = token;
 
+  /// Authenticates by setting a token
+  /// [tokenResponse] needs to be a JWT
   Future<void> setUserToken(Map<String, dynamic> tokenResponse) async {
     final token = TokenResponse.fromJson(tokenResponse);
     final client = await _client;
@@ -242,6 +244,8 @@ class ApptiveGridAuthenticator {
     if (options.authenticationOptions.apiKey != null) {
       final apiKey = options.authenticationOptions.apiKey!;
       return 'Basic ${base64Encode(utf8.encode('${apiKey.authKey}:${apiKey.password}'))}';
+    } else {
+      return null;
     }
   }
 
@@ -257,8 +261,11 @@ class ApptiveGridAuthenticator {
 
   /// Checks if the User is Authenticated
   Future<bool> get isAuthenticated => _setupCompleter.future.then(
-      (_) => options.authenticationOptions.apiKey != null || _token != null);
+      (_) => options.authenticationOptions.apiKey != null || _token != null,);
 
+  /// Checks if the User is Authenticated via a Token
+  /// Returns true if the user is logged in as a user.
+  /// Will return false if there is no authentication set or if the authentication is done using a [ApptiveGridApiKey]
   Future<bool> get isAuthenticatedWithToken =>
       _setupCompleter.future.then((_) => _token != null);
 }
