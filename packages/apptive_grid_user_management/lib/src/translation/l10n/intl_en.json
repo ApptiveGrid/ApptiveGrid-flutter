@@ -1,0 +1,17 @@
+{
+    "actionLogin": "Login",
+    "actionRegister": "Register",
+    "hintEmail": "Email Address",
+    "hintPassword": "Password",
+    "hintFirstName": "First Name",
+    "hintLastName": "Last Name",
+    "hintConfirmPassword": "Confirm Password",
+    "validateErrorEmailFormat": "Not a valid email address",
+    "validateErrorEmailEmpty": "Email may not be empty",
+    "validateErrorFirstNameEmpty": "First Name may not be empty",
+    "validateErrorLastNameEmpty": "Last Name may not be empty",
+    "validateErrorPasswordsNotMatching": "Passwords do not match",
+    "registerWaitingForConfirmation": "All Set!\\nCheck your Email for a link to verify your account.",
+    "confirmAccountCreation": "Confirm your account by clicking below",
+    "actionConfirm": "Confirm"
+}

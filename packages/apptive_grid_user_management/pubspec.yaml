@@ -1,0 +1,34 @@
+name: apptive_grid_user_management
+description: A new Flutter package project.
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ">=2.15.1 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependency_overrides:
+  apptive_grid_core:
+    path: ../../../active-grid-flutter/packages/apptive_grid_core
+
+dependencies:
+  apptive_grid_core: ^0.8.0-alpha.9
+  flutter:
+    sdk: flutter
+  http: ^0.13.4
+  intl: ^0.17.0
+  password_rule_check: ^0.1.0
+  uni_links: ^0.5.1
+
+dev_dependencies:
+  flutter_lints: ^1.0.0
+  flutter_localizations:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.2.0
+  uni_links_platform_interface: ^1.0.0
+
+
+flutter:
+
