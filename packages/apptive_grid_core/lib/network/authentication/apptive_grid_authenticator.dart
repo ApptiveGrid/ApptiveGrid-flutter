@@ -225,6 +225,7 @@ class ApptiveGridAuthenticator {
         );
       }
     } catch (_) {
+    } finally {
       setToken(null);
       setCredential(null);
       _authClient = null;
@@ -261,7 +262,8 @@ class ApptiveGridAuthenticator {
 
   /// Checks if the User is Authenticated
   Future<bool> get isAuthenticated => _setupCompleter.future.then(
-      (_) => options.authenticationOptions.apiKey != null || _token != null,);
+        (_) => options.authenticationOptions.apiKey != null || _token != null,
+      );
 
   /// Checks if the User is Authenticated via a Token
   /// Returns true if the user is logged in as a user.
