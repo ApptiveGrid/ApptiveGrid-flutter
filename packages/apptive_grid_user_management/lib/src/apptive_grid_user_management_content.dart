@@ -2,7 +2,9 @@ import 'package:apptive_grid_user_management/src/login_content.dart';
 import 'package:apptive_grid_user_management/src/register_content.dart';
 import 'package:flutter/material.dart';
 
+/// Widget to show UserManagement Content to the User
 class ApptiveGridUserManagementContent extends StatefulWidget {
+  /// Creates a Content Widget to show the user Content
   const ApptiveGridUserManagementContent({
     Key? key,
     this.initialContentType = ContentType.register,
@@ -10,16 +12,20 @@ class ApptiveGridUserManagementContent extends StatefulWidget {
     this.spacing = 16.0,
   }) : super(key: key);
 
+  /// The initial [ContentType] that should be displayed
   final ContentType initialContentType;
 
+  /// Callback invoked when the user logged in successfully
   final void Function()? onLogin;
 
+  /// Custom spacing between items
   final double spacing;
 
   @override
   _ApptiveGridUserManagementContentState createState() =>
       _ApptiveGridUserManagementContentState();
 
+  /// Returns the closest nullable [_ApptiveGridUserManagementContentState]
   static _ApptiveGridUserManagementContentState? maybeOf(BuildContext context) {
     return context
         .findAncestorStateOfType<_ApptiveGridUserManagementContentState>();
@@ -62,4 +68,11 @@ class _ApptiveGridUserManagementContentState
   double get spacing => widget.spacing;
 }
 
-enum ContentType { login, register }
+/// The different Content Types the user can see
+enum ContentType {
+  /// Content to login as an existing User
+  login,
+
+  /// Content to register as a new user
+  register,
+}

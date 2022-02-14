@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:http/http.dart' as http;
 
+/// A network client to perform requests to the ApptiveGridUserManagement Api
 class ApptiveGridUserManagementClient {
+  /// Creates a new client
   ApptiveGridUserManagementClient({
     required this.group,
     required this.clientId,
@@ -13,11 +15,22 @@ class ApptiveGridUserManagementClient {
     http.Client? client,
   }) : _client = client ?? http.Client();
 
+  /// User Group the users should be added to
   final String group;
+
+  /// The Client Id
   final String clientId;
+
+  /// The redirect Scheme that should be used in the Confirmation Link in the email
+  /// if this is not provided the email will contain a https://app.apptivegrid.de/ link
+  /// If you want to use the https Links (support for iOS Universal Linking) contact ApptiveGrid to get your App added
+  /// info@apptivegrid.de
   final String? redirectSchema;
 
+  /// ApptiveGridClient. This is used to save the token after login
   final ApptiveGridClient apptiveGridClient;
+
+  /// Locale that should be used. This determines the language the email will be send in
   final String? locale;
 
   final http.Client _client;
@@ -30,6 +43,7 @@ class ApptiveGridUserManagementClient {
         if (locale != null) 'Accept-Language': locale!
       };
 
+  /// Registers a new user with the given inputs
   Future<http.Response> register({
     required String firstName,
     required String lastName,
@@ -59,6 +73,8 @@ class ApptiveGridUserManagementClient {
     }
   }
 
+  /// Performs a login request with [email] and [password]
+  /// If the login succeeds the token will be set in [apptiveGridClient]
   Future<http.Response> login({
     required String email,
     required String password,
@@ -84,6 +100,9 @@ class ApptiveGridUserManagementClient {
     }
   }
 
+  /// Tries to log in the user after account confirmation.
+  /// This will return if the login was successful or not
+  /// It will only be successful if the user registered in the same session and thus the users email and password are stored in the client
   Future<bool> loginAfterConfirmation() async {
     if (_email == null || _password == null) {
       return false;
@@ -99,6 +118,7 @@ class ApptiveGridUserManagementClient {
     }
   }
 
+  /// Performs a GET request against [confirmationUri] to confirm a user account
   Future<http.Response> confirmAccount({required Uri confirmationUri}) async {
     final response = await _client.get(confirmationUri);
 

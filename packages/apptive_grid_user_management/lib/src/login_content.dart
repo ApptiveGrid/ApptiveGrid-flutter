@@ -3,12 +3,17 @@ import 'package:apptive_grid_user_management/src/password_form_field.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
 import 'package:flutter/material.dart';
 
+/// A Widget to show Login Controls
 class LoginContent extends StatefulWidget {
+  /// Creates a new LoginContent Widget to display inputs for a user to log in
   const LoginContent({Key? key, this.requestRegistration, this.onLogin})
       : super(key: key);
 
+  /// Callback invoked when the user wants to switch to registering
+  /// If this is `null` no option to switch to registration is shown
   final void Function()? requestRegistration;
 
+  /// Callback invoked after the user logged successfully
   final void Function()? onLogin;
 
   @override
@@ -20,6 +25,13 @@ class _LoginContentState extends State<LoginContent> {
   final _passwordController = TextEditingController();
 
   bool _loading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

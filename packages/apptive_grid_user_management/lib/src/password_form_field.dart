@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Form Field for a Password with a Show/Hide Switch
 class PasswordFormField extends StatefulWidget {
+  /// Creates a new PasswordFormField
   const PasswordFormField({
     Key? key,
     this.controller,
@@ -8,10 +10,13 @@ class PasswordFormField extends StatefulWidget {
     this.validator,
   }) : super(key: key);
 
+  /// Controller for the input
   final TextEditingController? controller;
 
+  /// Input Decoration for the Field. [InputDecoration.suffixIcon] will be overridden by a visibility Icon Switch
   final InputDecoration decoration;
 
+  /// Input Validator
   final String? Function(String?)? validator;
 
   @override

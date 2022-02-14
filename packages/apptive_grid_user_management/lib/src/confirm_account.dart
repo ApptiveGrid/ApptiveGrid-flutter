@@ -2,15 +2,20 @@ import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
 import 'package:flutter/material.dart';
 
+/// Widget to confirm an account
 class ConfirmAccount extends StatefulWidget {
+  /// Creates a Widget that allows users to confirm their account
   const ConfirmAccount({
     Key? key,
     required this.confirmationUri,
     required this.confirmAccount,
   }) : super(key: key);
 
+  /// Uri the Confirmation should be made against
   final Uri confirmationUri;
 
+  /// Callback invoked after the account was confirmed
+  /// [loggedIn] indicates if the user was logged in automatically after confirmation
   final void Function(bool loggedIn) confirmAccount;
 
   @override

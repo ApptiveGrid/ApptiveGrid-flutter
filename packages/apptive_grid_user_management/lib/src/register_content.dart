@@ -4,9 +4,13 @@ import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_m
 import 'package:flutter/material.dart';
 import 'package:password_rule_check/password_rule_check.dart';
 
+/// A Widget to show Registration Controls
 class RegisterContent extends StatefulWidget {
+  /// Creates a new RegisterContent Widget to display inputs for a user to register a new account
   const RegisterContent({Key? key, this.requestLogin}) : super(key: key);
 
+  /// Callback invoked when the user wants to switch to registering
+  /// If this is `null` no option to switch to registration is shown
   final void Function()? requestLogin;
 
   @override
@@ -33,6 +37,16 @@ class _RegisterContentState extends State<RegisterContent> {
   }
 
   @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     if (_step != _RegisterContentStep.waitForConfirmation) {
@@ -54,6 +68,7 @@ class _RegisterContentState extends State<RegisterContent> {
                   if (input == null || input.isEmpty) {
                     return localization.validateErrorFirstNameEmpty;
                   }
+                  return null;
                 },
               ),
               SizedBox(
@@ -67,6 +82,7 @@ class _RegisterContentState extends State<RegisterContent> {
                   if (input == null || input.isEmpty) {
                     return localization.validateErrorLastNameEmpty;
                   }
+                  return null;
                 },
               ),
               SizedBox(
@@ -86,6 +102,7 @@ class _RegisterContentState extends State<RegisterContent> {
                       null) {
                     return localization.validateErrorEmailFormat;
                   }
+                  return null;
                 },
               ),
               SizedBox(
@@ -102,6 +119,7 @@ class _RegisterContentState extends State<RegisterContent> {
                   if (_ruleCheckKey.currentState?.validate() == false) {
                     return '';
                   }
+                  return null;
                 },
               ),
               PasswordRuleCheck(
@@ -127,6 +145,7 @@ class _RegisterContentState extends State<RegisterContent> {
                   if (input != _passwordController.text) {
                     return localization.validateErrorPasswordsNotMatching;
                   }
+                  return null;
                 },
               ),
               SizedBox(

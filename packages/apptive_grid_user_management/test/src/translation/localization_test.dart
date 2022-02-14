@@ -1,7 +1,8 @@
-import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
-import 'package:apptive_grid_user_management/src/translation/l10n/translation_de.dart' as de;
-import 'package:apptive_grid_user_management/src/translation/l10n/translation_en.dart' as en;
+import 'package:apptive_grid_user_management/src/translation/l10n/translation_de.dart'
+    as de;
+import 'package:apptive_grid_user_management/src/translation/l10n/translation_en.dart'
+    as en;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
