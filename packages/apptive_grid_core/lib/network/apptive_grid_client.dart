@@ -166,6 +166,7 @@ class ApptiveGridClient {
   Future<Grid> loadGrid({
     required GridUri gridUri,
     List<ApptiveGridSorting>? sorting,
+    ApptiveGridFilter? filter,
   }) async {
     await _authenticator.checkAuthentication();
     final gridViewUrl =
@@ -187,6 +188,13 @@ class ApptiveGridClient {
         final queryParams = Map<String, dynamic>.from(url.queryParameters);
         queryParams['sorting'] =
             jsonEncode(sorting.map((e) => e.toRequestObject()).toList());
+        url = url.replace(queryParameters: queryParams);
+      }
+
+      // Apply Filter
+      if (filter != null) {
+        final queryParams = Map<String, dynamic>.from(url.queryParameters);
+        queryParams['filter'] = jsonEncode(filter.toJson());
         url = url.replace(queryParameters: queryParams);
       }
 
@@ -301,6 +309,31 @@ class ApptiveGridClient {
     }
 
     return FormUri.fromUri((json.decode(response.body) as Map)['uri']);
+  }
+
+  /// Get a specific entity via a [entityUri]
+  ///
+  /// This will return a Map of fieldIds and the respective values
+  /// To know what [DataType] they are you need to Load a Grid via [loadGrid] and compare [Grid.fields] with the ids
+  ///
+  /// The id of the entity can be accessed via `['_id']`
+  Future<Map<String, dynamic>> getEntity({
+    required EntityUri entityUri,
+  }) async {
+    await _authenticator.checkAuthentication();
+
+    final url = Uri.parse('${options.environment.url}${entityUri.uriString}');
+
+    final response = await _client.get(
+      url,
+      headers: headers,
+    );
+
+    if (response.statusCode >= 400) {
+      throw response;
+    }
+
+    return jsonDecode(response.body);
   }
 
   /// Authenticate the User

@@ -723,4 +723,99 @@ void main() {
       );
     });
   });
+
+  group('Action', () {
+    testWidgets('Click on Button shows Loading Indicator', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+        ),
+      );
+      final action = FormAction('uri', 'method');
+      final formData = FormData(
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        actions: [action],
+        schema: {},
+      );
+
+      final actionCompleter = Completer<http.Response>();
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.performAction(action, formData))
+          .thenAnswer((_) => actionCompleter.future);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pump();
+
+      expect(find.byType(ActionButton), findsNothing);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      actionCompleter.complete(http.Response('', 200));
+      await tester.pump();
+
+      expect(find.byType(Lottie), findsOneWidget);
+      expect(find.text('Thank You!', skipOffstage: false), findsOneWidget);
+      expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
+    });
+  });
+
+  group('User Reference', () {
+    testWidgets('UserReference Form Widget is build without padding',
+        (tester) async {
+      final formData = FormData(
+        title: 'Form Data',
+        components: [
+          UserReferenceFormComponent(
+            property: 'Created By',
+            data: UserReferenceDataEntity(),
+            fieldId: 'field3',
+          ),
+        ],
+        schema: {
+          'properties': {
+            'field3': {
+              'type': 'object',
+              'properties': {
+                'displayValue': {'type': 'string'},
+                'id': {'type': 'string'},
+                'type': {'type': 'string'},
+                'name': {'type': 'string'}
+              },
+              'objectType': 'userReference'
+            },
+          },
+        },
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+        ),
+      );
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer((realInvocation) async => formData);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.ancestor(
+          of: find.byType(UserReferenceFormWidget),
+          matching: find.byType(Padding),
+        ),
+        findsNothing,
+      );
+    });
+  });
 }

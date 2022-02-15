@@ -11,78 +11,15 @@ void main() {
     registerFallbackValue(FormData(title: 'title', components: [], schema: {}));
   });
 
-  testWidgets('Multiline TextFormWidget Displays', (tester) async {
-    const value = '''A
-multi-line
-string''';
-    final target = TextFormWidget(
-      component: StringFormComponent(
-        property: 'Text',
-        data: StringDataEntity(
-          value,
-        ),
-        options: const TextComponentOptions(
-          multi: true,
-        ),
-        fieldId: 'Field',
-      ),
-    );
-
-    await tester.pumpWidget(
-      TestApp(
-        child: target,
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    expect(find.text(value), findsOneWidget);
-  });
-
-  testWidgets('Multiline TextFormWidget Displays in FormData Widget',
-      (tester) async {
-    const value = '''A
-multi-line
-string''';
-    final formData = FormData(
-      title: 'Title',
-      components: [
-        StringFormComponent(
-          property: 'Text',
-          data: StringDataEntity(
-            value,
-          ),
-          options: const TextComponentOptions(
-            multi: true,
-          ),
-          fieldId: 'Field',
-        ),
-      ],
-      schema: null,
-    );
-
-    final target = ApptiveGridFormData(
-      formData: formData,
-    );
-
-    await tester.pumpWidget(
-      TestApp(
-        child: target,
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    expect(find.text(value), findsOneWidget);
-  });
-
   group('Validation', () {
     testWidgets('is required but filled sends', (tester) async {
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
         title: 'title',
         components: [
-          StringFormComponent(
+          EnumFormComponent(
             property: 'Property',
-            data: StringDataEntity('Value'),
+            data: EnumDataEntity(value: 'A', options: {'A', 'B', 'C'}),
             fieldId: 'fieldId',
             required: true,
           )

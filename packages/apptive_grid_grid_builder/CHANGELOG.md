@@ -6,10 +6,15 @@
 ### New Data Types
 * `DataType.attachment`
 * `DataType.enumCollection`
-* `Data.multiCrossReference`
+* `DataType.multiCrossReference`
+* 'DataType.createdBy'
 
 ### New Features
 * Added support for sorting when loading a Grid
+* Added support for filtering when loading a Grid
+
+## [0.8.0-alpha.4]
+* Add support for `ApptiveGridFilter` through `filter` argument
 
 ## [0.8.0-alpha.3]
 * Add `sorting` parameter to ApptiveGridGridBuilder

@@ -88,7 +88,7 @@ class _ApptiveGridWebApptiveState extends State<ApptiveGridWebApptive> {
       );
     } else {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator.adaptive(),
       );
     }
   }

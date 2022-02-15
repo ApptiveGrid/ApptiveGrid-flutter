@@ -826,7 +826,9 @@ void main() {
 
     test('Logout calls Authenticator', () {
       final authenticator = MockApptiveGridAuthenticator();
-      when(() => authenticator.logout()).thenAnswer((_) async {});
+      when(() => authenticator.logout()).thenAnswer((_) async {
+        return null;
+      });
       final client = ApptiveGridClient.fromClient(
         httpClient,
         authenticator: authenticator,
@@ -1218,6 +1220,104 @@ void main() {
         ),
       ).called(1);
     });
+
+    test('GridView filters get applied in request', () async {
+      final rawGridViewResponse = {
+        'fieldNames': ['First Name', 'Last Name', 'imgUrl'],
+        'entities': [
+          {
+            'fields': [
+              'Adam',
+              'Riese',
+              'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
+            ],
+            '_id': '60c9c997f8eeb8636c8140c4'
+          }
+        ],
+        'fieldIds': [
+          '9fqx8om03flgh8d4m1l953x29',
+          '9fqx8okgtzoafyanblvfg61cl',
+          '9fqx8on7ee2hq5iv20vcu9svw'
+        ],
+        'filter': {
+          '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
+        },
+        'schema': {
+          'type': 'object',
+          'properties': {
+            'fields': {
+              'type': 'array',
+              'items': [
+                {'type': 'string'},
+                {'type': 'string'},
+                {'type': 'string'}
+              ]
+            },
+            '_id': {'type': 'string'}
+          }
+        },
+        'name': 'New grid view'
+      };
+
+      final rawGridViewEntitiesResponse = [
+        {
+          'fields': [
+            'Adam',
+            'Riese',
+            'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
+          ],
+          '_id': '60c9c997f8eeb8636c8140c4'
+        }
+      ];
+
+      final gridViewResponse = Response(json.encode(rawGridViewResponse), 200);
+      final gridViewEntitiesResponse =
+          Response(json.encode(rawGridViewEntitiesResponse), 200);
+
+      when(
+        () => httpClient.get(
+          any(),
+          headers: any(
+            named: 'headers',
+          ),
+        ),
+      ).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+        if (uri.path.endsWith('/views/$view0')) {
+          return gridViewResponse;
+        } else if (uri.path.endsWith('entities')) {
+          return gridViewEntitiesResponse;
+        } else {
+          throw Exception();
+        }
+      });
+
+      await apptiveGridClient.loadGrid(
+        filter: SubstringFilter(
+          fieldId: '9fqx8om03flgh8d4m1l953x29',
+          value: StringDataEntity('a'),
+        ),
+        gridUri: GridViewUri(
+          user: userId,
+          space: spaceId,
+          grid: gridId,
+          view: view0,
+        ),
+      );
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (uri) =>
+                  uri.path.endsWith('/entities') &&
+                  uri.queryParameters.containsKey('filter'),
+            ),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
+    });
   });
 
   group('Caching Form Actions', () {
@@ -1354,6 +1454,54 @@ void main() {
 
       expect(
         () => apptiveGridClient.getEditLink(entityUri: entityUri, formId: form),
+        throwsA(isInstanceOf<Response>()),
+      );
+    });
+  });
+
+  group('Get Entity', () {
+    const userId = 'userId';
+    const spaceId = 'spaceId';
+    const gridId = 'gridId';
+    const entityId = 'entityId';
+    final entityUri =
+        EntityUri(user: userId, space: spaceId, grid: gridId, entity: entityId);
+    final rawResponse = {
+      '4um33znbt8l6x0vzvo0mperwj': null,
+      '_id': 'entityId',
+      '5kmhd05jzdd48jaxbds8yn3js': 'Test',
+    };
+    test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      final entity = await apptiveGridClient.getEntity(entityUri: entityUri);
+
+      expect(entity, rawResponse);
+    });
+
+    test('400 Status throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      expect(
+        () => apptiveGridClient.getEntity(entityUri: entityUri),
         throwsA(isInstanceOf<Response>()),
       );
     });

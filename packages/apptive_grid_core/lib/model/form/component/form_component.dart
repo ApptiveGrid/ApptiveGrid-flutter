@@ -85,6 +85,8 @@ abstract class FormComponent<T extends DataEntity> {
         return GeolocationFormComponent.fromJson(json);
       case DataType.multiCrossReference:
         return MultiCrossReferenceFormComponent.fromJson(json, properties);
+      case DataType.userReference:
+        return UserReferenceFormComponent.fromJson(json);
     }
   }
 }

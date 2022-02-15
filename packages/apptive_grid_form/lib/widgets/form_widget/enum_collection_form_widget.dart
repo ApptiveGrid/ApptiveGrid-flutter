@@ -30,6 +30,7 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget> {
         }
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      initialValue: widget.component.data,
       builder: (formState) {
         return InputDecorator(
           decoration: InputDecoration(

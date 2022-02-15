@@ -26,6 +26,7 @@ void main() {
     registerFallbackValue(PolygonUpdates.from({}, {}));
     registerFallbackValue(PolylineUpdates.from({}, {}));
     registerFallbackValue(CameraUpdate.newLatLng(const LatLng(0, 0)));
+    registerFallbackValue(FormData(title: '', components: [], schema: {}));
   });
 
   group('TextInput', () {
@@ -1372,6 +1373,162 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text(requiredString), findsNothing);
+    });
+
+    testWidgets('Prefilled Required Form is validated', (tester) async {
+      final action = FormAction('actionUri', 'POST');
+
+      final mockGeolocator = MockGeolocator();
+      GeolocatorPlatform.instance = mockGeolocator;
+      when(
+        () => mockGeolocator.getCurrentPosition(
+          locationSettings: any(named: 'locationSettings'),
+        ),
+      ).thenAnswer(
+        (invocation) async => Position(
+          latitude: 47,
+          longitude: 11,
+          timestamp: DateTime.now(),
+          accuracy: 0,
+          altitude: 0,
+          heading: 0,
+          speed: 0,
+          speedAccuracy: 0,
+        ),
+      );
+
+      final mockPermission = MockPermissionHandler();
+      PermissionHandlerPlatform.instance = mockPermission;
+      when(
+        () => mockPermission.requestPermissions([Permission.locationWhenInUse]),
+      ).thenAnswer(
+        (invocation) async =>
+            {Permission.locationWhenInUse: PermissionStatus.granted},
+      );
+      when(
+        () =>
+            mockPermission.checkPermissionStatus(Permission.locationWhenInUse),
+      ).thenAnswer((invocation) async => PermissionStatus.granted);
+
+      final geolocationData =
+          GeolocationDataEntity(const Geolocation(latitude: 47, longitude: 11));
+      final mockGeolocationHttpClient = MockHttpClient();
+      final apptiveGridClient = MockApptiveGridClient();
+      final options = ApptiveGridOptions(
+        formWidgetConfigurations: [
+          GeolocationFormWidgetConfiguration.withHttpClient(
+            placesApiKey: 'placesApiKey',
+            httpClient: mockGeolocationHttpClient,
+          ),
+        ],
+      );
+      final target = TestApp(
+        client: apptiveGridClient,
+        child: ApptiveGridFormData(
+          formData: FormData(
+            title: 'title',
+            components: [
+              GeolocationFormComponent(
+                property: 'property',
+                data: geolocationData,
+                fieldId: 'fieldId',
+                required: true,
+              ),
+            ],
+            actions: [action],
+            schema: null,
+          ),
+        ),
+      );
+
+      when(
+        () => mockGeolocationHttpClient.get(
+          any(),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async {
+        final requestUri = invocation.positionalArguments.first as Uri;
+
+        if (requestUri.path.contains('queryautocomplete')) {
+          final response = PlacesAutocompleteResponse(
+            status: 'OK',
+            predictions: [
+              Prediction(
+                description: 'ZWEIDENKER',
+                placeId: 'placeId',
+              )
+            ],
+          );
+          return Response(jsonEncode(response.toJson()), 200);
+        }
+
+        if (requestUri.path.contains('details')) {
+          final response = PlacesDetailsResponse(
+            status: 'OK',
+            result: PlaceDetails(
+              name: 'ZWEIDENKER',
+              placeId: 'placeId',
+              geometry: Geometry(location: Location(lat: 47, lng: 11)),
+            ),
+            htmlAttributions: [],
+          );
+          return Response(jsonEncode(response.toJson()), 200);
+        }
+
+        if (requestUri.path.contains('geocode')) {
+          final response = GeocodingResponse(
+            status: 'OK',
+            results: [
+              GeocodingResult(
+                geometry: Geometry(location: Location(lat: 47, lng: 11)),
+                placeId: 'placeId',
+                formattedAddress: 'ZWEIDENKER',
+              )
+            ],
+          );
+          return Response(jsonEncode(response.toJson()), 200);
+        }
+
+        throw 'MissingMockResponse for GET $requestUri';
+      });
+
+      when(() => apptiveGridClient.options).thenReturn(options);
+      when(() => apptiveGridClient.sendPendingActions())
+          .thenAnswer((_) async {});
+      when(
+        () => apptiveGridClient.performAction(
+          action,
+          any(),
+          saveToPendingItems: any(named: 'saveToPendingItems'),
+        ),
+      ).thenAnswer((_) async => Response('', 200));
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      final scrollable = find.ancestor(
+        of: find.byType(ActionButton, skipOffstage: false),
+        matching: find.byType(Scrollable),
+      );
+      await tester.scrollUntilVisible(
+        find.byType(ActionButton, skipOffstage: false),
+        400,
+        scrollable: scrollable,
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      const requiredString = 'property must not be empty';
+
+      expect(find.text(requiredString), findsNothing);
+      verify(
+        () => apptiveGridClient.performAction(
+          action,
+          any(),
+          saveToPendingItems: any(named: 'saveToPendingItems'),
+        ),
+      ).called(1);
     });
   });
 }

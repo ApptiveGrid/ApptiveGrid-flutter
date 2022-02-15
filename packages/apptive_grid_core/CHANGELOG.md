@@ -6,10 +6,23 @@
 ### New Data Types
 * `DataType.attachment`
 * `DataType.enumCollection`
-* `Data.multiCrossReference`
+* `DataType.multiCrossReference`
+* `DataType.createdBy`
 
 ### New Features
 * Added support for sorting when loading a Grid
+* Added support for filtering when loading a Grid
+* Add call retreive a single entity
+
+## [0.8.0-alpha.9]
+* Add Support for `DataType.createdBy`
+* Add call to retrieve a single entity
+
+## [0.8.0-alpha.8]
+* Fix Collection Filter Operators
+
+## [0.8.0-alpha.7]
+* Add support for `ApptiveGridFilter`
 
 ## [0.8.0-alpha.6]
 * Add support for `DataType.multiCrossReference`

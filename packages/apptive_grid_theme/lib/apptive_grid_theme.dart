@@ -157,7 +157,7 @@ class ApptiveGridTheme {
       chipTheme: baseTheme.chipTheme.copyWith(
         selectedColor: ApptiveGridColors.apptiveGridBlue,
         secondaryLabelStyle: baseTheme.chipTheme.secondaryLabelStyle
-            .copyWith(color: Colors.white),
+            ?.copyWith(color: Colors.white),
         secondarySelectedColor: ApptiveGridColors.apptiveGridBlue,
       ),
     );
