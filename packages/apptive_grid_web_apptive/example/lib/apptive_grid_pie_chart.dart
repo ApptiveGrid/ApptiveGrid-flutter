@@ -179,6 +179,7 @@ class _FieldSelectorState extends State<FieldSelector> {
               if (value == null) {
                 return 'Select a Column that should be displayed in the pie chart.';
               }
+              return null;
             },
             decoration: InputDecoration(
               errorMaxLines: 3,
