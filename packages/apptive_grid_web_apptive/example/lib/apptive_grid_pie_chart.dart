@@ -181,6 +181,7 @@ class _FieldSelectorState extends State<FieldSelector> {
               } else {
                 return null;
               }
+              return null;
             },
             decoration: InputDecoration(
               errorMaxLines: 3,

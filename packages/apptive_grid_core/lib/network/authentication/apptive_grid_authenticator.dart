@@ -248,6 +248,7 @@ class ApptiveGridAuthenticator {
     } else {
       return null;
     }
+    return null;
   }
 
   Future<void> _launchUrl(String url) async {
