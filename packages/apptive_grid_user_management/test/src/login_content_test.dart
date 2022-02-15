@@ -11,7 +11,7 @@ import '../infrastructure/mocks.dart';
 
 void main() {
   group('Login', () {
-    testWidgets('Calls login with paramters', (tester) async {
+    testWidgets('Calls login with parameters', (tester) async {
       final client = MockApptiveGridUserManagementClient();
 
       final target = MaterialApp(
@@ -116,6 +116,58 @@ void main() {
       await tester.pump();
 
       expect(await completer.future, equals(true));
+    });
+
+    testWidgets('Shows Error', (tester) async {
+      final client = MockApptiveGridUserManagementClient();
+
+      final target = MaterialApp(
+        home: Material(
+          child: ApptiveGridUserManagement.withClient(
+            confirmAccountPrompt: (_) {},
+            clientId: 'client',
+            onChangeEnvironment: (_) async {},
+            onAccountConfirmed: (_) {},
+            group: '',
+            client: client,
+            child: const LoginContent(),
+          ),
+        ),
+      );
+
+      when(
+            () => client.login(
+          email: any(named: 'email'),
+          password: any(named: 'password'),
+        ),
+      ).thenAnswer((_) => Future.error(Response('Error Message', 400)));
+
+      await tester.pumpWidget(target);
+
+      const email = 'email@2denker.de';
+      const password = 'Sup3rStrongPassword!';
+      await tester.enterText(
+        find.ancestor(
+          of: find.text('Email Address'),
+          matching: find.byType(TextFormField),
+        ),
+        email,
+      );
+      await tester.pump();
+      await tester.enterText(
+        find.ancestor(
+          of: find.text('Password'),
+          matching: find.byType(TextFormField),
+        ),
+        password,
+      );
+      await tester.pump();
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+
+      expect(find.text('Error during login. Please try again.'), findsOneWidget);
+      expect(find.text('Error Message'), findsOneWidget);
     });
   });
 }

@@ -38,4 +38,13 @@ class ApptiveGridUserManagementLocalizedTranslation
   String get confirmAccountCreation => "Bestätige deinen Account";
   @override
   String get actionConfirm => "Bestätigen";
+  @override
+  String get errorLogin =>
+      "Beim Login ist ein Fehler aufgetreten. Bitte versuche es erneut.";
+  @override
+  String get errorRegister =>
+      "Bei der Registrierung ist ein Fehler aufgetreten. Bitte versuche es erneut.";
+  @override
+  String get errorConfirm =>
+      "Beim bestätigen des Accounts ist ein Fehler aufgetreten. Bitte versuche es erneut.";
 }

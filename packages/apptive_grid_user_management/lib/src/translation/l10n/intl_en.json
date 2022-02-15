@@ -13,5 +13,8 @@
     "validateErrorPasswordsNotMatching": "Passwords do not match",
     "registerWaitingForConfirmation": "All Set!\\nCheck your Email for a link to verify your account.",
     "confirmAccountCreation": "Confirm your account by clicking below",
-    "actionConfirm": "Confirm"
+    "actionConfirm": "Confirm",
+    "errorLogin": "Error during login. Please try again.",
+    "errorRegister": "Error during registration. Please try again.",
+    "errorConfirm": "Error during confirmation. Please try again."
 }

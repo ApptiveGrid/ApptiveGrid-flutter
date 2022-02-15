@@ -47,4 +47,13 @@ abstract class ApptiveGridUserManagementTranslation {
 
   /// Action prompt to confirm the account
   String get actionConfirm;
+
+  /// Message when an error occurred during login
+  String get errorLogin;
+
+  /// Message when an error occurred during registration
+  String get errorRegister;
+
+  /// Message when an error occurred during confirmation
+  String get errorConfirm;
 }

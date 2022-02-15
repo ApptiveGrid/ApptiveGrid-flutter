@@ -2,6 +2,7 @@ import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/password_form_field.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 /// A Widget to show Login Controls
 class LoginContent extends StatefulWidget {
@@ -25,6 +26,8 @@ class _LoginContentState extends State<LoginContent> {
   final _passwordController = TextEditingController();
 
   bool _loading = false;
+
+  dynamic _error;
 
   @override
   void dispose() {
@@ -60,8 +63,25 @@ class _LoginContentState extends State<LoginContent> {
               hintText: localization.hintPassword,
             ),
           ),
+          if (_error != null)
+            ...[
+              SizedBox(
+                height: spacing,
+              ),
+              Text(
+                localization.errorLogin,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Theme.of(context).errorColor, fontWeight: FontWeight.bold,),
+              ),
+              if (_error is Response)
+                Text(
+                  (_error as Response).body,
+                textAlign: TextAlign.center,
+                  style: TextStyle(color: Theme.of(context).errorColor),
+                ),
+            ],
           SizedBox(
-            height: spacing,
+            height: _error == null ? spacing : spacing * 0.5,
           ),
           !_loading
               ? Center(
@@ -92,6 +112,7 @@ class _LoginContentState extends State<LoginContent> {
   Future<void> _login() async {
     setState(() {
       _loading = true;
+      _error = null;
     });
     final client = ApptiveGridUserManagement.maybeOf(context)!.client;
     client
@@ -102,7 +123,7 @@ class _LoginContentState extends State<LoginContent> {
         .catchError((error) {
       setState(() {
         _loading = false;
-        debugPrint('Error while Logging in ${error.toString()}');
+        _error = error;
       });
       return error;
     }).then((response) {

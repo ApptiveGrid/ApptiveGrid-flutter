@@ -43,6 +43,35 @@ void main() {
       verify(() => client.confirmAccount(confirmationUri: confirmationUri))
           .called(1);
     });
+
+    testWidgets('Shows Error', (tester) async {
+      final client = MockApptiveGridUserManagementClient();
+      final confirmationUri = Uri.parse('https://confirm.this');
+      final target = StubUserManagement(
+        client: client,
+        child: ConfirmAccount(
+          confirmAccount: (_) {},
+          confirmationUri: confirmationUri,
+        ),
+      );
+
+      when(
+            () => client.confirmAccount(
+          confirmationUri: any(named: 'confirmationUri'),
+        ),
+      ).thenAnswer((_) => Future.error(Response('Error Message', 400)));
+      when(() => client.loginAfterConfirmation())
+          .thenAnswer((_) async => false);
+
+      await tester.pumpWidget(target);
+      await tester.pump();
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+
+      expect(find.text('Error during confirmation. Please try again.'), findsOneWidget);
+      expect(find.text('Error Message'), findsOneWidget);
+    });
   });
 
   group('Callback', () {

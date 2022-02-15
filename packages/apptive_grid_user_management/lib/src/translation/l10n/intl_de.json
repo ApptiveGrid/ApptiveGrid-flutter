@@ -13,5 +13,8 @@
     "validateErrorPasswordsNotMatching": "Passwörter stimmen nicht überein",
     "registerWaitingForConfirmation": "Alles klar!\\nWir haben dir eine Mail geschickt, um den Account zu bestätigen.",
     "confirmAccountCreation": "Bestätige deinen Account",
-    "actionConfirm": "Bestätigen"
+    "actionConfirm": "Bestätigen",
+    "errorLogin": "Beim Login ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+    "errorRegister": "Bei der Registrierung ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+    "errorConfirm": "Beim bestätigen des Accounts ist ein Fehler aufgetreten. Bitte versuche es erneut."
 }

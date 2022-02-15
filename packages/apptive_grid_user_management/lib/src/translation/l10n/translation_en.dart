@@ -37,4 +37,10 @@ class ApptiveGridUserManagementLocalizedTranslation
   String get confirmAccountCreation => "Confirm your account by clicking below";
   @override
   String get actionConfirm => "Confirm";
+  @override
+  String get errorLogin => "Error during login. Please try again.";
+  @override
+  String get errorRegister => "Error during registration. Please try again.";
+  @override
+  String get errorConfirm => "Error during confirmation. Please try again.";
 }

@@ -2,6 +2,7 @@ import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/password_form_field.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:password_rule_check/password_rule_check.dart';
 
 /// A Widget to show Registration Controls
@@ -29,6 +30,8 @@ class _RegisterContentState extends State<RegisterContent> {
   final _ruleCheckKey = GlobalKey<PasswordRuleCheckState>();
 
   late _RegisterContentStep _step;
+
+  dynamic _error;
 
   @override
   void initState() {
@@ -148,8 +151,25 @@ class _RegisterContentState extends State<RegisterContent> {
                   return null;
                 },
               ),
+              if (_error != null)
+                ...[
+                  SizedBox(
+                    height: spacing,
+                  ),
+                  Text(
+                    localization.errorRegister,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Theme.of(context).errorColor, fontWeight: FontWeight.bold,),
+                  ),
+                  if (_error is Response)
+                    Text(
+                      (_error as Response).body,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Theme.of(context).errorColor),
+                    ),
+                ],
               SizedBox(
-                height: spacing,
+                height: _error == null ? spacing : spacing * 0.5,
               ),
               _step != _RegisterContentStep.loading
                   ? Center(
@@ -183,11 +203,9 @@ class _RegisterContentState extends State<RegisterContent> {
 
   void _register() {
     if (_formKey.currentState?.validate() == true) {
-      debugPrint(
-        'Register(${_emailController.text}|${_passwordController.text}',
-      );
       setState(() {
         _step = _RegisterContentStep.loading;
+        _error = null;
       });
       final client = ApptiveGridUserManagement.maybeOf(context)!.client;
       client
@@ -200,7 +218,7 @@ class _RegisterContentState extends State<RegisterContent> {
           .catchError((error) {
         setState(() {
           _step = _RegisterContentStep.waitingForInput;
-          debugPrint('Error while Registering ${error.toString()}');
+          _error = error;
         });
         return error;
       }).then((response) {

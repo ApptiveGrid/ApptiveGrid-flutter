@@ -15,7 +15,8 @@ void main() {
       supportedLocales: const [Locale('de')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
       ],
       home: ApptiveGridUserManagementLocalization(
         child: Builder(
