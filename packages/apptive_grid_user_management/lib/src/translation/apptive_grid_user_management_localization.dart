@@ -1,14 +1,14 @@
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_translation.dart';
-import 'package:flutter/material.dart';
-
 import 'package:apptive_grid_user_management/src/translation/l10n/translation_de.dart'
     as de;
 import 'package:apptive_grid_user_management/src/translation/l10n/translation_en.dart'
     as en;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 /// Provides Translations for ApptiveGridUserManagement Widgets
 class ApptiveGridUserManagementLocalization extends StatelessWidget {
-  /// Creates a wrapper around a Form so that the descendants can use localized Strings
+  /// Creates a wrapper so that the descendants can use localized Strings
   const ApptiveGridUserManagementLocalization({
     Key? key,
     required this.child,
@@ -94,5 +94,5 @@ class _InheritedApptiveGridUserManagementTranslation extends InheritedWidget {
   bool updateShouldNotify(
     _InheritedApptiveGridUserManagementTranslation oldWidget,
   ) =>
-      _translations != oldWidget._translations;
+      !mapEquals(_translations, oldWidget._translations);
 }

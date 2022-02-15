@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:apptive_grid_core/apptive_grid.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_user_management/src/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/confirm_account.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
 import '../infrastructure/mocks.dart';
 
 void main() {
-  group('Initial Deeplink', () {
+  group('Confirmation Deeplink', () {
     late UniLinksPlatform initialUniLinks;
 
     late Completer<String?> initialLink;
@@ -124,6 +125,40 @@ void main() {
             .confirmationUri,
         uri,
       );
+    });
+
+    testWidgets('Unknown environment uses production', (tester) async {
+      final client = MockApptiveGridUserManagementClient();
+
+      final callbackCompleter = Completer<ApptiveGridEnvironment>();
+
+      final uri =
+      Uri.parse('https://somethingweird.apptivegrid.de/auth/group/confirm/userId');
+
+      final apptiveGridUserManagement = MaterialApp(
+        home: Material(
+          child: ApptiveGridUserManagement.withClient(
+            group: 'group',
+            clientId: 'clientId',
+            confirmAccountPrompt: (_) {            },
+            onAccountConfirmed: (_) {},
+            onChangeEnvironment: (environment) async {
+              callbackCompleter.complete(environment);
+            },
+            client: client,
+          ),
+        ),
+      );
+
+      when(uniLink.getInitialLink).thenAnswer((_) async => uri.toString());
+
+      await tester.pumpWidget(apptiveGridUserManagement);
+      await tester.pumpAndSettle();
+
+      final environment =
+      await callbackCompleter.future.timeout(const Duration(seconds: 4));
+
+      expect(environment, equals(ApptiveGridEnvironment.production));
     });
 
     testWidgets('Initial Link completes setup', (tester) async {
