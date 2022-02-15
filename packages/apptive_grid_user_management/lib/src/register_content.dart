@@ -151,23 +151,25 @@ class _RegisterContentState extends State<RegisterContent> {
                   return null;
                 },
               ),
-              if (_error != null)
-                ...[
-                  SizedBox(
-                    height: spacing,
+              if (_error != null) ...[
+                SizedBox(
+                  height: spacing,
+                ),
+                Text(
+                  localization.errorRegister,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).errorColor,
+                    fontWeight: FontWeight.bold,
                   ),
+                ),
+                if (_error is Response)
                   Text(
-                    localization.errorRegister,
+                    (_error as Response).body,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Theme.of(context).errorColor, fontWeight: FontWeight.bold,),
+                    style: TextStyle(color: Theme.of(context).errorColor),
                   ),
-                  if (_error is Response)
-                    Text(
-                      (_error as Response).body,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Theme.of(context).errorColor),
-                    ),
-                ],
+              ],
               SizedBox(
                 height: _error == null ? spacing : spacing * 0.5,
               ),

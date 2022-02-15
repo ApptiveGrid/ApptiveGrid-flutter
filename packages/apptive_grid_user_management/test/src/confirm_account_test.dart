@@ -56,7 +56,7 @@ void main() {
       );
 
       when(
-            () => client.confirmAccount(
+        () => client.confirmAccount(
           confirmationUri: any(named: 'confirmationUri'),
         ),
       ).thenAnswer((_) => Future.error(Response('Error Message', 400)));
@@ -69,7 +69,10 @@ void main() {
       await tester.tap(find.byType(ElevatedButton));
       await tester.pump();
 
-      expect(find.text('Error during confirmation. Please try again.'), findsOneWidget);
+      expect(
+        find.text('Error during confirmation. Please try again.'),
+        findsOneWidget,
+      );
       expect(find.text('Error Message'), findsOneWidget);
     });
   });

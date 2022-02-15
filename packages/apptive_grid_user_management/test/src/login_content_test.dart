@@ -136,7 +136,7 @@ void main() {
       );
 
       when(
-            () => client.login(
+        () => client.login(
           email: any(named: 'email'),
           password: any(named: 'password'),
         ),
@@ -166,7 +166,10 @@ void main() {
       await tester.tap(find.byType(ElevatedButton));
       await tester.pump();
 
-      expect(find.text('Error during login. Please try again.'), findsOneWidget);
+      expect(
+        find.text('Error during login. Please try again.'),
+        findsOneWidget,
+      );
       expect(find.text('Error Message'), findsOneWidget);
     });
   });

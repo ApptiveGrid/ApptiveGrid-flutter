@@ -267,7 +267,7 @@ void main() {
       );
 
       when(
-            () => client.register(
+        () => client.register(
           firstName: any(named: 'firstName'),
           lastName: any(named: 'lastName'),
           email: any(named: 'email'),
@@ -337,7 +337,10 @@ void main() {
       await tester.tap(find.byType(ElevatedButton));
       await tester.pump();
 
-      expect(find.text('Error during registration. Please try again.'), findsOneWidget);
+      expect(
+        find.text('Error during registration. Please try again.'),
+        findsOneWidget,
+      );
       expect(find.text('Error Message'), findsOneWidget);
     });
   });

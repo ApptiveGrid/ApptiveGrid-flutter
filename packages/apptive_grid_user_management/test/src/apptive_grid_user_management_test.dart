@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:apptive_grid_core/apptive_grid.dart';
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_user_management/src/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/confirm_account.dart';
@@ -132,15 +131,16 @@ void main() {
 
       final callbackCompleter = Completer<ApptiveGridEnvironment>();
 
-      final uri =
-      Uri.parse('https://somethingweird.apptivegrid.de/auth/group/confirm/userId');
+      final uri = Uri.parse(
+        'https://somethingweird.apptivegrid.de/auth/group/confirm/userId',
+      );
 
       final apptiveGridUserManagement = MaterialApp(
         home: Material(
           child: ApptiveGridUserManagement.withClient(
             group: 'group',
             clientId: 'clientId',
-            confirmAccountPrompt: (_) {            },
+            confirmAccountPrompt: (_) {},
             onAccountConfirmed: (_) {},
             onChangeEnvironment: (environment) async {
               callbackCompleter.complete(environment);
@@ -156,7 +156,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final environment =
-      await callbackCompleter.future.timeout(const Duration(seconds: 4));
+          await callbackCompleter.future.timeout(const Duration(seconds: 4));
 
       expect(environment, equals(ApptiveGridEnvironment.production));
     });

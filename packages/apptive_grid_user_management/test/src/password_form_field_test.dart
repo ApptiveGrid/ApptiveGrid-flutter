@@ -11,30 +11,42 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-        (tester.widget(find.descendant(
-                of: find.byType(PasswordFormField),
-                matching: find.byType(TextField))) as TextField)
-            .obscureText,
-        true);
+      (tester.widget(
+        find.descendant(
+          of: find.byType(PasswordFormField),
+          matching: find.byType(TextField),
+        ),
+      ) as TextField)
+          .obscureText,
+      true,
+    );
     await tester.tap(find.byIcon(Icons.visibility, skipOffstage: false).first);
     await tester.pump();
 
     expect(
-        (tester.widget(find.descendant(
-                of: find.byType(PasswordFormField),
-                matching: find.byType(TextField))) as TextField)
-            .obscureText,
-        false);
+      (tester.widget(
+        find.descendant(
+          of: find.byType(PasswordFormField),
+          matching: find.byType(TextField),
+        ),
+      ) as TextField)
+          .obscureText,
+      false,
+    );
 
     await tester
         .tap(find.byIcon(Icons.visibility_off, skipOffstage: false).first);
     await tester.pump();
 
     expect(
-        (tester.widget(find.descendant(
-                of: find.byType(PasswordFormField),
-                matching: find.byType(TextField))) as TextField)
-            .obscureText,
-        true);
+      (tester.widget(
+        find.descendant(
+          of: find.byType(PasswordFormField),
+          matching: find.byType(TextField),
+        ),
+      ) as TextField)
+          .obscureText,
+      true,
+    );
   });
 }

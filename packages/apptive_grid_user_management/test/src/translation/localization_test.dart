@@ -126,12 +126,13 @@ class _ReloadLocalizationsState extends State<_ReloadLocalizations> {
   @override
   Widget build(BuildContext context) {
     return Localizations(
-        locale: _locale ?? Localizations.localeOf(context),
-        delegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-    child: widget.child,);
+      locale: _locale ?? Localizations.localeOf(context),
+      delegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      child: widget.child,
+    );
   }
 }

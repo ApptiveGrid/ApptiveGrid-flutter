@@ -63,23 +63,25 @@ class _LoginContentState extends State<LoginContent> {
               hintText: localization.hintPassword,
             ),
           ),
-          if (_error != null)
-            ...[
-              SizedBox(
-                height: spacing,
+          if (_error != null) ...[
+            SizedBox(
+              height: spacing,
+            ),
+            Text(
+              localization.errorLogin,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).errorColor,
+                fontWeight: FontWeight.bold,
               ),
+            ),
+            if (_error is Response)
               Text(
-                localization.errorLogin,
+                (_error as Response).body,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Theme.of(context).errorColor, fontWeight: FontWeight.bold,),
+                style: TextStyle(color: Theme.of(context).errorColor),
               ),
-              if (_error is Response)
-                Text(
-                  (_error as Response).body,
-                textAlign: TextAlign.center,
-                  style: TextStyle(color: Theme.of(context).errorColor),
-                ),
-            ],
+          ],
           SizedBox(
             height: _error == null ? spacing : spacing * 0.5,
           ),
