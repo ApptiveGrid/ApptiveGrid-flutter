@@ -1,6 +1,25 @@
-@@ [0.9.0-alpha.9]
+## [0.9.0]
+
+### Breaking Changes
+* `DataType.selectionBox` is now `DataType.singleSelect`
+* Due to new external dependencies there is some additional setup required. Please see the README for more details
+
+### New Data Types
+* `DataType.attachment`
+* `DataType.enumCollection`
+* `DataType.multiCrossReference`
+* `DataType.createdBy`
+
+### Bugfixes
+* Fixed Multiline Text FormWidgets
+* Fix required validation not working for all types if Form has initial data
+
+## [0.9.0-alpha.10]
+* Use stable version of `apptive_grid_core`
+
+## [0.9.0-alpha.9]
 * Add Support for `DataType.createdBy`
-* Fix required validation not wrking for all types if Form has initial data
+* Fix required validation not working for all types if Form has initial data
 
 ## [0.9.0-alpha.8]
 * Show Loading Indicator while submitting a Form
