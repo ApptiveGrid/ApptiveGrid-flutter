@@ -530,7 +530,7 @@ void main() {
 
       when(
         () => httpClient.get(
-          Uri.parse(env.url + formUri.uriString),
+          Uri.parse(env.url + formUri.uri.toString()),
           headers: any(named: 'headers'),
         ),
       ).thenAnswer(

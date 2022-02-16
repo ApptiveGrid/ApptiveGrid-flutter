@@ -80,7 +80,7 @@ void main() {
           as MultiCrossReferenceDataEntity;
 
       expect(
-        dataEntity.gridUri.uriString,
+        dataEntity.gridUri.uri.toString(),
         (rawResponse['schema'] as Map)['properties']['fields']['items'][0]
             ['items']['gridUri'],
       );

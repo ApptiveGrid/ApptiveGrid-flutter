@@ -985,11 +985,11 @@ void main() {
 
       expect(forms.length, equals(2));
       expect(
-        forms[0].uriString,
+        forms[0].uri.toString(),
         '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
       );
       expect(
-        forms[1].uriString,
+        forms[1].uri.toString(),
         '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1',
       );
     });
@@ -1040,11 +1040,11 @@ void main() {
 
       expect(views.length, equals(2));
       expect(
-        views[0].uriString,
+        views[0].uri.toString(),
         '/api/users/id/spaces/spaceId/grids/gridId/views/$view0',
       );
       expect(
-        views[1].uriString,
+        views[1].uri.toString(),
         '/api/users/id/spaces/spaceId/grids/gridId/views/$view1',
       );
     });

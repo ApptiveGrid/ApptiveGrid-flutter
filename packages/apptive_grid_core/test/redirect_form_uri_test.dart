@@ -6,19 +6,19 @@ void main() {
     test('From UriString parses correctly', () {
       final redirectFormUri = RedirectFormUri.fromUri('/api/a/787878');
 
-      expect(redirectFormUri.uriString, equals('/api/a/787878'));
+      expect(redirectFormUri.uri.toString(), equals('/api/a/787878'));
     });
 
     test('From Generated Uri String matches original', () {
       final direct = RedirectFormUri(components: ['787878']);
-      final parsed = RedirectFormUri.fromUri(direct.uriString);
+      final parsed = RedirectFormUri.fromUri(direct.uri.toString());
       expect(parsed, equals(direct));
     });
 
     test('Correct Api String reflects in uri', () {
       final direct = RedirectFormUri(components: ['787878']);
 
-      expect(direct.uriString, equals('/api/a/787878'));
+      expect(direct.uri.toString(), equals('/api/a/787878'));
     });
 
     test('/a/ and /r/ links are equal', () {
@@ -31,7 +31,7 @@ void main() {
     test('Updated Link Format Parses', () {
       final uri = RedirectFormUri.fromUri('/api/a/787878/ababab');
 
-      expect(uri.uriString, equals('/api/a/787878/ababab'));
+      expect(uri.uri.toString(), equals('/api/a/787878/ababab'));
     });
   });
 

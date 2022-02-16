@@ -25,7 +25,7 @@ void main() {
         grid: '1a2s3d4f',
         entity: '787878',
       );
-      final parsed = EntityUri.fromUri(direct.uriString);
+      final parsed = EntityUri.fromUri(direct.uri.toString());
       expect(parsed, equals(direct));
     });
   });

@@ -10,7 +10,7 @@ void main() {
         );
 
         expect(
-          formUri.uriString,
+          formUri.uri.toString(),
           '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/a1s2d3f4',
         );
       });
@@ -52,13 +52,13 @@ void main() {
       test('From UriString parses correctly', () {
         final formUri = DirectFormUri.fromUri('/api/r/a1s2d3f4');
 
-        expect(formUri.uriString, equals('/api/a/a1s2d3f4'));
+        expect(formUri.uri.toString(), equals('/api/a/a1s2d3f4'));
       });
 
       test('Direct api  UriString parses correctly', () {
         final formUri = DirectFormUri.fromUri('/api/a/a1s2d3f4');
 
-        expect(formUri.uriString, equals('/api/a/a1s2d3f4'));
+        expect(formUri.uri.toString(), equals('/api/a/a1s2d3f4'));
       });
     });
 

@@ -48,7 +48,7 @@ class Space {
   Map<String, dynamic> toJson() => {
         'name': name,
         'id': id,
-        'gridUris': grids.map((e) => e.uriString).toList(),
+        'gridUris': grids.map((e) => e.uri.toString()).toList(),
       };
 
   @override

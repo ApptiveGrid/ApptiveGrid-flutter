@@ -12,6 +12,7 @@ abstract class ApptiveGridUri {
   final UriType type;
 
   /// The uri that this is pointing to
+  @Deprecated('Should use `uri.toString()`')
   String get uriString => _uri.toString();
 
   /// The uri that this is pointing to

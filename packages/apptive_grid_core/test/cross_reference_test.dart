@@ -73,7 +73,7 @@ void main() {
           as CrossReferenceDataEntity;
 
       expect(
-        dataEntity.gridUri.uriString,
+        dataEntity.gridUri.uri.toString(),
         (rawResponse['schema'] as Map)['properties']['fields']['items'][0]
             ['gridUri'],
       );

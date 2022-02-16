@@ -25,7 +25,7 @@ void main() {
         grid: '1a2s3d4f',
         form: '787878',
       );
-      final parsed = DirectFormUri.fromUri(direct.uriString);
+      final parsed = DirectFormUri.fromUri(direct.uri.toString());
       expect(parsed, equals(direct));
     });
 
@@ -38,7 +38,7 @@ void main() {
       );
 
       expect(
-        direct.uriString,
+        direct.uri.toString(),
         '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/787878',
       );
     });
@@ -141,7 +141,7 @@ void main() {
         form: '787878',
       ).forEntity(entity: entityUri);
 
-      final parsed = DirectFormUri.fromUri(direct.uriString);
+      final parsed = DirectFormUri.fromUri(direct.uri.toString());
       expect(parsed, equals(direct));
     });
   });
