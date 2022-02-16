@@ -41,6 +41,13 @@ class ApptiveGridClient {
       }..removeWhere((key, value) => value == null))
           .map((key, value) => MapEntry(key, value!));
 
+  Uri _generateApptiveGridUri(ApptiveGridUri baseUri) {
+    return baseUri.uri.replace(
+      scheme: 'https',
+      host: Uri.parse(options.environment.url).host,
+    );
+  }
+
   /// Loads a [FormData] represented by [formUri]
   ///
   /// Based on [formUri] this might require Authentication
@@ -48,12 +55,13 @@ class ApptiveGridClient {
   Future<FormData> loadForm({
     required FormUri formUri,
   }) async {
-    if (formUri.needsAuthorization) {
-      await _authenticator.checkAuthentication();
-    }
-    final url = Uri.parse('${options.environment.url}${formUri.uriString}');
+    final url = _generateApptiveGridUri(formUri);
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
+      if (response.statusCode == 401) {
+        await _authenticator.checkAuthentication();
+        return loadForm(formUri: formUri);
+      }
       throw response;
     }
     return FormData.fromJson(json.decode(response.body));
@@ -169,8 +177,7 @@ class ApptiveGridClient {
     ApptiveGridFilter? filter,
   }) async {
     await _authenticator.checkAuthentication();
-    final gridViewUrl =
-        Uri.parse('${options.environment.url}${gridUri.uriString}');
+    final gridViewUrl = _generateApptiveGridUri(gridUri);
 
     final gridViewResponse = await _client.get(gridViewUrl, headers: headers);
     if (gridViewResponse.statusCode >= 400) {
@@ -179,9 +186,21 @@ class ApptiveGridClient {
 
     final initialGrid = Grid.fromJson(json.decode(gridViewResponse.body));
 
-    if (gridUri is GridViewUri) {
-      Uri url = Uri.parse(
-        '${options.environment.url}/api/users/${gridUri.user}/spaces/${gridUri.space}/grids/${gridUri.grid}/entities?viewId=${gridUri.view}&layout=indexed',
+    if (gridUri.uri.pathSegments.contains('views')) {
+      final gridViewUrlString = gridViewUrl.path.toString();
+      final gridViewUrlPathSegments = gridViewUrl.pathSegments;
+      Uri url = gridViewUrl.replace(
+        pathSegments: [
+          ...gridViewUrlString
+              .substring(0, gridViewUrlString.indexOf('views'))
+              .split('/'),
+          'entities'
+        ],
+        queryParameters: {
+          'viewId': gridViewUrlPathSegments[
+              gridViewUrlPathSegments.indexOf('views') + 1],
+          'layout': 'indexed',
+        },
       );
       // Apply Sorting
       if (sorting != null) {
@@ -235,7 +254,7 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final url = Uri.parse('${options.environment.url}${spaceUri.uriString}');
+    final url = _generateApptiveGridUri(spaceUri);
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
@@ -252,8 +271,10 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final url =
-        Uri.parse('${options.environment.url}${gridUri.uriString}/forms');
+    final baseUrl = _generateApptiveGridUri(gridUri);
+    final url = baseUrl.replace(
+      pathSegments: [...baseUrl.pathSegments, 'forms'],
+    );
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
@@ -272,8 +293,10 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final url =
-        Uri.parse('${options.environment.url}${gridUri.uriString}/views');
+    final baseUrl = _generateApptiveGridUri(gridUri);
+    final url = baseUrl.replace(
+      pathSegments: [...baseUrl.pathSegments, 'views'],
+    );
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
@@ -293,8 +316,10 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final url =
-        Uri.parse('${options.environment.url}${entityUri.uriString}/EditLink');
+    final baseUrl = _generateApptiveGridUri(entityUri);
+    final url = baseUrl.replace(
+      pathSegments: [...baseUrl.pathSegments, 'EditLink'],
+    );
 
     final response = await _client.post(
       url,
@@ -322,7 +347,7 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final url = Uri.parse('${options.environment.url}${entityUri.uriString}');
+    final url = _generateApptiveGridUri(entityUri);
 
     final response = await _client.get(
       url,
