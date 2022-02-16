@@ -117,7 +117,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final result = await completer.future;
-    expect(result, form);
+    expect(result, equals(form));
   });
 
   group('Loading', () {

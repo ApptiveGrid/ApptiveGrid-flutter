@@ -42,7 +42,7 @@ void main() {
     test('Grid Parses Correctly', () {
       final grid = Grid.fromJson(rawResponse);
 
-      expect(grid.fields.length, 1);
+      expect(grid.fields.length, equals(1));
       expect(
         grid.rows[0].entries[0].data,
         EnumCollectionDataEntity(value: {'A', 'C'}, options: {'A', 'B', 'C'}),
@@ -114,8 +114,8 @@ void main() {
         fieldId: 'c75385nsbbji82k5wntoj6sj2',
       );
 
-      expect(fromJson, direct);
-      expect(fromJson.hashCode, direct.hashCode);
+      expect(fromJson, equals(direct));
+      expect(fromJson.hashCode, equals(direct.hashCode));
     });
   });
 }

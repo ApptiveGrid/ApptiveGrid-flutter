@@ -53,8 +53,8 @@ void main() {
       expect(sort1, equals(sort2));
       expect(sort1.hashCode, equals(sort2.hashCode));
 
-      expect(sort1, isNot(equals(sort3)));
-      expect(sort1.hashCode, isNot(equals(sort3.hashCode)));
+      expect(sort1, isNot(sort3));
+      expect(sort1.hashCode, isNot(sort3.hashCode));
     });
   });
 
@@ -162,8 +162,8 @@ void main() {
       expect(sort1, equals(sort2));
       expect(sort1.hashCode, equals(sort2.hashCode));
 
-      expect(sort1, isNot(equals(sort3)));
-      expect(sort1.hashCode, isNot(equals(sort3.hashCode)));
+      expect(sort1, isNot(sort3));
+      expect(sort1.hashCode, isNot(sort3.hashCode));
     });
   });
 }

@@ -74,8 +74,8 @@ void main() {
     test('Grid Parses Correctly', () {
       final grid = Grid.fromJson(rawResponse);
 
-      expect(grid.fields.length, 1);
-      expect(grid.rows.length, 4);
+      expect(grid.fields.length, equals(1));
+      expect(grid.rows.length, equals(4));
     });
 
     group('UserReference Type', () {
@@ -134,7 +134,7 @@ void main() {
     test('Grid serializes back to original Response', () {
       final fromJson = Grid.fromJson(rawResponse);
 
-      expect(fromJson.toJson(), rawResponse);
+      expect(fromJson.toJson(), equals(rawResponse));
     });
   });
 
@@ -158,10 +158,10 @@ void main() {
         'id': 'userId',
         'type': 'accesscredentials'
       });
-      expect(a, b);
+      expect(a, equals(b));
       expect(a, isNot(c));
 
-      expect(a.hashCode, b.hashCode);
+      expect(a.hashCode, equals(b.hashCode));
       expect(a.hashCode, isNot(c.hashCode));
     });
   });
@@ -228,8 +228,8 @@ void main() {
         fieldId: 'f3k9zj2aaclqnhd2e8cvlwydt',
       );
 
-      expect(fromJson, direct);
-      expect(fromJson.hashCode, direct.hashCode);
+      expect(fromJson, equals(direct));
+      expect(fromJson.hashCode, equals(direct.hashCode));
     });
   });
 

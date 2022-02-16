@@ -59,7 +59,7 @@ void main() {
       when(() => permissionHandler.openAppSettings())
           .thenAnswer((invocation) async => true);
 
-      expect(await permissionManager.openAppSettings(), true);
+      expect(await permissionManager.openAppSettings(), equals(true));
       verify(permissionManager.openAppSettings).called(1);
     });
   });

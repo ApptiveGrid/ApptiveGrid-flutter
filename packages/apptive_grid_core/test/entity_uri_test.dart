@@ -8,20 +8,11 @@ void main() {
         '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/entities/787878',
       );
 
-      expect(entityUri.user, '123456');
-      expect(entityUri.space, 'asdfg');
-      expect(entityUri.grid, '1a2s3d4f');
-      expect(entityUri.entity, '787878');
-    });
-
-    test('Malformatted Uri throws ArgumentError', () {
-      const uri = '/api/users/123456/spaces/asdfg/grids/124124';
       expect(
-        () => EntityUri.fromUri(uri),
-        throwsA(
-          predicate<ArgumentError>(
-            (e) => e.message == 'Could not parse EntityUri $uri',
-            'ArgumentError with specific Message',
+        entityUri.uri,
+        equals(
+          Uri.parse(
+            '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/entities/787878',
           ),
         ),
       );
@@ -35,7 +26,7 @@ void main() {
         entity: '787878',
       );
       final parsed = EntityUri.fromUri(direct.uriString);
-      expect(parsed == direct, true);
+      expect(parsed, equals(direct));
     });
   });
 
@@ -50,8 +41,8 @@ void main() {
         grid: '1a2s3d4f',
         entity: '787878',
       );
-      expect(parsed == direct, true);
-      expect(parsed.hashCode - direct.hashCode, 0);
+      expect(parsed, equals(direct));
+      expect(parsed.hashCode, equals(direct.hashCode));
     });
 
     test('Different Values do not equal', () {
@@ -67,8 +58,8 @@ void main() {
         grid: '1a2s3d4f',
         entity: '878787',
       );
-      expect(one == two, false);
-      expect((one.hashCode - two.hashCode) != 0, true);
+      expect(one, isNot(two));
+      expect(one.hashCode, isNot(two.hashCode));
     });
   });
 }

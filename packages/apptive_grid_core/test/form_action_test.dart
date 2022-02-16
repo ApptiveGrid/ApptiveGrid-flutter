@@ -14,8 +14,8 @@ void main() {
 
       final action = FormAction.fromJson(json);
 
-      expect(action.uri, uri);
-      expect(action.method, method);
+      expect(action.uri, equals(uri));
+      expect(action.method, equals(method));
     });
   });
 
@@ -26,7 +26,7 @@ void main() {
 
       final action = FormAction(uri, method);
 
-      expect(FormAction.fromJson(action.toJson()), action);
+      expect(FormAction.fromJson(action.toJson()), equals(action));
     });
   });
 
@@ -44,13 +44,13 @@ void main() {
     final c = FormAction(method, uri);
 
     test('a == b', () {
-      expect(a == b, true);
-      expect(a.hashCode - b.hashCode, 0);
+      expect(a, equals(b));
+      expect(a.hashCode, equals(b.hashCode));
     });
 
     test('a != c', () {
-      expect(a == c, false);
-      expect((a.hashCode - c.hashCode) == 0, false);
+      expect(a, isNot(c));
+      expect(a.hashCode, isNot(c.hashCode));
     });
   });
 
@@ -71,10 +71,10 @@ void main() {
       final b = ActionItem(action: actionA, data: data);
       final c = ActionItem(action: actionB, data: data);
 
-      expect(a, b);
+      expect(a, equals(b));
       expect(a, isNot(c));
 
-      expect(a.hashCode, b.hashCode);
+      expect(a.hashCode, equals(b.hashCode));
       expect(a.hashCode, isNot(c.hashCode));
     });
   });

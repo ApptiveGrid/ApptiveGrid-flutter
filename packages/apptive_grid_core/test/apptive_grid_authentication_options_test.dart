@@ -28,8 +28,8 @@ void main() {
           redirectScheme: 'differentScheme',
         );
 
-        expect(optionsA, isNot(equals(optionsB)));
-        expect(optionsA.hashCode, isNot(equals(optionsB.hashCode)));
+        expect(optionsA, isNot(optionsB));
+        expect(optionsA.hashCode, isNot(optionsB.hashCode));
       });
     });
   });
@@ -52,8 +52,8 @@ void main() {
         const keyB =
             ApptiveGridApiKey(authKey: 'authKey', password: 'passwortWithT');
 
-        expect(keyA, isNot(equals(keyB)));
-        expect(keyA.hashCode, isNot(equals(keyB.hashCode)));
+        expect(keyA, isNot(keyB));
+        expect(keyA.hashCode, isNot(keyB.hashCode));
       });
     });
   });

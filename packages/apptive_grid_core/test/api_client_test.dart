@@ -7,7 +7,6 @@ import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
 
 import 'mocks.dart';
@@ -89,13 +88,14 @@ void main() {
         formUri: RedirectFormUri(components: ['FormId']),
       );
 
-      expect(formData.title, 'Form');
-      expect(formData.components.length, 1);
-      expect(formData.components[0].runtimeType, StringFormComponent);
-      expect(formData.actions.length, 1);
+      expect(formData.title, equals('Form'));
+      expect(formData.components.length, equals(1));
+      expect(formData.components[0].runtimeType, equals(StringFormComponent));
+      expect(formData.actions.length, equals(1));
     });
 
-    test('DirectUri checks authentication', () async {
+    test('DirectUri checks authentication if call throws 401', () async {
+      final unauthorizedResponse = Response(json.encode(rawResponse), 401);
       final response = Response(json.encode(rawResponse), 200);
       final authenticator = MockApptiveGridAuthenticator();
       final client = ApptiveGridClient.fromClient(
@@ -104,19 +104,25 @@ void main() {
       );
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => response);
+          .thenAnswer((_) async {
+        // Return response on next call
+        when(() => httpClient.get(any(), headers: any(named: 'headers')))
+            .thenAnswer((_) async => response);
+
+        // First return unauthorizedResponse
+        return unauthorizedResponse;
+      });
       when(() => authenticator.checkAuthentication())
           .thenAnswer((_) => Future.value());
 
-      unawaited(
-        client.loadForm(
+
+       await client.loadForm(
           formUri: DirectFormUri(
             user: 'user',
             space: 'space',
             grid: 'grid',
             form: 'FormId',
           ),
-        ),
       );
       verify(() => authenticator.checkAuthentication()).called(1);
     });
@@ -264,8 +270,8 @@ void main() {
 
       final response = await apptiveGridClient.performAction(action, formData);
 
-      expect(response.statusCode, 200);
-      expect(calledRequest.method, action.method);
+      expect(response.statusCode, equals(200));
+      expect(calledRequest.method, equals(action.method));
       expect(
         calledRequest.url.toString(),
         '${ApptiveGridEnvironment.production.url}${action.uri}',
@@ -772,8 +778,14 @@ void main() {
 
   group('Environment', () {
     test('Check Urls', () {
-      expect(ApptiveGridEnvironment.alpha.url, 'https://alpha.apptivegrid.de');
-      expect(ApptiveGridEnvironment.beta.url, 'https://beta.apptivegrid.de');
+      expect(
+        ApptiveGridEnvironment.alpha.url,
+        equals('https://alpha.apptivegrid.de'),
+      );
+      expect(
+        ApptiveGridEnvironment.beta.url,
+        equals('https://beta.apptivegrid.de'),
+      );
       expect(
         ApptiveGridEnvironment.production.url,
         'https://app.apptivegrid.de',
@@ -781,9 +793,15 @@ void main() {
     });
 
     test('Check Auth Realm', () {
-      expect(ApptiveGridEnvironment.alpha.authRealm, 'apptivegrid-test');
-      expect(ApptiveGridEnvironment.beta.authRealm, 'apptivegrid-test');
-      expect(ApptiveGridEnvironment.production.authRealm, 'apptivegrid');
+      expect(
+        ApptiveGridEnvironment.alpha.authRealm,
+        equals('apptivegrid-test'),
+      );
+      expect(ApptiveGridEnvironment.beta.authRealm, equals('apptivegrid-test'));
+      expect(
+        ApptiveGridEnvironment.production.authRealm,
+        equals('apptivegrid'),
+      );
     });
   });
 
@@ -965,7 +983,7 @@ void main() {
 
       final forms = await apptiveGridClient.getForms(gridUri: gridUri);
 
-      expect(forms.length, 2);
+      expect(forms.length, equals(2));
       expect(
         forms[0].uriString,
         '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
@@ -1020,7 +1038,7 @@ void main() {
 
       final views = await apptiveGridClient.getGridViews(gridUri: gridUri);
 
-      expect(views.length, 2);
+      expect(views.length, equals(2));
       expect(
         views[0].uriString,
         '/api/users/id/spaces/spaceId/grids/gridId/views/$view0',
@@ -1116,9 +1134,9 @@ void main() {
         ),
       );
 
-      expect(gridView.filter != null, true);
-      expect(gridView.fields.length, 3);
-      expect(gridView.rows.length, 1);
+      expect(gridView.filter, isNot(null));
+      expect(gridView.fields.length, equals(3));
+      expect(gridView.rows.length, equals(1));
     });
 
     test('GridView sorting gets applied in request', () async {
@@ -1435,8 +1453,7 @@ void main() {
         formId: form,
       );
 
-      expect(formUri.runtimeType, RedirectFormUri);
-      expect(formUri.uriString, '/api/a/$form');
+      expect(formUri.uri, equals(Uri(path: '/api/a/$form')));
     });
 
     test('400 Status throws Response', () async {
@@ -1485,7 +1502,7 @@ void main() {
 
       final entity = await apptiveGridClient.getEntity(entityUri: entityUri);
 
-      expect(entity, rawResponse);
+      expect(entity, equals(rawResponse));
     });
 
     test('400 Status throws Response', () async {
@@ -1537,15 +1554,21 @@ void main() {
     });
 
     test('switch url', () async {
-      expect(client.options.environment, ApptiveGridEnvironment.alpha);
+      expect(client.options.environment, equals(ApptiveGridEnvironment.alpha));
 
       await client.updateEnvironment(ApptiveGridEnvironment.production);
 
-      expect(client.options.environment, ApptiveGridEnvironment.production);
+      expect(
+        client.options.environment,
+        equals(ApptiveGridEnvironment.production),
+      );
     });
 
     test('switch authenticator environment', () async {
-      expect(authenticator.options.environment, ApptiveGridEnvironment.alpha);
+      expect(
+        authenticator.options.environment,
+        equals(ApptiveGridEnvironment.alpha),
+      );
 
       await client.updateEnvironment(ApptiveGridEnvironment.production);
 

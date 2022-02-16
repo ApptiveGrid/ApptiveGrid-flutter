@@ -47,7 +47,7 @@ void main() {
     test('Grid Parses Correctly', () {
       final grid = Grid.fromJson(rawResponse);
 
-      expect(grid.fields.length, 1);
+      expect(grid.fields.length, equals(1));
       expect(
         grid.rows[0].entries[0].data,
         CrossReferenceDataEntity.fromJson(
@@ -65,7 +65,7 @@ void main() {
     test('Grid serializes back to original Response', () {
       final fromJson = Grid.fromJson(rawResponse);
 
-      expect(fromJson.toJson(), rawResponse);
+      expect(fromJson.toJson(), equals(rawResponse));
     });
 
     test('GridUri is parsed Correctly', () {
@@ -105,10 +105,10 @@ void main() {
         gridUri:
             '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
       );
-      expect(a, b);
+      expect(a, equals(b));
       expect(a, isNot(c));
 
-      expect(a.hashCode, b.hashCode);
+      expect(a.hashCode, equals(b.hashCode));
       expect(a.hashCode, isNot(c.hashCode));
     });
   });
@@ -173,8 +173,8 @@ void main() {
         fieldId: '3ftoqhqbct15h5o730uknpvp5',
       );
 
-      expect(fromJson, direct);
-      expect(fromJson.hashCode, direct.hashCode);
+      expect(fromJson, equals(direct));
+      expect(fromJson.hashCode, equals(direct.hashCode));
     });
   });
 }

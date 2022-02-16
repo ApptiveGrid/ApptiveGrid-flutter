@@ -31,7 +31,7 @@ void main() {
       await tester.enterText(find.byType(TextFormField), '47.11.');
       await tester.pumpAndSettle();
 
-      expect(dataEntity.value, 47.11);
+      expect(dataEntity.value, equals(47.11));
       expect(find.text('47.11'), findsOneWidget);
     });
 
@@ -53,7 +53,7 @@ void main() {
       await tester.enterText(find.byType(TextFormField), '47,11');
       await tester.pumpAndSettle();
 
-      expect(dataEntity.value, 47.11);
+      expect(dataEntity.value, equals(47.11));
       expect(find.text('47,11'), findsOneWidget);
     });
   });

@@ -113,15 +113,15 @@ void main() {
     test('Parses json Response', () {
       final grid = Grid.fromJson(json);
 
-      expect(grid.name, 'New grid');
+      expect(grid.name, equals('New grid'));
       expect(grid.schema, isNot(null));
-      expect(grid.fields.length, 8);
-      expect(grid.rows.length, 5);
+      expect(grid.fields.length, equals(8));
+      expect(grid.rows.length, equals(5));
 
       final firstRow = grid.rows[0];
-      expect(firstRow.entries[0].data.value, 'Hello');
-      expect(firstRow.entries[1].data.value, 1);
-      expect(firstRow.entries[7].data.value, 'Enum1');
+      expect(firstRow.entries[0].data.value, equals('Hello'));
+      expect(firstRow.entries[1].data.value, equals(1));
+      expect(firstRow.entries[7].data.value, equals('Enum1'));
       expect(
         (firstRow.entries[7].data as EnumDataEntity).options,
         ['Enum1', 'Enum2'],
@@ -133,9 +133,9 @@ void main() {
       final saved = initialData.toJson();
       final restored = Grid.fromJson(saved);
 
-      expect(saved, json);
-      expect(restored, initialData);
-      expect(restored.hashCode, initialData.hashCode);
+      expect(saved, equals(json));
+      expect(restored, equals(initialData));
+      expect(restored.hashCode, equals(initialData.hashCode));
     });
   });
 }

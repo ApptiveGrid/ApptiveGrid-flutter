@@ -6,28 +6,9 @@ void main() {
     test('From UriString parses correctly', () {
       final spaceUri = SpaceUri.fromUri('/api/users/123456/spaces/asdfg/');
 
-      expect(spaceUri.user, '123456');
-      expect(spaceUri.space, 'asdfg');
-    });
-
-    test('Too long Uri still produces correct SpaceUri', () {
-      final spaceUri =
-          SpaceUri.fromUri('/api/users/123456/spaces/asdfg/grids/1a2s3d4f');
-
-      expect(spaceUri.user, '123456');
-      expect(spaceUri.space, 'asdfg');
-    });
-
-    test('Malformatted Uri throws ArgumentError', () {
-      const uri = '/api/users/123456';
       expect(
-        () => SpaceUri.fromUri(uri),
-        throwsA(
-          predicate<ArgumentError>(
-            (e) => e.message == 'Could not parse SpaceUri $uri',
-            'ArgumentError with specific Message',
-          ),
-        ),
+        spaceUri.uri,
+        equals(Uri.parse('/api/users/123456/spaces/asdfg/')),
       );
     });
   });
@@ -35,13 +16,13 @@ void main() {
   group('Equality', () {
     test('From UriString equals to direct invocation', () {
       final parsed =
-          SpaceUri.fromUri('/api/users/123456/spaces/asdfg/spaces/1a2s3d4f');
+          SpaceUri.fromUri('/api/users/123456/spaces/asdfg');
       final direct = SpaceUri(
         user: '123456',
         space: 'asdfg',
       );
-      expect(parsed == direct, true);
-      expect(parsed.hashCode - direct.hashCode, 0);
+      expect(parsed, equals(direct));
+      expect(parsed.hashCode, equals(direct.hashCode));
     });
 
     test('Different Values do not equal', () {
@@ -53,8 +34,8 @@ void main() {
         user: '123456',
         space: 'asdfg',
       );
-      expect(one == two, false);
-      expect((one.hashCode - two.hashCode) != 0, true);
+      expect(one, isNot(two));
+      expect(one.hashCode, isNot(two.hashCode));
     });
   });
 }

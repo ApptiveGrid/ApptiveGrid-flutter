@@ -25,6 +25,6 @@ void main() {
     await tester.tap(find.byType(ActionButton));
 
     final result = await completer.future;
-    expect(result, action);
+    expect(result, equals(action));
   });
 }

@@ -68,12 +68,12 @@ void main() {
     await tester.tap(find.text('A'));
     await tester.pump();
 
-    expect(component.data.value, {'A'});
+    expect(component.data.value, equals({'A'}));
 
     await tester.tap(find.text('A'));
     await tester.pump();
 
-    expect(component.data.value, <String>{});
+    expect(component.data.value, equals(<String>{}));
   });
 
   group('Validation', () {
@@ -183,7 +183,7 @@ void main() {
           verify(() => client.performAction(action, captureAny<FormData>()))
               .captured
               .first as FormData;
-      expect(capturedData.components.first.data.value, {'A'});
+      expect(capturedData.components.first.data.value, equals({'A'}));
     });
   });
 }
