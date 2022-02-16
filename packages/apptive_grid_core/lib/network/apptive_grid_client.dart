@@ -192,7 +192,7 @@ class ApptiveGridClient {
       Uri url = gridViewUrl.replace(
         pathSegments: [
           ...gridViewUrlString
-              .substring(0, gridViewUrlString.indexOf('views'))
+              .substring(0, gridViewUrlString.indexOf('/views'))
               .split('/'),
           'entities'
         ],

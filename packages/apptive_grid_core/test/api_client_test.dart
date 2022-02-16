@@ -1328,7 +1328,8 @@ void main() {
           any(
             that: predicate<Uri>(
               (uri) =>
-                  uri.path.endsWith('/entities') &&
+                  uri.path == '/api/users/$userId/spaces/$spaceId/grids/$gridId/entities' &&
+                    uri.queryParameters['viewId'] == view0 &&
                   uri.queryParameters.containsKey('filter'),
             ),
           ),
