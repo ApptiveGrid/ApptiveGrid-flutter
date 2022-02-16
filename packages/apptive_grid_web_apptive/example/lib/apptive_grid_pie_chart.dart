@@ -178,8 +178,6 @@ class _FieldSelectorState extends State<FieldSelector> {
             validator: (value) {
               if (value == null) {
                 return 'Select a Column that should be displayed in the pie chart.';
-              } else {
-                return null;
               }
               return null;
             },

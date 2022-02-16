@@ -245,8 +245,6 @@ class ApptiveGridAuthenticator {
     if (options.authenticationOptions.apiKey != null) {
       final apiKey = options.authenticationOptions.apiKey!;
       return 'Basic ${base64Encode(utf8.encode('${apiKey.authKey}:${apiKey.password}'))}';
-    } else {
-      return null;
     }
     return null;
   }

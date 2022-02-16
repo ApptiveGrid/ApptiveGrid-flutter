@@ -25,6 +25,5 @@ class AttachmentManager {
     } else if (actionType == AttachmentActionType.add) {
       formData?.attachmentActions.remove(attachment);
     }
-    return null;
   }
 }
