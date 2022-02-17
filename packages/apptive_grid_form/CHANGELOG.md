@@ -17,6 +17,9 @@
 * Fixed Multiline Text FormWidgets
 * Fix required validation not working for all types if Form has initial data
 
+## [0.9.0-alpha.11]
+* Use `apptive_grid_core: ^0.9.0`
+
 ## [0.9.0-alpha.10]
 * Use stable version of `apptive_grid_core`
 

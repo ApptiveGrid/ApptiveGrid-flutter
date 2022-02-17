@@ -1,3 +1,12 @@
+## [0.9.0]
+
+### Breaking Changes
+* `isAuthenticated` now returns `Future<bool>`
+
+## New Features
+* Add support for setting UserToken manually
+* Add function for checking if a user is authenticated with a User Token
+
 ## [0.8.0]
 
 ### Breaking Changes

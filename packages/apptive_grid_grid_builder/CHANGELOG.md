@@ -1,4 +1,7 @@
-### [0.8.0]
+## [0.8.1]
+* Use `apptive_grid_core: ^0.9.0`
+
+## [0.8.0]
 
 ### Breaking Changes
 * `DataType.selectionBox` is now `DataType.singleSelect`
