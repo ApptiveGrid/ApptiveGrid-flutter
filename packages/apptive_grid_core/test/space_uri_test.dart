@@ -15,8 +15,7 @@ void main() {
 
   group('Equality', () {
     test('From UriString equals to direct invocation', () {
-      final parsed =
-          SpaceUri.fromUri('/api/users/123456/spaces/asdfg');
+      final parsed = SpaceUri.fromUri('/api/users/123456/spaces/asdfg');
       final direct = SpaceUri(
         user: '123456',
         space: 'asdfg',

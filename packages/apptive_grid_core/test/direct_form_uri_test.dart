@@ -102,29 +102,29 @@ void main() {
       );
     });
 
-      test('DirectFormUri with Entity reflects in uri', () {
-        final entityUri = EntityUri(
-          user: '123456',
-          space: 'asdfg',
-          grid: '1a2s3d4f',
-          entity: '909090',
-        );
-        final direct = DirectFormUri(
-          user: '123456',
-          space: 'asdfg',
-          grid: '1a2s3d4f',
-          form: '787878',
-          entity: entityUri,
-        );
+    test('DirectFormUri with Entity reflects in uri', () {
+      final entityUri = EntityUri(
+        user: '123456',
+        space: 'asdfg',
+        grid: '1a2s3d4f',
+        entity: '909090',
+      );
+      final direct = DirectFormUri(
+        user: '123456',
+        space: 'asdfg',
+        grid: '1a2s3d4f',
+        form: '787878',
+        entity: entityUri,
+      );
 
-        expect(
-          direct.uri,
-          equals(
-            Uri.parse(
-              '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/787878?uri=/api/users/123456/spaces/asdfg/grids/1a2s3d4f/entities/909090',
-            ),
+      expect(
+        direct.uri,
+        equals(
+          Uri.parse(
+            '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/787878?uri=/api/users/123456/spaces/asdfg/grids/1a2s3d4f/entities/909090',
           ),
-        );
+        ),
+      );
     });
 
     test('Parse URI with Entity', () {

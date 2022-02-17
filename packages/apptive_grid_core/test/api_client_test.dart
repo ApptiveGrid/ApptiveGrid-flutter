@@ -115,14 +115,13 @@ void main() {
       when(() => authenticator.checkAuthentication())
           .thenAnswer((_) => Future.value());
 
-
-       await client.loadForm(
-          formUri: DirectFormUri(
-            user: 'user',
-            space: 'space',
-            grid: 'grid',
-            form: 'FormId',
-          ),
+      await client.loadForm(
+        formUri: DirectFormUri(
+          user: 'user',
+          space: 'space',
+          grid: 'grid',
+          form: 'FormId',
+        ),
       );
       verify(() => authenticator.checkAuthentication()).called(1);
     });
@@ -1328,8 +1327,9 @@ void main() {
           any(
             that: predicate<Uri>(
               (uri) =>
-                  uri.path == '/api/users/$userId/spaces/$spaceId/grids/$gridId/entities' &&
-                    uri.queryParameters['viewId'] == view0 &&
+                  uri.path ==
+                      '/api/users/$userId/spaces/$spaceId/grids/$gridId/entities' &&
+                  uri.queryParameters['viewId'] == view0 &&
                   uri.queryParameters.containsKey('filter'),
             ),
           ),

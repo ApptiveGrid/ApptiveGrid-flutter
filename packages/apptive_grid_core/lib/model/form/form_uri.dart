@@ -11,10 +11,15 @@ part of apptive_grid_model;
 /// [RedirectFormUri] should be used if you accessed a Form via a Redirect Link e.g. https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa
 /// [DirectFormUri] should be used if accessed
 class FormUri extends ApptiveGridUri {
-  FormUri._(Uri uri) : super._(uri.replace(path: uri.path.replaceFirst('api/r/', 'api/a/')), UriType.form);
+  FormUri._(Uri uri)
+      : super._(
+          uri.replace(path: uri.path.replaceFirst('api/r/', 'api/a/')),
+          UriType.form,
+        );
 
   /// Creates a FormUri based on a [uri]
-  FormUri.fromUri(String uri) : super.fromUri(uri.replaceFirst('api/r/', 'api/a/'), UriType.form);
+  FormUri.fromUri(String uri)
+      : super.fromUri(uri.replaceFirst('api/r/', 'api/a/'), UriType.form);
 
   /// Returns a FormUri pointing to a Form prefilled with values for a certain [EntityUri]
   FormUri forEntity({
@@ -22,7 +27,7 @@ class FormUri extends ApptiveGridUri {
   }) {
     return FormUri._(
       uri.replace(
-        query:'uri=${entity.uri.toString()}',
+        query: 'uri=${entity.uri.toString()}',
       ),
     );
   }
@@ -52,9 +57,7 @@ class DirectFormUri extends FormUri {
   }) : super._(
           Uri(
             path: '/api/users/$user/spaces/$space/grids/$grid/forms/$form',
-            query: entity != null
-                ? 'uri=${entity.uri.toString()}'
-                : null,
+            query: entity != null ? 'uri=${entity.uri.toString()}' : null,
           ),
         );
 
