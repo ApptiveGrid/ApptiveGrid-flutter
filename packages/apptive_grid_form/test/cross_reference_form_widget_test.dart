@@ -2,15 +2,19 @@ import 'dart:async';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
-import 'package:apptive_grid_form/widgets/form_widget/grid_row_dropdown/grid_row_dropdown_library.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'common.dart';
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(FormData(title: 'title', components: [], schema: {}));
+    registerFallbackValue(GridUri(user: 'user', space: 'space', grid: 'grid'));
+  });
+
   group('FormWidget', () {
     late ApptiveGridClient client;
     late Widget target;
@@ -59,18 +63,17 @@ void main() {
       await tester.tap(find.byIcon(Icons.arrow_drop_down));
       await tester.pumpAndSettle();
 
-      // Dropdown creates multiple instances. Thus expecting one entry more than actually expected
-      expect(find.text('First'), findsNWidgets(2));
-      expect(find.text('Second'), findsNWidgets(2));
+      expect(find.text('First'), findsNWidgets(1));
+      expect(find.text('Second'), findsNWidgets(1));
 
       // Filter
       await tester.enterText(find.byType(TextField), 'Sec');
       await tester.pumpAndSettle();
       expect(
         find.text('First'),
-        findsOneWidget,
-      ); // See above why one more than expected
-      expect(find.text('Second'), findsNWidgets(2));
+        findsNothing,
+      );
+      expect(find.text('Second'), findsNWidgets(1));
     });
 
     testWidgets('Select Widget', (tester) async {
@@ -161,29 +164,57 @@ void main() {
     });
   });
 
-  group('GridRowDropdownDataItem', () {
-    test('Equality', () {
-      final entityUri = EntityUri(
-        user: 'user',
-        space: 'space',
-        grid: 'grid',
-        entity: 'entity',
+  group('Validation', () {
+    testWidgets('is required but filled sends', (tester) async {
+      final action = FormAction('formAction', 'POST');
+      final formData = FormData(
+        title: 'title',
+        components: [
+          CrossReferenceFormComponent(
+            property: 'Property',
+            data: CrossReferenceDataEntity(
+              value: 'CrossRef',
+              gridUri: GridUri(user: 'user', space: 'space', grid: 'grid'),
+              entityUri: EntityUri(
+                user: 'user',
+                space: 'space',
+                grid: 'grid',
+                entity: 'entity',
+              ),
+            ),
+            fieldId: 'fieldId',
+            required: true,
+          )
+        ],
+        actions: [action],
+        schema: null,
       );
-      const value = 'value';
-      final a =
-          GridRowDropdownDataItem(entityUri: entityUri, displayValue: value);
-      final b = GridRowDropdownDataItem(
-        entityUri: EntityUri.fromUri(entityUri.uriString),
-        displayValue: value,
+      final client = MockApptiveGridClient();
+      when(() => client.loadGrid(gridUri: any(named: 'gridUri'))).thenAnswer(
+        (invocation) async =>
+            Grid(name: 'name', schema: {}, fields: [], rows: []),
       );
-      final c = GridRowDropdownDataItem(
-        entityUri: entityUri,
+      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.performAction(action, any()))
+          .thenAnswer((_) async => Response('body', 200));
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
       );
 
-      expect(a, b);
-      expect(a.hashCode, b.hashCode);
-      expect(a, isNot(c));
-      expect(a.hashCode, isNot(c.hashCode));
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Property must not be empty', skipOffstage: true),
+        findsNothing,
+      );
     });
   });
 }

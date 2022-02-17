@@ -21,10 +21,25 @@ enum DataType {
   checkbox,
 
   /// Type to display enum values
-  selectionBox,
+  singleSelect,
+
+  /// Select Multiple Values from List of possible Values
+  enumCollection,
 
   /// Type to display CrossReference Values
   crossReference,
+
+  /// Type for Attachments
+  attachment,
+
+  /// Type for geolocations
+  geolocation,
+
+  /// Type for Multi Cross References
+  multiCrossReference,
+
+  /// Type for UserReferences. Used for createdBy
+  userReference,
 }
 
 /// Returns [DataType] that matching a certain schema [schemaProperty]
@@ -38,7 +53,7 @@ DataType dataTypeFromSchemaProperty({
   switch (schemaType) {
     case 'string':
       if (schemaProperty['enum'] != null) {
-        return DataType.selectionBox;
+        return DataType.singleSelect;
       }
       switch (format) {
         case 'date-time':
@@ -58,6 +73,31 @@ DataType dataTypeFromSchemaProperty({
       switch (objectType) {
         case 'entityreference':
           return DataType.crossReference;
+        case 'attachment':
+          return DataType.attachment;
+        case 'geolocation':
+          return DataType.geolocation;
+        case 'userReference':
+          return DataType.userReference;
+        default:
+          throw ArgumentError(
+            'No defined Object type for type: $objectType',
+          );
+      }
+    case 'array':
+      final itemType =
+          dataTypeFromSchemaProperty(schemaProperty: schemaProperty['items']);
+      switch (itemType) {
+        case DataType.attachment:
+          return DataType.attachment;
+        case DataType.singleSelect:
+          return DataType.enumCollection;
+        case DataType.crossReference:
+          return DataType.multiCrossReference;
+        default:
+          throw ArgumentError(
+            'No defined Array type for type: $itemType',
+          );
       }
   }
   throw ArgumentError(

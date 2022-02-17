@@ -1,6 +1,5 @@
 import 'package:apptive_grid_theme/apptive_grid_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 
@@ -347,6 +346,45 @@ void main() {
         ),
       ),
       'Text',
+      widgetTester,
+    );
+  });
+
+  testWidgets('Chips', (widgetTester) async {
+    await _test(
+      (data) => Center(
+        child: Column(
+          children: [
+            const Chip(
+              label: Text('Chip'),
+            ),
+            const InputChip(
+              label: Text('InputChip'),
+            ),
+            ChoiceChip(
+              label: const Text('Choice Chip, Selected'),
+              selected: true,
+              onSelected: (_) {},
+            ),
+            ChoiceChip(
+              label: const Text('Choice Chip, UnSelected'),
+              selected: false,
+              onSelected: (_) {},
+            ),
+            const ChoiceChip(
+              label: Text('Choice Chip, Selected, no Callback'),
+              selected: true,
+            ),
+            const ChoiceChip(
+              label: Text('Choice Chip, UnSelected, no Callback'),
+              selected: false,
+            ),
+            FilterChip(label: const Text('FilterChip'), onSelected: (_) {}),
+            ActionChip(label: const Text('ActionChip'), onPressed: () {}),
+          ],
+        ),
+      ),
+      'Chips',
       widgetTester,
     );
   });

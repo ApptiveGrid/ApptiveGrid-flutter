@@ -1,4 +1,4 @@
-name: example
+name: apptive_grid_form_example
 description: A new Flutter project.
 
 publish_to: 'none'
@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.4
 
   apptive_grid_form:
     path: ../

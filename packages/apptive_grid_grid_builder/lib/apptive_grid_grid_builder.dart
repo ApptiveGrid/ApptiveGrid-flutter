@@ -1,7 +1,7 @@
 library apptive_grid_grid_builder;
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/apptive_grid_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 export 'package:apptive_grid_core/apptive_grid_core.dart';
@@ -13,6 +13,8 @@ class ApptiveGridGridBuilder extends StatefulWidget {
     Key? key,
     required this.gridUri,
     this.initialData,
+    this.sorting,
+    this.filter,
     required this.builder,
   }) : super(key: key);
 
@@ -25,6 +27,12 @@ class ApptiveGridGridBuilder extends StatefulWidget {
   /// Callback that is used to build the widget
   final Widget Function(BuildContext, AsyncSnapshot<Grid?>) builder;
 
+  /// List of [ApptiveGridSorting] that should be applied
+  final List<ApptiveGridSorting>? sorting;
+
+  /// [ApptiveGridFilter] that should be used to filter entities
+  final ApptiveGridFilter? filter;
+
   @override
   ApptiveGridGridBuilderState createState() => ApptiveGridGridBuilderState();
 }
@@ -35,15 +43,24 @@ class ApptiveGridGridBuilderState extends State<ApptiveGridGridBuilder> {
 
   @override
   void initState() {
+    super.initState();
     _snapshot =
         AsyncSnapshot<Grid?>.withData(ConnectionState.none, widget.initialData);
-    super.initState();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     reload(listen: true);
+  }
+
+  @override
+  void didUpdateWidget(covariant ApptiveGridGridBuilder oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!listEquals(oldWidget.sorting, widget.sorting) ||
+        oldWidget.filter != widget.filter) {
+      reload(listen: false);
+    }
   }
 
   @override
@@ -58,7 +75,11 @@ class ApptiveGridGridBuilderState extends State<ApptiveGridGridBuilder> {
     bool listen = false,
   }) {
     return ApptiveGrid.getClient(context, listen: listen)
-        .loadGrid(gridUri: widget.gridUri)
+        .loadGrid(
+          gridUri: widget.gridUri,
+          sorting: widget.sorting,
+          filter: widget.filter,
+        )
         .then(
           (value) => setState(() {
             _snapshot = AsyncSnapshot.withData(ConnectionState.done, value);

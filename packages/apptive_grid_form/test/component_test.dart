@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +100,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, 'Value');
+      expect(result.components.first.data.value, equals('Value'));
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -211,7 +210,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, date);
+      expect(result.components.first.data.value, equals(date));
     });
 
     testWidgets('Value is send and used with Time Picker', (tester) async {
@@ -394,7 +393,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, date);
+      expect(result.components.first.data.value, equals(date));
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -492,7 +491,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, 12);
+      expect(result.components.first.data.value, equals(12));
     });
 
     testWidgets('Prefilled Value gets displayed', (tester) async {
@@ -624,7 +623,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, 12);
+      expect(result.components.first.data.value, equals(12));
     });
 
     testWidgets('Prefilled Value gets displayed', (tester) async {
@@ -756,7 +755,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, true);
+      expect(result.components.first.data.value, equals(true));
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -812,7 +811,7 @@ void main() {
       );
       final component = EnumFormComponent(
         fieldId: 'id',
-        data: EnumDataEntity(value: 'value', options: ['value', 'newValue']),
+        data: EnumDataEntity(value: 'value', options: {'value', 'newValue'}),
         property: 'Property',
         options: const FormComponentOptions(),
         required: false,
@@ -858,7 +857,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, 'newValue');
+      expect(result.components.first.data.value, equals('newValue'));
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -868,7 +867,7 @@ void main() {
       );
       final component = EnumFormComponent(
         fieldId: 'id',
-        data: EnumDataEntity(options: ['value']),
+        data: EnumDataEntity(options: {'value'}),
         property: 'Property',
         options: const FormComponentOptions(),
         required: true,

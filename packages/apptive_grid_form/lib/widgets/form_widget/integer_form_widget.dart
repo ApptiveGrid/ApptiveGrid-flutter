@@ -38,9 +38,7 @@ class _IntegerFormWidgetState extends State<IntegerFormWidget> {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return TextFormField(
       controller: _controller,
       validator: (input) {

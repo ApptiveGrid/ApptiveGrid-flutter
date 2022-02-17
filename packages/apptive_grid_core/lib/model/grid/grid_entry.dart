@@ -30,10 +30,10 @@ class GridEntry {
       case DataType.checkbox:
         dataEntity = BooleanDataEntity(jsonData);
         break;
-      case DataType.selectionBox:
+      case DataType.singleSelect:
         dataEntity = EnumDataEntity(
           value: jsonData,
-          options: schema['enum'].cast<String>(),
+          options: (schema['enum'].cast<String>() as List<String>).toSet(),
         );
         break;
       case DataType.crossReference:
@@ -44,6 +44,29 @@ class GridEntry {
         break;
       case DataType.decimal:
         dataEntity = DecimalDataEntity(jsonData);
+        break;
+      case DataType.attachment:
+        dataEntity = AttachmentDataEntity.fromJson(jsonData);
+        break;
+      case DataType.enumCollection:
+        dataEntity = EnumCollectionDataEntity(
+          value:
+              ((jsonData ?? <String>[]).cast<String>() as List<String>).toSet(),
+          options:
+              (schema['items']['enum'].cast<String>() as List<String>).toSet(),
+        );
+        break;
+      case DataType.geolocation:
+        dataEntity = GeolocationDataEntity.fromJson(jsonData);
+        break;
+      case DataType.multiCrossReference:
+        dataEntity = MultiCrossReferenceDataEntity.fromJson(
+          jsonValue: jsonData,
+          gridUri: schema['items']['gridUri'],
+        );
+        break;
+      case DataType.userReference:
+        dataEntity = UserReferenceDataEntity.fromJson(jsonData);
         break;
     }
     return GridEntry(field, dataEntity);

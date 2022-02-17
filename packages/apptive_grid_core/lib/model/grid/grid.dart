@@ -4,61 +4,24 @@ part of apptive_grid_model;
 class GridUri extends ApptiveGridUri {
   /// Creates a new [GridUri] based on known ids for [user], [space] and [grid]
   GridUri({
-    required this.user,
-    required this.space,
-    required this.grid,
-  });
+    required String user,
+    required String space,
+    required String grid,
+    String? view,
+  }) : super._(
+          Uri(
+            pathSegments: [
+              ...'/api/users/$user/spaces/$space/grids/$grid'.split('/'),
+              if (view != null) ...['views', view]
+            ],
+          ),
+          UriType.grid,
+        );
 
   /// Creates a new [GridUri] based on a string [uri]
   /// Main usage of this is for [GridUri] retrieved through other Api Calls
   /// If the Uri passed in is a [GridViewUri] it will return that
-  factory GridUri.fromUri(String uri) {
-    try {
-      // Try to parse as GridViewUri
-      return GridViewUri.fromUri(uri);
-    } on ArgumentError {
-      const regex = r'/api/users/(\w+)/spaces/(\w+)/grids/(\w+)\b';
-      final matches = RegExp(regex).allMatches(uri);
-      if (matches.isEmpty || matches.elementAt(0).groupCount != 3) {
-        throw ArgumentError('Could not parse GridUri $uri');
-      }
-      final match = matches.elementAt(0);
-      return GridUri(
-        user: match.group(1)!,
-        space: match.group(2)!,
-        grid: match.group(3)!,
-      );
-    }
-  }
-
-  /// Id of the User that owns this Grid
-  final String user;
-
-  /// Id of the Space this Grid is in
-  final String space;
-
-  /// Id of the Grid this [GridUri] is representing
-  final String grid;
-
-  @override
-  String toString() {
-    return 'GridUri(user: $user, space: $space grid: $grid)';
-  }
-
-  /// Generates the uriString used for ApiCalls referencing this
-  @override
-  String get uriString => '/api/users/$user/spaces/$space/grids/$grid';
-
-  @override
-  bool operator ==(Object other) {
-    return other is GridUri &&
-        grid == other.grid &&
-        user == other.user &&
-        space == other.space;
-  }
-
-  @override
-  int get hashCode => toString().hashCode;
+  GridUri.fromUri(String uri) : super.fromUri(uri, UriType.grid);
 }
 
 /// Model for GridData
@@ -70,6 +33,7 @@ class Grid {
     required this.fields,
     required this.rows,
     this.filter,
+    this.sorting,
   });
 
   /// Deserializes [json] into a [Grid] Object
@@ -91,16 +55,18 @@ class Grid {
         .map((e) => GridRow.fromJson(e, fields, schema))
         .toList();
     final filter = json['filter'];
+    final sorting = json['sorting'];
     return Grid(
       name: json['name'],
       schema: schema,
       fields: fields,
       rows: entries,
       filter: filter,
+      sorting: sorting,
     );
   }
 
-  /// Name of the Form
+  /// Name of the Grid
   final String name;
 
   /// Schema used for deserializing and validating data send back to the server
@@ -108,6 +74,9 @@ class Grid {
 
   /// Filter applied to this GridView. If this is not null the Grid is actually a GridView
   final dynamic filter;
+
+  /// Sorting applied to this GridView. If this is not null the Grid is actually a GridView
+  final dynamic sorting;
 
   /// List of [GridField] representing the Columns the Grid has
   final List<GridField> fields;
@@ -123,11 +92,12 @@ class Grid {
         'fieldIds': fields.map((e) => e.id).toList(),
         'fieldNames': fields.map((e) => e.name).toList(),
         if (filter != null) 'filter': filter,
+        if (sorting != null) 'sorting': sorting,
       };
 
   @override
   String toString() {
-    return 'GridData(name: $name, fields: $fields, rows: $rows, filter: $filter)';
+    return 'GridData(name: $name, fields: $fields, rows: $rows, filter: $filter, sorting: $sorting)';
   }
 
   @override
@@ -136,7 +106,9 @@ class Grid {
         name == other.name &&
         schema.toString() == other.schema.toString() &&
         f.listEquals(fields, other.fields) &&
-        f.listEquals(rows, other.rows);
+        f.listEquals(rows, other.rows) &&
+        filter.toString() == other.filter.toString() &&
+        sorting.toString() == other.sorting.toString();
   }
 
   @override

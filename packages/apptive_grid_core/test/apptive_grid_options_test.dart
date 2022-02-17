@@ -1,5 +1,4 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/apptive_grid_network.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mocks.dart';
@@ -48,7 +47,7 @@ void main() {
         cache: cache,
       );
       final optionsB = optionsA.copyWith();
-      expect(optionsB, optionsA);
+      expect(optionsB, equals(optionsA));
     });
   });
 
@@ -74,8 +73,8 @@ void main() {
             ApptiveGridAuthenticationOptions(autoAuthenticate: true),
       );
 
-      expect(optionsA, isNot(equals(optionsB)));
-      expect(optionsA.hashCode, isNot(equals(optionsB.hashCode)));
+      expect(optionsA, isNot(optionsB));
+      expect(optionsA.hashCode, isNot(optionsB.hashCode));
     });
   });
 }

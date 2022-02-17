@@ -27,7 +27,7 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
 
   void _setUp() {
     final enumFields = widget.grid.fields
-        .where((element) => element.type == DataType.selectionBox)
+        .where((element) => element.type == DataType.singleSelect)
         .toList();
     if (enumFields.isNotEmpty) {
       _isValid = true;
@@ -79,7 +79,7 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
                 },
                 grid: widget.grid,
                 value: _field,
-                validator: (field) => field.type == DataType.selectionBox,
+                validator: (field) => field.type == DataType.singleSelect,
               ),
             ),
           if (_field != null)
@@ -179,6 +179,7 @@ class _FieldSelectorState extends State<FieldSelector> {
               if (value == null) {
                 return 'Select a Column that should be displayed in the pie chart.';
               }
+              return null;
             },
             decoration: InputDecoration(
               errorMaxLines: 3,

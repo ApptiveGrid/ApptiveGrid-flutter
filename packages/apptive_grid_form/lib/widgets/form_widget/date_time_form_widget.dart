@@ -43,6 +43,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
         }
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      initialValue: widget.component.data.value,
       builder: (state) {
         final localization = ApptiveGridLocalization.of(context)!;
         return InputDecorator(

@@ -147,14 +147,18 @@ class ApptiveGridTheme {
             dark: Colors.white,
           ),
         ),
-        brightness: brightness,
         titleTextStyle: textTheme.headline3,
         toolbarTextStyle: textTheme.headline3,
         systemOverlayStyle: _withBrightness(
           light: SystemUiOverlayStyle.dark,
           dark: SystemUiOverlayStyle.light,
         ),
-        backwardsCompatibility: false,
+      ),
+      chipTheme: baseTheme.chipTheme.copyWith(
+        selectedColor: ApptiveGridColors.apptiveGridBlue,
+        secondaryLabelStyle: baseTheme.chipTheme.secondaryLabelStyle
+            ?.copyWith(color: Colors.white),
+        secondarySelectedColor: ApptiveGridColors.apptiveGridBlue,
       ),
     );
   }

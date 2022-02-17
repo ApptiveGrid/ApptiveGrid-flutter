@@ -20,7 +20,7 @@ class ApptiveGridClient {
         _authenticator = authenticator ??
             ApptiveGridAuthenticator(options: options, httpClient: httpClient);
 
-  /// Configuraptions
+  /// Configurations
   ApptiveGridOptions options;
 
   final ApptiveGridAuthenticator _authenticator;
@@ -41,6 +41,13 @@ class ApptiveGridClient {
       }..removeWhere((key, value) => value == null))
           .map((key, value) => MapEntry(key, value!));
 
+  Uri _generateApptiveGridUri(ApptiveGridUri baseUri) {
+    return baseUri.uri.replace(
+      scheme: 'https',
+      host: Uri.parse(options.environment.url).host,
+    );
+  }
+
   /// Loads a [FormData] represented by [formUri]
   ///
   /// Based on [formUri] this might require Authentication
@@ -48,12 +55,13 @@ class ApptiveGridClient {
   Future<FormData> loadForm({
     required FormUri formUri,
   }) async {
-    if (formUri.needsAuthorization) {
-      await _authenticator.checkAuthentication();
-    }
-    final url = Uri.parse('${options.environment.url}${formUri.uriString}');
+    final url = _generateApptiveGridUri(formUri);
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
+      if (response.statusCode == 401) {
+        await _authenticator.checkAuthentication();
+        return loadForm(formUri: formUri);
+      }
       throw response;
     }
     return FormData.fromJson(json.decode(response.body));
@@ -69,56 +77,157 @@ class ApptiveGridClient {
     bool saveToPendingItems = true,
   }) async {
     final actionItem = ActionItem(action: action, data: formData);
+
+    final attachmentActions = await _performAttachmentActions(
+      formData.attachmentActions,
+      fromForm: true,
+    ).catchError(
+      (error) => _handleActionError(
+        error,
+        actionItem: actionItem,
+        saveToPendingItems: saveToPendingItems,
+      ),
+    );
+    if (attachmentActions.statusCode >= 400) {
+      return attachmentActions;
+    }
     final uri = Uri.parse('${options.environment.url}${action.uri}');
     final request = http.Request(action.method, uri);
     request.body = jsonEncode(formData.toRequestObject());
-
-    // ignore: prefer_function_declarations_over_variables
-    final handleError = (error) async {
-      // TODO: Filter out Errors that happened because the Input was not correct
-      // in that case don't save the Action and throw the error
-      if (saveToPendingItems && options.cache != null) {
-        await options.cache!.addPendingActionItem(actionItem);
-        if (error is http.Response) {
-          return error;
-        } else {
-          return http.Response(error.toString(), 400);
-        }
-      }
-      throw error;
-    };
     late http.Response response;
     request.headers.addAll(headers);
     try {
       final streamResponse = await _client.send(request);
       response = await http.Response.fromStream(streamResponse);
-    } catch (e) {
+    } catch (error) {
       // Catch all Exception for compatibility Reasons between Web and non Web Apps
-      return handleError(e);
+      return _handleActionError(
+        error,
+        actionItem: actionItem,
+        saveToPendingItems: saveToPendingItems,
+      );
     }
 
     if (response.statusCode >= 400) {
-      return handleError(response);
+      return _handleActionError(
+        response,
+        actionItem: actionItem,
+        saveToPendingItems: saveToPendingItems,
+      );
     }
     // Action was performed successfully. Remove it from pending Actions
     await options.cache?.removePendingActionItem(actionItem);
     return response;
   }
 
+  Future<http.Response> _handleActionError(
+    Object error, {
+    required ActionItem actionItem,
+    required bool saveToPendingItems,
+  }) async {
+    // TODO: Filter out Errors that happened because the Input was not correct
+    // in that case don't save the Action and throw the error
+    if (saveToPendingItems && options.cache != null) {
+      await options.cache!.addPendingActionItem(actionItem);
+      if (error is http.Response) {
+        return error;
+      } else {
+        return http.Response(error.toString(), 400);
+      }
+    }
+    throw error;
+  }
+
+  Future<http.Response> _performAttachmentActions(
+    Map<Attachment, AttachmentAction> actions, {
+    bool fromForm = false,
+  }) async {
+    await Future.wait(
+      actions.values.map((action) {
+        switch (action.type) {
+          case AttachmentActionType.add:
+            return _uploadAttachment(
+              action as AddAttachmentAction,
+              fromForm: fromForm,
+            );
+          case AttachmentActionType.delete:
+            debugPrint('Delete Attachment ${action.attachment}');
+            return Future.value();
+          case AttachmentActionType.rename:
+            debugPrint(
+              'Rename Attachment ${action.attachment} to "${action.attachment.name}"',
+            );
+            return Future.value();
+        }
+      }),
+    );
+    return http.Response('AttachmentActionSuccess', 200);
+  }
+
   /// Loads a [Grid] represented by [gridUri]
+  ///
+  /// [sorting] defines the order in which items will be returned
+  /// The order of [ApptiveGridSorting] in [sorting] will rank the order in which values should be sorted
   ///
   /// Requires Authorization
   /// throws [Response] if the request fails
   Future<Grid> loadGrid({
     required GridUri gridUri,
+    List<ApptiveGridSorting>? sorting,
+    ApptiveGridFilter? filter,
   }) async {
     await _authenticator.checkAuthentication();
-    final url = Uri.parse('${options.environment.url}${gridUri.uriString}');
-    final response = await _client.get(url, headers: headers);
-    if (response.statusCode >= 400) {
-      throw response;
+    final gridViewUrl = _generateApptiveGridUri(gridUri);
+
+    final gridViewResponse = await _client.get(gridViewUrl, headers: headers);
+    if (gridViewResponse.statusCode >= 400) {
+      throw gridViewResponse;
     }
-    return Grid.fromJson(json.decode(response.body));
+
+    final initialGrid = Grid.fromJson(json.decode(gridViewResponse.body));
+
+    if (gridUri.uri.pathSegments.contains('views')) {
+      final gridViewUrlString = gridViewUrl.path.toString();
+      final gridViewUrlPathSegments = gridViewUrl.pathSegments;
+      Uri url = gridViewUrl.replace(
+        pathSegments: [
+          ...gridViewUrlString
+              .substring(0, gridViewUrlString.indexOf('/views'))
+              .split('/'),
+          'entities'
+        ],
+        queryParameters: {
+          'viewId': gridViewUrlPathSegments[
+              gridViewUrlPathSegments.indexOf('views') + 1],
+          'layout': 'indexed',
+        },
+      );
+      // Apply Sorting
+      if (sorting != null) {
+        final queryParams = Map<String, dynamic>.from(url.queryParameters);
+        queryParams['sorting'] =
+            jsonEncode(sorting.map((e) => e.toRequestObject()).toList());
+        url = url.replace(queryParameters: queryParams);
+      }
+
+      // Apply Filter
+      if (filter != null) {
+        final queryParams = Map<String, dynamic>.from(url.queryParameters);
+        queryParams['filter'] = jsonEncode(filter.toJson());
+        url = url.replace(queryParameters: queryParams);
+      }
+
+      final response = await _client.get(url, headers: headers);
+      if (response.statusCode >= 400) {
+        throw response;
+      }
+      final entities = json.decode(response.body);
+      final gridToParse = initialGrid.toJson();
+      gridToParse['entities'] = entities;
+      return Grid.fromJson(gridToParse);
+    } else {
+      return initialGrid;
+    }
   }
 
   /// Get the [User] that is authenticated
@@ -145,7 +254,7 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final url = Uri.parse('${options.environment.url}${spaceUri.uriString}');
+    final url = _generateApptiveGridUri(spaceUri);
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
@@ -162,8 +271,10 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final url =
-        Uri.parse('${options.environment.url}${gridUri.uriString}/forms');
+    final baseUrl = _generateApptiveGridUri(gridUri);
+    final url = baseUrl.replace(
+      pathSegments: [...baseUrl.pathSegments, 'forms'],
+    );
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
@@ -182,8 +293,10 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final url =
-        Uri.parse('${options.environment.url}${gridUri.uriString}/views');
+    final baseUrl = _generateApptiveGridUri(gridUri);
+    final url = baseUrl.replace(
+      pathSegments: [...baseUrl.pathSegments, 'views'],
+    );
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
@@ -203,8 +316,10 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final url =
-        Uri.parse('${options.environment.url}${entityUri.uriString}/EditLink');
+    final baseUrl = _generateApptiveGridUri(entityUri);
+    final url = baseUrl.replace(
+      pathSegments: [...baseUrl.pathSegments, 'EditLink'],
+    );
 
     final response = await _client.post(
       url,
@@ -219,6 +334,31 @@ class ApptiveGridClient {
     }
 
     return FormUri.fromUri((json.decode(response.body) as Map)['uri']);
+  }
+
+  /// Get a specific entity via a [entityUri]
+  ///
+  /// This will return a Map of fieldIds and the respective values
+  /// To know what [DataType] they are you need to Load a Grid via [loadGrid] and compare [Grid.fields] with the ids
+  ///
+  /// The id of the entity can be accessed via `['_id']`
+  Future<Map<String, dynamic>> getEntity({
+    required EntityUri entityUri,
+  }) async {
+    await _authenticator.checkAuthentication();
+
+    final url = _generateApptiveGridUri(entityUri);
+
+    final response = await _client.get(
+      url,
+      headers: headers,
+    );
+
+    if (response.statusCode >= 400) {
+      throw response;
+    }
+
+    return jsonDecode(response.body);
   }
 
   /// Authenticate the User
@@ -263,5 +403,94 @@ class ApptiveGridClient {
         // Was not able to submit this action
       }
     }
+  }
+
+  // Attachments
+  String get _signedUrlApiEndpoint {
+    final endpoint = options
+        .attachmentConfigurations[options.environment]?.signedUrlApiEndpoint;
+    if (endpoint != null) {
+      return endpoint;
+    } else {
+      throw ArgumentError(
+        'In order to use Attachments you need to specify AttachmentConfigurations in ApptiveGridOptions',
+      );
+    }
+  }
+
+  String? get _signedUrlFormApiEndpoint {
+    return options.attachmentConfigurations[options.environment]
+        ?.signedUrlFormApiEndpoint;
+  }
+
+  String get _attachmentApiEndpoint {
+    final endpoint = options
+        .attachmentConfigurations[options.environment]?.attachmentApiEndpoint;
+    if (endpoint != null) {
+      return endpoint;
+    } else {
+      throw ArgumentError(
+        'In order to use Attachments you need to specify AttachmentConfigurations in ApptiveGridOptions',
+      );
+    }
+  }
+
+  /// Creates an url where an attachment should be saved
+  ///
+  /// TODO: Do not Use Name
+  Uri createAttachmentUrl(String name) {
+    return Uri.parse(
+      '$_attachmentApiEndpoint$name?${DateTime.now().millisecondsSinceEpoch}',
+    );
+  }
+
+  /// Uploads an [Attachment] defined in [action]
+  ///
+  /// [fromForm] determines if this attachment can be added without the need for authentication
+  ///
+  /// In order for no authentication [fromForm] needs to be `true` and [AttachmentConfiguration.signedUrlFormApiEndpoint] needs to be non null
+  /// for the current [ApptiveGridStage] in [ApptiveGridOptions.attachmentConfigurations] in [options]
+  Future _uploadAttachment(
+    AddAttachmentAction action, {
+    bool fromForm = false,
+  }) async {
+    final requireAuth = !fromForm || _signedUrlFormApiEndpoint == null;
+    if (requireAuth) {
+      await _authenticator.checkAuthentication();
+    }
+
+    final baseUri = Uri.parse(
+      requireAuth ? _signedUrlApiEndpoint : _signedUrlFormApiEndpoint!,
+    );
+    final uri = Uri(
+      scheme: baseUri.scheme,
+      host: baseUri.host,
+      path: baseUri.path,
+      queryParameters: {
+        'fileName': action.attachment.name,
+        'fileType': action.attachment.type,
+      },
+    );
+    final createUrlHeaders = requireAuth ? headers : <String, String>{};
+    return _client.get(uri, headers: createUrlHeaders).then((response) {
+      if (response.statusCode < 400) {
+        return _client
+            .put(
+          Uri.parse(jsonDecode(response.body)['uploadURL']),
+          headers: {HttpHeaders.contentTypeHeader: action.attachment.type},
+          body: action.byteData,
+        )
+            .then((putResponse) {
+          if (putResponse.statusCode < 400) {
+            debugPrint('Uploaded Successfully');
+            return putResponse;
+          } else {
+            throw putResponse;
+          }
+        });
+      } else {
+        throw response;
+      }
+    });
   }
 }

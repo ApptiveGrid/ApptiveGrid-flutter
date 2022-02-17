@@ -1,8 +1,62 @@
+## [0.9.0]
+
+### Breaking Changes
+* `DataType.selectionBox` is now `DataType.singleSelect`
+* Due to new external dependencies there is some additional setup required. Please see the README for more details
+
+### New Data Types
+* `DataType.attachment`
+* `DataType.enumCollection`
+* `DataType.multiCrossReference`
+* `DataType.createdBy`
+
+### New Features
+* Rework structure of Uris to be more generic
+
+### Bugfixes
+* Fixed Multiline Text FormWidgets
+* Fix required validation not working for all types if Form has initial data
+
+## [0.9.0-alpha.10]
+* Use stable version of `apptive_grid_core`
+
+## [0.9.0-alpha.9]
+* Add Support for `DataType.createdBy`
+* Fix required validation not working for all types if Form has initial data
+
+## [0.9.0-alpha.8]
+* Show Loading Indicator while submitting a Form
+
+## [0.9.0-alpha.7]
+* Add proper support for `DataType.multiCrossReference` in Forms
+
+## [0.9.0-alpha.6]
+* Add support for `DataType.multiCrossReference`
+* The Form Widget only offers very basic support for now. It only supports selecting single Values from CrossReferenced Grids
+* Adjust Attachment Form Widget to offer more options to select attachments from camera, gallery and files
+
+## [0.9.0-alpha.5]
+* Fix Multiline Text FormWidgets
+* Add Spacing for EnumCollection
+
+## [0.9.0-alpha.4]
+* Add support for Geolocation Form Widgets
+
+## [0.9.0-alpha.3]
+* **BREAKING CHANGE** `DataType.selectionBox` is now `DataType.singleSelect`
+* Add support for `DataType.enumCollection`
+
+## [0.9.0-alpha.2]
+* Fix Required Form Field not updating if required
+
+## [0.9.0-alpha.1]
+* Preview support for attachments
+
 ## [0.8.0]
 * **BREAKING CHANGE** Requires minSdkVersion for Android to be at least 18
 
 ## [0.7.3+1]
-* Use Locale for DateTime Formats in [DateFormWidget] and [DateTimeFormWidget]
+* Use Locale for DateTime Formats in `DateFormWidget` and `DateTimeFormWidget`
 
 ## [0.7.3]
 * Add missing translations
@@ -15,7 +69,7 @@
 * Adding translations to Forms. Right now English and German are supported
 
 ## [0.7.1]
-* Adding a way to get [currentData] of a FormWidget
+* Adding a way to get `currentData` of a FormWidget
 
 ## [0.7.0]
 * **BREAKING CHANGE** Added `FormData` to `onActionSuccess` callback to receive the data that was successfully send

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +117,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final result = await completer.future;
-    expect(result, form);
+    expect(result, equals(form));
   });
 
   group('Loading', () {
@@ -531,7 +530,7 @@ void main() {
 
       when(
         () => httpClient.get(
-          Uri.parse(env.url + formUri.uriString),
+          Uri.parse(env.url + formUri.uri.toString()),
           headers: any(named: 'headers'),
         ),
       ).thenAnswer(
@@ -721,6 +720,101 @@ void main() {
         (tester.state(find.byType(ApptiveGridForm)) as ApptiveGridFormState)
             .currentData,
         equals(formData),
+      );
+    });
+  });
+
+  group('Action', () {
+    testWidgets('Click on Button shows Loading Indicator', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+        ),
+      );
+      final action = FormAction('uri', 'method');
+      final formData = FormData(
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        actions: [action],
+        schema: {},
+      );
+
+      final actionCompleter = Completer<http.Response>();
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.performAction(action, formData))
+          .thenAnswer((_) => actionCompleter.future);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pump();
+
+      expect(find.byType(ActionButton), findsNothing);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      actionCompleter.complete(http.Response('', 200));
+      await tester.pump();
+
+      expect(find.byType(Lottie), findsOneWidget);
+      expect(find.text('Thank You!', skipOffstage: false), findsOneWidget);
+      expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
+    });
+  });
+
+  group('User Reference', () {
+    testWidgets('UserReference Form Widget is build without padding',
+        (tester) async {
+      final formData = FormData(
+        title: 'Form Data',
+        components: [
+          UserReferenceFormComponent(
+            property: 'Created By',
+            data: UserReferenceDataEntity(),
+            fieldId: 'field3',
+          ),
+        ],
+        schema: {
+          'properties': {
+            'field3': {
+              'type': 'object',
+              'properties': {
+                'displayValue': {'type': 'string'},
+                'id': {'type': 'string'},
+                'type': {'type': 'string'},
+                'name': {'type': 'string'}
+              },
+              'objectType': 'userReference'
+            },
+          },
+        },
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+        ),
+      );
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer((realInvocation) async => formData);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.ancestor(
+          of: find.byType(UserReferenceFormWidget),
+          matching: find.byType(Padding),
+        ),
+        findsNothing,
       );
     });
   });

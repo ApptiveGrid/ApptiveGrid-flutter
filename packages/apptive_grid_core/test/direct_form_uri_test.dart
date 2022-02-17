@@ -8,20 +8,11 @@ void main() {
         '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/787878',
       );
 
-      expect(directFormUri.user, '123456');
-      expect(directFormUri.space, 'asdfg');
-      expect(directFormUri.grid, '1a2s3d4f');
-      expect(directFormUri.form, '787878');
-    });
-
-    test('Malformatted Uri throws ArgumentError', () {
-      const uri = '/api/users/123456/spaces/asdfg/grids/1a2s3d4f';
       expect(
-        () => DirectFormUri.fromUri(uri),
-        throwsA(
-          predicate<ArgumentError>(
-            (e) => e.message == 'Could not parse FormUri $uri',
-            'ArgumentError with specific Message',
+        directFormUri.uri,
+        equals(
+          Uri.parse(
+            '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/787878',
           ),
         ),
       );
@@ -34,8 +25,8 @@ void main() {
         grid: '1a2s3d4f',
         form: '787878',
       );
-      final parsed = DirectFormUri.fromUri(direct.uriString);
-      expect(parsed == direct, true);
+      final parsed = DirectFormUri.fromUri(direct.uri.toString());
+      expect(parsed, equals(direct));
     });
 
     test('Without Entity reflects in uri', () {
@@ -47,7 +38,7 @@ void main() {
       );
 
       expect(
-        direct.uriString,
+        direct.uri.toString(),
         '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/787878',
       );
     });
@@ -64,8 +55,8 @@ void main() {
         grid: '1a2s3d4f',
         form: '787878',
       );
-      expect(parsed == direct, true);
-      expect(parsed.hashCode - direct.hashCode, 0);
+      expect(parsed, equals(direct));
+      expect(parsed.hashCode, equals(direct.hashCode));
     });
 
     test('Different Values do not equal', () {
@@ -81,13 +72,37 @@ void main() {
         grid: '1a2s3d4f',
         form: '878787',
       );
-      expect(one == two, false);
-      expect((one.hashCode - two.hashCode) != 0, true);
+      expect(one, isNot(two));
+      expect(one.hashCode, isNot(two.hashCode));
     });
   });
 
   group('Entity', () {
-    test('With Entity reflects in uri', () {
+    test('FormUri for Entity reflects in uri', () {
+      final entityUri = EntityUri(
+        user: '123456',
+        space: 'asdfg',
+        grid: '1a2s3d4f',
+        entity: '909090',
+      );
+      final forEntity = DirectFormUri(
+        user: '123456',
+        space: 'asdfg',
+        grid: '1a2s3d4f',
+        form: '787878',
+      ).forEntity(entity: entityUri);
+
+      expect(
+        forEntity.uri,
+        equals(
+          Uri.parse(
+            '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/787878?uri=/api/users/123456/spaces/asdfg/grids/1a2s3d4f/entities/909090',
+          ),
+        ),
+      );
+    });
+
+    test('DirectFormUri with Entity reflects in uri', () {
       final entityUri = EntityUri(
         user: '123456',
         space: 'asdfg',
@@ -99,11 +114,16 @@ void main() {
         space: 'asdfg',
         grid: '1a2s3d4f',
         form: '787878',
-      ).forEntity(entity: entityUri);
+        entity: entityUri,
+      );
 
       expect(
-        direct.uriString,
-        '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/787878?uri=/api/users/123456/spaces/asdfg/grids/1a2s3d4f/entities/909090',
+        direct.uri,
+        equals(
+          Uri.parse(
+            '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/forms/787878?uri=/api/users/123456/spaces/asdfg/grids/1a2s3d4f/entities/909090',
+          ),
+        ),
       );
     });
 
@@ -121,8 +141,8 @@ void main() {
         form: '787878',
       ).forEntity(entity: entityUri);
 
-      final parsed = DirectFormUri.fromUri(direct.uriString);
-      expect(parsed, direct);
+      final parsed = DirectFormUri.fromUri(direct.uri.toString());
+      expect(parsed, equals(direct));
     });
   });
 }

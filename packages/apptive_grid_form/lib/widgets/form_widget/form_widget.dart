@@ -37,6 +37,24 @@ Widget fromModel(FormComponent component) {
       return CrossReferenceFormWidget(
         component: component as CrossReferenceFormComponent,
       );
+    case AttachmentDataEntity:
+      return AttachmentFormWidget(
+        component: component as AttachmentFormComponent,
+      );
+    case EnumCollectionDataEntity:
+      return EnumCollectionFormWidget(
+        component: component as EnumCollectionFormComponent,
+      );
+    case GeolocationDataEntity:
+      return GeolocationFormWidget(
+        component: component as GeolocationFormComponent,
+      );
+    case MultiCrossReferenceDataEntity:
+      return MultiCrossReferenceFormWidget(
+        component: component as MultiCrossReferenceFormComponent,
+      );
+    case UserReferenceDataEntity:
+      return const UserReferenceFormWidget();
     default:
       throw ArgumentError(
         'No Widget found for component $component. Please make sure you are you using the latest version of this package?',

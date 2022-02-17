@@ -1,3 +1,52 @@
+## [0.8.0]
+
+### Breaking Changes
+* `DataType.selectionBox` is now `DataType.singleSelect`
+
+### New Data Types
+* `DataType.attachment`
+* `DataType.enumCollection`
+* `DataType.multiCrossReference`
+* `DataType.createdBy`
+
+### New Features
+* Added support for sorting when loading a Grid
+* Added support for filtering when loading a Grid
+* Add call retrieve a single entity
+* Rework structure of Uris to be more generic
+
+## [0.8.0-alpha.9]
+* Add Support for `DataType.createdBy`
+* Add call to retrieve a single entity
+
+## [0.8.0-alpha.8]
+* Fix Collection Filter Operators
+
+## [0.8.0-alpha.7]
+* Add support for `ApptiveGridFilter`
+
+## [0.8.0-alpha.6]
+* Add support for `DataType.multiCrossReference`
+
+## [0.8.0-alpha.5]
+* Add Sorting to loading a Grid
+
+## [0.8.0-alpha.4]
+* Add support for `DataType.geolocation`
+* Make `ApptiveGrid.withClient` public
+* Add support for unauthenticated attachment uploading
+
+
+## [0.8.0-alpha.3]
+* **BREAKING CHANGE** `DataType.selectionBox` is now `DataType.singleSelect`
+* Add support for `DataType.enumCollection`
+
+## [0.8.0-alpha.2]
+* Include Fixes from [0.7.1]
+
+## [0.8.0-alpha.1]
+* Preview support for attachments
+
 ## [0.7.1]
 * Fix Timezone Issues with `DateTimeDataEntities`
 * Fix parsing error if receiving a non float decimal value from the backend

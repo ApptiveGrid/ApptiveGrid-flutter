@@ -34,18 +34,18 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, StringFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, value);
-      expect(parsedComponent.required, true);
-      expect(parsedComponent.data.runtimeType, StringDataEntity);
-      expect(parsedComponent.data.schemaValue, value);
+      expect(parsedComponent.runtimeType, equals(StringFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(value));
+      expect(parsedComponent.required, equals(true));
+      expect(parsedComponent.data.runtimeType, equals(StringDataEntity));
+      expect(parsedComponent.data.schemaValue, equals(value));
 
       final parsedOptions = parsedComponent.options as TextComponentOptions;
-      expect(parsedOptions.multi, true);
-      expect(parsedOptions.placeholder, placeholder);
-      expect(parsedOptions.description, description);
-      expect(parsedOptions.label, label);
+      expect(parsedOptions.multi, equals(true));
+      expect(parsedOptions.placeholder, equals(placeholder));
+      expect(parsedOptions.description, equals(description));
+      expect(parsedOptions.label, equals(label));
     });
 
     test('DateTime', () {
@@ -69,15 +69,18 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, DateTimeFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, value);
-      expect(parsedComponent.required, true);
-      expect(parsedComponent.data.runtimeType, DateTimeDataEntity);
-      expect(parsedComponent.data.schemaValue, value.toUtc().toIso8601String());
+      expect(parsedComponent.runtimeType, equals(DateTimeFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(value));
+      expect(parsedComponent.required, equals(true));
+      expect(parsedComponent.data.runtimeType, equals(DateTimeDataEntity));
+      expect(
+        parsedComponent.data.schemaValue,
+        equals(value.toUtc().toIso8601String()),
+      );
 
       final parsedOptions = parsedComponent.options;
-      expect(const FormComponentOptions(), parsedOptions);
+      expect(const FormComponentOptions(), equals(parsedOptions));
     });
 
     test('Date', () {
@@ -101,15 +104,15 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, DateFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, value);
-      expect(parsedComponent.required, true);
-      expect(parsedComponent.data.runtimeType, DateDataEntity);
-      expect(parsedComponent.data.schemaValue, '2020-12-07');
+      expect(parsedComponent.runtimeType, equals(DateFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(value));
+      expect(parsedComponent.required, equals(true));
+      expect(parsedComponent.data.runtimeType, equals(DateDataEntity));
+      expect(parsedComponent.data.schemaValue, equals('2020-12-07'));
 
       final parsedOptions = parsedComponent.options;
-      expect(const FormComponentOptions(), parsedOptions);
+      expect(const FormComponentOptions(), equals(parsedOptions));
     });
 
     test('Number', () {
@@ -143,18 +146,18 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, IntegerFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, value);
-      expect(parsedComponent.required, true);
-      expect(parsedComponent.data.runtimeType, IntegerDataEntity);
-      expect(parsedComponent.data.schemaValue, value);
+      expect(parsedComponent.runtimeType, equals(IntegerFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(value));
+      expect(parsedComponent.required, equals(true));
+      expect(parsedComponent.data.runtimeType, equals(IntegerDataEntity));
+      expect(parsedComponent.data.schemaValue, equals(value));
 
       final parsedOptions = parsedComponent.options as TextComponentOptions;
-      expect(parsedOptions.multi, true);
-      expect(parsedOptions.placeholder, placeholder);
-      expect(parsedOptions.description, description);
-      expect(parsedOptions.label, label);
+      expect(parsedOptions.multi, equals(true));
+      expect(parsedOptions.placeholder, equals(placeholder));
+      expect(parsedOptions.description, equals(description));
+      expect(parsedOptions.label, equals(label));
     });
 
     test('Decimal', () {
@@ -188,18 +191,18 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, DecimalFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, value);
-      expect(parsedComponent.required, true);
-      expect(parsedComponent.data.runtimeType, DecimalDataEntity);
-      expect(parsedComponent.data.schemaValue, value);
+      expect(parsedComponent.runtimeType, equals(DecimalFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(value));
+      expect(parsedComponent.required, equals(true));
+      expect(parsedComponent.data.runtimeType, equals(DecimalDataEntity));
+      expect(parsedComponent.data.schemaValue, equals(value));
 
       final parsedOptions = parsedComponent.options as TextComponentOptions;
-      expect(parsedOptions.multi, true);
-      expect(parsedOptions.placeholder, placeholder);
-      expect(parsedOptions.description, description);
-      expect(parsedOptions.label, label);
+      expect(parsedOptions.multi, equals(true));
+      expect(parsedOptions.placeholder, equals(placeholder));
+      expect(parsedOptions.description, equals(description));
+      expect(parsedOptions.label, equals(label));
     });
 
     test('Decimal with non float number', () {
@@ -233,18 +236,18 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, DecimalFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, 47.0);
-      expect(parsedComponent.required, true);
-      expect(parsedComponent.data.runtimeType, DecimalDataEntity);
-      expect(parsedComponent.data.schemaValue, 47.0);
+      expect(parsedComponent.runtimeType, equals(DecimalFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(47.0));
+      expect(parsedComponent.required, equals(true));
+      expect(parsedComponent.data.runtimeType, equals(DecimalDataEntity));
+      expect(parsedComponent.data.schemaValue, equals(47.0));
 
       final parsedOptions = parsedComponent.options as TextComponentOptions;
-      expect(parsedOptions.multi, true);
-      expect(parsedOptions.placeholder, placeholder);
-      expect(parsedOptions.description, description);
-      expect(parsedOptions.label, label);
+      expect(parsedOptions.multi, equals(true));
+      expect(parsedOptions.placeholder, equals(placeholder));
+      expect(parsedOptions.description, equals(description));
+      expect(parsedOptions.label, equals(label));
     });
 
     test('Checkbox', () {
@@ -275,16 +278,16 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, BooleanFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, value);
-      expect(parsedComponent.required, true);
-      expect(parsedComponent.data.runtimeType, BooleanDataEntity);
-      expect(parsedComponent.data.schemaValue, value);
+      expect(parsedComponent.runtimeType, equals(BooleanFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(value));
+      expect(parsedComponent.required, equals(true));
+      expect(parsedComponent.data.runtimeType, equals(BooleanDataEntity));
+      expect(parsedComponent.data.schemaValue, equals(value));
 
       final parsedOptions = parsedComponent.options;
-      expect(parsedOptions.description, description);
-      expect(parsedOptions.label, label);
+      expect(parsedOptions.description, equals(description));
+      expect(parsedOptions.label, equals(label));
     });
   });
 
@@ -319,10 +322,10 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, StringFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, null);
-      expect(parsedComponent.data.schemaValue, null);
+      expect(parsedComponent.runtimeType, equals(StringFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(null));
+      expect(parsedComponent.data.schemaValue, equals(null));
     });
 
     test('DateTime', () {
@@ -345,10 +348,10 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, DateTimeFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, null);
-      expect(parsedComponent.data.schemaValue, null);
+      expect(parsedComponent.runtimeType, equals(DateTimeFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(null));
+      expect(parsedComponent.data.schemaValue, equals(null));
     });
 
     test('Date', () {
@@ -371,10 +374,10 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, DateFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, null);
-      expect(parsedComponent.data.schemaValue, null);
+      expect(parsedComponent.runtimeType, equals(DateFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(null));
+      expect(parsedComponent.data.schemaValue, equals(null));
     });
 
     test('Number', () {
@@ -407,10 +410,10 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, IntegerFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, null);
-      expect(parsedComponent.data.schemaValue, null);
+      expect(parsedComponent.runtimeType, equals(IntegerFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(null));
+      expect(parsedComponent.data.schemaValue, equals(null));
     });
 
     test('Decimal', () {
@@ -443,10 +446,10 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, DecimalFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, null);
-      expect(parsedComponent.data.schemaValue, null);
+      expect(parsedComponent.runtimeType, equals(DecimalFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(null));
+      expect(parsedComponent.data.schemaValue, equals(null));
     });
 
     test('Checkbox', () {
@@ -471,10 +474,10 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, BooleanFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, false);
-      expect(parsedComponent.data.schemaValue, false);
+      expect(parsedComponent.runtimeType, equals(BooleanFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(false));
+      expect(parsedComponent.data.schemaValue, equals(false));
     });
 
     test('Enum', () {
@@ -500,14 +503,14 @@ void main() {
 
       final parsedComponent = FormComponent.fromJson(json, schema);
 
-      expect(parsedComponent.runtimeType, EnumFormComponent);
-      expect(parsedComponent.property, property);
-      expect(parsedComponent.data.value, 'AG');
+      expect(parsedComponent.runtimeType, equals(EnumFormComponent));
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals('AG'));
       expect(
         (parsedComponent.data as EnumDataEntity).options,
-        ['GmbH', 'AG', 'Freiberuflich'],
+        {'GmbH', 'AG', 'Freiberuflich'},
       );
-      expect(parsedComponent.data.schemaValue, 'AG');
+      expect(parsedComponent.data.schemaValue, equals('AG'));
     });
   });
 
@@ -519,7 +522,7 @@ void main() {
       final schema = {
         'properties': {
           id: {
-            'type': 'unkown',
+            'type': 'unknown',
           }
         }
       };
@@ -529,10 +532,80 @@ void main() {
         'value': null,
         'required': true,
         'options': <String, dynamic>{},
-        'type': 'unkown'
+        'type': 'unknown'
       };
 
-      expect(() => FormComponent.fromJson(json, schema), throwsArgumentError);
+      expect(
+        () => FormComponent.fromJson(json, schema),
+        equals(throwsArgumentError),
+      );
+    });
+
+    test('Unknown Array Type throws', () {
+      const property = 'property';
+      const id = 'id';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'array',
+            'items': {
+              'type': 'string',
+            }
+          }
+        }
+      };
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': null,
+        'required': true,
+        'options': <String, dynamic>{},
+        'type': 'unknown'
+      };
+
+      expect(
+        () => FormComponent.fromJson(json, schema),
+        throwsA(
+          predicate<ArgumentError>(
+            (e) => e.message == 'No defined Array type for type: DataType.text',
+            'ArgumentError with specific Message',
+          ),
+        ),
+      );
+    });
+
+    test('Unknown Object Type throws', () {
+      const property = 'property';
+      const id = 'id';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'object',
+            "properties": <String, dynamic>{},
+            "objectType": "unknown"
+          }
+        }
+      };
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': null,
+        'required': true,
+        'options': <String, dynamic>{},
+        'type': 'unknown'
+      };
+
+      expect(
+        () => FormComponent.fromJson(json, schema),
+        throwsA(
+          predicate<ArgumentError>(
+            (e) => e.message == 'No defined Object type for type: unknown',
+            'ArgumentError with specific Message',
+          ),
+        ),
+      );
     });
 
     test('Unknown Property throws', () {
@@ -555,7 +628,10 @@ void main() {
         'fieldId': 'differentId'
       };
 
-      expect(() => FormComponent.fromJson(json, schema), throwsArgumentError);
+      expect(
+        () => FormComponent.fromJson(json, schema),
+        equals(throwsArgumentError),
+      );
     });
   });
 }

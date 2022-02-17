@@ -1,3 +1,31 @@
+### [0.8.0]
+
+### Breaking Changes
+* `DataType.selectionBox` is now `DataType.singleSelect`
+
+### New Data Types
+* `DataType.attachment`
+* `DataType.enumCollection`
+* `DataType.multiCrossReference`
+* 'DataType.createdBy'
+
+### New Features
+* Added support for sorting when loading a Grid
+* Added support for filtering when loading a Grid
+* Rework structure of Uris to be more generic
+
+## [0.8.0-alpha.4]
+* Add support for `ApptiveGridFilter` through `filter` argument
+
+## [0.8.0-alpha.3]
+* Add `sorting` parameter to ApptiveGridGridBuilder
+
+## [0.8.0-alpha.2]
+* Adds support for MultiEnum and Geolocation Types
+
+## [0.8.0-alpha.1]
+* Preview support for attachments
+
 ## [0.7.0]
 * **BREAKING CHANGE** Requires minSdkVersion for Android to be at least 18
 

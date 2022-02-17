@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
 
 import 'mocks.dart';
@@ -88,13 +88,14 @@ void main() {
         formUri: RedirectFormUri(components: ['FormId']),
       );
 
-      expect(formData.title, 'Form');
-      expect(formData.components.length, 1);
-      expect(formData.components[0].runtimeType, StringFormComponent);
-      expect(formData.actions.length, 1);
+      expect(formData.title, equals('Form'));
+      expect(formData.components.length, equals(1));
+      expect(formData.components[0].runtimeType, equals(StringFormComponent));
+      expect(formData.actions.length, equals(1));
     });
 
-    test('DirectUri checks authentication', () async {
+    test('DirectUri checks authentication if call throws 401', () async {
+      final unauthorizedResponse = Response(json.encode(rawResponse), 401);
       final response = Response(json.encode(rawResponse), 200);
       final authenticator = MockApptiveGridAuthenticator();
       final client = ApptiveGridClient.fromClient(
@@ -103,18 +104,23 @@ void main() {
       );
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => response);
+          .thenAnswer((_) async {
+        // Return response on next call
+        when(() => httpClient.get(any(), headers: any(named: 'headers')))
+            .thenAnswer((_) async => response);
+
+        // First return unauthorizedResponse
+        return unauthorizedResponse;
+      });
       when(() => authenticator.checkAuthentication())
           .thenAnswer((_) => Future.value());
 
-      unawaited(
-        client.loadForm(
-          formUri: DirectFormUri(
-            user: 'user',
-            space: 'space',
-            grid: 'grid',
-            form: 'FormId',
-          ),
+      await client.loadForm(
+        formUri: DirectFormUri(
+          user: 'user',
+          space: 'space',
+          grid: 'grid',
+          form: 'FormId',
         ),
       );
       verify(() => authenticator.checkAuthentication()).called(1);
@@ -263,8 +269,8 @@ void main() {
 
       final response = await apptiveGridClient.performAction(action, formData);
 
-      expect(response.statusCode, 200);
-      expect(calledRequest.method, action.method);
+      expect(response.statusCode, equals(200));
+      expect(calledRequest.method, equals(action.method));
       expect(
         calledRequest.url.toString(),
         '${ApptiveGridEnvironment.production.url}${action.uri}',
@@ -274,12 +280,511 @@ void main() {
         ContentType.json,
       );
     });
+
+    test('Error without Cache throws Response', () async {
+      final action = FormAction('/uri', 'POST');
+      const property = 'Checkbox';
+      const id = 'id';
+      final component = BooleanFormComponent(
+        fieldId: id,
+        property: property,
+        data: BooleanDataEntity(true),
+        options: FormComponentOptions.fromJson({}),
+        required: false,
+      );
+      final schema = {
+        'type': 'object',
+        'properties': {
+          id: {'type': 'boolean'},
+        },
+        'required': []
+      };
+      final formData = FormData(
+        name: 'Name',
+        title: 'Title',
+        components: [component],
+        actions: [action],
+        schema: schema,
+      );
+
+      final request = Request(
+        'POST',
+        Uri.parse('${ApptiveGridEnvironment.production.url}/uri}'),
+      );
+      request.body = jsonEncode(jsonEncode(formData.toRequestObject()));
+
+      when(() => httpClient.send(any())).thenAnswer(
+        (realInvocation) async => StreamedResponse(Stream.value([]), 400),
+      );
+
+      await expectLater(
+        () async => await apptiveGridClient.performAction(action, formData),
+        throwsA(isInstanceOf<Response>()),
+      );
+    });
+
+    group('Attachments', () {
+      group('No Attachment Config', () {
+        late ApptiveGridClient client;
+        late Client httpClient;
+        late ApptiveGridAuthenticator authenticator;
+
+        setUp(() {
+          httpClient = MockHttpClient();
+          authenticator = MockApptiveGridAuthenticator();
+          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.checkAuthentication())
+              .thenAnswer((_) async {});
+          client = ApptiveGridClient.fromClient(
+            httpClient,
+            options: const ApptiveGridOptions(
+              environment: ApptiveGridEnvironment.production,
+              authenticationOptions: ApptiveGridAuthenticationOptions(
+                autoAuthenticate: true,
+              ),
+            ),
+            authenticator: authenticator,
+          );
+        });
+
+        test('Create Attachment Uri, throws Error', () {
+          expect(
+            () => client.createAttachmentUrl('Name'),
+            throwsA(isInstanceOf<ArgumentError>()),
+          );
+        });
+
+        test('Upload Attachment, throws Error', () {
+          final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
+          final action = FormAction('actionUri', 'POST');
+          final bytes = Uint8List(10);
+          final formData = FormData(
+            title: 'Title',
+            components: [
+              AttachmentFormComponent(
+                property: 'property',
+                data: AttachmentDataEntity([attachment]),
+                fieldId: 'fieldId',
+              ),
+            ],
+            schema: null,
+            actions: [action],
+            attachmentActions: {
+              attachment:
+                  AddAttachmentAction(byteData: bytes, attachment: attachment)
+            },
+          );
+
+          expect(
+            () => client.performAction(action, formData),
+            throwsArgumentError,
+          );
+        });
+      });
+
+      group('With Attachment Config', () {
+        late ApptiveGridClient client;
+        late Client httpClient;
+        late ApptiveGridAuthenticator authenticator;
+
+        const attachmentConfig = {
+          ApptiveGridEnvironment.production: AttachmentConfiguration(
+            attachmentApiEndpoint: 'attachmentEndpoint.com/',
+            signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
+          )
+        };
+
+        setUp(() {
+          httpClient = MockHttpClient();
+          authenticator = MockApptiveGridAuthenticator();
+          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.checkAuthentication())
+              .thenAnswer((_) async {});
+          client = ApptiveGridClient.fromClient(
+            httpClient,
+            options: const ApptiveGridOptions(
+              attachmentConfigurations: attachmentConfig,
+              environment: ApptiveGridEnvironment.production,
+              authenticationOptions: ApptiveGridAuthenticationOptions(
+                autoAuthenticate: true,
+              ),
+            ),
+            authenticator: authenticator,
+          );
+        });
+
+        test('Creates Attachment Uri based on config', () {
+          const name = 'FileName';
+          expect(
+            client.createAttachmentUrl(name).toString(),
+            predicate<String>(
+              (uriString) =>
+                  uriString.startsWith('attachmentEndpoint.com/$name?'),
+            ),
+          );
+        });
+
+        group('Upload Data', () {
+          final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
+          final action = FormAction('actionUri', 'POST');
+          final bytes = Uint8List(10);
+          final attachmentAction =
+              AddAttachmentAction(byteData: bytes, attachment: attachment);
+          final formData = FormData(
+            title: 'Title',
+            components: [
+              AttachmentFormComponent(
+                property: 'property',
+                data: AttachmentDataEntity([attachment]),
+                fieldId: 'fieldId',
+              ),
+            ],
+            schema: null,
+            actions: [action],
+            attachmentActions: {attachment: attachmentAction},
+          );
+
+          test('Getting Upload Url fails', () async {
+            final response = Response('body', 400);
+            final baseUri = Uri.parse(
+              attachmentConfig[ApptiveGridEnvironment.production]!
+                  .signedUrlApiEndpoint,
+            );
+            final uri = Uri(
+              scheme: baseUri.scheme,
+              host: baseUri.host,
+              path: baseUri.path,
+              queryParameters: {
+                'fileName': attachmentAction.attachment.name,
+                'fileType': attachmentAction.attachment.type,
+              },
+            );
+            when(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .thenAnswer((_) async => response);
+
+            expect(
+              () async => await client.performAction(action, formData),
+              throwsA(equals(response)),
+            );
+          });
+
+          test('Upload Bytes success', () async {
+            final uploadUri = Uri.parse('uploadUrl.com/data');
+            final getResponse =
+                Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
+            final putResponse = Response('Success', 200);
+            final baseUri = Uri.parse(
+              attachmentConfig[ApptiveGridEnvironment.production]!
+                  .signedUrlApiEndpoint,
+            );
+            final uri = Uri(
+              scheme: baseUri.scheme,
+              host: baseUri.host,
+              path: baseUri.path,
+              queryParameters: {
+                'fileName': attachmentAction.attachment.name,
+                'fileType': attachmentAction.attachment.type,
+              },
+            );
+            when(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .thenAnswer((_) async => getResponse);
+            when(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).thenAnswer((_) async => putResponse);
+            when(() => httpClient.send(any())).thenAnswer(
+              (realInvocation) async => StreamedResponse(Stream.value([]), 200),
+            );
+
+            await client.performAction(action, formData);
+
+            verify(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .called(1);
+            verify(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).called(1);
+            verify(() => httpClient.send(any())).called(1);
+          });
+
+          test('Upload Fails throws Response', () async {
+            final uploadUri = Uri.parse('uploadUrl.com/data');
+            final getResponse =
+                Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
+            final putResponse = Response('Error', 500);
+            final baseUri = Uri.parse(
+              attachmentConfig[ApptiveGridEnvironment.production]!
+                  .signedUrlApiEndpoint,
+            );
+            final uri = Uri(
+              scheme: baseUri.scheme,
+              host: baseUri.host,
+              path: baseUri.path,
+              queryParameters: {
+                'fileName': attachmentAction.attachment.name,
+                'fileType': attachmentAction.attachment.type,
+              },
+            );
+            when(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .thenAnswer((_) async => getResponse);
+            when(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).thenAnswer((_) async => putResponse);
+
+            await expectLater(
+              () async => await client.performAction(action, formData),
+              throwsA(equals(putResponse)),
+            );
+
+            verify(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .called(1);
+            verify(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).called(1);
+            verifyNever(() => httpClient.send(any()));
+          });
+        });
+
+        group(
+            'TODO: NO OP ACTIONS '
+            'These tests might need addition changes once the actions do more. '
+            'For Now Check that formAction is performed', () {
+          late ApptiveGridClient client;
+          late Client httpClient;
+          late ApptiveGridAuthenticator authenticator;
+
+          const attachmentConfig = {
+            ApptiveGridEnvironment.production: AttachmentConfiguration(
+              attachmentApiEndpoint: 'attachmentEndpoint.com/',
+              signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
+            )
+          };
+
+          setUp(() {
+            httpClient = MockHttpClient();
+            authenticator = MockApptiveGridAuthenticator();
+            when(() => authenticator.isAuthenticated).thenReturn(true);
+            when(() => authenticator.checkAuthentication())
+                .thenAnswer((_) async {});
+            client = ApptiveGridClient.fromClient(
+              httpClient,
+              options: const ApptiveGridOptions(
+                attachmentConfigurations: attachmentConfig,
+                environment: ApptiveGridEnvironment.production,
+                authenticationOptions: ApptiveGridAuthenticationOptions(
+                  autoAuthenticate: true,
+                ),
+              ),
+              authenticator: authenticator,
+            );
+          });
+          test('Rename Action', () async {
+            final attachment =
+                Attachment(name: 'name', url: Uri(), type: 'type');
+            final action = FormAction('actionUri', 'POST');
+            final attachmentAction = RenameAttachmentAction(
+              newName: 'NewName',
+              attachment: attachment,
+            );
+            final formData = FormData(
+              title: 'Title',
+              components: [
+                AttachmentFormComponent(
+                  property: 'property',
+                  data: AttachmentDataEntity([attachment]),
+                  fieldId: 'fieldId',
+                ),
+              ],
+              schema: null,
+              actions: [action],
+              attachmentActions: {attachment: attachmentAction},
+            );
+
+            when(() => httpClient.send(any())).thenAnswer(
+              (realInvocation) async => StreamedResponse(Stream.value([]), 200),
+            );
+
+            await client.performAction(action, formData);
+
+            verify(() => httpClient.send(any())).called(1);
+          });
+
+          test('Delete Action', () async {
+            final attachment =
+                Attachment(name: 'name', url: Uri(), type: 'type');
+            final action = FormAction('actionUri', 'POST');
+            final attachmentAction =
+                DeleteAttachmentAction(attachment: attachment);
+            final formData = FormData(
+              title: 'Title',
+              components: [
+                AttachmentFormComponent(
+                  property: 'property',
+                  data: AttachmentDataEntity([attachment]),
+                  fieldId: 'fieldId',
+                ),
+              ],
+              schema: null,
+              actions: [action],
+              attachmentActions: {attachment: attachmentAction},
+            );
+
+            when(() => httpClient.send(any())).thenAnswer(
+              (realInvocation) async => StreamedResponse(Stream.value([]), 200),
+            );
+
+            await client.performAction(action, formData);
+
+            verify(() => httpClient.send(any())).called(1);
+          });
+        });
+      });
+
+      group('With Form Attachment Config', () {
+        late ApptiveGridClient client;
+        late Client httpClient;
+        late ApptiveGridAuthenticator authenticator;
+
+        const attachmentConfig = {
+          ApptiveGridEnvironment.production: AttachmentConfiguration(
+            attachmentApiEndpoint: 'attachmentEndpoint.com/',
+            signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
+            signedUrlFormApiEndpoint: 'signedUrlFormApiEndpoint.com/',
+          )
+        };
+
+        setUp(() {
+          httpClient = MockHttpClient();
+          authenticator = MockApptiveGridAuthenticator();
+          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.checkAuthentication())
+              .thenAnswer((_) async {});
+          client = ApptiveGridClient.fromClient(
+            httpClient,
+            options: const ApptiveGridOptions(
+              attachmentConfigurations: attachmentConfig,
+              environment: ApptiveGridEnvironment.production,
+              authenticationOptions: ApptiveGridAuthenticationOptions(
+                autoAuthenticate: true,
+              ),
+            ),
+            authenticator: authenticator,
+          );
+        });
+
+        group('Upload Data', () {
+          final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
+          final action = FormAction('actionUri', 'POST');
+          final bytes = Uint8List(10);
+          final attachmentAction =
+              AddAttachmentAction(byteData: bytes, attachment: attachment);
+          final formData = FormData(
+            title: 'Title',
+            components: [
+              AttachmentFormComponent(
+                property: 'property',
+                data: AttachmentDataEntity([attachment]),
+                fieldId: 'fieldId',
+              ),
+            ],
+            schema: null,
+            actions: [action],
+            attachmentActions: {attachment: attachmentAction},
+          );
+
+          test('Creates upload Url without headers', () async {
+            final uploadUri = Uri.parse('uploadUrl.com/data');
+            final getResponse =
+                Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
+            final putResponse = Response('Success', 200);
+            final baseUri = Uri.parse(
+              attachmentConfig[ApptiveGridEnvironment.production]!
+                  .signedUrlFormApiEndpoint!,
+            );
+            final uri = Uri(
+              scheme: baseUri.scheme,
+              host: baseUri.host,
+              path: baseUri.path,
+              queryParameters: {
+                'fileName': attachmentAction.attachment.name,
+                'fileType': attachmentAction.attachment.type,
+              },
+            );
+            when(() => httpClient.get(uri, headers: any(named: 'headers')))
+                .thenAnswer((_) async => getResponse);
+            when(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).thenAnswer((_) async => putResponse);
+            when(() => httpClient.send(any())).thenAnswer(
+              (realInvocation) async => StreamedResponse(Stream.value([]), 200),
+            );
+
+            await client.performAction(action, formData);
+
+            final captures = verify(
+              () => httpClient.get(
+                captureAny(),
+                headers: captureAny(named: 'headers'),
+              ),
+            ).captured;
+            final capturedUri = captures.first as Uri;
+            final capturedHeaders = captures[1] as Map<String, String>;
+            expect(
+              capturedUri.host,
+              Uri.parse(
+                attachmentConfig[ApptiveGridEnvironment.production]!
+                    .signedUrlFormApiEndpoint!,
+              ).host,
+            );
+            expect(capturedHeaders[HttpHeaders.authorizationHeader], isNull);
+            verify(
+              () => httpClient.put(
+                uploadUri,
+                headers: any(named: 'headers'),
+                body: bytes,
+                encoding: any(named: 'encoding'),
+              ),
+            ).called(1);
+            verify(() => httpClient.send(captureAny())).called(1);
+          });
+        });
+      });
+    });
   });
 
   group('Environment', () {
     test('Check Urls', () {
-      expect(ApptiveGridEnvironment.alpha.url, 'https://alpha.apptivegrid.de');
-      expect(ApptiveGridEnvironment.beta.url, 'https://beta.apptivegrid.de');
+      expect(
+        ApptiveGridEnvironment.alpha.url,
+        equals('https://alpha.apptivegrid.de'),
+      );
+      expect(
+        ApptiveGridEnvironment.beta.url,
+        equals('https://beta.apptivegrid.de'),
+      );
       expect(
         ApptiveGridEnvironment.production.url,
         'https://app.apptivegrid.de',
@@ -287,9 +792,15 @@ void main() {
     });
 
     test('Check Auth Realm', () {
-      expect(ApptiveGridEnvironment.alpha.authRealm, 'apptivegrid-test');
-      expect(ApptiveGridEnvironment.beta.authRealm, 'apptivegrid-test');
-      expect(ApptiveGridEnvironment.production.authRealm, 'apptivegrid');
+      expect(
+        ApptiveGridEnvironment.alpha.authRealm,
+        equals('apptivegrid-test'),
+      );
+      expect(ApptiveGridEnvironment.beta.authRealm, equals('apptivegrid-test'));
+      expect(
+        ApptiveGridEnvironment.production.authRealm,
+        equals('apptivegrid'),
+      );
     });
   });
 
@@ -332,7 +843,9 @@ void main() {
 
     test('Logout calls Authenticator', () {
       final authenticator = MockApptiveGridAuthenticator();
-      when(() => authenticator.logout()).thenAnswer((_) async {});
+      when(() => authenticator.logout()).thenAnswer((_) async {
+        return null;
+      });
       final client = ApptiveGridClient.fromClient(
         httpClient,
         authenticator: authenticator,
@@ -469,13 +982,13 @@ void main() {
 
       final forms = await apptiveGridClient.getForms(gridUri: gridUri);
 
-      expect(forms.length, 2);
+      expect(forms.length, equals(2));
       expect(
-        forms[0].uriString,
+        forms[0].uri.toString(),
         '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
       );
       expect(
-        forms[1].uriString,
+        forms[1].uri.toString(),
         '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1',
       );
     });
@@ -524,13 +1037,13 @@ void main() {
 
       final views = await apptiveGridClient.getGridViews(gridUri: gridUri);
 
-      expect(views.length, 2);
+      expect(views.length, equals(2));
       expect(
-        views[0].uriString,
+        views[0].uri.toString(),
         '/api/users/id/spaces/spaceId/grids/gridId/views/$view0',
       );
       expect(
-        views[1].uriString,
+        views[1].uri.toString(),
         '/api/users/id/spaces/spaceId/grids/gridId/views/$view1',
       );
     });
@@ -595,14 +1108,21 @@ void main() {
 
       when(
         () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view0',
-          ),
+          any(),
           headers: any(
             named: 'headers',
           ),
         ),
-      ).thenAnswer((_) async => response);
+      ).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+        if (uri.path.endsWith('/views/$view0')) {
+          return response;
+        } else if (uri.path.endsWith('entities')) {
+          return Response(json.encode(gridViewResponse['entities']), 200);
+        } else {
+          throw Exception();
+        }
+      });
 
       final gridView = await apptiveGridClient.loadGrid(
         gridUri: GridViewUri(
@@ -613,9 +1133,209 @@ void main() {
         ),
       );
 
-      expect(gridView.filter != null, true);
-      expect(gridView.fields.length, 3);
-      expect(gridView.rows.length, 1);
+      expect(gridView.filter, isNot(null));
+      expect(gridView.fields.length, equals(3));
+      expect(gridView.rows.length, equals(1));
+    });
+
+    test('GridView sorting gets applied in request', () async {
+      final rawGridViewResponse = {
+        'fieldNames': ['First Name', 'Last Name', 'imgUrl'],
+        'entities': [
+          {
+            'fields': [
+              'Adam',
+              'Riese',
+              'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
+            ],
+            '_id': '60c9c997f8eeb8636c8140c4'
+          }
+        ],
+        'fieldIds': [
+          '9fqx8om03flgh8d4m1l953x29',
+          '9fqx8okgtzoafyanblvfg61cl',
+          '9fqx8on7ee2hq5iv20vcu9svw'
+        ],
+        'filter': {
+          '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
+        },
+        'schema': {
+          'type': 'object',
+          'properties': {
+            'fields': {
+              'type': 'array',
+              'items': [
+                {'type': 'string'},
+                {'type': 'string'},
+                {'type': 'string'}
+              ]
+            },
+            '_id': {'type': 'string'}
+          }
+        },
+        'name': 'New grid view'
+      };
+
+      final rawGridViewEntitiesResponse = [
+        {
+          'fields': [
+            'Adam',
+            'Riese',
+            'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
+          ],
+          '_id': '60c9c997f8eeb8636c8140c4'
+        }
+      ];
+
+      final gridViewResponse = Response(json.encode(rawGridViewResponse), 200);
+      final gridViewEntitiesResponse =
+          Response(json.encode(rawGridViewEntitiesResponse), 200);
+
+      when(
+        () => httpClient.get(
+          any(),
+          headers: any(
+            named: 'headers',
+          ),
+        ),
+      ).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+        if (uri.path.endsWith('/views/$view0')) {
+          return gridViewResponse;
+        } else if (uri.path.endsWith('entities')) {
+          return gridViewEntitiesResponse;
+        } else {
+          throw Exception();
+        }
+      });
+
+      await apptiveGridClient.loadGrid(
+        sorting: [
+          const ApptiveGridSorting(
+            fieldId: '9fqx8om03flgh8d4m1l953x29',
+            order: SortOrder.desc,
+          )
+        ],
+        gridUri: GridViewUri(
+          user: userId,
+          space: spaceId,
+          grid: gridId,
+          view: view0,
+        ),
+      );
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (uri) =>
+                  uri.path.endsWith('/entities') &&
+                  uri.queryParameters.containsKey('sorting'),
+            ),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
+    });
+
+    test('GridView filters get applied in request', () async {
+      final rawGridViewResponse = {
+        'fieldNames': ['First Name', 'Last Name', 'imgUrl'],
+        'entities': [
+          {
+            'fields': [
+              'Adam',
+              'Riese',
+              'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
+            ],
+            '_id': '60c9c997f8eeb8636c8140c4'
+          }
+        ],
+        'fieldIds': [
+          '9fqx8om03flgh8d4m1l953x29',
+          '9fqx8okgtzoafyanblvfg61cl',
+          '9fqx8on7ee2hq5iv20vcu9svw'
+        ],
+        'filter': {
+          '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
+        },
+        'schema': {
+          'type': 'object',
+          'properties': {
+            'fields': {
+              'type': 'array',
+              'items': [
+                {'type': 'string'},
+                {'type': 'string'},
+                {'type': 'string'}
+              ]
+            },
+            '_id': {'type': 'string'}
+          }
+        },
+        'name': 'New grid view'
+      };
+
+      final rawGridViewEntitiesResponse = [
+        {
+          'fields': [
+            'Adam',
+            'Riese',
+            'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
+          ],
+          '_id': '60c9c997f8eeb8636c8140c4'
+        }
+      ];
+
+      final gridViewResponse = Response(json.encode(rawGridViewResponse), 200);
+      final gridViewEntitiesResponse =
+          Response(json.encode(rawGridViewEntitiesResponse), 200);
+
+      when(
+        () => httpClient.get(
+          any(),
+          headers: any(
+            named: 'headers',
+          ),
+        ),
+      ).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+        if (uri.path.endsWith('/views/$view0')) {
+          return gridViewResponse;
+        } else if (uri.path.endsWith('entities')) {
+          return gridViewEntitiesResponse;
+        } else {
+          throw Exception();
+        }
+      });
+
+      await apptiveGridClient.loadGrid(
+        filter: SubstringFilter(
+          fieldId: '9fqx8om03flgh8d4m1l953x29',
+          value: StringDataEntity('a'),
+        ),
+        gridUri: GridViewUri(
+          user: userId,
+          space: spaceId,
+          grid: gridId,
+          view: view0,
+        ),
+      );
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (uri) =>
+                  uri.path ==
+                      '/api/users/$userId/spaces/$spaceId/grids/$gridId/entities' &&
+                  uri.queryParameters['viewId'] == view0 &&
+                  uri.queryParameters.containsKey('filter'),
+            ),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
     });
   });
 
@@ -734,8 +1454,7 @@ void main() {
         formId: form,
       );
 
-      expect(formUri.runtimeType, RedirectFormUri);
-      expect(formUri.uriString, '/api/a/$form');
+      expect(formUri.uri, equals(Uri(path: '/api/a/$form')));
     });
 
     test('400 Status throws Response', () async {
@@ -753,6 +1472,54 @@ void main() {
 
       expect(
         () => apptiveGridClient.getEditLink(entityUri: entityUri, formId: form),
+        throwsA(isInstanceOf<Response>()),
+      );
+    });
+  });
+
+  group('Get Entity', () {
+    const userId = 'userId';
+    const spaceId = 'spaceId';
+    const gridId = 'gridId';
+    const entityId = 'entityId';
+    final entityUri =
+        EntityUri(user: userId, space: spaceId, grid: gridId, entity: entityId);
+    final rawResponse = {
+      '4um33znbt8l6x0vzvo0mperwj': null,
+      '_id': 'entityId',
+      '5kmhd05jzdd48jaxbds8yn3js': 'Test',
+    };
+    test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      final entity = await apptiveGridClient.getEntity(entityUri: entityUri);
+
+      expect(entity, equals(rawResponse));
+    });
+
+    test('400 Status throws Response', () async {
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      expect(
+        () => apptiveGridClient.getEntity(entityUri: entityUri),
         throwsA(isInstanceOf<Response>()),
       );
     });
@@ -788,15 +1555,21 @@ void main() {
     });
 
     test('switch url', () async {
-      expect(client.options.environment, ApptiveGridEnvironment.alpha);
+      expect(client.options.environment, equals(ApptiveGridEnvironment.alpha));
 
       await client.updateEnvironment(ApptiveGridEnvironment.production);
 
-      expect(client.options.environment, ApptiveGridEnvironment.production);
+      expect(
+        client.options.environment,
+        equals(ApptiveGridEnvironment.production),
+      );
     });
 
     test('switch authenticator environment', () async {
-      expect(authenticator.options.environment, ApptiveGridEnvironment.alpha);
+      expect(
+        authenticator.options.environment,
+        equals(ApptiveGridEnvironment.alpha),
+      );
 
       await client.updateEnvironment(ApptiveGridEnvironment.production);
 

@@ -23,8 +23,30 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        true,
-        ApptiveGrid.getClient(context, listen: false) is ApptiveGridClient,
+        ApptiveGrid.getClient(context, listen: false),
+        isNot(isNull),
+      );
+    });
+
+    testWidgets('ApptiveGridClient', (tester) async {
+      late BuildContext context;
+      const options = ApptiveGridOptions();
+      final target = ApptiveGrid(
+        options: options,
+        child: Builder(
+          builder: (buildContext) {
+            context = buildContext;
+            return Container();
+          },
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        ApptiveGrid.getOptions(context),
+        equals(options),
       );
     });
   });
@@ -50,7 +72,10 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ApptiveGridClient>(context, listen: false);
-        expect(ApptiveGridEnvironment.alpha, client.options.environment);
+        expect(
+          ApptiveGridEnvironment.alpha,
+          equals(client.options.environment),
+        );
       });
 
       testWidgets('Beta', (tester) async {
@@ -72,7 +97,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ApptiveGridClient>(context, listen: false);
-        expect(ApptiveGridEnvironment.beta, client.options.environment);
+        expect(ApptiveGridEnvironment.beta, equals(client.options.environment));
       });
 
       testWidgets('Production', (tester) async {
@@ -94,7 +119,10 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = ApptiveGrid.getClient(context, listen: false);
-        expect(ApptiveGridEnvironment.production, client.options.environment);
+        expect(
+          ApptiveGridEnvironment.production,
+          equals(client.options.environment),
+        );
       });
 
       testWidgets('Default is Prod', (tester) async {
@@ -112,7 +140,10 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ApptiveGridClient>(context, listen: false);
-        expect(ApptiveGridEnvironment.production, client.options.environment);
+        expect(
+          ApptiveGridEnvironment.production,
+          equals(client.options.environment),
+        );
       });
 
       testWidgets('Authentication', (tester) async {
@@ -135,7 +166,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ApptiveGridClient>(context, listen: false);
-        expect(client.options.authenticationOptions, authentication);
+        expect(client.options.authenticationOptions, equals(authentication));
       });
     });
   });
@@ -160,7 +191,41 @@ void main() {
 
       final providedClient =
           Provider.of<ApptiveGridClient>(context, listen: false);
-      expect(providedClient, client);
+      expect(providedClient, equals(client));
     });
   });
+
+  group('FormWidgetConfigurations', () {
+    testWidgets('Options contain FormWidgetConfigs', (tester) async {
+      const config = _StubFormWidgetConfiguration();
+
+      const options = ApptiveGridOptions(
+        formWidgetConfigurations: [config],
+      );
+      late final BuildContext context;
+      final target = ApptiveGrid(
+        options: options,
+        child: Builder(
+          builder: (buildContext) {
+            context = buildContext;
+            return Container();
+          },
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        ApptiveGrid.getOptions(context)
+            .formWidgetConfigurations
+            .firstWhere((element) => element is _StubFormWidgetConfiguration),
+        equals(config),
+      );
+    });
+  });
+}
+
+class _StubFormWidgetConfiguration extends FormWidgetConfiguration {
+  const _StubFormWidgetConfiguration() : super();
 }

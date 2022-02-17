@@ -218,6 +218,7 @@ class ApptiveGridAuthenticator {
       final apiKey = options.authenticationOptions.apiKey!;
       return 'Basic ${base64Encode(utf8.encode('${apiKey.authKey}:${apiKey.password}'))}';
     }
+    return null;
   }
 
   Future<void> _launchUrl(String url) async {

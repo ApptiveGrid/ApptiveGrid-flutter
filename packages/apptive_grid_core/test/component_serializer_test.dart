@@ -18,7 +18,10 @@ void main() {
         required: true,
       );
 
-      expect(StringFormComponent.fromJson(component.toJson()), component);
+      expect(
+        StringFormComponent.fromJson(component.toJson()),
+        equals(component),
+      );
     });
 
     test('Number', () {
@@ -36,7 +39,10 @@ void main() {
         required: true,
       );
 
-      expect(IntegerFormComponent.fromJson(component.toJson()), component);
+      expect(
+        IntegerFormComponent.fromJson(component.toJson()),
+        equals(component),
+      );
     });
 
     test('Decimal', () {
@@ -54,7 +60,10 @@ void main() {
         required: true,
       );
 
-      expect(DecimalFormComponent.fromJson(component.toJson()), component);
+      expect(
+        DecimalFormComponent.fromJson(component.toJson()),
+        equals(component),
+      );
     });
 
     test('Date', () {
@@ -67,7 +76,7 @@ void main() {
         required: true,
       );
 
-      expect(DateFormComponent.fromJson(component.toJson()), component);
+      expect(DateFormComponent.fromJson(component.toJson()), equals(component));
     });
 
     test('DateTime', () {
@@ -80,7 +89,10 @@ void main() {
         required: true,
       );
 
-      expect(DateTimeFormComponent.fromJson(component.toJson()), component);
+      expect(
+        DateTimeFormComponent.fromJson(component.toJson()),
+        equals(component),
+      );
     });
 
     test('Checkbox', () {
@@ -93,7 +105,10 @@ void main() {
         required: true,
       );
 
-      expect(BooleanFormComponent.fromJson(component.toJson()), component);
+      expect(
+        BooleanFormComponent.fromJson(component.toJson()),
+        equals(component),
+      );
     });
 
     test('Enum', () {
@@ -123,13 +138,57 @@ void main() {
         property: property,
         data: EnumDataEntity(
           value: 'AG',
-          options: ['GmbH', 'AG', 'Freiberuflich'],
+          options: {'GmbH', 'AG', 'Freiberuflich'},
         ),
         required: true,
       );
 
       expect(
         EnumFormComponent.fromJson(
+          jsonComponent.toJson(),
+          schema['properties']![id],
+        ),
+        component,
+      );
+    });
+    test('EnumCollection', () {
+      const property = 'property';
+      const id = 'id';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'array',
+            'items': {
+              'type': 'string',
+              'enum': ['GmbH', 'AG', 'Freiberuflich']
+            }
+          },
+          '_id': {'type': 'string'}
+        }
+      };
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': ['AG'],
+        'required': true,
+        'options': <String, dynamic>{},
+        'type': 'selectBox'
+      };
+
+      final jsonComponent = FormComponent.fromJson(json, schema);
+      final component = EnumCollectionFormComponent(
+        fieldId: id,
+        property: property,
+        data: EnumCollectionDataEntity(
+          value: {'AG'},
+          options: {'GmbH', 'AG', 'Freiberuflich'},
+        ),
+        required: true,
+      );
+
+      expect(
+        EnumCollectionFormComponent.fromJson(
           jsonComponent.toJson(),
           schema['properties']![id],
         ),

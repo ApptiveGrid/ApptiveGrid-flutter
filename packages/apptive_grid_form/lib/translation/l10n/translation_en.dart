@@ -32,4 +32,16 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get dateTimeFieldTime => "Time";
   @override
   String get checkboxRequired => "Required";
+  @override
+  String get addAttachment => "Add attachment";
+  @override
+  String get searchLocation => "Search location";
+  @override
+  String get searchLocationNoResult => "No results";
+  @override
+  String get attachmentSourceGallery => "Choose existing";
+  @override
+  String get attachmentSourceCamera => "Take Photo or Video";
+  @override
+  String get attachmentSourceFiles => "Select files";
 }

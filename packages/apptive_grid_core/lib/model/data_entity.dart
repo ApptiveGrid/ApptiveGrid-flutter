@@ -30,6 +30,18 @@ abstract class DataEntity<T, S> {
   int get hashCode => toString().hashCode;
 }
 
+/// Class for DataEntities that are support in Comparison Filters like [LesserThanFilter] and [GreaterThanFilter]
+abstract class ComparableDataEntity<T, S> extends DataEntity<T, S> {
+  /// Creates a new DataEntity with [value]
+  ComparableDataEntity([T? value]) : super(value);
+}
+
+/// Class for DataEntities that support Collection Filters like [AnyOfFilter], [AllOfFilter] and [NoneOfFilter]
+abstract class CollectionDataEntity<T, S> extends DataEntity<T, S> {
+  /// Creates a new DataEntity with [value]
+  CollectionDataEntity([T? value]) : super(value);
+}
+
 /// [DataEntity] representing [String] Objects
 class StringDataEntity extends DataEntity<String, String> {
   /// Creates a new StringDataEntity Object with value [value]
@@ -40,7 +52,7 @@ class StringDataEntity extends DataEntity<String, String> {
 }
 
 /// [DataEntity] representing [DateTime] Objects
-class DateTimeDataEntity extends DataEntity<DateTime, String> {
+class DateTimeDataEntity extends ComparableDataEntity<DateTime, String> {
   /// Creates a new DateTimeDataEntity Object with value [value]
   DateTimeDataEntity([DateTime? value]) : super(value);
 
@@ -61,7 +73,7 @@ class DateTimeDataEntity extends DataEntity<DateTime, String> {
 
 /// [DataEntity] representing a Date
 /// Internally this is using [DateTime] ignoring the Time Part
-class DateDataEntity extends DataEntity<DateTime, String> {
+class DateDataEntity extends ComparableDataEntity<DateTime, String> {
   /// Creates a new DateTimeDataEntity Object with value [value]
   DateDataEntity([DateTime? value]) : super(value);
 
@@ -92,7 +104,7 @@ class BooleanDataEntity extends DataEntity<bool, bool> {
 }
 
 /// [DataEntity] representing [int] Objects
-class IntegerDataEntity extends DataEntity<int, int> {
+class IntegerDataEntity extends ComparableDataEntity<int, int> {
   /// Creates a new IntegerDataEntity Object
   IntegerDataEntity([int? value]) : super(value);
 
@@ -101,7 +113,7 @@ class IntegerDataEntity extends DataEntity<int, int> {
 }
 
 /// [DataEntity] representing [double] Objects
-class DecimalDataEntity extends DataEntity<double, double> {
+class DecimalDataEntity extends ComparableDataEntity<double, double> {
   /// Creates a new DecimalDataEntity Object
   DecimalDataEntity([num? value]) : super(value?.toDouble());
 
@@ -112,10 +124,10 @@ class DecimalDataEntity extends DataEntity<double, double> {
 /// [DataEntity] representing an enum like Object
 class EnumDataEntity extends DataEntity<String, String> {
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
-  EnumDataEntity({String? value, this.options = const []}) : super(value);
+  EnumDataEntity({String? value, this.options = const {}}) : super(value);
 
   /// Possible options of the Data Entity
-  List<String> options;
+  Set<String> options;
 
   @override
   String? get schemaValue => value;
@@ -129,7 +141,47 @@ class EnumDataEntity extends DataEntity<String, String> {
   bool operator ==(Object other) {
     return other is EnumDataEntity &&
         value == (other).value &&
-        f.listEquals(options, (other).options);
+        f.setEquals(options, (other).options);
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
+}
+
+/// [DataEntity] representing an enum like Object
+class EnumCollectionDataEntity
+    extends CollectionDataEntity<Set<String>, List<String>> {
+  /// Creates a new EnumDataEntity Object with [value] out of possible [options]
+  EnumCollectionDataEntity._({
+    required Set<String> value,
+    this.options = const {},
+  }) : super(value);
+
+  /// Creates a new EnumDataEntity Object with [value] out of possible [options]
+  factory EnumCollectionDataEntity({
+    Set<String>? value,
+    Set<String> options = const {},
+  }) {
+    return EnumCollectionDataEntity._(value: value ?? {}, options: options);
+  }
+
+  /// Possible options of the Data Entity
+  Set<String> options;
+
+  @override
+  List<String>? get schemaValue =>
+      value == null || value!.isEmpty ? null : value!.toList();
+
+  @override
+  String toString() {
+    return '$runtimeType(value: $value, values: $options)}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EnumCollectionDataEntity &&
+        f.setEquals(value, other.value) &&
+        f.setEquals(options, other.options);
   }
 
   @override
@@ -169,13 +221,13 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
     if (value == null || entityUri == null) {
       return null;
     } else {
-      return {'displayValue': value, 'uri': entityUri?.uriString};
+      return {'displayValue': value, 'uri': entityUri?.uri.toString()};
     }
   }
 
   @override
   String toString() {
-    return 'CrossReferenceDataEntity(displayValue: $value, enitytUri: $entityUri, gridUri: $gridUri)}';
+    return 'CrossReferenceDataEntity(displayValue: $value, entityUri: $entityUri, gridUri: $gridUri)';
   }
 
   @override
@@ -188,4 +240,144 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 
   @override
   int get hashCode => toString().hashCode;
+}
+
+/// [DataEntity] representing an array of Attachments
+class AttachmentDataEntity
+    extends CollectionDataEntity<List<Attachment>, dynamic> {
+  /// Create a new Attachment Data Entity
+  AttachmentDataEntity([
+    List<Attachment>? value,
+  ]) : super(value ?? []);
+
+  /// Creates a new AttachmentDataEntity from a Json Response
+  factory AttachmentDataEntity.fromJson(
+    List? jsonValue,
+  ) =>
+      AttachmentDataEntity(
+        jsonValue
+                ?.map((attachment) => Attachment.fromJson(attachment))
+                .toList() ??
+            [],
+      );
+
+  @override
+  dynamic get schemaValue {
+    if (value == null || value!.isEmpty) {
+      return null;
+    } else {
+      return value!.map((e) => e.toJson()).toList();
+    }
+  }
+
+  @override
+  String toString() {
+    return 'AttachmentDataEntity(attachments: $value)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AttachmentDataEntity && f.listEquals(value, other.value);
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
+}
+
+/// [DataEntity] representing [Geolocation]s
+class GeolocationDataEntity extends DataEntity<Geolocation, dynamic> {
+  /// Creates a new GeolocationDataEntity Object with value [value]
+  GeolocationDataEntity([Geolocation? value]) : super(value);
+
+  /// Creates a new GeolocationDataEntity Object from json
+  /// [json] needs to be an array of double
+  factory GeolocationDataEntity.fromJson(dynamic json) {
+    Geolocation? jsonValue;
+    if (json != null) {
+      jsonValue = Geolocation.fromJson(json);
+    }
+    return GeolocationDataEntity(jsonValue);
+  }
+
+  /// Returns [value] coordinates in a array
+  @override
+  dynamic get schemaValue => value?.toJson();
+}
+
+/// [DataEntity] representing a list of objects CrossReferencing to a different Grid
+class MultiCrossReferenceDataEntity
+    extends CollectionDataEntity<List<CrossReferenceDataEntity>, dynamic> {
+  /// Create a new CrossReference Data Entity
+  MultiCrossReferenceDataEntity({
+    List<CrossReferenceDataEntity>? references,
+    required this.gridUri,
+  }) : super(references ?? []);
+
+  /// Creates a new MultiCrossReferenceDataEntity from a Json Response
+  factory MultiCrossReferenceDataEntity.fromJson({
+    required List? jsonValue,
+    required String gridUri,
+  }) {
+    return MultiCrossReferenceDataEntity(
+      references: jsonValue
+              ?.map(
+                (e) => CrossReferenceDataEntity.fromJson(
+                  jsonValue: e,
+                  gridUri: gridUri,
+                ),
+              )
+              .toList() ??
+          [],
+      gridUri: GridUri.fromUri(gridUri),
+    );
+  }
+
+  /// Pointing to the [Grid] this is referencing
+  final GridUri gridUri;
+
+  @override
+  dynamic get schemaValue {
+    if (value == null || value!.isEmpty) {
+      return null;
+    } else {
+      return value!
+          .map((crossReference) => crossReference.schemaValue)
+          .toList();
+    }
+  }
+
+  @override
+  String toString() {
+    return 'MultiCrossReferenceDataEntity(references: $value, gridUri: $gridUri)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is MultiCrossReferenceDataEntity &&
+        f.listEquals(value, other.value) &&
+        gridUri == other.gridUri;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
+}
+
+/// [DataEntity] representing [UserReference]s
+class UserReferenceDataEntity extends DataEntity<UserReference, dynamic> {
+  /// Creates a new UserReferenceDataEntity Object with value [value]
+  UserReferenceDataEntity([UserReference? value]) : super(value);
+
+  /// Creates a new UserReferenceDataEntity Object from json
+  /// [json] needs to be an object that is parsed with [UserReference.fromJson]
+  factory UserReferenceDataEntity.fromJson(dynamic json) {
+    UserReference? jsonValue;
+    if (json != null) {
+      jsonValue = UserReference.fromJson(json);
+    }
+    return UserReferenceDataEntity(jsonValue);
+  }
+
+  /// Returns [value] as a json object map
+  @override
+  dynamic get schemaValue => value?.toJson();
 }
