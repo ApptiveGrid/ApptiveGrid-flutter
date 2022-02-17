@@ -4,44 +4,18 @@ part of apptive_grid_model;
 class SpaceUri extends ApptiveGridUri {
   /// Creates a new [SpaceUri] based on known ids for [user] and [space]
   SpaceUri({
-    required this.user,
-    required this.space,
-  });
+    required String user,
+    required String space,
+  }) : super._(
+          Uri(
+            path: '/api/users/$user/spaces/$space',
+          ),
+          UriType.space,
+        );
 
   /// Creates a new [SpaceUri] based on a string [uri]
   /// Main usage of this is for [SpaceUri] retrieved through other Api Calls
-  factory SpaceUri.fromUri(String uri) {
-    const regex = r'/api/users/(\w+)/spaces/(\w+)\b';
-    final matches = RegExp(regex).allMatches(uri);
-    if (matches.isEmpty || matches.elementAt(0).groupCount != 2) {
-      throw ArgumentError('Could not parse SpaceUri $uri');
-    }
-    final match = matches.elementAt(0);
-    return SpaceUri(user: match.group(1)!, space: match.group(2)!);
-  }
-
-  /// Id of the User that owns this Grid
-  final String user;
-
-  /// Id of the Space this [SpaceUri] is representing
-  final String space;
-
-  @override
-  String toString() {
-    return 'SpaceUri(user: $user, space: $space)';
-  }
-
-  /// Generates the uriString used for ApiCalls referencing this [space]
-  @override
-  String get uriString => '/api/users/$user/spaces/$space';
-
-  @override
-  bool operator ==(Object other) {
-    return other is SpaceUri && space == other.space && user == other.user;
-  }
-
-  @override
-  int get hashCode => toString().hashCode;
+  SpaceUri.fromUri(String uri) : super.fromUri(uri, UriType.space);
 }
 
 /// Model for a Space
@@ -74,7 +48,7 @@ class Space {
   Map<String, dynamic> toJson() => {
         'name': name,
         'id': id,
-        'gridUris': grids.map((e) => e.uriString).toList(),
+        'gridUris': grids.map((e) => e.uri.toString()).toList(),
       };
 
   @override

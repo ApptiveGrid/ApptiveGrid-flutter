@@ -72,7 +72,10 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ApptiveGridClient>(context, listen: false);
-        expect(ApptiveGridEnvironment.alpha, client.options.environment);
+        expect(
+          ApptiveGridEnvironment.alpha,
+          equals(client.options.environment),
+        );
       });
 
       testWidgets('Beta', (tester) async {
@@ -94,7 +97,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ApptiveGridClient>(context, listen: false);
-        expect(ApptiveGridEnvironment.beta, client.options.environment);
+        expect(ApptiveGridEnvironment.beta, equals(client.options.environment));
       });
 
       testWidgets('Production', (tester) async {
@@ -116,7 +119,10 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = ApptiveGrid.getClient(context, listen: false);
-        expect(ApptiveGridEnvironment.production, client.options.environment);
+        expect(
+          ApptiveGridEnvironment.production,
+          equals(client.options.environment),
+        );
       });
 
       testWidgets('Default is Prod', (tester) async {
@@ -134,7 +140,10 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ApptiveGridClient>(context, listen: false);
-        expect(ApptiveGridEnvironment.production, client.options.environment);
+        expect(
+          ApptiveGridEnvironment.production,
+          equals(client.options.environment),
+        );
       });
 
       testWidgets('Authentication', (tester) async {
@@ -157,7 +166,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final client = Provider.of<ApptiveGridClient>(context, listen: false);
-        expect(client.options.authenticationOptions, authentication);
+        expect(client.options.authenticationOptions, equals(authentication));
       });
     });
   });
@@ -182,7 +191,7 @@ void main() {
 
       final providedClient =
           Provider.of<ApptiveGridClient>(context, listen: false);
-      expect(providedClient, client);
+      expect(providedClient, equals(client));
     });
   });
 

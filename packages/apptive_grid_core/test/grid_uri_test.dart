@@ -7,21 +7,9 @@ void main() {
       final gridUri =
           GridUri.fromUri('/api/users/123456/spaces/asdfg/grids/1a2s3d4f');
 
-      expect(gridUri.user, '123456');
-      expect(gridUri.space, 'asdfg');
-      expect(gridUri.grid, '1a2s3d4f');
-    });
-
-    test('Malformatted Uri throws ArgumentError', () {
-      const uri = '/api/users/123456/spaces/asdfg/';
       expect(
-        () => GridUri.fromUri(uri),
-        throwsA(
-          predicate<ArgumentError>(
-            (e) => e.message == 'Could not parse GridUri $uri',
-            'ArgumentError with specific Message',
-          ),
-        ),
+        gridUri.uri,
+        equals(Uri.parse('/api/users/123456/spaces/asdfg/grids/1a2s3d4f')),
       );
     });
   });
@@ -31,15 +19,15 @@ void main() {
       final parsed =
           GridUri.fromUri('/api/users/123456/spaces/asdfg/grids/1a2s3d4f');
       final direct = GridUri(user: '123456', space: 'asdfg', grid: '1a2s3d4f');
-      expect(parsed == direct, true);
-      expect(parsed.hashCode - direct.hashCode, 0);
+      expect(parsed, equals(direct));
+      expect(parsed.hashCode, equals(direct.hashCode));
     });
 
     test('Different Values do not equal', () {
       final one = GridUri(user: '12345', space: 'asdf', grid: '1a2s3d4');
       final two = GridUri(user: '123456', space: 'asdfg', grid: '1a2s3d4f');
-      expect(one == two, false);
-      expect((one.hashCode - two.hashCode) != 0, true);
+      expect(one, isNot(two));
+      expect(one.hashCode, isNot(two.hashCode));
     });
   });
 }

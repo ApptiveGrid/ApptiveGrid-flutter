@@ -93,9 +93,9 @@ void main() {
 
         final captured =
             verify(() => client.performAction(action, captureAny())).captured;
-        expect(captured.length, 1);
+        expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
-        expect(submittedData.components.first.data, data);
+        expect(submittedData.components.first.data, equals(data));
       });
 
       testWidgets('Multiple Attachments get added', (tester) async {
@@ -183,10 +183,10 @@ void main() {
 
         final captured =
             verify(() => client.performAction(action, captureAny())).captured;
-        expect(captured.length, 1);
+        expect(captured.length, equals(1));
         final submittedData =
             captured.first.components.first.data as AttachmentDataEntity;
-        expect(submittedData.value!.length, 2);
+        expect(submittedData.value!.length, equals(2));
         expect(submittedData.value!.first, equals(attachment1));
         expect(submittedData.value!.last, equals(attachment2));
       });
@@ -277,9 +277,9 @@ void main() {
 
         final captured =
             verify(() => client.performAction(action, captureAny())).captured;
-        expect(captured.length, 1);
+        expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
-        expect(submittedData.components.first.data, data);
+        expect(submittedData.components.first.data, equals(data));
       });
 
       testWidgets('Multiple Attachments from file pickerget added',
@@ -369,10 +369,10 @@ void main() {
 
         final captured =
             verify(() => client.performAction(action, captureAny())).captured;
-        expect(captured.length, 1);
+        expect(captured.length, equals(1));
         final submittedData =
             captured.first.components.first.data as AttachmentDataEntity;
-        expect(submittedData.value!.length, 2);
+        expect(submittedData.value!.length, equals(2));
         expect(submittedData.value!.first, equals(attachment1));
         expect(submittedData.value!.last, equals(attachment2));
       });
@@ -471,9 +471,9 @@ void main() {
 
         final captured =
             verify(() => client.performAction(action, captureAny())).captured;
-        expect(captured.length, 1);
+        expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
-        expect(submittedData.components.first.data, data);
+        expect(submittedData.components.first.data, equals(data));
       });
 
       testWidgets(
@@ -593,9 +593,9 @@ void main() {
 
       final captured =
           verify(() => client.performAction(action, captureAny())).captured;
-      expect(captured.length, 1);
+      expect(captured.length, equals(1));
       final submittedData = captured.first as FormData;
-      expect(submittedData.components.first.data, data);
+      expect(submittedData.components.first.data, equals(data));
     });
 
     testWidgets('Existing Attachment gets deleted', (tester) async {
@@ -644,9 +644,9 @@ void main() {
 
       final captured =
           verify(() => client.performAction(action, captureAny())).captured;
-      expect(captured.length, 1);
+      expect(captured.length, equals(1));
       final submittedData = captured.first as FormData;
-      expect(submittedData.components.first.data, data);
+      expect(submittedData.components.first.data, equals(data));
     });
   });
 
@@ -816,7 +816,7 @@ void main() {
           verify(() => client.performAction(action, captureAny<FormData>()))
               .captured
               .first as FormData;
-      expect(capturedData.components.first.data, data);
+      expect(capturedData.components.first.data, equals(data));
     });
   });
 }

@@ -43,7 +43,7 @@ class User {
         'lastName': lastName,
         'firstName': firstName,
         'id': id,
-        'spaceUris': spaces.map((e) => e.uriString).toList(),
+        'spaceUris': spaces.map((e) => e.uri.toString()).toList(),
       };
 
   @override

@@ -16,10 +16,10 @@ void main() {
         ]
       });
 
-      expect(jsonSpace.id, id);
-      expect(jsonSpace.name, name);
-      expect(jsonSpace.grids.length, 1);
-      expect(jsonSpace.grids[0], grid);
+      expect(jsonSpace.id, equals(id));
+      expect(jsonSpace.name, equals(name));
+      expect(jsonSpace.grids.length, equals(1));
+      expect(jsonSpace.grids[0], equals(grid));
     });
 
     test('From Json, toJson equals', () {
@@ -33,7 +33,7 @@ void main() {
 
       final doubleParse = Space.fromJson(jsonSpace.toJson());
 
-      expect(doubleParse, jsonSpace);
+      expect(doubleParse, equals(jsonSpace));
     });
   });
 
@@ -53,8 +53,8 @@ void main() {
         ]
       });
 
-      expect(plain, jsonSpace);
-      expect((plain.hashCode - jsonSpace.hashCode) == 0, true);
+      expect(plain, equals(jsonSpace));
+      expect(plain.hashCode, equals(jsonSpace.hashCode));
     });
 
     test('Plain and From json not equal with different values', () {
@@ -71,8 +71,8 @@ void main() {
         ]
       });
 
-      expect(plain == jsonSpace, false);
-      expect((plain.hashCode - jsonSpace.hashCode) == 0, false);
+      expect(plain, isNot(jsonSpace));
+      expect(plain.hashCode, isNot(jsonSpace.hashCode));
     });
   });
 }

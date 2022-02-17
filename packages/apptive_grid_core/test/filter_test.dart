@@ -164,8 +164,8 @@ void main() {
           ],
         );
 
-        expect(a, isNot(equals(b)));
-        expect(a.hashCode, isNot(equals(b.hashCode)));
+        expect(a, isNot(b));
+        expect(a.hashCode, isNot(b.hashCode));
       });
 
       test('Different Conditions', () {
@@ -189,8 +189,8 @@ void main() {
           ],
         );
 
-        expect(a, isNot(equals(b)));
-        expect(a.hashCode, isNot(equals(b.hashCode)));
+        expect(a, isNot(b));
+        expect(a.hashCode, isNot(b.hashCode));
       });
     });
 
@@ -213,8 +213,8 @@ void main() {
           value: StringDataEntity('value'),
         );
 
-        expect(a, isNot(equals(b)));
-        expect(a.hashCode, isNot(equals(b.hashCode)));
+        expect(a, isNot(b));
+        expect(a.hashCode, isNot(b.hashCode));
       });
 
       test('Different Value', () {
@@ -223,8 +223,8 @@ void main() {
         final b =
             EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value1'));
 
-        expect(a, isNot(equals(b)));
-        expect(a.hashCode, isNot(equals(b.hashCode)));
+        expect(a, isNot(b));
+        expect(a.hashCode, isNot(b.hashCode));
       });
 
       test('Different Field', () {
@@ -233,8 +233,8 @@ void main() {
         final b =
             EqualsFilter(fieldId: 'fieldId1', value: StringDataEntity('value'));
 
-        expect(a, isNot(equals(b)));
-        expect(a.hashCode, isNot(equals(b.hashCode)));
+        expect(a, isNot(b));
+        expect(a.hashCode, isNot(b.hashCode));
       });
     });
   });

@@ -14,8 +14,8 @@ void main() {
         ]
       });
 
-      expect(fromJson, direct);
-      expect(fromJson.hashCode, direct.hashCode);
+      expect(fromJson, equals(direct));
+      expect(fromJson.hashCode, equals(direct.hashCode));
     });
 
     test('UnEqual', () {

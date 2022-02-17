@@ -10,8 +10,8 @@ void main() {
       final a = GridField(id, name, type);
       final b = GridField(id, name, type);
 
-      expect(a, b);
-      expect(a.hashCode, b.hashCode);
+      expect(a, equals(b));
+      expect(a.hashCode, equals(b.hashCode));
     });
 
     test('is not equal', () {

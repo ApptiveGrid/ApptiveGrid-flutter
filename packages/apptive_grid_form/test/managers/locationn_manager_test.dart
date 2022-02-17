@@ -87,7 +87,7 @@ void main() {
         () => httpClient.get(captureAny<Uri>(), headers: any(named: 'headers')),
       ).captured.first as Uri;
 
-      expect(capturedUri.host, 'maps.googleapis.com');
+      expect(capturedUri.host, equals('maps.googleapis.com'));
       expect(
         capturedUri.pathSegments,
         ['maps', 'api', 'place', 'queryautocomplete', 'json'],
@@ -117,7 +117,7 @@ void main() {
         () => httpClient.get(captureAny<Uri>(), headers: any(named: 'headers')),
       ).captured.first as Uri;
 
-      expect(capturedUri.host, 'maps.googleapis.com');
+      expect(capturedUri.host, equals('maps.googleapis.com'));
       expect(
         capturedUri.pathSegments,
         ['maps', 'api', 'place', 'details', 'json'],
@@ -146,8 +146,11 @@ void main() {
         () => httpClient.get(captureAny<Uri>(), headers: any(named: 'headers')),
       ).captured.first as Uri;
 
-      expect(capturedUri.host, 'maps.googleapis.com');
-      expect(capturedUri.pathSegments, ['maps', 'api', 'geocode', 'json']);
+      expect(capturedUri.host, equals('maps.googleapis.com'));
+      expect(
+        capturedUri.pathSegments,
+        equals(['maps', 'api', 'geocode', 'json']),
+      );
     });
   });
 }

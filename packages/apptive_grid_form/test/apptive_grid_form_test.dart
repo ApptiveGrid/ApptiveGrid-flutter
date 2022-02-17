@@ -117,7 +117,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final result = await completer.future;
-    expect(result, form);
+    expect(result, equals(form));
   });
 
   group('Loading', () {
@@ -530,7 +530,7 @@ void main() {
 
       when(
         () => httpClient.get(
-          Uri.parse(env.url + formUri.uriString),
+          Uri.parse(env.url + formUri.uri.toString()),
           headers: any(named: 'headers'),
         ),
       ).thenAnswer(

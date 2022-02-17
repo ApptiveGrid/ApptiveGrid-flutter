@@ -10,6 +10,9 @@
 * `DataType.multiCrossReference`
 * `DataType.createdBy`
 
+### New Features
+* Rework structure of Uris to be more generic
+
 ### Bugfixes
 * Fixed Multiline Text FormWidgets
 * Fix required validation not working for all types if Form has initial data

@@ -12,7 +12,8 @@
 ### New Features
 * Added support for sorting when loading a Grid
 * Added support for filtering when loading a Grid
-* Add call retreive a single entity
+* Add call retrieve a single entity
+* Rework structure of Uris to be more generic
 
 ## [0.8.0-alpha.9]
 * Add Support for `DataType.createdBy`
