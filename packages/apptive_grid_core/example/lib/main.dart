@@ -133,8 +133,7 @@ class _SpaceSectionState extends State<_SpaceSection> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _spaceFuture = ApptiveGrid.getClient(context).getSpace(
-      spaceUri:
-          SpaceUri(user: widget.spaceUri.user, space: widget.spaceUri.space),
+      spaceUri: widget.spaceUri,
     );
   }
 

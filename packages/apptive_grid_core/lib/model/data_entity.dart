@@ -221,7 +221,7 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
     if (value == null || entityUri == null) {
       return null;
     } else {
-      return {'displayValue': value, 'uri': entityUri?.uriString};
+      return {'displayValue': value, 'uri': entityUri?.uri.toString()};
     }
   }
 

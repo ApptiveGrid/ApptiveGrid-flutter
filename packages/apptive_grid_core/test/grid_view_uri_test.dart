@@ -8,20 +8,11 @@ void main() {
         '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/views/9999',
       );
 
-      expect(gridViewUri.user, '123456');
-      expect(gridViewUri.space, 'asdfg');
-      expect(gridViewUri.grid, '1a2s3d4f');
-      expect(gridViewUri.view, '9999');
-    });
-
-    test('Malformatted Uri throws ArgumentError', () {
-      const uri = '/api/users/123456/spaces/asdfg/';
       expect(
-        () => GridViewUri.fromUri(uri),
-        throwsA(
-          predicate<ArgumentError>(
-            (e) => e.message == 'Could not parse GridViewUri $uri',
-            'ArgumentError with specific Message',
+        gridViewUri.uri,
+        equals(
+          Uri.parse(
+            '/api/users/123456/spaces/asdfg/grids/1a2s3d4f/views/9999',
           ),
         ),
       );
@@ -39,8 +30,8 @@ void main() {
         grid: '1a2s3d4f',
         view: '9999',
       );
-      expect(parsed == direct, true);
-      expect(parsed.hashCode - direct.hashCode, 0);
+      expect(parsed, equals(direct));
+      expect(parsed.hashCode, equals(direct.hashCode));
     });
 
     test('Different Values do not equal', () {
@@ -56,8 +47,8 @@ void main() {
         grid: '1a2s3d4f',
         view: '8888',
       );
-      expect(one == two, false);
-      expect((one.hashCode - two.hashCode) != 0, true);
+      expect(one, isNot(two));
+      expect(one.hashCode, isNot(two.hashCode));
     });
   });
 }

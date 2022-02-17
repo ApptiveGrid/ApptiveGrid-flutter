@@ -28,10 +28,10 @@ void main() {
         },
       });
 
-      expect(direct.hashCode, fromJson.hashCode);
-      expect(direct, direct);
-      expect(fromJson, fromJson);
-      expect(direct, fromJson);
+      expect(direct.hashCode, equals(fromJson.hashCode));
+      expect(direct, equals(direct));
+      expect(fromJson, equals(fromJson));
+      expect(direct, equals(fromJson));
     });
   });
 }

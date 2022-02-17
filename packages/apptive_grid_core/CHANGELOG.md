@@ -1,3 +1,20 @@
+## [0.8.0]
+
+### Breaking Changes
+* `DataType.selectionBox` is now `DataType.singleSelect`
+
+### New Data Types
+* `DataType.attachment`
+* `DataType.enumCollection`
+* `DataType.multiCrossReference`
+* `DataType.createdBy`
+
+### New Features
+* Added support for sorting when loading a Grid
+* Added support for filtering when loading a Grid
+* Add call retrieve a single entity
+* Rework structure of Uris to be more generic
+
 ## [0.8.0-alpha.9]
 * Add Support for `DataType.createdBy`
 * Add call to retrieve a single entity

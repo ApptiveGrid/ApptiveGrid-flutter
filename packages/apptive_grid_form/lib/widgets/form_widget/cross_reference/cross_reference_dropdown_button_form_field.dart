@@ -186,11 +186,13 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
           itemCount: _grid!.rows.length,
           itemBuilder: (context, index) {
             final row = _grid!.rows[index];
-            final entityUri = EntityUri(
-              user: _gridUri.user,
-              space: _gridUri.space,
-              grid: _gridUri.grid,
-              entity: row.id,
+            String path = _gridUri.uri.path;
+            final viewsIndex = path.indexOf('/views');
+            if (viewsIndex > 0) {
+              path = path.substring(0, viewsIndex);
+            }
+            final entityUri = EntityUri.fromUri(
+              '$path/entities/${row.id}',
             );
             return _RowMenuItem(
               key: ValueKey(widget.component.fieldId + row.id),

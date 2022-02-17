@@ -47,13 +47,13 @@ void main() {
       );
       authenticator.setToken(token);
 
-      expect(authenticator.header, 'Bearer 12345');
+      expect(authenticator.header, equals('Bearer 12345'));
     });
 
     test('Has no Token returns null', () {
       authenticator =
           ApptiveGridAuthenticator(options: const ApptiveGridOptions());
-      expect(authenticator.header, null);
+      expect(authenticator.header, isNull);
     });
   });
 
@@ -127,7 +127,7 @@ void main() {
       await authenticator.checkAuthentication();
 
       // Check if new Token is used in Header
-      expect(authenticator.header, 'Bearer 12345');
+      expect(authenticator.header, equals('Bearer 12345'));
       verify(() => credential.getTokenResponse(any())).called(1);
     });
   });
@@ -306,8 +306,8 @@ void main() {
       final response = await authenticator.logout();
       verify(() => httpClient.get(logoutUri, headers: any(named: 'headers')))
           .called(1);
-      expect(response!.statusCode, 200);
-      expect(response.request!.url, logoutUri);
+      expect(response!.statusCode, equals(200));
+      expect(response.request!.url, equals(logoutUri));
       expect(await authenticator.isAuthenticated, false);
     });
 
@@ -345,7 +345,7 @@ void main() {
       test('With token returns true', () async {
         authenticator = ApptiveGridAuthenticator();
 
-        expect(await authenticator.isAuthenticated, false);
+        expect(await authenticator.isAuthenticated, equals(false));
 
         final token = TokenResponse.fromJson(
           {'token_type': 'Bearer', 'access_token': '12345'},
@@ -367,7 +367,7 @@ void main() {
           ),
         );
 
-        expect(await authenticator.isAuthenticated, true);
+        expect(await authenticator.isAuthenticated, equals(true));
       });
     });
 
@@ -503,7 +503,7 @@ void main() {
       final credentialToken = await credential
           .getTokenResponse()
           .timeout(const Duration(seconds: 5));
-      expect(resultCredential, credentialToken);
+      expect(resultCredential, equals(credentialToken));
     });
   });
 
@@ -517,13 +517,13 @@ void main() {
     test('isAuthenticated', () async {
       authenticator = ApptiveGridAuthenticator(options: options);
 
-      expect(await authenticator.isAuthenticated, true);
+      expect(await authenticator.isAuthenticated, equals(true));
     });
 
     test('Sets Header', () {
       authenticator = ApptiveGridAuthenticator(options: options);
 
-      expect(authenticator.header!.split(' ')[0], 'Basic');
+      expect(authenticator.header!.split(' ')[0], equals('Basic'));
       expect(
         authenticator.header!.split(' ')[1],
         base64Encode(utf8.encode('authKey:password')),
@@ -656,7 +656,7 @@ void main() {
       await authenticator.checkAuthentication();
 
       verifyNever(testAuthenticator.authorize);
-      expect(await authenticator.isAuthenticated, true);
+      expect(await authenticator.isAuthenticated, equals(true));
     });
 
     test(
@@ -729,7 +729,7 @@ void main() {
       await authenticator.checkAuthentication();
 
       verify(testAuthenticator.authorize).called(1);
-      expect(await authenticator.isAuthenticated, true);
+      expect(await authenticator.isAuthenticated, equals(true));
     });
 
     test(
@@ -774,7 +774,7 @@ void main() {
       await authenticator.checkAuthentication();
 
       verify(testAuthenticator.authorize).called(1);
-      expect(await authenticator.isAuthenticated, true);
+      expect(await authenticator.isAuthenticated, equals(true));
     });
 
     test(

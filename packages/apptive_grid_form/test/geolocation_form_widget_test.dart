@@ -186,7 +186,7 @@ void main() {
         ),
       ).captured.first as Uri;
 
-      expect(capturedUri.queryParameters['location'], '47.0,11.0');
+      expect(capturedUri.queryParameters['location'], equals('47.0,11.0'));
     });
 
     testWidgets('Filled Textfield shows clear button, click clears button',
@@ -281,7 +281,7 @@ void main() {
       await tester.tap(find.byIcon(Icons.clear));
       await tester.pumpAndSettle();
 
-      expect(geolocationDataEntity.value, null);
+      expect(geolocationDataEntity.value, equals(null));
       expect(find.byIcon(Icons.clear), findsNothing);
 
       await tester.enterText(find.byType(TextField), 'Z');

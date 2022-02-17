@@ -80,7 +80,7 @@ void main() {
     test('Grid Parses Correctly', () {
       final grid = Grid.fromJson(rawResponse);
 
-      expect(grid.fields.length, 1);
+      expect(grid.fields.length, equals(1));
       expect(
         grid.rows[0].entries[0].data,
         GeolocationDataEntity.fromJson(
@@ -95,7 +95,7 @@ void main() {
     test('Grid With null value Parses Correctly', () {
       final grid = Grid.fromJson(rawResponseWithNullValue);
 
-      expect(grid.fields.length, 1);
+      expect(grid.fields.length, equals(1));
       expect(
         grid.rows[0].entries[0].data,
         GeolocationDataEntity(),
@@ -167,8 +167,8 @@ void main() {
         fieldId: '78lnph2fb2olm9jtc696d66q9',
       );
 
-      expect(fromJson, direct);
-      expect(fromJson.hashCode, direct.hashCode);
+      expect(fromJson, equals(direct));
+      expect(fromJson.hashCode, equals(direct.hashCode));
     });
   });
 

@@ -66,15 +66,15 @@ void main() {
   );
 
   test('equals', () {
-    expect(textA == textB, true);
-    expect(textA.hashCode - textB.hashCode == 0, true);
+    expect(textA, equals(textB));
+    expect(textA.hashCode, equals(textB.hashCode));
   });
   test('not equals', () {
-    expect(textA == textC, false);
-    expect(textA.hashCode - textC.hashCode == 0, false);
-    expect(textA.hashCode != number.hashCode, true);
-    expect(textA.hashCode != date.hashCode, true);
-    expect(textA.hashCode != dateTime.hashCode, true);
-    expect(textA.hashCode != checkBox.hashCode, true);
+    expect(textA, isNot(textC));
+    expect(textA.hashCode, isNot(textC.hashCode));
+    expect(textA.hashCode, isNot(number.hashCode));
+    expect(textA.hashCode, isNot(date.hashCode));
+    expect(textA.hashCode, isNot(dateTime.hashCode));
+    expect(textA.hashCode, isNot(checkBox.hashCode));
   });
 }

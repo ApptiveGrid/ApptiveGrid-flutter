@@ -20,12 +20,12 @@ void main() {
         ]
       });
 
-      expect(jsonUser.id, id);
-      expect(jsonUser.firstName, firstName);
-      expect(jsonUser.lastName, lastName);
-      expect(jsonUser.email, email);
-      expect(jsonUser.spaces.length, 1);
-      expect(jsonUser.spaces[0], spaceUri);
+      expect(jsonUser.id, equals(id));
+      expect(jsonUser.firstName, equals(firstName));
+      expect(jsonUser.lastName, equals(lastName));
+      expect(jsonUser.email, equals(email));
+      expect(jsonUser.spaces.length, equals(1));
+      expect(jsonUser.spaces[0], equals(spaceUri));
     });
 
     test('From Json, toJson equals', () {
@@ -41,7 +41,7 @@ void main() {
 
       final doubleParse = User.fromJson(jsonUser.toJson());
 
-      expect(doubleParse, jsonUser);
+      expect(doubleParse, equals(jsonUser));
     });
   });
 
@@ -71,8 +71,8 @@ void main() {
         ]
       });
 
-      expect(plain == jsonUser, true);
-      expect((plain.hashCode - jsonUser.hashCode) == 0, true);
+      expect(plain, equals(jsonUser));
+      expect(plain.hashCode, equals(jsonUser.hashCode));
     });
 
     test('Plain and From json not equal with different values', () {
@@ -99,8 +99,8 @@ void main() {
         ]
       });
 
-      expect(plain == jsonUser, false);
-      expect((plain.hashCode - jsonUser.hashCode) == 0, false);
+      expect(plain, isNot(jsonUser));
+      expect(plain.hashCode, isNot(jsonUser.hashCode));
     });
   });
 }

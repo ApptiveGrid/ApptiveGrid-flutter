@@ -17,13 +17,13 @@ void main() {
       const c = TextComponentOptions();
 
       test('a == b', () {
-        expect(a == b, true);
-        expect(a.hashCode - b.hashCode, 0);
+        expect(a, equals(b));
+        expect(a.hashCode, equals(b.hashCode));
       });
 
       test('a != c', () {
-        expect(a == c, false);
-        expect((a.hashCode - c.hashCode) == 0, false);
+        expect(a, isNot(c));
+        expect(a.hashCode, isNot(c.hashCode));
       });
     });
   });
@@ -42,13 +42,13 @@ void main() {
       );
 
       test('a == b', () {
-        expect(a == b, true);
-        expect(a.hashCode - b.hashCode, 0);
+        expect(a, equals(b));
+        expect(a.hashCode, equals(b.hashCode));
       });
 
       test('a != c', () {
-        expect(a == c, false);
-        expect((a.hashCode - c.hashCode) == 0, false);
+        expect(a, isNot(c));
+        expect(a.hashCode, isNot(c.hashCode));
       });
     });
   });

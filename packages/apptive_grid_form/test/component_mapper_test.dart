@@ -15,7 +15,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, TextFormWidget);
+      expect(widget.runtimeType, equals(TextFormWidget));
     });
 
     test('NumberComponent', () {
@@ -29,7 +29,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, IntegerFormWidget);
+      expect(widget.runtimeType, equals(IntegerFormWidget));
     });
 
     test('DecimalComponent', () {
@@ -43,7 +43,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, DecimalFormWidget);
+      expect(widget.runtimeType, equals(DecimalFormWidget));
     });
 
     test('DateComponent', () {
@@ -57,7 +57,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, DateFormWidget);
+      expect(widget.runtimeType, equals(DateFormWidget));
     });
 
     test('DateTimeComponent', () {
@@ -71,7 +71,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, DateTimeFormWidget);
+      expect(widget.runtimeType, equals(DateTimeFormWidget));
     });
 
     test('CheckBoxComponent', () {
@@ -85,7 +85,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, CheckBoxFormWidget);
+      expect(widget.runtimeType, equals(CheckBoxFormWidget));
     });
 
     test('EnumComponent', () {
@@ -99,7 +99,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, EnumFormWidget);
+      expect(widget.runtimeType, equals(EnumFormWidget));
     });
 
     test('EnumCollectionComponent', () {
@@ -113,7 +113,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, EnumCollectionFormWidget);
+      expect(widget.runtimeType, equals(EnumCollectionFormWidget));
     });
 
     test('CrossReferenceComponent', () {
@@ -129,7 +129,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, CrossReferenceFormWidget);
+      expect(widget.runtimeType, equals(CrossReferenceFormWidget));
     });
 
     test('MultiCrossReferenceComponent', () {
@@ -145,7 +145,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, MultiCrossReferenceFormWidget);
+      expect(widget.runtimeType, equals(MultiCrossReferenceFormWidget));
     });
 
     test('UserReferenceComponent', () {
@@ -166,13 +166,13 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, UserReferenceFormWidget);
+      expect(widget.runtimeType, equals(UserReferenceFormWidget));
     });
 
     test('ArgumentError', () {
       final component = UnknownComponent();
 
-      expect(() => fromModel(component), throwsArgumentError);
+      expect(() => fromModel(component), equals(throwsArgumentError));
     });
   });
 }

@@ -85,12 +85,12 @@ void main() {
     test('Successful', () {
       final formData = FormData.fromJson(response);
 
-      expect(formData.name, name);
-      expect(formData.title, title);
+      expect(formData.name, equals(name));
+      expect(formData.title, equals(title));
 
-      expect(formData.actions.length, 1);
+      expect(formData.actions.length, equals(1));
 
-      expect(formData.components.length, 5);
+      expect(formData.components.length, equals(5));
 
       expect(formData.components.map((e) => e.runtimeType).toList(), [
         StringFormComponent,
@@ -121,7 +121,7 @@ void main() {
         schema: schema,
       );
 
-      expect(FormData.fromJson(formData.toJson()), formData);
+      expect(FormData.fromJson(formData.toJson()), equals(formData));
     });
 
     test('AttachmentActions get Restored', () {
@@ -217,13 +217,13 @@ void main() {
     final c = FormData.fromJson(response);
 
     test('a == b', () {
-      expect(a == b, true);
-      expect(a.hashCode - b.hashCode, 0);
+      expect(a, equals(b));
+      expect(a.hashCode, equals(b.hashCode));
     });
 
     test('a != c', () {
-      expect(a == c, false);
-      expect((a.hashCode - c.hashCode) == 0, false);
+      expect(a, isNot(c));
+      expect(a.hashCode, isNot(c.hashCode));
     });
   });
 
@@ -259,7 +259,7 @@ void main() {
     test('Form Without Actions parses correctly', () {
       final formData = FormData.fromJson(responseWithoutActions);
 
-      expect(formData.actions.length, 0);
+      expect(formData.actions.length, equals(0));
     });
   });
 
@@ -301,9 +301,12 @@ void main() {
 
       final formData = FormData.fromJson(responseWithCrossReference);
 
-      expect(formData.title, 'New title');
-      expect(formData.components[0].runtimeType, CrossReferenceFormComponent);
-      expect(formData.components[0].data.value, null);
+      expect(formData.title, equals('New title'));
+      expect(
+        formData.components[0].runtimeType,
+        equals(CrossReferenceFormComponent),
+      );
+      expect(formData.components[0].data.value, equals(null));
       expect(
         (formData.components[0].data as CrossReferenceDataEntity).entityUri,
         null,
@@ -357,9 +360,12 @@ void main() {
 
       final formData = FormData.fromJson(responseWithCrossReference);
 
-      expect(formData.title, 'New title');
-      expect(formData.components[0].runtimeType, CrossReferenceFormComponent);
-      expect(formData.components[0].data.value, 'Yeah!');
+      expect(formData.title, equals('New title'));
+      expect(
+        formData.components[0].runtimeType,
+        equals(CrossReferenceFormComponent),
+      );
+      expect(formData.components[0].data.value, equals('Yeah!'));
       expect(
         (formData.components[0].data as CrossReferenceDataEntity).entityUri,
         EntityUri.fromUri(
