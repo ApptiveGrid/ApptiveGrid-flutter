@@ -16,9 +16,11 @@
 ### Bugfixes
 * Fixed Multiline Text FormWidgets
 * Fix required validation not working for all types if Form has initial data
+* Fix stretched submit Loading Indicator
 
 ## [0.9.0-alpha.11]
 * Use `apptive_grid_core: ^0.9.0`
+* Fix stretched submit Loading Indicator
 
 ## [0.9.0-alpha.10]
 * Use stable version of `apptive_grid_core`

@@ -334,7 +334,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                     final actionIndex = index - 1 - data.components.length;
                     final action = data.actions[actionIndex];
                     if (_actionsInProgress.contains(action)) {
-                      return const CircularProgressIndicator.adaptive();
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
                     } else {
                       return ActionButton(
                         action: data.actions[actionIndex],
