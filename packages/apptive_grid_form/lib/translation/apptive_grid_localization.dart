@@ -1,8 +1,8 @@
 import 'package:apptive_grid_form/translation/apptive_grid_translation.dart';
-import 'package:flutter/material.dart';
-
 import 'package:apptive_grid_form/translation/l10n/translation_de.dart' as de;
 import 'package:apptive_grid_form/translation/l10n/translation_en.dart' as en;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 /// Provides Translations for ApptiveGridForm Widgets
 class ApptiveGridLocalization extends StatelessWidget {
@@ -89,5 +89,5 @@ class _InheritedApptiveGridTranslation extends InheritedWidget {
 
   @override
   bool updateShouldNotify(_InheritedApptiveGridTranslation oldWidget) =>
-      _translations != oldWidget._translations;
+      !mapEquals(_translations, oldWidget._translations);
 }

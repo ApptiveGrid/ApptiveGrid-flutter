@@ -1,3 +1,6 @@
+## 0.0.3+1
+* Fix nullable access
+
 ## 0.0.3
 * Add `ChipTheme`
 

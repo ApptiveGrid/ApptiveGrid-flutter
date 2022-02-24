@@ -332,7 +332,8 @@ void main() {
         setUp(() {
           httpClient = MockHttpClient();
           authenticator = MockApptiveGridAuthenticator();
-          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.isAuthenticated)
+              .thenAnswer((_) async => true);
           when(() => authenticator.checkAuthentication())
               .thenAnswer((_) async {});
           client = ApptiveGridClient.fromClient(
@@ -397,7 +398,8 @@ void main() {
         setUp(() {
           httpClient = MockHttpClient();
           authenticator = MockApptiveGridAuthenticator();
-          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.isAuthenticated)
+              .thenAnswer((_) async => true);
           when(() => authenticator.checkAuthentication())
               .thenAnswer((_) async {});
           client = ApptiveGridClient.fromClient(
@@ -581,7 +583,8 @@ void main() {
           setUp(() {
             httpClient = MockHttpClient();
             authenticator = MockApptiveGridAuthenticator();
-            when(() => authenticator.isAuthenticated).thenReturn(true);
+            when(() => authenticator.isAuthenticated)
+                .thenAnswer((_) async => true);
             when(() => authenticator.checkAuthentication())
                 .thenAnswer((_) async {});
             client = ApptiveGridClient.fromClient(
@@ -674,7 +677,8 @@ void main() {
         setUp(() {
           httpClient = MockHttpClient();
           authenticator = MockApptiveGridAuthenticator();
-          when(() => authenticator.isAuthenticated).thenReturn(true);
+          when(() => authenticator.isAuthenticated)
+              .thenAnswer((_) async => true);
           when(() => authenticator.checkAuthentication())
               .thenAnswer((_) async {});
           client = ApptiveGridClient.fromClient(
@@ -843,9 +847,7 @@ void main() {
 
     test('Logout calls Authenticator', () {
       final authenticator = MockApptiveGridAuthenticator();
-      when(() => authenticator.logout()).thenAnswer((_) async {
-        return null;
-      });
+      when(() => authenticator.logout()).thenAnswer((_) async => null);
       final client = ApptiveGridClient.fromClient(
         httpClient,
         authenticator: authenticator,
@@ -857,7 +859,7 @@ void main() {
 
     test('isAuthenticated calls Authenticator', () {
       final authenticator = MockApptiveGridAuthenticator();
-      when(() => authenticator.isAuthenticated).thenAnswer((_) => true);
+      when(() => authenticator.isAuthenticated).thenAnswer((_) async => true);
       final client = ApptiveGridClient.fromClient(
         httpClient,
         authenticator: authenticator,
@@ -865,6 +867,39 @@ void main() {
       client.isAuthenticated;
 
       verify(() => authenticator.isAuthenticated).called(1);
+    });
+
+    test('isAuthenticatedWithToken calls Authenticator', () {
+      final authenticator = MockApptiveGridAuthenticator();
+      when(() => authenticator.isAuthenticatedWithToken)
+          .thenAnswer((_) async => true);
+      final client = ApptiveGridClient.fromClient(
+        httpClient,
+        authenticator: authenticator,
+      );
+      client.isAuthenticatedWithToken;
+
+      verify(() => authenticator.isAuthenticatedWithToken).called(1);
+    });
+
+    test('setUserToken calls Authenticator', () {
+      final authenticator = MockApptiveGridAuthenticator();
+      when(() => authenticator.setUserToken(any())).thenAnswer((_) async => {});
+      final client = ApptiveGridClient.fromClient(
+        httpClient,
+        authenticator: authenticator,
+      );
+
+      final tokenTime = DateTime.now();
+      final tokenResponse = {
+        'token_type': 'Bearer',
+        'access_token': '12345',
+        'expires_at': tokenTime.millisecondsSinceEpoch,
+        'expires_in': tokenTime.microsecondsSinceEpoch
+      };
+      client.setUserToken(tokenResponse);
+
+      verify(() => authenticator.setUserToken(tokenResponse)).called(1);
     });
   });
 

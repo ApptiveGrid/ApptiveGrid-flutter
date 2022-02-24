@@ -53,7 +53,7 @@ void main() {
     test('Has no Token returns null', () {
       authenticator =
           ApptiveGridAuthenticator(options: const ApptiveGridOptions());
-      expect(authenticator.header, equals(null));
+      expect(authenticator.header, isNull);
     });
   });
 
@@ -308,21 +308,97 @@ void main() {
           .called(1);
       expect(response!.statusCode, equals(200));
       expect(response.request!.url, equals(logoutUri));
+      expect(await authenticator.isAuthenticated, false);
     });
-  });
 
-  group('Is Authenticated', () {
-    test('isAuthenticated  returns Status of token', () async {
-      authenticator = ApptiveGridAuthenticator();
+    test('Logout call throws error, still clears token', () async {
+      final httpClient = MockHttpClient();
+      authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
+      final logoutUri = Uri.parse('https://log.me/out');
 
-      expect(authenticator.isAuthenticated, equals(false));
-
+      final credential = MockCredential();
+      authenticator.setCredential(credential);
       final token = TokenResponse.fromJson(
         {'token_type': 'Bearer', 'access_token': '12345'},
       );
       authenticator.setToken(token);
 
-      expect(authenticator.isAuthenticated, equals(true));
+      when(() => credential.generateLogoutUrl())
+          .thenAnswer((invocation) => logoutUri);
+      when(() => httpClient.get(logoutUri, headers: any(named: 'headers')))
+          .thenAnswer(
+        (invocation) => Future.error(
+          Response(
+            '',
+            400,
+            request: Request('GET', invocation.positionalArguments[0]),
+          ),
+        ),
+      );
+      await authenticator.logout();
+      expect(await authenticator.isAuthenticated, false);
+    });
+  });
+
+  group('Is Authenticated', () {
+    group('isAuthenticated', () {
+      test('With token returns true', () async {
+        authenticator = ApptiveGridAuthenticator();
+
+        expect(await authenticator.isAuthenticated, equals(false));
+
+        final token = TokenResponse.fromJson(
+          {'token_type': 'Bearer', 'access_token': '12345'},
+        );
+        authenticator.setToken(token);
+
+        expect(await authenticator.isAuthenticated, true);
+      });
+
+      test('With Api Key returns true', () async {
+        authenticator = ApptiveGridAuthenticator(
+          options: const ApptiveGridOptions(
+            authenticationOptions: ApptiveGridAuthenticationOptions(
+              apiKey: ApptiveGridApiKey(
+                authKey: 'authKey',
+                password: 'password',
+              ),
+            ),
+          ),
+        );
+
+        expect(await authenticator.isAuthenticated, equals(true));
+      });
+    });
+
+    group('isAuthenticated with User token', () {
+      test('With token returns true', () async {
+        authenticator = ApptiveGridAuthenticator();
+
+        expect(await authenticator.isAuthenticatedWithToken, false);
+
+        final token = TokenResponse.fromJson(
+          {'token_type': 'Bearer', 'access_token': '12345'},
+        );
+        authenticator.setToken(token);
+
+        expect(await authenticator.isAuthenticatedWithToken, true);
+      });
+
+      test('With Api Key returns true', () async {
+        authenticator = ApptiveGridAuthenticator(
+          options: const ApptiveGridOptions(
+            authenticationOptions: ApptiveGridAuthenticationOptions(
+              apiKey: ApptiveGridApiKey(
+                authKey: 'authKey',
+                password: 'password',
+              ),
+            ),
+          ),
+        );
+
+        expect(await authenticator.isAuthenticatedWithToken, false);
+      });
     });
   });
 
@@ -438,10 +514,10 @@ void main() {
       ),
     );
 
-    test('isAuthenticated', () {
+    test('isAuthenticated', () async {
       authenticator = ApptiveGridAuthenticator(options: options);
 
-      expect(authenticator.isAuthenticated, equals(true));
+      expect(await authenticator.isAuthenticated, equals(true));
     });
 
     test('Sets Header', () {
@@ -580,7 +656,7 @@ void main() {
       await authenticator.checkAuthentication();
 
       verifyNever(testAuthenticator.authorize);
-      expect(authenticator.isAuthenticated, equals(true));
+      expect(await authenticator.isAuthenticated, equals(true));
     });
 
     test(
@@ -653,7 +729,7 @@ void main() {
       await authenticator.checkAuthentication();
 
       verify(testAuthenticator.authorize).called(1);
-      expect(authenticator.isAuthenticated, equals(true));
+      expect(await authenticator.isAuthenticated, equals(true));
     });
 
     test(
@@ -698,7 +774,7 @@ void main() {
       await authenticator.checkAuthentication();
 
       verify(testAuthenticator.authorize).called(1);
-      expect(authenticator.isAuthenticated, equals(true));
+      expect(await authenticator.isAuthenticated, equals(true));
     });
 
     test(
@@ -758,13 +834,42 @@ void main() {
           value: any(named: 'value'),
           options: any(named: 'options'),
         ),
-      ).called(1);
+      ).called(2); // Creation of Authenticator reloads credential
       verify(
         () => secureStorage.read(
           key: any(named: 'key'),
           options: any(named: 'options'),
         ),
-      ).called(1);
+      ).called(2); // Value is read also at creation of authenticator
+    });
+  });
+
+  group('Set User token', () {
+    test('Set Token authenticates User', () async {
+      final httpClient = MockHttpClient();
+      authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
+
+      when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
+          .thenAnswer(
+        (invocation) async => Response(
+          jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+          200,
+          request: Request('GET', discoveryUri),
+          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+        ),
+      );
+
+      final tokenTime = DateTime.now();
+      final tokenResponse = {
+        'token_type': 'Bearer',
+        'access_token': '12345',
+        'expires_at': tokenTime.millisecondsSinceEpoch,
+        'expires_in': tokenTime.microsecondsSinceEpoch
+      };
+
+      await authenticator.setUserToken(tokenResponse);
+
+      expect(await authenticator.isAuthenticatedWithToken, true);
     });
   });
 }

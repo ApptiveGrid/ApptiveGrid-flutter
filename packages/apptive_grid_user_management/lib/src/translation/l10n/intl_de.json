@@ -1,0 +1,20 @@
+{
+    "actionLogin": "Login",
+    "actionRegister": "Registrieren",
+    "hintEmail": "E-Mail Adresse",
+    "hintPassword": "Passwort",
+    "hintFirstName": "Vorname",
+    "hintLastName": "Nachname",
+    "hintConfirmPassword": "Passwort bestätigen",
+    "validateErrorEmailFormat": "Keine gültige E-Mail Adresse",
+    "validateErrorEmailEmpty": "E-Mail darf nicht leer sein",
+    "validateErrorFirstNameEmpty": "Vorname darf nicht leer sein",
+    "validateErrorLastNameEmpty": "Nachname darf nicht leer sein",
+    "validateErrorPasswordsNotMatching": "Passwörter stimmen nicht überein",
+    "registerWaitingForConfirmation": "Alles klar!\\nWir haben dir eine Mail geschickt, um den Account zu bestätigen.",
+    "confirmAccountCreation": "Bestätige deinen Account",
+    "actionConfirm": "Bestätigen",
+    "errorLogin": "Beim Login ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+    "errorRegister": "Bei der Registrierung ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+    "errorConfirm": "Beim bestätigen des Accounts ist ein Fehler aufgetreten. Bitte versuche es erneut."
+}

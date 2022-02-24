@@ -17,7 +17,7 @@ class AttachmentManager {
   }
 
   /// Removes an Attachment. Used for deleting Attachments
-  Uint8List? removeAttachment(Attachment attachment) {
+  void removeAttachment(Attachment attachment) {
     final actionType = formData?.attachmentActions[attachment]?.type;
     if (actionType == null) {
       formData?.attachmentActions[attachment] =
@@ -25,6 +25,5 @@ class AttachmentManager {
     } else if (actionType == AttachmentActionType.add) {
       formData?.attachmentActions.remove(attachment);
     }
-    return null;
   }
 }
