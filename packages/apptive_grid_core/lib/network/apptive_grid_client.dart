@@ -199,6 +199,25 @@ class ApptiveGridClient {
 
   }
 
+  /// Load Entities of a Grid that are accessed by [uri]
+  /// [viewId] specifies allows to request the entities of a specific GridView which allows for getting Filters/Sorting that was applied from the web client
+  ///
+  /// if [layout] is not set the items will be a Map<String, dynamic> with the keys being the fieldIds and the value being the values as json objects
+  /// `indexed` layout will return the items in the following format:
+  /// ```
+  /// {
+  ///   "fields": [
+  ///     `jsonValue of First Column`,
+  ///     `jsonValue of Second Column`,
+  ///     `jsonValue of Third Column`,
+  ///     `jsonValue of Fourth Column`,
+  ///     ...
+  ///   ]
+  /// }
+  /// ```
+  ///
+  /// [sorting] allows to apply custom sorting
+  /// [filter] allows to get custom filters
   Future<EntitiesResponse<T>> loadEntities<T>({
   required Uri uri,
     String? viewId,
