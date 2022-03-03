@@ -184,19 +184,23 @@ class ApptiveGridClient {
       throw gridViewResponse;
     }
 
-
-    final entitiesResponse = await loadEntities(uri: Uri.parse('${gridViewUrl.toString().replaceAll(RegExp('/views/.*'), '')}/entities'),
-      viewId: gridViewUrl.pathSegments.contains('views') ? gridViewUrl.pathSegments[gridViewUrl.pathSegments.indexOf('views') + 1]: null,
+    final entitiesResponse = await loadEntities(
+      uri: Uri.parse(
+        '${gridViewUrl.toString().replaceAll(RegExp('/views/.*'), '')}/entities',
+      ),
+      viewId: gridViewUrl.pathSegments.contains('views')
+          ? gridViewUrl
+              .pathSegments[gridViewUrl.pathSegments.indexOf('views') + 1]
+          : null,
       layout: 'indexed',
       filter: filter,
       sorting: sorting,
     );
 
-      final entities = entitiesResponse.items;
-      final gridToParse = jsonDecode(gridViewResponse.body);
-      gridToParse['entities'] = entities;
-      return Grid.fromJson(gridToParse);
-
+    final entities = entitiesResponse.items;
+    final gridToParse = jsonDecode(gridViewResponse.body);
+    gridToParse['entities'] = entities;
+    return Grid.fromJson(gridToParse);
   }
 
   /// Load Entities of a Grid that are accessed by [uri]
@@ -219,28 +223,25 @@ class ApptiveGridClient {
   /// [sorting] allows to apply custom sorting
   /// [filter] allows to get custom filters
   Future<EntitiesResponse<T>> loadEntities<T>({
-  required Uri uri,
+    required Uri uri,
     String? viewId,
     String? layout,
     List<ApptiveGridSorting>? sorting,
     ApptiveGridFilter? filter,
-}) async {
+  }) async {
     final baseUrl = Uri.parse(options.environment.url);
     final requestUri = uri.replace(
       scheme: baseUrl.scheme,
       host: baseUrl.host,
-      queryParameters: Map.from(uri.queryParameters)..addAll(
-        {
-          if (viewId != null)
-            'viewId': viewId,
-          if (layout != null)
-            'layout': layout,
+      queryParameters: Map.from(uri.queryParameters)
+        ..addAll({
+          if (viewId != null) 'viewId': viewId,
+          if (layout != null) 'layout': layout,
           if (sorting != null)
-            'sorting': jsonEncode(sorting.map((e) => e.toRequestObject()).toList()),
-          if (filter != null)
-            'filter': jsonEncode(filter.toJson()),
-        }
-      ),
+            'sorting':
+                jsonEncode(sorting.map((e) => e.toRequestObject()).toList()),
+          if (filter != null) 'filter': jsonEncode(filter.toJson()),
+        }),
     );
 
     final response = await _client.get(requestUri, headers: headers);

@@ -2,7 +2,6 @@ part of apptive_grid_model;
 
 /// Response when loading entities of a Grid with [ApptiveGridClient.loadEntities]
 class EntitiesResponse<T> {
-
   /// Creates a new Response Object with [items]
   const EntitiesResponse({this.items = const []});
 
@@ -14,8 +13,7 @@ class EntitiesResponse<T> {
 
   @override
   bool operator ==(Object other) {
-    return other is EntitiesResponse &&
-    f.listEquals(other.items, items);
+    return other is EntitiesResponse && f.listEquals(other.items, items);
   }
 
   @override
