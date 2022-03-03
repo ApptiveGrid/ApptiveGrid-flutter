@@ -184,49 +184,58 @@ class ApptiveGridClient {
       throw gridViewResponse;
     }
 
-    final initialGrid = Grid.fromJson(json.decode(gridViewResponse.body));
 
-    if (gridUri.uri.pathSegments.contains('views')) {
-      final gridViewUrlString = gridViewUrl.path.toString();
-      final gridViewUrlPathSegments = gridViewUrl.pathSegments;
-      Uri url = gridViewUrl.replace(
-        pathSegments: [
-          ...gridViewUrlString
-              .substring(0, gridViewUrlString.indexOf('/views'))
-              .split('/'),
-          'entities'
-        ],
-        queryParameters: {
-          'viewId': gridViewUrlPathSegments[
-              gridViewUrlPathSegments.indexOf('views') + 1],
-          'layout': 'indexed',
-        },
-      );
-      // Apply Sorting
-      if (sorting != null) {
-        final queryParams = Map<String, dynamic>.from(url.queryParameters);
-        queryParams['sorting'] =
-            jsonEncode(sorting.map((e) => e.toRequestObject()).toList());
-        url = url.replace(queryParameters: queryParams);
-      }
+    final entitiesResponse = await loadEntities(uri: Uri.parse('${gridViewUrl.toString().replaceAll(RegExp('/views/.*'), '')}/entities'),
+      viewId: gridViewUrl.pathSegments.contains('views') ? gridViewUrl.pathSegments[gridViewUrl.pathSegments.indexOf('views') + 1]: null,
+      layout: 'indexed',
+      filter: filter,
+      sorting: sorting,
+    );
 
-      // Apply Filter
-      if (filter != null) {
-        final queryParams = Map<String, dynamic>.from(url.queryParameters);
-        queryParams['filter'] = jsonEncode(filter.toJson());
-        url = url.replace(queryParameters: queryParams);
-      }
-
-      final response = await _client.get(url, headers: headers);
-      if (response.statusCode >= 400) {
-        throw response;
-      }
-      final entities = json.decode(response.body);
-      final gridToParse = initialGrid.toJson();
+      final entities = entitiesResponse.items;
+      final gridToParse = jsonDecode(gridViewResponse.body);
       gridToParse['entities'] = entities;
       return Grid.fromJson(gridToParse);
+
+  }
+
+  Future<EntitiesResponse<T>> loadEntities<T>({
+  required Uri uri,
+    String? viewId,
+    String? layout,
+    List<ApptiveGridSorting>? sorting,
+    ApptiveGridFilter? filter,
+}) async {
+    final baseUrl = Uri.parse(options.environment.url);
+    final requestUri = uri.replace(
+      scheme: baseUrl.scheme,
+      host: baseUrl.host,
+      queryParameters: Map.from(uri.queryParameters)..addAll(
+        {
+          if (viewId != null)
+            'viewId': viewId,
+          if (layout != null)
+            'layout': layout,
+          if (sorting != null)
+            'sorting': jsonEncode(sorting.map((e) => e.toRequestObject()).toList()),
+          if (filter != null)
+            'filter': jsonEncode(filter.toJson()),
+        }
+      ),
+    );
+
+    final response = await _client.get(requestUri, headers: headers);
+
+    if (response.statusCode >= 400) {
+      throw response;
+    }
+
+    final decodedResponse = jsonDecode(response.body);
+    if (decodedResponse is List) {
+      return EntitiesResponse(items: decodedResponse.cast<T>());
     } else {
-      return initialGrid;
+      // Preparation for Paging
+      return EntitiesResponse(items: decodedResponse['items']);
     }
   }
 
