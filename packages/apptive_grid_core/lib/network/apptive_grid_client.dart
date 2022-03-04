@@ -184,49 +184,78 @@ class ApptiveGridClient {
       throw gridViewResponse;
     }
 
-    final initialGrid = Grid.fromJson(json.decode(gridViewResponse.body));
+    final entitiesResponse = await loadEntities(
+      uri: Uri.parse(
+        '${gridViewUrl.toString().replaceAll(RegExp('/views/.*'), '')}/entities',
+      ),
+      viewId: gridViewUrl.pathSegments.contains('views')
+          ? gridViewUrl
+              .pathSegments[gridViewUrl.pathSegments.indexOf('views') + 1]
+          : null,
+      layout: 'indexed',
+      filter: filter,
+      sorting: sorting,
+    );
 
-    if (gridUri.uri.pathSegments.contains('views')) {
-      final gridViewUrlString = gridViewUrl.path.toString();
-      final gridViewUrlPathSegments = gridViewUrl.pathSegments;
-      Uri url = gridViewUrl.replace(
-        pathSegments: [
-          ...gridViewUrlString
-              .substring(0, gridViewUrlString.indexOf('/views'))
-              .split('/'),
-          'entities'
-        ],
-        queryParameters: {
-          'viewId': gridViewUrlPathSegments[
-              gridViewUrlPathSegments.indexOf('views') + 1],
-          'layout': 'indexed',
-        },
-      );
-      // Apply Sorting
-      if (sorting != null) {
-        final queryParams = Map<String, dynamic>.from(url.queryParameters);
-        queryParams['sorting'] =
-            jsonEncode(sorting.map((e) => e.toRequestObject()).toList());
-        url = url.replace(queryParameters: queryParams);
-      }
+    final entities = entitiesResponse.items;
+    final gridToParse = jsonDecode(gridViewResponse.body);
+    gridToParse['entities'] = entities;
+    return Grid.fromJson(gridToParse);
+  }
 
-      // Apply Filter
-      if (filter != null) {
-        final queryParams = Map<String, dynamic>.from(url.queryParameters);
-        queryParams['filter'] = jsonEncode(filter.toJson());
-        url = url.replace(queryParameters: queryParams);
-      }
+  /// Load Entities of a Grid that are accessed by [uri]
+  /// [viewId] specifies allows to request the entities of a specific GridView which allows for getting Filters/Sorting that was applied from the web client
+  ///
+  /// if [layout] is not set the items will be a Map<String, dynamic> with the keys being the fieldIds and the value being the values as json objects
+  /// `indexed` layout will return the items in the following format:
+  /// ```
+  /// {
+  ///   "fields": [
+  ///     `jsonValue of First Column`,
+  ///     `jsonValue of Second Column`,
+  ///     `jsonValue of Third Column`,
+  ///     `jsonValue of Fourth Column`,
+  ///     ...
+  ///   ]
+  /// }
+  /// ```
+  ///
+  /// [sorting] allows to apply custom sorting
+  /// [filter] allows to get custom filters
+  Future<EntitiesResponse<T>> loadEntities<T>({
+    required Uri uri,
+    String? viewId,
+    String? layout,
+    List<ApptiveGridSorting>? sorting,
+    ApptiveGridFilter? filter,
+  }) async {
+    final baseUrl = Uri.parse(options.environment.url);
+    final requestUri = uri.replace(
+      scheme: baseUrl.scheme,
+      host: baseUrl.host,
+      queryParameters: Map.from(uri.queryParameters)
+        ..addAll({
+          if (viewId != null) 'viewId': viewId,
+          if (layout != null) 'layout': layout,
+          if (sorting != null)
+            'sorting':
+                jsonEncode(sorting.map((e) => e.toRequestObject()).toList()),
+          if (filter != null) 'filter': jsonEncode(filter.toJson()),
+        }),
+    );
 
-      final response = await _client.get(url, headers: headers);
-      if (response.statusCode >= 400) {
-        throw response;
-      }
-      final entities = json.decode(response.body);
-      final gridToParse = initialGrid.toJson();
-      gridToParse['entities'] = entities;
-      return Grid.fromJson(gridToParse);
+    final response = await _client.get(requestUri, headers: headers);
+
+    if (response.statusCode >= 400) {
+      throw response;
+    }
+
+    final decodedResponse = jsonDecode(response.body);
+    if (decodedResponse is List) {
+      return EntitiesResponse(items: decodedResponse.cast<T>());
     } else {
-      return initialGrid;
+      // Preparation for Paging
+      return EntitiesResponse(items: decodedResponse['items']);
     }
   }
 

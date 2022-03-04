@@ -191,6 +191,20 @@ void main() {
         ),
       ).thenAnswer((_) async => response);
 
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities?layout=indexed',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          jsonEncode(rawResponse['entities']),
+          200,
+        ),
+      );
+
       final grid = await apptiveGridClient.loadGrid(
         gridUri: GridUri(
           user: user,
