@@ -71,6 +71,17 @@ class _ApptiveGridState extends State<ApptiveGrid> {
   }
 
   @override
+  void didUpdateWidget(covariant ApptiveGrid oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.options != widget.options) {
+      setState(() {
+        _client.options = widget.options;
+        _client.updateEnvironment(widget.options.environment);
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
