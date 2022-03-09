@@ -59,27 +59,34 @@ class ApptiveGridAuthenticator {
 
   /// Override the token for testing purposes
   @visibleForTesting
-  void setToken(TokenResponse? token) => _token = token;
+  Future<void> setToken(TokenResponse? token) async {
+    if (token != null) {
+      _token = token;
+      final client = await _client;
+      final credential = Credential.fromJson({
+        'issuer': client.issuer.metadata.toJson(),
+        'client_id': client.clientId,
+        'client_secret': client.clientSecret,
+        'token': token.toJson(),
+      });
+      setCredential(credential);
+    } else {
+      _token = null;
+      await setCredential(null);
+    }
+  }
 
   /// Authenticates by setting a token
   /// [tokenResponse] needs to be a JWT
   Future<void> setUserToken(Map<String, dynamic> tokenResponse) async {
     final token = TokenResponse.fromJson(tokenResponse);
-    final client = await _client;
-    final credential = Credential.fromJson({
-      'issuer': client.issuer.metadata.toJson(),
-      'client_id': client.clientId,
-      'client_secret': client.clientSecret,
-      'token': token.toJson(),
-    });
-    setCredential(credential);
     setToken(token);
   }
 
   /// Override the Credential for testing purposes
   @visibleForTesting
-  void setCredential(Credential? credential) {
-    _authenticationStorage?.saveCredential(
+  Future<void> setCredential(Credential? credential) async {
+    await _authenticationStorage?.saveCredential(
       credential != null ? jsonEncode(credential.toJson()) : null,
     );
     _credential = credential;
@@ -126,9 +133,9 @@ class ApptiveGridAuthenticator {
                 )
               : null,
         );
-    setCredential(await authenticator.authorize());
+    await setCredential(await authenticator.authorize());
 
-    setToken(await _credential?.getTokenResponse());
+    await setToken(await _credential?.getTokenResponse());
 
     try {
       await closeWebView();
@@ -205,7 +212,9 @@ class ApptiveGridAuthenticator {
       });
     } else if ((_token?.expiresAt?.difference(DateTime.now()).inSeconds ?? 0) <
         70) {
-      setToken(await _credential?.getTokenResponse(true));
+      final newToken = await _credential?.getTokenResponse(true);
+      debugPrint('Refreshed Token: $newToken');
+      await setToken(newToken);
     }
   }
 
@@ -226,8 +235,8 @@ class ApptiveGridAuthenticator {
       }
     } catch (_) {
     } finally {
-      setToken(null);
-      setCredential(null);
+      await setToken(null);
+      await setCredential(null);
       _authClient = null;
     }
 

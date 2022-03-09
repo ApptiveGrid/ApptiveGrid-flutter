@@ -9,8 +9,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:openid_client/openid_client.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import 'mocks.dart';
@@ -25,7 +25,8 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(Uri());
-
+  });
+  setUp(() {
     final mockUniLink = MockUniLinks();
     UniLinksPlatform.instance = mockUniLink;
     streamController = StreamController<String?>.broadcast();
@@ -33,7 +34,7 @@ void main() {
         .thenAnswer((_) => streamController.stream);
   });
 
-  tearDownAll(() {
+  tearDown(() {
     authenticator.dispose();
     streamController.close();
   });
@@ -75,17 +76,19 @@ void main() {
       // Mock AuthBackend Return a new Token
       final mockAuthBackend = MockAuthenticator();
       authenticator.testAuthenticator = mockAuthBackend;
-      final client = MockAuthClient();
-      authenticator.setAuthClient(client);
       final credential = MockCredential();
       final newToken = TokenResponse.fromJson(
         {'token_type': 'Bearer', 'access_token': '12345'},
       );
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
+      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.clientId).thenReturn('clientId');
       when(() => mockAuthBackend.authorize())
           .thenAnswer((invocation) async => credential);
       when(() => credential.getTokenResponse())
           .thenAnswer((invocation) async => newToken);
-
+      await authenticator.setCredential(credential);
       await authenticator.checkAuthentication();
 
       verify(() => mockAuthBackend.authorize()).called(1);
@@ -100,7 +103,9 @@ void main() {
       final token = MockToken();
       when(() => token.expiresAt)
           .thenReturn(now.subtract(const Duration(seconds: 20)));
-      authenticator.setToken(token);
+      when(() => token.toJson()).thenReturn(<String, dynamic>{});
+
+      await authenticator.setToken(token);
 
       // Mock AuthBackend Return a new Token
       final mockAuthBackend = MockAuthenticator();
@@ -108,7 +113,7 @@ void main() {
       final client = MockAuthClient();
       authenticator.setAuthClient(client);
       final credential = MockCredential();
-      authenticator.setCredential(credential);
+      await authenticator.setCredential(credential);
       final newToken = TokenResponse.fromJson(
         {'token_type': 'Bearer', 'access_token': '12345'},
       );
@@ -119,6 +124,8 @@ void main() {
           expiresAt: any(named: 'expiresAt'),
         ),
       ).thenReturn(credential);
+      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.clientId).thenReturn('clientId');
       when(() => mockAuthBackend.authorize())
           .thenAnswer((invocation) async => credential);
       when(() => credential.getTokenResponse(any()))
@@ -160,11 +167,26 @@ void main() {
       UrlLauncherPlatform.instance = urlLauncher;
 
       authenticator = ApptiveGridAuthenticator();
+
       final authClient = MockAuthClient();
       when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
       when(() => authClient.clientId).thenReturn('Id');
+      when(() => authClient.httpClient).thenReturn(MockHttpClient());
       authenticator.setAuthClient(authClient);
-      unawaited(authenticator.authenticate());
+
+      final testAuthenticator = MockAuthenticator();
+      final credential = MockCredential();
+      final token = MockToken();
+      when(() => token.toJson()).thenReturn(<String, dynamic>{});
+      when(() => credential.getTokenResponse())
+          .thenAnswer((invocation) async => token);
+      authenticator.testAuthenticator = testAuthenticator;
+      when(() => testAuthenticator.authorize()).thenAnswer((invocation) async {
+        launch(_zweidenkerIssuer.metadata.tokenEndpoint.toString());
+        return credential;
+      });
+
+      await authenticator.authenticate();
       final launchedUrl = await completer.future;
       expect(
         launchedUrl
@@ -211,6 +233,8 @@ void main() {
           .thenAnswer((invocation) async => newToken);
       final authClient = MockAuthClient();
       when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.clientId).thenReturn('Id');
+      when(() => authClient.httpClient).thenReturn(MockHttpClient());
       authenticator.setAuthClient(authClient);
       await authenticator.authenticate();
     });
@@ -251,6 +275,8 @@ void main() {
           .thenAnswer((invocation) async => newToken);
       final authClient = MockAuthClient();
       when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.clientId).thenReturn('Id');
+      when(() => authClient.httpClient).thenReturn(MockHttpClient());
       authenticator.setAuthClient(authClient);
       await authenticator.authenticate();
     });
@@ -286,11 +312,17 @@ void main() {
       final logoutUri = Uri.parse('https://log.me/out');
 
       final credential = MockCredential();
-      authenticator.setCredential(credential);
+      await authenticator.setCredential(credential);
       final token = TokenResponse.fromJson(
         {'token_type': 'Bearer', 'access_token': '12345'},
       );
-      authenticator.setToken(token);
+
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
+      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.clientId).thenReturn('clientId');
+
+      await authenticator.setToken(token);
 
       when(() => credential.generateLogoutUrl())
           .thenAnswer((invocation) => logoutUri);
@@ -317,11 +349,17 @@ void main() {
       final logoutUri = Uri.parse('https://log.me/out');
 
       final credential = MockCredential();
-      authenticator.setCredential(credential);
+      await authenticator.setCredential(credential);
       final token = TokenResponse.fromJson(
         {'token_type': 'Bearer', 'access_token': '12345'},
       );
-      authenticator.setToken(token);
+
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
+      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.clientId).thenReturn('clientId');
+
+      await authenticator.setToken(token);
 
       when(() => credential.generateLogoutUrl())
           .thenAnswer((invocation) => logoutUri);
@@ -350,7 +388,8 @@ void main() {
         final token = TokenResponse.fromJson(
           {'token_type': 'Bearer', 'access_token': '12345'},
         );
-        authenticator.setToken(token);
+
+        await authenticator.setToken(token);
 
         expect(await authenticator.isAuthenticated, true);
       });
@@ -380,7 +419,8 @@ void main() {
         final token = TokenResponse.fromJson(
           {'token_type': 'Bearer', 'access_token': '12345'},
         );
-        authenticator.setToken(token);
+
+        await authenticator.setToken(token);
 
         expect(await authenticator.isAuthenticatedWithToken, true);
       });
@@ -483,9 +523,24 @@ void main() {
       ).thenReturn(credential);
 
       final completer = Completer<Credential>();
-      unawaited(
-        authenticator.authenticate().then((value) => completer.complete(value)),
-      );
+
+      final testAuthenticator = MockAuthenticator();
+      final mockCredential = MockCredential();
+      final token = MockToken();
+      when(() => token.toJson()).thenReturn(<String, dynamic>{});
+      when(() => mockCredential.getTokenResponse())
+          .thenAnswer((invocation) async => token);
+      authenticator.testAuthenticator = testAuthenticator;
+      when(() => testAuthenticator.authorize()).thenAnswer((invocation) async {
+        //launch(_zweidenkerIssuer.metadata.tokenEndpoint.toString());
+        completer.complete(mockCredential);
+        urlCompleter.complete('state');
+        return mockCredential;
+      });
+      when(() => testAuthenticator.processResult(any()))
+          .thenAnswer((_) async {});
+
+      await authenticator.authenticate();
       final state = await urlCompleter.future;
       final responseMap = {
         'state': state,
@@ -496,14 +551,7 @@ void main() {
           Uri(scheme: customScheme, queryParameters: responseMap, host: 'host');
 
       streamController.add(uri.toString());
-      final completerResult = await completer.future;
-      final resultCredential = await completerResult
-          .getTokenResponse()
-          .timeout(const Duration(seconds: 5));
-      final credentialToken = await credential
-          .getTokenResponse()
-          .timeout(const Duration(seconds: 5));
-      expect(resultCredential, equals(credentialToken));
+      verify(() => testAuthenticator.processResult(responseMap)).called(1);
     });
   });
 
@@ -583,6 +631,11 @@ void main() {
 
       authenticator.testAuthenticator = testAuthenticator;
 
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
+      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.clientId).thenReturn('clientId');
+
       await authenticator.authenticate();
 
       verify(() => storage.saveCredential(jsonEncode(jsonCredential)))
@@ -649,6 +702,11 @@ void main() {
         httpClient: httpClient,
       );
       authenticator.testAuthenticator = testAuthenticator;
+
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
+      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.clientId).thenReturn('clientId');
 
       when(() => storage.credential)
           .thenAnswer((invocation) => jsonEncode(credential.toJson()));
@@ -726,6 +784,11 @@ void main() {
           .thenAnswer((_) async => authCredential);
       when(() => authCredential.toJson()).thenReturn({});
 
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
+      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.clientId).thenReturn('clientId');
+
       await authenticator.checkAuthentication();
 
       verify(testAuthenticator.authorize).called(1);
@@ -764,12 +827,19 @@ void main() {
       authenticator.testAuthenticator = testAuthenticator;
 
       final credential = MockCredential();
+      final token = MockToken();
       when(() => credential.toJson()).thenAnswer((_) => <String, dynamic>{});
       when(() => credential.getTokenResponse(any()))
-          .thenAnswer((_) async => MockToken());
+          .thenAnswer((_) async => token);
+      when(() => token.toJson()).thenReturn(<String, dynamic>{});
       when(() => testAuthenticator.authorize())
           .thenAnswer((invocation) async => credential);
       when(() => storage.credential).thenAnswer((_) => null);
+
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
+      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.clientId).thenReturn('clientId');
 
       await authenticator.checkAuthentication();
 
@@ -819,10 +889,17 @@ void main() {
       );
       authenticator.testAuthenticator = testAuthenticator;
 
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
+      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.clientId).thenReturn('clientId');
+
       final credential = MockCredential();
+      final token = MockToken();
       when(() => credential.toJson()).thenAnswer((_) => <String, dynamic>{});
-      when(() => credential.getTokenResponse())
-          .thenAnswer((_) async => MockToken());
+      when(() => credential.getTokenResponse(any()))
+          .thenAnswer((_) async => token);
+      when(() => token.toJson()).thenReturn(<String, dynamic>{});
       when(() => testAuthenticator.authorize())
           .thenAnswer((invocation) async => credential);
 
@@ -834,7 +911,9 @@ void main() {
           value: any(named: 'value'),
           options: any(named: 'options'),
         ),
-      ).called(2); // Creation of Authenticator reloads credential
+      ).called(
+        4, // Creation of Authenticator reloads credential, Setting token also saves credential
+      );
       verify(
         () => secureStorage.read(
           key: any(named: 'key'),
