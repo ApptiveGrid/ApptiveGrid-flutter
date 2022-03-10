@@ -18,6 +18,10 @@
 * Fix required validation not working for all types if Form has initial data
 * Fix stretched submit Loading Indicator
 
+## [0.9.0-alpha.12]
+* Add * to label of required fields
+* Fix bug where required fields where not validated for long forms
+
 ## [0.9.0-alpha.11]
 * Use `apptive_grid_core: ^0.9.0`
 * Fix stretched submit Loading Indicator

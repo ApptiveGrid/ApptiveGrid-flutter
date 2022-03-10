@@ -1,6 +1,8 @@
 ## 0.9.1+1
 * Fix entities not checking for authentication
 * Store new Token after refreshing
+* Only check for authentication when loading grids if initial loading returned 401
+* Adjust required values for CrossReferenceDataEntities (Display Value is not necessary)
 
 ## 0.9.1
 * Add call to load entities directly
