@@ -81,35 +81,81 @@ void main() {
   });
 
   group('DataEntity', () {
-    test('Equality', () {
-      final a = CrossReferenceDataEntity.fromJson(
-        jsonValue: {
-          'displayValue': 'Yeah!',
-          'uri':
-              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
-        },
-        gridUri:
-            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
-      );
-      final b = CrossReferenceDataEntity.fromJson(
-        jsonValue: {
-          'displayValue': 'Yeah!',
-          'uri':
-              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
-        },
-        gridUri:
-            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
-      );
-      final c = CrossReferenceDataEntity.fromJson(
-        jsonValue: null,
-        gridUri:
-            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
-      );
-      expect(a, equals(b));
-      expect(a, isNot(c));
+    group('Equality', () {
+      test('Equality', () {
+        final a = CrossReferenceDataEntity.fromJson(
+          jsonValue: {
+            'displayValue': 'Yeah!',
+            'uri':
+                '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+          },
+          gridUri:
+              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        );
+        final b = CrossReferenceDataEntity.fromJson(
+          jsonValue: {
+            'displayValue': 'Yeah!',
+            'uri':
+                '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+          },
+          gridUri:
+              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        );
+        final c = CrossReferenceDataEntity.fromJson(
+          jsonValue: null,
+          gridUri:
+              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        );
+        expect(a, equals(b));
+        expect(a, isNot(c));
 
-      expect(a.hashCode, equals(b.hashCode));
-      expect(a.hashCode, isNot(c.hashCode));
+        expect(a.hashCode, equals(b.hashCode));
+        expect(a.hashCode, isNot(c.hashCode));
+      });
+    });
+
+    group('Schema Object', () {
+      test('Value and EntityUri are set', () {
+        final entity = CrossReferenceDataEntity(
+          gridUri: GridUri.fromUri('uri'),
+          value: 'Display Value',
+          entityUri: EntityUri.fromUri('entityUri'),
+        );
+
+        expect(
+          entity.schemaValue,
+          equals({
+            'displayValue': 'Display Value',
+            'uri': 'entityUri',
+          }),
+        );
+      });
+
+      test('No Value still produces object if EntityUri is set', () {
+        final entity = CrossReferenceDataEntity(
+          gridUri: GridUri.fromUri('uri'),
+          value: null,
+          entityUri: EntityUri.fromUri('entityUri'),
+        );
+
+        expect(
+          entity.schemaValue,
+          equals({
+            'displayValue': '',
+            'uri': 'entityUri',
+          }),
+        );
+      });
+
+      test('No Entity Uri sends null', () {
+        final entity = CrossReferenceDataEntity(
+          gridUri: GridUri.fromUri('uri'),
+          value: 'Display Value',
+          entityUri: null,
+        );
+
+        expect(entity.schemaValue, isNull);
+      });
     });
   });
 

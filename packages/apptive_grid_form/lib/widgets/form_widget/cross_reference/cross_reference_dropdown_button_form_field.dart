@@ -31,7 +31,11 @@ class _CrossReferenceDropdownButtonFormField<T extends DataEntity>
 }
 
 class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
-    extends State<_CrossReferenceDropdownButtonFormField<T>> {
+    extends State<_CrossReferenceDropdownButtonFormField<T>>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   Grid? _grid;
   dynamic _error;
 
@@ -110,11 +114,15 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
   }
 
   void requestRebuild() {
-    setState(() {});
+    setState(() {
+      (_overlayKey.currentState as FormFieldState?)
+          ?.didChange(widget.component.data.value);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DropdownButtonFormField<dynamic>(
       key: _overlayKey,
       isExpanded: true,
@@ -126,7 +134,15 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       },
       validator: (value) {
         if (widget.component.required &&
-            (value == null || (value is List && value.isEmpty))) {
+            ((T == CrossReferenceDataEntity &&
+                    (widget.component.data as CrossReferenceDataEntity?)
+                            ?.entityUri ==
+                        null) ||
+                (T == MultiCrossReferenceDataEntity &&
+                    (widget.component.data as MultiCrossReferenceDataEntity?)
+                            ?.value
+                            ?.isEmpty ==
+                        true))) {
           return ApptiveGridLocalization.of(context)!
               .fieldIsRequired(widget.component.property);
         } else {
@@ -136,10 +152,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       selectedItemBuilder: _selectedItems,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       value: widget.component.data.value,
-      decoration: InputDecoration(
-        helperText: widget.component.options.description,
-        helperMaxLines: 100,
-        labelText: widget.component.options.label ?? widget.component.property,
+      decoration: widget.component.baseDecoration.copyWith(
         errorText: _error?.toString(),
       ),
     );

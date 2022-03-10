@@ -15,9 +15,14 @@ class AttachmentFormWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _AttachmentFormWidgetState();
 }
 
-class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
+class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Provider(
       create: (_) => const PermissionManager(),
       child: FormField<AttachmentDataEntity>(
@@ -34,12 +39,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
         initialValue: widget.component.data,
         builder: (formState) {
           return InputDecorator(
-            decoration: InputDecoration(
-              label: Text(
-                widget.component.options.label ?? widget.component.property,
-              ),
-              helperText: widget.component.options.description,
-              helperMaxLines: 100,
+            decoration: widget.component.baseDecoration.copyWith(
               errorText: formState.errorText,
               contentPadding: EdgeInsets.zero,
               border: InputBorder.none,

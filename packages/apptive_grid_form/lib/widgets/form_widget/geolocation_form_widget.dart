@@ -17,11 +17,16 @@ class GeolocationFormWidget extends StatefulWidget {
   _GeolocationFormWidgetState createState() => _GeolocationFormWidgetState();
 }
 
-class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
+class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
+    with AutomaticKeepAliveClientMixin {
   dynamic _error;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (_error != null) {
       return const Center(
         child: Text(
@@ -68,12 +73,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
             Provider.value(value: const PermissionManager()),
           ],
           builder: (_, __) => InputDecorator(
-            decoration: InputDecoration(
-              label: Text(
-                widget.component.options.label ?? widget.component.property,
-              ),
-              helperText: widget.component.options.description,
-              helperMaxLines: 100,
+            decoration: widget.component.baseDecoration.copyWith(
               errorText: formState.errorText,
               contentPadding: EdgeInsets.zero,
               border: InputBorder.none,

@@ -18,12 +18,17 @@ class DateTimeFormWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _DateTimeFormWidgetState();
 }
 
-class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
+class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (widget.component.data.value != null) {
       final locale = Localizations.maybeLocaleOf(context)?.toString();
       final dateFormat = DateFormat.yMd(locale);
@@ -47,11 +52,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget> {
       builder: (state) {
         final localization = ApptiveGridLocalization.of(context)!;
         return InputDecorator(
-          decoration: InputDecoration(
-            helperText: widget.component.options.description,
-            helperMaxLines: 100,
-            labelText:
-                widget.component.options.label ?? widget.component.property,
+          decoration: widget.component.baseDecoration.copyWith(
             errorText: state.errorText,
           ),
           child: Row(

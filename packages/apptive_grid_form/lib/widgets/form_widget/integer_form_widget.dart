@@ -15,8 +15,12 @@ class IntegerFormWidget extends StatefulWidget {
   _IntegerFormWidgetState createState() => _IntegerFormWidgetState();
 }
 
-class _IntegerFormWidgetState extends State<IntegerFormWidget> {
+class _IntegerFormWidgetState extends State<IntegerFormWidget>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController _controller = TextEditingController();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -39,6 +43,7 @@ class _IntegerFormWidgetState extends State<IntegerFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return TextFormField(
       controller: _controller,
       validator: (input) {
@@ -53,12 +58,7 @@ class _IntegerFormWidgetState extends State<IntegerFormWidget> {
       expands: widget.component.options.multi,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       keyboardType: const TextInputType.numberWithOptions(signed: true),
-      decoration: InputDecoration(
-        helperText: widget.component.options.description,
-        helperMaxLines: 100,
-        labelText: widget.component.options.label ?? widget.component.property,
-        hintText: widget.component.options.placeholder,
-      ),
+      decoration: widget.component.baseDecoration,
     );
   }
 }

@@ -15,9 +15,14 @@ class CheckBoxFormWidget extends StatefulWidget {
   _CheckBoxFormWidgetState createState() => _CheckBoxFormWidgetState();
 }
 
-class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
+class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FormField<bool>(
       initialValue: widget.component.data.value,
       validator: (value) {
@@ -65,7 +70,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
                 ),
                 Expanded(
                   child: Text(
-                    widget.component.options.label ?? widget.component.property,
+                    widget.component.baseDecoration.labelText!,
                   ),
                 ),
               ],
