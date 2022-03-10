@@ -8,6 +8,7 @@ void main() async {
     authenticationOptions: ApptiveGridAuthenticationOptions(
       autoAuthenticate: true,
       redirectScheme: 'apptivegrid',
+      persistCredentials: true,
     ),
   );
   await enableWebAuth(options);
@@ -72,11 +73,17 @@ class _UserSection extends StatefulWidget {
 
 class _UserSectionState extends State<_UserSection> {
   Future<User>? _userFuture;
+  late ApptiveGridClient _client;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _userFuture = ApptiveGrid.getClient(context).getMe().then((value) {
+    _client = ApptiveGrid.getClient(context);
+    _reload();
+  }
+
+  Future<void> _reload() async {
+    _userFuture = _client.getMe().then((value) {
       widget.onUserLoaded(value);
       return value;
     });
@@ -93,6 +100,22 @@ class _UserSectionState extends State<_UserSection> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          child: Text('Logout'),
+                          onPressed: () {
+                            ApptiveGrid.getClient(context, listen: false)
+                                .logout();
+                          },
+                        ),
+                        IconButton(
+                          onPressed: _reload,
+                          icon: Icon(Icons.refresh),
+                        )
+                      ],
+                    ),
                     Text('${user.firstName} ${user.lastName}'),
                     Text(user.email),
                   ],

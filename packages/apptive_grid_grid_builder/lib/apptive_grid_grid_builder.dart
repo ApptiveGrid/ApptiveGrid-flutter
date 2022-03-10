@@ -58,7 +58,8 @@ class ApptiveGridGridBuilderState extends State<ApptiveGridGridBuilder> {
   void didUpdateWidget(covariant ApptiveGridGridBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!listEquals(oldWidget.sorting, widget.sorting) ||
-        oldWidget.filter != widget.filter) {
+        oldWidget.filter != widget.filter ||
+        oldWidget.gridUri != widget.gridUri) {
       reload(listen: false);
     }
   }

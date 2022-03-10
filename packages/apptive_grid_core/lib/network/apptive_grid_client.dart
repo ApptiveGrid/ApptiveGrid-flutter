@@ -234,6 +234,7 @@ class ApptiveGridClient {
     List<ApptiveGridSorting>? sorting,
     ApptiveGridFilter? filter,
   }) async {
+    await _authenticator.checkAuthentication();
     final baseUrl = Uri.parse(options.environment.url);
     final requestUri = uri.replace(
       scheme: baseUrl.scheme,

@@ -1,3 +1,7 @@
+## 0.9.1+1
+* Fix entities not checking for authentication
+* Store new Token after refreshing
+
 ## 0.9.1
 * Add call to load entities directly
 
