@@ -117,37 +117,42 @@ void main() {
     group('Schema Object', () {
       test('Value and EntityUri are set', () {
         final entity = CrossReferenceDataEntity(
-            gridUri: GridUri.fromUri('uri'),
-            value: 'Display Value',
-            entityUri: EntityUri.fromUri('entityUri'));
+          gridUri: GridUri.fromUri('uri'),
+          value: 'Display Value',
+          entityUri: EntityUri.fromUri('entityUri'),
+        );
 
         expect(
-            entity.schemaValue,
-            equals({
-              'displayValue': 'Display Value',
-              'uri': 'entityUri',
-            }));
+          entity.schemaValue,
+          equals({
+            'displayValue': 'Display Value',
+            'uri': 'entityUri',
+          }),
+        );
       });
 
       test('No Value still produces object if EntityUri is set', () {
         final entity = CrossReferenceDataEntity(
-            gridUri: GridUri.fromUri('uri'),
-            value: null,
-            entityUri: EntityUri.fromUri('entityUri'));
+          gridUri: GridUri.fromUri('uri'),
+          value: null,
+          entityUri: EntityUri.fromUri('entityUri'),
+        );
 
         expect(
-            entity.schemaValue,
-            equals({
-              'displayValue': '',
-              'uri': 'entityUri',
-            }));
+          entity.schemaValue,
+          equals({
+            'displayValue': '',
+            'uri': 'entityUri',
+          }),
+        );
       });
 
       test('No Entity Uri sends null', () {
         final entity = CrossReferenceDataEntity(
-            gridUri: GridUri.fromUri('uri'),
-            value: 'Display Value',
-            entityUri: null);
+          gridUri: GridUri.fromUri('uri'),
+          value: 'Display Value',
+          entityUri: null,
+        );
 
         expect(entity.schemaValue, isNull);
       });

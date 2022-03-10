@@ -184,7 +184,11 @@ class ApptiveGridClient {
       if (gridViewResponse.statusCode == 401 && !isRetry) {
         await _authenticator.checkAuthentication();
         return loadGrid(
-            gridUri: gridUri, sorting: sorting, filter: filter, isRetry: true);
+          gridUri: gridUri,
+          sorting: sorting,
+          filter: filter,
+          isRetry: true,
+        );
       }
       throw gridViewResponse;
     }
