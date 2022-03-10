@@ -175,12 +175,17 @@ class ApptiveGridClient {
     required GridUri gridUri,
     List<ApptiveGridSorting>? sorting,
     ApptiveGridFilter? filter,
+    bool isRetry = false,
   }) async {
-    await _authenticator.checkAuthentication();
     final gridViewUrl = _generateApptiveGridUri(gridUri);
 
     final gridViewResponse = await _client.get(gridViewUrl, headers: headers);
     if (gridViewResponse.statusCode >= 400) {
+      if (gridViewResponse.statusCode == 401 && !isRetry) {
+        await _authenticator.checkAuthentication();
+        return loadGrid(
+            gridUri: gridUri, sorting: sorting, filter: filter, isRetry: true);
+      }
       throw gridViewResponse;
     }
 
