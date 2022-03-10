@@ -53,12 +53,7 @@ class _IntegerFormWidgetState extends State<IntegerFormWidget> {
       expands: widget.component.options.multi,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       keyboardType: const TextInputType.numberWithOptions(signed: true),
-      decoration: InputDecoration(
-        helperText: widget.component.options.description,
-        helperMaxLines: 100,
-        labelText: widget.component.options.label ?? widget.component.property,
-        hintText: widget.component.options.placeholder,
-      ),
+      decoration: widget.component.baseDecoration,
     );
   }
 }

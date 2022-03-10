@@ -136,10 +136,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       selectedItemBuilder: _selectedItems,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       value: widget.component.data.value,
-      decoration: InputDecoration(
-        helperText: widget.component.options.description,
-        helperMaxLines: 100,
-        labelText: widget.component.options.label ?? widget.component.property,
+      decoration: widget.component.baseDecoration.copyWith(
         errorText: _error?.toString(),
       ),
     );

@@ -68,12 +68,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget> {
             Provider.value(value: const PermissionManager()),
           ],
           builder: (_, __) => InputDecorator(
-            decoration: InputDecoration(
-              label: Text(
-                widget.component.options.label ?? widget.component.property,
-              ),
-              helperText: widget.component.options.description,
-              helperMaxLines: 100,
+            decoration: widget.component.baseDecoration.copyWith(
               errorText: formState.errorText,
               contentPadding: EdgeInsets.zero,
               border: InputBorder.none,

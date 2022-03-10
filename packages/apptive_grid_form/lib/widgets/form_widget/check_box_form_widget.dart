@@ -65,7 +65,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget> {
                 ),
                 Expanded(
                   child: Text(
-                    widget.component.options.label ?? widget.component.property,
+                    widget.component.baseDecoration.labelText!,
                   ),
                 ),
               ],

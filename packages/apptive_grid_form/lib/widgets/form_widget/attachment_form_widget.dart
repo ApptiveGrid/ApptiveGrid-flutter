@@ -34,12 +34,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
         initialValue: widget.component.data,
         builder: (formState) {
           return InputDecorator(
-            decoration: InputDecoration(
-              label: Text(
-                widget.component.options.label ?? widget.component.property,
-              ),
-              helperText: widget.component.options.description,
-              helperMaxLines: 100,
+            decoration: widget.component.baseDecoration.copyWith(
               errorText: formState.errorText,
               contentPadding: EdgeInsets.zero,
               border: InputBorder.none,
