@@ -15,9 +15,14 @@ class AttachmentFormWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _AttachmentFormWidgetState();
 }
 
-class _AttachmentFormWidgetState extends State<AttachmentFormWidget> {
+class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Provider(
       create: (_) => const PermissionManager(),
       child: FormField<AttachmentDataEntity>(

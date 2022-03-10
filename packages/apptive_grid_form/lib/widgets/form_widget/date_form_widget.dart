@@ -17,12 +17,17 @@ class DateFormWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _DateFormWidgetState();
 }
 
-class _DateFormWidgetState extends State<DateFormWidget> {
+class _DateFormWidgetState extends State<DateFormWidget>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController _controller = TextEditingController();
   final GlobalKey<FormFieldState> _formKey = GlobalKey<FormFieldState>();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final locale = Localizations.maybeLocaleOf(context)?.toString();
     final dateFormat = DateFormat.yMd(locale);
     if (widget.component.data.value != null) {

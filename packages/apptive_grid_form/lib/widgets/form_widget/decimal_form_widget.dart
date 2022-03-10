@@ -15,8 +15,12 @@ class DecimalFormWidget extends StatefulWidget {
   _DecimalFormWidgetState createState() => _DecimalFormWidgetState();
 }
 
-class _DecimalFormWidgetState extends State<DecimalFormWidget> {
+class _DecimalFormWidgetState extends State<DecimalFormWidget>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController _controller = TextEditingController();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -48,6 +52,7 @@ class _DecimalFormWidgetState extends State<DecimalFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return TextFormField(
       controller: _controller,
       validator: (input) {

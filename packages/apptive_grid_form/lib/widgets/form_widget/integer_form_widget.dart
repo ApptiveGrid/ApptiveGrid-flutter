@@ -15,8 +15,12 @@ class IntegerFormWidget extends StatefulWidget {
   _IntegerFormWidgetState createState() => _IntegerFormWidgetState();
 }
 
-class _IntegerFormWidgetState extends State<IntegerFormWidget> {
+class _IntegerFormWidgetState extends State<IntegerFormWidget>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController _controller = TextEditingController();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -39,6 +43,7 @@ class _IntegerFormWidgetState extends State<IntegerFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return TextFormField(
       controller: _controller,
       validator: (input) {

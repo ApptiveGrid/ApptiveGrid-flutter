@@ -15,9 +15,14 @@ class EnumFormWidget extends StatefulWidget {
   _EnumFormWidgetState createState() => _EnumFormWidgetState();
 }
 
-class _EnumFormWidgetState extends State<EnumFormWidget> {
+class _EnumFormWidgetState extends State<EnumFormWidget>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DropdownButtonFormField<String>(
       isExpanded: true,
       items: widget.component.data.options

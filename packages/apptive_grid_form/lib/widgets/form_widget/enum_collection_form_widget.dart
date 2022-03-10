@@ -16,9 +16,14 @@ class EnumCollectionFormWidget extends StatefulWidget {
       _EnumCollectionFormWidgetState();
 }
 
-class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget> {
+class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FormField<EnumCollectionDataEntity>(
       validator: (selection) {
         if (widget.component.required &&

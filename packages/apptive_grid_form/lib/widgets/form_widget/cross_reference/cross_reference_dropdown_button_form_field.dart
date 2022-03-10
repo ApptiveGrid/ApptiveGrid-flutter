@@ -31,7 +31,11 @@ class _CrossReferenceDropdownButtonFormField<T extends DataEntity>
 }
 
 class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
-    extends State<_CrossReferenceDropdownButtonFormField<T>> {
+    extends State<_CrossReferenceDropdownButtonFormField<T>>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   Grid? _grid;
   dynamic _error;
 
@@ -115,6 +119,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DropdownButtonFormField<dynamic>(
       key: _overlayKey,
       isExpanded: true,
