@@ -114,7 +114,10 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
   }
 
   void requestRebuild() {
-    setState(() {});
+    setState(() {
+      (_overlayKey.currentState as FormFieldState?)
+          ?.didChange(widget.component.data.value);
+    });
   }
 
   @override
@@ -131,7 +134,15 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       },
       validator: (value) {
         if (widget.component.required &&
-            (value == null || (value is List && value.isEmpty))) {
+            ((T == CrossReferenceDataEntity &&
+                    (widget.component.data as CrossReferenceDataEntity?)
+                            ?.entityUri ==
+                        null) ||
+                (T == MultiCrossReferenceDataEntity &&
+                    (widget.component.data as MultiCrossReferenceDataEntity?)
+                            ?.value
+                            ?.isEmpty ==
+                        true))) {
           return ApptiveGridLocalization.of(context)!
               .fieldIsRequired(widget.component.property);
         } else {
