@@ -218,10 +218,10 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 
   @override
   dynamic get schemaValue {
-    if (value == null || entityUri == null) {
+    if (entityUri == null) {
       return null;
     } else {
-      return {'displayValue': value, 'uri': entityUri?.uri.toString()};
+      return {'displayValue': value ?? '', 'uri': entityUri!.uri.toString()};
     }
   }
 
