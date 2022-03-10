@@ -95,6 +95,14 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
   FormData? get currentData => _dataKey.currentState?.currentData;
 
   @override
+  void didUpdateWidget(covariant ApptiveGridForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.formUri != oldWidget.formUri) {
+      _loadForm();
+    }
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _client = ApptiveGrid.getClient(context);
