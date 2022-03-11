@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_core/apptive_grid_network.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage_platform_interface/flutter_secure_storage_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
