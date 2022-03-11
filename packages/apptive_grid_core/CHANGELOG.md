@@ -1,3 +1,6 @@
+## 0.9.2
+* Hide `ContentType` in export of Network Package
+
 ## 0.9.1+1
 * Fix entities not checking for authentication
 * Store new Token after refreshing
