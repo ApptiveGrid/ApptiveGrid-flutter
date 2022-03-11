@@ -3,7 +3,6 @@ import 'package:apptive_grid_user_management/src/email_form_field.dart';
 import 'package:apptive_grid_user_management/src/password_form_field.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:password_rule_check/password_rule_check.dart';
 

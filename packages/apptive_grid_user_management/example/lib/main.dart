@@ -15,34 +15,34 @@ class MyApp extends StatelessWidget {
       options: const ApptiveGridOptions(
         environment: ApptiveGridEnvironment.alpha,
       ),
-      child: Builder(
-        builder: (context) {
-          return ApptiveGridUserManagement(
-            group: 'YOUR_USER_GROUP',
-            clientId: 'app',
-            confirmAccountPrompt: (confirmWidget) {
-              // Show [confirmWidget] to allow Users to confirm their account
-            },
-            onAccountConfirmed: (loggedIn) {
-              // Account was confirmed
-              // go to login screen if [loggedIn] is false
-            },
-            child: MaterialApp(
-              title: 'Apptive Grid User Management Example',
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-              ),
-              home: const LoginRegistrationPage(),
+      child: Builder(builder: (context) {
+        return ApptiveGridUserManagement(
+          group: 'YOUR_USER_GROUP',
+          clientId: 'app',
+          confirmAccountPrompt: (confirmWidget) {
+            // Show [confirmWidget] to allow Users to confirm their account
+          },
+          onAccountConfirmed: (loggedIn) {
+            // Account was confirmed
+            // go to login screen if [loggedIn] is false
+          },
+          child: MaterialApp(
+            title: 'Apptive Grid User Management Example',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
             ),
-          );
-        }
-      ),
+            home: const LoginRegistrationPage(),
+          ),
+        );
+      }),
     );
   }
 }
 
 class LoginRegistrationPage extends StatelessWidget {
-  const LoginRegistrationPage({Key? key,}) : super(key: key);
+  const LoginRegistrationPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +55,10 @@ class LoginRegistrationPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(8),
             child: Card(
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: ApptiveGridUserManagementContent(),
-              )
-            ),
+                child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: ApptiveGridUserManagementContent(),
+            )),
           ),
         ],
       ),
