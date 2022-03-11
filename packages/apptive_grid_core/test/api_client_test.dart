@@ -1628,4 +1628,141 @@ void main() {
       );
     });
   });
+
+  group('Profile Picture', () {
+    late Client httpClient;
+
+    final user = User(
+      email: 'email',
+      lastName: 'lastName',
+      firstName: 'firstName',
+      id: 'userId',
+      spaces: [],
+    );
+
+    group('Errors', () {
+      test('Getting upload Url fails, throws response', () async {
+        httpClient = MockHttpClient();
+        apptiveGridClient = ApptiveGridClient.fromClient(httpClient);
+        final response = Response('Error Response', 400);
+
+        when(() => httpClient.get(any(), headers: any(named: 'headers')))
+            .thenAnswer((invocation) async {
+          if ((invocation.positionalArguments.first as Uri)
+              .path
+              .endsWith('users/me')) {
+            return Response(jsonEncode(user.toJson()), 200);
+          } else {
+            return response;
+          }
+        });
+
+        expect(
+          () => apptiveGridClient.uploadProfilePicture(
+            bytes: Uint8List(0),
+          ),
+          throwsA(equals(response)),
+        );
+      });
+
+      test('Putting content fails, throws response', () async {
+        httpClient = MockHttpClient();
+        apptiveGridClient = ApptiveGridClient.fromClient(httpClient);
+        final uploadUrlResponse = Response('{"uploadURL": "uploadUrl"}', 200);
+        final errorResponse = Response('Error Response', 400);
+
+        when(() => httpClient.get(any(), headers: any(named: 'headers')))
+            .thenAnswer((invocation) async {
+          if ((invocation.positionalArguments.first as Uri)
+              .path
+              .endsWith('users/me')) {
+            return Response(jsonEncode(user.toJson()), 200);
+          } else {
+            return uploadUrlResponse;
+          }
+        });
+
+        when(
+          () => httpClient.put(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          ),
+        ).thenAnswer((_) async => errorResponse);
+
+        expect(
+          () => apptiveGridClient.uploadProfilePicture(
+            bytes: Uint8List(0),
+          ),
+          throwsA(equals(errorResponse)),
+        );
+      });
+    });
+
+    test('Uploads bytes to retrieved url', () async {
+      httpClient = MockHttpClient();
+      final authenticator = MockApptiveGridAuthenticator();
+      when(() => authenticator.header).thenReturn('Bearer authToken');
+      when(() => authenticator.checkAuthentication()).thenAnswer((_) async {});
+      apptiveGridClient = ApptiveGridClient.fromClient(
+        httpClient,
+        authenticator: authenticator,
+      );
+
+      final uploadUrlResponse = Response('{"uploadURL": "uploadUrl"}', 200);
+      final putResponse = Response('Uploaded Response', 200);
+      final bytes = Uint8List(10);
+
+      when(() => httpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((invocation) async {
+        if ((invocation.positionalArguments.first as Uri)
+            .path
+            .endsWith('users/me')) {
+          return Response(jsonEncode(user.toJson()), 200);
+        } else {
+          return uploadUrlResponse;
+        }
+      });
+
+      when(
+        () => httpClient.put(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => putResponse);
+
+      final response =
+          await apptiveGridClient.uploadProfilePicture(bytes: bytes);
+
+      expect(response, equals(putResponse));
+
+      verify(
+        () => httpClient.get(
+          Uri.parse(
+            'https://6csgir6rcj.execute-api.eu-central-1.amazonaws.com/uploads',
+          ).replace(
+            queryParameters: {
+              'fileName': user.id,
+              'fileType': 'image/jpeg',
+            },
+          ),
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer authToken',
+            HttpHeaders.contentTypeHeader: 'application/json',
+          },
+        ),
+      ).called(1);
+
+      verify(
+        () => httpClient.put(
+          Uri.parse('uploadUrl'),
+          headers: {
+            HttpHeaders.contentTypeHeader: 'image/jpeg',
+          },
+          body: bytes,
+        ),
+      ).called(1);
+    });
+  });
 }

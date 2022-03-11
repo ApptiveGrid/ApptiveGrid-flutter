@@ -561,11 +561,13 @@ class ApptiveGridClient {
     final user = await getMe();
 
     final signedUri = Uri.parse(
-            'https://6csgir6rcj.execute-api.eu-central-1.amazonaws.com/uploads')
-        .replace(queryParameters: {
-      'fileName': user.id,
-      'fileType': 'image/jpeg',
-    });
+      'https://6csgir6rcj.execute-api.eu-central-1.amazonaws.com/uploads',
+    ).replace(
+      queryParameters: {
+        'fileName': user.id,
+        'fileType': 'image/jpeg',
+      },
+    );
 
     final signedResponse = await _client.get(signedUri, headers: headers);
 

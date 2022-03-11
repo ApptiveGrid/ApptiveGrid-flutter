@@ -213,7 +213,6 @@ class ApptiveGridAuthenticator {
     } else if ((_token?.expiresAt?.difference(DateTime.now()).inSeconds ?? 0) <
         70) {
       final newToken = await _credential?.getTokenResponse(true);
-      debugPrint('Refreshed Token: $newToken');
       await setToken(newToken);
     }
   }
