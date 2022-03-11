@@ -1,4 +1,5 @@
 ## 0.9.2
+* Add call to upload Profile Picture
 * Hide `ContentType` in export of Network Package
 
 ## 0.9.1+1
