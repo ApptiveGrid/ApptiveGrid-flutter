@@ -1,4 +1,5 @@
 import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
+import 'package:apptive_grid_user_management/src/email_form_field.dart';
 import 'package:apptive_grid_user_management/src/password_form_field.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
 import 'package:flutter/material.dart';
@@ -47,12 +48,8 @@ class _LoginContentState extends State<LoginContent> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
-          TextFormField(
+          EmailFormField(
             controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              hintText: localization.hintEmail,
-            ),
           ),
           SizedBox(
             height: spacing,
