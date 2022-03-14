@@ -68,7 +68,7 @@ scripts:
   test:coverage:
     run: |
       melos exec -c 1 -- \
-        "mkdir -p coverage && flutter test --coverage && genhtml coverage/lcov.info -o coverage/html"
+        "mkdir -p coverage && flutter test --coverage"
     select-package:
       dir-exists:
         - test
