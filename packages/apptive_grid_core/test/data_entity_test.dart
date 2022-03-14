@@ -90,7 +90,8 @@ void main() {
 
     test('Json is parsed', () {
       final date = DateTime(2020, 3, 3, 12, 12, 12);
-      final entity = DateTimeDataEntity.fromJson(date.toUtc().toIso8601String());
+      final entity =
+          DateTimeDataEntity.fromJson(date.toUtc().toIso8601String());
 
       expect(entity.value, equals(date.toLocal()));
       expect(entity.schemaValue, equals(date.toUtc().toIso8601String()));
