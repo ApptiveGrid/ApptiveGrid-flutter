@@ -2,6 +2,7 @@ library apptive_grid_network;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:apptive_grid_core/apptive_grid_options.dart';

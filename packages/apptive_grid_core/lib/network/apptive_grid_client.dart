@@ -555,4 +555,40 @@ class ApptiveGridClient {
       }
     });
   }
+
+  /// Uploads [bytes] as the Profile Picture for the logged in user
+  Future<http.Response> uploadProfilePicture({required Uint8List bytes}) async {
+    final user = await getMe();
+
+    final signedUri = Uri.parse(
+      'https://6csgir6rcj.execute-api.eu-central-1.amazonaws.com/uploads',
+    ).replace(
+      queryParameters: {
+        'fileName': user.id,
+        'fileType': 'image/jpeg',
+      },
+    );
+
+    final signedResponse = await _client.get(signedUri, headers: headers);
+
+    if (signedResponse.statusCode >= 400) {
+      throw signedResponse;
+    }
+
+    final uploadUrl = Uri.parse(jsonDecode(signedResponse.body)['uploadURL']);
+
+    final uploadResponse = await _client.put(
+      uploadUrl,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'image/jpeg',
+      },
+      body: bytes,
+    );
+
+    if (uploadResponse.statusCode >= 400) {
+      throw uploadResponse;
+    } else {
+      return uploadResponse;
+    }
+  }
 }
