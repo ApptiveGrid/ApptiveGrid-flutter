@@ -81,18 +81,18 @@ void main() {
 
   group('DateTime', () {
     test('Value is set', () {
-      final date = DateTime(2020, 3, 3, 12, 12, 12);
+      final date = DateTime(2020, 3, 3, 12, 12, 12).toLocal();
       final entity = DateTimeDataEntity(date);
 
-      expect(entity.value, equals(date));
+      expect(entity.value?.toLocal(), equals(date));
       expect(entity.schemaValue, equals('2020-03-03T11:12:12.000Z'));
     });
 
     test('Json is parsed', () {
-      final date = DateTime(2020, 3, 3, 12, 12, 12);
+      final date = DateTime(2020, 3, 3, 12, 12, 12).toLocal();
       final entity = DateTimeDataEntity.fromJson('2020-03-03T11:12:12.000Z');
 
-      expect(entity.value, equals(date));
+      expect(entity.value?.toLocal(), equals(date));
       expect(entity.schemaValue, equals('2020-03-03T11:12:12.000Z'));
     });
 
