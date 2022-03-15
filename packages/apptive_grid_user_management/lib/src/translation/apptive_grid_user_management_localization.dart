@@ -90,9 +90,11 @@ class _InheritedApptiveGridUserManagementTranslation extends InheritedWidget {
     return _translations[const Locale.fromSubtags(languageCode: 'en')]!;
   }
 
+  // coverage:ignore-start
   @override
   bool updateShouldNotify(
     _InheritedApptiveGridUserManagementTranslation oldWidget,
   ) =>
       !mapEquals(_translations, oldWidget._translations);
+// coverage:ignore-end
 }
