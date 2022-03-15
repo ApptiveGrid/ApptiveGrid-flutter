@@ -818,4 +818,77 @@ void main() {
       );
     });
   });
+
+  group('Reload', () {
+    testWidgets('Changing Form Uri triggers reload', (tester) async {
+      final firstForm = FormUri.fromUri('/form1');
+      final secondForm = FormUri.fromUri('/form2');
+
+      final globalKey = GlobalKey<_ChangingFormWidgetState>();
+      final client = MockApptiveGridClient();
+
+      when(client.sendPendingActions).thenAnswer((_) async {});
+      when(() => client.loadForm(formUri: any(named: 'formUri'))).thenAnswer(
+        (_) async => FormData(
+          title: 'title',
+          components: [],
+          schema: {},
+        ),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: _ChangingFormWidget(
+          key: globalKey,
+          form1: firstForm,
+          form2: secondForm,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pump();
+
+      globalKey.currentState?._changeForm();
+      await tester.pump();
+
+      verify(() => client.loadForm(formUri: firstForm)).called(1);
+      verify(() => client.loadForm(formUri: secondForm)).called(1);
+    });
+  });
+}
+
+class _ChangingFormWidget extends StatefulWidget {
+  const _ChangingFormWidget({
+    Key? key,
+    required this.form1,
+    required this.form2,
+  }) : super(key: key);
+
+  final FormUri form1;
+  final FormUri form2;
+
+  @override
+  _ChangingFormWidgetState createState() => _ChangingFormWidgetState();
+}
+
+class _ChangingFormWidgetState extends State<_ChangingFormWidget> {
+  late FormUri _displayingUri;
+
+  @override
+  void initState() {
+    super.initState();
+    _displayingUri = widget.form1;
+  }
+
+  void _changeForm() {
+    setState(() {
+      _displayingUri =
+          _displayingUri == widget.form1 ? widget.form2 : widget.form1;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ApptiveGridForm(formUri: _displayingUri);
+  }
 }

@@ -29,7 +29,7 @@ void main() {
   setUp(() {
     httpClient = MockHttpClient();
     locationManager = LocationManager(
-      configuration: GeolocationFormWidgetConfiguration.withHttpClient(
+      configuration: GeolocationFormWidgetConfiguration(
         placesApiKey: 'placesApiKey',
         httpClient: httpClient,
       ),

@@ -119,7 +119,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
     final result = await FilePicker.platform
         .pickFiles(allowMultiple: true, withData: true, type: FileType.any);
 
-    if (result != null || result!.files.isNotEmpty) {
+    if (result != null && result.files.isNotEmpty) {
       final newAttachments = <Attachment>[];
       for (final file in result.files) {
         final attachment = Attachment(

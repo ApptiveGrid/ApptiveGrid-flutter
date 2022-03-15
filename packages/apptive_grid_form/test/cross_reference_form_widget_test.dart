@@ -44,7 +44,7 @@ void main() {
       );
 
       when(() => client.sendPendingActions()).thenAnswer((_) async {});
-      when(() => client.loadGrid(gridUri: gridUri))
+      when(() => client.loadGrid(gridUri: any(named: 'gridUri')))
           .thenAnswer((_) async => grid);
 
       target = TestApp(
@@ -87,6 +87,41 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('First'), findsOneWidget);
+    });
+
+    testWidgets('Strips /views from url', (tester) async {
+      final gridUri =
+          GridUri(user: 'user', space: 'space', grid: 'grid', view: 'view');
+      final testComponent = CrossReferenceFormComponent(
+        property: 'Property',
+        data: CrossReferenceDataEntity(
+          gridUri: gridUri,
+        ),
+        fieldId: 'fieldId',
+        required: true,
+      );
+
+      target = TestApp(
+        client: client,
+        child: Form(
+          key: formKey,
+          child: CrossReferenceFormWidget(component: testComponent),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.arrow_drop_down));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('First').last);
+      await tester.pumpAndSettle();
+
+      expect(
+        testComponent.data.entityUri?.uri.toString(),
+        equals('/api/users/user/spaces/space/grids/grid/entities/row1'),
+      );
     });
 
     testWidgets('Loading Grid has Error, displays error', (tester) async {

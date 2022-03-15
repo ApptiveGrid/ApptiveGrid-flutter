@@ -51,30 +51,28 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                ...(widget.component.data.value?.map(
-                          (attachment) => Row(
-                            children: [
-                              Expanded(
-                                child: Text(attachment.name),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  Provider.of<AttachmentManager>(
-                                    context,
-                                    listen: false,
-                                  ).removeAttachment(attachment);
-                                  widget.component.data.value
-                                      ?.remove(attachment);
-                                  formState.didChange(widget.component.data);
-                                  setState(() {});
-                                },
-                                icon: const Icon(Icons.close),
-                              ),
-                            ],
-                          ),
-                        ) ??
-                        [])
-                    .toList(),
+                if (widget.component.data.value != null)
+                  ...(widget.component.data.value!.map(
+                    (attachment) => Row(
+                      children: [
+                        Expanded(
+                          child: Text(attachment.name),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Provider.of<AttachmentManager>(
+                              context,
+                              listen: false,
+                            ).removeAttachment(attachment);
+                            widget.component.data.value?.remove(attachment);
+                            formState.didChange(widget.component.data);
+                            setState(() {});
+                          },
+                          icon: const Icon(Icons.close),
+                        ),
+                      ],
+                    ),
+                  )).toList(),
                 AddAttachmentButton(
                   onAttachmentsAdded: (newAttachments) =>
                       _attachmentsAdded(newAttachments, formState),
