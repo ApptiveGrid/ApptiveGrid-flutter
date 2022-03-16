@@ -1,3 +1,4 @@
+[![Build](https://github.com/ApptiveGrid/apptive_grid_flutter/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/ApptiveGrid/apptive_grid_flutter/actions/workflows/main.yml?query=branch%3Amain)
 [![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=plastic)](https://github.com/invertase/melos)
 # Flutter Apptivegrid #
 
