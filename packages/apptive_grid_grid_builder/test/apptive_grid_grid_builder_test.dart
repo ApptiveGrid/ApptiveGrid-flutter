@@ -189,6 +189,54 @@ void main() {
     ).called(2);
   });
 
+  group('GridUri', () {
+    testWidgets('Changing GridUri reloads', (tester) async {
+      final uri1 = GridUri.fromUri('/uri1');
+      final uri2 = GridUri.fromUri('/uri2');
+      final target = TestApp(
+        client: client,
+        child: _SortingAndFilterSwitcher(
+          gridUri1: uri1,
+          gridUri2: uri2,
+        ),
+      );
+
+      final title = 'Title';
+      when(
+        () => client.loadGrid(
+          gridUri: any(named: 'gridUri'),
+          filter: any(named: 'filter'),
+        ),
+      ).thenAnswer(
+        (_) async => Grid(
+          name: title,
+          schema: null,
+          fields: [],
+          rows: [],
+        ),
+      );
+
+      await tester.pumpWidget(target);
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => client.loadGrid(
+          gridUri: uri1,
+          filter: any(named: 'filter'),
+        ),
+      ).called(1);
+
+      verify(
+        () => client.loadGrid(
+          gridUri: uri2,
+          filter: any(named: 'filter'),
+        ),
+      ).called(1);
+    });
+  });
+
   group('Sorting', () {
     testWidgets('Sorting is applied', (tester) async {
       final sorting = [
@@ -246,7 +294,7 @@ void main() {
       final target = TestApp(
         client: client,
         child: _SortingAndFilterSwitcher(
-          gridUri: GridUri(user: user, space: space, grid: gridId),
+          gridUri1: GridUri(user: user, space: space, grid: gridId),
           sorting1: sorting,
           sorting2: [
             ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.desc)
@@ -340,7 +388,7 @@ void main() {
       final target = TestApp(
         client: client,
         child: _SortingAndFilterSwitcher(
-          gridUri: GridUri(user: user, space: space, grid: gridId),
+          gridUri1: GridUri(user: user, space: space, grid: gridId),
           filter1: filter1,
           filter2: filter2,
         ),
@@ -383,7 +431,8 @@ class _SortingAndFilterSwitcher extends StatefulWidget {
     this.sorting2,
     this.filter1,
     this.filter2,
-    required this.gridUri,
+    required this.gridUri1,
+    this.gridUri2,
   }) : super(key: key);
 
   final List<ApptiveGridSorting>? sorting1;
@@ -392,7 +441,8 @@ class _SortingAndFilterSwitcher extends StatefulWidget {
   final ApptiveGridFilter? filter1;
   final ApptiveGridFilter? filter2;
 
-  final GridUri gridUri;
+  final GridUri gridUri1;
+  final GridUri? gridUri2;
 
   @override
   _SortingAndFilterSwitcherState createState() =>
@@ -402,12 +452,14 @@ class _SortingAndFilterSwitcher extends StatefulWidget {
 class _SortingAndFilterSwitcherState extends State<_SortingAndFilterSwitcher> {
   late List<ApptiveGridSorting>? _sorting;
   late ApptiveGridFilter? _filter;
+  late GridUri _gridUri;
 
   @override
   void initState() {
     super.initState();
     _sorting = widget.sorting1;
     _filter = widget.filter1;
+    _gridUri = widget.gridUri1;
   }
 
   @override
@@ -419,6 +471,9 @@ class _SortingAndFilterSwitcherState extends State<_SortingAndFilterSwitcher> {
             setState(() {
               _sorting = widget.sorting2;
               _filter = widget.filter2;
+              if (widget.gridUri2 != null) {
+                _gridUri = widget.gridUri2!;
+              }
             });
           },
           child: Text('Switch Sorting'),
@@ -426,7 +481,7 @@ class _SortingAndFilterSwitcherState extends State<_SortingAndFilterSwitcher> {
         ApptiveGridGridBuilder(
           sorting: _sorting,
           filter: _filter,
-          gridUri: widget.gridUri,
+          gridUri: _gridUri,
           builder: (_, __) => const SizedBox(),
         ),
       ],

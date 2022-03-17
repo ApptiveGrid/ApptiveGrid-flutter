@@ -190,6 +190,67 @@ void main() {
         expect(submittedData.value!.first, equals(attachment1));
         expect(submittedData.value!.last, equals(attachment2));
       });
+
+      testWidgets('No Attachment from file picker added, completes',
+          (tester) async {
+        const filename = 'Filename.png';
+        final filePicker = MockFilePicker();
+        final attachmentUri = Uri.parse('attachmenturl.com');
+        when(
+          () => filePicker.pickFiles(
+            dialogTitle: any(named: 'dialogTitle'),
+            allowMultiple: true,
+            withData: true,
+            type: FileType.any,
+          ),
+        ).thenAnswer(
+          (invocation) async => null,
+        );
+        FilePicker.platform = filePicker;
+
+        final action = FormAction('formAction', 'POST');
+        final formData = FormData(
+          title: 'title',
+          components: [
+            AttachmentFormComponent(
+              property: 'property',
+              data: AttachmentDataEntity(),
+              fieldId: 'fieldId',
+            )
+          ],
+          actions: [action],
+          schema: null,
+        );
+        final client = MockApptiveGridClient();
+        when(() => client.sendPendingActions())
+            .thenAnswer((_) => Future.value());
+        when(() => client.performAction(action, any()))
+            .thenAnswer((_) async => Response('body', 200));
+        when(() => client.createAttachmentUrl(filename))
+            .thenReturn(attachmentUri);
+
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridFormData(
+            formData: formData,
+          ),
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+        expect(
+          find.text('Add attachment', skipOffstage: false),
+          findsOneWidget,
+        );
+        await tester.tap(find.text('Add attachment'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Select files'));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(ActionButton));
+
+        await tester.pumpAndSettle();
+      });
     });
 
     group('Gallery', () {

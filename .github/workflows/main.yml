@@ -1,0 +1,70 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+      - uses: bluefireteam/melos-action@v1
+
+      - name: Format, Lint, Publishability
+        run: melos run lint:all
+      - name: Run Tests
+        run: melos run test:all_coverage
+      - name: Core Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v1
+        with:
+          path: ./packages/apptive_grid_core/coverage/lcov.info
+          min_coverage: 97
+      - name: Form Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v1
+        with:
+          path: ./packages/apptive_grid_form/coverage/lcov.info
+      - name: Grid Builder Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v1
+        with:
+          path: ./packages/apptive_grid_grid_builder/coverage/lcov.info
+      - name: User Management Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v1
+        with:
+          path: ./packages/apptive_grid_user_management/coverage/lcov.info
+
+  android_examples:
+    name: Build Android Examples
+    needs: quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+      - uses: bluefireteam/melos-action@v1
+
+      - name: Build Android Examples
+        run: melos run build:android
+
+  ios_examples:
+    name: Build iOS Examples
+    needs: quality
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+      - uses: bluefireteam/melos-action@v1
+
+      - name: Build iOS Examples
+        run: melos run build:ios

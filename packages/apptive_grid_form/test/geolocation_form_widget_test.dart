@@ -35,7 +35,7 @@ void main() {
       final target = TestApp(
         options: ApptiveGridOptions(
           formWidgetConfigurations: [
-            GeolocationFormWidgetConfiguration.withHttpClient(
+            GeolocationFormWidgetConfiguration(
               placesApiKey: 'placesApiKey',
               httpClient: mockGeolocationHttpClient,
             ),
@@ -95,7 +95,7 @@ void main() {
       final target = TestApp(
         options: ApptiveGridOptions(
           formWidgetConfigurations: [
-            GeolocationFormWidgetConfiguration.withHttpClient(
+            GeolocationFormWidgetConfiguration(
               placesApiKey: 'placesApiKey',
               httpClient: mockGeolocationHttpClient,
             ),
@@ -198,7 +198,7 @@ void main() {
       final target = TestApp(
         options: ApptiveGridOptions(
           formWidgetConfigurations: [
-            GeolocationFormWidgetConfiguration.withHttpClient(
+            GeolocationFormWidgetConfiguration(
               placesApiKey: 'placesApiKey',
               httpClient: mockGeolocationHttpClient,
             ),
@@ -295,7 +295,7 @@ void main() {
       final target = TestApp(
         options: ApptiveGridOptions(
           formWidgetConfigurations: [
-            GeolocationFormWidgetConfiguration.withHttpClient(
+            GeolocationFormWidgetConfiguration(
               placesApiKey: 'placesApiKey',
               httpClient: mockGeolocationHttpClient,
             ),
@@ -373,7 +373,7 @@ void main() {
       final target = TestApp(
         options: ApptiveGridOptions(
           formWidgetConfigurations: [
-            GeolocationFormWidgetConfiguration.withHttpClient(
+            GeolocationFormWidgetConfiguration(
               placesApiKey: 'placesApiKey',
               httpClient: mockGeolocationHttpClient,
             ),
@@ -473,7 +473,7 @@ void main() {
       final target = TestApp(
         options: ApptiveGridOptions(
           formWidgetConfigurations: [
-            GeolocationFormWidgetConfiguration.withHttpClient(
+            GeolocationFormWidgetConfiguration(
               placesApiKey: 'placesApiKey',
               httpClient: mockGeolocationHttpClient,
             ),
@@ -601,7 +601,7 @@ void main() {
       final target = TestApp(
         options: ApptiveGridOptions(
           formWidgetConfigurations: [
-            GeolocationFormWidgetConfiguration.withHttpClient(
+            GeolocationFormWidgetConfiguration(
               placesApiKey: 'placesApiKey',
               httpClient: mockGeolocationHttpClient,
             ),
@@ -719,7 +719,7 @@ void main() {
       final target = TestApp(
         options: ApptiveGridOptions(
           formWidgetConfigurations: [
-            GeolocationFormWidgetConfiguration.withHttpClient(
+            GeolocationFormWidgetConfiguration(
               placesApiKey: 'placesApiKey',
               httpClient: mockGeolocationHttpClient,
             ),
@@ -917,7 +917,7 @@ void main() {
       final target = TestApp(
         options: ApptiveGridOptions(
           formWidgetConfigurations: [
-            GeolocationFormWidgetConfiguration.withHttpClient(
+            GeolocationFormWidgetConfiguration(
               placesApiKey: 'placesApiKey',
               httpClient: mockGeolocationHttpClient,
             ),
@@ -1009,7 +1009,7 @@ void main() {
       final target = TestApp(
         options: ApptiveGridOptions(
           formWidgetConfigurations: [
-            GeolocationFormWidgetConfiguration.withHttpClient(
+            GeolocationFormWidgetConfiguration(
               placesApiKey: 'placesApiKey',
               httpClient: mockGeolocationHttpClient,
             ),
@@ -1268,7 +1268,7 @@ void main() {
       final target = TestApp(
         options: ApptiveGridOptions(
           formWidgetConfigurations: [
-            GeolocationFormWidgetConfiguration.withHttpClient(
+            GeolocationFormWidgetConfiguration(
               placesApiKey: 'placesApiKey',
               httpClient: mockGeolocationHttpClient,
             ),
@@ -1416,7 +1416,7 @@ void main() {
       final apptiveGridClient = MockApptiveGridClient();
       final options = ApptiveGridOptions(
         formWidgetConfigurations: [
-          GeolocationFormWidgetConfiguration.withHttpClient(
+          GeolocationFormWidgetConfiguration(
             placesApiKey: 'placesApiKey',
             httpClient: mockGeolocationHttpClient,
           ),

@@ -84,16 +84,17 @@ void main() {
       final date = DateTime(2020, 3, 3, 12, 12, 12);
       final entity = DateTimeDataEntity(date);
 
-      expect(entity.value, equals(date));
-      expect(entity.schemaValue, equals('2020-03-03T11:12:12.000Z'));
+      expect(entity.value, equals(date.toLocal()));
+      expect(entity.schemaValue, equals(date.toUtc().toIso8601String()));
     });
 
     test('Json is parsed', () {
       final date = DateTime(2020, 3, 3, 12, 12, 12);
-      final entity = DateTimeDataEntity.fromJson('2020-03-03T11:12:12.000Z');
+      final entity =
+          DateTimeDataEntity.fromJson(date.toUtc().toIso8601String());
 
-      expect(entity.value, equals(date));
-      expect(entity.schemaValue, equals('2020-03-03T11:12:12.000Z'));
+      expect(entity.value, equals(date.toLocal()));
+      expect(entity.schemaValue, equals(date.toUtc().toIso8601String()));
     });
 
     test('Default is null', () {

@@ -1,7 +1,8 @@
 name: apptive_grid_web_apptive
-description: A Flutter Package to enable Flutter Apptives on ApptiveGrid Web
+description: A Flutter Package to enable Flutter Apptives on ApptiveGrid Web Client
 version: 0.0.2
 homepage: https://apptivegrid.de
+repository: https://github.com/ApptiveGrid/apptive_grid_flutter/tree/main/packages/apptive_grid_web_apptive
 publish_to: none
 
 environment:

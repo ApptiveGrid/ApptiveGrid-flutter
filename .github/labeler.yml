@@ -1,0 +1,6 @@
+p:core: packages/apptive_grid_core/**/*
+p:form: packages/apptive_grid_form/**/*
+p:grid_builder: packages/apptive_grid_grid_builder/**/*
+p:theme: packages/apptive_grid_theme/**/*
+p:user_management: packages/apptive_grid_user_management/**/*
+p:web_apptive: packages/apptive_grid_web_apptive/**/*

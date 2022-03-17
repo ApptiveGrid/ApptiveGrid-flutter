@@ -6,16 +6,6 @@ class GeolocationFormWidgetConfiguration extends FormWidgetConfiguration {
   const GeolocationFormWidgetConfiguration({
     required this.placesApiKey,
     this.geocodingApiKey,
-  })  : httpClient = null,
-        super();
-
-  /// Creates a new [GeolocationFormWidgetConfiguration] with a [httpClient]
-  ///
-  /// Used for testing in order to set mocks
-  @visibleForTesting
-  const GeolocationFormWidgetConfiguration.withHttpClient({
-    required this.placesApiKey,
-    this.geocodingApiKey,
     this.httpClient,
   }) : super();
 

@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
+// coverage:ignore-file
 
 import 'dart:convert';
 import 'dart:html';

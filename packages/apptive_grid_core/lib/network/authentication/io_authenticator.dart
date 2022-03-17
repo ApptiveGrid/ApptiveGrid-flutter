@@ -1,3 +1,5 @@
+// coverage:ignore-file
+
 import 'package:openid_client/openid_client_io.dart' as openid;
 
 /// IO Implementation of Authenticator
