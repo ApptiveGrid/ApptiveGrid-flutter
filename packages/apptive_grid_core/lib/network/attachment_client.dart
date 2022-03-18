@@ -1,8 +1,13 @@
 part of apptive_grid_client;
 
 class AttachmentProcessor {
-  AttachmentProcessor(this.options, this.authenticator);
+  AttachmentProcessor(
+    this.options,
+    this.authenticator, {
+    http.Client? httpClient,
+  }) : _client = httpClient ?? http.Client();
 
+  final http.Client _client;
   final ApptiveGridOptions options;
   final ApptiveGridAuthenticator authenticator;
   AttachmentConfiguration? _config;
@@ -10,14 +15,20 @@ class AttachmentProcessor {
 
   Future<AttachmentConfiguration> get configuration async {
     if (_config == null) {
-      final serverResponse = (await http
+      final serverResponse = (await _client
           .get(Uri.parse('${options.environment.url}/config.json'))
           .catchError((error) => http.Response('{}', 400)));
       final serverAttachments = jsonDecode(serverResponse.body)['attachments'];
 
-      _config = serverAttachments != null
+      final newConfiguration = serverAttachments != null
           ? AttachmentConfiguration.fromJson(serverAttachments)
           : options.attachmentConfigurations[options.environment];
+      if (newConfiguration == null) {
+        throw Exception(
+            'Attachment is null. If there is no internet connection you should provide attachment Configurations through `ApptiveGridOptions.options.attachmentConfigs`');
+      } else {
+        _config = newConfiguration;
+      }
     }
     return _config!;
   }
@@ -145,7 +156,7 @@ class AttachmentProcessor {
       },
     );
 
-    final uploadUrlResponse = await http.get(uri, headers: headers);
+    final uploadUrlResponse = await _client.get(uri, headers: headers);
 
     if (uploadUrlResponse.statusCode >= 400) {
       throw uploadUrlResponse;
@@ -155,7 +166,7 @@ class AttachmentProcessor {
       jsonDecode(uploadUrlResponse.body)['uploadURL'],
     );
 
-    final putResponse = await http.put(
+    final putResponse = await _client.put(
       uploadUrl,
       headers: {
         HttpHeaders.contentTypeHeader: type,

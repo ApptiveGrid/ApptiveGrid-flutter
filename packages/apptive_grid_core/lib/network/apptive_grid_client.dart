@@ -22,29 +22,30 @@ class ApptiveGridClient {
   /// Creates an ApiClient
   ApptiveGridClient({
     this.options = const ApptiveGridOptions(),
-  })  : _client = http.Client(),
-        _authenticator = ApptiveGridAuthenticator(options: options) {
-    _attachmentProcessor = AttachmentProcessor(options, _authenticator);
+    http.Client? httpClient,
+    ApptiveGridAuthenticator? authenticator,
+  })  : _client = httpClient ?? http.Client() {
+    _authenticator = authenticator ?? ApptiveGridAuthenticator(options: options, httpClient: _client);
+    _attachmentProcessor = AttachmentProcessor(options, _authenticator, httpClient: _client);
   }
 
   /// Creates an Api Client on the Basis of a [http.Client]
   ///
   /// this should only be used for testing in order to pass in a Mocked [http.Client]
   @visibleForTesting
-  ApptiveGridClient.fromClient(
+  @Deprecated('httpClient now is an argument in the unnamed constructor')
+  factory ApptiveGridClient.fromClient(
     http.Client httpClient, {
-    this.options = const ApptiveGridOptions(),
+    ApptiveGridOptions options = const ApptiveGridOptions(),
     ApptiveGridAuthenticator? authenticator,
-  })  : _client = httpClient,
-        _authenticator = authenticator ??
-            ApptiveGridAuthenticator(options: options, httpClient: httpClient) {
-    _attachmentProcessor = AttachmentProcessor(options, _authenticator);
+  })  {
+    return ApptiveGridClient(options: options, authenticator: authenticator, httpClient: httpClient);
   }
 
   /// Configurations
   ApptiveGridOptions options;
 
-  final ApptiveGridAuthenticator _authenticator;
+  late final ApptiveGridAuthenticator _authenticator;
 
   final http.Client _client;
 
