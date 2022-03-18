@@ -6,7 +6,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -122,12 +121,9 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
     if (result != null && result.files.isNotEmpty) {
       final newAttachments = <Attachment>[];
       for (final file in result.files) {
-        final attachment = Attachment(
-          name: file.name,
-          url: ApptiveGrid.getClient(context, listen: false)
-              .createAttachmentUrl(file.name),
-          type: lookupMimeType(file.name) ?? '',
-        );
+        final attachment = await ApptiveGrid.getClient(context, listen: false)
+            .attachmentProcessor
+            .createAttachment(file.name);
         Provider.of<AttachmentManager>(context, listen: false)
             .addAttachment(attachment, file.bytes);
         newAttachments.add(attachment);
@@ -144,12 +140,10 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
     if (result != null && result.isNotEmpty) {
       final newAttachments = <Attachment>[];
       for (final file in result) {
-        final attachment = Attachment(
-          name: file.name,
-          url: ApptiveGrid.getClient(context, listen: false)
-              .createAttachmentUrl(file.name),
-          type: file.mimeType ?? lookupMimeType(file.name) ?? '',
-        );
+        final attachment = await ApptiveGrid.getClient(context, listen: false)
+            .attachmentProcessor
+            .createAttachment(file.name);
+
         final bytes = await file.readAsBytes();
         Provider.of<AttachmentManager>(context, listen: false)
             .addAttachment(attachment, bytes);
@@ -165,12 +159,9 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
     final file = await _imagePicker.pickImage(source: ImageSource.camera);
 
     if (file != null) {
-      final newAttachment = Attachment(
-        name: file.name,
-        url: ApptiveGrid.getClient(context, listen: false)
-            .createAttachmentUrl(file.name),
-        type: file.mimeType ?? lookupMimeType(file.name) ?? '',
-      );
+      final newAttachment = await ApptiveGrid.getClient(context, listen: false)
+          .attachmentProcessor
+          .createAttachment(file.name);
       final bytes = await file.readAsBytes();
       Provider.of<AttachmentManager>(context, listen: false)
           .addAttachment(newAttachment, bytes);

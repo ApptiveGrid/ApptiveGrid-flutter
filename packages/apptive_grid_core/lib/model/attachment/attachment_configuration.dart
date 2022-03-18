@@ -14,9 +14,10 @@ class AttachmentConfiguration {
   /// Creates a new AttachmentConfiguration from json
   factory AttachmentConfiguration.fromJson(Map<String, dynamic> json) {
     return AttachmentConfiguration(
-      signedUrlApiEndpoint: json['signedUrl'],
-      signedUrlFormApiEndpoint: json['signedUrlForm'],
-      attachmentApiEndpoint: json['storageUrl'],
+      signedUrlApiEndpoint: json['signedUrlEndpoint'] ?? json['signedUrl'],
+      signedUrlFormApiEndpoint:
+          json['unauthenticatedSignedUrlEndpoint'] ?? json['signedUrlForm'],
+      attachmentApiEndpoint: json['apiEndpoint'] ?? json['storageUrl'],
     );
   }
 

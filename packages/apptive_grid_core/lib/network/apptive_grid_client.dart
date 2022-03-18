@@ -1,4 +1,21 @@
-part of apptive_grid_network;
+library apptive_grid_client;
+
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:apptive_grid_core/apptive_grid_model.dart';
+import 'package:apptive_grid_core/apptive_grid_network.dart';
+import 'package:apptive_grid_core/apptive_grid_options.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:mime/mime.dart';
+import 'package:openid_client/openid_client.dart';
+import 'package:uuid/uuid.dart';
+import 'package:image/image.dart' as img;
+import 'dart:math' as math;
+
+part 'attachment_client.dart';
 
 /// Api Client to communicate with the ApptiveGrid Backend
 class ApptiveGridClient {
@@ -6,7 +23,9 @@ class ApptiveGridClient {
   ApptiveGridClient({
     this.options = const ApptiveGridOptions(),
   })  : _client = http.Client(),
-        _authenticator = ApptiveGridAuthenticator(options: options);
+        _authenticator = ApptiveGridAuthenticator(options: options) {
+    _attachmentProcessor = AttachmentProcessor(options, _authenticator);
+  }
 
   /// Creates an Api Client on the Basis of a [http.Client]
   ///
@@ -18,7 +37,9 @@ class ApptiveGridClient {
     ApptiveGridAuthenticator? authenticator,
   })  : _client = httpClient,
         _authenticator = authenticator ??
-            ApptiveGridAuthenticator(options: options, httpClient: httpClient);
+            ApptiveGridAuthenticator(options: options, httpClient: httpClient) {
+    _attachmentProcessor = AttachmentProcessor(options, _authenticator);
+  }
 
   /// Configurations
   ApptiveGridOptions options;
@@ -26,6 +47,9 @@ class ApptiveGridClient {
   final ApptiveGridAuthenticator _authenticator;
 
   final http.Client _client;
+
+  late AttachmentProcessor _attachmentProcessor;
+  AttachmentProcessor get attachmentProcessor => _attachmentProcessor;
 
   /// Close the connection on the httpClient
   void dispose() {
@@ -146,9 +170,8 @@ class ApptiveGridClient {
       actions.values.map((action) {
         switch (action.type) {
           case AttachmentActionType.add:
-            return _uploadAttachment(
+            return _attachmentProcessor.uploadAttachment(
               action as AddAttachmentAction,
-              fromForm: fromForm,
             );
           case AttachmentActionType.delete:
             debugPrint('Delete Attachment ${action.attachment}');
@@ -448,6 +471,7 @@ class ApptiveGridClient {
 
     options = options.copyWith(environment: environment);
     _authenticator.options = options;
+    _attachmentProcessor = AttachmentProcessor(options, _authenticator);
   }
 
   /// Tries to send pending [ActionItem]s that are stored in [options.cache]
@@ -467,24 +491,6 @@ class ApptiveGridClient {
     }
   }
 
-  // Attachments
-  String get _signedUrlApiEndpoint {
-    final endpoint = options
-        .attachmentConfigurations[options.environment]?.signedUrlApiEndpoint;
-    if (endpoint != null) {
-      return endpoint;
-    } else {
-      throw ArgumentError(
-        'In order to use Attachments you need to specify AttachmentConfigurations in ApptiveGridOptions',
-      );
-    }
-  }
-
-  String? get _signedUrlFormApiEndpoint {
-    return options.attachmentConfigurations[options.environment]
-        ?.signedUrlFormApiEndpoint;
-  }
-
   String get _attachmentApiEndpoint {
     final endpoint = options
         .attachmentConfigurations[options.environment]?.attachmentApiEndpoint;
@@ -498,8 +504,7 @@ class ApptiveGridClient {
   }
 
   /// Creates an url where an attachment should be saved
-  ///
-  /// TODO: Do not Use Name
+  @Deprecated('Use AttachmentClient.createAttachment')
   Uri createAttachmentUrl(String name) {
     return Uri.parse(
       '$_attachmentApiEndpoint$name?${DateTime.now().millisecondsSinceEpoch}',
@@ -512,49 +517,6 @@ class ApptiveGridClient {
   ///
   /// In order for no authentication [fromForm] needs to be `true` and [AttachmentConfiguration.signedUrlFormApiEndpoint] needs to be non null
   /// for the current [ApptiveGridStage] in [ApptiveGridOptions.attachmentConfigurations] in [options]
-  Future _uploadAttachment(
-    AddAttachmentAction action, {
-    bool fromForm = false,
-  }) async {
-    final requireAuth = !fromForm || _signedUrlFormApiEndpoint == null;
-    if (requireAuth) {
-      await _authenticator.checkAuthentication();
-    }
-
-    final baseUri = Uri.parse(
-      requireAuth ? _signedUrlApiEndpoint : _signedUrlFormApiEndpoint!,
-    );
-    final uri = Uri(
-      scheme: baseUri.scheme,
-      host: baseUri.host,
-      path: baseUri.path,
-      queryParameters: {
-        'fileName': action.attachment.name,
-        'fileType': action.attachment.type,
-      },
-    );
-    final createUrlHeaders = requireAuth ? headers : <String, String>{};
-    return _client.get(uri, headers: createUrlHeaders).then((response) {
-      if (response.statusCode < 400) {
-        return _client
-            .put(
-          Uri.parse(jsonDecode(response.body)['uploadURL']),
-          headers: {HttpHeaders.contentTypeHeader: action.attachment.type},
-          body: action.byteData,
-        )
-            .then((putResponse) {
-          if (putResponse.statusCode < 400) {
-            debugPrint('Uploaded Successfully');
-            return putResponse;
-          } else {
-            throw putResponse;
-          }
-        });
-      } else {
-        throw response;
-      }
-    });
-  }
 
   /// Uploads [bytes] as the Profile Picture for the logged in user
   Future<http.Response> uploadProfilePicture({required Uint8List bytes}) async {
