@@ -516,7 +516,8 @@ class ApptiveGridClient {
   }
 
   /// Creates an url where an attachment should be saved
-  @Deprecated('Use AttachmentClient.createAttachment')
+  /// Deprecated: use [ApptiveGridClient.attachmentProcessor.createAttachment]
+  @Deprecated('Use attachmentProcessor.createAttachment')
   Uri createAttachmentUrl(String name) {
     return Uri.parse(
       '$_attachmentApiEndpoint$name?${DateTime.now().millisecondsSinceEpoch}',
