@@ -25,7 +25,8 @@ class AttachmentProcessor {
           : options.attachmentConfigurations[options.environment];
       if (newConfiguration == null) {
         throw Exception(
-            'Attachment is null. If there is no internet connection you should provide attachment Configurations through `ApptiveGridOptions.options.attachmentConfigs`');
+          'Attachment is null. If there is no internet connection you should provide attachment Configurations through `ApptiveGridOptions.options.attachmentConfigs`',
+        );
       } else {
         _config = newConfiguration;
       }
@@ -89,24 +90,28 @@ class AttachmentProcessor {
 
     if (attachmentAction.attachment.type.startsWith('image')) {
       final type = attachmentAction.attachment.type;
+      http.Response? mainUpload;
       final uploads = await Future.wait<http.Response>(
         [
           _uploadFile(
             baseUri: baseUploadUri,
             headers: uploadHeaders,
-            bytes: await _scaleImageToMaxSize(
+            bytes: scaleImageToMaxSize(
               originalImage: attachmentAction.byteData!,
               size: 1000,
               type: type,
             ),
             name: attachmentAction.attachment.url.pathSegments.last,
             type: type,
-          ),
+          ).then((response) {
+            mainUpload = response;
+            return response;
+          }),
           if (attachmentAction.attachment.largeThumbnail != null)
             _uploadFile(
               baseUri: baseUploadUri,
               headers: uploadHeaders,
-              bytes: await _scaleImageToMaxSize(
+              bytes: scaleImageToMaxSize(
                 originalImage: attachmentAction.byteData!,
                 size: 256,
                 type: type,
@@ -114,12 +119,16 @@ class AttachmentProcessor {
               name:
                   attachmentAction.attachment.largeThumbnail!.pathSegments.last,
               type: type,
-            ),
+            ).catchError((error) {
+              debugPrint('Could not upload large thumbnail');
+              debugPrint(error);
+              return http.Response('', 200);
+            }),
           if (attachmentAction.attachment.smallThumbnail != null)
             _uploadFile(
               baseUri: baseUploadUri,
               headers: uploadHeaders,
-              bytes: await _scaleImageToMaxSize(
+              bytes: scaleImageToMaxSize(
                 originalImage: attachmentAction.byteData!,
                 size: 64,
                 type: type,
@@ -127,9 +136,19 @@ class AttachmentProcessor {
               name:
                   attachmentAction.attachment.smallThumbnail!.pathSegments.last,
               type: type,
-            ),
+            ).catchError((error) {
+              debugPrint('Could not upload small thumbnail');
+              debugPrint(error);
+              return http.Response(error, 200);
+            }),
         ],
-      );
+      ).catchError((error) {
+        if (mainUpload != null) {
+          return [mainUpload!];
+        } else {
+          throw error;
+        }
+      });
       return uploads.first;
     } else {
       return _uploadFile(
@@ -181,14 +200,14 @@ class AttachmentProcessor {
     }
   }
 
-  Future<Uint8List> _scaleImageToMaxSize({
+  Uint8List scaleImageToMaxSize({
     required Uint8List originalImage,
     required int size,
     required String type,
-  }) async {
+  }) {
     final resizeData = originalImage;
-    final image = img.decodeImage(resizeData)!;
-    if (math.max(image.width, image.height) <= size) {
+    final image = img.decodeImage(resizeData);
+    if (image == null || math.max(image.width, image.height) <= size) {
       return originalImage;
     }
 

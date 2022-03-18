@@ -15,7 +15,7 @@ import 'package:uuid/uuid.dart';
 import 'package:image/image.dart' as img;
 import 'dart:math' as math;
 
-part 'attachment_client.dart';
+part 'attachment_processor.dart';
 
 /// Api Client to communicate with the ApptiveGrid Backend
 class ApptiveGridClient {
@@ -24,11 +24,14 @@ class ApptiveGridClient {
     this.options = const ApptiveGridOptions(),
     http.Client? httpClient,
     ApptiveGridAuthenticator? authenticator,
-  })  : _client = httpClient ?? http.Client() {
-    _authenticator = authenticator ?? ApptiveGridAuthenticator(options: options, httpClient: _client);
-    _attachmentProcessor = AttachmentProcessor(options, _authenticator, httpClient: _client);
+  }) : _client = httpClient ?? http.Client() {
+    _authenticator = authenticator ??
+        ApptiveGridAuthenticator(options: options, httpClient: _client);
+    _attachmentProcessor =
+        AttachmentProcessor(options, _authenticator, httpClient: _client);
   }
 
+  // coverage:ignore-start
   /// Creates an Api Client on the Basis of a [http.Client]
   ///
   /// this should only be used for testing in order to pass in a Mocked [http.Client]
@@ -38,9 +41,14 @@ class ApptiveGridClient {
     http.Client httpClient, {
     ApptiveGridOptions options = const ApptiveGridOptions(),
     ApptiveGridAuthenticator? authenticator,
-  })  {
-    return ApptiveGridClient(options: options, authenticator: authenticator, httpClient: httpClient);
+  }) {
+    return ApptiveGridClient(
+      options: options,
+      authenticator: authenticator,
+      httpClient: httpClient,
+    );
   }
+  // coverage:ignore-end
 
   /// Configurations
   ApptiveGridOptions options;
@@ -50,6 +58,7 @@ class ApptiveGridClient {
   final http.Client _client;
 
   late AttachmentProcessor _attachmentProcessor;
+
   AttachmentProcessor get attachmentProcessor => _attachmentProcessor;
 
   /// Close the connection on the httpClient

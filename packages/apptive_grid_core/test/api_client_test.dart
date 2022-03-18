@@ -361,17 +361,23 @@ void main() {
             ),
             authenticator: authenticator,
           );
-          when(() => httpClient.get(
+          when(
+            () => httpClient.get(
               any(
-                  that: predicate<Uri>(
-                      (uri) => uri.path.endsWith('config.json'),),),
-              headers: any(named: 'headers'),),).thenAnswer((invocation) async {
+                that: predicate<Uri>(
+                  (uri) => uri.path.endsWith('config.json'),
+                ),
+              ),
+              headers: any(named: 'headers'),
+            ),
+          ).thenAnswer((invocation) async {
             return Response('{}', 200);
           });
         });
 
         test('Create Attachment Uri, throws Error', () {
           expect(
+            // ignore: deprecated_member_use_from_same_package
             () => client.createAttachmentUrl('Name'),
             throwsA(isInstanceOf<ArgumentError>()),
           );
@@ -440,30 +446,40 @@ void main() {
             authenticator: authenticator,
           );
 
-          when(() => httpClient.get(
+          when(
+            () => httpClient.get(
               any(
-                  that: predicate<Uri>(
-                          (uri) => uri.path.endsWith('config.json'),),),
-              headers: any(named: 'headers'),),).thenAnswer((invocation) async {
-            return Response(jsonEncode({
-              'attachments': {
-                "unauthenticatedSignedUrlEndpoint": signedFormUrl,
-                "signedUrlEndpoint": signedUrl,
-                "apiEndpoint": attachmentUrl,
-              }
-            }), 200,);
+                that: predicate<Uri>(
+                  (uri) => uri.path.endsWith('config.json'),
+                ),
+              ),
+              headers: any(named: 'headers'),
+            ),
+          ).thenAnswer((invocation) async {
+            return Response(
+              jsonEncode({
+                'attachments': {
+                  "unauthenticatedSignedUrlEndpoint": signedFormUrl,
+                  "signedUrlEndpoint": signedUrl,
+                  "apiEndpoint": attachmentUrl,
+                }
+              }),
+              200,
+            );
           });
         });
 
         test('Server config is used', () async {
-          expect(await client.attachmentProcessor.configuration, equals(
-            const AttachmentConfiguration(
-              signedUrlApiEndpoint: signedUrl,
-              signedUrlFormApiEndpoint: signedFormUrl,
-              attachmentApiEndpoint: attachmentUrl,
+          expect(
+            await client.attachmentProcessor.configuration,
+            equals(
+              const AttachmentConfiguration(
+                signedUrlApiEndpoint: signedUrl,
+                signedUrlFormApiEndpoint: signedFormUrl,
+                attachmentApiEndpoint: attachmentUrl,
+              ),
             ),
-          ),);
-
+          );
         });
       });
 
@@ -498,11 +514,16 @@ void main() {
             ),
             authenticator: authenticator,
           );
-          when(() => httpClient.get(
+          when(
+            () => httpClient.get(
               any(
-                  that: predicate<Uri>(
-                          (uri) => uri.path.endsWith('config.json'),),),
-              headers: any(named: 'headers'),),).thenAnswer((invocation) async {
+                that: predicate<Uri>(
+                  (uri) => uri.path.endsWith('config.json'),
+                ),
+              ),
+              headers: any(named: 'headers'),
+            ),
+          ).thenAnswer((invocation) async {
             return Response('{}', 200);
           });
         });
@@ -510,6 +531,7 @@ void main() {
         test('Creates Attachment Uri based on config', () {
           const name = 'FileName';
           expect(
+            // ignore: deprecated_member_use_from_same_package
             client.createAttachmentUrl(name).toString(),
             predicate<String>(
               (uriString) =>
@@ -519,148 +541,446 @@ void main() {
         });
 
         group('Upload Data', () {
-          final attachment = Attachment(name: 'name', url: Uri(
-            path: 'with/elements',
-          ), type: 'type',);
-          final action = FormAction('actionUri', 'POST');
-          final bytes = Uint8List(10);
-          final attachmentAction =
-              AddAttachmentAction(byteData: bytes, attachment: attachment);
-          final formData = FormData(
-            title: 'Title',
-            components: [
-              AttachmentFormComponent(
-                property: 'property',
-                data: AttachmentDataEntity([attachment]),
-                fieldId: 'fieldId',
+          group('Generic Files', () {
+            final attachment = Attachment(
+              name: 'name',
+              url: Uri(
+                path: 'with/elements',
               ),
-            ],
-            schema: null,
-            actions: [action],
-            attachmentActions: {attachment: attachmentAction},
-          );
-
-          test('Getting Upload Url fails', () async {
-            final response = Response('body', 400);
-            final baseUri = Uri.parse(
-              attachmentConfig[ApptiveGridEnvironment.production]!
-                  .signedUrlApiEndpoint,
+              type: 'type',
             );
-            when(() => httpClient.get(any(that: predicate<Uri>((requestUri) {
-              return baseUri.scheme == requestUri.scheme &&
-                  baseUri.host == requestUri.host &&
-                  baseUri.path == requestUri.path &&
-              requestUri.queryParameters['fileType'] == attachmentAction.attachment.type &&
-              requestUri.queryParameters['fileName'] != null;
-            }),), headers: any(named: 'headers'),),)
-                .thenAnswer((_) async {
-                  return response;
+            final action = FormAction('actionUri', 'POST');
+            final bytes = Uint8List(10);
+            final attachmentAction =
+                AddAttachmentAction(byteData: bytes, attachment: attachment);
+            final formData = FormData(
+              title: 'Title',
+              components: [
+                AttachmentFormComponent(
+                  property: 'property',
+                  data: AttachmentDataEntity([attachment]),
+                  fieldId: 'fieldId',
+                ),
+              ],
+              schema: null,
+              actions: [action],
+              attachmentActions: {attachment: attachmentAction},
+            );
+
+            test('Getting Upload Url fails', () async {
+              final response = Response('body', 400);
+              final baseUri = Uri.parse(
+                attachmentConfig[ApptiveGridEnvironment.production]!
+                    .signedUrlApiEndpoint,
+              );
+              when(
+                () => httpClient.get(
+                  any(
+                    that: predicate<Uri>((requestUri) {
+                      return baseUri.scheme == requestUri.scheme &&
+                          baseUri.host == requestUri.host &&
+                          baseUri.path == requestUri.path &&
+                          requestUri.queryParameters['fileType'] ==
+                              attachmentAction.attachment.type &&
+                          requestUri.queryParameters['fileName'] != null;
+                    }),
+                  ),
+                  headers: any(named: 'headers'),
+                ),
+              ).thenAnswer((_) async {
+                return response;
+              });
+
+              expect(
+                () async => await client.performAction(action, formData),
+                throwsA(equals(response)),
+              );
+            });
+
+            test('Upload Bytes success', () async {
+              final uploadUri = Uri.parse('uploadUrl.com/data');
+              final getResponse =
+                  Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
+              final putResponse = Response('Success', 200);
+              final baseUri = Uri.parse(
+                attachmentConfig[ApptiveGridEnvironment.production]!
+                    .signedUrlApiEndpoint,
+              );
+              when(
+                () => httpClient.get(
+                  any(
+                    that: predicate<Uri>((requestUri) {
+                      return baseUri.scheme == requestUri.scheme &&
+                          baseUri.host == requestUri.host &&
+                          baseUri.path == requestUri.path &&
+                          requestUri.queryParameters['fileType'] ==
+                              attachmentAction.attachment.type &&
+                          requestUri.queryParameters['fileName'] != null;
+                    }),
+                  ),
+                  headers: any(named: 'headers'),
+                ),
+              ).thenAnswer((_) async => getResponse);
+              when(
+                () => httpClient.put(
+                  uploadUri,
+                  headers: any(named: 'headers'),
+                  body: bytes,
+                  encoding: any(named: 'encoding'),
+                ),
+              ).thenAnswer((_) async => putResponse);
+              when(() => httpClient.send(any())).thenAnswer(
+                (realInvocation) async =>
+                    StreamedResponse(Stream.value([]), 200),
+              );
+
+              await client.performAction(action, formData);
+
+              verify(
+                () => httpClient.get(
+                  any(
+                    that: predicate<Uri>((requestUri) {
+                      return baseUri.scheme == requestUri.scheme &&
+                          baseUri.host == requestUri.host &&
+                          baseUri.path == requestUri.path &&
+                          requestUri.queryParameters['fileType'] ==
+                              attachmentAction.attachment.type &&
+                          requestUri.queryParameters['fileName'] != null;
+                    }),
+                  ),
+                  headers: any(named: 'headers'),
+                ),
+              ).called(1);
+              verify(
+                () => httpClient.put(
+                  uploadUri,
+                  headers: any(named: 'headers'),
+                  body: bytes,
+                  encoding: any(named: 'encoding'),
+                ),
+              ).called(1);
+              verify(() => httpClient.send(any())).called(1);
+            });
+
+            test('Upload Fails throws Response', () async {
+              final uploadUri = Uri.parse('uploadUrl.com/data');
+              final getResponse =
+                  Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
+              final putResponse = Response('Error', 500);
+              final baseUri = Uri.parse(
+                attachmentConfig[ApptiveGridEnvironment.production]!
+                    .signedUrlApiEndpoint,
+              );
+              when(
+                () => httpClient.get(
+                  any(
+                    that: predicate<Uri>((requestUri) {
+                      return baseUri.scheme == requestUri.scheme &&
+                          baseUri.host == requestUri.host &&
+                          baseUri.path == requestUri.path &&
+                          requestUri.queryParameters['fileType'] ==
+                              attachmentAction.attachment.type &&
+                          requestUri.queryParameters['fileName'] != null;
+                    }),
+                  ),
+                  headers: any(named: 'headers'),
+                ),
+              ).thenAnswer((_) async => getResponse);
+              when(
+                () => httpClient.put(
+                  uploadUri,
+                  headers: any(named: 'headers'),
+                  body: bytes,
+                  encoding: any(named: 'encoding'),
+                ),
+              ).thenAnswer((_) async => putResponse);
+
+              await expectLater(
+                () async => await client.performAction(action, formData),
+                throwsA(equals(putResponse)),
+              );
+
+              verify(
+                () => httpClient.get(
+                  any(
+                    that: predicate<Uri>((requestUri) {
+                      return baseUri.scheme == requestUri.scheme &&
+                          baseUri.host == requestUri.host &&
+                          baseUri.path == requestUri.path &&
+                          requestUri.queryParameters['fileType'] ==
+                              attachmentAction.attachment.type &&
+                          requestUri.queryParameters['fileName'] != null;
+                    }),
+                  ),
+                  headers: any(named: 'headers'),
+                ),
+              ).called(1);
+              verify(
+                () => httpClient.put(
+                  uploadUri,
+                  headers: any(named: 'headers'),
+                  body: bytes,
+                  encoding: any(named: 'encoding'),
+                ),
+              ).called(1);
+              verifyNever(() => httpClient.send(any()));
+            });
+
+            group('Images', () {
+              final attachment = Attachment(
+                name: 'name',
+                url: Uri(
+                  path: 'main',
+                ),
+                smallThumbnail: Uri(
+                  path: 'small',
+                ),
+                largeThumbnail: Uri(
+                  path: 'large',
+                ),
+                type: 'image/png',
+              );
+              final action = FormAction('actionUri', 'POST');
+              final bytes = Uint8List(10);
+              final attachmentAction =
+                  AddAttachmentAction(byteData: bytes, attachment: attachment);
+              final formData = FormData(
+                title: 'Title',
+                components: [
+                  AttachmentFormComponent(
+                    property: 'property',
+                    data: AttachmentDataEntity([attachment]),
+                    fieldId: 'fieldId',
+                  ),
+                ],
+                schema: null,
+                actions: [action],
+                attachmentActions: {attachment: attachmentAction},
+              );
+
+              test('Thumbnails are uploaded', () async {
+                final uploadUri = Uri.parse('uploadUrl.com/data');
+                final getResponse =
+                    Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
+                final putResponse = Response('Success', 200);
+                final baseUri = Uri.parse(
+                  attachmentConfig[ApptiveGridEnvironment.production]!
+                      .signedUrlApiEndpoint,
+                );
+                when(
+                  () => httpClient.get(
+                    any(
+                      that: predicate<Uri>((requestUri) {
+                        return baseUri.scheme == requestUri.scheme &&
+                            baseUri.host == requestUri.host &&
+                            baseUri.path == requestUri.path &&
+                            requestUri.queryParameters['fileType'] ==
+                                attachmentAction.attachment.type &&
+                            requestUri.queryParameters['fileName'] != null;
+                      }),
+                    ),
+                    headers: any(named: 'headers'),
+                  ),
+                ).thenAnswer((_) async => getResponse);
+                when(
+                  () => httpClient.put(
+                    uploadUri,
+                    headers: any(named: 'headers'),
+                    body: bytes,
+                    encoding: any(named: 'encoding'),
+                  ),
+                ).thenAnswer((_) async => putResponse);
+                when(() => httpClient.send(any())).thenAnswer(
+                  (realInvocation) async =>
+                      StreamedResponse(Stream.value([]), 200),
+                );
+
+                await client.performAction(action, formData);
+
+                verify(
+                  () => httpClient.get(
+                    any(
+                      that: predicate<Uri>((requestUri) {
+                        return baseUri.scheme == requestUri.scheme &&
+                            baseUri.host == requestUri.host &&
+                            baseUri.path == requestUri.path &&
+                            requestUri.queryParameters['fileType'] ==
+                                attachmentAction.attachment.type &&
+                            requestUri.queryParameters['fileName'] != null;
+                      }),
+                    ),
+                    headers: any(named: 'headers'),
+                  ),
+                ).called(3);
+                verify(
+                  () => httpClient.put(
+                    uploadUri,
+                    headers: any(named: 'headers'),
+                    body: bytes,
+                    encoding: any(named: 'encoding'),
+                  ),
+                ).called(3);
+                verify(() => httpClient.send(any())).called(1);
+              });
+
+              test('Thumbnail upload fails, main upload succeed, call succeeds',
+                  () async {
+                final uploadUri = Uri.parse('https://uploadUrl.com/data');
+                final putSuccess = Response('Success', 200);
+                final putFail = Response('Fail', 400);
+                final baseUri = Uri.parse(
+                  attachmentConfig[ApptiveGridEnvironment.production]!
+                      .signedUrlApiEndpoint,
+                );
+                when(
+                  () => httpClient.get(
+                    any(
+                      that: predicate<Uri>((requestUri) {
+                        return baseUri.scheme == requestUri.scheme &&
+                            baseUri.host == requestUri.host &&
+                            baseUri.path == requestUri.path &&
+                            requestUri.queryParameters['fileType'] ==
+                                attachmentAction.attachment.type &&
+                            requestUri.queryParameters['fileName'] != null;
+                      }),
+                    ),
+                    headers: any(named: 'headers'),
+                  ),
+                ).thenAnswer((invocation) async {
+                  final requestUri = uploadUri.replace(
+                    pathSegments: [
+                      (invocation.positionalArguments.first as Uri)
+                          .queryParameters['fileName']!
+                    ],
+                  );
+                  // Use filename in upload uri to match error responses
+                  return Response(
+                    '{"uploadURL":"${requestUri.toString()}"}',
+                    200,
+                  );
                 });
+                when(
+                  () => httpClient.put(
+                    any(
+                      that: predicate<Uri>(
+                        (uri) => uri.host == uploadUri.host,
+                      ),
+                    ),
+                    headers: any(named: 'headers'),
+                    body: bytes,
+                    encoding: any(named: 'encoding'),
+                  ),
+                ).thenAnswer((invocation) async {
+                  final uri = invocation.positionalArguments.first as Uri;
+                  if (uri.pathSegments.last == 'main') {
+                    return putSuccess;
+                  } else {
+                    return putFail;
+                  }
+                });
+                when(() => httpClient.send(any())).thenAnswer(
+                  (realInvocation) async =>
+                      StreamedResponse(Stream.value([]), 200),
+                );
 
-            expect(
-              () async => await client.performAction(action, formData),
-              throwsA(equals(response)),
-            );
-          });
+                await client.performAction(action, formData);
 
-          test('Upload Bytes success', () async {
-            final uploadUri = Uri.parse('uploadUrl.com/data');
-            final getResponse =
-                Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
-            final putResponse = Response('Success', 200);
-            final baseUri = Uri.parse(
-              attachmentConfig[ApptiveGridEnvironment.production]!
-                  .signedUrlApiEndpoint,
-            );
-            when(() => httpClient.get(any(that: predicate<Uri>((requestUri) {
-              return baseUri.scheme == requestUri.scheme &&
-                  baseUri.host == requestUri.host &&
-                  baseUri.path == requestUri.path &&
-                  requestUri.queryParameters['fileType'] == attachmentAction.attachment.type &&
-                  requestUri.queryParameters['fileName'] != null;
-            }),), headers: any(named: 'headers'),),)
-                .thenAnswer((_) async => getResponse);
-            when(
-              () => httpClient.put(
-                uploadUri,
-                headers: any(named: 'headers'),
-                body: bytes,
-                encoding: any(named: 'encoding'),
-              ),
-            ).thenAnswer((_) async => putResponse);
-            when(() => httpClient.send(any())).thenAnswer(
-              (realInvocation) async => StreamedResponse(Stream.value([]), 200),
-            );
+                verify(
+                  () => httpClient.get(
+                    any(
+                      that: predicate<Uri>((requestUri) {
+                        return baseUri.scheme == requestUri.scheme &&
+                            baseUri.host == requestUri.host &&
+                            baseUri.path == requestUri.path &&
+                            requestUri.queryParameters['fileType'] ==
+                                attachmentAction.attachment.type &&
+                            requestUri.queryParameters['fileName'] != null;
+                      }),
+                    ),
+                    headers: any(named: 'headers'),
+                  ),
+                ).called(3);
+                verify(
+                  () => httpClient.put(
+                    any(
+                      that: predicate<Uri>(
+                        (uri) => uri.host == uploadUri.host,
+                      ),
+                    ),
+                    headers: any(named: 'headers'),
+                    body: bytes,
+                    encoding: any(named: 'encoding'),
+                  ),
+                ).called(3);
+                verify(() => httpClient.send(any())).called(1);
+              });
 
-            await client.performAction(action, formData);
+              test('Main upload fails, thumbnails succeed, call fails',
+                  () async {
+                final uploadUri = Uri.parse('https://uploadUrl.com/data');
+                final putSuccess = Response('Success', 200);
+                final putFail = Response('Fail', 400);
+                final baseUri = Uri.parse(
+                  attachmentConfig[ApptiveGridEnvironment.production]!
+                      .signedUrlApiEndpoint,
+                );
+                when(
+                  () => httpClient.get(
+                    any(
+                      that: predicate<Uri>((requestUri) {
+                        return baseUri.scheme == requestUri.scheme &&
+                            baseUri.host == requestUri.host &&
+                            baseUri.path == requestUri.path &&
+                            requestUri.queryParameters['fileType'] ==
+                                attachmentAction.attachment.type &&
+                            requestUri.queryParameters['fileName'] != null;
+                      }),
+                    ),
+                    headers: any(named: 'headers'),
+                  ),
+                ).thenAnswer((invocation) async {
+                  final requestUri = uploadUri.replace(
+                    pathSegments: [
+                      (invocation.positionalArguments.first as Uri)
+                          .queryParameters['fileName']!
+                    ],
+                  );
+                  // Use filename in upload uri to match error responses
+                  return Response(
+                    '{"uploadURL":"${requestUri.toString()}"}',
+                    200,
+                  );
+                });
+                when(
+                  () => httpClient.put(
+                    any(
+                      that: predicate<Uri>(
+                        (uri) => uri.host == uploadUri.host,
+                      ),
+                    ),
+                    headers: any(named: 'headers'),
+                    body: bytes,
+                    encoding: any(named: 'encoding'),
+                  ),
+                ).thenAnswer((invocation) async {
+                  final uri = invocation.positionalArguments.first as Uri;
+                  if (uri.pathSegments.last == 'main') {
+                    return putFail;
+                  } else {
+                    return putSuccess;
+                  }
+                });
+                when(() => httpClient.send(any())).thenAnswer(
+                  (realInvocation) async =>
+                      StreamedResponse(Stream.value([]), 200),
+                );
 
-            verify(() => httpClient.get(any(that: predicate<Uri>((requestUri) {
-              return baseUri.scheme == requestUri.scheme &&
-                  baseUri.host == requestUri.host &&
-                  baseUri.path == requestUri.path &&
-                  requestUri.queryParameters['fileType'] == attachmentAction.attachment.type &&
-                  requestUri.queryParameters['fileName'] != null;
-            }),), headers: any(named: 'headers'),),)
-                .called(1);
-            verify(
-              () => httpClient.put(
-                uploadUri,
-                headers: any(named: 'headers'),
-                body: bytes,
-                encoding: any(named: 'encoding'),
-              ),
-            ).called(1);
-            verify(() => httpClient.send(any())).called(1);
-          });
-
-          test('Upload Fails throws Response', () async {
-            final uploadUri = Uri.parse('uploadUrl.com/data');
-            final getResponse =
-                Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
-            final putResponse = Response('Error', 500);
-            final baseUri = Uri.parse(
-              attachmentConfig[ApptiveGridEnvironment.production]!
-                  .signedUrlApiEndpoint,
-            );
-            when(() => httpClient.get(any(that: predicate<Uri>((requestUri) {
-              return baseUri.scheme == requestUri.scheme &&
-                  baseUri.host == requestUri.host &&
-                  baseUri.path == requestUri.path &&
-                  requestUri.queryParameters['fileType'] == attachmentAction.attachment.type &&
-                  requestUri.queryParameters['fileName'] != null;
-            }),), headers: any(named: 'headers'),),)
-                .thenAnswer((_) async => getResponse);
-            when(
-              () => httpClient.put(
-                uploadUri,
-                headers: any(named: 'headers'),
-                body: bytes,
-                encoding: any(named: 'encoding'),
-              ),
-            ).thenAnswer((_) async => putResponse);
-
-            await expectLater(
-              () async => await client.performAction(action, formData),
-              throwsA(equals(putResponse)),
-            );
-
-            verify(() => httpClient.get(any(that: predicate<Uri>((requestUri) {
-              return baseUri.scheme == requestUri.scheme &&
-                  baseUri.host == requestUri.host &&
-                  baseUri.path == requestUri.path &&
-                  requestUri.queryParameters['fileType'] == attachmentAction.attachment.type &&
-                  requestUri.queryParameters['fileName'] != null;
-            }),), headers: any(named: 'headers'),),)
-                .called(1);
-            verify(
-              () => httpClient.put(
-                uploadUri,
-                headers: any(named: 'headers'),
-                body: bytes,
-                encoding: any(named: 'encoding'),
-              ),
-            ).called(1);
-            verifyNever(() => httpClient.send(any()));
+                expect(
+                  () => client.performAction(action, formData),
+                  throwsA(isInstanceOf<Response>()),
+                );
+              });
+            });
           });
         });
 
@@ -791,17 +1111,26 @@ void main() {
             ),
             authenticator: authenticator,
           );
-          when(() => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                    (uri) => uri.path.endsWith('config.json'),),),
-            headers: any(named: 'headers'),),).thenAnswer((invocation) async {
+          when(
+            () => httpClient.get(
+              any(
+                that: predicate<Uri>(
+                  (uri) => uri.path.endsWith('config.json'),
+                ),
+              ),
+              headers: any(named: 'headers'),
+            ),
+          ).thenAnswer((invocation) async {
             return Response('{}', 200);
           });
         });
 
         group('Upload Data', () {
-          final attachment = Attachment(name: 'name', url: Uri(path: 'with/path'), type: 'type');
+          final attachment = Attachment(
+            name: 'name',
+            url: Uri(path: 'with/path'),
+            type: 'type',
+          );
           final action = FormAction('actionUri', 'POST');
           final bytes = Uint8List(10);
           final attachmentAction =
@@ -821,7 +1150,8 @@ void main() {
           );
 
           test('Creates upload Url without headers', () async {
-            when(() => authenticator.isAuthenticated).thenAnswer((_) async => false);
+            when(() => authenticator.isAuthenticated)
+                .thenAnswer((_) async => false);
             final uploadUri = Uri.parse('uploadUrl.com/data');
             final getResponse =
                 Response('{"uploadURL":"${uploadUri.toString()}"}', 200);
@@ -830,14 +1160,21 @@ void main() {
               attachmentConfig[ApptiveGridEnvironment.production]!
                   .signedUrlFormApiEndpoint!,
             );
-            when(() => httpClient.get(any(that: predicate<Uri>((requestUri) {
-              return baseUri.scheme == requestUri.scheme &&
-                  baseUri.host == requestUri.host &&
-                  baseUri.path == requestUri.path &&
-                  requestUri.queryParameters['fileType'] == attachmentAction.attachment.type &&
-                  requestUri.queryParameters['fileName'] != null;
-            }),), headers: any(named: 'headers')))
-                .thenAnswer((_) async => getResponse);
+            when(
+              () => httpClient.get(
+                any(
+                  that: predicate<Uri>((requestUri) {
+                    return baseUri.scheme == requestUri.scheme &&
+                        baseUri.host == requestUri.host &&
+                        baseUri.path == requestUri.path &&
+                        requestUri.queryParameters['fileType'] ==
+                            attachmentAction.attachment.type &&
+                        requestUri.queryParameters['fileName'] != null;
+                  }),
+                ),
+                headers: any(named: 'headers'),
+              ),
+            ).thenAnswer((_) async => getResponse);
             when(
               () => httpClient.put(
                 uploadUri,
