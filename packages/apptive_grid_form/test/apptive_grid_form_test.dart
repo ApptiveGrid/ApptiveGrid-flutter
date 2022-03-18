@@ -542,7 +542,7 @@ void main() {
     });
 
     testWidgets('No Cache, Error, Shows Error Screen', (tester) async {
-      final client = ApptiveGridClient.fromClient(httpClient);
+      final client = ApptiveGridClient(httpClient: httpClient);
 
       final target = TestApp(
         client: client,
@@ -574,8 +574,8 @@ void main() {
       when(() => cache.getPendingActionItems())
           .thenAnswer((invocation) => cacheMap.toList());
 
-      final client = ApptiveGridClient.fromClient(
-        httpClient,
+      final client = ApptiveGridClient(
+        httpClient: httpClient,
         options: ApptiveGridOptions(
           cache: cache,
         ),

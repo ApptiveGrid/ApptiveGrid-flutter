@@ -146,9 +146,19 @@ void main() {
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
       when(() => client.performAction(action, any()))
           .thenAnswer((_) async => Response('body', 200));
-      when(() => client.createAttachmentUrl(any())).thenAnswer(
-        (invocation) =>
-            Uri.parse('${invocation.positionalArguments.first}.com'),
+      final attachmentProcessor = MockAttachmentProcessor();
+      when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
+      when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
+        (invocation) async {
+          final name = invocation.positionalArguments.first;
+          return Attachment(
+            name: name,
+            type: name.endsWith('png') ? 'image/png' : 'application/pdf',
+            url: Uri.parse(
+              '$name.com',
+            ),
+          );
+        },
       );
 
       final target = TestApp(

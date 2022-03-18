@@ -16,6 +16,8 @@ class MockHttpClient extends Mock implements http.Client {}
 
 class MockApptiveGridCache extends Mock implements ApptiveGridCache {}
 
+class MockAttachmentProcessor extends Mock implements AttachmentProcessor {}
+
 class MockFilePicker extends Mock
     with MockPlatformInterfaceMixin
     implements FilePicker {}
