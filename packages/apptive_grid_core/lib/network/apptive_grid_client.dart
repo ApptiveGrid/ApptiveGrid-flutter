@@ -59,6 +59,8 @@ class ApptiveGridClient {
 
   late AttachmentProcessor _attachmentProcessor;
 
+  /// Processor for Attachments.
+  /// Handles uploading attachments, creating attachments, scaling images
   AttachmentProcessor get attachmentProcessor => _attachmentProcessor;
 
   /// Close the connection on the httpClient
@@ -520,13 +522,6 @@ class ApptiveGridClient {
       '$_attachmentApiEndpoint$name?${DateTime.now().millisecondsSinceEpoch}',
     );
   }
-
-  /// Uploads an [Attachment] defined in [action]
-  ///
-  /// [fromForm] determines if this attachment can be added without the need for authentication
-  ///
-  /// In order for no authentication [fromForm] needs to be `true` and [AttachmentConfiguration.signedUrlFormApiEndpoint] needs to be non null
-  /// for the current [ApptiveGridStage] in [ApptiveGridOptions.attachmentConfigurations] in [options]
 
   /// Uploads [bytes] as the Profile Picture for the logged in user
   Future<http.Response> uploadProfilePicture({required Uint8List bytes}) async {

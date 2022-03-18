@@ -1,6 +1,14 @@
 part of apptive_grid_client;
 
+/// Processor for Attachments.
+/// Handles uploading attachments, creating attachments, scaling images
 class AttachmentProcessor {
+  /// Creates a new AttachmentProcessor
+  ///
+  /// [options] is used to get the current stage to try to fetch server config for attachments
+  /// As a fallback [AttachmentConfig] provided through [ApptiveGridOptions.attachmentConfigurations] is used
+  ///
+  /// If the user is authenticated in [authenticator] then the authenticated endpoint is used and an authorization is triggered
   AttachmentProcessor(
     this.options,
     this.authenticator, {
@@ -8,11 +16,20 @@ class AttachmentProcessor {
   }) : _client = httpClient ?? http.Client();
 
   final http.Client _client;
+
+  /// [options] is used to get the current stage to try to fetch server config for attachments
+  /// As a fallback [AttachmentConfig] provided through [ApptiveGridOptions.attachmentConfigurations] is used
   final ApptiveGridOptions options;
+
+  /// Authenticator to handle authentication to upload attachments
   final ApptiveGridAuthenticator authenticator;
   AttachmentConfiguration? _config;
   static const _uuid = Uuid();
 
+  /// Returns the current configuration
+  /// It tries to fetch the attachment configuration on the server determined by [ApptiveGridOptions.environment] from [options]
+  /// if that fails or there are no options it fallbacks to [ApptiveGridOptions.attachmentConfigurations] from [options]
+  /// if that is also `null` for the current environment an [Exception] is thrown
   Future<AttachmentConfiguration> get configuration async {
     if (_config == null) {
       final serverResponse = (await _client
@@ -34,6 +51,10 @@ class AttachmentProcessor {
     return _config!;
   }
 
+  /// Creates a new [Attachment] based on [name]
+  /// The [Attachment.type] is the mime determined by the ending of [name] through [lookupMimeType]
+  /// If the Attachment is an image (type starts with `image/`) it will generate a new [Attachment] with thumbnail urls
+  /// If the Attachment is not an image, [Attachment.smallThumbnail] and [Attachment.largeThunbnail] will be `null`
   Future<Attachment> createAttachment(String name) async {
     final type = lookupMimeType(name) ?? '';
     final config = await configuration;
@@ -66,6 +87,12 @@ class AttachmentProcessor {
     );
   }
 
+  /// Perform an [attachmentAction] to upload [AttachmentAction.byteData] for [AttachmentAction.attachment]
+  ///
+  /// If the attachment is an image (see createAttachment) it will upload a scaled version of the original (max Side 1000px) and tries to upload thumbnails (256px and 64px)
+  /// If uploading one or more of the thumnbnails fails the upload will still be handled as success as long as the main file did upload successfully
+  ///
+  /// If the attachment is not an imge the file will be uploaded without any alterations
   Future<http.Response> uploadAttachment(
     AddAttachmentAction attachmentAction,
   ) async {
@@ -200,6 +227,8 @@ class AttachmentProcessor {
     }
   }
 
+  /// Scales down [originalImage] so that the largest size will be [size] pixels while keeping the aspect ratio
+  /// [type] should be the mime type of the image. It is used to determine the file format when scaling
   Uint8List scaleImageToMaxSize({
     required Uint8List originalImage,
     required int size,
