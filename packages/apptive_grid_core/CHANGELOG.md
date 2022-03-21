@@ -1,3 +1,9 @@
+## 0.9.3
+### Rework Attachments
+  * Deprecated old call to generate an upload url
+  * Uploading Thumbnails for Images
+  * Scaling down images to have a maximum side of 1000px
+
 ## 0.9.2
 * Add call to upload Profile Picture
 * Hide `ContentType` in export of Network Package

@@ -66,8 +66,18 @@ void main() {
             .thenAnswer((_) => Future.value());
         when(() => client.performAction(action, any()))
             .thenAnswer((_) async => Response('body', 200));
-        when(() => client.createAttachmentUrl(filename))
-            .thenReturn(attachmentUri);
+        final attachmentProcessor = MockAttachmentProcessor();
+        when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
+        when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
+          (invocation) async {
+            final name = invocation.positionalArguments.first;
+            return Attachment(
+              name: name,
+              type: name.endsWith('png') ? 'image/png' : 'application/pdf',
+              url: attachmentUri,
+            );
+          },
+        );
 
         final target = TestApp(
           client: client,
@@ -153,9 +163,19 @@ void main() {
             .thenAnswer((_) => Future.value());
         when(() => client.performAction(action, any()))
             .thenAnswer((_) async => Response('body', 200));
-        when(() => client.createAttachmentUrl(any())).thenAnswer(
-          (invocation) =>
-              Uri.parse('${invocation.positionalArguments.first}.com'),
+        final attachmentProcessor = MockAttachmentProcessor();
+        when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
+        when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
+          (invocation) async {
+            final name = invocation.positionalArguments.first;
+            return Attachment(
+              name: name,
+              type: name.endsWith('png') ? 'image/png' : 'application/pdf',
+              url: Uri.parse(
+                '$name.com',
+              ),
+            );
+          },
         );
 
         final target = TestApp(
@@ -193,7 +213,6 @@ void main() {
 
       testWidgets('No Attachment from file picker added, completes',
           (tester) async {
-        const filename = 'Filename.png';
         final filePicker = MockFilePicker();
         final attachmentUri = Uri.parse('attachmenturl.com');
         when(
@@ -226,8 +245,18 @@ void main() {
             .thenAnswer((_) => Future.value());
         when(() => client.performAction(action, any()))
             .thenAnswer((_) async => Response('body', 200));
-        when(() => client.createAttachmentUrl(filename))
-            .thenReturn(attachmentUri);
+        final attachmentProcessor = MockAttachmentProcessor();
+        when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
+        when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
+          (invocation) async {
+            final name = invocation.positionalArguments.first;
+            return Attachment(
+              name: name,
+              type: name.endsWith('png') ? 'image/png' : 'application/pdf',
+              url: attachmentUri,
+            );
+          },
+        );
 
         final target = TestApp(
           client: client,
@@ -311,8 +340,18 @@ void main() {
             .thenAnswer((_) => Future.value());
         when(() => client.performAction(action, any()))
             .thenAnswer((_) async => Response('body', 200));
-        when(() => client.createAttachmentUrl(filename))
-            .thenReturn(attachmentUri);
+        final attachmentProcessor = MockAttachmentProcessor();
+        when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
+        when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
+          (invocation) async {
+            final name = invocation.positionalArguments.first;
+            return Attachment(
+              name: name,
+              type: name.endsWith('png') ? 'image/png' : 'application/pdf',
+              url: attachmentUri,
+            );
+          },
+        );
 
         final target = TestApp(
           client: client,
@@ -343,7 +382,7 @@ void main() {
         expect(submittedData.components.first.data, equals(data));
       });
 
-      testWidgets('Multiple Attachments from file pickerget added',
+      testWidgets('Multiple Attachments from file picker get added',
           (tester) async {
         const filename1 = 'Filename1.png';
         const filename2 = 'Filename2.pdf';
@@ -400,9 +439,19 @@ void main() {
             .thenAnswer((_) => Future.value());
         when(() => client.performAction(action, any()))
             .thenAnswer((_) async => Response('body', 200));
-        when(() => client.createAttachmentUrl(any())).thenAnswer(
-          (invocation) =>
-              Uri.parse('${invocation.positionalArguments.first}.com'),
+        final attachmentProcessor = MockAttachmentProcessor();
+        when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
+        when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
+          (invocation) async {
+            final name = invocation.positionalArguments.first;
+            return Attachment(
+              name: name,
+              type: name.endsWith('png') ? 'image/png' : 'application/pdf',
+              url: Uri.parse(
+                '$name.com',
+              ),
+            );
+          },
         );
 
         final target = TestApp(
@@ -505,8 +554,18 @@ void main() {
             .thenAnswer((_) => Future.value());
         when(() => client.performAction(action, any()))
             .thenAnswer((_) async => Response('body', 200));
-        when(() => client.createAttachmentUrl(filename))
-            .thenReturn(attachmentUri);
+        final attachmentProcessor = MockAttachmentProcessor();
+        when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
+        when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
+          (invocation) async {
+            final name = invocation.positionalArguments.first;
+            return Attachment(
+              name: name,
+              type: name.endsWith('png') ? 'image/png' : 'application/pdf',
+              url: attachmentUri,
+            );
+          },
+        );
 
         final target = TestApp(
           client: client,
@@ -627,8 +686,18 @@ void main() {
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
       when(() => client.performAction(action, any()))
           .thenAnswer((_) async => Response('body', 200));
-      when(() => client.createAttachmentUrl(filename))
-          .thenReturn(attachmentUri);
+      final attachmentProcessor = MockAttachmentProcessor();
+      when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
+      when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
+        (invocation) async {
+          final name = invocation.positionalArguments.first;
+          return Attachment(
+            name: name,
+            type: name.endsWith('png') ? 'image/png' : 'application/pdf',
+            url: attachmentUri,
+          );
+        },
+      );
 
       final target = TestApp(
         client: client,
@@ -839,8 +908,18 @@ void main() {
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
       when(() => client.performAction(action, any()))
           .thenAnswer((_) async => Response('body', 200));
-      when(() => client.createAttachmentUrl(filename))
-          .thenReturn(attachmentUri);
+      final attachmentProcessor = MockAttachmentProcessor();
+      when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
+      when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
+        (invocation) async {
+          final name = invocation.positionalArguments.first;
+          return Attachment(
+            name: name,
+            type: name.endsWith('png') ? 'image/png' : 'application/pdf',
+            url: attachmentUri,
+          );
+        },
+      );
 
       final target = TestApp(
         client: client,
