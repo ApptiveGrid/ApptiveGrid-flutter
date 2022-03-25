@@ -55,6 +55,8 @@ void main() {
             },
             onAccountConfirmed: (_) {},
             onChangeEnvironment: (_) async {},
+            resetPasswordPrompt: (_) {},
+            onPasswordReset: (_) async {},
             client: client,
           ),
         ),
@@ -98,6 +100,8 @@ void main() {
               callbackCompleter.complete(widget);
             },
             onAccountConfirmed: (_) {},
+            resetPasswordPrompt: (_) {},
+            onPasswordReset: (_) async {},
             client: client,
           ),
         ),
@@ -145,6 +149,8 @@ void main() {
             onChangeEnvironment: (environment) async {
               callbackCompleter.complete(environment);
             },
+            resetPasswordPrompt: (_) {},
+            onPasswordReset: (_) async {},
             client: client,
           ),
         ),
@@ -179,6 +185,8 @@ void main() {
               callbackCompleter.complete(widget);
             },
             onAccountConfirmed: (_) {},
+            resetPasswordPrompt: (_) {},
+            onPasswordReset: (_) async {},
             client: client,
             child: Builder(
               builder: (buildContext) {
@@ -196,7 +204,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        await ApptiveGridUserManagement.maybeOf(context)!.initialSetup(),
+        (await ApptiveGridUserManagement.maybeOf(context)!.initialSetup())
+            .first,
         false,
       );
     });
@@ -224,6 +233,8 @@ void main() {
                     callbackCompleter.complete(widget);
                   },
                   onAccountConfirmed: (_) {},
+                  resetPasswordPrompt: (_) {},
+                  onPasswordReset: (_) async {},
                   child: Builder(
                     builder: (buildContext) {
                       context = buildContext;

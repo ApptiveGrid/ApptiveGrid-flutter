@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/login_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../infrastructure/mocks.dart';
+import '../infrastructure/test_app.dart';
 
 void main() {
   group('Login', () {
@@ -16,12 +16,7 @@ void main() {
 
       final target = MaterialApp(
         home: Material(
-          child: ApptiveGridUserManagement.withClient(
-            confirmAccountPrompt: (_) {},
-            clientId: 'client',
-            onChangeEnvironment: (_) async {},
-            onAccountConfirmed: (_) {},
-            group: '',
+          child: StubUserManagement(
             client: client,
             child: const LoginContent(),
           ),
@@ -68,12 +63,7 @@ void main() {
 
       final target = MaterialApp(
         home: Material(
-          child: ApptiveGridUserManagement.withClient(
-            confirmAccountPrompt: (_) {},
-            clientId: 'client',
-            onChangeEnvironment: (_) async {},
-            onAccountConfirmed: (_) {},
-            group: '',
+          child: StubUserManagement(
             client: client,
             child: LoginContent(
               onLogin: () {
@@ -123,12 +113,7 @@ void main() {
 
       final target = MaterialApp(
         home: Material(
-          child: ApptiveGridUserManagement.withClient(
-            confirmAccountPrompt: (_) {},
-            clientId: 'client',
-            onChangeEnvironment: (_) async {},
-            onAccountConfirmed: (_) {},
-            group: '',
+          child: StubUserManagement(
             client: client,
             child: const LoginContent(),
           ),
