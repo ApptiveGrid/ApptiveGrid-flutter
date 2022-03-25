@@ -1,3 +1,6 @@
+## 0.0.3
+* Add functionality to reset passwords
+
 ## 0.0.2
 * Add Example
 * Disallow spaces in email fields
