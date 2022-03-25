@@ -30,20 +30,20 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
 
   @override
   Widget build(BuildContext context) {
-    final localisation = ApptiveGridUserManagementLocalization.of(context)!;
+    final localization = ApptiveGridUserManagementLocalization.of(context)!;
     final spacing =
         ApptiveGridUserManagementContent.maybeOf(context)?.spacing ?? 16;
     return AbsorbPointer(
       absorbing: _loading,
       child: Column(
         children: [
-          Text(localisation.confirmAccountCreation),
+          Text(localization.confirmAccountCreation),
           if (_error != null) ...[
             SizedBox(
               height: spacing,
             ),
             Text(
-              localisation.errorConfirm,
+              localization.errorConfirm,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Theme.of(context).errorColor,
@@ -66,7 +66,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                 )
               : ElevatedButton(
                   onPressed: _confirmAccount,
-                  child: Text(localisation.actionConfirm),
+                  child: Text(localization.actionConfirm),
                 )
         ],
       ),

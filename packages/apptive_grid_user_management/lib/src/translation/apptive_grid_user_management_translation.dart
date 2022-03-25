@@ -56,4 +56,30 @@ abstract class ApptiveGridUserManagementTranslation {
 
   /// Message when an error occurred during confirmation
   String get errorConfirm;
+
+  /// Option on login content
+  String get forgotPassword;
+
+  /// Message shown in the dialog to reset the password
+  String get forgotPasswordMessage;
+
+  /// Action prompt to reset the password;
+  String get actionResetPassword;
+
+  /// Action to cancel something
+  String get actionCancel;
+
+  /// Confirm that a message is understood
+  String get actionOk;
+
+  /// Confirmation Message after a link to reset a password has been send
+  String requestNewPasswordSuccess(String email);
+
+  String get resetPasswordMessage;
+
+  String get hintNewPassword;
+
+  String get actionPasswordChange;
+
+  String get resetPasswordSuccess;
 }

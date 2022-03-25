@@ -8,6 +8,7 @@ class PasswordFormField extends StatefulWidget {
     this.controller,
     this.decoration = const InputDecoration(),
     this.validator,
+    this.readOnly = false,
   }) : super(key: key);
 
   /// Controller for the input
@@ -18,6 +19,8 @@ class PasswordFormField extends StatefulWidget {
 
   /// Input Validator
   final String? Function(String?)? validator;
+
+  final bool readOnly;
 
   @override
   _PasswordFormFieldState createState() => _PasswordFormFieldState();
@@ -32,6 +35,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       controller: widget.controller,
       obscureText: _obscureText,
       autocorrect: false,
+      readOnly: widget.readOnly,
       keyboardType:
           _obscureText ? TextInputType.text : TextInputType.visiblePassword,
       decoration: widget.decoration.copyWith(

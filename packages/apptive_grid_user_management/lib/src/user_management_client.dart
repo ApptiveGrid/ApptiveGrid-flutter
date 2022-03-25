@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 /// A network client to perform requests to the ApptiveGridUserManagement Api
@@ -125,6 +126,52 @@ class ApptiveGridUserManagementClient {
     if (response.statusCode >= 400) {
       throw response;
     } else {
+      return response;
+    }
+  }
+
+  Future<http.Response> requestNewPassword({required String email}) async {
+    debugPrint('Request Reset for $email in client');
+    final response = await _client.post(
+      Uri.parse(
+        '${apptiveGridClient.options.environment.url}/auth/$group/forgotPassword',
+      ),
+      body: jsonEncode({
+        'email': email,
+        if (redirectSchema != null) 'redirectSchema': redirectSchema,
+      }),
+      headers: _commonHeaders,
+    );
+
+    if (response.statusCode >= 400) {
+      if (response.statusCode == 404) {
+        return http.Response('OK', 200);
+      }
+      throw response;
+    } else {
+      _email = email;
+      return response;
+    }
+  }
+
+  Future<http.Response> resetPassword({
+    required Uri resetUri,
+    required String newPassword,
+  }) async {
+    final response = await _client.put(
+      resetUri,
+      body: jsonEncode(
+        {
+          'newPassword': newPassword,
+        },
+      ),
+      headers: _commonHeaders,
+    );
+
+    if (response.statusCode >= 400) {
+      throw response;
+    } else {
+      _password = newPassword;
       return response;
     }
   }

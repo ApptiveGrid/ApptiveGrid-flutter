@@ -60,8 +60,8 @@ for lang in "en" "de"; do
     else
       translation="${array[$n]}"
     fi
-    if [ $key == "fieldIsRequired" ]; then
-      wildcard="fieldName"
+    if [ $key == "requestNewPasswordSuccess" ]; then
+      wildcard="email"
       printf "   String %s(String %s) => \"%s\";\n" $key "$wildcard" "$translation" >>$langFile
     else
       printf "   String get %s => \"%s\";\n" $key "$translation" >>$langFile

@@ -16,5 +16,15 @@
     "actionConfirm": "Confirm",
     "errorLogin": "Error during login. Please try again.",
     "errorRegister": "Error during registration. Please try again.",
-    "errorConfirm": "Error during confirmation. Please try again."
+    "errorConfirm": "Error during confirmation. Please try again.",
+    "forgotPassword": "Forgot password?",
+    "forgotPasswordMessage": "We can send you a link to reset your password.",
+    "actionResetPassword": "Reset",
+    "actionCancel": "Cancel",
+    "actionOk": "OK",
+    "requestNewPasswordSuccess": "We have send a link to reset your password to $email.",
+    "resetPasswordMessage": "Reset Password",
+    "hintNewPassword": "New password",
+    "actionPasswordChange": "Reset",
+    "resetPasswordSuccess": "Your password was reset successfully."
 }
