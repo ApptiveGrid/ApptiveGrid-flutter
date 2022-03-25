@@ -20,6 +20,7 @@ class PasswordFormField extends StatefulWidget {
   /// Input Validator
   final String? Function(String?)? validator;
 
+  /// Defines if this field is readOnly
   final bool readOnly;
 
   @override

@@ -22,6 +22,7 @@ class ApptiveGridUserManagementContent extends StatefulWidget {
   /// Custom spacing between items
   final double spacing;
 
+  /// Called with [resetPasswordContent] and [resetPasswordKey] to be able to build custom UIs to request a new Password
   final RequestPasswordResetCallback? requestResetPassword;
 
   @override

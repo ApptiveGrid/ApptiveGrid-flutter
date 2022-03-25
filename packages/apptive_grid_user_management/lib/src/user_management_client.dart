@@ -129,6 +129,11 @@ class ApptiveGridUserManagementClient {
     }
   }
 
+  /// Performs a request that will try to send a Email with a link to reset the user's password to [email]
+  ///
+  /// If there is no user with the provided [email] it will behave as if there was to prevent collecting of addresses
+  ///
+  /// This will save [email] in the session to allow [loginAfterConfirmation] to succeed if the user also [resetPassword] in the same session
   Future<http.Response> requestResetPassword({required String email}) async {
     final response = await _client.post(
       Uri.parse(
@@ -152,6 +157,9 @@ class ApptiveGridUserManagementClient {
     }
   }
 
+  /// Resets the user's password to [newPassword] by calling PUT against [resetUri]
+  ///
+  /// This will save [newPassword] in the session to allow [loginAfterConfirmation] to succeed if the user also called [requestResetPassword] or [register] before
   Future<http.Response> resetPassword({
     required Uri resetUri,
     required String newPassword,

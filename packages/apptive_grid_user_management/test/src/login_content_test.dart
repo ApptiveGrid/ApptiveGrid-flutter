@@ -190,11 +190,11 @@ void main() {
           ),
           email,
         );
-        await tester.pump();
-
+        await tester.pumpAndSettle();
         await tester.tap(find.text('Reset'));
-        await tester.pump();
+        await tester.pumpAndSettle();
 
+        verify(() => client.requestResetPassword(email: email)).called(1);
         expect(
           find.descendant(
             of: find.byType(TextButton),
@@ -207,7 +207,6 @@ void main() {
 
         expect(find.byType(AlertDialog), findsNothing);
         expect(find.byType(RequestResetPasswordContent), findsNothing);
-        verify(() => client.requestResetPassword(email: email)).called(1);
       });
 
       testWidgets('Cancel Dialog', (tester) async {

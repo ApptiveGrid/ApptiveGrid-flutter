@@ -5,11 +5,11 @@ import 'package:apptive_grid_user_management/src/request_reset_password_content.
 import 'package:apptive_grid_user_management/src/user_management_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 
 import '../infrastructure/mocks.dart';
 import '../infrastructure/test_app.dart';
-import 'package:http/http.dart' as http;
 
 void main() {
   late ApptiveGridUserManagementClient client;
@@ -19,12 +19,10 @@ void main() {
     client = MockApptiveGridUserManagementClient();
     final key = GlobalKey<RequestResetPasswordContentState>();
     target = StubUserManagement(
+      client: client,
       child: ListView(
         children: [
-          RequestResetPasswordContent(
-            key: key,
-            client: client,
-          ),
+          RequestResetPasswordContent(key: key),
           ElevatedButton(
             onPressed: () {
               key.currentState?.requestResetPassword();

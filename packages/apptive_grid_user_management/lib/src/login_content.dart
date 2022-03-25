@@ -6,6 +6,11 @@ import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_m
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
+/// Callback to build custom UIs for requesting a reset Link
+/// [resetPasswordContent] is the UI with Messaging and the textfield to display
+/// with the [RequestResetPasswordContentState] state acquired through the [requestPasswordKey] you can trigger the reset
+/// Note that the email that is used gets the input from a field in [resetPasswordContent]
+/// If you need a more custom experience you need to build your own ui and call [ApptiveGridUserManagementClient.requestResetPassword] yourself
 typedef RequestPasswordResetCallback = void Function(
   Widget resetPasswordContent,
   GlobalKey<RequestResetPasswordContentState> requestPasswordKey,
@@ -166,16 +171,22 @@ class _LoginContentState extends State<LoginContent> {
   void _requestResetPassword() {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     final contentKey = GlobalKey<RequestResetPasswordContentState>();
-    final content = ApptiveGridUserManagementLocalization(
-      child: RequestResetPasswordContent(
-        key: contentKey,
-        client: ApptiveGridUserManagement.maybeOf(context)?.client,
-      ),
-    );
 
     if (widget.requestResetPassword != null) {
+      final content = ApptiveGridUserManagementLocalization(
+        child: RequestResetPasswordContent(
+          key: contentKey,
+        ),
+      );
       widget.requestResetPassword!.call(content, contentKey);
     } else {
+      final content = ApptiveGridUserManagementLocalization(
+        child: RequestResetPasswordContent(
+          key: contentKey,
+          // Provide function to get the client from the dialog
+          getClient: () => ApptiveGridUserManagement.maybeOf(context)?.client,
+        ),
+      );
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -196,17 +207,13 @@ class _LoginContentState extends State<LoginContent> {
                         onPressed: Navigator.of(dialogContext).pop,
                         child: Text(localization.actionCancel),
                       ),
-                      // Use Builder to make sure the state of the content is non-null to enable the button
-                      Builder(
-                        builder: (context) => TextButton(
-                          onPressed: () async {
-                            await contentKey.currentState
-                                ?.requestResetPassword();
-                            setState.call(() {});
-                          },
-                          child: Text(localization.actionResetPassword),
-                        ),
-                      )
+                      TextButton(
+                        onPressed: () async {
+                          await contentKey.currentState?.requestResetPassword();
+                          setState.call(() {});
+                        },
+                        child: Text(localization.actionResetPassword),
+                      ),
                     ],
             ),
           );

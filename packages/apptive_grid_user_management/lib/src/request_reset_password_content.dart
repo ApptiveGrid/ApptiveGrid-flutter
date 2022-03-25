@@ -5,23 +5,32 @@ import 'package:apptive_grid_user_management/src/user_management_client.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+/// Content to show if the user forgot their password
+///
+/// Shows Messaging on what is happening and provides a Input field to provide an email
 class RequestResetPasswordContent extends StatefulWidget {
-  const RequestResetPasswordContent({Key? key, required this.client})
+  /// Creates a new ResetPasswordContent Widget
+  const RequestResetPasswordContent({Key? key, this.getClient})
       : super(key: key);
 
-  final ApptiveGridUserManagementClient? client;
+  /// Function to get a [ApptiveGridUserManagementClient]
+  ///
+  /// Needed for the default behaviour of the forgot passwort button in [LoginContent] to get access to the Client from a dialog
+  final ApptiveGridUserManagementClient? Function()? getClient;
 
   @override
   RequestResetPasswordContentState createState() =>
       RequestResetPasswordContentState();
 }
 
+/// State for [RequestResetPasswordContent]
 class RequestResetPasswordContentState
     extends State<RequestResetPasswordContent> {
   bool _loading = false;
 
   bool _success = false;
 
+  /// returns `true` if the email was send
   bool get success => _success;
 
   dynamic _error;
@@ -126,8 +135,12 @@ class RequestResetPasswordContentState
     );
   }
 
+  /// Requests that there is a reset link send to the user
+  ///
+  /// If there already is a request running or there has been a mail send already then this call will return
+  /// If the email is null or empty there will be a hint to the user and no request will be made
   Future<void> requestResetPassword() async {
-    if (_loading) {
+    if (_loading || _success) {
       return;
     }
     setState(() {
@@ -142,7 +155,8 @@ class RequestResetPasswordContentState
       });
       return;
     }
-    final client = widget.client;
+    final client = widget.getClient?.call() ??
+        ApptiveGridUserManagement.maybeOf(context)?.client;
     final response = await client
         ?.requestResetPassword(email: _textEditingController.text)
         .catchError((error) {

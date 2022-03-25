@@ -75,15 +75,21 @@ abstract class ApptiveGridUserManagementTranslation {
   /// Confirmation Message after a link to reset a password has been send
   String requestResetPasswordSuccess(String email);
 
+  /// Hint/Title to reset the password
   String get resetPasswordMessage;
 
+  /// Hint for the FormField to set a New Password
   String get hintNewPassword;
 
-  String get actionPasswordChange;
+  /// Action to reset a password
+  String get actionPasswordReset;
 
+  /// Message that the password was reset successfully
   String get resetPasswordSuccess;
 
+  /// Message that there has been an unknown error
   String get errorUnknown;
 
+  /// Message that there has been an error while resetting the password
   String get errorReset;
 }

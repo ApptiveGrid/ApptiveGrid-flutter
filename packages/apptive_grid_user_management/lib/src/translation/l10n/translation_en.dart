@@ -62,7 +62,7 @@ class ApptiveGridUserManagementLocalizedTranslation
   @override
   String get hintNewPassword => "New password";
   @override
-  String get actionPasswordChange => "Reset";
+  String get actionPasswordReset => "Reset";
   @override
   String get resetPasswordSuccess => "Your password was reset successfully.";
   @override
