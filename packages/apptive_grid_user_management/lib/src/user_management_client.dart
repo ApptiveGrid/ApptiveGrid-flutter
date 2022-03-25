@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 /// A network client to perform requests to the ApptiveGridUserManagement Api
@@ -130,8 +129,7 @@ class ApptiveGridUserManagementClient {
     }
   }
 
-  Future<http.Response> requestNewPassword({required String email}) async {
-    debugPrint('Request Reset for $email in client');
+  Future<http.Response> requestResetPassword({required String email}) async {
     final response = await _client.post(
       Uri.parse(
         '${apptiveGridClient.options.environment.url}/auth/$group/forgotPassword',

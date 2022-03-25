@@ -109,7 +109,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       height: spacing,
                     ),
                     Text(
-                      localization.errorConfirm,
+                      localization.errorReset,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Theme.of(context).errorColor,

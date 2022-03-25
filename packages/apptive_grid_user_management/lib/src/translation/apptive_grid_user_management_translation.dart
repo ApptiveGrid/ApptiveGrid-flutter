@@ -73,7 +73,7 @@ abstract class ApptiveGridUserManagementTranslation {
   String get actionOk;
 
   /// Confirmation Message after a link to reset a password has been send
-  String requestNewPasswordSuccess(String email);
+  String requestResetPasswordSuccess(String email);
 
   String get resetPasswordMessage;
 
@@ -82,4 +82,8 @@ abstract class ApptiveGridUserManagementTranslation {
   String get actionPasswordChange;
 
   String get resetPasswordSuccess;
+
+  String get errorUnknown;
+
+  String get errorReset;
 }

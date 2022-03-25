@@ -183,9 +183,9 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
   Future<bool> _requestPasswordReset(Uri? uri) async {
     final isResetLink = _isResetPasswordLink(uri);
     if (isResetLink) {
-      //assert(uri != null);
+      assert(uri != null);
       final environment = ApptiveGridEnvironment.values.firstWhere(
-        (element) => Uri.parse(element.url).host == uri?.host,
+        (element) => Uri.parse(element.url).host == uri!.host,
         orElse: () => ApptiveGridEnvironment.production,
       );
       await widget.onChangeEnvironment?.call(environment);
@@ -193,7 +193,7 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
       widget.resetPasswordPrompt(
         ApptiveGridUserManagementLocalization(
           child: ResetPassword(
-            resetUri: uri ?? Uri.parse('dummy.uri'),
+            resetUri: uri!,
             onReset: widget.onPasswordReset,
           ),
         ),
@@ -203,20 +203,20 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
   }
 
   bool _isResetPasswordLink(Uri? uri) {
-    //return true;
-    debugPrint('Checking $uri if reset Link');
     final isResetLink = uri != null &&
         uri.host.endsWith('apptivegrid.de') &&
         uri.pathSegments.contains('auth') &&
         uri.pathSegments.contains('resetPassword') &&
         uri.pathSegments.contains(widget.group);
-    debugPrint('Result: $isResetLink');
     return isResetLink;
   }
 
   /// Wait until the initial setup is completed. Used for checking if the app was started with a confirmation Link
   /// Useful for custom splash screens
   Future<List<bool>> initialSetup() => Future.wait(
-        [_initialConfirmationChecker.future, _initialResetChecker.future],
+        [
+          _initialConfirmationChecker.future,
+          _initialResetChecker.future,
+        ],
       );
 }

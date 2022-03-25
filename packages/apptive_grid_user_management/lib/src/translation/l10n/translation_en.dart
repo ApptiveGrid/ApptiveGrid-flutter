@@ -55,7 +55,7 @@ class ApptiveGridUserManagementLocalizedTranslation
   @override
   String get actionOk => "OK";
   @override
-  String requestNewPasswordSuccess(String email) =>
+  String requestResetPasswordSuccess(String email) =>
       "We have send a link to reset your password to $email.";
   @override
   String get resetPasswordMessage => "Reset Password";
@@ -65,4 +65,8 @@ class ApptiveGridUserManagementLocalizedTranslation
   String get actionPasswordChange => "Reset";
   @override
   String get resetPasswordSuccess => "Your password was reset successfully.";
+  @override
+  String get errorUnknown => "An error occurred. Please try again.";
+  @override
+  String get errorReset => "Password could not be set. Please try again.";
 }

@@ -1,11 +1,15 @@
 import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/email_form_field.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
+import 'package:apptive_grid_user_management/src/user_management_client.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class RequestResetPasswordContent extends StatefulWidget {
-  const RequestResetPasswordContent({Key? key}) : super(key: key);
+  const RequestResetPasswordContent({Key? key, required this.client})
+      : super(key: key);
+
+  final ApptiveGridUserManagementClient? client;
 
   @override
   RequestResetPasswordContentState createState() =>
@@ -15,8 +19,6 @@ class RequestResetPasswordContent extends StatefulWidget {
 class RequestResetPasswordContentState
     extends State<RequestResetPasswordContent> {
   bool _loading = false;
-
-  bool get loading => _loading;
 
   bool _success = false;
 
@@ -54,7 +56,7 @@ class RequestResetPasswordContentState
                     child: Builder(
                       builder: (context) {
                         final baseString =
-                            localization.requestNewPasswordSuccess(
+                            localization.requestResetPasswordSuccess(
                           _textEditingController.text,
                         );
                         final mail = _textEditingController.text;
@@ -106,7 +108,7 @@ class RequestResetPasswordContentState
                       height: spacing,
                     ),
                     Text(
-                      localization.errorLogin,
+                      localization.errorUnknown,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Theme.of(context).errorColor,
@@ -124,7 +126,7 @@ class RequestResetPasswordContentState
     );
   }
 
-  Future<void> requestNewPassword() async {
+  Future<void> requestResetPassword() async {
     if (_loading) {
       return;
     }
@@ -140,9 +142,9 @@ class RequestResetPasswordContentState
       });
       return;
     }
-    final client = ApptiveGridUserManagement.maybeOf(context)!.client;
+    final client = widget.client;
     final response = await client
-        ?.requestNewPassword(email: _textEditingController.text)
+        ?.requestResetPassword(email: _textEditingController.text)
         .catchError((error) {
       _error = error;
       if (error is http.Response) {

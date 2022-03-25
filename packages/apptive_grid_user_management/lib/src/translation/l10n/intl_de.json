@@ -22,9 +22,11 @@
     "actionResetPassword": "Zurücksetzen",
     "actionCancel": "Abbrechen",
     "actionOk": "OK",
-    "requestNewPasswordSuccess": "Wir haben einen Link zum zurücksetzen an $email gesendet.",
+    "requestResetPasswordSuccess": "Wir haben einen Link zum zurücksetzen an $email gesendet.",
     "resetPasswordMessage": "Passwort zurücksetzen",
     "hintNewPassword": "Neues Passwort",
     "actionPasswordChange": "Zurücksetzen",
-    "resetPasswordSuccess": "Dein Passwort wurde erfolgreich zurückgesetzt"
+    "resetPasswordSuccess": "Dein Passwort wurde erfolgreich zurückgesetzt",
+    "errorUnknown": "Leider ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+    "errorReset": "Passwort konnte nicht zurückgesetzt werden. Bitte versuche es erneut."
 }

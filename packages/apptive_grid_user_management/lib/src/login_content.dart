@@ -8,7 +8,7 @@ import 'package:http/http.dart';
 
 typedef RequestPasswordResetCallback = void Function(
   Widget resetPasswordContent,
-  GlobalKey<RequestResetPasswordContentState> requestPasswordState,
+  GlobalKey<RequestResetPasswordContentState> requestPasswordKey,
 );
 
 /// A Widget to show Login Controls
@@ -87,7 +87,7 @@ class _LoginContentState extends State<LoginContent> {
                 ),
               ),
               onPressed: () {
-                _requestNewPassword();
+                _requestResetPassword();
               },
             ),
           ),
@@ -163,22 +163,25 @@ class _LoginContentState extends State<LoginContent> {
     });
   }
 
-  void _requestNewPassword() {
+  void _requestResetPassword() {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     final contentKey = GlobalKey<RequestResetPasswordContentState>();
-    final content = RequestResetPasswordContent(key: contentKey);
+    final content = ApptiveGridUserManagementLocalization(
+      child: RequestResetPasswordContent(
+        key: contentKey,
+        client: ApptiveGridUserManagement.maybeOf(context)?.client,
+      ),
+    );
 
     if (widget.requestResetPassword != null) {
       widget.requestResetPassword!.call(content, contentKey);
     } else {
-      final dialogKey = GlobalKey();
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (dialogContext) {
           return StatefulBuilder(
             builder: (_, setState) => AlertDialog(
-              key: dialogKey,
               title: Text(localization.forgotPassword),
               content: content,
               actions: contentKey.currentState?.success == true
@@ -197,7 +200,8 @@ class _LoginContentState extends State<LoginContent> {
                       Builder(
                         builder: (context) => TextButton(
                           onPressed: () async {
-                            await contentKey.currentState?.requestNewPassword();
+                            await contentKey.currentState
+                                ?.requestResetPassword();
                             setState.call(() {});
                           },
                           child: Text(localization.actionResetPassword),

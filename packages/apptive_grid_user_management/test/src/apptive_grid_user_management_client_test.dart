@@ -255,56 +255,311 @@ void main() {
   });
 
   group('Login after Confirmation', () {
-    test('Registered before, Login success returns true', () async {
+    group('Confirmation', () {
+      test('Registered before, Login success returns true', () async {
+        final httpClient = MockHttpClient();
+        final apptiveGridClient = MockApptiveGridClient();
+        when(() => apptiveGridClient.options)
+            .thenReturn(const ApptiveGridOptions());
+        when(() => apptiveGridClient.setUserToken(any()))
+            .thenAnswer((_) async {});
+        final client = ApptiveGridUserManagementClient(
+          group: 'group',
+          clientId: 'clientId',
+          apptiveGridClient: apptiveGridClient,
+          client: httpClient,
+        );
+
+        final loginResponse = Response('{"key":"value"}', 200);
+        when(
+          () => httpClient.get(
+            any(
+              that: predicate<Uri>(
+                (uri) => uri.pathSegments.contains('login'),
+              ),
+            ),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => loginResponse);
+
+        final registrationResponse = Response('', 200);
+        when(
+          () => httpClient.post(
+            any(
+              that: predicate<Uri>(
+                (uri) => uri.pathSegments.contains('users'),
+              ),
+            ),
+            body: any(named: 'body'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => registrationResponse);
+
+        await client.register(
+          firstName: 'firstName',
+          lastName: 'lastName',
+          email: 'email',
+          password: 'password',
+        );
+
+        expect(await client.loginAfterConfirmation(), equals(true));
+      });
+
+      test('Registered before, Login error returns false', () async {
+        final httpClient = MockHttpClient();
+        final apptiveGridClient = MockApptiveGridClient();
+        when(() => apptiveGridClient.options)
+            .thenReturn(const ApptiveGridOptions());
+        final client = ApptiveGridUserManagementClient(
+          group: 'group',
+          clientId: 'clientId',
+          apptiveGridClient: apptiveGridClient,
+          client: httpClient,
+        );
+
+        final loginResponse = Response('{"key":"value"}', 400);
+        when(
+          () => httpClient.get(
+            any(
+              that: predicate<Uri>(
+                (uri) => uri.pathSegments.contains('login'),
+              ),
+            ),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => loginResponse);
+
+        final registrationResponse = Response('', 200);
+        when(
+          () => httpClient.post(
+            any(
+              that: predicate<Uri>(
+                (uri) => uri.pathSegments.contains('users'),
+              ),
+            ),
+            body: any(named: 'body'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => registrationResponse);
+
+        await client.register(
+          firstName: 'firstName',
+          lastName: 'lastName',
+          email: 'email',
+          password: 'password',
+        );
+
+        expect(await client.loginAfterConfirmation(), equals(false));
+      });
+
+      test('No registration returns false', () async {
+        final httpClient = MockHttpClient();
+        final apptiveGridClient = MockApptiveGridClient();
+        when(() => apptiveGridClient.options)
+            .thenReturn(const ApptiveGridOptions());
+        final client = ApptiveGridUserManagementClient(
+          group: 'group',
+          clientId: 'clientId',
+          apptiveGridClient: apptiveGridClient,
+          client: httpClient,
+        );
+
+        expect(await client.loginAfterConfirmation(), equals(false));
+      });
+    });
+
+    group('Reset Password', () {
+      test('Request reset, Reset Password, Login success returns true',
+          () async {
+        final httpClient = MockHttpClient();
+        final apptiveGridClient = MockApptiveGridClient();
+        when(() => apptiveGridClient.options)
+            .thenReturn(const ApptiveGridOptions());
+        when(() => apptiveGridClient.setUserToken(any()))
+            .thenAnswer((_) async {});
+        final client = ApptiveGridUserManagementClient(
+          group: 'group',
+          clientId: 'clientId',
+          apptiveGridClient: apptiveGridClient,
+          client: httpClient,
+        );
+
+        final loginResponse = Response('{"key":"value"}', 200);
+        when(
+          () => httpClient.get(
+            any(
+              that: predicate<Uri>(
+                (uri) => uri.pathSegments.contains('login'),
+              ),
+            ),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => loginResponse);
+
+        final requestResetResponse = Response('', 200);
+        when(
+          () => httpClient.post(
+            any(
+              that: predicate<Uri>(
+                (uri) => uri.pathSegments.contains('forgotPassword'),
+              ),
+            ),
+            body: any(named: 'body'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => requestResetResponse);
+
+        final resetResponse = Response('', 200);
+        final resetUri = Uri.parse('reset');
+        when(
+          () => httpClient.put(
+            resetUri,
+            body: any(named: 'body'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => resetResponse);
+
+        await client.requestResetPassword(
+          email: 'email',
+        );
+
+        await client.resetPassword(
+          resetUri: resetUri,
+          newPassword: 'newPassword',
+        );
+
+        expect(await client.loginAfterConfirmation(), equals(true));
+      });
+
+      test('Registered before, Login error returns false', () async {
+        final httpClient = MockHttpClient();
+        final apptiveGridClient = MockApptiveGridClient();
+        when(() => apptiveGridClient.options)
+            .thenReturn(const ApptiveGridOptions());
+        final client = ApptiveGridUserManagementClient(
+          group: 'group',
+          clientId: 'clientId',
+          apptiveGridClient: apptiveGridClient,
+          client: httpClient,
+        );
+
+        final loginResponse = Response('{"key":"value"}', 400);
+        when(
+          () => httpClient.get(
+            any(
+              that: predicate<Uri>(
+                (uri) => uri.pathSegments.contains('login'),
+              ),
+            ),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => loginResponse);
+
+        final requestResetResponse = Response('', 200);
+        when(
+          () => httpClient.post(
+            any(
+              that: predicate<Uri>(
+                (uri) => uri.pathSegments.contains('forgotPassword'),
+              ),
+            ),
+            body: any(named: 'body'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => requestResetResponse);
+
+        final resetResponse = Response('', 200);
+        final resetUri = Uri.parse('reset');
+        when(
+          () => httpClient.put(
+            resetUri,
+            body: any(named: 'body'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => resetResponse);
+
+        await client.requestResetPassword(
+          email: 'email',
+        );
+
+        await client.resetPassword(resetUri: resetUri, newPassword: 'password');
+
+        expect(await client.loginAfterConfirmation(), equals(false));
+      });
+
+      test('No registration returns false', () async {
+        final httpClient = MockHttpClient();
+        final apptiveGridClient = MockApptiveGridClient();
+        when(() => apptiveGridClient.options)
+            .thenReturn(const ApptiveGridOptions());
+        final client = ApptiveGridUserManagementClient(
+          group: 'group',
+          clientId: 'clientId',
+          apptiveGridClient: apptiveGridClient,
+          client: httpClient,
+        );
+
+        final resetResponse = Response('', 200);
+        final resetUri = Uri.parse('reset');
+        when(
+          () => httpClient.put(
+            resetUri,
+            body: any(named: 'body'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => resetResponse);
+
+        await client.resetPassword(resetUri: resetUri, newPassword: 'password');
+
+        expect(await client.loginAfterConfirmation(), equals(false));
+      });
+    });
+  });
+
+  group('Request Reset', () {
+    test('Call returns response', () async {
       final httpClient = MockHttpClient();
       final apptiveGridClient = MockApptiveGridClient();
       when(() => apptiveGridClient.options)
           .thenReturn(const ApptiveGridOptions());
-      when(() => apptiveGridClient.setUserToken(any()))
-          .thenAnswer((_) async {});
       final client = ApptiveGridUserManagementClient(
         group: 'group',
         clientId: 'clientId',
         apptiveGridClient: apptiveGridClient,
         client: httpClient,
       );
-
-      final loginResponse = Response('{"key":"value"}', 200);
-      when(
-        () => httpClient.get(
-          any(
-            that: predicate<Uri>(
-              (uri) => uri.pathSegments.contains('login'),
-            ),
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => loginResponse);
-
-      final registrationResponse = Response('', 200);
+      const email = 'emailAddress';
+      final response = Response('', 200);
       when(
         () => httpClient.post(
           any(
             that: predicate<Uri>(
-              (uri) => uri.pathSegments.contains('users'),
+              (uri) => uri.pathSegments.contains('forgotPassword'),
             ),
           ),
-          body: any(named: 'body'),
           headers: any(named: 'headers'),
+          body: any(named: 'body'),
         ),
-      ).thenAnswer((_) async => registrationResponse);
+      ).thenAnswer((_) async => response);
 
-      await client.register(
-        firstName: 'firstName',
-        lastName: 'lastName',
-        email: 'email',
-        password: 'password',
+      expect(
+        await client.requestResetPassword(email: email),
+        response,
       );
 
-      expect(await client.loginAfterConfirmation(), equals(true));
+      final capturedBody = jsonDecode(
+        verify(
+          () => httpClient.post(
+            any(),
+            headers: any(named: 'headers'),
+            body: captureAny(named: 'body'),
+          ),
+        ).captured.first as String,
+      );
+      expect(capturedBody['email'], equals(email));
     });
 
-    test('Registered before, Login error returns false', () async {
+    test('Error throws response', () async {
       final httpClient = MockHttpClient();
       final apptiveGridClient = MockApptiveGridClient();
       when(() => apptiveGridClient.options)
@@ -315,43 +570,104 @@ void main() {
         apptiveGridClient: apptiveGridClient,
         client: httpClient,
       );
-
-      final loginResponse = Response('{"key":"value"}', 400);
-      when(
-        () => httpClient.get(
-          any(
-            that: predicate<Uri>(
-              (uri) => uri.pathSegments.contains('login'),
-            ),
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => loginResponse);
-
-      final registrationResponse = Response('', 200);
+      const email = 'emailAddress';
+      final response = Response('', 400);
       when(
         () => httpClient.post(
           any(
             that: predicate<Uri>(
-              (uri) => uri.pathSegments.contains('users'),
+              (uri) => uri.pathSegments.contains('forgotPassword'),
             ),
           ),
-          body: any(named: 'body'),
           headers: any(named: 'headers'),
+          body: any(named: 'body'),
         ),
-      ).thenAnswer((_) async => registrationResponse);
+      ).thenAnswer((_) async => response);
 
-      await client.register(
-        firstName: 'firstName',
-        lastName: 'lastName',
-        email: 'email',
-        password: 'password',
+      expect(
+        () => client.requestResetPassword(email: email),
+        throwsA(
+          equals(response),
+        ),
       );
-
-      expect(await client.loginAfterConfirmation(), equals(false));
     });
 
-    test('No registration returns false', () async {
+    test('404 Error returns OK Response', () async {
+      final httpClient = MockHttpClient();
+      final apptiveGridClient = MockApptiveGridClient();
+      when(() => apptiveGridClient.options)
+          .thenReturn(const ApptiveGridOptions());
+      final client = ApptiveGridUserManagementClient(
+        group: 'group',
+        clientId: 'clientId',
+        apptiveGridClient: apptiveGridClient,
+        client: httpClient,
+      );
+      const email = 'emailAddress';
+      final response = Response('', 404);
+      when(
+        () => httpClient.post(
+          any(
+            that: predicate<Uri>(
+              (uri) => uri.pathSegments.contains('forgotPassword'),
+            ),
+          ),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      expect(
+        (await client.requestResetPassword(email: email)).statusCode,
+        equals(200),
+      );
+    });
+  });
+
+  group('Reset Password', () {
+    test('Call returns response', () async {
+      final httpClient = MockHttpClient();
+      final apptiveGridClient = MockApptiveGridClient();
+      when(() => apptiveGridClient.options)
+          .thenReturn(const ApptiveGridOptions());
+      final client = ApptiveGridUserManagementClient(
+        group: 'group',
+        clientId: 'clientId',
+        apptiveGridClient: apptiveGridClient,
+        client: httpClient,
+      );
+      final resetUri = Uri.parse('https://reset.this');
+      const newPassword = 'newPassword';
+      final response = Response('', 200);
+      when(
+        () => httpClient.put(
+          resetUri,
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      expect(
+        await client.resetPassword(
+          resetUri: resetUri,
+          newPassword: newPassword,
+        ),
+        response,
+      );
+
+      final capturedBody = jsonDecode(
+        verify(
+          () => httpClient.put(
+            any(),
+            headers: any(named: 'headers'),
+            body: captureAny(named: 'body'),
+          ),
+        ).captured.first as String,
+      );
+      expect(capturedBody['newPassword'], equals(newPassword));
+    });
+
+    test('Error throws response', () async {
       final httpClient = MockHttpClient();
       final apptiveGridClient = MockApptiveGridClient();
       when(() => apptiveGridClient.options)
@@ -363,7 +679,24 @@ void main() {
         client: httpClient,
       );
 
-      expect(await client.loginAfterConfirmation(), equals(false));
+      final resetUri = Uri.parse('https://reset.this');
+      const newPassword = 'newPassword';
+      final response = Response('', 400);
+      when(
+        () => httpClient.put(
+          resetUri,
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      expect(
+        () =>
+            client.resetPassword(resetUri: resetUri, newPassword: newPassword),
+        throwsA(
+          equals(response),
+        ),
+      );
     });
   });
 }
