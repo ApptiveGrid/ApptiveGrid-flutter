@@ -1,3 +1,6 @@
+## 0.9.4
+* Fix Bug where not having a saved token would ask for User Authentication directly
+
 ## 0.9.3
 ### Rework Attachments
   * Deprecated old call to generate an upload url

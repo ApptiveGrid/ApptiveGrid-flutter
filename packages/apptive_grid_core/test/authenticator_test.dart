@@ -420,6 +420,35 @@ void main() {
         _zweidenkerIssuer.metadata.toJson(),
       );
     });
+
+    test('No saved token, auto authenticate true, not authenticate', () async {
+      final httpClient = MockHttpClient();
+      final tokenStorage = MockAuthenticationStorage();
+      final originalUniLinks = UniLinksPlatform.instance;
+      final mockUniLinks = MockUniLinks();
+      when(() => mockUniLinks.linkStream).thenAnswer((_) => Stream.value(null));
+      UniLinksPlatform.instance = mockUniLinks;
+      when(() => tokenStorage.credential).thenAnswer((_) => null);
+      authenticator = ApptiveGridAuthenticator(
+        authenticationStorage: tokenStorage,
+        options: const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+            persistCredentials: true,
+          ),
+        ),
+        httpClient: httpClient,
+      );
+
+      final isAuthenticated = await authenticator.isAuthenticated;
+
+      expect(isAuthenticated, equals(false));
+      verifyNever(
+        () => httpClient.get(discoveryUri, headers: any(named: 'headers')),
+      );
+
+      UniLinksPlatform.instance = originalUniLinks;
+    });
   });
 
   group('Logout', () {
