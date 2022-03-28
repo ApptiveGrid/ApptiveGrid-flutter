@@ -647,7 +647,7 @@ void main() {
           headers: {HttpHeaders.contentTypeHeader: ContentType.json},
         ),
       );
-      authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
+      authenticator = ApptiveGridAuthenticator(
         httpClient: httpClient,
         options: const ApptiveGridOptions(
           authenticationOptions: ApptiveGridAuthenticationOptions(
@@ -655,7 +655,7 @@ void main() {
             persistCredentials: true,
           ),
         ),
-        storage: storage,
+        authenticationStorage: storage,
       );
 
       when(() => storage.saveCredential(any())).thenAnswer((_) {});
@@ -724,14 +724,14 @@ void main() {
       final testAuthenticator = MockAuthenticator();
 
       final storage = MockAuthenticationStorage();
-      authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
+      authenticator = ApptiveGridAuthenticator(
         options: const ApptiveGridOptions(
           authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
             persistCredentials: true,
           ),
         ),
-        storage: storage,
+        authenticationStorage: storage,
         httpClient: httpClient,
       );
       authenticator.testAuthenticator = testAuthenticator;
@@ -795,14 +795,14 @@ void main() {
       final testAuthenticator = MockAuthenticator();
 
       final storage = MockAuthenticationStorage();
-      authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
+      authenticator = ApptiveGridAuthenticator(
         options: const ApptiveGridOptions(
           authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
             persistCredentials: true,
           ),
         ),
-        storage: storage,
+        authenticationStorage: storage,
         httpClient: httpClient,
       );
       authenticator.testAuthenticator = testAuthenticator;
@@ -847,7 +847,7 @@ void main() {
         ),
       );
 
-      authenticator = ApptiveGridAuthenticator.withAuthenticationStorage(
+      authenticator = ApptiveGridAuthenticator(
         httpClient: httpClient,
         options: const ApptiveGridOptions(
           authenticationOptions: ApptiveGridAuthenticationOptions(
@@ -855,7 +855,7 @@ void main() {
             persistCredentials: true,
           ),
         ),
-        storage: storage,
+        authenticationStorage: storage,
       );
       authenticator.testAuthenticator = testAuthenticator;
 
@@ -945,7 +945,7 @@ void main() {
           options: any(named: 'options'),
         ),
       ).called(
-        4, // Creation of Authenticator reloads credential, Setting token also saves credential
+        2, // Creation of Authenticator reloads credential, Setting token also saves credential
       );
       verify(
         () => secureStorage.read(
