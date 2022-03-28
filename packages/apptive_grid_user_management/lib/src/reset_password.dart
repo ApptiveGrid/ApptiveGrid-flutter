@@ -65,6 +65,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   PasswordFormField(
                     key: _newPasswordFormKey,
                     controller: _newPasswordController,
+                    autofillHints: const [AutofillHints.newPassword],
                     decoration: InputDecoration(
                       hintText: localization.hintNewPassword,
                       errorStyle: const TextStyle(fontSize: 0),
@@ -93,6 +94,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   ),
                   PasswordFormField(
                     controller: _confirmPasswordController,
+                    autofillHints: const [AutofillHints.password],
                     decoration: InputDecoration(
                       hintText: localization.hintConfirmPassword,
                     ),

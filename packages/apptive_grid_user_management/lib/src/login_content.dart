@@ -75,6 +75,7 @@ class _LoginContentState extends State<LoginContent> {
           ),
           PasswordFormField(
             controller: _passwordController,
+            autofillHints: const [AutofillHints.password],
             decoration: InputDecoration(
               hintText: localization.hintPassword,
             ),
