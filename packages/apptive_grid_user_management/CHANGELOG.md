@@ -1,5 +1,6 @@
 ## 0.0.3
 * Add functionality to reset passwords
+* **BREAKING** Rename `redirectSchema` to `redirectScheme`
 
 ## 0.0.2
 * Add Example

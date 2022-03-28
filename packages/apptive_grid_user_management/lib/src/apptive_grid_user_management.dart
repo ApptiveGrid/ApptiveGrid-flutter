@@ -112,7 +112,7 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
         ApptiveGridUserManagementClient(
           group: widget.group,
           clientId: widget.clientId,
-          redirectSchema: widget.redirectScheme,
+          redirectScheme: widget.redirectScheme,
           apptiveGridClient: ApptiveGrid.getClient(context),
         );
 

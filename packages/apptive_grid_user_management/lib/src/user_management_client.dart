@@ -9,7 +9,7 @@ class ApptiveGridUserManagementClient {
   ApptiveGridUserManagementClient({
     required this.group,
     required this.clientId,
-    this.redirectSchema,
+    this.redirectScheme,
     required this.apptiveGridClient,
     this.locale,
     http.Client? client,
@@ -25,7 +25,7 @@ class ApptiveGridUserManagementClient {
   /// if this is not provided the email will contain a https://app.apptivegrid.de/ link
   /// If you want to use the https Links (support for iOS Universal Linking) contact ApptiveGrid to get your App added
   /// info@apptivegrid.de
-  final String? redirectSchema;
+  final String? redirectScheme;
 
   /// ApptiveGridClient. This is used to save the token after login
   final ApptiveGridClient apptiveGridClient;
@@ -59,7 +59,7 @@ class ApptiveGridUserManagementClient {
         'lastName': lastName,
         'email': email,
         'password': password,
-        if (redirectSchema != null) 'redirectSchema': redirectSchema,
+        if (redirectScheme != null) 'redirectScheme': redirectScheme,
       }),
       headers: _commonHeaders,
     );
@@ -141,7 +141,7 @@ class ApptiveGridUserManagementClient {
       ),
       body: jsonEncode({
         'email': email,
-        if (redirectSchema != null) 'redirectSchema': redirectSchema,
+        if (redirectScheme != null) 'redirectScheme': redirectScheme,
       }),
       headers: _commonHeaders,
     );

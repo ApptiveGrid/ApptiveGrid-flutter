@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
         return ApptiveGridUserManagement(
           group: 'YOUR_USER_GROUP',
           clientId: 'app',
+          redirectScheme: 'resetTest',
           confirmAccountPrompt: (confirmWidget) {
             // Show [confirmWidget] to allow Users to confirm their account
           },

@@ -58,7 +58,7 @@ void main() {
       final client = ApptiveGridUserManagementClient(
         group: 'group',
         clientId: 'clientId',
-        redirectSchema: 'customRedirect',
+        redirectScheme: 'customRedirect',
         apptiveGridClient: apptiveGridClient,
         client: httpClient,
       );
