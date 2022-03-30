@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
             debugPrint('User is now loggedIn: $loggedIn');
             _navigatorKey.currentState?.pop();
           },
+          passwordRequirement: PasswordRequirement.safetyHint,
           child: MaterialApp(
             navigatorKey: _navigatorKey,
             title: 'Apptive Grid User Management Example',
