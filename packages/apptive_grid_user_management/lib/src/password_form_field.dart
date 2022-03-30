@@ -9,7 +9,7 @@ class PasswordFormField extends StatefulWidget {
     this.decoration = const InputDecoration(),
     this.validator,
     this.readOnly = false,
-    this.autofillHints = const [],
+    this.autofillHints = const [AutofillHints.password],
   }) : super(key: key);
 
   /// Controller for the input
