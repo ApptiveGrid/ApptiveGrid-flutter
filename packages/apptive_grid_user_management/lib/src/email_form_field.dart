@@ -22,7 +22,7 @@ class EmailFormField extends StatelessWidget {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     return TextFormField(
       controller: controller,
-      autocorrect: false,
+      autofillHints: const [AutofillHints.email],
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         hintText: localization.hintEmail,

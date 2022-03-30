@@ -8,6 +8,8 @@ class PasswordFormField extends StatefulWidget {
     this.controller,
     this.decoration = const InputDecoration(),
     this.validator,
+    this.readOnly = false,
+    this.autofillHints = const [AutofillHints.password],
   }) : super(key: key);
 
   /// Controller for the input
@@ -18,6 +20,12 @@ class PasswordFormField extends StatefulWidget {
 
   /// Input Validator
   final String? Function(String?)? validator;
+
+  /// Defines if this field is readOnly
+  final bool readOnly;
+
+  /// Hints for auto filling
+  final Iterable<String> autofillHints;
 
   @override
   _PasswordFormFieldState createState() => _PasswordFormFieldState();
@@ -32,6 +40,8 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       controller: widget.controller,
       obscureText: _obscureText,
       autocorrect: false,
+      autofillHints: widget.autofillHints,
+      readOnly: widget.readOnly,
       keyboardType:
           _obscureText ? TextInputType.text : TextInputType.visiblePassword,
       decoration: widget.decoration.copyWith(

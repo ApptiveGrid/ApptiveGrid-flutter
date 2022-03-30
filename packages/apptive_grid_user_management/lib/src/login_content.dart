@@ -1,15 +1,30 @@
 import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/email_form_field.dart';
 import 'package:apptive_grid_user_management/src/password_form_field.dart';
+import 'package:apptive_grid_user_management/src/request_reset_password_content.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
+/// Callback to build custom UIs for requesting a reset Link
+/// [resetPasswordContent] is the UI with Messaging and the textfield to display
+/// with the [RequestResetPasswordContentState] state acquired through the [requestPasswordKey] you can trigger the reset
+/// Note that the email that is used gets the input from a field in [resetPasswordContent]
+/// If you need a more custom experience you need to build your own ui and call [ApptiveGridUserManagementClient.requestResetPassword] yourself
+typedef RequestPasswordResetCallback = void Function(
+  Widget resetPasswordContent,
+  GlobalKey<RequestResetPasswordContentState> requestPasswordKey,
+);
+
 /// A Widget to show Login Controls
 class LoginContent extends StatefulWidget {
   /// Creates a new LoginContent Widget to display inputs for a user to log in
-  const LoginContent({Key? key, this.requestRegistration, this.onLogin})
-      : super(key: key);
+  const LoginContent({
+    Key? key,
+    this.requestRegistration,
+    this.onLogin,
+    this.requestResetPassword,
+  }) : super(key: key);
 
   /// Callback invoked when the user wants to switch to registering
   /// If this is `null` no option to switch to registration is shown
@@ -17,6 +32,9 @@ class LoginContent extends StatefulWidget {
 
   /// Callback invoked after the user logged successfully
   final void Function()? onLogin;
+
+  /// Show a custom Dialog/Widget when the User requests a new password
+  final RequestPasswordResetCallback? requestResetPassword;
 
   @override
   _LoginContentState createState() => _LoginContentState();
@@ -39,6 +57,7 @@ class _LoginContentState extends State<LoginContent> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     final spacing =
         ApptiveGridUserManagementContent.maybeOf(context)?.spacing ?? 16;
@@ -56,8 +75,26 @@ class _LoginContentState extends State<LoginContent> {
           ),
           PasswordFormField(
             controller: _passwordController,
+            autofillHints: const [AutofillHints.password],
             decoration: InputDecoration(
               hintText: localization.hintPassword,
+            ),
+          ),
+          SizedBox(
+            height: spacing,
+          ),
+          Center(
+            child: TextButton(
+              child: Text(
+                localization.forgotPassword,
+                style: textTheme.bodyText1?.copyWith(
+                  decoration: TextDecoration.underline,
+                  color: textTheme.bodyText2?.color,
+                ),
+              ),
+              onPressed: () {
+                _requestResetPassword();
+              },
             ),
           ),
           if (_error != null) ...[
@@ -130,5 +167,59 @@ class _LoginContentState extends State<LoginContent> {
         widget.onLogin?.call();
       }
     });
+  }
+
+  void _requestResetPassword() {
+    final localization = ApptiveGridUserManagementLocalization.of(context)!;
+    final contentKey = GlobalKey<RequestResetPasswordContentState>();
+
+    if (widget.requestResetPassword != null) {
+      final content = ApptiveGridUserManagementLocalization(
+        child: RequestResetPasswordContent(
+          key: contentKey,
+        ),
+      );
+      widget.requestResetPassword!.call(content, contentKey);
+    } else {
+      final content = ApptiveGridUserManagementLocalization(
+        child: RequestResetPasswordContent(
+          key: contentKey,
+          // Provide function to get the client from the dialog
+          getClient: () => ApptiveGridUserManagement.maybeOf(context)?.client,
+        ),
+      );
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) {
+          return StatefulBuilder(
+            builder: (_, setState) => AlertDialog(
+              title: Text(localization.forgotPassword),
+              content: content,
+              actions: contentKey.currentState?.success == true
+                  ? [
+                      TextButton(
+                        onPressed: Navigator.of(dialogContext).pop,
+                        child: Text(localization.actionOk),
+                      ),
+                    ]
+                  : [
+                      TextButton(
+                        onPressed: Navigator.of(dialogContext).pop,
+                        child: Text(localization.actionCancel),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await contentKey.currentState?.requestResetPassword();
+                          setState.call(() {});
+                        },
+                        child: Text(localization.actionResetPassword),
+                      ),
+                    ],
+            ),
+          );
+        },
+      );
+    }
   }
 }

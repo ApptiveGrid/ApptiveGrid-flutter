@@ -47,4 +47,33 @@ class ApptiveGridUserManagementLocalizedTranslation
   @override
   String get errorConfirm =>
       "Beim bestätigen des Accounts ist ein Fehler aufgetreten. Bitte versuche es erneut.";
+  @override
+  String get forgotPassword => "Passwort vergessen?";
+  @override
+  String get forgotPasswordMessage =>
+      "Wir können dir einen Link schicken, mit dem du dein Passwort zurücksetzen kannst.";
+  @override
+  String get actionResetPassword => "Zurücksetzen";
+  @override
+  String get actionCancel => "Abbrechen";
+  @override
+  String get actionOk => "OK";
+  @override
+  String requestResetPasswordSuccess(String email) =>
+      "Wir haben einen Link zum zurücksetzen an $email gesendet.";
+  @override
+  String get resetPasswordMessage => "Passwort zurücksetzen";
+  @override
+  String get hintNewPassword => "Neues Passwort";
+  @override
+  String get actionPasswordReset => "Zurücksetzen";
+  @override
+  String get resetPasswordSuccess =>
+      "Dein Passwort wurde erfolgreich zurückgesetzt";
+  @override
+  String get errorUnknown =>
+      "Leider ist ein Fehler aufgetreten. Bitte versuche es erneut.";
+  @override
+  String get errorReset =>
+      "Passwort konnte nicht zurückgesetzt werden. Bitte versuche es erneut.";
 }

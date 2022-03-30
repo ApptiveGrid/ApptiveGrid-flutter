@@ -9,7 +9,7 @@ class ApptiveGridUserManagementClient {
   ApptiveGridUserManagementClient({
     required this.group,
     required this.clientId,
-    this.redirectSchema,
+    this.redirectScheme,
     required this.apptiveGridClient,
     this.locale,
     http.Client? client,
@@ -25,7 +25,7 @@ class ApptiveGridUserManagementClient {
   /// if this is not provided the email will contain a https://app.apptivegrid.de/ link
   /// If you want to use the https Links (support for iOS Universal Linking) contact ApptiveGrid to get your App added
   /// info@apptivegrid.de
-  final String? redirectSchema;
+  final String? redirectScheme;
 
   /// ApptiveGridClient. This is used to save the token after login
   final ApptiveGridClient apptiveGridClient;
@@ -59,7 +59,7 @@ class ApptiveGridUserManagementClient {
         'lastName': lastName,
         'email': email,
         'password': password,
-        if (redirectSchema != null) 'redirectSchema': redirectSchema,
+        if (redirectScheme != null) 'redirectScheme': redirectScheme,
       }),
       headers: _commonHeaders,
     );
@@ -125,6 +125,59 @@ class ApptiveGridUserManagementClient {
     if (response.statusCode >= 400) {
       throw response;
     } else {
+      return response;
+    }
+  }
+
+  /// Performs a request that will try to send a Email with a link to reset the user's password to [email]
+  ///
+  /// If there is no user with the provided [email] it will behave as if there was to prevent collecting of addresses
+  ///
+  /// This will save [email] in the session to allow [loginAfterConfirmation] to succeed if the user also [resetPassword] in the same session
+  Future<http.Response> requestResetPassword({required String email}) async {
+    final response = await _client.post(
+      Uri.parse(
+        '${apptiveGridClient.options.environment.url}/auth/$group/forgotPassword',
+      ),
+      body: jsonEncode({
+        'email': email,
+        if (redirectScheme != null) 'redirectScheme': redirectScheme,
+      }),
+      headers: _commonHeaders,
+    );
+
+    if (response.statusCode >= 400) {
+      if (response.statusCode == 404) {
+        return http.Response('OK', 200);
+      }
+      throw response;
+    } else {
+      _email = email;
+      return response;
+    }
+  }
+
+  /// Resets the user's password to [newPassword] by calling PUT against [resetUri]
+  ///
+  /// This will save [newPassword] in the session to allow [loginAfterConfirmation] to succeed if the user also called [requestResetPassword] or [register] before
+  Future<http.Response> resetPassword({
+    required Uri resetUri,
+    required String newPassword,
+  }) async {
+    final response = await _client.put(
+      resetUri,
+      body: jsonEncode(
+        {
+          'newPassword': newPassword,
+        },
+      ),
+      headers: _commonHeaders,
+    );
+
+    if (response.statusCode >= 400) {
+      throw response;
+    } else {
+      _password = newPassword;
       return response;
     }
   }

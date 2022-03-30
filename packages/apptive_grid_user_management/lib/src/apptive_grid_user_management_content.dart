@@ -10,6 +10,7 @@ class ApptiveGridUserManagementContent extends StatefulWidget {
     this.initialContentType = ContentType.register,
     this.onLogin,
     this.spacing = 16.0,
+    this.requestResetPassword,
   }) : super(key: key);
 
   /// The initial [ContentType] that should be displayed
@@ -20,6 +21,9 @@ class ApptiveGridUserManagementContent extends StatefulWidget {
 
   /// Custom spacing between items
   final double spacing;
+
+  /// Called with [resetPasswordContent] and [resetPasswordKey] to be able to build custom UIs to request a new Password
+  final RequestPasswordResetCallback? requestResetPassword;
 
   @override
   _ApptiveGridUserManagementContentState createState() =>
@@ -52,6 +56,7 @@ class _ApptiveGridUserManagementContentState
               _contentType = ContentType.register;
             });
           },
+          requestResetPassword: widget.requestResetPassword,
           onLogin: widget.onLogin,
         );
       case ContentType.register:

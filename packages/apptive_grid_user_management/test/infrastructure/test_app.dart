@@ -22,6 +22,8 @@ class StubUserManagement extends StatelessWidget {
           confirmAccountPrompt: (_) {},
           onAccountConfirmed: (_) {},
           onChangeEnvironment: (_) async {},
+          resetPasswordPrompt: (_) {},
+          onPasswordReset: (_) async {},
           client: client ?? MockApptiveGridUserManagementClient(),
           child: child,
         ),

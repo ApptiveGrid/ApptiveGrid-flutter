@@ -1,4 +1,3 @@
-import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/register_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../infrastructure/mocks.dart';
+import '../infrastructure/test_app.dart';
 
 void main() {
   group('Register', () {
@@ -14,12 +14,7 @@ void main() {
 
       final target = MaterialApp(
         home: Material(
-          child: ApptiveGridUserManagement.withClient(
-            confirmAccountPrompt: (_) {},
-            clientId: 'client',
-            onChangeEnvironment: (_) async {},
-            onAccountConfirmed: (_) {},
-            group: '',
+          child: StubUserManagement(
             client: client,
             child: const SingleChildScrollView(child: RegisterContent()),
           ),
@@ -113,12 +108,7 @@ void main() {
 
         final target = MaterialApp(
           home: Material(
-            child: ApptiveGridUserManagement.withClient(
-              confirmAccountPrompt: (_) {},
-              clientId: 'client',
-              onChangeEnvironment: (_) async {},
-              onAccountConfirmed: (_) {},
-              group: '',
+            child: StubUserManagement(
               client: client,
               child: const SingleChildScrollView(child: RegisterContent()),
             ),
@@ -152,12 +142,7 @@ void main() {
 
         final target = MaterialApp(
           home: Material(
-            child: ApptiveGridUserManagement.withClient(
-              confirmAccountPrompt: (_) {},
-              clientId: 'client',
-              onChangeEnvironment: (_) async {},
-              onAccountConfirmed: (_) {},
-              group: '',
+            child: StubUserManagement(
               client: client,
               child: const SingleChildScrollView(child: RegisterContent()),
             ),
@@ -197,12 +182,7 @@ void main() {
 
         final target = MaterialApp(
           home: Material(
-            child: ApptiveGridUserManagement.withClient(
-              confirmAccountPrompt: (_) {},
-              clientId: 'client',
-              onChangeEnvironment: (_) async {},
-              onAccountConfirmed: (_) {},
-              group: '',
+            child: StubUserManagement(
               client: client,
               child: const SingleChildScrollView(child: RegisterContent()),
             ),
@@ -254,12 +234,7 @@ void main() {
 
       final target = MaterialApp(
         home: Material(
-          child: ApptiveGridUserManagement.withClient(
-            confirmAccountPrompt: (_) {},
-            clientId: 'client',
-            onChangeEnvironment: (_) async {},
-            onAccountConfirmed: (_) {},
-            group: '',
+          child: StubUserManagement(
             client: client,
             child: const SingleChildScrollView(child: RegisterContent()),
           ),

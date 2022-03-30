@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_user_management/src/confirm_account.dart';
+import 'package:apptive_grid_user_management/src/reset_password.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
 import 'package:apptive_grid_user_management/src/user_management_client.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,8 @@ class ApptiveGridUserManagement extends StatefulWidget {
     required this.confirmAccountPrompt,
     required this.onAccountConfirmed,
     this.onChangeEnvironment,
+    required this.resetPasswordPrompt,
+    required this.onPasswordReset,
   })  : _client = null,
         super(key: key);
 
@@ -36,6 +39,8 @@ class ApptiveGridUserManagement extends StatefulWidget {
     required this.onAccountConfirmed,
     this.onChangeEnvironment,
     required ApptiveGridUserManagementClient client,
+    required this.resetPasswordPrompt,
+    required this.onPasswordReset,
   })  : _client = client,
         super(key: key);
 
@@ -66,6 +71,14 @@ class ApptiveGridUserManagement extends StatefulWidget {
   /// Callback when the User successfully confirmed their account
   final void Function(bool loggedIn) onAccountConfirmed;
 
+  /// Notifies that the app has been opened to reset a user Password
+  /// The user should be redirected to a Widget/Page containing the [resetPasswordWidget]
+  final void Function(Widget resetPasswordWidget) resetPasswordPrompt;
+
+  /// Callback when the User successfully reset their password
+  /// After this the User should be redirected to the login page
+  final void Function(bool loggedIn) onPasswordReset;
+
   final ApptiveGridUserManagementClient? _client;
 
   @override
@@ -79,11 +92,13 @@ class ApptiveGridUserManagement extends StatefulWidget {
 }
 
 class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
-  ApptiveGridUserManagementClient? _userManagementClient;
+  late ApptiveGridUserManagementClient? _userManagementClient;
 
   StreamSubscription? _deepLinkSubscription;
 
   final Completer<bool> _initialConfirmationChecker = Completer();
+
+  final Completer<bool> _initialResetChecker = Completer();
 
   @override
   void initState() {
@@ -97,17 +112,20 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
         ApptiveGridUserManagementClient(
           group: widget.group,
           clientId: widget.clientId,
-          redirectSchema: widget.redirectScheme,
+          redirectScheme: widget.redirectScheme,
           apptiveGridClient: ApptiveGrid.getClient(context),
         );
 
     uni_links.getInitialUri().then((uri) async {
       final isConfirmation = await _requestConfirmation(uri);
+      final isReset = await _requestPasswordReset(uri);
+
       _initialConfirmationChecker.complete(isConfirmation);
+      _initialResetChecker.complete(isReset);
+
       return uri;
     });
-    _deepLinkSubscription =
-        uni_links.uriLinkStream.listen(_requestConfirmation);
+    _deepLinkSubscription = uni_links.uriLinkStream.listen(_checkLink);
   }
 
   @override
@@ -124,6 +142,13 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
   }
 
   ApptiveGridUserManagementClient? get client => _userManagementClient;
+
+  Future<List<bool>> _checkLink(Uri? uri) async {
+    return Future.wait([
+      _requestConfirmation(uri),
+      _requestPasswordReset(uri),
+    ]);
+  }
 
   Future<bool> _requestConfirmation(Uri? uri) async {
     final isConfirmation = _isConfirmationLink(uri);
@@ -155,7 +180,43 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
         uri.pathSegments.contains(widget.group);
   }
 
+  Future<bool> _requestPasswordReset(Uri? uri) async {
+    final isResetLink = _isResetPasswordLink(uri);
+    if (isResetLink) {
+      assert(uri != null);
+      final environment = ApptiveGridEnvironment.values.firstWhere(
+        (element) => Uri.parse(element.url).host == uri!.host,
+        orElse: () => ApptiveGridEnvironment.production,
+      );
+      await widget.onChangeEnvironment?.call(environment);
+
+      widget.resetPasswordPrompt(
+        ApptiveGridUserManagementLocalization(
+          child: ResetPassword(
+            resetUri: uri!,
+            onReset: widget.onPasswordReset,
+          ),
+        ),
+      );
+    }
+    return isResetLink;
+  }
+
+  bool _isResetPasswordLink(Uri? uri) {
+    final isResetLink = uri != null &&
+        uri.host.endsWith('apptivegrid.de') &&
+        uri.pathSegments.contains('auth') &&
+        uri.pathSegments.contains('resetPassword') &&
+        uri.pathSegments.contains(widget.group);
+    return isResetLink;
+  }
+
   /// Wait until the initial setup is completed. Used for checking if the app was started with a confirmation Link
   /// Useful for custom splash screens
-  Future<bool> initialSetup() => _initialConfirmationChecker.future;
+  Future<List<bool>> initialSetup() => Future.wait(
+        [
+          _initialConfirmationChecker.future,
+          _initialResetChecker.future,
+        ],
+      );
 }
