@@ -1,15 +1,28 @@
+import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:flutter/widgets.dart';
 import 'package:password_rule_check/password_rule_check.dart';
 
+/// A widget to show password strength hints/requirements
 class PasswordCheck extends StatelessWidget {
-  const PasswordCheck({Key? key, required this.controller, this.requirement = PasswordRequirement.enforced, required this.validationKey,}) : super(key: key);
+  /// Shows a [PasswordRuleCheck] based on [ApptiveGridUserManagement.passwordRequirement]
+  const PasswordCheck({
+    Key? key,
+    required this.controller,
+    required this.validationKey,
+  }) : super(key: key);
 
+  /// [TextEditingController] managing the input of the password field
   final TextEditingController controller;
+
+  /// Key to validate [PasswordRuleCheckState]
   final GlobalKey<PasswordRuleCheckState> validationKey;
-  final PasswordRequirement requirement;
 
   @override
   Widget build(BuildContext context) {
+    final requirement = ApptiveGridUserManagement.maybeOf(context)
+            ?.widget
+            .passwordRequirement ??
+        PasswordRequirement.enforced;
     switch (requirement) {
       case PasswordRequirement.enforced:
         return PasswordRuleCheck(
@@ -44,6 +57,15 @@ class PasswordCheck extends StatelessWidget {
   }
 }
 
+/// Sets the level of password requirements
 enum PasswordRequirement {
-  enforced, safetyHint
+  /// In order to allow passwords it needs to be:
+  /// minLength of 8 Characters and contain at least one of each:
+  /// Special Character, Digit, Uppercase Letter, Lowercase Letter
+  enforced,
+
+  /// In order to allow a password it needs to be 8 characters long
+  /// Furthermore the indication bar will turn green if the password contains at least one of each:
+  /// Special Character, Digit, Uppercase Letter, Lowercase Letter
+  safetyHint,
 }

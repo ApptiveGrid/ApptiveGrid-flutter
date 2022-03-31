@@ -82,9 +82,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                   PasswordCheck(
                     controller: _newPasswordController,
                     validationKey: _ruleCheckKey,
-                    requirement: ApptiveGridUserManagement.maybeOf(context)!
-                        .widget
-                        .passwordRequirement,
                   ),
                   SizedBox(
                     height: spacing,

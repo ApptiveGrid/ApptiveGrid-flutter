@@ -62,6 +62,7 @@ class ApptiveGridUserManagement extends StatefulWidget {
   /// The Widget that should be shown beneath
   final Widget? child;
 
+  /// Sets the enforcement of the Password Requirement
   final PasswordRequirement passwordRequirement;
 
   /// Callback to change the [environment] of ApptiveGrid

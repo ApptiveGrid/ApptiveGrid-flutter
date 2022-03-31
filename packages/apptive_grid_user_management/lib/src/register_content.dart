@@ -130,9 +130,6 @@ class _RegisterContentState extends State<RegisterContent> {
               PasswordCheck(
                 controller: _passwordController,
                 validationKey: _ruleCheckKey,
-                requirement: ApptiveGridUserManagement.maybeOf(context)!
-                    .widget
-                    .passwordRequirement,
               ),
               SizedBox(
                 height: spacing,
