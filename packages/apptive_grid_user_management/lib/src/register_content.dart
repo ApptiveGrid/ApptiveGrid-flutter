@@ -1,5 +1,6 @@
 import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/email_form_field.dart';
+import 'package:apptive_grid_user_management/src/password_check.dart';
 import 'package:apptive_grid_user_management/src/password_form_field.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
 import 'package:flutter/material.dart';
@@ -126,16 +127,9 @@ class _RegisterContentState extends State<RegisterContent> {
                   return null;
                 },
               ),
-              PasswordRuleCheck(
-                key: _ruleCheckKey,
+              PasswordCheck(
                 controller: _passwordController,
-                ruleSet: PasswordRuleSet(
-                  minLength: 8,
-                  digits: 1,
-                  specialCharacters: 1,
-                  lowercase: 1,
-                  uppercase: 1,
-                ),
+                validationKey: _ruleCheckKey,
               ),
               SizedBox(
                 height: spacing,

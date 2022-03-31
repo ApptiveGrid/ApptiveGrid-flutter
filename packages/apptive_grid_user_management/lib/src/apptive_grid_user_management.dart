@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_user_management/src/confirm_account.dart';
+import 'package:apptive_grid_user_management/src/password_check.dart';
 import 'package:apptive_grid_user_management/src/reset_password.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
 import 'package:apptive_grid_user_management/src/user_management_client.dart';
@@ -18,6 +19,7 @@ class ApptiveGridUserManagement extends StatefulWidget {
     required this.clientId,
     this.redirectScheme,
     this.child,
+    this.passwordRequirement = PasswordRequirement.enforced,
     required this.confirmAccountPrompt,
     required this.onAccountConfirmed,
     this.onChangeEnvironment,
@@ -35,6 +37,7 @@ class ApptiveGridUserManagement extends StatefulWidget {
     this.clientId = 'app',
     this.redirectScheme,
     this.child,
+    this.passwordRequirement = PasswordRequirement.enforced,
     required this.confirmAccountPrompt,
     required this.onAccountConfirmed,
     this.onChangeEnvironment,
@@ -58,6 +61,9 @@ class ApptiveGridUserManagement extends StatefulWidget {
 
   /// The Widget that should be shown beneath
   final Widget? child;
+
+  /// Sets the enforcement of the Password Requirement
+  final PasswordRequirement passwordRequirement;
 
   /// Callback to change the [environment] of ApptiveGrid
   /// This is called when opening the App with a Confirmation Link which might have a different environment than the rest of the app

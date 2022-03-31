@@ -5,12 +5,18 @@ import 'package:flutter/material.dart';
 import 'mocks.dart';
 
 class StubUserManagement extends StatelessWidget {
-  const StubUserManagement({Key? key, required this.child, this.client})
-      : super(key: key);
+  const StubUserManagement({
+    Key? key,
+    required this.child,
+    this.client,
+    this.passwordRequirement = PasswordRequirement.enforced,
+  }) : super(key: key);
 
   final Widget child;
 
   final ApptiveGridUserManagementClient? client;
+
+  final PasswordRequirement passwordRequirement;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +25,7 @@ class StubUserManagement extends StatelessWidget {
         child: ApptiveGridUserManagement.withClient(
           group: 'group',
           clientId: 'clientId',
+          passwordRequirement: passwordRequirement,
           confirmAccountPrompt: (_) {},
           onAccountConfirmed: (_) {},
           onChangeEnvironment: (_) async {},
