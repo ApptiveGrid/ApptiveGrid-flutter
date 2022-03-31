@@ -1,14 +1,15 @@
 import 'dart:async';
 
+import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/password_form_field.dart';
 import 'package:apptive_grid_user_management/src/reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 
 import '../infrastructure/mocks.dart';
 import '../infrastructure/test_app.dart';
-import 'package:http/http.dart' as http;
 
 void main() {
   setUpAll(() {
@@ -334,10 +335,11 @@ void main() {
       );
     });
 
-    testWidgets('Password not fulfilling rules', (tester) async {
+    testWidgets('Enforced Rule Password not fulfilling rules', (tester) async {
       final client = MockApptiveGridUserManagementClient();
       final resetUri = Uri.parse('https://confirm.this');
       final target = StubUserManagement(
+        passwordRequirement: PasswordRequirement.enforced,
         client: client,
         child: ResetPassword(
           onReset: (_) {},
@@ -348,6 +350,51 @@ void main() {
       await tester.pumpWidget(target);
 
       const password = 'weakpassword';
+      await tester.inputPasswordAndConfirmation(
+        newPassword: password,
+        confirmation: password,
+      );
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+
+      expect(
+        (find
+                .descendant(
+                  of: find.byType(PasswordFormField).first,
+                  matching: find.byType(TextField),
+                )
+                .evaluate()
+                .first
+                .widget as TextField)
+            .decoration
+            ?.errorText,
+        isNot(isNull),
+      );
+
+      verifyNever(
+        () => client.resetPassword(
+          resetUri: any(named: 'resetUri'),
+          newPassword: any(named: 'newPassword'),
+        ),
+      );
+    });
+
+    testWidgets('SafetyHint Password not fulfilling rule', (tester) async {
+      final client = MockApptiveGridUserManagementClient();
+      final resetUri = Uri.parse('https://confirm.this');
+      final target = StubUserManagement(
+        passwordRequirement: PasswordRequirement.safetyHint,
+        client: client,
+        child: ResetPassword(
+          onReset: (_) {},
+          resetUri: resetUri,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+
+      const password = '2short';
       await tester.inputPasswordAndConfirmation(
         newPassword: password,
         confirmation: password,

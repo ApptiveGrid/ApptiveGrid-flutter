@@ -1,3 +1,5 @@
+import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
+import 'package:apptive_grid_user_management/src/password_form_field.dart';
 import 'package:apptive_grid_user_management/src/register_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -226,6 +228,248 @@ void main() {
           find.text('Passwords do not match', skipOffstage: false),
           findsOneWidget,
         );
+      });
+
+      group('PasswordRequirements', () {
+        testWidgets('Enforced Rule checks against all options', (tester) async {
+          final client = MockApptiveGridUserManagementClient();
+
+          final target = MaterialApp(
+            home: Material(
+              child: StubUserManagement(
+                passwordRequirement: PasswordRequirement.enforced,
+                client: client,
+                child: const SingleChildScrollView(child: RegisterContent()),
+              ),
+            ),
+          );
+
+          await tester.pumpWidget(target);
+
+          const password = 'MissingSp3cialCharacter';
+          await tester.scrollUntilVisible(
+            find.textFormFieldWithLabel('Password'),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.enterText(
+            find.textFormFieldWithLabel('Password'),
+            password,
+          );
+          await tester.pump();
+          await tester.scrollUntilVisible(
+            find.textFormFieldWithLabel('Confirm Password'),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.enterText(
+            find.textFormFieldWithLabel('Confirm Password'),
+            password,
+          );
+          await tester.pump();
+
+          await tester.scrollUntilVisible(
+            find.byType(ElevatedButton),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pump();
+
+          expect(
+            (find
+                    .descendant(
+                      of: find.byType(PasswordFormField).first,
+                      matching: find.byType(TextField),
+                    )
+                    .evaluate()
+                    .first
+                    .widget as TextField)
+                .decoration
+                ?.errorText,
+            isNot(isNull),
+          );
+        });
+
+        testWidgets('Enforced Rule verifies if all rules met', (tester) async {
+          final client = MockApptiveGridUserManagementClient();
+
+          final target = MaterialApp(
+            home: Material(
+              child: StubUserManagement(
+                passwordRequirement: PasswordRequirement.enforced,
+                client: client,
+                child: const SingleChildScrollView(child: RegisterContent()),
+              ),
+            ),
+          );
+
+          await tester.pumpWidget(target);
+
+          const password = 'W!thSp3cialCharacter';
+          await tester.scrollUntilVisible(
+            find.textFormFieldWithLabel('Password'),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.enterText(
+            find.textFormFieldWithLabel('Password'),
+            password,
+          );
+          await tester.pump();
+          await tester.scrollUntilVisible(
+            find.textFormFieldWithLabel('Confirm Password'),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.enterText(
+            find.textFormFieldWithLabel('Confirm Password'),
+            password,
+          );
+          await tester.pump();
+
+          await tester.scrollUntilVisible(
+            find.byType(ElevatedButton),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pump();
+
+          expect(
+            (find
+                    .descendant(
+                      of: find.byType(PasswordFormField).first,
+                      matching: find.byType(TextField),
+                    )
+                    .evaluate()
+                    .first
+                    .widget as TextField)
+                .decoration
+                ?.errorText,
+            isNull,
+          );
+        });
+
+        testWidgets('SafetyHint Rule checks against length', (tester) async {
+          final client = MockApptiveGridUserManagementClient();
+
+          final target = MaterialApp(
+            home: Material(
+              child: StubUserManagement(
+                passwordRequirement: PasswordRequirement.safetyHint,
+                client: client,
+                child: const SingleChildScrollView(child: RegisterContent()),
+              ),
+            ),
+          );
+
+          await tester.pumpWidget(target);
+
+          const password = '2Short';
+          await tester.scrollUntilVisible(
+            find.textFormFieldWithLabel('Password'),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.enterText(
+            find.textFormFieldWithLabel('Password'),
+            password,
+          );
+          await tester.pump();
+          await tester.scrollUntilVisible(
+            find.textFormFieldWithLabel('Confirm Password'),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.enterText(
+            find.textFormFieldWithLabel('Confirm Password'),
+            password,
+          );
+          await tester.pump();
+
+          await tester.scrollUntilVisible(
+            find.byType(ElevatedButton),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pump();
+
+          expect(
+            (find
+                    .descendant(
+                      of: find.byType(PasswordFormField).first,
+                      matching: find.byType(TextField),
+                    )
+                    .evaluate()
+                    .first
+                    .widget as TextField)
+                .decoration
+                ?.errorText,
+            isNot(isNull),
+          );
+        });
+
+        testWidgets('SafetyHint Rule only needs length', (tester) async {
+          final client = MockApptiveGridUserManagementClient();
+
+          final target = MaterialApp(
+            home: Material(
+              child: StubUserManagement(
+                passwordRequirement: PasswordRequirement.safetyHint,
+                client: client,
+                child: const SingleChildScrollView(child: RegisterContent()),
+              ),
+            ),
+          );
+
+          await tester.pumpWidget(target);
+
+          const password = 'longenough';
+          await tester.scrollUntilVisible(
+            find.textFormFieldWithLabel('Password'),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.enterText(
+            find.textFormFieldWithLabel('Password'),
+            password,
+          );
+          await tester.pump();
+          await tester.scrollUntilVisible(
+            find.textFormFieldWithLabel('Confirm Password'),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.enterText(
+            find.textFormFieldWithLabel('Confirm Password'),
+            password,
+          );
+          await tester.pump();
+
+          await tester.scrollUntilVisible(
+            find.byType(ElevatedButton),
+            50,
+            scrollable: find.byType(Scrollable).first,
+          );
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pump();
+
+          expect(
+            (find
+                    .descendant(
+                      of: find.byType(PasswordFormField).first,
+                      matching: find.byType(TextField),
+                    )
+                    .evaluate()
+                    .first
+                    .widget as TextField)
+                .decoration
+                ?.errorText,
+            isNull,
+          );
+        });
       });
     });
 
