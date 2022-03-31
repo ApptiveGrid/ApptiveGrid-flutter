@@ -1,3 +1,6 @@
+## 0.0.4
+* Allow customization of Password Rule enforcement through `PasswordRequirement`
+
 ## 0.0.3
 * Add functionality to reset passwords
 * **BREAKING** Rename `redirectSchema` to `redirectScheme`
