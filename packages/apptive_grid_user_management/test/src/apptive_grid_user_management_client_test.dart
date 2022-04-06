@@ -156,7 +156,8 @@ void main() {
         () => httpClient.get(
           any(
             that: predicate<Uri>(
-              (uri) => uri.pathSegments.contains(group) &&
+              (uri) =>
+                  uri.pathSegments.contains(group) &&
                   uri.pathSegments.contains('login'),
             ),
           ),
