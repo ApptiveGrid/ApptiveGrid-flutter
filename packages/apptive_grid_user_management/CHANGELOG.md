@@ -1,3 +1,6 @@
+## 0.0.4+1
+* Add Group to Login call url
+
 ## 0.0.4
 * Allow customization of Password Rule enforcement through `PasswordRequirement`
 

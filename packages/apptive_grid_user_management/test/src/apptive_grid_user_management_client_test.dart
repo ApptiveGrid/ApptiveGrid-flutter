@@ -137,6 +137,7 @@ void main() {
 
   group('Login', () {
     test('Call returns response', () async {
+      const group = 'group';
       final httpClient = MockHttpClient();
       final apptiveGridClient = MockApptiveGridClient();
       when(() => apptiveGridClient.options)
@@ -144,7 +145,7 @@ void main() {
       when(() => apptiveGridClient.setUserToken(any()))
           .thenAnswer((_) async {});
       final client = ApptiveGridUserManagementClient(
-        group: 'group',
+        group: group,
         clientId: 'clientId',
         apptiveGridClient: apptiveGridClient,
         client: httpClient,
@@ -155,7 +156,9 @@ void main() {
         () => httpClient.get(
           any(
             that: predicate<Uri>(
-              (uri) => uri.pathSegments.contains('login'),
+              (uri) =>
+                  uri.pathSegments.contains(group) &&
+                  uri.pathSegments.contains('login'),
             ),
           ),
           headers: any(named: 'headers'),
@@ -166,6 +169,7 @@ void main() {
         await client.login(email: 'email', password: 'password'),
         response,
       );
+
       verify(() => apptiveGridClient.setUserToken(jsonDecode(response.body)))
           .called(1);
     });

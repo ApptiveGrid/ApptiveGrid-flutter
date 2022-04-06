@@ -81,7 +81,7 @@ class ApptiveGridUserManagementClient {
   }) async {
     final response = await _client.get(
       Uri.parse(
-        '${apptiveGridClient.options.environment.url}/auth/login?clientId=$clientId',
+        '${apptiveGridClient.options.environment.url}/auth/$group/login?clientId=$clientId',
       ),
       headers: {
         ..._commonHeaders,
