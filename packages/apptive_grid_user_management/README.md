@@ -55,7 +55,9 @@ Do the following to open confirmation Links
     ```entitlements
    <key>com.apple.developer.associated-domains</key>
     <array>
-        <string>applinks:*.apptivegrid.de</string>
+      <string>applinks:alpha.apptivegrid.de</string>
+      <string>applinks:beta.apptivegrid.de</string>
+      <string>applinks:app.apptivegrid.de</string>
     </array>
     ```
 2. Using custom schema in `Info.plist`
@@ -63,6 +65,8 @@ Do the following to open confirmation Links
    <key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>YOUR_SCHEMA</string>
