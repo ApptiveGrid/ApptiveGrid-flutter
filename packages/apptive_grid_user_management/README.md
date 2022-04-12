@@ -34,15 +34,15 @@ Add the following entries to your `AndroidManifest` to be able to open confirmat
 
         <data
                 android:host="alpha.apptivegrid.de"
-                android:pathPattern="/auth/regio4all/confirm/.*"
+                android:pathPattern="/auth/YOUR_GROUP_ID/confirm/.*"
                 android:scheme="YOUR_SCHEME"/>
         <data
                 android:host="beta.apptivegrid.de"
-                android:pathPattern="/auth/regio4all/confirm/.*"
+                android:pathPattern="/auth/YOUR_GROUP_ID/confirm/.*"
                 android:scheme="YOUR_SCHEME"/>
         <data
                 android:host="app.apptivegrid.de"
-                android:pathPattern="/auth/regio4all/confirm/.*"
+                android:pathPattern="/auth/YOUR_GROUP_ID/confirm/.*"
                 android:scheme="YOUR_SCHEME"/>
       </intent-filter>
 </activity>
