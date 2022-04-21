@@ -346,12 +346,13 @@ void main() {
       });
 
       testWidgets('Back to Form shows Form', (tester) async {
+        final formUri = RedirectFormUri(
+          components: ['form'],
+        );
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            formUri: RedirectFormUri(
-              components: ['form'],
-            ),
+            formUri: formUri,
           ),
         );
         final action = FormAction('uri', 'method');
@@ -364,7 +365,7 @@ void main() {
         );
 
         when(
-          () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+          () => client.loadForm(formUri: formUri),
         ).thenAnswer((realInvocation) async => formData);
         when(() => client.performAction(action, formData))
             .thenAnswer((_) => Future.error(''));
@@ -379,6 +380,8 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Form Title'), findsOneWidget);
+        // Don't reload here
+        verify(() => client.loadForm(formUri: formUri)).called(1);
       });
 
       testWidgets('Cache Response. Additional Answer shows Form',

@@ -5,6 +5,7 @@ import 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:apptive_grid_form/widgets/form_widget/attachment_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -240,7 +241,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   @override
   void didUpdateWidget(covariant ApptiveGridFormData oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _updateView();
+    _updateView(resetFormData: widget.formData != oldWidget.formData);
   }
 
   @override
@@ -456,7 +457,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         Center(
           child: TextButton(
             onPressed: () {
-              widget.triggerReload?.call();
+              if (_formData == null) {
+                widget.triggerReload?.call();
+              }
               _updateView(resetFormData: false);
             },
             child: Text(localization.backToForm),
