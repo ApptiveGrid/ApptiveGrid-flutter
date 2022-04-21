@@ -27,7 +27,7 @@
 .dart_tool/
 .packages
 build/
-/tool/poeditor.properties
 /coverage/
 /.flutter-plugins
 /.flutter-plugins-dependencies
+/tool/poeditor.properties

@@ -5,6 +5,7 @@ import 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:apptive_grid_form/widgets/form_widget/attachment_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -240,7 +241,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   @override
   void didUpdateWidget(covariant ApptiveGridFormData oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _updateView();
+    _updateView(resetFormData: widget.formData != oldWidget.formData);
   }
 
   @override
@@ -426,6 +427,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   Widget _buildError(BuildContext context) {
     final localization = ApptiveGridLocalization.of(context)!;
+    final theme = Theme.of(context);
     return ListView(
       padding: const EdgeInsets.all(32.0),
       children: [
@@ -439,12 +441,25 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         Text(
           localization.errorTitle,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline4,
+          style: theme.textTheme.headline4,
+        ),
+        Padding(
+          padding: widget.contentPadding ?? _defaultPadding,
+          child: Text(
+            _error is http.Response
+                ? '${_error.statusCode}: ${_error.body}'
+                : _error.toString(),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelSmall
+                ?.copyWith(color: theme.colorScheme.error),
+          ),
         ),
         Center(
           child: TextButton(
             onPressed: () {
-              widget.triggerReload?.call();
+              if (_formData == null) {
+                widget.triggerReload?.call();
+              }
               _updateView(resetFormData: false);
             },
             child: Text(localization.backToForm),
