@@ -431,6 +431,77 @@ void main() {
         verify(() => client.loadForm(formUri: any(named: 'formUri'))).called(2);
       });
     });
+
+    group('Error Message', () {
+      testWidgets('Error shows to String Error', (tester) async {
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridForm(
+            formUri: RedirectFormUri(
+              components: ['form'],
+            ),
+          ),
+        );
+        final action = FormAction('uri', 'method');
+        final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [action],
+          schema: {},
+        );
+
+        when(
+          () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        ).thenAnswer((realInvocation) async => formData);
+        when(() => client.performAction(action, formData))
+            .thenAnswer((_) => Future.error(Exception('Testing Errors')));
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+        await tester.tap(find.byType(ActionButton));
+        await tester.pumpAndSettle();
+        expect(
+          find.text('Exception: Testing Errors', skipOffstage: false),
+          findsOneWidget,
+        );
+      });
+
+      testWidgets('Response shows Status Code and Body', (tester) async {
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridForm(
+            formUri: RedirectFormUri(
+              components: ['form'],
+            ),
+          ),
+        );
+        final action = FormAction('uri', 'method');
+        final formData = FormData(
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [],
+          actions: [action],
+          schema: {},
+        );
+
+        when(
+          () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        ).thenAnswer((realInvocation) async => formData);
+        when(() => client.performAction(action, formData)).thenAnswer(
+          (_) => Future.error(http.Response('Testing Errors', 400)),
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+        await tester.tap(find.byType(ActionButton));
+        await tester.pumpAndSettle();
+        expect(
+          find.text('400: Testing Errors', skipOffstage: false),
+          findsOneWidget,
+        );
+      });
+    });
   });
 
   group('Skip Custom Builder', () {

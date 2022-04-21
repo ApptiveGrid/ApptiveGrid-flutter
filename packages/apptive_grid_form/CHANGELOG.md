@@ -1,5 +1,9 @@
 ## 0.9.1
 * Use new Attachment System
+* Show Error Message in Form Error
+
+## 0.9.1-alpha.2
+* Show Error Message in Form Error
 
 ## 0.9.1-alpha.1
 * Use new Attachment System

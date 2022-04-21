@@ -426,6 +426,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   Widget _buildError(BuildContext context) {
     final localization = ApptiveGridLocalization.of(context)!;
+    final theme = Theme.of(context);
     return ListView(
       padding: const EdgeInsets.all(32.0),
       children: [
@@ -439,7 +440,18 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         Text(
           localization.errorTitle,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline4,
+          style: theme.textTheme.headline4,
+        ),
+        Padding(
+          padding: widget.contentPadding ?? _defaultPadding,
+          child: Text(
+            _error is http.Response
+                ? '${_error.statusCode}: ${_error.body}'
+                : _error.toString(),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelSmall
+                ?.copyWith(color: theme.colorScheme.error),
+          ),
         ),
         Center(
           child: TextButton(
