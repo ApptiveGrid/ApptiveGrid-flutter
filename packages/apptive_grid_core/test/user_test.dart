@@ -17,15 +17,47 @@ void main() {
         'email': 'jane.doe@zweidenker.de',
         'spaceUris': [
           '/api/users/id/spaces/spaceId',
-        ]
+        ],
+        '_links': 
+          {
+            "accessCredentials": {
+              "href": "/api/users/id/accessKeys",
+              "method": "get"
+            },
+            "spaces": {
+              "href": "/api/users/id/spaces",
+              "method": "get"
+            },
+            "hooks": {
+              "href": "/api/users/id/hooks",
+              "method": "get"
+            },
+            "addHook": {
+              "href": "/api/users/id/hooks",
+              "method": "post"
+            },
+            "self": {
+              "href": "/api/users/id",
+              "method": "get"
+            },
+            "addAccessCredentials": {
+              "href": "/api/users/id/accessKeys",
+              "method": "post"
+            },
+            "addSpace": {
+              "href": "/api/users/id/spaces",
+              "method": "post"
+          },
+        },
       });
 
       expect(jsonUser.id, equals(id));
       expect(jsonUser.firstName, equals(firstName));
       expect(jsonUser.lastName, equals(lastName));
       expect(jsonUser.email, equals(email));
-      expect(jsonUser.spaces.length, equals(1));
-      expect(jsonUser.spaces[0], equals(spaceUri));
+      expect(jsonUser.spaceUris.length, equals(1));
+      expect(jsonUser.spaceUris[0], equals(spaceUri));
+      expect(jsonUser.links.length, equals(7));
     });
 
     test('From Json, toJson equals', () {
@@ -36,7 +68,10 @@ void main() {
         'email': 'jane.doe@zweidenker.de',
         'spaceUris': [
           '/api/users/id/spaces/spaceId',
-        ]
+        ],
+        '_links': {
+          'self': {'href': '/api/users/id', 'method': 'get'},
+        },
       });
 
       final doubleParse = User.fromJson(jsonUser.toJson());
@@ -58,7 +93,10 @@ void main() {
         lastName: lastName,
         firstName: firstName,
         id: id,
-        spaces: [spaceUri],
+        spaceUris: [spaceUri],
+        links: {
+          ApptiveLinkType.self: ApptiveLink(uri: Uri.parse('/api/users/id'), method: 'get'),
+        },
       );
 
       final jsonUser = User.fromJson({
@@ -68,7 +106,10 @@ void main() {
         'email': 'jane.doe@zweidenker.de',
         'spaceUris': [
           '/api/users/id/spaces/spaceId',
-        ]
+        ],
+        '_links': {
+          'self': {'href': '/api/users/id', 'method': 'get'},
+        },
       });
 
       expect(plain, equals(jsonUser));
@@ -86,7 +127,8 @@ void main() {
         lastName: lastName,
         firstName: firstName,
         id: id,
-        spaces: [],
+        spaceUris: [],
+        links: {},
       );
 
       final jsonUser = User.fromJson({
@@ -96,7 +138,10 @@ void main() {
         'email': 'jane.doe@zweidenker.de',
         'spaceUris': [
           '/api/users/id/spaces/spaceId',
-        ]
+        ],
+        '_links': {
+          'self': {'href': '/api/users/id', 'method': 'get'},
+        },
       });
 
       expect(plain, isNot(jsonUser));
