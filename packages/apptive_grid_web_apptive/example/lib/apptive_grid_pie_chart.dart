@@ -27,8 +27,9 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
 
   void _setUp() {
     final enumFields = widget.grid.fields
-        .where((element) => element.type == DataType.singleSelect)
-        .toList();
+            ?.where((element) => element.type == DataType.singleSelect)
+            .toList() ??
+        [];
     if (enumFields.isNotEmpty) {
       _isValid = true;
       _needsSelection = enumFields.length > 1;
@@ -44,12 +45,12 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
   void didUpdateWidget(covariant ApptiveGridPieChart oldWidget) {
     super.didUpdateWidget(oldWidget);
     setState(() {
-      final newFieldIds = widget.grid.fields.map((e) => e.id);
-      if (newFieldIds.contains(_field?.id)) {
-        _field = widget.grid.fields
+      final newFieldIds = widget.grid.fields?.map((e) => e.id);
+      if ((newFieldIds ?? []).contains(_field?.id)) {
+        _field = widget.grid.fields!
             .firstWhere((element) => element.id == _field?.id);
       } else {
-        if (_field != null && !newFieldIds.contains(_field?.id)) {
+        if (_field != null && !(newFieldIds ?? []).contains(_field?.id)) {
           _field = null;
         }
         _setUp();
@@ -114,7 +115,7 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
   Map<String, double> _calculateDataMap() {
     final rows = widget.grid.rows;
 
-    final enumValues = (rows[0]
+    final enumValues = (rows?[0]
             .entries
             .firstWhere((element) => element.field.id == _field?.id)
             .data as EnumDataEntity)
@@ -124,7 +125,7 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
       enumValues.map(
         (value) => MapEntry(
           value,
-          rows
+          (rows ?? [])
               .where(
                 (row) =>
                     (row.entries
@@ -187,7 +188,7 @@ class _FieldSelectorState extends State<FieldSelector> {
             autovalidateMode: AutovalidateMode.always,
             onChanged: widget.onSelected,
             items: widget.grid.fields
-                .where(widget.validator)
+                ?.where(widget.validator)
                 .map<DropdownMenuItem<GridField>>(
                   (e) => DropdownMenuItem<GridField>(
                     value: e,

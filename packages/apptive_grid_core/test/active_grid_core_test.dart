@@ -199,7 +199,7 @@ void main() {
         equals(ApptiveGridEnvironment.beta),
       );
     });
-    });
+  });
 
   group('Mock Client', () {
     testWidgets('withClient Uses Provided Client', (tester) async {
@@ -261,7 +261,11 @@ class _StubFormWidgetConfiguration extends FormWidgetConfiguration {
 }
 
 class _UpdateOptionsWidget extends StatefulWidget {
-  const _UpdateOptionsWidget({Key? key, required this.initalEnvironment, required this.child,}) : super(key: key);
+  const _UpdateOptionsWidget({
+    Key? key,
+    required this.initalEnvironment,
+    required this.child,
+  }) : super(key: key);
 
   final ApptiveGridEnvironment initalEnvironment;
   final Widget child;
@@ -271,7 +275,6 @@ class _UpdateOptionsWidget extends StatefulWidget {
 }
 
 class _UpdateOptionsWidgetState extends State<_UpdateOptionsWidget> {
-
   late ApptiveGridEnvironment _environment;
 
   @override
@@ -294,4 +297,3 @@ class _UpdateOptionsWidgetState extends State<_UpdateOptionsWidget> {
     );
   }
 }
-

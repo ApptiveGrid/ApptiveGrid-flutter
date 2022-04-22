@@ -11,6 +11,7 @@ class User {
     required this.id,
     required this.spaceUris,
     required this.links,
+    this.embeddedSpaces,
   });
 
   /// Deserializes [json] into a [User] Object
@@ -22,7 +23,10 @@ class User {
         spaceUris = (json['spaceUris'] as List)
             .map((e) => SpaceUri.fromUri(e))
             .toList(),
-        links = linkMapFromJson(json['_links']);
+        links = linkMapFromJson(json['_links']),
+        embeddedSpaces = (json['_embedded']?['spaces'] as List?)
+            ?.map((e) => Space.fromJson(e))
+            .toList();
 
   /// Email of the this [User]
   final String email;
@@ -39,17 +43,35 @@ class User {
   /// [SpaceUri]s pointing to [Space]s created by this [User]
   final List<SpaceUri> spaceUris;
 
+  /// Links to actions the user can take
   final LinkMap links;
 
+  /// A List of embedded [Space]s
+  ///
+  /// This contains more information about the [Spaces] than [spaceUris] for example the [Space.name] and if it is a [SharedSpace]
+  final List<Space>? embeddedSpaces;
+
   /// Serializes this [Space] into a json Map
-  Map<String, dynamic> toJson() => {
-        'email': email,
-        'lastName': lastName,
-        'firstName': firstName,
-        'id': id,
-        'spaceUris': spaceUris.map((e) => e.uri.toString()).toList(),
-        '_links': links.toJson(),
-      };
+  Map<String, dynamic> toJson() {
+    final jsonMap = {
+      'email': email,
+      'lastName': lastName,
+      'firstName': firstName,
+      'id': id,
+      'spaceUris': spaceUris.map((e) => e.uri.toString()).toList(),
+      '_links': links.toJson(),
+    };
+
+    if (embeddedSpaces != null) {
+      final embeddedMap =
+          jsonMap['_embedded'] as Map<String, dynamic>? ?? <String, dynamic>{};
+      embeddedMap['spaces'] = embeddedSpaces?.map((e) => e.toJson()).toList();
+
+      jsonMap['_embedded'] = embeddedMap;
+    }
+
+    return jsonMap;
+  }
 
   @override
   String toString() {

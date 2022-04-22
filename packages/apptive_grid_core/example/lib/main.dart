@@ -175,8 +175,9 @@ class _SpaceSectionState extends State<_SpaceSection> {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: space.gridUris
-                          ?.map((e) => _GridSection(gridUri: e))
-                          .toList() ?? [SizedBox()],
+                              ?.map((e) => _GridSection(gridUri: e))
+                              .toList() ??
+                          [SizedBox()],
                     )
                   ],
                 );
@@ -235,10 +236,12 @@ class _GridSectionState extends State<_GridSection> {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: grid.rows
-                          .map(
-                            (e) => Text(e.entries.first.data.value.toString()),
-                          )
-                          .toList(),
+                              ?.map(
+                                (e) =>
+                                    Text(e.entries.first.data.value.toString()),
+                              )
+                              .toList() ??
+                          [SizedBox()],
                     )
                   ],
                 );

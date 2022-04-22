@@ -228,23 +228,23 @@ class ApptiveGridClient {
       throw gridViewResponse;
     }
 
-    final entitiesResponse = await loadEntities(
-      uri: Uri.parse(
-        '${gridViewUrl.toString().replaceAll(RegExp('/views/.*'), '')}/entities',
-      ),
-      viewId: gridViewUrl.pathSegments.contains('views')
-          ? gridViewUrl
-              .pathSegments[gridViewUrl.pathSegments.indexOf('views') + 1]
-          : null,
-      layout: 'indexed',
-      filter: filter,
-      sorting: sorting,
-    );
-
-    final entities = entitiesResponse.items;
     final gridToParse = jsonDecode(gridViewResponse.body);
-    gridToParse['entities'] = entities;
-    return Grid.fromJson(gridToParse);
+    final grid = Grid.fromJson(gridToParse);
+    if (grid.links.containsKey(ApptiveLinkType.entities)) {
+      final entitiesResponse = await loadEntities(
+        uri: grid.links[ApptiveLinkType.entities]!.uri,
+        layout: 'indexed',
+        filter: filter,
+        sorting: sorting,
+      );
+
+      final entities = entitiesResponse.items;
+
+      gridToParse['entities'] = entities;
+      return Grid.fromJson(gridToParse);
+    } else {
+      return grid;
+    }
   }
 
   /// Load Entities of a Grid that are accessed by [uri]
@@ -268,7 +268,6 @@ class ApptiveGridClient {
   /// [filter] allows to get custom filters
   Future<EntitiesResponse<T>> loadEntities<T>({
     required Uri uri,
-    String? viewId,
     String? layout,
     List<ApptiveGridSorting>? sorting,
     ApptiveGridFilter? filter,
@@ -280,7 +279,6 @@ class ApptiveGridClient {
       host: baseUrl.host,
       queryParameters: Map.from(uri.queryParameters)
         ..addAll({
-          if (viewId != null) 'viewId': viewId,
           if (layout != null) 'layout': layout,
           if (sorting != null)
             'sorting':
@@ -296,7 +294,6 @@ class ApptiveGridClient {
         await _authenticator.checkAuthentication();
         return loadEntities<T>(
           uri: uri,
-          viewId: viewId,
           layout: layout,
           sorting: sorting,
           filter: filter,

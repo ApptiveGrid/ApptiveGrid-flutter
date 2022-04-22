@@ -51,10 +51,12 @@ void main() {
       ),
     ).thenAnswer(
       (_) async => Grid(
+        id: gridId,
         name: title,
         schema: null,
         fields: [],
         rows: [],
+        links: {},
       ),
     );
 
@@ -74,10 +76,12 @@ void main() {
           grid: gridId,
         ),
         initialData: Grid(
+          id: gridId,
           name: 'Initial Title',
           schema: null,
           fields: [],
           rows: [],
+          links: {},
         ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -96,10 +100,12 @@ void main() {
       ),
     ).thenAnswer(
       (_) async => Grid(
+        id: gridId,
         name: title,
         schema: null,
         fields: [],
         rows: [],
+        links: {},
       ),
     );
 
@@ -170,10 +176,12 @@ void main() {
       ),
     ).thenAnswer(
       (_) async => Grid(
+        id: gridId,
         name: title,
         schema: null,
         fields: [],
         rows: [],
+        links: {},
       ),
     );
 
@@ -209,10 +217,12 @@ void main() {
         ),
       ).thenAnswer(
         (_) async => Grid(
+          id: 'grid',
           name: title,
           schema: null,
           fields: [],
           rows: [],
+          links: {},
         ),
       );
 
@@ -269,10 +279,12 @@ void main() {
         ),
       ).thenAnswer(
         (_) async => Grid(
+          id: 'grid',
           name: title,
           schema: null,
           fields: [],
           rows: [],
+          links: {},
         ),
       );
 
@@ -310,10 +322,12 @@ void main() {
         ),
       ).thenAnswer(
         (_) async => Grid(
+          id: 'grid',
           name: title,
           schema: null,
           fields: [],
           rows: [],
+          links: {},
         ),
       );
 
@@ -362,10 +376,12 @@ void main() {
         ),
       ).thenAnswer(
         (_) async => Grid(
+          id: 'grid',
           name: title,
           schema: null,
           fields: [],
           rows: [],
+          links: {},
         ),
       );
 
@@ -402,10 +418,12 @@ void main() {
         ),
       ).thenAnswer(
         (_) async => Grid(
+          id: 'grid',
           name: title,
           schema: null,
           fields: [],
           rows: [],
+          links: {},
         ),
       );
 

@@ -34,12 +34,58 @@ enum ApptiveLinkType {
   /// Lists [Grid]s
   grids,
 
-  /// Removes a [Space]
+  /// Removes a [Space], [Grid]
   remove,
 
-  /// Rename a [Space]
+  /// Rename a [Space], [Grid]
   rename,
 
   /// List Shares
   shares,
+
+  // Grid Related
+  /// Adds a new [GridRow]
+  addEntity,
+
+  /// Adds a new [GridField]
+  addField,
+
+  /// Adds a new Form
+  addForm,
+
+  /// Adds a new Link
+  addLink,
+
+  /// Adds a View
+  addView,
+
+  /// List Entities
+  entities,
+
+  /// List Forms
+  forms,
+
+  /// Perform a query on a [Grid]
+  query,
+
+  /// Remove a field
+  removeField,
+
+  /// Get the schema of a [Grid]
+  schema,
+
+  /// Update the key of a field
+  updateFieldKey,
+
+  /// Update the [GridField.name]
+  updateFieldName,
+
+  /// Update the [GridField.type]
+  updateFieldType,
+
+  /// Check if there have been updates to the Grid
+  updates,
+
+  /// List Views of a [Grid]
+  views
 }

@@ -23,6 +23,7 @@ void main() {
     final gridUri = GridUri(user: 'user', space: 'space', grid: 'grid');
     final field = GridField('field', 'Name', DataType.text);
     final grid = Grid(
+      id: 'grid',
       name: 'Test',
       schema: null,
       fields: [field],
@@ -30,6 +31,13 @@ void main() {
         GridRow('row1', [GridEntry(field, StringDataEntity('First'))]),
         GridRow('row2', [GridEntry(field, StringDataEntity('Second'))]),
       ],
+      links: {
+        ApptiveLinkType.self: ApptiveLink(uri: gridUri.uri, method: 'get'),
+        ApptiveLinkType.entities: ApptiveLink(
+          uri: gridUri.uri.replace(path: '${gridUri.uri.path}/entities'),
+          method: 'get',
+        ),
+      },
     );
 
     setUp(() {
@@ -174,12 +182,20 @@ void main() {
 
     testWidgets('Empty null values', (tester) async {
       final gridWithNull = Grid(
+        id: 'grid',
         name: 'Test',
         schema: null,
         fields: [field],
         rows: [
           GridRow('row1', [GridEntry(field, StringDataEntity())]),
         ],
+        links: {
+          ApptiveLinkType.self: ApptiveLink(uri: gridUri.uri, method: 'get'),
+          ApptiveLinkType.entities: ApptiveLink(
+            uri: gridUri.uri.replace(path: '${gridUri.uri.path}/entities'),
+            method: 'get',
+          ),
+        },
       );
 
       when(() => client.loadGrid(gridUri: gridUri))
@@ -226,8 +242,14 @@ void main() {
       );
       final client = MockApptiveGridClient();
       when(() => client.loadGrid(gridUri: any(named: 'gridUri'))).thenAnswer(
-        (invocation) async =>
-            Grid(name: 'name', schema: {}, fields: [], rows: []),
+        (invocation) async => Grid(
+          id: 'grid',
+          name: 'name',
+          schema: {},
+          fields: [],
+          rows: [],
+          links: {},
+        ),
       );
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
       when(() => client.performAction(action, any()))

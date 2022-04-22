@@ -27,6 +27,7 @@ class Space {
     required this.name,
     this.gridUris,
     required this.links,
+    this.embeddedGrids,
   });
 
   /// Deserializes [json] into a [Space] Object
@@ -38,8 +39,13 @@ class Space {
       return Space(
         name: json['name'],
         id: json['id'],
-        gridUris: (json['gridUris'] as List?)?.map((e) => GridUri.fromUri(e)).toList(),
+        gridUris: (json['gridUris'] as List?)
+            ?.map((e) => GridUri.fromUri(e))
+            .toList(),
         links: linkMapFromJson(json['_links']),
+        embeddedGrids: (json['_embedded']?['grids'] as List?)
+            ?.map((e) => Grid.fromJson(e))
+            .toList(),
       );
     }
   }
@@ -53,17 +59,33 @@ class Space {
   /// [GridUri]s pointing to [Grid]s contained in this [Space]
   final List<GridUri>? gridUris;
 
+  /// Links for relavant actions for this Space
   final LinkMap links;
 
+  /// A List of [Grid]s that are embedded in this Space
+  final List<Grid>? embeddedGrids;
+
   /// Serializes this [Space] into a json Map
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'id': id,
-    if (gridUris != null)
+  Map<String, dynamic> toJson() {
+    final jsonMap = {
+      'name': name,
+      'id': id,
+      if (gridUris != null)
         'gridUris': gridUris!.map((e) => e.uri.toString()).toList(),
-    'type': 'space',
-    '_links': links.toJson(),
-      };
+      'type': 'space',
+      '_links': links.toJson(),
+    };
+
+    if (embeddedGrids != null) {
+      final embeddedMap =
+          jsonMap['_embedded'] as Map<String, dynamic>? ?? <String, dynamic>{};
+      embeddedMap['grids'] = embeddedGrids?.map((e) => e.toJson()).toList();
+
+      jsonMap['_embedded'] = embeddedMap;
+    }
+
+    return jsonMap;
+  }
 
   @override
   String toString() {
@@ -76,23 +98,32 @@ class Space {
         id == other.id &&
         name == other.name &&
         f.listEquals(gridUris, other.gridUris) &&
-    f.mapEquals(links, other.links);
+        f.mapEquals(links, other.links);
   }
 
   @override
   int get hashCode => toString().hashCode;
 }
 
+/// A [Space] shared with a [User]
 class SharedSpace extends Space {
   /// Creates a new Space Model with a certain [id] and [name]
   /// [gridUris] is [List<GridUri>] pointing to the [Grid]s contained in this [Space]
+  /// [realSpace] points to the Uri of the actual [Space]
   SharedSpace({
     required String id,
     required String name,
     required this.realSpace,
     List<GridUri>? gridUris,
     required LinkMap links,
-  }) : super(id: id, name: name, gridUris: gridUris, links: links);
+    List<Grid>? embeddedGrids,
+  }) : super(
+          id: id,
+          name: name,
+          gridUris: gridUris,
+          links: links,
+          embeddedGrids: embeddedGrids,
+        );
 
   /// Deserializes [json] into a [Space] Object
   factory SharedSpace.fromJson(Map<String, dynamic> json) {
@@ -100,11 +131,16 @@ class SharedSpace extends Space {
       name: json['name'],
       id: json['id'],
       realSpace: Uri.parse(json['realSpace']),
-      gridUris: (json['gridUris'] as List?)?.map((e) => GridUri.fromUri(e)).toList(),
+      gridUris:
+          (json['gridUris'] as List?)?.map((e) => GridUri.fromUri(e)).toList(),
       links: linkMapFromJson(json['_links']),
+      embeddedGrids: (json['_embedded']?['grids'] as List?)
+          ?.map((e) => Grid.fromJson(e))
+          .toList(),
     );
   }
 
+  /// Uri of the [Space] that is shared
   final Uri realSpace;
 
   @override
@@ -119,7 +155,6 @@ class SharedSpace extends Space {
   String toString() {
     return 'SharedSpace(name: $name, id: $id, realSpace: ${realSpace.toString()} gridUris: ${gridUris.toString()}, links: $links)';
   }
-
 
   @override
   bool operator ==(Object other) {

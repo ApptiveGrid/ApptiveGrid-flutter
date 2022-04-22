@@ -18,36 +18,20 @@ void main() {
         'spaceUris': [
           '/api/users/id/spaces/spaceId',
         ],
-        '_links': 
-          {
-            "accessCredentials": {
-              "href": "/api/users/id/accessKeys",
-              "method": "get"
-            },
-            "spaces": {
-              "href": "/api/users/id/spaces",
-              "method": "get"
-            },
-            "hooks": {
-              "href": "/api/users/id/hooks",
-              "method": "get"
-            },
-            "addHook": {
-              "href": "/api/users/id/hooks",
-              "method": "post"
-            },
-            "self": {
-              "href": "/api/users/id",
-              "method": "get"
-            },
-            "addAccessCredentials": {
-              "href": "/api/users/id/accessKeys",
-              "method": "post"
-            },
-            "addSpace": {
-              "href": "/api/users/id/spaces",
-              "method": "post"
+        '_links': {
+          "accessCredentials": {
+            "href": "/api/users/id/accessKeys",
+            "method": "get"
           },
+          "spaces": {"href": "/api/users/id/spaces", "method": "get"},
+          "hooks": {"href": "/api/users/id/hooks", "method": "get"},
+          "addHook": {"href": "/api/users/id/hooks", "method": "post"},
+          "self": {"href": "/api/users/id", "method": "get"},
+          "addAccessCredentials": {
+            "href": "/api/users/id/accessKeys",
+            "method": "post"
+          },
+          "addSpace": {"href": "/api/users/id/spaces", "method": "post"},
         },
       });
 
@@ -95,7 +79,8 @@ void main() {
         id: id,
         spaceUris: [spaceUri],
         links: {
-          ApptiveLinkType.self: ApptiveLink(uri: Uri.parse('/api/users/id'), method: 'get'),
+          ApptiveLinkType.self:
+              ApptiveLink(uri: Uri.parse('/api/users/id'), method: 'get'),
         },
       );
 

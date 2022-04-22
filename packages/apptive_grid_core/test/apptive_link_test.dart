@@ -12,8 +12,10 @@ void main() {
     });
 
     test('In Equality', () {
-      final reference = ApptiveLink(uri: Uri.parse('uri.toParse'), method: 'get');
-      final uri = ApptiveLink(uri: Uri.parse('different.uri.toParse'), method: 'get');
+      final reference =
+          ApptiveLink(uri: Uri.parse('uri.toParse'), method: 'get');
+      final uri =
+          ApptiveLink(uri: Uri.parse('different.uri.toParse'), method: 'get');
       final method = ApptiveLink(uri: Uri.parse('uri.toParse'), method: 'post');
 
       expect(reference, isNot(equals(uri)));
@@ -23,7 +25,8 @@ void main() {
     });
 
     test('From Json', () {
-      final reference = ApptiveLink(uri: Uri.parse('uri.toParse'), method: 'get');
+      final reference =
+          ApptiveLink(uri: Uri.parse('uri.toParse'), method: 'get');
 
       final json = {
         'href': 'uri.toParse',

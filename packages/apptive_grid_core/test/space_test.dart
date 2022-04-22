@@ -42,7 +42,21 @@ void main() {
             'self': {
               'href': '/api/users/user/spaces/id',
               'method': 'get',
-            }
+            },
+          },
+          '_embedded': {
+            'grids': [
+              {
+                'id': 'gridId',
+                'name': 'Grid',
+                '_links': {
+                  'self': {
+                    'href': '/api/users/user/spaces/id/grid/gridId',
+                    'method': 'get',
+                  },
+                },
+              },
+            ],
           },
         });
 
@@ -62,6 +76,19 @@ void main() {
           id: id,
           name: name,
           gridUris: [grid],
+          embeddedGrids: [
+            Grid(
+              id: 'gridId',
+              name: 'Grid',
+              schema: null,
+              links: {
+                ApptiveLinkType.self: ApptiveLink(
+                  uri: Uri.parse('/api/users/user/spaces/id/grids/gridId'),
+                  method: 'get',
+                )
+              },
+            ),
+          ],
           links: {
             ApptiveLinkType.self: ApptiveLink(
               uri: Uri.parse('/api/users/user/spaces/id'),
@@ -76,6 +103,20 @@ void main() {
           'gridUris': [
             '/api/users/user/spaces/id/grids/gridId',
           ],
+          '_embedded': {
+            'grids': [
+              {
+                'id': 'gridId',
+                'name': 'Grid',
+                '_links': {
+                  'self': {
+                    'href': '/api/users/user/spaces/id/grid/gridId',
+                    'method': 'get',
+                  },
+                },
+              },
+            ],
+          },
           'type': 'space',
           '_links': {
             'self': {
@@ -172,7 +213,8 @@ void main() {
       });
 
       test('Space.fromJson returns shared Space', () {
-        final space = Space.fromJson({'id': 'id',
+        final space = Space.fromJson({
+          'id': 'id',
           'name': 'name',
           'gridUris': [
             '/api/users/user/spaces/id/grids/gridId',
@@ -183,8 +225,9 @@ void main() {
             'self': {
               'href': '/api/users/user/spaces/id',
               'method': 'get',
-            }
-          },});
+            },
+          },
+        });
 
         expect(space.runtimeType, equals(SharedSpace));
       });
@@ -240,6 +283,18 @@ void main() {
           name: name,
           gridUris: [],
           realSpace: realSpace,
+          embeddedGrids: [
+            Grid(
+              id: 'gridId',
+              name: 'Grid',
+              links: {
+                ApptiveLinkType.self: ApptiveLink(
+                  uri: Uri.parse('/api/users/user/spaces/id/grids/gridId'),
+                  method: 'get',
+                ),
+              },
+            ),
+          ],
           links: {
             ApptiveLinkType.self: ApptiveLink(
               uri: Uri.parse('/api/users/user/spaces/id'),
@@ -256,6 +311,20 @@ void main() {
             '/api/users/user/spaces/id/grids/gridId',
           ],
           'realSpace': 'realSpace.uri',
+          '_embedded': {
+            'grids': [
+              {
+                'id': 'gridId',
+                'name': 'Grid',
+                '_links': {
+                  'self': {
+                    'href': '/api/users/user/spaces/id/grid/gridId',
+                    'method': 'get',
+                  },
+                },
+              },
+            ],
+          },
         });
 
         expect(plain, isNot(jsonSharedSpace));

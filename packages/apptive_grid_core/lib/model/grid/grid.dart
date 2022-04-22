@@ -28,43 +28,55 @@ class GridUri extends ApptiveGridUri {
 class Grid {
   /// Creates a GridData Object
   Grid({
+    required this.id,
     required this.name,
-    required this.schema,
-    required this.fields,
-    required this.rows,
+    this.schema,
+    this.fields,
+    this.rows,
     this.filter,
     this.sorting,
+    required this.links,
   });
 
   /// Deserializes [json] into a [Grid] Object
   factory Grid.fromJson(Map<String, dynamic> json) {
-    final ids = json['fieldIds'] as List;
-    final names = json['fieldNames'] as List;
+    final id = json['id'];
+    final ids = json['fieldIds'] as List?;
+    final names = json['fieldNames'] as List?;
     final schema = json['schema'];
-    final fields = List<GridField>.generate(
-      ids.length,
-      (i) => GridField(
-        ids[i],
-        names[i],
-        dataTypeFromSchemaProperty(
-          schemaProperty: schema['properties']['fields']['items'][i],
-        ),
-      ),
-    );
-    final entries = (json['entities'] as List)
-        .map((e) => GridRow.fromJson(e, fields, schema))
-        .toList();
+    final fields = ids != null && names != null
+        ? List<GridField>.generate(
+            ids.length,
+            (i) => GridField(
+              ids[i],
+              names[i],
+              dataTypeFromSchemaProperty(
+                schemaProperty: schema['properties']['fields']['items'][i],
+              ),
+            ),
+          )
+        : null;
+    final entries = fields != null
+        ? (json['entities'] as List)
+            .map((e) => GridRow.fromJson(e, fields, schema))
+            .toList()
+        : null;
     final filter = json['filter'];
     final sorting = json['sorting'];
     return Grid(
+      id: id,
       name: json['name'],
       schema: schema,
       fields: fields,
       rows: entries,
       filter: filter,
       sorting: sorting,
+      links: linkMapFromJson(json['_links']),
     );
   }
+
+  /// Id of this Grid
+  final String id;
 
   /// Name of the Grid
   final String name;
@@ -79,25 +91,30 @@ class Grid {
   final dynamic sorting;
 
   /// List of [GridField] representing the Columns the Grid has
-  final List<GridField> fields;
+  final List<GridField>? fields;
 
   /// Rows of the Grid
-  final List<GridRow> rows;
+  final List<GridRow>? rows;
+
+  /// Links for actions relevant to this grid
+  final LinkMap links;
 
   /// Serializes [Grid] into a json Map
   Map<String, dynamic> toJson() => {
+        'id': id,
         'name': name,
         'schema': schema,
-        'entities': rows.map((e) => e.toJson()).toList(),
-        'fieldIds': fields.map((e) => e.id).toList(),
-        'fieldNames': fields.map((e) => e.name).toList(),
+        if (rows != null) 'entities': rows!.map((e) => e.toJson()).toList(),
+        if (fields != null) 'fieldIds': fields!.map((e) => e.id).toList(),
+        if (fields != null) 'fieldNames': fields!.map((e) => e.name).toList(),
         if (filter != null) 'filter': filter,
         if (sorting != null) 'sorting': sorting,
+        '_links': links.toJson(),
       };
 
   @override
   String toString() {
-    return 'GridData(name: $name, fields: $fields, rows: $rows, filter: $filter, sorting: $sorting)';
+    return 'GridData(name: $name, fields: $fields, rows: $rows, filter: $filter, sorting: $sorting, links: $links)';
   }
 
   @override
@@ -108,7 +125,8 @@ class Grid {
         f.listEquals(fields, other.fields) &&
         f.listEquals(rows, other.rows) &&
         filter.toString() == other.filter.toString() &&
-        sorting.toString() == other.sorting.toString();
+        sorting.toString() == other.sorting.toString() &&
+        f.mapEquals(links, other.links);
   }
 
   @override

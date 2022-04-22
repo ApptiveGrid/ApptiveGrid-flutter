@@ -1,3 +1,12 @@
+## 0.10.0-alpha.1 - Model Rework
+* Add HAL Links to User, Space, Grid and Form
+* Add embedded Objects to User, Space, Grid
+### Breaking Changes
+* Rename `spaces` in `User` to `spaceUris`
+* * Rename `grids` in `Space` to `gridUris`
+* Make `rows` and `fields` of `Grid` `nullable`
+* Added required parameter `id` to Grid
+
 ## 0.9.4
 * Fix Bug where not having a saved token would ask for User Authentication directly
 

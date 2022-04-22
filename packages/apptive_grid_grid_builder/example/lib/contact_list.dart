@@ -80,12 +80,12 @@ class _MyHomePageState extends State<_MyHomePage> {
                 return _builderKey.currentState?.reload() ?? Future.value();
               },
               child: ListView.separated(
-                itemCount: snapshot.data!.rows.length,
+                itemCount: snapshot.data!.rows?.length ?? 0,
                 separatorBuilder: (context, index) {
                   return Divider();
                 },
                 itemBuilder: (context, index) {
-                  final row = snapshot.data!.rows[index];
+                  final row = snapshot.data!.rows![index];
                   return ListTile(
                     leading: Padding(
                       padding: const EdgeInsets.fromLTRB(4, 4, 4, 8),

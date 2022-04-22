@@ -174,12 +174,91 @@ void main() {
           '_id': {'type': 'string'}
         }
       },
-      'name': 'Contacts'
+      'name': 'Contacts',
+      'id': 'gridId',
+      '_links': {
+        "addLink": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
+          "method": "post"
+        },
+        "forms": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
+          "method": "get"
+        },
+        "updateFieldType": {
+          "href":
+              "/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange",
+          "method": "post"
+        },
+        "removeField": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove",
+          "method": "post"
+        },
+        "addEntity": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
+          "method": "post"
+        },
+        "views": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
+          "method": "get"
+        },
+        "addView": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
+          "method": "post"
+        },
+        "self": {
+          "href":
+              "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+          "method": "get"
+        },
+        "updateFieldKey": {
+          "href":
+              "/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange",
+          "method": "post"
+        },
+        "query": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/query",
+          "method": "get"
+        },
+        "entities": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
+          "method": "get"
+        },
+        "updates": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/updates",
+          "method": "get"
+        },
+        "schema": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/schema",
+          "method": "get"
+        },
+        "updateFieldName": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename",
+          "method": "post"
+        },
+        "addForm": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
+          "method": "post"
+        },
+        "addField": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd",
+          "method": "post"
+        },
+        "rename": {
+          "href": "/api/users/userId/spaces/spaceId/grids/gridId/Rename",
+          "method": "post"
+        },
+        "remove": {
+          "href":
+              "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+          "method": "delete"
+        }
+      },
     };
     test('Success', () async {
-      const user = 'user';
-      const space = 'space';
-      const gridId = 'grid';
+      const user = 'userId';
+      const space = 'spaceId';
+      const gridId = 'gridId';
 
       final response = Response(json.encode(rawResponse), 200);
 
@@ -242,9 +321,9 @@ void main() {
     });
     test('401 -> Authenticates and retries', () async {
       reset(httpClient);
-      const user = 'user';
-      const space = 'space';
-      const gridId = 'grid';
+      const user = 'userId';
+      const space = 'spaceId';
+      const gridId = 'gridId';
 
       final response = Response('', 401);
       final retryResponse = Response(json.encode(rawResponse), 200);
@@ -254,7 +333,7 @@ void main() {
         '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
       );
       when(
-            () => httpClient.get(
+        () => httpClient.get(
           any(that: predicate<Uri>((testUri) => testUri.path == uri.uri.path)),
           headers: any(named: 'headers'),
         ),
@@ -267,14 +346,14 @@ void main() {
         }
       });
       when(
-            () => httpClient.get(
+        () => httpClient.get(
           Uri.parse(
             '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities?layout=indexed',
           ),
           headers: any(named: 'headers'),
         ),
       ).thenAnswer(
-            (_) async => Response(
+        (_) async => Response(
           jsonEncode(rawResponse['entities']),
           200,
         ),
@@ -282,8 +361,12 @@ void main() {
 
       await apptiveGridClient.loadGrid(gridUri: uri);
 
-      verify(() => httpClient.get(any(that: predicate<Uri>((testUri) => testUri.path == uri.uri.path)), headers: any(named: 'headers')))
-          .called(2);
+      verify(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).called(2);
     });
   });
 
@@ -1622,7 +1705,88 @@ void main() {
             '_id': {'type': 'string'}
           }
         },
-        'name': 'New grid view'
+        'name': 'New grid view',
+        'id': 'gridId',
+        '_links': {
+          "addLink": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
+            "method": "post"
+          },
+          "forms": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
+            "method": "get"
+          },
+          "updateFieldType": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange",
+            "method": "post"
+          },
+          "removeField": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove",
+            "method": "post"
+          },
+          "addEntity": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
+            "method": "post"
+          },
+          "views": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
+            "method": "get"
+          },
+          "addView": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
+            "method": "post"
+          },
+          "self": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "get"
+          },
+          "updateFieldKey": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange",
+            "method": "post"
+          },
+          "query": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/query",
+            "method": "get"
+          },
+          "entities": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
+            "method": "get"
+          },
+          "updates": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/updates",
+            "method": "get"
+          },
+          "schema": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/schema",
+            "method": "get"
+          },
+          "updateFieldName": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename",
+            "method": "post"
+          },
+          "addForm": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
+            "method": "post"
+          },
+          "addField": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd",
+            "method": "post"
+          },
+          "rename": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/Rename",
+            "method": "post"
+          },
+          "remove": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "delete"
+          }
+        },
       };
 
       final response = Response(json.encode(gridViewResponse), 200);
@@ -1655,8 +1819,8 @@ void main() {
       );
 
       expect(gridView.filter, isNot(null));
-      expect(gridView.fields.length, equals(3));
-      expect(gridView.rows.length, equals(1));
+      expect(gridView.fields!.length, equals(3));
+      expect(gridView.rows!.length, equals(1));
     });
 
     test('GridView sorting gets applied in request', () async {
@@ -1694,7 +1858,88 @@ void main() {
             '_id': {'type': 'string'}
           }
         },
-        'name': 'New grid view'
+        'name': 'New grid view',
+        'id': 'gridId',
+        '_links': {
+          "addLink": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
+            "method": "post"
+          },
+          "forms": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
+            "method": "get"
+          },
+          "updateFieldType": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange",
+            "method": "post"
+          },
+          "removeField": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove",
+            "method": "post"
+          },
+          "addEntity": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
+            "method": "post"
+          },
+          "views": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
+            "method": "get"
+          },
+          "addView": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
+            "method": "post"
+          },
+          "self": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "get"
+          },
+          "updateFieldKey": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange",
+            "method": "post"
+          },
+          "query": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/query",
+            "method": "get"
+          },
+          "entities": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
+            "method": "get"
+          },
+          "updates": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/updates",
+            "method": "get"
+          },
+          "schema": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/schema",
+            "method": "get"
+          },
+          "updateFieldName": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename",
+            "method": "post"
+          },
+          "addForm": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
+            "method": "post"
+          },
+          "addField": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd",
+            "method": "post"
+          },
+          "rename": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/Rename",
+            "method": "post"
+          },
+          "remove": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "delete"
+          }
+        },
       };
 
       final rawGridViewEntitiesResponse = [
@@ -1794,7 +2039,88 @@ void main() {
             '_id': {'type': 'string'}
           }
         },
-        'name': 'New grid view'
+        'name': 'New grid view',
+        'id': 'gridId',
+        '_links': {
+          "addLink": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
+            "method": "post"
+          },
+          "forms": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
+            "method": "get"
+          },
+          "updateFieldType": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange",
+            "method": "post"
+          },
+          "removeField": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove",
+            "method": "post"
+          },
+          "addEntity": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
+            "method": "post"
+          },
+          "views": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
+            "method": "get"
+          },
+          "addView": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
+            "method": "post"
+          },
+          "self": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "get"
+          },
+          "updateFieldKey": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange",
+            "method": "post"
+          },
+          "query": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/query",
+            "method": "get"
+          },
+          "entities": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
+            "method": "get"
+          },
+          "updates": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/updates",
+            "method": "get"
+          },
+          "schema": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/schema",
+            "method": "get"
+          },
+          "updateFieldName": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename",
+            "method": "post"
+          },
+          "addForm": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
+            "method": "post"
+          },
+          "addField": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd",
+            "method": "post"
+          },
+          "rename": {
+            "href": "/api/users/userId/spaces/spaceId/grids/gridId/Rename",
+            "method": "post"
+          },
+          "remove": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "delete"
+          }
+        },
       };
 
       final rawGridViewEntitiesResponse = [
@@ -1850,7 +2176,7 @@ void main() {
               (uri) =>
                   uri.path ==
                       '/api/users/$userId/spaces/$spaceId/grids/$gridId/entities' &&
-                  uri.queryParameters['viewId'] == view0 &&
+                  //uri.queryParameters['viewId'] == view0 &&
                   uri.queryParameters.containsKey('filter'),
             ),
           ),
@@ -2111,6 +2437,7 @@ void main() {
       id: 'userId',
       spaceUris: [],
       links: {},
+      embeddedSpaces: [],
     );
 
     group('Errors', () {
@@ -2247,8 +2574,11 @@ void main() {
       const gridId = 'grid';
 
       final response = Response('', 401);
-      final retryResponse = Response('{'
-          '"items": []}', 200);
+      final retryResponse = Response(
+        '{'
+        '"items": []}',
+        200,
+      );
       bool isRetry = false;
 
       final uri = Uri.parse(
@@ -2270,8 +2600,12 @@ void main() {
 
       await apptiveGridClient.loadEntities(uri: uri);
 
-      verify(() => httpClient.get(any(that: predicate<Uri>((testUri) => testUri.path == uri.path)), headers: any(named: 'headers')))
-          .called(2);
+      verify(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).called(2);
     });
   });
 }
