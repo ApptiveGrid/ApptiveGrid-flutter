@@ -2,6 +2,7 @@ library apptive_grid_client;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_model.dart';
@@ -9,11 +10,10 @@ import 'package:apptive_grid_core/apptive_grid_network.dart';
 import 'package:apptive_grid_core/apptive_grid_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as img;
 import 'package:mime/mime.dart';
 import 'package:openid_client/openid_client.dart';
 import 'package:uuid/uuid.dart';
-import 'package:image/image.dart' as img;
-import 'dart:math' as math;
 
 part 'attachment_processor.dart';
 
@@ -48,6 +48,7 @@ class ApptiveGridClient {
       httpClient: httpClient,
     );
   }
+
   // coverage:ignore-end
 
   /// Configurations
@@ -555,5 +556,55 @@ class ApptiveGridClient {
     } else {
       return uploadResponse;
     }
+  }
+
+  /// Perform a action represented by [link]
+  /// [body] is the body of the request
+  /// [headers] will be added in addition to [ApptiveGridClient.headers]
+  /// [queryParameters] will override any [queryParameters] in [ApptiveLink.uri]
+  /// [parseResponse] will be called with [http.Response] if the request has been successful
+  Future<T?> performApptiveLink<T>({
+    required ApptiveLink link,
+    bool isRetry = false,
+    dynamic body,
+    Map<String, String>? headers,
+    Map<String, String>? queryParameters,
+    required Future<T?> Function(http.Response response) parseResponse,
+  }) async {
+    final request = http.Request(
+      link.method,
+      link.uri.replace(
+        queryParameters: queryParameters ?? link.uri.queryParameters,
+      ),
+    );
+
+    if (body != null) {
+      request.body = json.encode(body);
+    }
+
+    request.headers.addAll(this.headers);
+    if (headers != null) {
+      request.headers.addAll(headers);
+    }
+
+    final streamResponse = await _client.send(request);
+    final response = await http.Response.fromStream(streamResponse);
+
+    if (response.statusCode >= 400) {
+      if (response.statusCode == 401 && !isRetry) {
+        return performApptiveLink(
+          link: link,
+          body: body,
+          headers: headers,
+          queryParameters: queryParameters,
+          isRetry: true,
+          parseResponse: parseResponse,
+        );
+      } else {
+        throw response;
+      }
+    }
+
+    return parseResponse(response);
   }
 }

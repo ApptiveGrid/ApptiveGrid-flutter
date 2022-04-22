@@ -1,5 +1,6 @@
 ## 0.10.0-alpha.1 - Model Rework
-* Add HAL Links to User, Space, Grid and Form
+* Add HAL `ApptiveLink`s to User, Space, Grid and Form
+* Add call to perform an HAL `ApptiveLink`
 * Add embedded Objects to User, Space, Grid
 ### Breaking Changes
 * Rename `spaces` in `User` to `spaceUris`

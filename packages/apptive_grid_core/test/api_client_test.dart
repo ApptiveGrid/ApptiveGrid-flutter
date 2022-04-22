@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_core/apptive_grid_network.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
@@ -2649,6 +2650,163 @@ void main() {
           headers: any(named: 'headers'),
         ),
       ).called(2);
+    });
+  });
+
+  group('Perform ApptiveLink', () {
+    const actionResponse = 'Action Response';
+
+    test('Success', () async {
+      final link = ApptiveLink(uri: Uri.parse('apptive.link'), method: 'get');
+
+      final response =
+          StreamedResponse(Stream.value(utf8.encode(actionResponse)), 200);
+      final linkCompleter = Completer();
+
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+
+      await apptiveGridClient.performApptiveLink(
+        link: link,
+        parseResponse: (response) async =>
+            linkCompleter.complete(response.body),
+      );
+
+      expect(await linkCompleter.future, equals(actionResponse));
+    });
+
+    test('400 Status throws Response', () async {
+      final link = ApptiveLink(uri: Uri.parse('apptive.link'), method: 'get');
+
+      final response =
+          StreamedResponse(Stream.value(utf8.encode(actionResponse)), 400);
+      final linkCompleter = Completer();
+
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((_) async => response);
+      expect(
+        () => apptiveGridClient.performApptiveLink(
+          link: link,
+          parseResponse: (response) async => linkCompleter.complete(response),
+        ),
+        throwsA(isInstanceOf<Response>()),
+      );
+    });
+
+    test('401 -> Authenticates and retries', () async {
+      reset(httpClient);
+      final link = ApptiveLink(uri: Uri.parse('apptive.link'), method: 'get');
+
+      bool isRetry = false;
+
+      final response =
+          StreamedResponse(Stream.value(utf8.encode(actionResponse)), 401);
+      final retryResponse =
+          StreamedResponse(Stream.value(utf8.encode(actionResponse)), 200);
+      final linkCompleter = Completer();
+
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((_) async {
+        if (!isRetry) {
+          isRetry = true;
+          return response;
+        } else {
+          return retryResponse;
+        }
+      });
+
+      await apptiveGridClient.performApptiveLink(
+        link: link,
+        parseResponse: (response) async => linkCompleter.complete(response),
+      );
+
+      verify(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).called(2);
+    });
+
+    test('Headers, Body, Query get applied', () async {
+      final link = ApptiveLink(uri: Uri.parse('apptive.link'), method: 'post');
+
+      const body = 'testBody';
+      final headers = {'TestHeader': 'Value'};
+      final queryParameters = {'QueryParameter': 'Value'};
+
+      final response =
+          StreamedResponse(Stream.value(utf8.encode(actionResponse)), 200);
+      final linkCompleter = Completer();
+
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+
+      await apptiveGridClient.performApptiveLink(
+        link: link,
+        body: body,
+        headers: headers,
+        queryParameters: queryParameters,
+        parseResponse: (response) async =>
+            linkCompleter.complete(response.body),
+      );
+
+      verify(
+        () => httpClient.send(
+          any(
+            that: predicate<Request>((request) {
+              return mapEquals(request.url.queryParameters, queryParameters) &&
+                  request.headers[headers.keys.first] == headers.values.first &&
+                  request.body == jsonEncode(body);
+            }),
+          ),
+        ),
+      ).called(1);
     });
   });
 }
