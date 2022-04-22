@@ -1,3 +1,7 @@
+## 0.9.0-alpha.1
+* Update Core package
+* Includes a lot of breaking changes in the model including in `Grid`
+
 ## 0.8.1+1
 * Reload builder when uri changed
 
