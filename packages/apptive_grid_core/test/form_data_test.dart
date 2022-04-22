@@ -217,13 +217,12 @@ void main() {
     });
 
     test('toRequestObject returns Empty Map for non component', () {
-      final formWithoutComponents = FormData.fromJson(FormData.fromJson(response).toJson()..['components'] = null);
-
+      final formWithoutComponents = FormData.fromJson(
+        FormData.fromJson(response).toJson()..['components'] = null,
+      );
 
       expect(
-        formWithoutComponents
-            .toRequestObject()
-            .cast<dynamic, String?>(),
+        formWithoutComponents.toRequestObject().cast<dynamic, String?>(),
         equals({}),
       );
     });
