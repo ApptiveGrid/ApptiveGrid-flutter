@@ -10,7 +10,13 @@ import 'common.dart';
 void main() {
   setUpAll(() {
     registerFallbackValue(
-      FormData(title: 'title', components: [], schema: null),
+      FormData(
+        id: 'formId',
+        links: {},
+        title: 'title',
+        components: [],
+        schema: null,
+      ),
     );
   });
 
@@ -80,6 +86,7 @@ void main() {
     testWidgets('is required but filled sends', (tester) async {
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
+        id: 'formId',
         title: 'title',
         components: [
           EnumCollectionFormComponent(
@@ -93,6 +100,7 @@ void main() {
           )
         ],
         actions: [action],
+        links: {},
         schema: null,
       );
       final client = MockApptiveGridClient();
@@ -135,11 +143,13 @@ void main() {
 
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
+        id: 'formId',
         title: 'title',
         components: [
           component,
         ],
         actions: [action],
+        links: {},
         schema: null,
       );
       final client = MockApptiveGridClient();
@@ -193,7 +203,7 @@ void main() {
           verify(() => client.performAction(action, captureAny<FormData>()))
               .captured
               .first as FormData;
-      expect(capturedData.components.first.data.value, equals({'A'}));
+      expect(capturedData.components!.first.data.value, equals({'A'}));
     });
   });
 }

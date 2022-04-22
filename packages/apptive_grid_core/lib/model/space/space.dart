@@ -163,7 +163,8 @@ class SharedSpace extends Space {
         name == other.name &&
         f.listEquals(gridUris, other.gridUris) &&
         realSpace == other.realSpace &&
-        f.mapEquals(links, other.links);
+        f.mapEquals(links, other.links) &&
+        f.listEquals(embeddedGrids, other.embeddedGrids);
   }
 
   @override

@@ -107,6 +107,21 @@ void main() {
           '_id': {'type': 'string'}
         }
       },
+      '_embedded': {
+        "forms": [
+          {
+            "name": "Formular 1",
+            "id": "formId",
+            "_links": {
+              "self": {
+                "href":
+                    "/api/users/userId/spaces/spaceId/grids/gridId/forms/formId",
+                "method": "get"
+              }
+            }
+          }
+        ]
+      },
       'name': 'New grid',
       'id': 'gridId',
       '_links': {

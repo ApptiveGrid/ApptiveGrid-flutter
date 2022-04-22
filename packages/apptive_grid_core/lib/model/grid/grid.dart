@@ -36,6 +36,7 @@ class Grid {
     this.filter,
     this.sorting,
     required this.links,
+    this.embeddedForms,
   });
 
   /// Deserializes [json] into a [Grid] Object
@@ -72,6 +73,9 @@ class Grid {
       filter: filter,
       sorting: sorting,
       links: linkMapFromJson(json['_links']),
+      embeddedForms: (json['_embedded']?['forms'] as List?)
+          ?.map((e) => FormData.fromJson(e))
+          .toList(),
     );
   }
 
@@ -99,34 +103,51 @@ class Grid {
   /// Links for actions relevant to this grid
   final LinkMap links;
 
+  /// List of [FormData] that is embedded in this.
+  final List<FormData>? embeddedForms;
+
   /// Serializes [Grid] into a json Map
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'schema': schema,
-        if (rows != null) 'entities': rows!.map((e) => e.toJson()).toList(),
-        if (fields != null) 'fieldIds': fields!.map((e) => e.id).toList(),
-        if (fields != null) 'fieldNames': fields!.map((e) => e.name).toList(),
-        if (filter != null) 'filter': filter,
-        if (sorting != null) 'sorting': sorting,
-        '_links': links.toJson(),
-      };
+  Map<String, dynamic> toJson() {
+    final jsonMap = {
+      'id': id,
+      'name': name,
+      'schema': schema,
+      if (rows != null) 'entities': rows!.map((e) => e.toJson()).toList(),
+      if (fields != null) 'fieldIds': fields!.map((e) => e.id).toList(),
+      if (fields != null) 'fieldNames': fields!.map((e) => e.name).toList(),
+      if (filter != null) 'filter': filter,
+      if (sorting != null) 'sorting': sorting,
+      '_links': links.toJson(),
+    };
+
+    if (embeddedForms != null) {
+      final embeddedMap =
+          jsonMap['_embedded'] as Map<String, dynamic>? ?? <String, dynamic>{};
+      embeddedMap['forms'] = embeddedForms?.map((e) => e.toJson()).toList();
+
+      jsonMap['_embedded'] = embeddedMap;
+    }
+
+    return jsonMap;
+  }
 
   @override
   String toString() {
-    return 'GridData(name: $name, fields: $fields, rows: $rows, filter: $filter, sorting: $sorting, links: $links)';
+    return 'Grid(id: $id, name: $name, fields: $fields, rows: $rows, filter: $filter, sorting: $sorting, links: $links)';
   }
 
   @override
   bool operator ==(Object other) {
     return other is Grid &&
+        id == other.id &&
         name == other.name &&
         schema.toString() == other.schema.toString() &&
         f.listEquals(fields, other.fields) &&
         f.listEquals(rows, other.rows) &&
         filter.toString() == other.filter.toString() &&
         sorting.toString() == other.sorting.toString() &&
-        f.mapEquals(links, other.links);
+        f.mapEquals(links, other.links) &&
+        f.listEquals(embeddedForms, other.embeddedForms);
   }
 
   @override

@@ -16,7 +16,13 @@ import 'common.dart';
 void main() {
   setUpAll(() {
     registerFallbackValue(
-      FormData(title: 'title', components: [], schema: null),
+      FormData(
+        id: 'formId',
+        title: 'title',
+        components: [],
+        schema: null,
+        links: {},
+      ),
     );
   });
 
@@ -50,6 +56,7 @@ void main() {
         );
         final action = FormAction('formAction', 'POST');
         final formData = FormData(
+          id: 'formId',
           title: 'title',
           components: [
             AttachmentFormComponent(
@@ -59,6 +66,7 @@ void main() {
             )
           ],
           actions: [action],
+          links: {},
           schema: null,
         );
         final client = MockApptiveGridClient();
@@ -105,7 +113,7 @@ void main() {
             verify(() => client.performAction(action, captureAny())).captured;
         expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
-        expect(submittedData.components.first.data, equals(data));
+        expect(submittedData.components!.first.data, equals(data));
       });
 
       testWidgets('Multiple Attachments get added', (tester) async {
@@ -147,6 +155,7 @@ void main() {
         );
         final action = FormAction('formAction', 'POST');
         final formData = FormData(
+          id: 'formId',
           title: 'title',
           components: [
             AttachmentFormComponent(
@@ -156,6 +165,7 @@ void main() {
             )
           ],
           actions: [action],
+          links: {},
           schema: null,
         );
         final client = MockApptiveGridClient();
@@ -205,7 +215,7 @@ void main() {
             verify(() => client.performAction(action, captureAny())).captured;
         expect(captured.length, equals(1));
         final submittedData =
-            captured.first.components.first.data as AttachmentDataEntity;
+            captured.first.components!.first.data as AttachmentDataEntity;
         expect(submittedData.value!.length, equals(2));
         expect(submittedData.value!.first, equals(attachment1));
         expect(submittedData.value!.last, equals(attachment2));
@@ -229,6 +239,7 @@ void main() {
 
         final action = FormAction('formAction', 'POST');
         final formData = FormData(
+          id: 'formId',
           title: 'title',
           components: [
             AttachmentFormComponent(
@@ -238,6 +249,7 @@ void main() {
             )
           ],
           actions: [action],
+          links: {},
           schema: null,
         );
         final client = MockApptiveGridClient();
@@ -324,6 +336,7 @@ void main() {
         );
         final action = FormAction('formAction', 'POST');
         final formData = FormData(
+          id: 'formId',
           title: 'title',
           components: [
             AttachmentFormComponent(
@@ -333,6 +346,7 @@ void main() {
             )
           ],
           actions: [action],
+          links: {},
           schema: null,
         );
         final client = MockApptiveGridClient();
@@ -379,7 +393,7 @@ void main() {
             verify(() => client.performAction(action, captureAny())).captured;
         expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
-        expect(submittedData.components.first.data, equals(data));
+        expect(submittedData.components!.first.data, equals(data));
       });
 
       testWidgets('Multiple Attachments from file picker get added',
@@ -423,6 +437,7 @@ void main() {
         );
         final action = FormAction('formAction', 'POST');
         final formData = FormData(
+          id: 'formId',
           title: 'title',
           components: [
             AttachmentFormComponent(
@@ -432,6 +447,7 @@ void main() {
             )
           ],
           actions: [action],
+          links: {},
           schema: null,
         );
         final client = MockApptiveGridClient();
@@ -481,7 +497,7 @@ void main() {
             verify(() => client.performAction(action, captureAny())).captured;
         expect(captured.length, equals(1));
         final submittedData =
-            captured.first.components.first.data as AttachmentDataEntity;
+            captured.first.components!.first.data as AttachmentDataEntity;
         expect(submittedData.value!.length, equals(2));
         expect(submittedData.value!.first, equals(attachment1));
         expect(submittedData.value!.last, equals(attachment2));
@@ -538,6 +554,7 @@ void main() {
         );
         final action = FormAction('formAction', 'POST');
         final formData = FormData(
+          id: 'formId',
           title: 'title',
           components: [
             AttachmentFormComponent(
@@ -547,6 +564,7 @@ void main() {
             )
           ],
           actions: [action],
+          links: {},
           schema: null,
         );
         final client = MockApptiveGridClient();
@@ -593,7 +611,7 @@ void main() {
             verify(() => client.performAction(action, captureAny())).captured;
         expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
-        expect(submittedData.components.first.data, equals(data));
+        expect(submittedData.components!.first.data, equals(data));
       });
 
       testWidgets(
@@ -607,6 +625,7 @@ void main() {
 
         final action = FormAction('formAction', 'POST');
         final formData = FormData(
+          id: 'formId',
           title: 'title',
           components: [
             AttachmentFormComponent(
@@ -616,6 +635,7 @@ void main() {
             )
           ],
           actions: [action],
+          links: {},
           schema: null,
         );
         final client = MockApptiveGridClient();
@@ -671,6 +691,7 @@ void main() {
       );
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
+        id: 'formId',
         title: 'title',
         components: [
           AttachmentFormComponent(
@@ -680,6 +701,7 @@ void main() {
           )
         ],
         actions: [action],
+        links: {},
         schema: null,
       );
       final client = MockApptiveGridClient();
@@ -725,7 +747,7 @@ void main() {
           verify(() => client.performAction(action, captureAny())).captured;
       expect(captured.length, equals(1));
       final submittedData = captured.first as FormData;
-      expect(submittedData.components.first.data, equals(data));
+      expect(submittedData.components!.first.data, equals(data));
     });
 
     testWidgets('Existing Attachment gets deleted', (tester) async {
@@ -742,6 +764,7 @@ void main() {
       );
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
+        id: 'formId',
         title: 'title',
         components: [
           AttachmentFormComponent(
@@ -751,6 +774,7 @@ void main() {
           )
         ],
         actions: [action],
+        links: {},
         schema: null,
       );
       final client = MockApptiveGridClient();
@@ -776,7 +800,7 @@ void main() {
           verify(() => client.performAction(action, captureAny())).captured;
       expect(captured.length, equals(1));
       final submittedData = captured.first as FormData;
-      expect(submittedData.components.first.data, equals(data));
+      expect(submittedData.components!.first.data, equals(data));
     });
   });
 
@@ -784,6 +808,7 @@ void main() {
     testWidgets('Attachment is required shows message', (tester) async {
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
+        id: 'formId',
         title: 'title',
         components: [
           AttachmentFormComponent(
@@ -794,6 +819,7 @@ void main() {
           )
         ],
         actions: [action],
+        links: {},
         schema: null,
       );
       final client = MockApptiveGridClient();
@@ -823,6 +849,7 @@ void main() {
     testWidgets('Attachment is required but filled sends', (tester) async {
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
+        id: 'formId',
         title: 'title',
         components: [
           AttachmentFormComponent(
@@ -835,6 +862,7 @@ void main() {
           )
         ],
         actions: [action],
+        links: {},
         schema: null,
       );
       final client = MockApptiveGridClient();
@@ -892,6 +920,7 @@ void main() {
       );
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
+        id: 'formId',
         title: 'title',
         components: [
           AttachmentFormComponent(
@@ -902,6 +931,7 @@ void main() {
           )
         ],
         actions: [action],
+        links: {},
         schema: null,
       );
       final client = MockApptiveGridClient();
@@ -956,7 +986,7 @@ void main() {
           verify(() => client.performAction(action, captureAny<FormData>()))
               .captured
               .first as FormData;
-      expect(capturedData.components.first.data, equals(data));
+      expect(capturedData.components!.first.data, equals(data));
     });
   });
 }

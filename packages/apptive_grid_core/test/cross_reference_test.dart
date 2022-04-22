@@ -276,11 +276,34 @@ void main() {
         ],
         'name': 'New Name',
         'title': 'New title',
+        'id': 'formId',
+        '_links': {
+          "submit": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "post"
+          },
+          "remove": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "delete"
+          },
+          "self": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "get"
+          },
+          "update": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "put"
+          }
+        },
       };
 
       final formData = FormData.fromJson(responseWithCrossReference);
 
-      final fromJson = formData.components[0] as CrossReferenceFormComponent;
+      final fromJson = formData.components![0] as CrossReferenceFormComponent;
 
       final directEntity = CrossReferenceDataEntity.fromJson(
         jsonValue: {

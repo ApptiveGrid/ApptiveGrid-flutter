@@ -78,7 +78,30 @@ void main() {
       }
     ],
     'name': name,
-    'title': title
+    'title': title,
+    'id': 'formId',
+    '_links': {
+      "submit": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "post"
+      },
+      "remove": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "delete"
+      },
+      "self": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "get"
+      },
+      "update": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "put"
+      }
+    },
   };
 
   group('Parsing', () {
@@ -88,11 +111,11 @@ void main() {
       expect(formData.name, equals(name));
       expect(formData.title, equals(title));
 
-      expect(formData.actions.length, equals(1));
+      expect(formData.actions!.length, equals(1));
 
-      expect(formData.components.length, equals(5));
+      expect(formData.components!.length, equals(5));
 
-      expect(formData.components.map((e) => e.runtimeType).toList(), [
+      expect(formData.components!.map((e) => e.runtimeType).toList(), [
         StringFormComponent,
         IntegerFormComponent,
         DateTimeFormComponent,
@@ -114,10 +137,12 @@ void main() {
       );
 
       final formData = FormData(
+        id: 'formId',
         name: 'name',
         title: title,
         components: [component],
         actions: [action],
+        links: {},
         schema: schema,
       );
 
@@ -156,10 +181,12 @@ void main() {
       );
 
       final formData = FormData(
+        id: 'formId',
         name: 'name',
         title: title,
         components: [component],
         actions: [action],
+        links: {},
         schema: schema,
       );
 
@@ -188,6 +215,18 @@ void main() {
         isNot([]),
       );
     });
+
+    test('toRequestObject returns Empty Map for non component', () {
+      final formWithoutComponents = FormData.fromJson(FormData.fromJson(response).toJson()..['components'] = null);
+
+
+      expect(
+        formWithoutComponents
+            .toRequestObject()
+            .cast<dynamic, String?>(),
+        equals({}),
+      );
+    });
   });
 
   group('Equality', () {
@@ -201,17 +240,21 @@ void main() {
     );
 
     final a = FormData(
+      id: 'formId',
       name: 'name',
       title: title,
       components: [component],
       actions: [action],
+      links: {},
       schema: schema,
     );
     final b = FormData(
+      id: 'formId',
       name: 'name',
       title: title,
       components: [component],
       actions: [action],
+      links: {},
       schema: schema,
     );
     final c = FormData.fromJson(response);
@@ -255,11 +298,34 @@ void main() {
       ],
       'name': 'Name',
       'title': 'New title',
+      'id': 'formId',
+      '_links': {
+        "submit": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "post"
+        },
+        "remove": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "delete"
+        },
+        "self": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "get"
+        },
+        "update": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "put"
+        }
+      },
     };
     test('Form Without Actions parses correctly', () {
       final formData = FormData.fromJson(responseWithoutActions);
 
-      expect(formData.actions.length, equals(0));
+      expect(formData.actions, isNull);
     });
   });
 
@@ -296,23 +362,46 @@ void main() {
           }
         ],
         'name': 'Name',
-        'title': 'New title'
+        'title': 'New title',
+        'id': 'formId',
+        '_links': {
+          "submit": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "post"
+          },
+          "remove": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "delete"
+          },
+          "self": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "get"
+          },
+          "update": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "put"
+          }
+        },
       };
 
       final formData = FormData.fromJson(responseWithCrossReference);
 
       expect(formData.title, equals('New title'));
       expect(
-        formData.components[0].runtimeType,
+        formData.components![0].runtimeType,
         equals(CrossReferenceFormComponent),
       );
-      expect(formData.components[0].data.value, equals(null));
+      expect(formData.components![0].data.value, equals(null));
       expect(
-        (formData.components[0].data as CrossReferenceDataEntity).entityUri,
+        (formData.components![0].data as CrossReferenceDataEntity).entityUri,
         null,
       );
       expect(
-        (formData.components[0].data as CrossReferenceDataEntity).gridUri,
+        (formData.components![0].data as CrossReferenceDataEntity).gridUri,
         GridUri.fromUri(
           '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
         ),
@@ -355,25 +444,48 @@ void main() {
           }
         ],
         'name': 'Name',
-        'title': 'New title'
+        'title': 'New title',
+        'id': 'formId',
+        '_links': {
+          "submit": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "post"
+          },
+          "remove": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "delete"
+          },
+          "self": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "get"
+          },
+          "update": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "put"
+          }
+        },
       };
 
       final formData = FormData.fromJson(responseWithCrossReference);
 
       expect(formData.title, equals('New title'));
       expect(
-        formData.components[0].runtimeType,
+        formData.components![0].runtimeType,
         equals(CrossReferenceFormComponent),
       );
-      expect(formData.components[0].data.value, equals('Yeah!'));
+      expect(formData.components![0].data.value, equals('Yeah!'));
       expect(
-        (formData.components[0].data as CrossReferenceDataEntity).entityUri,
+        (formData.components![0].data as CrossReferenceDataEntity).entityUri,
         EntityUri.fromUri(
           '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d',
         ),
       );
       expect(
-        (formData.components[0].data as CrossReferenceDataEntity).gridUri,
+        (formData.components![0].data as CrossReferenceDataEntity).gridUri,
         GridUri.fromUri(
           '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
         ),

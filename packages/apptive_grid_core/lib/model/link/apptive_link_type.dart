@@ -34,10 +34,10 @@ enum ApptiveLinkType {
   /// Lists [Grid]s
   grids,
 
-  /// Removes a [Space], [Grid]
+  /// Removes a [Space], [Grid], [Form]
   remove,
 
-  /// Rename a [Space], [Grid]
+  /// Rename a [Space], [Grid], [Form]
   rename,
 
   /// List Shares
@@ -87,5 +87,12 @@ enum ApptiveLinkType {
   updates,
 
   /// List Views of a [Grid]
-  views
+  views,
+
+  //Form Related Links
+  /// Submit [FormData]
+  submit,
+
+  /// Update a Form
+  update,
 }

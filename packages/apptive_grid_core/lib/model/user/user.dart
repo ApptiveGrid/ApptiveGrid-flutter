@@ -86,7 +86,8 @@ class User {
         lastName == other.lastName &&
         firstName == other.firstName &&
         f.listEquals(spaceUris, other.spaceUris) &&
-        f.mapEquals(links, other.links);
+        f.mapEquals(links, other.links) &&
+        f.listEquals(embeddedSpaces, other.embeddedSpaces);
   }
 
   @override

@@ -25,11 +25,13 @@ void main() {
       ActionItem(
         action: FormAction('uri', 'method'),
         data: FormData(
+          id: 'formId',
           name: 'name',
           title: 'title',
           components: [],
           actions: [],
           schema: {},
+          links: {},
         ),
       ),
     );
@@ -76,7 +78,30 @@ void main() {
         },
       ],
       'name': 'Name',
-      'title': 'Form'
+      'title': 'Form',
+      'id': 'formId',
+      '_links': {
+        "submit": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "post"
+        },
+        "remove": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "delete"
+        },
+        "self": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "get"
+        },
+        "update": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "put"
+        }
+      },
     };
 
     test('Success', () async {
@@ -90,9 +115,9 @@ void main() {
       );
 
       expect(formData.title, equals('Form'));
-      expect(formData.components.length, equals(1));
-      expect(formData.components[0].runtimeType, equals(StringFormComponent));
-      expect(formData.actions.length, equals(1));
+      expect(formData.components?.length, equals(1));
+      expect(formData.components![0].runtimeType, equals(StringFormComponent));
+      expect(formData.actions!.length, equals(1));
     });
 
     test('DirectUri checks authentication if call throws 401', () async {
@@ -390,10 +415,12 @@ void main() {
         'required': []
       };
       final formData = FormData(
+        id: 'formId',
         name: 'Name',
         title: 'Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: schema,
       );
 
@@ -443,10 +470,12 @@ void main() {
         'required': []
       };
       final formData = FormData(
+        id: 'formId',
         name: 'Name',
         title: 'Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: schema,
       );
 
@@ -516,6 +545,7 @@ void main() {
           final action = FormAction('actionUri', 'POST');
           final bytes = Uint8List(10);
           final formData = FormData(
+            id: 'formId',
             title: 'Title',
             components: [
               AttachmentFormComponent(
@@ -526,6 +556,7 @@ void main() {
             ],
             schema: null,
             actions: [action],
+            links: {},
             attachmentActions: {
               attachment:
                   AddAttachmentAction(byteData: bytes, attachment: attachment)
@@ -682,6 +713,7 @@ void main() {
             final attachmentAction =
                 AddAttachmentAction(byteData: bytes, attachment: attachment);
             final formData = FormData(
+              id: 'formId',
               title: 'Title',
               components: [
                 AttachmentFormComponent(
@@ -692,6 +724,7 @@ void main() {
               ],
               schema: null,
               actions: [action],
+              links: {},
               attachmentActions: {attachment: attachmentAction},
             );
 
@@ -873,6 +906,7 @@ void main() {
               final attachmentAction =
                   AddAttachmentAction(byteData: bytes, attachment: attachment);
               final formData = FormData(
+                id: 'formId',
                 title: 'Title',
                 components: [
                   AttachmentFormComponent(
@@ -883,6 +917,7 @@ void main() {
                 ],
                 schema: null,
                 actions: [action],
+                links: {},
                 attachmentActions: {attachment: attachmentAction},
               );
 
@@ -1155,6 +1190,7 @@ void main() {
               attachment: attachment,
             );
             final formData = FormData(
+              id: 'formId',
               title: 'Title',
               components: [
                 AttachmentFormComponent(
@@ -1165,6 +1201,7 @@ void main() {
               ],
               schema: null,
               actions: [action],
+              links: {},
               attachmentActions: {attachment: attachmentAction},
             );
 
@@ -1184,6 +1221,7 @@ void main() {
             final attachmentAction =
                 DeleteAttachmentAction(attachment: attachment);
             final formData = FormData(
+              id: 'formId',
               title: 'Title',
               components: [
                 AttachmentFormComponent(
@@ -1194,6 +1232,7 @@ void main() {
               ],
               schema: null,
               actions: [action],
+              links: {},
               attachmentActions: {attachment: attachmentAction},
             );
 
@@ -1264,6 +1303,7 @@ void main() {
           final attachmentAction =
               AddAttachmentAction(byteData: bytes, attachment: attachment);
           final formData = FormData(
+            id: 'formId',
             title: 'Title',
             components: [
               AttachmentFormComponent(
@@ -1274,6 +1314,7 @@ void main() {
             ],
             schema: null,
             actions: [action],
+            links: {},
             attachmentActions: {attachment: attachmentAction},
           );
 
@@ -2198,11 +2239,13 @@ void main() {
     final action = FormAction('actionUri', 'POST');
 
     final data = FormData(
+      id: 'formId',
       name: 'Name',
       title: 'title',
       components: [],
       actions: [],
       schema: {},
+      links: {},
     );
 
     final cacheMap = <String, dynamic>{};
