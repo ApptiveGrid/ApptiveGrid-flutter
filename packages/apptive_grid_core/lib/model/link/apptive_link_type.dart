@@ -23,4 +23,23 @@ enum ApptiveLinkType {
 
   /// List of [Space]s
   spaces,
+
+  // Space Related
+  /// Adds a new Grid
+  addGrid,
+
+  /// Adds a new Share
+  addShare,
+
+  /// Lists [Grid]s
+  grids,
+
+  /// Removes a [Space]
+  remove,
+
+  /// Rename a [Space]
+  rename,
+
+  /// List Shares
+  shares,
 }
