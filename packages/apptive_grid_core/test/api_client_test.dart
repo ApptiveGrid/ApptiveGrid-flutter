@@ -240,6 +240,51 @@ void main() {
         throwsA(isInstanceOf<Response>()),
       );
     });
+    test('401 -> Authenticates and retries', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
+
+      final response = Response('', 401);
+      final retryResponse = Response(json.encode(rawResponse), 200);
+      bool isRetry = false;
+
+      final uri = GridUri.fromUri(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
+      );
+      when(
+            () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        if (!isRetry) {
+          isRetry = true;
+          return response;
+        } else {
+          return retryResponse;
+        }
+      });
+      when(
+            () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities?layout=indexed',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer(
+            (_) async => Response(
+          jsonEncode(rawResponse['entities']),
+          200,
+        ),
+      );
+
+      await apptiveGridClient.loadGrid(gridUri: uri);
+
+      verify(() => httpClient.get(any(that: predicate<Uri>((testUri) => testUri.path == uri.uri.path)), headers: any(named: 'headers')))
+          .called(2);
+    });
   });
 
   group('performAction', () {
@@ -2064,7 +2109,8 @@ void main() {
       lastName: 'lastName',
       firstName: 'firstName',
       id: 'userId',
-      spaces: [],
+      spaceUris: [],
+      links: {},
     );
 
     group('Errors', () {
@@ -2190,6 +2236,42 @@ void main() {
           body: bytes,
         ),
       ).called(1);
+    });
+  });
+
+  group('Load Entities', () {
+    test('401 -> Authenticates and retries', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
+
+      final response = Response('', 401);
+      final retryResponse = Response('{'
+          '"items": []}', 200);
+      bool isRetry = false;
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        if (!isRetry) {
+          isRetry = true;
+          return response;
+        } else {
+          return retryResponse;
+        }
+      });
+
+      await apptiveGridClient.loadEntities(uri: uri);
+
+      verify(() => httpClient.get(any(that: predicate<Uri>((testUri) => testUri.path == uri.path)), headers: any(named: 'headers')))
+          .called(2);
     });
   });
 }
