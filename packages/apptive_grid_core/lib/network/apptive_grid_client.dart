@@ -2,6 +2,7 @@ library apptive_grid_client;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_model.dart';
@@ -9,11 +10,10 @@ import 'package:apptive_grid_core/apptive_grid_network.dart';
 import 'package:apptive_grid_core/apptive_grid_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as img;
 import 'package:mime/mime.dart';
 import 'package:openid_client/openid_client.dart';
 import 'package:uuid/uuid.dart';
-import 'package:image/image.dart' as img;
-import 'dart:math' as math;
 
 part 'attachment_processor.dart';
 
@@ -48,6 +48,7 @@ class ApptiveGridClient {
       httpClient: httpClient,
     );
   }
+
   // coverage:ignore-end
 
   /// Configurations
@@ -228,23 +229,23 @@ class ApptiveGridClient {
       throw gridViewResponse;
     }
 
-    final entitiesResponse = await loadEntities(
-      uri: Uri.parse(
-        '${gridViewUrl.toString().replaceAll(RegExp('/views/.*'), '')}/entities',
-      ),
-      viewId: gridViewUrl.pathSegments.contains('views')
-          ? gridViewUrl
-              .pathSegments[gridViewUrl.pathSegments.indexOf('views') + 1]
-          : null,
-      layout: 'indexed',
-      filter: filter,
-      sorting: sorting,
-    );
-
-    final entities = entitiesResponse.items;
     final gridToParse = jsonDecode(gridViewResponse.body);
-    gridToParse['entities'] = entities;
-    return Grid.fromJson(gridToParse);
+    final grid = Grid.fromJson(gridToParse);
+    if (grid.links.containsKey(ApptiveLinkType.entities)) {
+      final entitiesResponse = await loadEntities(
+        uri: grid.links[ApptiveLinkType.entities]!.uri,
+        layout: 'indexed',
+        filter: filter,
+        sorting: sorting,
+      );
+
+      final entities = entitiesResponse.items;
+
+      gridToParse['entities'] = entities;
+      return Grid.fromJson(gridToParse);
+    } else {
+      return grid;
+    }
   }
 
   /// Load Entities of a Grid that are accessed by [uri]
@@ -268,7 +269,6 @@ class ApptiveGridClient {
   /// [filter] allows to get custom filters
   Future<EntitiesResponse<T>> loadEntities<T>({
     required Uri uri,
-    String? viewId,
     String? layout,
     List<ApptiveGridSorting>? sorting,
     ApptiveGridFilter? filter,
@@ -280,7 +280,6 @@ class ApptiveGridClient {
       host: baseUrl.host,
       queryParameters: Map.from(uri.queryParameters)
         ..addAll({
-          if (viewId != null) 'viewId': viewId,
           if (layout != null) 'layout': layout,
           if (sorting != null)
             'sorting':
@@ -294,9 +293,8 @@ class ApptiveGridClient {
     if (response.statusCode >= 400) {
       if (response.statusCode == 401 && !isRetry) {
         await _authenticator.checkAuthentication();
-        return loadEntities(
+        return loadEntities<T>(
           uri: uri,
-          viewId: viewId,
           layout: layout,
           sorting: sorting,
           filter: filter,
@@ -558,5 +556,55 @@ class ApptiveGridClient {
     } else {
       return uploadResponse;
     }
+  }
+
+  /// Perform a action represented by [link]
+  /// [body] is the body of the request
+  /// [headers] will be added in addition to [ApptiveGridClient.headers]
+  /// [queryParameters] will override any [queryParameters] in [ApptiveLink.uri]
+  /// [parseResponse] will be called with [http.Response] if the request has been successful
+  Future<T?> performApptiveLink<T>({
+    required ApptiveLink link,
+    bool isRetry = false,
+    dynamic body,
+    Map<String, String>? headers,
+    Map<String, String>? queryParameters,
+    required Future<T?> Function(http.Response response) parseResponse,
+  }) async {
+    final request = http.Request(
+      link.method,
+      link.uri.replace(
+        queryParameters: queryParameters ?? link.uri.queryParameters,
+      ),
+    );
+
+    if (body != null) {
+      request.body = json.encode(body);
+    }
+
+    request.headers.addAll(this.headers);
+    if (headers != null) {
+      request.headers.addAll(headers);
+    }
+
+    final streamResponse = await _client.send(request);
+    final response = await http.Response.fromStream(streamResponse);
+
+    if (response.statusCode >= 400) {
+      if (response.statusCode == 401 && !isRetry) {
+        return performApptiveLink(
+          link: link,
+          body: body,
+          headers: headers,
+          queryParameters: queryParameters,
+          isRetry: true,
+          parseResponse: parseResponse,
+        );
+      } else {
+        throw response;
+      }
+    }
+
+    return parseResponse(response);
   }
 }

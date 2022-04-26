@@ -89,7 +89,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
     ApptiveGrid.getClient(context, listen: false)
         .loadGrid(gridUri: _gridUri)
         .then((value) {
-      for (final row in value.rows) {
+      for (final row in (value.rows ?? [])) {
         _controllers[row.id]?.dispose();
         _controllers[row.id] = _scrollControllerGroup.addAndGet();
       }
@@ -185,7 +185,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
         enabled: false,
         value: null,
         child: HeaderRowWidget(
-          fields: _grid!.fields,
+          fields: _grid!.fields ?? [],
           controller: _headerController,
         ),
       );
@@ -196,9 +196,9 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
         child: ListView.builder(
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
-          itemCount: _grid!.rows.length,
+          itemCount: _grid!.rows?.length ?? 0,
           itemBuilder: (context, index) {
-            final row = _grid!.rows[index];
+            final row = _grid!.rows![index];
             String path = _gridUri.uri.path;
             final viewsIndex = path.indexOf('/views');
             if (viewsIndex > 0) {
@@ -304,9 +304,10 @@ class _RowMenuItemState extends State<_RowMenuItem> {
   @override
   Widget build(BuildContext context) {
     final index = widget.grid.rows
-        .where((row) => row.matchesFilter(widget.filterController?.query))
-        .toList()
-        .indexOf(widget.row);
+            ?.where((row) => row.matchesFilter(widget.filterController?.query))
+            .toList()
+            .indexOf(widget.row) ??
+        0;
     return GridRowWidget(
       row: widget.row,
       scrollController: widget.controller,

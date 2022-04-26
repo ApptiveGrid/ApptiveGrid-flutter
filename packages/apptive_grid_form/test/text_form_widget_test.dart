@@ -8,7 +8,15 @@ import 'common.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(FormData(title: 'title', components: [], schema: {}));
+    registerFallbackValue(
+      FormData(
+        id: 'id',
+        links: {},
+        title: 'title',
+        components: [],
+        schema: {},
+      ),
+    );
   });
 
   testWidgets('Multiline TextFormWidget Displays', (tester) async {
@@ -44,6 +52,7 @@ string''';
 multi-line
 string''';
     final formData = FormData(
+      id: 'formId',
       title: 'Title',
       components: [
         StringFormComponent(
@@ -58,6 +67,7 @@ string''';
         ),
       ],
       schema: null,
+      links: {},
     );
 
     final target = ApptiveGridFormData(
@@ -78,6 +88,7 @@ string''';
     testWidgets('is required but filled sends', (tester) async {
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
+        id: 'formId',
         title: 'title',
         components: [
           StringFormComponent(
@@ -88,6 +99,7 @@ string''';
           )
         ],
         actions: [action],
+        links: {},
         schema: null,
       );
       final client = MockApptiveGridClient();

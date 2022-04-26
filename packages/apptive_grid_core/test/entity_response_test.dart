@@ -67,11 +67,14 @@ void main() {
         ],
       );
       final response3 = response2.copyWith(items: response.items);
+      final response4 = response.copyWith();
 
-      expect(response, isNot(response2));
-      expect(response.hashCode, isNot(response2.hashCode));
-      expect(response, equals(response3));
-      expect(response.hashCode, equals(response3.hashCode));
+      expect(response2, isNot(response));
+      expect(response2.hashCode, isNot(response.hashCode));
+      expect(response3, equals(response));
+      expect(response3.hashCode, equals(response.hashCode));
+      expect(response4, equals(response));
+      expect(response4.hashCode, equals(response.hashCode));
     });
   });
 }

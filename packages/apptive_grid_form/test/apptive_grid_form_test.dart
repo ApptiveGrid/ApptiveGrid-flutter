@@ -20,7 +20,13 @@ void main() {
     registerFallbackValue(
       ActionItem(
         action: FormAction('', ''),
-        data: FormData(title: '', components: [], schema: null),
+        data: FormData(
+          id: 'formId',
+          title: '',
+          components: [],
+          schema: null,
+          links: {},
+        ),
       ),
     );
   });
@@ -45,11 +51,13 @@ void main() {
         () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
       ).thenAnswer(
         (realInvocation) async => FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
           actions: [],
           schema: {},
+          links: {},
         ),
       );
 
@@ -74,11 +82,13 @@ void main() {
         () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
       ).thenAnswer(
         (realInvocation) async => FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
           actions: [],
           schema: {},
+          links: {},
         ),
       );
 
@@ -91,11 +101,13 @@ void main() {
 
   testWidgets('OnLoadedCallback gets called', (tester) async {
     final form = FormData(
+      id: 'formId',
       name: 'Form Name',
       title: 'Form Title',
       components: [],
       actions: [],
       schema: {},
+      links: {},
     );
     final completer = Completer<FormData>();
     final target = TestApp(
@@ -131,11 +143,13 @@ void main() {
         ),
       );
       final form = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
         actions: [],
         schema: {},
+        links: {},
       );
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
@@ -164,10 +178,12 @@ void main() {
       );
       final action = FormAction('uri', 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
         actions: [action],
+        links: {},
         schema: {},
       );
 
@@ -198,10 +214,12 @@ void main() {
       );
       final action = FormAction('uri', 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
         actions: [action],
+        links: {},
         schema: {},
       );
 
@@ -288,10 +306,12 @@ void main() {
         );
         final action = FormAction('uri', 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
           actions: [action],
+          links: {},
           schema: {},
         );
 
@@ -322,10 +342,12 @@ void main() {
         );
         final action = FormAction('uri', 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
           actions: [action],
+          links: {},
           schema: {},
         );
 
@@ -357,10 +379,12 @@ void main() {
         );
         final action = FormAction('uri', 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
           actions: [action],
+          links: {},
           schema: {},
         );
 
@@ -408,10 +432,12 @@ void main() {
         );
         final action = FormAction('uri', 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
           actions: [action],
+          links: {},
           schema: {},
         );
 
@@ -447,10 +473,12 @@ void main() {
         );
         final action = FormAction('uri', 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
           actions: [action],
+          links: {},
           schema: {},
         );
 
@@ -481,10 +509,12 @@ void main() {
         );
         final action = FormAction('uri', 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
           actions: [action],
+          links: {},
           schema: {},
         );
 
@@ -522,10 +552,12 @@ void main() {
       );
       final action = FormAction('uri', 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
         actions: [action],
+        links: {},
         schema: {},
       );
 
@@ -557,10 +589,12 @@ void main() {
       );
       final action = FormAction('uri', 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
         actions: [action],
+        links: {},
         schema: {},
       );
 
@@ -584,10 +618,12 @@ void main() {
 
     final action = FormAction('actionUri', 'POST');
     final data = FormData(
+      id: 'formId',
       name: 'Form Name',
       title: 'Title',
       components: [],
       actions: [action],
+      links: {},
       schema: {},
     );
 
@@ -684,11 +720,13 @@ void main() {
     testWidgets('Current Data returns data', (tester) async {
       final key = GlobalKey<ApptiveGridFormDataState>();
       final form = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
         actions: [],
         schema: {},
+        links: {},
       );
       final target = TestApp(
         client: client,
@@ -720,10 +758,12 @@ void main() {
       final key = GlobalKey<ApptiveGridFormDataState>();
       final action = FormAction('uri', 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
         actions: [action],
+        links: {},
         schema: {},
       );
       final target = TestApp(
@@ -760,10 +800,12 @@ void main() {
       final key = GlobalKey<ApptiveGridFormDataState>();
       final action = FormAction('uri', 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
         actions: [action],
+        links: {},
         schema: {},
       );
       final target = TestApp(
@@ -810,10 +852,12 @@ void main() {
       );
       final action = FormAction('uri', 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
         actions: [action],
+        links: {},
         schema: {},
       );
 
@@ -844,6 +888,7 @@ void main() {
     testWidgets('UserReference Form Widget is build without padding',
         (tester) async {
       final formData = FormData(
+        id: 'formId',
         title: 'Form Data',
         components: [
           UserReferenceFormComponent(
@@ -852,6 +897,7 @@ void main() {
             fieldId: 'field3',
           ),
         ],
+        links: {},
         schema: {
           'properties': {
             'field3': {
@@ -904,9 +950,11 @@ void main() {
       when(client.sendPendingActions).thenAnswer((_) async {});
       when(() => client.loadForm(formUri: any(named: 'formUri'))).thenAnswer(
         (_) async => FormData(
+          id: 'formId',
           title: 'title',
           components: [],
           schema: {},
+          links: {},
         ),
       );
 

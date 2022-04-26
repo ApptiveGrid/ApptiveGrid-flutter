@@ -300,11 +300,12 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       child: Form(
         key: _formKey,
         child: ListView.builder(
-          itemCount: 1 + data.components.length + data.actions.length,
+          itemCount:
+              1 + (data.components?.length ?? 0) + (data.actions?.length ?? 0),
           itemBuilder: (context, index) {
             // Title
             if (index == 0) {
-              if (widget.hideTitle) {
+              if (widget.hideTitle || data.title == null) {
                 return const SizedBox();
               } else {
                 return Padding(
@@ -312,15 +313,15 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                       widget.contentPadding ??
                       _defaultPadding,
                   child: Text(
-                    data.title,
+                    data.title!,
                     style: widget.titleStyle ??
                         Theme.of(context).textTheme.headline5,
                   ),
                 );
               }
-            } else if (index < data.components.length + 1) {
+            } else if (index < (data.components?.length ?? 0) + 1) {
               final componentIndex = index - 1;
-              final component = fromModel(data.components[componentIndex]);
+              final component = fromModel(data.components![componentIndex]);
               if (component is UserReferenceFormWidget) {
                 // UserReference Widget should be invisible in the Form
                 // So returning without any Padding
@@ -330,7 +331,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                   padding: widget.contentPadding ?? _defaultPadding,
                   child: Builder(
                     builder: (context) {
-                      return fromModel(data.components[componentIndex]);
+                      return fromModel(data.components![componentIndex]);
                     },
                   ),
                 );
@@ -340,15 +341,16 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 padding: widget.contentPadding ?? _defaultPadding,
                 child: Builder(
                   builder: (_) {
-                    final actionIndex = index - 1 - data.components.length;
-                    final action = data.actions[actionIndex];
+                    final actionIndex =
+                        index - 1 - (data.components?.length ?? 0);
+                    final action = data.actions![actionIndex];
                     if (_actionsInProgress.contains(action)) {
                       return const Center(
                         child: CircularProgressIndicator.adaptive(),
                       );
                     } else {
                       return ActionButton(
-                        action: data.actions[actionIndex],
+                        action: action,
                         onPressed: _performAction,
                         child: Text(localization.actionSend),
                       );

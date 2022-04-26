@@ -14,11 +14,13 @@ void main() {
   setUpAll(() {
     registerFallbackValue(
       FormData(
+        id: 'formId',
         name: 'name',
         title: 'title',
         components: [],
         actions: [],
         schema: {},
+        links: {},
       ),
     );
   });
@@ -64,10 +66,12 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('string'),
       );
       final target = TestApp(
@@ -100,7 +104,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals('Value'));
+      expect(result.components!.first.data.value, equals('Value'));
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -116,10 +120,12 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('string'),
       );
       final target = TestApp(
@@ -162,10 +168,12 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('string', format: 'date-time'),
       );
       final target = TestApp(
@@ -210,7 +218,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals(date));
+      expect(result.components!.first.data.value, equals(date));
     });
 
     testWidgets('Value is send and used with Time Picker', (tester) async {
@@ -226,10 +234,12 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('string', format: 'date-time'),
       );
       final target = TestApp(
@@ -274,7 +284,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future
-          .then((data) => data.components.first.data.value as DateTime);
+          .then((data) => data.components!.first.data.value as DateTime);
       expect(
         DateTime(
           result.year,
@@ -300,10 +310,12 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('string', format: 'date-time'),
       );
       final target = TestApp(
@@ -346,10 +358,12 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('string', format: 'date'),
       );
       final target = TestApp(
@@ -393,7 +407,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals(date));
+      expect(result.components!.first.data.value, equals(date));
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -409,10 +423,12 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('string', format: 'date'),
       );
       final target = TestApp(
@@ -455,10 +471,12 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('integer'),
       );
       final target = TestApp(
@@ -491,7 +509,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals(12));
+      expect(result.components!.first.data.value, equals(12));
     });
 
     testWidgets('Prefilled Value gets displayed', (tester) async {
@@ -503,11 +521,13 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [],
         schema: getSchema('integer'),
+        links: {},
       );
       final target = TestApp(
         client: client,
@@ -541,10 +561,12 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('integer'),
       );
       final target = TestApp(
@@ -587,10 +609,12 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('number'),
       );
       final target = TestApp(
@@ -623,7 +647,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals(12));
+      expect(result.components!.first.data.value, equals(12));
     });
 
     testWidgets('Prefilled Value gets displayed', (tester) async {
@@ -635,11 +659,13 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [],
         schema: getSchema('number'),
+        links: {},
       );
       final target = TestApp(
         client: client,
@@ -673,10 +699,12 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('number'),
       );
       final target = TestApp(
@@ -719,10 +747,12 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('boolean'),
       );
       final target = TestApp(
@@ -755,7 +785,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals(true));
+      expect(result.components!.first.data.value, equals(true));
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -771,10 +801,12 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('boolean'),
       );
       final target = TestApp(
@@ -817,10 +849,12 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema('string', options: ['value', 'newValue']),
       );
       final target = TestApp(
@@ -857,7 +891,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals('newValue'));
+      expect(result.components!.first.data.value, equals('newValue'));
     });
 
     testWidgets('Required shows Error', (tester) async {
@@ -873,10 +907,12 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
         actions: [action],
+        links: {},
         schema: getSchema(
           'string',
           options: [

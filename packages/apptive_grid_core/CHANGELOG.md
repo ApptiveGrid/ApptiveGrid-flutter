@@ -1,3 +1,15 @@
+## 0.10.0-alpha.1 - Model Rework
+* Add HAL `ApptiveLink`s to User, Space, Grid and Form
+* Add call to perform an HAL `ApptiveLink`
+* Add embedded Objects to User, Space, Grid
+### Breaking Changes
+* Rename `spaces` in `User` to `spaceUris`
+* Rename `grids` in `Space` to `gridUris`
+* `rows` and `fields` of `Grid` are now `nullable`
+* Added required parameter `id` to Grid
+* Added required parameter `id' to FormData
+* `title`, `actions` and `components` of `FormData` are now `nullable`
+
 ## 0.9.4
 * Fix Bug where not having a saved token would ask for User Authentication directly
 

@@ -103,16 +103,16 @@ class _MyHomePageState extends State<_MyHomePage> {
             if (_sorting == null) {
               WidgetsBinding.instance?.addPostFrameCallback((_) {
                 late final ApptiveGridSorting newSorting;
-                if (snapshot.data!.fields.first.type == DataType.geolocation) {
+                if (snapshot.data!.fields?.first.type == DataType.geolocation) {
                   newSorting = DistanceApptiveGridSorting(
-                    fieldId: snapshot.data!.fields.first.id,
+                    fieldId: snapshot.data!.fields!.first.id,
                     order: _order,
                     location:
                         Geolocation(latitude: 50.938757, longitude: 6.954399),
                   );
                 } else {
                   newSorting = ApptiveGridSorting(
-                    fieldId: snapshot.data!.fields.first.id,
+                    fieldId: snapshot.data!.fields!.first.id,
                     order: _order,
                   );
                 }
@@ -126,12 +126,12 @@ class _MyHomePageState extends State<_MyHomePage> {
                 return _builderKey.currentState?.reload() ?? Future.value();
               },
               child: ListView.separated(
-                itemCount: snapshot.data!.rows.length,
+                itemCount: snapshot.data!.rows?.length ?? 0,
                 separatorBuilder: (context, index) {
                   return Divider();
                 },
                 itemBuilder: (context, index) {
-                  final row = snapshot.data!.rows[index];
+                  final row = snapshot.data!.rows![index];
                   return ListTile(
                     title: Text(row.entries[1].data.schemaValue),
                     subtitle: Text(row.entries[0].data.value.toString()),

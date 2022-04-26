@@ -9,7 +9,15 @@ import 'common.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(FormData(title: 'title', components: [], schema: {}));
+    registerFallbackValue(
+      FormData(
+        id: 'id',
+        links: {},
+        title: 'title',
+        components: [],
+        schema: {},
+      ),
+    );
   });
 
   group('Input Sanitation', () {
@@ -62,6 +70,7 @@ void main() {
     testWidgets('is required but filled sends', (tester) async {
       final action = FormAction('formAction', 'POST');
       final formData = FormData(
+        id: 'formId',
         title: 'title',
         components: [
           DecimalFormComponent(
@@ -72,6 +81,7 @@ void main() {
           )
         ],
         actions: [action],
+        links: {},
         schema: null,
       );
       final client = MockApptiveGridClient();

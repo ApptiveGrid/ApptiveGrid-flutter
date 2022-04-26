@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
                     'Spaces',
                     style: Theme.of(context).textTheme.headline4,
                   ),
-                ...((_user?.spaces) ?? [])
+                ...((_user?.spaceUris) ?? [])
                     .map((e) => _SpaceSection(spaceUri: e)),
               ],
             ),
@@ -174,9 +174,10 @@ class _SpaceSectionState extends State<_SpaceSection> {
                     Text(space.name),
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: space.grids
-                          .map((e) => _GridSection(gridUri: e))
-                          .toList(),
+                      children: space.gridUris
+                              ?.map((e) => _GridSection(gridUri: e))
+                              .toList() ??
+                          [SizedBox()],
                     )
                   ],
                 );
@@ -235,10 +236,12 @@ class _GridSectionState extends State<_GridSection> {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: grid.rows
-                          .map(
-                            (e) => Text(e.entries.first.data.value.toString()),
-                          )
-                          .toList(),
+                              ?.map(
+                                (e) =>
+                                    Text(e.entries.first.data.value.toString()),
+                              )
+                              .toList() ??
+                          [SizedBox()],
                     )
                   ],
                 );
