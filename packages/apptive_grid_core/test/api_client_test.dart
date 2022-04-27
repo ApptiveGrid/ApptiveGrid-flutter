@@ -2657,7 +2657,7 @@ void main() {
     const actionResponse = 'Action Response';
 
     test('Success', () async {
-      final link = ApptiveLink(uri: Uri.parse('apptive.link'), method: 'get');
+      final link = ApptiveLink(uri: Uri.parse('/apptive/link'), method: 'get');
 
       final response =
           StreamedResponse(Stream.value(utf8.encode(actionResponse)), 200);
@@ -2668,6 +2668,8 @@ void main() {
           any(
             that: predicate<BaseRequest>(
               (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
                   request.url.path == link.uri.path &&
                   request.method == link.method,
             ),
@@ -2687,7 +2689,7 @@ void main() {
     });
 
     test('400 Status throws Response', () async {
-      final link = ApptiveLink(uri: Uri.parse('apptive.link'), method: 'get');
+      final link = ApptiveLink(uri: Uri.parse('/apptive/link'), method: 'get');
 
       final response =
           StreamedResponse(Stream.value(utf8.encode(actionResponse)), 400);
@@ -2698,6 +2700,8 @@ void main() {
           any(
             that: predicate<BaseRequest>(
               (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
                   request.url.path == link.uri.path &&
                   request.method == link.method,
             ),
@@ -2715,7 +2719,7 @@ void main() {
 
     test('401 -> Authenticates and retries', () async {
       reset(httpClient);
-      final link = ApptiveLink(uri: Uri.parse('apptive.link'), method: 'get');
+      final link = ApptiveLink(uri: Uri.parse('/apptive/link'), method: 'get');
 
       bool isRetry = false;
 
@@ -2730,6 +2734,8 @@ void main() {
           any(
             that: predicate<BaseRequest>(
               (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
                   request.url.path == link.uri.path &&
                   request.method == link.method,
             ),
@@ -2754,6 +2760,8 @@ void main() {
           any(
             that: predicate<BaseRequest>(
               (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
                   request.url.path == link.uri.path &&
                   request.method == link.method,
             ),
@@ -2763,7 +2771,7 @@ void main() {
     });
 
     test('Headers, Body, Query get applied', () async {
-      final link = ApptiveLink(uri: Uri.parse('apptive.link'), method: 'post');
+      final link = ApptiveLink(uri: Uri.parse('/apptive/link'), method: 'post');
 
       const body = 'testBody';
       final headers = {'TestHeader': 'Value'};
@@ -2778,6 +2786,8 @@ void main() {
           any(
             that: predicate<BaseRequest>(
               (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
                   request.url.path == link.uri.path &&
                   request.method == link.method,
             ),

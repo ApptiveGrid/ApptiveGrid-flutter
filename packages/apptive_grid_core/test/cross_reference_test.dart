@@ -15,7 +15,14 @@ void main() {
                   '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
             }
           ],
-          '_id': '60d0370e0edfa83071816e12'
+          '_id': '60d0370e0edfa83071816e12',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/60d0370e0edfa83071816e12",
+              "method": "get"
+            },
+          },
         }
       ],
       'fieldIds': ['3ftoqhqbct15h5o730uknpvp5'],

@@ -26,7 +26,14 @@ void main() {
             true,
             'Enum1'
           ],
-          '_id': '3ojhtqm2bgtwzpdbktuv6syv5'
+          '_id': '3ojhtqm2bgtwzpdbktuv6syv5',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         },
         {
           'fields': [
@@ -39,11 +46,25 @@ void main() {
             true,
             'Enum2'
           ],
-          '_id': '6bs7tqexlcy88cry3qzzvjbyz'
+          '_id': '6bs7tqexlcy88cry3qzzvjbyz',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         },
         {
           'fields': [null, null, null, null, null, null, false, null],
-          '_id': '6bs7tqf61rppn1nixxb6cr7se'
+          '_id': '6bs7tqf61rppn1nixxb6cr7se',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         },
         {
           'fields': [
@@ -56,7 +77,14 @@ void main() {
             true,
             'Enum2'
           ],
-          '_id': 'bxzfxf43vaeefhje6xcmnofa8'
+          '_id': 'bxzfxf43vaeefhje6xcmnofa8',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         },
         {
           'fields': [
@@ -69,7 +97,14 @@ void main() {
             true,
             null
           ],
-          '_id': 'bxzfxf72k3j4d5fcmk6w0pa4s'
+          '_id': 'bxzfxf72k3j4d5fcmk6w0pa4s',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         },
       ],
       'fieldIds': [

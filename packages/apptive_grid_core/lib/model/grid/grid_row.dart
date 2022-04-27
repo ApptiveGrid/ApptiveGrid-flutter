@@ -3,7 +3,11 @@ part of apptive_grid_model;
 /// Model for a Row in a Grid
 class GridRow {
   /// Creates a GridRow
-  GridRow(this.id, this.entries);
+  GridRow({
+    required this.id,
+    required this.entries,
+    required this.links,
+  });
 
   /// Creates a GridRow from [json]
   ///
@@ -22,7 +26,13 @@ class GridRow {
         schema['properties']['fields']['items'][i],
       ),
     );
-    return GridRow(json['_id'], entries);
+    return GridRow(
+      id: json['_id'],
+      entries: entries,
+      links: linkMapFromJson(
+        json['_links'],
+      ),
+    );
   }
 
   /// id of the row
@@ -31,24 +41,29 @@ class GridRow {
   /// List of entries
   final List<GridEntry> entries;
 
+  /// Links for actions related to this [GridRow]
+  final LinkMap links;
+
   /// Serializes a row to a Map
   ///
   /// in the format used by the Server for [GridData.fromJson] and [GridData.toJson]
   Map<String, dynamic> toJson() => {
         '_id': id,
         'fields': entries.map((e) => e.data.schemaValue).toList(),
+        '_links': links.toJson(),
       };
 
   @override
   String toString() {
-    return 'GridRow(id: $id, entries: $entries)';
+    return 'GridRow(id: $id, entries: $entries, links: $links)';
   }
 
   @override
   bool operator ==(Object other) {
     return other is GridRow &&
         id == other.id &&
-        f.listEquals(entries, other.entries);
+        f.listEquals(entries, other.entries) &&
+        f.mapEquals(links, other.links);
   }
 
   @override

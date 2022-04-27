@@ -34,7 +34,7 @@ enum ApptiveLinkType {
   /// Lists [Grid]s
   grids,
 
-  /// Removes a [Space], [Grid], [Form]
+  /// Removes a [Space], [Grid], [Form], [GridRow]
   remove,
 
   /// Rename a [Space], [Grid], [Form]
@@ -93,6 +93,13 @@ enum ApptiveLinkType {
   /// Submit [FormData]
   submit,
 
-  /// Update a Form
+  /// Update a [FormData], [GrdiRow]
   update,
+
+  // Row/Entity Related Link Types
+  /// Partially Update a [GridRow]
+  partialUpdate,
+
+  /// Create a Link to a [FormData] for this [GridRow]
+  addEditionLink,
 }

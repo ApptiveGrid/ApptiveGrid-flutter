@@ -8,7 +8,14 @@ void main() {
       'entities': [
         {
           'fields': [47.11],
-          '_id': '60d0370e0edfa83071816e12'
+          '_id': '60d0370e0edfa83071816e12',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         }
       ],
       'fieldIds': ['3ftoqhqbct15h5o730uknpvp5'],

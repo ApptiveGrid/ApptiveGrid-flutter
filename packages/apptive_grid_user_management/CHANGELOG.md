@@ -1,3 +1,6 @@
+## 0.0.5-alpha.1
+* Update apptive_grid_core to 0.10.0 to include breaking model changes
+
 ## 0.0.4+1
 * Add Group to Login call url
 

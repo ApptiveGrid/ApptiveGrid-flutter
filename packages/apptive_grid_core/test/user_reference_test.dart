@@ -9,7 +9,14 @@ void main() {
       'entities': [
         {
           'fields': [null],
-          '_id': '61eeab7586c4f19eee92f1a6'
+          '_id': '61eeab7586c4f19eee92f1a6',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         },
         {
           'fields': [
@@ -20,7 +27,14 @@ void main() {
               'type': 'user'
             }
           ],
-          '_id': '61eeab8286c4f19eee92f1e0'
+          '_id': '61eeab8286c4f19eee92f1e0',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         },
         {
           'fields': [
@@ -31,7 +45,14 @@ void main() {
               'type': 'link'
             }
           ],
-          '_id': '61eeac6486c4f1885092f263'
+          '_id': '61eeac6486c4f1885092f263',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         },
         {
           'fields': [
@@ -42,7 +63,14 @@ void main() {
               'type': 'accesscredentials'
             }
           ],
-          '_id': '61eeac6486c4f1885092f263'
+          '_id': '61eeac6486c4f1885092f263',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         },
       ],
       'fieldIds': ['f3k9zj2aaclqnhd2e8cvlwydt'],

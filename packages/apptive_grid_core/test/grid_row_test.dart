@@ -10,7 +10,7 @@ void main() {
       final entries = <GridEntry>[
         GridEntry(field, StringDataEntity(value)),
       ];
-      final direct = GridRow(id, entries);
+      final direct = GridRow(id: id, entries: entries, links: {});
       final fromJson = GridRow.fromJson({
         '_id': id,
         'fields': [value]

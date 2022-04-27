@@ -21,7 +21,14 @@ void main() {
               }
             ]
           ],
-          '_id': '619b63e84a391314968da9a0'
+          '_id': '619b63e84a391314968da9a0',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         },
       ],
       'fieldIds': ['80vw5xpimeeuxmoiftfqepbvc'],
