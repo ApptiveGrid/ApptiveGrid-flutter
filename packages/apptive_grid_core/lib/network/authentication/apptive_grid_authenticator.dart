@@ -142,7 +142,7 @@ class ApptiveGridAuthenticator {
     await setToken(await _credential?.getTokenResponse());
 
     try {
-      await closeWebView();
+      await closeInAppWebView();
     } on MissingPluginException {
       debugPrint('closeWebView is not available on this platform');
     } on UnimplementedError {
@@ -266,9 +266,9 @@ class ApptiveGridAuthenticator {
   }
 
   Future<void> _launchUrl(String url) async {
-    if (await canLaunch(url)) {
+    if (await canLaunchUrl(Uri.parse(url))) {
       try {
-        await launch(url);
+        await launchUrl(Uri.parse(url));
       } on PlatformException {
         // Could not launch Url
       }
