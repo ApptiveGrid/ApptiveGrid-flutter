@@ -2,6 +2,7 @@
 * Add HAL Links to GridRow
 ### Breaking Change
 * id, entities and links are now required named arguments in GridRow
+* Removed `spaceUris` from `User` and `gridUris` from `Space`
 
 ## 0.10.0-alpha.1 - Model Rework
 * Add HAL `ApptiveLink`s to User, Space, Grid and Form
