@@ -180,10 +180,14 @@ class _SpaceSectionState extends State<_SpaceSection> {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: space.embeddedGrids
-                              ?.map((e) => _GridSection(
-                                  gridUri: GridUri.fromUri(e
-                                      .links[ApptiveLinkType.self]!.uri
-                                      .toString())))
+                              ?.map(
+                                (e) => _GridSection(
+                                  gridUri: GridUri.fromUri(
+                                    e.links[ApptiveLinkType.self]!.uri
+                                        .toString(),
+                                  ),
+                                ),
+                              )
                               .toList() ??
                           [SizedBox()],
                     )
