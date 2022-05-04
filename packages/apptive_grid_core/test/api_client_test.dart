@@ -2479,7 +2479,6 @@ void main() {
       lastName: 'lastName',
       firstName: 'firstName',
       id: 'userId',
-      spaceUris: [],
       links: {},
       embeddedSpaces: [],
     );

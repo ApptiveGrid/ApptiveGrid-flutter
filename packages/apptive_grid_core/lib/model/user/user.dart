@@ -9,7 +9,6 @@ class User {
     required this.lastName,
     required this.firstName,
     required this.id,
-    required this.spaceUris,
     required this.links,
     this.embeddedSpaces,
   });
@@ -20,9 +19,6 @@ class User {
         lastName = json['lastName'],
         firstName = json['firstName'],
         id = json['id'],
-        spaceUris = (json['spaceUris'] as List)
-            .map((e) => SpaceUri.fromUri(e))
-            .toList(),
         links = linkMapFromJson(json['_links']),
         embeddedSpaces = (json['_embedded']?['spaces'] as List?)
             ?.map((e) => Space.fromJson(e))
@@ -40,9 +36,6 @@ class User {
   /// Id of this [User]
   final String id;
 
-  /// [SpaceUri]s pointing to [Space]s created by this [User]
-  final List<SpaceUri> spaceUris;
-
   /// Links to actions the user can take
   final LinkMap links;
 
@@ -58,7 +51,6 @@ class User {
       'lastName': lastName,
       'firstName': firstName,
       'id': id,
-      'spaceUris': spaceUris.map((e) => e.uri.toString()).toList(),
       '_links': links.toJson(),
     };
 
@@ -75,7 +67,7 @@ class User {
 
   @override
   String toString() {
-    return 'User(email: $email, lastName: $lastName, firstName: $firstName, id: $id, spaceUris: ${spaceUris.toString()}, links: $links)';
+    return 'User(email: $email, lastName: $lastName, firstName: $firstName, id: $id, links: $links)';
   }
 
   @override
@@ -85,7 +77,6 @@ class User {
         email == other.email &&
         lastName == other.lastName &&
         firstName == other.firstName &&
-        f.listEquals(spaceUris, other.spaceUris) &&
         f.mapEquals(links, other.links) &&
         f.listEquals(embeddedSpaces, other.embeddedSpaces);
   }
