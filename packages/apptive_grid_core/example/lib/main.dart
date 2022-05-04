@@ -48,8 +48,13 @@ class _MyAppState extends State<MyApp> {
                     'Spaces',
                     style: Theme.of(context).textTheme.headline4,
                   ),
-                ...((_user?.spaceUris) ?? [])
-                    .map((e) => _SpaceSection(spaceUri: e)),
+                ...((_user?.embeddedSpaces) ?? []).map(
+                  (e) => _SpaceSection(
+                    spaceUri: SpaceUri.fromUri(
+                      e.links[ApptiveLinkType.self]!.uri.toString(),
+                    ),
+                  ),
+                ),
               ],
             ),
           );
@@ -174,8 +179,15 @@ class _SpaceSectionState extends State<_SpaceSection> {
                     Text(space.name),
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: space.gridUris
-                              ?.map((e) => _GridSection(gridUri: e))
+                      children: space.embeddedGrids
+                              ?.map(
+                                (e) => _GridSection(
+                                  gridUri: GridUri.fromUri(
+                                    e.links[ApptiveLinkType.self]!.uri
+                                        .toString(),
+                                  ),
+                                ),
+                              )
                               .toList() ??
                           [SizedBox()],
                     )

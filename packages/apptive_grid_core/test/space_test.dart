@@ -7,14 +7,10 @@ void main() {
       test('From Json maps correctly', () {
         const id = 'id';
         const name = 'name';
-        final grid = GridUri(user: 'user', space: id, grid: 'gridId');
 
         final jsonSpace = Space.fromJson({
           'id': 'id',
           'name': 'name',
-          'gridUris': [
-            '/api/users/user/spaces/id/grids/gridId',
-          ],
           '_links': {
             'self': {
               'href': '/api/users/user/spaces/id',
@@ -25,8 +21,6 @@ void main() {
 
         expect(jsonSpace.id, equals(id));
         expect(jsonSpace.name, equals(name));
-        expect(jsonSpace.gridUris!.length, equals(1));
-        expect(jsonSpace.gridUris![0], equals(grid));
         expect(jsonSpace.links.length, equals(1));
       });
 
@@ -34,9 +28,6 @@ void main() {
         final jsonSpace = Space.fromJson({
           'id': 'id',
           'name': 'name',
-          'gridUris': [
-            '/api/users/user/spaces/id/grids/gridId',
-          ],
           'type': 'space',
           '_links': {
             'self': {
@@ -70,12 +61,10 @@ void main() {
       test('Plain and From json equal', () {
         const id = 'id';
         const name = 'name';
-        final grid = GridUri(user: 'user', space: id, grid: 'gridId');
 
         final plain = Space(
           id: id,
           name: name,
-          gridUris: [grid],
           embeddedGrids: [
             Grid(
               id: 'gridId',
@@ -100,9 +89,6 @@ void main() {
         final jsonSpace = Space.fromJson({
           'id': 'id',
           'name': 'name',
-          'gridUris': [
-            '/api/users/user/spaces/id/grids/gridId',
-          ],
           '_embedded': {
             'grids': [
               {
@@ -137,7 +123,6 @@ void main() {
         final plain = Space(
           id: id,
           name: name,
-          gridUris: [],
           links: {
             ApptiveLinkType.self: ApptiveLink(
               uri: Uri.parse('/api/users/user/spaces/id'),
@@ -150,9 +135,6 @@ void main() {
           'id': 'id',
           'name': 'name',
           'type': 'space',
-          'gridUris': [
-            '/api/users/user/spaces/id/grids/gridId',
-          ]
         });
 
         expect(plain, isNot(jsonSpace));
@@ -166,14 +148,10 @@ void main() {
       test('From Json maps correctly', () {
         const id = 'id';
         const name = 'name';
-        final grid = GridUri(user: 'user', space: id, grid: 'gridId');
 
         final jsonSharedSpace = SharedSpace.fromJson({
           'id': 'id',
           'name': 'name',
-          'gridUris': [
-            '/api/users/user/spaces/id/grids/gridId',
-          ],
           'realSpace': 'realSpace.uri',
           '_links': {
             'self': {
@@ -185,8 +163,6 @@ void main() {
 
         expect(jsonSharedSpace.id, equals(id));
         expect(jsonSharedSpace.name, equals(name));
-        expect(jsonSharedSpace.gridUris!.length, equals(1));
-        expect(jsonSharedSpace.gridUris![0], equals(grid));
         expect(jsonSharedSpace.links.length, equals(1));
       });
 
@@ -194,9 +170,6 @@ void main() {
         final jsonSharedSpace = SharedSpace.fromJson({
           'id': 'id',
           'name': 'name',
-          'gridUris': [
-            '/api/users/user/spaces/id/grids/gridId',
-          ],
           'realSpace': 'realSpace.uri',
           'type': 'sharedSpace',
           '_links': {
@@ -216,9 +189,6 @@ void main() {
         final space = Space.fromJson({
           'id': 'id',
           'name': 'name',
-          'gridUris': [
-            '/api/users/user/spaces/id/grids/gridId',
-          ],
           'type': 'sharedSpace',
           'realSpace': 'realSpace.uri',
           '_links': {
@@ -237,13 +207,11 @@ void main() {
       test('Plain and From json equal', () {
         const id = 'id';
         const name = 'name';
-        final grid = GridUri(user: 'user', space: id, grid: 'gridId');
         final realSpace = Uri.parse('realSpace.uri');
 
         final plain = SharedSpace(
           id: id,
           name: name,
-          gridUris: [grid],
           realSpace: realSpace,
           links: {
             ApptiveLinkType.self: ApptiveLink(
@@ -256,9 +224,6 @@ void main() {
         final jsonSharedSpace = SharedSpace.fromJson({
           'id': 'id',
           'name': 'name',
-          'gridUris': [
-            '/api/users/user/spaces/id/grids/gridId',
-          ],
           'realSpace': 'realSpace.uri',
           'type': 'sharedSpace',
           '_links': {
@@ -281,7 +246,6 @@ void main() {
         final plain = SharedSpace(
           id: id,
           name: name,
-          gridUris: [],
           realSpace: realSpace,
           embeddedGrids: [
             Grid(
@@ -307,9 +271,6 @@ void main() {
           'id': 'id',
           'name': 'name',
           'type': 'sharedSpace',
-          'gridUris': [
-            '/api/users/user/spaces/id/grids/gridId',
-          ],
           'realSpace': 'realSpace.uri',
           '_embedded': {
             'grids': [

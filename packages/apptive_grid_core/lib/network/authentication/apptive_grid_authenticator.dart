@@ -266,9 +266,9 @@ class ApptiveGridAuthenticator {
   }
 
   Future<void> _launchUrl(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
+    if (await canLaunchUrlString(url)) {
       try {
-        await launchUrl(Uri.parse(url));
+        await launchUrlString(url);
       } on PlatformException {
         // Could not launch Url
       }

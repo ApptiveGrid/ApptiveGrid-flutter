@@ -25,7 +25,6 @@ class Space {
   Space({
     required this.id,
     required this.name,
-    this.gridUris,
     required this.links,
     this.embeddedGrids,
   });
@@ -39,9 +38,6 @@ class Space {
       return Space(
         name: json['name'],
         id: json['id'],
-        gridUris: (json['gridUris'] as List?)
-            ?.map((e) => GridUri.fromUri(e))
-            .toList(),
         links: linkMapFromJson(json['_links']),
         embeddedGrids: (json['_embedded']?['grids'] as List?)
             ?.map((e) => Grid.fromJson(e))
@@ -56,9 +52,6 @@ class Space {
   /// Id of this space
   final String id;
 
-  /// [GridUri]s pointing to [Grid]s contained in this [Space]
-  final List<GridUri>? gridUris;
-
   /// Links for relavant actions for this Space
   final LinkMap links;
 
@@ -70,8 +63,6 @@ class Space {
     final jsonMap = {
       'name': name,
       'id': id,
-      if (gridUris != null)
-        'gridUris': gridUris!.map((e) => e.uri.toString()).toList(),
       'type': 'space',
       '_links': links.toJson(),
     };
@@ -89,7 +80,7 @@ class Space {
 
   @override
   String toString() {
-    return 'Space(name: $name, id: $id, gridUris: ${gridUris.toString()}, links: $links)';
+    return 'Space(name: $name, id: $id, links: $links)';
   }
 
   @override
@@ -97,7 +88,6 @@ class Space {
     return other is Space &&
         id == other.id &&
         name == other.name &&
-        f.listEquals(gridUris, other.gridUris) &&
         f.mapEquals(links, other.links);
   }
 
@@ -114,13 +104,11 @@ class SharedSpace extends Space {
     required String id,
     required String name,
     required this.realSpace,
-    List<GridUri>? gridUris,
     required LinkMap links,
     List<Grid>? embeddedGrids,
   }) : super(
           id: id,
           name: name,
-          gridUris: gridUris,
           links: links,
           embeddedGrids: embeddedGrids,
         );
@@ -131,8 +119,6 @@ class SharedSpace extends Space {
       name: json['name'],
       id: json['id'],
       realSpace: Uri.parse(json['realSpace']),
-      gridUris:
-          (json['gridUris'] as List?)?.map((e) => GridUri.fromUri(e)).toList(),
       links: linkMapFromJson(json['_links']),
       embeddedGrids: (json['_embedded']?['grids'] as List?)
           ?.map((e) => Grid.fromJson(e))
@@ -153,7 +139,7 @@ class SharedSpace extends Space {
 
   @override
   String toString() {
-    return 'SharedSpace(name: $name, id: $id, realSpace: ${realSpace.toString()} gridUris: ${gridUris.toString()}, links: $links)';
+    return 'SharedSpace(name: $name, id: $id, realSpace: ${realSpace.toString()}, links: $links)';
   }
 
   @override
@@ -161,7 +147,6 @@ class SharedSpace extends Space {
     return other is SharedSpace &&
         id == other.id &&
         name == other.name &&
-        f.listEquals(gridUris, other.gridUris) &&
         realSpace == other.realSpace &&
         f.mapEquals(links, other.links) &&
         f.listEquals(embeddedGrids, other.embeddedGrids);

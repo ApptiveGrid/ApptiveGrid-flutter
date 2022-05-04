@@ -1,3 +1,8 @@
+## 0.9.0-alpha.2
+* Update Core Package to 0.10.0-alpha.2 to include breaking changes to GridRow
+### Breaking Change
+* Removed `spaceUris` from `User` and `gridUris` from `Space`
+
 ## 0.9.0-alpha.1
 * Update Core package
 * Includes a lot of breaking changes in the model including in `Grid`

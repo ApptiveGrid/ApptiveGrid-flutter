@@ -8,16 +8,12 @@ void main() {
       const firstName = 'Jane';
       const lastName = 'Doe';
       const email = 'jane.doe@zweidenker.de';
-      final spaceUri = SpaceUri(user: id, space: 'spaceId');
 
       final jsonUser = User.fromJson({
         'id': 'id',
         'firstName': 'Jane',
         'lastName': 'Doe',
         'email': 'jane.doe@zweidenker.de',
-        'spaceUris': [
-          '/api/users/id/spaces/spaceId',
-        ],
         '_links': {
           "accessCredentials": {
             "href": "/api/users/id/accessKeys",
@@ -39,8 +35,6 @@ void main() {
       expect(jsonUser.firstName, equals(firstName));
       expect(jsonUser.lastName, equals(lastName));
       expect(jsonUser.email, equals(email));
-      expect(jsonUser.spaceUris.length, equals(1));
-      expect(jsonUser.spaceUris[0], equals(spaceUri));
       expect(jsonUser.links.length, equals(7));
     });
 
@@ -70,14 +64,12 @@ void main() {
       const firstName = 'Jane';
       const lastName = 'Doe';
       const email = 'jane.doe@zweidenker.de';
-      final spaceUri = SpaceUri(user: id, space: 'spaceId');
 
       final plain = User(
         email: email,
         lastName: lastName,
         firstName: firstName,
         id: id,
-        spaceUris: [spaceUri],
         links: {
           ApptiveLinkType.self:
               ApptiveLink(uri: Uri.parse('/api/users/id'), method: 'get'),
@@ -89,9 +81,6 @@ void main() {
         'firstName': 'Jane',
         'lastName': 'Doe',
         'email': 'jane.doe@zweidenker.de',
-        'spaceUris': [
-          '/api/users/id/spaces/spaceId',
-        ],
         '_links': {
           'self': {'href': '/api/users/id', 'method': 'get'},
         },
@@ -112,7 +101,6 @@ void main() {
         lastName: lastName,
         firstName: firstName,
         id: id,
-        spaceUris: [],
         links: {},
       );
 
@@ -121,9 +109,6 @@ void main() {
         'firstName': 'Jane',
         'lastName': 'Doe',
         'email': 'jane.doe@zweidenker.de',
-        'spaceUris': [
-          '/api/users/id/spaces/spaceId',
-        ],
         '_links': {
           'self': {'href': '/api/users/id', 'method': 'get'},
         },
