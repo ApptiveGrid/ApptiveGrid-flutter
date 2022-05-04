@@ -16,7 +16,14 @@ void main() {
               'lat': 50.90713366617792,
             },
           ],
-          "_id": "61b08a87aa660541e58f58ef"
+          "_id": "61b08a87aa660541e58f58ef",
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         }
       ],
       "fieldIds": ["78lnph2fb2olm9jtc696d66q9"],

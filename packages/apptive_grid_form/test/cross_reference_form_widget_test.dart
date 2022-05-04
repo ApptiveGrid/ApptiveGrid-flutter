@@ -36,8 +36,16 @@ void main() {
       schema: null,
       fields: [field],
       rows: [
-        GridRow('row1', [GridEntry(field, StringDataEntity('First'))]),
-        GridRow('row2', [GridEntry(field, StringDataEntity('Second'))]),
+        GridRow(
+          id: 'row1',
+          entries: [GridEntry(field, StringDataEntity('First'))],
+          links: {},
+        ),
+        GridRow(
+          id: 'row2',
+          entries: [GridEntry(field, StringDataEntity('Second'))],
+          links: {},
+        ),
       ],
       links: {
         ApptiveLinkType.self: ApptiveLink(uri: gridUri.uri, method: 'get'),
@@ -195,7 +203,11 @@ void main() {
         schema: null,
         fields: [field],
         rows: [
-          GridRow('row1', [GridEntry(field, StringDataEntity())]),
+          GridRow(
+            id: 'row1',
+            entries: [GridEntry(field, StringDataEntity())],
+            links: {},
+          ),
         ],
         links: {
           ApptiveLinkType.self: ApptiveLink(uri: gridUri.uri, method: 'get'),

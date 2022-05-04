@@ -78,8 +78,8 @@ class ApptiveGridClient {
       }..removeWhere((key, value) => value == null))
           .map((key, value) => MapEntry(key, value!));
 
-  Uri _generateApptiveGridUri(ApptiveGridUri baseUri) {
-    return baseUri.uri.replace(
+  Uri _generateApptiveGridUri(Uri baseUri) {
+    return baseUri.replace(
       scheme: 'https',
       host: Uri.parse(options.environment.url).host,
     );
@@ -92,7 +92,7 @@ class ApptiveGridClient {
   Future<FormData> loadForm({
     required FormUri formUri,
   }) async {
-    final url = _generateApptiveGridUri(formUri);
+    final url = _generateApptiveGridUri(formUri.uri);
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       if (response.statusCode == 401) {
@@ -213,7 +213,7 @@ class ApptiveGridClient {
     ApptiveGridFilter? filter,
     bool isRetry = false,
   }) async {
-    final gridViewUrl = _generateApptiveGridUri(gridUri);
+    final gridViewUrl = _generateApptiveGridUri(gridUri.uri);
 
     final gridViewResponse = await _client.get(gridViewUrl, headers: headers);
     if (gridViewResponse.statusCode >= 400) {
@@ -337,7 +337,7 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final url = _generateApptiveGridUri(spaceUri);
+    final url = _generateApptiveGridUri(spaceUri.uri);
     final response = await _client.get(url, headers: headers);
     if (response.statusCode >= 400) {
       throw response;
@@ -354,7 +354,7 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final baseUrl = _generateApptiveGridUri(gridUri);
+    final baseUrl = _generateApptiveGridUri(gridUri.uri);
     final url = baseUrl.replace(
       pathSegments: [...baseUrl.pathSegments, 'forms'],
     );
@@ -376,7 +376,7 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final baseUrl = _generateApptiveGridUri(gridUri);
+    final baseUrl = _generateApptiveGridUri(gridUri.uri);
     final url = baseUrl.replace(
       pathSegments: [...baseUrl.pathSegments, 'views'],
     );
@@ -399,7 +399,7 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final baseUrl = _generateApptiveGridUri(entityUri);
+    final baseUrl = _generateApptiveGridUri(entityUri.uri);
     final url = baseUrl.replace(
       pathSegments: [...baseUrl.pathSegments, 'EditLink'],
     );
@@ -430,7 +430,7 @@ class ApptiveGridClient {
   }) async {
     await _authenticator.checkAuthentication();
 
-    final url = _generateApptiveGridUri(entityUri);
+    final url = _generateApptiveGridUri(entityUri.uri);
 
     final response = await _client.get(
       url,
@@ -573,7 +573,7 @@ class ApptiveGridClient {
   }) async {
     final request = http.Request(
       link.method,
-      link.uri.replace(
+      _generateApptiveGridUri(link.uri).replace(
         queryParameters: queryParameters ?? link.uri.queryParameters,
       ),
     );

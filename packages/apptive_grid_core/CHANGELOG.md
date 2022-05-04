@@ -1,3 +1,8 @@
+## 0.10.0-alpha.2
+* Add HAL Links to GridRow
+### Breaking Change
+* id, entities and links are now required named arguments in GridRow
+
 ## 0.10.0-alpha.1 - Model Rework
 * Add HAL `ApptiveLink`s to User, Space, Grid and Form
 * Add call to perform an HAL `ApptiveLink`

@@ -13,7 +13,14 @@ void main() {
           'fields': [
             ['A', 'C']
           ],
-          '_id': '61af483b85182c9a4e8eee91'
+          '_id': '61af483b85182c9a4e8eee91',
+          '_links': {
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
+              "method": "get"
+            },
+          },
         },
       ],
       'fieldIds': ['8ou8s82tahpyqoowd0izr1nzm'],

@@ -1,3 +1,6 @@
+## 0.10.0-alpha.2
+* Update Core Package to 0.10.0-alpha.2 to include breaking changes to GridRow
+
 ## 0.10.0-alpha.1
 * Update Core Package
 * Includes a lot of breaking changes in the Models. Including in `FormData`
