@@ -24,13 +24,12 @@ void main() {
 
     registerFallbackValue(
       ActionItem(
-        action: FormAction('uri', 'method'),
+        link: ApptiveLink(uri: Uri.parse('uri'), method: 'method'),
         data: FormData(
           id: 'formId',
           name: 'name',
           title: 'title',
           components: [],
-          actions: [],
           schema: {},
           links: {},
         ),
@@ -118,6 +117,7 @@ void main() {
       expect(formData.title, equals('Form'));
       expect(formData.components?.length, equals(1));
       expect(formData.components![0].runtimeType, equals(StringFormComponent));
+      // ignore: deprecated_member_use_from_same_package
       expect(formData.actions!.length, equals(1));
     });
 
@@ -396,9 +396,9 @@ void main() {
     });
   });
 
-  group('performAction', () {
-    test('Successful', () async {
-      final action = FormAction('/uri', 'POST');
+  group('submitForm', () {
+    test('Deprecated performAction still works', () async {
+      final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       const property = 'Checkbox';
       const id = 'id';
       final component = BooleanFormComponent(
@@ -420,8 +420,7 @@ void main() {
         name: 'Name',
         title: 'Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: schema,
       );
 
@@ -438,13 +437,15 @@ void main() {
         return StreamedResponse(Stream.value([]), 200);
       });
 
-      final response = await apptiveGridClient.performAction(action, formData);
+      final response =
+          // ignore: deprecated_member_use_from_same_package
+          await apptiveGridClient.performAction(action.asFormAction, formData);
 
-      expect(response.statusCode, equals(200));
+      expect(response?.statusCode, equals(200));
       expect(calledRequest.method, equals(action.method));
       expect(
-        calledRequest.url.toString(),
-        '${ApptiveGridEnvironment.production.url}${action.uri}',
+        calledRequest.url.path,
+        Uri.parse('${ApptiveGridEnvironment.production.url}${action.uri}').path,
       );
       expect(
         calledRequest.headers[HttpHeaders.contentTypeHeader],
@@ -452,8 +453,8 @@ void main() {
       );
     });
 
-    test('Error without Cache throws Response', () async {
-      final action = FormAction('/uri', 'POST');
+    test('Successful', () async {
+      final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       const property = 'Checkbox';
       const id = 'id';
       final component = BooleanFormComponent(
@@ -475,8 +476,61 @@ void main() {
         name: 'Name',
         title: 'Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
+        schema: schema,
+      );
+
+      final request = Request(
+        'POST',
+        Uri.parse('${ApptiveGridEnvironment.production.url}/uri}'),
+      );
+      request.body = jsonEncode(jsonEncode(formData.toRequestObject()));
+
+      late BaseRequest calledRequest;
+
+      when(() => httpClient.send(any())).thenAnswer((realInvocation) async {
+        calledRequest = realInvocation.positionalArguments[0];
+        return StreamedResponse(Stream.value([]), 200);
+      });
+
+      final response = await apptiveGridClient.submitForm(action, formData);
+
+      expect(response?.statusCode, equals(200));
+      expect(calledRequest.method, equals(action.method));
+      expect(
+        calledRequest.url.path,
+        Uri.parse('${ApptiveGridEnvironment.production.url}${action.uri}').path,
+      );
+      expect(
+        calledRequest.headers[HttpHeaders.contentTypeHeader],
+        ContentType.json,
+      );
+    });
+
+    test('Error without Cache throws Response', () async {
+      final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
+      const property = 'Checkbox';
+      const id = 'id';
+      final component = BooleanFormComponent(
+        fieldId: id,
+        property: property,
+        data: BooleanDataEntity(true),
+        options: FormComponentOptions.fromJson({}),
+        required: false,
+      );
+      final schema = {
+        'type': 'object',
+        'properties': {
+          id: {'type': 'boolean'},
+        },
+        'required': []
+      };
+      final formData = FormData(
+        id: 'formId',
+        name: 'Name',
+        title: 'Title',
+        components: [component],
+        links: {ApptiveLinkType.submit: action},
         schema: schema,
       );
 
@@ -491,7 +545,7 @@ void main() {
       );
 
       await expectLater(
-        () async => await apptiveGridClient.performAction(action, formData),
+        () async => await apptiveGridClient.submitForm(action, formData),
         throwsA(isInstanceOf<Response>()),
       );
     });
@@ -543,7 +597,8 @@ void main() {
 
         test('Upload Attachment, throws Error', () {
           final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
-          final action = FormAction('actionUri', 'POST');
+          final action =
+              ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
           final bytes = Uint8List(10);
           final formData = FormData(
             id: 'formId',
@@ -556,8 +611,7 @@ void main() {
               ),
             ],
             schema: null,
-            actions: [action],
-            links: {},
+            links: {ApptiveLinkType.submit: action},
             attachmentActions: {
               attachment:
                   AddAttachmentAction(byteData: bytes, attachment: attachment)
@@ -565,7 +619,7 @@ void main() {
           );
 
           expect(
-            () => client.performAction(action, formData),
+            () => client.submitForm(action, formData),
             throwsException,
           );
         });
@@ -709,7 +763,8 @@ void main() {
               ),
               type: 'type',
             );
-            final action = FormAction('actionUri', 'POST');
+            final action =
+                ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
             final bytes = Uint8List(10);
             final attachmentAction =
                 AddAttachmentAction(byteData: bytes, attachment: attachment);
@@ -724,8 +779,7 @@ void main() {
                 ),
               ],
               schema: null,
-              actions: [action],
-              links: {},
+              links: {ApptiveLinkType.submit: action},
               attachmentActions: {attachment: attachmentAction},
             );
 
@@ -754,7 +808,7 @@ void main() {
               });
 
               expect(
-                () async => await client.performAction(action, formData),
+                () async => await client.submitForm(action, formData),
                 throwsA(equals(response)),
               );
             });
@@ -796,7 +850,7 @@ void main() {
                     StreamedResponse(Stream.value([]), 200),
               );
 
-              await client.performAction(action, formData);
+              await client.submitForm(action, formData);
 
               verify(
                 () => httpClient.get(
@@ -858,7 +912,7 @@ void main() {
               ).thenAnswer((_) async => putResponse);
 
               await expectLater(
-                () async => await client.performAction(action, formData),
+                () async => await client.submitForm(action, formData),
                 throwsA(equals(putResponse)),
               );
 
@@ -902,7 +956,8 @@ void main() {
                 ),
                 type: 'image/png',
               );
-              final action = FormAction('actionUri', 'POST');
+              final action =
+                  ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
               final bytes = Uint8List(10);
               final attachmentAction =
                   AddAttachmentAction(byteData: bytes, attachment: attachment);
@@ -917,8 +972,7 @@ void main() {
                   ),
                 ],
                 schema: null,
-                actions: [action],
-                links: {},
+                links: {ApptiveLinkType.submit: action},
                 attachmentActions: {attachment: attachmentAction},
               );
 
@@ -959,7 +1013,7 @@ void main() {
                       StreamedResponse(Stream.value([]), 200),
                 );
 
-                await client.performAction(action, formData);
+                await client.submitForm(action, formData);
 
                 verify(
                   () => httpClient.get(
@@ -1047,7 +1101,7 @@ void main() {
                       StreamedResponse(Stream.value([]), 200),
                 );
 
-                await client.performAction(action, formData);
+                await client.submitForm(action, formData);
 
                 verify(
                   () => httpClient.get(
@@ -1140,7 +1194,7 @@ void main() {
                 );
 
                 expect(
-                  () => client.performAction(action, formData),
+                  () => client.submitForm(action, formData),
                   throwsA(isInstanceOf<Response>()),
                 );
               });
@@ -1185,7 +1239,8 @@ void main() {
           test('Rename Action', () async {
             final attachment =
                 Attachment(name: 'name', url: Uri(), type: 'type');
-            final action = FormAction('actionUri', 'POST');
+            final action =
+                ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
             final attachmentAction = RenameAttachmentAction(
               newName: 'NewName',
               attachment: attachment,
@@ -1201,8 +1256,7 @@ void main() {
                 ),
               ],
               schema: null,
-              actions: [action],
-              links: {},
+              links: {ApptiveLinkType.submit: action},
               attachmentActions: {attachment: attachmentAction},
             );
 
@@ -1210,7 +1264,7 @@ void main() {
               (realInvocation) async => StreamedResponse(Stream.value([]), 200),
             );
 
-            await client.performAction(action, formData);
+            await client.submitForm(action, formData);
 
             verify(() => httpClient.send(any())).called(1);
           });
@@ -1218,7 +1272,8 @@ void main() {
           test('Delete Action', () async {
             final attachment =
                 Attachment(name: 'name', url: Uri(), type: 'type');
-            final action = FormAction('actionUri', 'POST');
+            final action =
+                ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
             final attachmentAction =
                 DeleteAttachmentAction(attachment: attachment);
             final formData = FormData(
@@ -1232,8 +1287,7 @@ void main() {
                 ),
               ],
               schema: null,
-              actions: [action],
-              links: {},
+              links: {ApptiveLinkType.submit: action},
               attachmentActions: {attachment: attachmentAction},
             );
 
@@ -1241,7 +1295,7 @@ void main() {
               (realInvocation) async => StreamedResponse(Stream.value([]), 200),
             );
 
-            await client.performAction(action, formData);
+            await client.submitForm(action, formData);
 
             verify(() => httpClient.send(any())).called(1);
           });
@@ -1299,7 +1353,8 @@ void main() {
             url: Uri(path: 'with/path'),
             type: 'type',
           );
-          final action = FormAction('actionUri', 'POST');
+          final action =
+              ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
           final bytes = Uint8List(10);
           final attachmentAction =
               AddAttachmentAction(byteData: bytes, attachment: attachment);
@@ -1314,8 +1369,7 @@ void main() {
               ),
             ],
             schema: null,
-            actions: [action],
-            links: {},
+            links: {ApptiveLinkType.submit: action},
             attachmentActions: {attachment: attachmentAction},
           );
 
@@ -1357,7 +1411,7 @@ void main() {
               (realInvocation) async => StreamedResponse(Stream.value([]), 200),
             );
 
-            await client.performAction(action, formData);
+            await client.submitForm(action, formData);
 
             final captures = verify(
               () => httpClient.get(
@@ -2237,14 +2291,13 @@ void main() {
 
     late ApptiveGridClient client;
 
-    final action = FormAction('actionUri', 'POST');
+    final action = ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
 
     final data = FormData(
       id: 'formId',
       name: 'Name',
       title: 'title',
       components: [],
-      actions: [],
       schema: {},
       links: {},
     );
@@ -2274,7 +2327,7 @@ void main() {
       });
 
       await expectLater(
-        (await client.performAction(action, data)).statusCode,
+        (await client.submitForm(action, data))?.statusCode,
         400,
       );
 
@@ -2294,7 +2347,7 @@ void main() {
           .thenThrow(const SocketException('Socket Exception'));
 
       await expectLater(
-        (await client.performAction(action, data)).statusCode,
+        (await client.submitForm(action, data))?.statusCode,
         400,
       );
 
@@ -2302,7 +2355,7 @@ void main() {
     });
 
     test('Resubmit fails does not crash', () async {
-      final actionItem = ActionItem(action: action, data: data);
+      final actionItem = ActionItem(link: action, data: data);
       cacheMap[actionItem.toString()] = actionItem.toJson();
 
       when(() => httpClient.send(any())).thenAnswer((realInvocation) async {

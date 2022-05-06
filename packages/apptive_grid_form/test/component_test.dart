@@ -18,7 +18,6 @@ void main() {
         name: 'name',
         title: 'title',
         components: [],
-        actions: [],
         schema: {},
         links: {},
       ),
@@ -54,10 +53,7 @@ void main() {
 
   group('Text', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = StringFormComponent(
         fieldId: 'id',
         data: StringDataEntity(),
@@ -70,8 +66,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string'),
       );
       final target = TestApp(
@@ -87,7 +82,7 @@ void main() {
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -108,10 +103,7 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = StringFormComponent(
         fieldId: 'id',
         data: StringDataEntity(),
@@ -124,8 +116,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string'),
       );
       final target = TestApp(
@@ -149,17 +140,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
   group('DateTime', () {
     testWidgets('Value is send and used with Date Picker', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DateTimeFormComponent(
         fieldId: 'id',
         data: DateTimeDataEntity(),
@@ -172,8 +160,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', format: 'date-time'),
       );
       final target = TestApp(
@@ -189,7 +176,7 @@ void main() {
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -222,10 +209,7 @@ void main() {
     });
 
     testWidgets('Value is send and used with Time Picker', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DateTimeFormComponent(
         fieldId: 'id',
         data: DateTimeDataEntity(),
@@ -238,8 +222,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', format: 'date-time'),
       );
       final target = TestApp(
@@ -255,7 +238,7 @@ void main() {
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -298,10 +281,7 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DateTimeFormComponent(
         fieldId: 'id',
         data: DateTimeDataEntity(),
@@ -314,8 +294,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', format: 'date-time'),
       );
       final target = TestApp(
@@ -339,17 +318,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
   group('Date', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DateFormComponent(
         fieldId: 'id',
         data: DateDataEntity(),
@@ -362,8 +338,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', format: 'date'),
       );
       final target = TestApp(
@@ -379,7 +354,7 @@ void main() {
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -411,10 +386,7 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DateFormComponent(
         fieldId: 'id',
         data: DateDataEntity(),
@@ -427,8 +399,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', format: 'date'),
       );
       final target = TestApp(
@@ -452,17 +423,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
   group('Number', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = IntegerFormComponent(
         fieldId: 'id',
         data: IntegerDataEntity(),
@@ -475,8 +443,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('integer'),
       );
       final target = TestApp(
@@ -492,7 +459,7 @@ void main() {
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -525,7 +492,6 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [],
         schema: getSchema('integer'),
         links: {},
       );
@@ -549,10 +515,7 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = IntegerFormComponent(
         fieldId: 'id',
         data: IntegerDataEntity(),
@@ -565,8 +528,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('integer'),
       );
       final target = TestApp(
@@ -590,17 +552,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
   group('Decimal', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DecimalFormComponent(
         fieldId: 'id',
         data: DecimalDataEntity(),
@@ -613,8 +572,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('number'),
       );
       final target = TestApp(
@@ -630,7 +588,7 @@ void main() {
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -663,7 +621,6 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [],
         schema: getSchema('number'),
         links: {},
       );
@@ -687,10 +644,7 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DecimalFormComponent(
         fieldId: 'id',
         data: DecimalDataEntity(),
@@ -703,8 +657,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('number'),
       );
       final target = TestApp(
@@ -728,17 +681,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
   group('CheckBox', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = BooleanFormComponent(
         fieldId: 'id',
         data: BooleanDataEntity(),
@@ -751,8 +701,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('boolean'),
       );
       final target = TestApp(
@@ -768,7 +717,7 @@ void main() {
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -789,10 +738,7 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = BooleanFormComponent(
         fieldId: 'id',
         data: BooleanDataEntity(),
@@ -805,8 +751,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('boolean'),
       );
       final target = TestApp(
@@ -830,17 +775,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Required'), findsOneWidget);
     });
   });
 
   group('Enum', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = EnumFormComponent(
         fieldId: 'id',
         data: EnumDataEntity(value: 'value', options: {'value', 'newValue'}),
@@ -853,8 +795,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', options: ['value', 'newValue']),
       );
       final target = TestApp(
@@ -870,7 +811,7 @@ void main() {
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -895,10 +836,7 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = EnumFormComponent(
         fieldId: 'id',
         data: EnumDataEntity(options: {'value'}),
@@ -911,8 +849,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema(
           'string',
           options: [
@@ -941,7 +878,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });

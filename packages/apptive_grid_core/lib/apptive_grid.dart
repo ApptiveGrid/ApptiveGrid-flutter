@@ -1,5 +1,5 @@
-import 'package:apptive_grid_core/apptive_grid_options.dart';
 import 'package:apptive_grid_core/apptive_grid_network.dart';
+import 'package:apptive_grid_core/apptive_grid_options.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -96,7 +96,9 @@ class _ApptiveGridState extends State<ApptiveGrid> {
 
   @override
   void dispose() {
-    _client.dispose();
+    if (widget.client == null) {
+      _client.dispose();
+    }
     super.dispose();
   }
 }

@@ -13,7 +13,7 @@ class ActionButton extends StatelessWidget {
   }) : super(key: key);
 
   /// The action the Button represents
-  final FormAction action;
+  final ApptiveLink action;
 
   /// The child Widget displayed in the Button
   final Widget? child;
@@ -21,7 +21,7 @@ class ActionButton extends StatelessWidget {
   /// Called when the button is pressed
   ///
   /// Will pass the [action] back
-  final void Function(FormAction) onPressed;
+  final void Function(ApptiveLink) onPressed;
 
   @override
   Widget build(BuildContext context) {

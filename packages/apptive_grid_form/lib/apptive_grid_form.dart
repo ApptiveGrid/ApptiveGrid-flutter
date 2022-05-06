@@ -67,11 +67,11 @@ class ApptiveGridForm extends StatefulWidget {
   /// ```
   final void Function(FormData)? onFormLoaded;
 
-  /// Callback after [FormAction] completes Successfully
+  /// Callback after Form is Submitted completes Successfully
   ///
   /// If this returns false the default success screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
-  final Future<bool> Function(FormAction, FormData)? onActionSuccess;
+  final Future<bool> Function(ApptiveLink, FormData)? onActionSuccess;
 
   /// Callback if an Error occurs
   ///
@@ -184,11 +184,11 @@ class ApptiveGridFormData extends StatefulWidget {
   /// Flag to hide the form title, default is false
   final bool hideTitle;
 
-  /// Callback after [FormAction] completes Successfully
+  /// Callback after [ApptiveLink] completes Successfully
   ///
   /// If this returns false the default success screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
-  final Future<bool> Function(FormAction, FormData)? onActionSuccess;
+  final Future<bool> Function(ApptiveLink, FormData)? onActionSuccess;
 
   /// Callback if an Error occurs
   ///
@@ -220,7 +220,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   late AttachmentManager _attachmentManager;
 
-  final Set<FormAction> _actionsInProgress = {};
+  final Set<ApptiveLink> _actionsInProgress = {};
 
   /// Returns the current [FormData] held in this Widget
   FormData? get currentData {
@@ -295,13 +295,14 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   Widget _buildForm(BuildContext context, FormData data) {
     final localization = ApptiveGridLocalization.of(context)!;
+    final submitLink = data.links[ApptiveLinkType.submit];
     return Provider<AttachmentManager>.value(
       value: _attachmentManager,
       child: Form(
         key: _formKey,
         child: ListView.builder(
           itemCount:
-              1 + (data.components?.length ?? 0) + (data.actions?.length ?? 0),
+              1 + (data.components?.length ?? 0) + (submitLink != null ? 1 : 0),
           itemBuilder: (context, index) {
             // Title
             if (index == 0) {
@@ -341,17 +342,14 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 padding: widget.contentPadding ?? _defaultPadding,
                 child: Builder(
                   builder: (_) {
-                    final actionIndex =
-                        index - 1 - (data.components?.length ?? 0);
-                    final action = data.actions![actionIndex];
-                    if (_actionsInProgress.contains(action)) {
+                    if (_actionsInProgress.contains(submitLink)) {
                       return const Center(
                         child: CircularProgressIndicator.adaptive(),
                       );
                     } else {
                       return ActionButton(
-                        action: action,
-                        onPressed: _performAction,
+                        action: submitLink!,
+                        onPressed: _submitForm,
                         child: Text(localization.actionSend),
                       );
                     }
@@ -473,14 +471,14 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
-  Future<void> _performAction(FormAction action) async {
+  Future<void> _submitForm(ApptiveLink link) async {
     setState(() {
-      _actionsInProgress.add(action);
+      _actionsInProgress.add(link);
     });
     if (_formKey.currentState!.validate()) {
-      _client.performAction(action, _formData!).then((response) async {
-        if (response.statusCode < 400) {
-          if (await widget.onActionSuccess?.call(action, _formData!) ?? true) {
+      _client.submitForm(link, _formData!).then((response) async {
+        if (response != null && response.statusCode < 400) {
+          if (await widget.onActionSuccess?.call(link, _formData!) ?? true) {
             setState(() {
               _success = true;
             });
@@ -493,12 +491,12 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         _onError(error);
       }).whenComplete(() {
         setState(() {
-          _actionsInProgress.remove(action);
+          _actionsInProgress.remove(link);
         });
       });
     } else {
       setState(() {
-        _actionsInProgress.remove(action);
+        _actionsInProgress.remove(link);
       });
     }
   }
