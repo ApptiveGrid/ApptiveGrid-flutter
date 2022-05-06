@@ -89,6 +89,9 @@ enum ApptiveLinkType {
   /// List Views of a [Grid]
   views,
 
+  /// Returns a List of virtual [Grid]s of a persistent [Grid]
+  virtualGrids,
+
   //Form Related Links
   /// Submit [FormData]
   submit,
