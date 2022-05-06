@@ -1,9 +1,13 @@
 ## 0.10.0-alpha.3
 * Add `virtualGrids` ApptiveLinkType
+* Deprecate `FormActions`
+### Breaking Changes
+* Remove `actions` from forms
+* Changed constructor arguments for
 
 ## 0.10.0-alpha.2
 * Add HAL Links to GridRow
-### Breaking Change
+### Breaking Changes
 * id, entities and links are now required named arguments in GridRow
 * Removed `spaceUris` from `User` and `gridUris` from `Space`
 
