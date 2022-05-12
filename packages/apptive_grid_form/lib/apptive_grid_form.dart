@@ -31,6 +31,7 @@ class ApptiveGridForm extends StatefulWidget {
     this.onFormLoaded,
     this.onActionSuccess,
     this.onError,
+    this.scrollController,
   }) : super(key: key);
 
   /// [FormUri] of the Form to display
@@ -79,6 +80,8 @@ class ApptiveGridForm extends StatefulWidget {
   /// This functionality can be used to do a custom Widget or Transition
   final Future<bool> Function(dynamic)? onError;
 
+  final ScrollController? scrollController;
+
   @override
   ApptiveGridFormState createState() => ApptiveGridFormState();
 }
@@ -123,6 +126,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       onActionSuccess: widget.onActionSuccess,
       onError: widget.onError,
       triggerReload: _loadForm,
+      scrollController: widget.scrollController,
     );
   }
 
@@ -164,6 +168,7 @@ class ApptiveGridFormData extends StatefulWidget {
     this.onActionSuccess,
     this.onError,
     this.triggerReload,
+    this.scrollController,
   }) : super(key: key);
 
   /// [FormData] that should be displayed
@@ -198,6 +203,8 @@ class ApptiveGridFormData extends StatefulWidget {
 
   /// Will be called when [formData] should be reloaded
   final void Function()? triggerReload;
+
+  final ScrollController? scrollController;
 
   @override
   ApptiveGridFormDataState createState() => ApptiveGridFormDataState();
@@ -301,6 +308,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       child: Form(
         key: _formKey,
         child: ListView.builder(
+          controller: widget.scrollController,
           itemCount:
               1 + (data.components?.length ?? 0) + (submitLink != null ? 1 : 0),
           itemBuilder: (context, index) {
@@ -366,6 +374,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   Widget _buildSuccess(BuildContext context) {
     final localization = ApptiveGridLocalization.of(context)!;
     return ListView(
+      controller: widget.scrollController,
       padding: const EdgeInsets.all(32.0),
       children: [
         AspectRatio(
@@ -398,6 +407,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   Widget _buildSaved(BuildContext context) {
     final localization = ApptiveGridLocalization.of(context)!;
     return ListView(
+      controller: widget.scrollController,
       padding: const EdgeInsets.all(32.0),
       children: [
         AspectRatio(
@@ -429,6 +439,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     final localization = ApptiveGridLocalization.of(context)!;
     final theme = Theme.of(context);
     return ListView(
+      controller: widget.scrollController,
       padding: const EdgeInsets.all(32.0),
       children: [
         AspectRatio(
