@@ -7,9 +7,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('Click calls with Action', (tester) async {
-    final action = FormAction('uri', 'method');
+    final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
 
-    final completer = Completer<FormAction>();
+    final completer = Completer<ApptiveLink>();
 
     await tester.pumpWidget(
       MaterialApp(

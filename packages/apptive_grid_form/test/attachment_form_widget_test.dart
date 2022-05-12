@@ -54,7 +54,8 @@ void main() {
         final data = AttachmentDataEntity(
           [Attachment(name: filename, url: attachmentUri, type: 'image/png')],
         );
-        final action = FormAction('formAction', 'POST');
+        final action =
+            ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
         final formData = FormData(
           id: 'formId',
           title: 'title',
@@ -65,14 +66,13 @@ void main() {
               fieldId: 'fieldId',
             )
           ],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: null,
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.performAction(action, any()))
+        when(() => client.submitForm(action, any()))
             .thenAnswer((_) async => Response('body', 200));
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
@@ -110,7 +110,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final captured =
-            verify(() => client.performAction(action, captureAny())).captured;
+            verify(() => client.submitForm(action, captureAny())).captured;
         expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
         expect(submittedData.components!.first.data, equals(data));
@@ -153,7 +153,8 @@ void main() {
           url: attachmentUri2,
           type: 'application/pdf',
         );
-        final action = FormAction('formAction', 'POST');
+        final action =
+            ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
         final formData = FormData(
           id: 'formId',
           title: 'title',
@@ -164,14 +165,13 @@ void main() {
               fieldId: 'fieldId',
             )
           ],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: null,
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.performAction(action, any()))
+        when(() => client.submitForm(action, any()))
             .thenAnswer((_) async => Response('body', 200));
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
@@ -212,7 +212,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final captured =
-            verify(() => client.performAction(action, captureAny())).captured;
+            verify(() => client.submitForm(action, captureAny())).captured;
         expect(captured.length, equals(1));
         final submittedData =
             captured.first.components!.first.data as AttachmentDataEntity;
@@ -237,7 +237,8 @@ void main() {
         );
         FilePicker.platform = filePicker;
 
-        final action = FormAction('formAction', 'POST');
+        final action =
+            ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
         final formData = FormData(
           id: 'formId',
           title: 'title',
@@ -248,14 +249,13 @@ void main() {
               fieldId: 'fieldId',
             )
           ],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: null,
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.performAction(action, any()))
+        when(() => client.submitForm(action, any()))
             .thenAnswer((_) async => Response('body', 200));
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
@@ -334,7 +334,8 @@ void main() {
         final data = AttachmentDataEntity(
           [Attachment(name: filename, url: attachmentUri, type: 'image/png')],
         );
-        final action = FormAction('formAction', 'POST');
+        final action =
+            ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
         final formData = FormData(
           id: 'formId',
           title: 'title',
@@ -345,14 +346,13 @@ void main() {
               fieldId: 'fieldId',
             )
           ],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: null,
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.performAction(action, any()))
+        when(() => client.submitForm(action, any()))
             .thenAnswer((_) async => Response('body', 200));
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
@@ -390,7 +390,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final captured =
-            verify(() => client.performAction(action, captureAny())).captured;
+            verify(() => client.submitForm(action, captureAny())).captured;
         expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
         expect(submittedData.components!.first.data, equals(data));
@@ -435,7 +435,8 @@ void main() {
           url: attachmentUri2,
           type: 'application/pdf',
         );
-        final action = FormAction('formAction', 'POST');
+        final action =
+            ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
         final formData = FormData(
           id: 'formId',
           title: 'title',
@@ -446,14 +447,13 @@ void main() {
               fieldId: 'fieldId',
             )
           ],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: null,
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.performAction(action, any()))
+        when(() => client.submitForm(action, any()))
             .thenAnswer((_) async => Response('body', 200));
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
@@ -494,7 +494,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final captured =
-            verify(() => client.performAction(action, captureAny())).captured;
+            verify(() => client.submitForm(action, captureAny())).captured;
         expect(captured.length, equals(1));
         final submittedData =
             captured.first.components!.first.data as AttachmentDataEntity;
@@ -552,7 +552,8 @@ void main() {
         final data = AttachmentDataEntity(
           [Attachment(name: filename, url: attachmentUri, type: 'image/png')],
         );
-        final action = FormAction('formAction', 'POST');
+        final action =
+            ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
         final formData = FormData(
           id: 'formId',
           title: 'title',
@@ -563,14 +564,13 @@ void main() {
               fieldId: 'fieldId',
             )
           ],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: null,
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.performAction(action, any()))
+        when(() => client.submitForm(action, any()))
             .thenAnswer((_) async => Response('body', 200));
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
@@ -608,7 +608,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final captured =
-            verify(() => client.performAction(action, captureAny())).captured;
+            verify(() => client.submitForm(action, captureAny())).captured;
         expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
         expect(submittedData.components!.first.data, equals(data));
@@ -623,7 +623,8 @@ void main() {
         when(() => permissionHandler.checkPermissionStatus(Permission.camera))
             .thenAnswer((_) async => PermissionStatus.permanentlyDenied);
 
-        final action = FormAction('formAction', 'POST');
+        final action =
+            ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
         final formData = FormData(
           id: 'formId',
           title: 'title',
@@ -634,8 +635,7 @@ void main() {
               fieldId: 'fieldId',
             )
           ],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: null,
         );
         final client = MockApptiveGridClient();
@@ -689,7 +689,7 @@ void main() {
       final data = AttachmentDataEntity(
         [],
       );
-      final action = FormAction('formAction', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
       final formData = FormData(
         id: 'formId',
         title: 'title',
@@ -700,13 +700,12 @@ void main() {
             fieldId: 'fieldId',
           )
         ],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: null,
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((_) async => Response('body', 200));
       final attachmentProcessor = MockAttachmentProcessor();
       when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
@@ -744,7 +743,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final captured =
-          verify(() => client.performAction(action, captureAny())).captured;
+          verify(() => client.submitForm(action, captureAny())).captured;
       expect(captured.length, equals(1));
       final submittedData = captured.first as FormData;
       expect(submittedData.components!.first.data, equals(data));
@@ -762,7 +761,7 @@ void main() {
       final data = AttachmentDataEntity(
         [],
       );
-      final action = FormAction('formAction', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
       final formData = FormData(
         id: 'formId',
         title: 'title',
@@ -773,13 +772,12 @@ void main() {
             fieldId: 'fieldId',
           )
         ],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: null,
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((_) async => Response('body', 200));
 
       final target = TestApp(
@@ -797,7 +795,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final captured =
-          verify(() => client.performAction(action, captureAny())).captured;
+          verify(() => client.submitForm(action, captureAny())).captured;
       expect(captured.length, equals(1));
       final submittedData = captured.first as FormData;
       expect(submittedData.components!.first.data, equals(data));
@@ -806,7 +804,7 @@ void main() {
 
   group('Options', () {
     testWidgets('Attachment is required shows message', (tester) async {
-      final action = FormAction('formAction', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
       final formData = FormData(
         id: 'formId',
         title: 'title',
@@ -818,13 +816,12 @@ void main() {
             required: true,
           )
         ],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: null,
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((_) async => Response('body', 200));
 
       final target = TestApp(
@@ -847,7 +844,7 @@ void main() {
     });
 
     testWidgets('Attachment is required but filled sends', (tester) async {
-      final action = FormAction('formAction', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
       final formData = FormData(
         id: 'formId',
         title: 'title',
@@ -861,13 +858,12 @@ void main() {
             required: true,
           )
         ],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: null,
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((_) async => Response('body', 200));
 
       final target = TestApp(
@@ -918,7 +914,7 @@ void main() {
       final data = AttachmentDataEntity(
         [Attachment(name: filename, url: attachmentUri, type: 'image/png')],
       );
-      final action = FormAction('formAction', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
       final formData = FormData(
         id: 'formId',
         title: 'title',
@@ -930,13 +926,12 @@ void main() {
             required: true,
           )
         ],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: null,
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((_) async => Response('body', 200));
       final attachmentProcessor = MockAttachmentProcessor();
       when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
@@ -983,7 +978,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final capturedData =
-          verify(() => client.performAction(action, captureAny<FormData>()))
+          verify(() => client.submitForm(action, captureAny<FormData>()))
               .captured
               .first as FormData;
       expect(capturedData.components!.first.data, equals(data));

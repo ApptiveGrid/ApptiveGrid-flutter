@@ -111,6 +111,7 @@ void main() {
       expect(formData.name, equals(name));
       expect(formData.title, equals(title));
 
+      // ignore: deprecated_member_use_from_same_package
       expect(formData.actions!.length, equals(1));
 
       expect(formData.components!.length, equals(5));
@@ -127,7 +128,7 @@ void main() {
 
   group('Serializing', () {
     test('toJson -> fromJson -> equals', () {
-      final action = FormAction('/uri', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       final schema = response['schema'];
       final component = IntegerFormComponent(
         fieldId: '4zc4l48ffin5v8pa2emyx9s15',
@@ -141,8 +142,7 @@ void main() {
         name: 'name',
         title: title,
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: schema,
       );
 
@@ -150,7 +150,7 @@ void main() {
     });
 
     test('AttachmentActions get Restored', () {
-      final action = FormAction('/uri', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       final schema = {
         'type': 'object',
         'properties': {
@@ -185,8 +185,7 @@ void main() {
         name: 'name',
         title: title,
         components: [component],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: schema,
       );
 
@@ -229,7 +228,7 @@ void main() {
   });
 
   group('Equality', () {
-    final action = FormAction('/uri', 'POST');
+    final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
     final schema = response['schema'];
     final component = IntegerFormComponent(
       fieldId: '4zc4l48ffin5v8pa2emyx9s15',
@@ -243,8 +242,7 @@ void main() {
       name: 'name',
       title: title,
       components: [component],
-      actions: [action],
-      links: {},
+      links: {ApptiveLinkType.submit: action},
       schema: schema,
     );
     final b = FormData(
@@ -252,8 +250,7 @@ void main() {
       name: 'name',
       title: title,
       components: [component],
-      actions: [action],
-      links: {},
+      links: {ApptiveLinkType.submit: action},
       schema: schema,
     );
     final c = FormData.fromJson(response);
@@ -269,8 +266,8 @@ void main() {
     });
   });
 
-  group('Without Actions', () {
-    final responseWithoutActions = {
+  group('Without Submit Link', () {
+    final responseWithoutSubmitLink = {
       'schema': {
         'type': 'object',
         'properties': {
@@ -299,11 +296,6 @@ void main() {
       'title': 'New title',
       'id': 'formId',
       '_links': {
-        "submit": {
-          "href":
-              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-          "method": "post"
-        },
         "remove": {
           "href":
               "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
@@ -322,8 +314,9 @@ void main() {
       },
     };
     test('Form Without Actions parses correctly', () {
-      final formData = FormData.fromJson(responseWithoutActions);
+      final formData = FormData.fromJson(responseWithoutSubmitLink);
 
+      // ignore: deprecated_member_use_from_same_package
       expect(formData.actions, isNull);
     });
   });

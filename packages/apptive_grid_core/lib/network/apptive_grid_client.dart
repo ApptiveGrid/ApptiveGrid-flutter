@@ -104,16 +104,29 @@ class ApptiveGridClient {
     return FormData.fromJson(json.decode(response.body));
   }
 
-  /// Performs a [FormAction] using [formData]
-  ///
-  /// if this returns a [http.Response] with a [http.Response.statusCode] >= 400 it means that the Item was saved in [options.cache]
-  /// throws [Response] if the request fails
-  Future<http.Response> performAction(
+  /// Calls [submitForm] here for compatibility
+  @Deprecated('Use submitForm with ApptiveLink instead')
+  Future<http.Response?> performAction(
     FormAction action,
     FormData formData, {
     bool saveToPendingItems = true,
+  }) =>
+      submitForm(
+        ApptiveLink(uri: Uri.parse(action.uri), method: action.method),
+        formData,
+        saveToPendingItems: saveToPendingItems,
+      );
+
+  /// Submits [formData] against [link]
+  ///
+  /// if this returns a [http.Response] with a [http.Response.statusCode] >= 400 it means that the Item was saved in [options.cache]
+  /// throws [Response] if the request fails
+  Future<http.Response?> submitForm(
+    ApptiveLink link,
+    FormData formData, {
+    bool saveToPendingItems = true,
   }) async {
-    final actionItem = ActionItem(action: action, data: formData);
+    final actionItem = ActionItem(link: link, data: formData);
 
     final attachmentActions = await _performAttachmentActions(
       formData.attachmentActions,
@@ -128,14 +141,14 @@ class ApptiveGridClient {
     if (attachmentActions.statusCode >= 400) {
       return attachmentActions;
     }
-    final uri = Uri.parse('${options.environment.url}${action.uri}');
-    final request = http.Request(action.method, uri);
-    request.body = jsonEncode(formData.toRequestObject());
-    late http.Response response;
-    request.headers.addAll(headers);
+
+    late http.Response? response;
     try {
-      final streamResponse = await _client.send(request);
-      response = await http.Response.fromStream(streamResponse);
+      response = await performApptiveLink<http.Response>(
+        link: link,
+        body: formData.toRequestObject(),
+        parseResponse: (response) async => response,
+      );
     } catch (error) {
       // Catch all Exception for compatibility Reasons between Web and non Web Apps
       return _handleActionError(
@@ -144,16 +157,10 @@ class ApptiveGridClient {
         saveToPendingItems: saveToPendingItems,
       );
     }
-
-    if (response.statusCode >= 400) {
-      return _handleActionError(
-        response,
-        actionItem: actionItem,
-        saveToPendingItems: saveToPendingItems,
-      );
+    if (response != null && response.statusCode < 400) {
+      // Action was performed successfully. Remove it from pending Actions
+      await options.cache?.removePendingActionItem(actionItem);
     }
-    // Action was performed successfully. Remove it from pending Actions
-    await options.cache?.removePendingActionItem(actionItem);
     return response;
   }
 
@@ -490,8 +497,8 @@ class ApptiveGridClient {
 
     for (final action in pendingActions) {
       try {
-        await performAction(
-          action.action,
+        await submitForm(
+          action.link,
           action.data,
           saveToPendingItems: false, // don't resubmit this to pending items
         );

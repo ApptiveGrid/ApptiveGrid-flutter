@@ -112,5 +112,5 @@ scripts:
   build:example_ios_pub:
     run: |
       melos exec -c 6 --dir-exists="ios" --scope="*example" --fail-fast -- \
-        "flutter build ios --no-codesign"
+        "flutter build ios --debug --no-codesign"
     description: Build a specific example app for iOS.

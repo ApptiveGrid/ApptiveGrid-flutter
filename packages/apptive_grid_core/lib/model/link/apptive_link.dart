@@ -9,7 +9,7 @@ class ApptiveLink {
   /// Expect [uri] in a field called `href` and [method] in a field called `method`
   factory ApptiveLink.fromJson(dynamic json) {
     return ApptiveLink(
-      uri: Uri.parse(json['href']),
+      uri: Uri.parse(json['href'] ?? json['url']),
       method: json['method'],
     );
   }
@@ -40,6 +40,14 @@ class ApptiveLink {
 
   @override
   int get hashCode => toString().hashCode;
+}
+
+/// Extension for ApptiveLinks
+extension ApptiveLinkX on ApptiveLink {
+  // ignore: deprecated_member_use_from_same_package
+  /// Converts a this to a [FormAction]
+  // ignore: deprecated_member_use_from_same_package
+  FormAction get asFormAction => FormAction(uri.toString(), method);
 }
 
 /// A Map of Links

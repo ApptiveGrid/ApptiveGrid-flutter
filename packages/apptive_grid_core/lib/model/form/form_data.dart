@@ -8,7 +8,6 @@ class FormData {
     this.name,
     this.title,
     required this.components,
-    this.actions,
     required this.schema,
     required this.links,
     Map<Attachment, AttachmentAction>? attachmentActions,
@@ -23,9 +22,6 @@ class FormData {
             ?.map<FormComponent>(
               (e) => FormComponent.fromJson(e, json['schema']),
             )
-            .toList(),
-        actions = (json['actions'] as List?)
-            ?.map((e) => FormAction.fromJson(e))
             .toList(),
         schema = json['schema'],
         links = linkMapFromJson(json['_links']),
@@ -51,7 +47,10 @@ class FormData {
   final List<FormComponent>? components;
 
   /// List of [FormActions] available for this Form
-  final List<FormAction>? actions;
+  @Deprecated('Use submitAction instead which is based on HAL links')
+  List<FormAction>? get actions => links[ApptiveLinkType.submit] != null
+      ? [links[ApptiveLinkType.submit]!.asFormAction]
+      : null;
 
   /// Schema used to deserialize [components] and verify data send back to the server
   final dynamic schema;
@@ -69,8 +68,6 @@ class FormData {
         if (title != null) 'title': title,
         if (components != null)
           'components': components!.map((e) => e.toJson()).toList(),
-        if (actions != null)
-          'actions': actions?.map((e) => e.toJson()).toList(),
         if (schema != null) 'schema': schema,
         '_links': links.toJson(),
         if (attachmentActions.isNotEmpty)
@@ -100,7 +97,6 @@ class FormData {
         name == other.name &&
         title == other.title &&
         schema.toString() == other.schema.toString() &&
-        f.listEquals(actions, other.actions) &&
         f.listEquals(components, other.components) &&
         f.mapEquals(attachmentActions, other.attachmentActions) &&
         f.mapEquals(links, other.links);

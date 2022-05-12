@@ -237,7 +237,7 @@ void main() {
 
   group('Validation', () {
     testWidgets('is required but filled sends', (tester) async {
-      final action = FormAction('formAction', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
       final formData = FormData(
         id: 'formId',
         title: 'title',
@@ -258,8 +258,7 @@ void main() {
             required: true,
           )
         ],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: null,
       );
       final client = MockApptiveGridClient();
@@ -274,7 +273,7 @@ void main() {
         ),
       );
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((_) async => Response('body', 200));
 
       final target = TestApp(

@@ -19,7 +19,7 @@ void main() {
     registerFallbackValue(http.Request('POST', Uri()));
     registerFallbackValue(
       ActionItem(
-        action: FormAction('', ''),
+        link: ApptiveLink(uri: Uri(), method: ''),
         data: FormData(
           id: 'formId',
           title: '',
@@ -55,7 +55,6 @@ void main() {
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [],
           schema: {},
           links: {},
         ),
@@ -86,7 +85,6 @@ void main() {
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [],
           schema: {},
           links: {},
         ),
@@ -105,7 +103,6 @@ void main() {
       name: 'Form Name',
       title: 'Form Title',
       components: [],
-      actions: [],
       schema: {},
       links: {},
     );
@@ -147,7 +144,6 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [],
         schema: {},
         links: {},
       );
@@ -176,21 +172,20 @@ void main() {
           ),
         ),
       );
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
         id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
 
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -212,21 +207,20 @@ void main() {
           ),
         ),
       );
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
         id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
 
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -304,21 +298,20 @@ void main() {
             ),
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
           id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
           () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData))
+        when(() => client.submitForm(action, formData))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -340,21 +333,20 @@ void main() {
             ),
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
           id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
           () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData))
+        when(() => client.submitForm(action, formData))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -377,21 +369,20 @@ void main() {
             formUri: formUri,
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
           id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
           () => client.loadForm(formUri: formUri),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData))
+        when(() => client.submitForm(action, formData))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -430,21 +421,20 @@ void main() {
             ),
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
           id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
           () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData))
+        when(() => client.submitForm(action, formData))
             .thenAnswer((_) async => http.Response('', 500));
 
         await tester.pumpWidget(target);
@@ -471,21 +461,20 @@ void main() {
             ),
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
           id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
           () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData))
+        when(() => client.submitForm(action, formData))
             .thenAnswer((_) => Future.error(Exception('Testing Errors')));
 
         await tester.pumpWidget(target);
@@ -507,21 +496,20 @@ void main() {
             ),
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
           id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
-          links: {},
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
           () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData)).thenAnswer(
+        when(() => client.submitForm(action, formData)).thenAnswer(
           (_) => Future.error(http.Response('Testing Errors', 400)),
         );
 
@@ -550,21 +538,20 @@ void main() {
           },
         ),
       );
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
         id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
 
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -587,21 +574,20 @@ void main() {
           },
         ),
       );
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
         id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
 
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) => Future.error(''));
 
       await tester.pumpWidget(target);
@@ -616,14 +602,13 @@ void main() {
   group('Cache', () {
     late http.Client httpClient;
 
-    final action = FormAction('actionUri', 'POST');
+    final action = ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
     final data = FormData(
       id: 'formId',
       name: 'Form Name',
       title: 'Title',
       components: [],
-      actions: [action],
-      links: {},
+      links: {ApptiveLinkType.submit: action},
       schema: {},
     );
 
@@ -632,7 +617,9 @@ void main() {
 
     setUpAll(() {
       registerFallbackValue(http.Request('POST', Uri()));
-      registerFallbackValue(ActionItem(action: action, data: data));
+      registerFallbackValue(
+        ActionItem(link: action, data: data),
+      );
     });
 
     setUp(() {
@@ -724,7 +711,6 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [],
         schema: {},
         links: {},
       );
@@ -756,14 +742,13 @@ void main() {
         'Action Success '
         'Current Data returns null', (tester) async {
       final key = GlobalKey<ApptiveGridFormDataState>();
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
         id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
       final target = TestApp(
@@ -779,7 +764,7 @@ void main() {
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -798,14 +783,13 @@ void main() {
         'Action Error '
         'Current Data data', (tester) async {
       final key = GlobalKey<ApptiveGridFormDataState>();
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
         id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
       final target = TestApp(
@@ -824,7 +808,7 @@ void main() {
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) async => http.Response('', 400));
 
       await tester.pumpWidget(target);
@@ -850,14 +834,13 @@ void main() {
           ),
         ),
       );
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
         id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
-        links: {},
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
 
@@ -865,7 +848,7 @@ void main() {
       when(
         () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) => actionCompleter.future);
 
       await tester.pumpWidget(target);

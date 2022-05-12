@@ -1253,7 +1253,7 @@ void main() {
   group('Decoration', () {
     testWidgets('Required shows hint and updates message if changed',
         (tester) async {
-      final action = FormAction('actionUri', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
 
       final mockGeolocator = MockGeolocator();
       GeolocatorPlatform.instance = mockGeolocator;
@@ -1310,8 +1310,7 @@ void main() {
                 required: true,
               ),
             ],
-            actions: [action],
-            links: {},
+            links: {ApptiveLinkType.submit: action},
             schema: null,
           ),
         ),
@@ -1402,7 +1401,7 @@ void main() {
     });
 
     testWidgets('Prefilled Required Form is validated', (tester) async {
-      final action = FormAction('actionUri', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
 
       final mockGeolocator = MockGeolocator();
       GeolocatorPlatform.instance = mockGeolocator;
@@ -1462,8 +1461,7 @@ void main() {
                 required: true,
               ),
             ],
-            actions: [action],
-            links: {},
+            links: {ApptiveLinkType.submit: action},
             schema: null,
           ),
         ),
@@ -1524,7 +1522,7 @@ void main() {
       when(() => apptiveGridClient.sendPendingActions())
           .thenAnswer((_) async {});
       when(
-        () => apptiveGridClient.performAction(
+        () => apptiveGridClient.submitForm(
           action,
           any(),
           saveToPendingItems: any(named: 'saveToPendingItems'),
@@ -1551,7 +1549,7 @@ void main() {
 
       expect(find.text(requiredString), findsNothing);
       verify(
-        () => apptiveGridClient.performAction(
+        () => apptiveGridClient.submitForm(
           action,
           any(),
           saveToPendingItems: any(named: 'saveToPendingItems'),
