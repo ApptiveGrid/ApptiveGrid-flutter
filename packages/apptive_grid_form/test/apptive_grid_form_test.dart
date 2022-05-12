@@ -160,6 +160,53 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets('Reload with reset resets', (tester) async {
+      final key = GlobalKey<ApptiveGridFormState>();
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          key: key,
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+        ),
+      );
+      final form = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        schema: {},
+        links: {},
+      );
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer(
+        (realInvocation) =>
+            Future.delayed(const Duration(seconds: 2), () => form),
+      );
+
+      await tester.pumpWidget(target);
+
+      final loadingFinder = find.byType(
+        CircularProgressIndicator,
+      );
+      expect(
+        loadingFinder,
+        findsOneWidget,
+      );
+
+      await tester.pumpAndSettle();
+      expect(loadingFinder, findsNothing);
+
+      key.currentState?.loadForm(resetData: true);
+
+      await tester.pump();
+      expect(loadingFinder, findsOneWidget);
+      await tester.pumpAndSettle();
+      expect(loadingFinder, findsNothing);
+    });
   });
 
   group('Success', () {
@@ -864,6 +911,46 @@ void main() {
       expect(find.byType(Lottie), findsOneWidget);
       expect(find.text('Thank You!', skipOffstage: false), findsOneWidget);
       expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
+    });
+
+    testWidgets('Custom Button Label', (tester) async {
+      const label = 'Custom Label';
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+          buttonLabel: label,
+        ),
+      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      final formData = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        links: {ApptiveLinkType.submit: action},
+        schema: {},
+      );
+
+      final actionCompleter = Completer<http.Response>();
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.submitForm(action, formData))
+          .thenAnswer((_) => actionCompleter.future);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(
+          of: find.byType(ActionButton),
+          matching: find.text(label),
+        ),
+        findsOneWidget,
+      );
     });
   });
 

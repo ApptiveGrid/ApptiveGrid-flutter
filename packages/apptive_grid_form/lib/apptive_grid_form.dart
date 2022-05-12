@@ -32,6 +32,8 @@ class ApptiveGridForm extends StatefulWidget {
     this.onActionSuccess,
     this.onError,
     this.scrollController,
+    this.buttonAlignment = Alignment.center,
+    this.buttonLabel,
   }) : super(key: key);
 
   /// [FormUri] of the Form to display
@@ -45,10 +47,10 @@ class ApptiveGridForm extends StatefulWidget {
   final TextStyle? titleStyle;
 
   /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
-  final EdgeInsets? contentPadding;
+  final EdgeInsetsGeometry? contentPadding;
 
   /// Padding for the title. If no Padding is provided the [contentPadding] is used
-  final EdgeInsets? titlePadding;
+  final EdgeInsetsGeometry? titlePadding;
 
   /// Flag to hide the form title, default is false
   final bool hideTitle;
@@ -80,7 +82,15 @@ class ApptiveGridForm extends StatefulWidget {
   /// This functionality can be used to do a custom Widget or Transition
   final Future<bool> Function(dynamic)? onError;
 
+  /// Optional ScrollController for the Form
   final ScrollController? scrollController;
+
+  /// Alignment of the Send Button
+  final Alignment buttonAlignment;
+
+  /// Label of the Button to submit a form.
+  /// Defaults to a localized version of `Send`
+  final String? buttonLabel;
 
   @override
   ApptiveGridFormState createState() => ApptiveGridFormState();
@@ -102,7 +112,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
   void didUpdateWidget(covariant ApptiveGridForm oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.formUri != oldWidget.formUri) {
-      _loadForm();
+      loadForm();
     }
   }
 
@@ -110,7 +120,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _client = ApptiveGrid.getClient(context);
-    _loadForm();
+    loadForm();
   }
 
   @override
@@ -125,12 +135,23 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       hideTitle: widget.hideTitle,
       onActionSuccess: widget.onActionSuccess,
       onError: widget.onError,
-      triggerReload: _loadForm,
+      triggerReload: () => loadForm(resetData: false),
       scrollController: widget.scrollController,
+      buttonAlignment: widget.buttonAlignment,
+      buttonLabel: widget.buttonLabel,
     );
   }
 
-  void _loadForm() {
+  /// Loads the form
+  ///
+  /// If [resetData] is `true` it will call setState with [_formData] = `null`
+  /// Useful if a manual reload of the form is required
+  void loadForm({bool resetData = false}) {
+    if (resetData) {
+      setState(() {
+        _formData = null;
+      });
+    }
     _client.loadForm(formUri: widget.formUri).then((value) {
       if (widget.onFormLoaded != null) {
         widget.onFormLoaded!(value);
@@ -169,6 +190,8 @@ class ApptiveGridFormData extends StatefulWidget {
     this.onError,
     this.triggerReload,
     this.scrollController,
+    this.buttonAlignment = Alignment.center,
+    this.buttonLabel,
   }) : super(key: key);
 
   /// [FormData] that should be displayed
@@ -181,10 +204,10 @@ class ApptiveGridFormData extends StatefulWidget {
   final TextStyle? titleStyle;
 
   /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
-  final EdgeInsets? contentPadding;
+  final EdgeInsetsGeometry? contentPadding;
 
   /// Padding for the title. If no Padding is provided the [contentPadding] is used
-  final EdgeInsets? titlePadding;
+  final EdgeInsetsGeometry? titlePadding;
 
   /// Flag to hide the form title, default is false
   final bool hideTitle;
@@ -204,7 +227,15 @@ class ApptiveGridFormData extends StatefulWidget {
   /// Will be called when [formData] should be reloaded
   final void Function()? triggerReload;
 
+  /// Optional ScrollController for the Form
   final ScrollController? scrollController;
+
+  /// Alignment of the Send Button
+  final Alignment buttonAlignment;
+
+  /// Label of the Button to submit a form.
+  /// Defaults to a localized version of `Send`
+  final String? buttonLabel;
 
   @override
   ApptiveGridFormDataState createState() => ApptiveGridFormDataState();
@@ -348,20 +379,28 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             } else {
               return Padding(
                 padding: widget.contentPadding ?? _defaultPadding,
-                child: Builder(
-                  builder: (_) {
-                    if (_actionsInProgress.contains(submitLink)) {
-                      return const Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      );
-                    } else {
-                      return ActionButton(
-                        action: submitLink!,
-                        onPressed: _submitForm,
-                        child: Text(localization.actionSend),
-                      );
-                    }
-                  },
+                child: Align(
+                  alignment: widget.buttonAlignment,
+                  child: Builder(
+                    builder: (_) {
+                      if (_actionsInProgress.contains(submitLink)) {
+                        return const TextButton(
+                          onPressed: null,
+                          child: Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          ),
+                        );
+                      } else {
+                        return ActionButton(
+                          action: submitLink!,
+                          onPressed: _submitForm,
+                          child: Text(
+                            widget.buttonLabel ?? localization.actionSend,
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
               );
             }
