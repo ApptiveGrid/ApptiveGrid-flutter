@@ -101,7 +101,7 @@ class _MyHomePageState extends State<_MyHomePage> {
             );
           } else {
             if (_sorting == null) {
-              WidgetsBinding.instance?.addPostFrameCallback((_) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
                 late final ApptiveGridSorting newSorting;
                 if (snapshot.data!.fields?.first.type == DataType.geolocation) {
                   newSorting = DistanceApptiveGridSorting(

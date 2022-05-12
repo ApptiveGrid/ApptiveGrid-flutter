@@ -55,7 +55,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
                     .firstWhere(
                   (element) => element is GeolocationFormWidgetConfiguration,
                   orElse: () {
-                    WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
                       setState(() {
                         _error = Exception(
                           'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget',
