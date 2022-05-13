@@ -25,11 +25,9 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () => onPressed(action),
-        child: child,
-      ),
+    return ElevatedButton(
+      onPressed: () => onPressed(action),
+      child: child,
     );
   }
 }

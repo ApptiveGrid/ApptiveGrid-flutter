@@ -1,8 +1,8 @@
 ## 0.10.0-alpha.3
 * Deprecate `FormActions`
+* Add `scrollController`, `buttonAlignment` and `buttonLabel` to `ApptiveGridForm` and `ApptiveGridFormData`
 ### Breaking Changes
 * Remove `actions` from forms
-* Changed constructor arguments for
 
 ## 0.10.0-alpha.2
 * Update Core Package to 0.10.0-alpha.2 to include breaking changes to GridRow

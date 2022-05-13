@@ -40,7 +40,7 @@ class _ApptiveGridWebApptiveState extends State<ApptiveGridWebApptive> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       html.window.addEventListener('message', (event) {
         final message = (event as html.MessageEvent);
         try {
