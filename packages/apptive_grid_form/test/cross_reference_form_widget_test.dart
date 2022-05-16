@@ -29,11 +29,10 @@ void main() {
     late GlobalKey<FormState> formKey;
 
     final gridUri = GridUri(user: 'user', space: 'space', grid: 'grid');
-    final field = GridField('field', 'Name', DataType.text);
+    final field = GridField(id: 'field', name: 'Name', type: DataType.text);
     final grid = Grid(
       id: 'grid',
       name: 'Test',
-      schema: null,
       fields: [field],
       rows: [
         GridRow(
@@ -200,7 +199,6 @@ void main() {
       final gridWithNull = Grid(
         id: 'grid',
         name: 'Test',
-        schema: null,
         fields: [field],
         rows: [
           GridRow(
@@ -266,7 +264,6 @@ void main() {
         (invocation) async => Grid(
           id: 'grid',
           name: 'name',
-          schema: {},
           fields: [],
           rows: [],
           links: {},
