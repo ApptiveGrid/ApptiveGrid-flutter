@@ -29,18 +29,6 @@ class ApptiveGridAuthenticator {
     }
   }
 
-  /// Creates an [ApptiveGridAuthenticator] with a specific [AuthenticationStorage]
-  @visibleForTesting
-  @Deprecated('Use ApptiveGridAuthenticator directly')
-  ApptiveGridAuthenticator.withAuthenticationStorage({
-    this.options = const ApptiveGridOptions(),
-    this.httpClient,
-    required AuthenticationStorage? storage,
-  })  : _authenticationStorage = storage,
-        _authCallbackSubscription = null {
-    _setupCompleter.complete();
-  }
-
   /// [ApptiveGridOptions] used for getting the correct [ApptiveGridEnvironment.authRealm]
   /// and checking if authentication should automatically be handled
   ApptiveGridOptions options;

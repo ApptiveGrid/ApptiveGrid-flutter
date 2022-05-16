@@ -4,6 +4,7 @@
 ### Breaking Changes
 * GridField now uses named arguments
 * Removed `schema` from `Grid`
+* Removed deprecated `ApptiveGridAuthenticator.withAuthenticationStorage`
 
 ## 0.10.0-alpha.3
 * Add `virtualGrids` ApptiveLinkType
