@@ -3,43 +3,51 @@ part of apptive_grid_model;
 /// The Data Types that are available in ApptiveGrid
 enum DataType {
   /// Type to display [String]
-  text,
+  text(backendName: 'string'),
 
   /// Type to display [DateTime]
-  dateTime,
+  dateTime(backendName: 'date-time'),
 
   /// Type to display [DateTime] without the option to adjust the Time part
-  date,
+  date(backendName: 'date'),
 
   /// Type to display [int] numbers
-  integer,
+  integer(backendName: 'integer'),
 
   /// Type to display [double] decimal numbers
-  decimal,
+  decimal(backendName: 'decimal'),
 
   /// Type to display [bool] values
-  checkbox,
+  checkbox(backendName: 'boolean'),
 
   /// Type to display enum values
-  singleSelect,
+  singleSelect(backendName: 'enum'),
 
   /// Select Multiple Values from List of possible Values
-  enumCollection,
+  enumCollection(backendName: 'enumcollection'),
 
   /// Type to display CrossReference Values
-  crossReference,
+  crossReference(backendName: 'reference'),
 
   /// Type for Attachments
-  attachment,
+  attachment(backendName: 'attachments'),
 
   /// Type for geolocations
-  geolocation,
+  geolocation(backendName: 'geolocation'),
 
   /// Type for Multi Cross References
-  multiCrossReference,
+  multiCrossReference(backendName: 'references'),
 
   /// Type for UserReferences. Used for createdBy
-  userReference,
+  userReference(backendName: 'createdby');
+
+  /// Define a Datatype with a corresponding [backendName]
+  const DataType({
+    required this.backendName,
+  });
+
+  /// The name that is used in the ApptiveGridBackend for this [DataType]
+  final String backendName;
 }
 
 /// Returns [DataType] that matching a certain schema [schemaProperty]

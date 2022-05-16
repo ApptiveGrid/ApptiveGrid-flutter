@@ -75,27 +75,28 @@ void main() {
       ],
       'fieldIds': ['f3k9zj2aaclqnhd2e8cvlwydt'],
       'filter': {},
-      'schema': {
-        'type': 'object',
-        'properties': {
-          'fields': {
-            'type': 'array',
-            'items': [
-              {
-                'type': 'object',
-                'properties': {
-                  'displayValue': {'type': 'string'},
-                  'id': {'type': 'string'},
-                  'type': {'type': 'string'},
-                  'name': {'type': 'string'}
-                },
-                'objectType': 'userReference'
-              }
-            ]
+      'fields': [
+        {
+          "type": {
+            "name": "createdby",
+            "componentTypes": ["textfield"]
           },
-          '_id': {'type': 'string'}
-        }
-      },
+          "key": null,
+          "name": "UserRef",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "displayValue": {"type": "string", "format": "string"},
+              "id": {"type": "string", "format": "string"},
+              "type": {"type": "string", "format": "string"},
+              "name": {"type": "string", "format": "string"}
+            },
+            "objectType": "userReference"
+          },
+          "id": "628210d604bd30b6b19b7f9d",
+          "_links": {}
+        },
+      ],
       'name': 'Yeah Ansicht',
       'id': 'gridId',
       '_links': {
@@ -241,7 +242,7 @@ void main() {
     test('Grid serializes back to original Response', () {
       final fromJson = Grid.fromJson(rawResponse);
 
-      expect(fromJson.toJson(), equals(rawResponse));
+      expect(Grid.fromJson(fromJson.toJson()), fromJson);
     });
   });
 

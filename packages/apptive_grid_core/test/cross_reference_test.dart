@@ -25,30 +25,30 @@ void main() {
           },
         }
       ],
-      'fieldIds': ['3ftoqhqbct15h5o730uknpvp5'],
+      'fieldIds': ['fieldId'],
       'filter': {},
-      'schema': {
-        'type': 'object',
-        'properties': {
-          'fields': {
-            'type': 'array',
-            'items': [
-              {
-                'type': 'object',
-                'properties': {
-                  'displayValue': {'type': 'string'},
-                  'uri': {'type': 'string'}
-                },
-                'required': ['uri'],
-                'objectType': 'entityreference',
-                'gridUri':
-                    '/api/users/userId/spaces/spaceId/grids/gridId/views/60d036f00edfa83071816e06'
-              }
-            ]
+      'fields': [
+        {
+          "type": {
+            "name": "reference",
+            "componentTypes": ["entitySelect"]
           },
-          '_id': {'type': 'string'}
+          "key": null,
+          "name": "CrossRef",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "displayValue": {"type": "string"},
+              "uri": {"type": "string"}
+            },
+            "required": ["uri"],
+            "objectType": "entityreference",
+            "gridUri": "/api/users/userId/spaces/spaceId/grids/referencedGrid"
+          },
+          "id": "628210a604bd30163b9b7f77",
+          "_links": {}
         }
-      },
+      ],
       'name': 'New grid view',
       '_links': {
         "addLink": {
@@ -142,8 +142,7 @@ void main() {
             'uri':
                 '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
           },
-          gridUri:
-              '/api/users/userId/spaces/spaceId/grids/gridId/views/60d036f00edfa83071816e06',
+          gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGrid',
         ),
       );
     });
@@ -151,7 +150,7 @@ void main() {
     test('Grid serializes back to original Response', () {
       final fromJson = Grid.fromJson(rawResponse);
 
-      expect(fromJson.toJson(), equals(rawResponse));
+      expect(Grid.fromJson(fromJson.toJson()), fromJson);
     });
 
     test('GridUri is parsed Correctly', () {
@@ -160,8 +159,7 @@ void main() {
 
       expect(
         dataEntity.gridUri.uri.toString(),
-        (rawResponse['schema'] as Map)['properties']['fields']['items'][0]
-            ['gridUri'],
+        (rawResponse['fields'] as List).first['schema']['gridUri'],
       );
     });
   });
@@ -175,8 +173,7 @@ void main() {
             'uri':
                 '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
           },
-          gridUri:
-              '/api/users/userId/spaces/spaceId/grids/gridId/views/60d036f00edfa83071816e06',
+          gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGrid',
         );
         final b = CrossReferenceDataEntity.fromJson(
           jsonValue: {
@@ -184,13 +181,11 @@ void main() {
             'uri':
                 '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
           },
-          gridUri:
-              '/api/users/userId/spaces/spaceId/grids/gridId/views/60d036f00edfa83071816e06',
+          gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGrid',
         );
         final c = CrossReferenceDataEntity.fromJson(
           jsonValue: null,
-          gridUri:
-              '/api/users/userId/spaces/spaceId/grids/gridId/views/60d036f00edfa83071816e06',
+          gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGrid',
         );
         expect(a, equals(b));
         expect(a, isNot(c));
@@ -259,8 +254,7 @@ void main() {
               },
               'required': ['uri'],
               'objectType': 'entityreference',
-              'gridUri':
-                  '/api/users/userId/spaces/spaceId/grids/gridId/views/60d036f00edfa83071816e06'
+              'gridUri': '/api/users/userId/spaces/spaceId/grids/referencedGrid'
             }
           },
           'required': []
@@ -318,8 +312,7 @@ void main() {
           'uri':
               '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
         },
-        gridUri:
-            '/api/users/userId/spaces/spaceId/grids/gridId/views/60d036f00edfa83071816e06',
+        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGrid',
       );
 
       final direct = CrossReferenceFormComponent(

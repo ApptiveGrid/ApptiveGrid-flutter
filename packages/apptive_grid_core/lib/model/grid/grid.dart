@@ -30,7 +30,6 @@ class Grid {
   Grid({
     required this.id,
     required this.name,
-    this.schema,
     this.fields,
     this.rows,
     this.filter,
@@ -42,24 +41,12 @@ class Grid {
   /// Deserializes [json] into a [Grid] Object
   factory Grid.fromJson(Map<String, dynamic> json) {
     final id = json['id'];
-    final ids = json['fieldIds'] as List?;
-    final names = json['fieldNames'] as List?;
-    final schema = json['schema'];
-    final fields = ids != null && names != null
-        ? List<GridField>.generate(
-            ids.length,
-            (i) => GridField(
-              ids[i],
-              names[i],
-              dataTypeFromSchemaProperty(
-                schemaProperty: schema['properties']['fields']['items'][i],
-              ),
-            ),
-          )
-        : null;
+    final fields = (json['fields'] as List?)
+        ?.map((json) => GridField.fromJson(json))
+        .toList();
     final entries = fields != null
-        ? (json['entities'] as List)
-            .map((e) => GridRow.fromJson(e, fields, schema))
+        ? (json['entities'] as List?)
+            ?.map((e) => GridRow.fromJson(e, fields))
             .toList()
         : null;
     final filter = json['filter'];
@@ -67,7 +54,6 @@ class Grid {
     return Grid(
       id: id,
       name: json['name'],
-      schema: schema,
       fields: fields,
       rows: entries,
       filter: filter,
@@ -84,9 +70,6 @@ class Grid {
 
   /// Name of the Grid
   final String name;
-
-  /// Schema used for deserializing and validating data send back to the server
-  final dynamic schema;
 
   /// Filter applied to this GridView. If this is not null the Grid is actually a GridView
   final dynamic filter;
@@ -111,10 +94,8 @@ class Grid {
     final jsonMap = {
       'id': id,
       'name': name,
-      'schema': schema,
       if (rows != null) 'entities': rows!.map((e) => e.toJson()).toList(),
-      if (fields != null) 'fieldIds': fields!.map((e) => e.id).toList(),
-      if (fields != null) 'fieldNames': fields!.map((e) => e.name).toList(),
+      if (fields != null) 'fields': fields!.map((e) => e.toJson()).toList(),
       if (filter != null) 'filter': filter,
       if (sorting != null) 'sorting': sorting,
       '_links': links.toJson(),
@@ -141,7 +122,6 @@ class Grid {
     return other is Grid &&
         id == other.id &&
         name == other.name &&
-        schema.toString() == other.schema.toString() &&
         f.listEquals(fields, other.fields) &&
         f.listEquals(rows, other.rows) &&
         filter.toString() == other.filter.toString() &&

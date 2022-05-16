@@ -1787,20 +1787,41 @@ void main() {
         'filter': {
           '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
         },
-        'schema': {
-          'type': 'object',
-          'properties': {
-            'fields': {
-              'type': 'array',
-              'items': [
-                {'type': 'string'},
-                {'type': 'string'},
-                {'type': 'string'}
-              ]
+        'fields': [
+          {
+            "type": {
+              "name": "string",
+              "componentTypes": ["textfield"]
             },
-            '_id': {'type': 'string'}
-          }
-        },
+            "key": null,
+            "name": "String",
+            "schema": {"type": "string"},
+            "id": "6282104004bd30efc49b7f17",
+            "_links": {}
+          },
+          {
+            "type": {
+              "name": "string",
+              "componentTypes": ["textfield"]
+            },
+            "key": null,
+            "name": "String",
+            "schema": {"type": "string"},
+            "id": "6282104004bd30efc49b7f17",
+            "_links": {}
+          },
+          {
+            "type": {
+              "name": "string",
+              "componentTypes": ["textfield"]
+            },
+            "key": null,
+            "name": "String",
+            "schema": {"type": "string"},
+            "id": "6282104004bd30efc49b7f17",
+            "_links": {}
+          },
+        ],
         'name': 'New grid view',
         'id': 'gridId',
         '_links': {

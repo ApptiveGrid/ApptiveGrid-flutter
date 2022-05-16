@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -25,24 +23,25 @@ void main() {
       ],
       'fieldIds': ['8ou8s82tahpyqoowd0izr1nzm'],
       'filter': {},
-      'schema': {
-        'type': 'object',
-        'properties': {
-          'fields': {
-            'type': 'array',
-            'items': [
-              {
-                'type': 'array',
-                'items': {
-                  'type': 'string',
-                  'enum': ['A', 'B', 'C']
-                }
-              }
-            ]
+      'fields': [
+        {
+          "type": {
+            "name": "enumcollection",
+            "componentTypes": ["multiSelectDropdown"]
           },
-          '_id': {'type': 'string'}
-        }
-      },
+          "key": null,
+          "name": "MultiSelect",
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["A", "B", "C"]
+            }
+          },
+          "id": "6282109204bd30163b9b7f5f",
+          "_links": {}
+        },
+      ],
       'name': 'Name',
       'id': 'gridId',
       '_links': {
@@ -138,10 +137,7 @@ void main() {
     test('Grid serializes back to original Response', () {
       final fromJson = Grid.fromJson(rawResponse);
 
-      expect(
-        jsonDecode(jsonEncode(fromJson.toJson())),
-        equals(jsonDecode(jsonEncode(rawResponse))),
-      );
+      expect(Grid.fromJson(fromJson.toJson()), fromJson);
     });
   });
 

@@ -222,7 +222,10 @@ class ApptiveGridClient {
   }) async {
     final gridViewUrl = _generateApptiveGridUri(gridUri.uri);
 
-    final gridViewResponse = await _client.get(gridViewUrl, headers: headers);
+    final gridHeaders = Map.fromEntries(headers.entries);
+    gridHeaders['Accept'] = 'application/vnd.apptivegrid.hal;version=2';
+    final gridViewResponse =
+        await _client.get(gridViewUrl, headers: gridHeaders);
     if (gridViewResponse.statusCode >= 400) {
       if (gridViewResponse.statusCode == 401 && !isRetry) {
         await _authenticator.checkAuthentication();

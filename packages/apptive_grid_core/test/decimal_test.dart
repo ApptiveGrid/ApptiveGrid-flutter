@@ -20,18 +20,19 @@ void main() {
       ],
       'fieldIds': ['3ftoqhqbct15h5o730uknpvp5'],
       'filter': {},
-      'schema': {
-        'type': 'object',
-        'properties': {
-          'fields': {
-            'type': 'array',
-            'items': [
-              {'type': 'number'}
-            ]
+      'fields': [
+        {
+          "type": {
+            "name": "decimal",
+            "componentTypes": ["textfield"]
           },
-          '_id': {'type': 'string'}
-        }
-      },
+          "key": null,
+          "name": "Decimal",
+          "schema": {"type": "number", "format": "float"},
+          "id": "6282107404bd30163b9b7f44",
+          "_links": {}
+        },
+      ],
       'name': 'New grid view',
       'id': 'gridId',
       '_links': {
@@ -124,7 +125,7 @@ void main() {
     test('Grid serializes back to original Response', () {
       final fromJson = Grid.fromJson(rawResponse);
 
-      expect(fromJson.toJson(), equals(rawResponse));
+      expect(Grid.fromJson(fromJson.toJson()), equals(fromJson));
     });
   });
 
