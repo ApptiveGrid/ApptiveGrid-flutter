@@ -80,36 +80,19 @@ class OrFilterComposition extends _FilterComposition {
 
 /// Filter Operators for Filters that check on a Field
 enum _FieldOperator {
-  substring,
-  equal,
-  greaterThan,
-  lesserThan,
+  substring(operation: 'substring'),
+  equal(operation: '='),
+  greaterThan(operation: 'gt'),
+  lesserThan(operation: 'lt'),
 
   // Collections
-  any,
-  all,
-  none
-}
+  any(operation: 'hasAnyOf'),
+  all(operation: 'hasAllOf'),
+  none(operation: 'hasNoneOf');
 
-extension _FieldOperatorX on _FieldOperator {
-  String get operation {
-    switch (this) {
-      case _FieldOperator.substring:
-        return 'substring';
-      case _FieldOperator.equal:
-        return '=';
-      case _FieldOperator.greaterThan:
-        return 'gt';
-      case _FieldOperator.lesserThan:
-        return 'lt';
-      case _FieldOperator.any:
-        return 'hasAnyOf';
-      case _FieldOperator.all:
-        return 'hasAllOf';
-      case _FieldOperator.none:
-        return 'hasNoneOf';
-    }
-  }
+  const _FieldOperator({required this.operation});
+
+  final String operation;
 }
 
 /// Filter to check for a single Field with [fieldId]

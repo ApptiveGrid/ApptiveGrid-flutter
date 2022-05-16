@@ -31,26 +31,6 @@ class ApptiveGridClient {
         AttachmentProcessor(options, _authenticator, httpClient: _client);
   }
 
-  // coverage:ignore-start
-  /// Creates an Api Client on the Basis of a [http.Client]
-  ///
-  /// this should only be used for testing in order to pass in a Mocked [http.Client]
-  @visibleForTesting
-  @Deprecated('httpClient now is an argument in the unnamed constructor')
-  factory ApptiveGridClient.fromClient(
-    http.Client httpClient, {
-    ApptiveGridOptions options = const ApptiveGridOptions(),
-    ApptiveGridAuthenticator? authenticator,
-  }) {
-    return ApptiveGridClient(
-      options: options,
-      authenticator: authenticator,
-      httpClient: httpClient,
-    );
-  }
-
-  // coverage:ignore-end
-
   /// Configurations
   ApptiveGridOptions options;
 
