@@ -66,7 +66,7 @@ void main() {
       expect(find.text('Form Title'), findsOneWidget);
     });
 
-    testWidgets('Title do not displays', (tester) async {
+    testWidgets('Title does not display', (tester) async {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -127,7 +127,7 @@ void main() {
       expect(find.text('Form Description'), findsOneWidget);
     });
 
-    testWidgets('Description do not displays', (tester) async {
+    testWidgets('Description does not display', (tester) async {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
