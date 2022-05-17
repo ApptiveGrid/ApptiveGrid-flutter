@@ -362,7 +362,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     final localization = ApptiveGridLocalization.of(context)!;
     final submitLink = data.links[ApptiveLinkType.submit];
     // Offset for title and description
-    final indexOffset = 2;
+    const indexOffset = 2;
     return Provider<AttachmentManager>.value(
       value: _attachmentManager,
       child: Form(
