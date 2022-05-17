@@ -7,6 +7,7 @@ class FormData {
     required this.id,
     this.name,
     this.title,
+    this.description,
     required this.components,
     required this.schema,
     required this.links,
@@ -18,6 +19,7 @@ class FormData {
       : id = json['id'],
         name = json['name'],
         title = json['title'],
+        description = json['description'],
         components = (json['components'] as List?)
             ?.map<FormComponent>(
               (e) => FormComponent.fromJson(e, json['schema']),
@@ -43,6 +45,9 @@ class FormData {
   /// Title of the Form
   final String? title;
 
+  /// Description of the Form
+  final String? description;
+
   /// List of [FormComponent] represented in the Form
   final List<FormComponent>? components;
 
@@ -66,6 +71,7 @@ class FormData {
         'id': id,
         if (name != null) 'name': name,
         if (title != null) 'title': title,
+        if (description != null) 'description': description,
         if (components != null)
           'components': components!.map((e) => e.toJson()).toList(),
         if (schema != null) 'schema': schema,
@@ -95,6 +101,7 @@ class FormData {
     return other is FormData &&
         id == other.id &&
         name == other.name &&
+        description == other.description &&
         title == other.title &&
         schema.toString() == other.schema.toString() &&
         f.listEquals(components, other.components) &&

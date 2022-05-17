@@ -1,6 +1,6 @@
 name: apptive_grid_core
 description: Core Library for ApptiveGrid used to provide general ApptiveGrid functionality to other Packages or Apps
-version: 0.10.0-alpha.4
+version: 0.10.0-alpha.5
 homepage: https://www.apptivegrid.de
 repository: https://github.com/ApptiveGrid/apptive_grid_flutter/tree/main/packages/apptive_grid_core
 
@@ -16,7 +16,7 @@ dependencies:
   provider: ^6.0.2
   openid_client: ^0.4.3
   uni_links: ^0.5.1
-  url_launcher: ^6.0.17
+  url_launcher: ^6.1.2
   uuid: ^3.0.6
   flutter_secure_storage: ^5.0.2
   flutter:

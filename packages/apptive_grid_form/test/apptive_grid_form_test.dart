@@ -66,7 +66,7 @@ void main() {
       expect(find.text('Form Title'), findsOneWidget);
     });
 
-    testWidgets('Title do not displays', (tester) async {
+    testWidgets('Title does not display', (tester) async {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
@@ -94,6 +94,67 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Form Title'), findsNothing);
+    });
+  });
+
+  group('Description', () {
+    testWidgets('Description Displays', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+        ),
+      );
+
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer(
+        (realInvocation) async => FormData(
+          id: 'formId',
+          name: 'Form Name',
+          description: 'Form Description',
+          components: [],
+          schema: {},
+          links: {},
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Form Description'), findsOneWidget);
+    });
+
+    testWidgets('Description does not display', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+          hideDescription: true,
+        ),
+      );
+
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer(
+        (realInvocation) async => FormData(
+          id: 'formId',
+          name: 'Form Name',
+          description: 'Form Description',
+          components: [],
+          schema: {},
+          links: {},
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Form Description'), findsNothing);
     });
   });
 
