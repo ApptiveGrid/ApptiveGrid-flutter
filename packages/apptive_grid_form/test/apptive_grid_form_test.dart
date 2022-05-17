@@ -97,6 +97,67 @@ void main() {
     });
   });
 
+  group('Description', () {
+    testWidgets('Description Displays', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+        ),
+      );
+
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer(
+        (realInvocation) async => FormData(
+          id: 'formId',
+          name: 'Form Name',
+          description: 'Form Description',
+          components: [],
+          schema: {},
+          links: {},
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Form Description'), findsOneWidget);
+    });
+
+    testWidgets('Description do not displays', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          formUri: RedirectFormUri(
+            components: ['form'],
+          ),
+          hideDescription: true,
+        ),
+      );
+
+      when(
+        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+      ).thenAnswer(
+        (realInvocation) async => FormData(
+          id: 'formId',
+          name: 'Form Name',
+          description: 'Form Description',
+          components: [],
+          schema: {},
+          links: {},
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Form Title'), findsNothing);
+    });
+  });
+
   testWidgets('OnLoadedCallback gets called', (tester) async {
     final form = FormData(
       id: 'formId',

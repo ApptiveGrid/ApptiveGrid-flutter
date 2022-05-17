@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   const title = 'title';
   const name = 'name';
+  const description = 'description';
   final response = {
     'schema': {
       'type': 'object',
@@ -79,6 +80,7 @@ void main() {
     ],
     'name': name,
     'title': title,
+    'description': description,
     'id': 'formId',
     '_links': {
       "submit": {
@@ -110,6 +112,7 @@ void main() {
 
       expect(formData.name, equals(name));
       expect(formData.title, equals(title));
+      expect(formData.description, equals(description));
 
       // ignore: deprecated_member_use_from_same_package
       expect(formData.actions!.length, equals(1));
@@ -139,8 +142,9 @@ void main() {
 
       final formData = FormData(
         id: 'formId',
-        name: 'name',
+        name: name,
         title: title,
+        description: description,
         components: [component],
         links: {ApptiveLinkType.submit: action},
         schema: schema,
