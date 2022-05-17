@@ -154,7 +154,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.text('Form Title'), findsNothing);
+      expect(find.text('Form Description'), findsNothing);
     });
   });
 
