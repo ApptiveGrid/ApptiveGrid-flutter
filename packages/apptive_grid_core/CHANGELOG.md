@@ -1,6 +1,8 @@
+## 0.10.0-alpha.5
+* Add `description` to forms
+
 ## 0.10.0-alpha.4
 * Adjust GridField to include `key` and `schema`
-* Add `description` to forms
 
 ### Breaking Changes
 * GridField now uses named arguments

@@ -1,6 +1,8 @@
+## 0.10.0-alpha.5
+* Add `description` to forms
+
 ## 0.10.0-alpha.4
 * Update Core Package to 0.10.0-alpha.4 to include breaking changes to GridField
-* Add `description` to forms
 
 ## 0.10.0-alpha.3
 * Deprecate `FormActions`
