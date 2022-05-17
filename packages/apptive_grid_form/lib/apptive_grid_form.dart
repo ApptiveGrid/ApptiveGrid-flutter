@@ -171,9 +171,11 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       if (widget.onFormLoaded != null) {
         widget.onFormLoaded!(value);
       }
-      setState(() {
-        _formData = value;
-      });
+      if (mounted) {
+        setState(() {
+          _formData = value;
+        });
+      }
     }).catchError((error) {
       _onError(error);
     });
@@ -181,9 +183,11 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
 
   void _onError(dynamic error) async {
     if (await widget.onError?.call(error) ?? true) {
-      setState(() {
-        _error = error;
-      });
+      if (mounted) {
+        setState(() {
+          _error = error;
+        });
+      }
     }
   }
 }
