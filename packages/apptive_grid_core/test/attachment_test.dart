@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -33,32 +31,33 @@ void main() {
       ],
       'fieldIds': ['80vw5xpimeeuxmoiftfqepbvc'],
       'filter': {},
-      'schema': {
-        'type': 'object',
-        'properties': {
-          'fields': {
-            'type': 'array',
-            'items': [
-              {
-                'type': 'array',
-                'items': {
-                  'type': 'object',
-                  'properties': {
-                    'smallThumbnail': {'type': 'string'},
-                    'url': {'type': 'string'},
-                    'largeThumbnail': {'type': 'string'},
-                    'name': {'type': 'string'},
-                    'type': {'type': 'string'}
-                  },
-                  'required': ['url', 'type'],
-                  'objectType': 'attachment'
-                }
-              }
-            ]
+      'fields': [
+        {
+          "type": {
+            "name": "attachments",
+            "componentTypes": ["filePicker"]
           },
-          '_id': {'type': 'string'}
+          "key": null,
+          "name": "Attachment",
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "smallThumbnail": {"type": "string"},
+                "url": {"type": "string"},
+                "largeThumbnail": {"type": "string"},
+                "name": {"type": "string"},
+                "type": {"type": "string"}
+              },
+              "required": ["url", "type"],
+              "objectType": "attachment"
+            }
+          },
+          "id": "628210b904bd301aa89b7f81",
+          "_links": {}
         }
-      },
+      ],
       'name': 'Grid 4 View',
       'id': 'gridId',
       '_links': {
@@ -153,32 +152,33 @@ void main() {
       ],
       'fieldIds': ['80vw5xpimeeuxmoiftfqepbvc'],
       'filter': {},
-      'schema': {
-        'type': 'object',
-        'properties': {
-          'fields': {
-            'type': 'array',
-            'items': [
-              {
-                'type': 'array',
-                'items': {
-                  'type': 'object',
-                  'properties': {
-                    'smallThumbnail': {'type': 'string'},
-                    'url': {'type': 'string'},
-                    'largeThumbnail': {'type': 'string'},
-                    'name': {'type': 'string'},
-                    'type': {'type': 'string'}
-                  },
-                  'required': ['url', 'type'],
-                  'objectType': 'attachment'
-                }
-              }
-            ]
+      'fields': [
+        {
+          "type": {
+            "name": "attachments",
+            "componentTypes": ["filePicker"]
           },
-          '_id': {'type': 'string'}
+          "key": null,
+          "name": "Attachment",
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "smallThumbnail": {"type": "string"},
+                "url": {"type": "string"},
+                "largeThumbnail": {"type": "string"},
+                "name": {"type": "string"},
+                "type": {"type": "string"}
+              },
+              "required": ["url", "type"],
+              "objectType": "attachment"
+            }
+          },
+          "id": "628210b904bd301aa89b7f81",
+          "_links": {}
         }
-      },
+      ],
       'name': 'Grid 4 View',
       'id': 'gridId',
       '_links': {
@@ -294,10 +294,7 @@ void main() {
     test('Grid serializes back to original Response', () {
       final fromJson = Grid.fromJson(rawResponse);
 
-      expect(
-        jsonDecode(jsonEncode(fromJson.toJson())),
-        equals(jsonDecode(jsonEncode(rawResponse))),
-      );
+      expect(Grid.fromJson(fromJson.toJson()), fromJson);
     });
   });
 

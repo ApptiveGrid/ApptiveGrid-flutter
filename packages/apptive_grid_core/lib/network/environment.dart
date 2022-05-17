@@ -3,37 +3,20 @@ part of apptive_grid_network;
 /// Possible Stages/Environment ApptiveGrid can point to
 enum ApptiveGridEnvironment {
   /// Alpha Environment
-  alpha,
+  alpha(url: 'https://alpha.apptivegrid.de', authRealm: 'apptivegrid-test'),
 
   /// Beta Environment
-  beta,
+  beta(url: 'https://beta.apptivegrid.de', authRealm: 'apptivegrid-test'),
 
   /// Production Environment
-  production
-}
+  production(url: 'https://app.apptivegrid.de', authRealm: 'apptivegrid');
 
-/// Extensions for [ApptiveGridEnvironment]
-extension EnvironmentExtension on ApptiveGridEnvironment {
-  /// Returns the API url for the selected [ApptiveGridEnvironment]
-  String get url {
-    switch (this) {
-      case ApptiveGridEnvironment.alpha:
-        return 'https://alpha.apptivegrid.de';
-      case ApptiveGridEnvironment.beta:
-        return 'https://beta.apptivegrid.de';
-      case ApptiveGridEnvironment.production:
-        return 'https://app.apptivegrid.de';
-    }
-  }
+  /// Create a new ApptiveGridEnvironment
+  const ApptiveGridEnvironment({required this.url, required this.authRealm});
 
-  /// Returns the realm that needs to be used for Authentication
-  String get authRealm {
-    switch (this) {
-      case ApptiveGridEnvironment.alpha:
-      case ApptiveGridEnvironment.beta:
-        return 'apptivegrid-test';
-      case ApptiveGridEnvironment.production:
-        return 'apptivegrid';
-    }
-  }
+  /// The API url for the selected [ApptiveGridEnvironment]
+  final String url;
+
+  ///The authentication realm that needs to be used for Authentication
+  final String authRealm;
 }

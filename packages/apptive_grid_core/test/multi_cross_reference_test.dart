@@ -12,7 +12,7 @@ void main() {
               {
                 'displayValue': 'Yeah!',
                 'uri':
-                    '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+                    '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
               }
             ]
           ],
@@ -28,31 +28,32 @@ void main() {
       ],
       'fieldIds': ['3ftoqhqbct15h5o730uknpvp5'],
       'filter': {},
-      'schema': {
-        'type': 'object',
-        'properties': {
-          'fields': {
-            'type': 'array',
-            'items': [
-              {
-                'type': 'array',
-                'items': {
-                  'type': 'object',
-                  'properties': {
-                    'displayValue': {'type': 'string'},
-                    'uri': {'type': 'string'}
-                  },
-                  'required': ['uri'],
-                  'objectType': 'entityreference',
-                  'gridUri':
-                      '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06'
-                }
-              }
-            ]
+      'fields': [
+        {
+          "type": {
+            "name": "references",
+            "componentTypes": ["multiSelectDropdown"]
           },
-          '_id': {'type': 'string'}
+          "key": null,
+          "name": "Multi Cross",
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "displayValue": {"type": "string"},
+                "uri": {"type": "string"}
+              },
+              "required": ["uri"],
+              "objectType": "entityreference",
+              "gridUri":
+                  "/api/users/userId/spaces/spaceId/grids/referencedGridId"
+            }
+          },
+          "id": "628210cb04bd301aa89b7f93",
+          "_links": {}
         }
-      },
+      ],
       'name': 'New grid view',
       'id': 'gridId',
       '_links': {
@@ -139,26 +140,26 @@ void main() {
       final grid = Grid.fromJson(rawResponse);
 
       expect(grid.fields!.length, equals(1));
+      final referenceValue = MultiCrossReferenceDataEntity.fromJson(
+        jsonValue: [
+          {
+            'displayValue': 'Yeah!',
+            'uri':
+                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
+          }
+        ],
+        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
+      );
       expect(
         grid.rows![0].entries[0].data,
-        MultiCrossReferenceDataEntity.fromJson(
-          jsonValue: [
-            {
-              'displayValue': 'Yeah!',
-              'uri':
-                  '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
-            }
-          ],
-          gridUri:
-              '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
-        ),
+        equals(referenceValue),
       );
     });
 
     test('Grid serializes back to original Response', () {
       final fromJson = Grid.fromJson(rawResponse);
 
-      expect(fromJson.toJson(), equals(rawResponse));
+      expect(Grid.fromJson(fromJson.toJson()), fromJson);
     });
 
     test('GridUri is parsed Correctly', () {
@@ -167,8 +168,7 @@ void main() {
 
       expect(
         dataEntity.gridUri.uri.toString(),
-        (rawResponse['schema'] as Map)['properties']['fields']['items'][0]
-            ['items']['gridUri'],
+        (rawResponse['fields'] as List).first['schema']['items']['gridUri'],
       );
     });
   });
@@ -180,27 +180,24 @@ void main() {
           {
             'displayValue': 'Yeah!',
             'uri':
-                '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
           }
         ],
-        gridUri:
-            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
       );
       final b = MultiCrossReferenceDataEntity.fromJson(
         jsonValue: [
           {
             'displayValue': 'Yeah!',
             'uri':
-                '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
           }
         ],
-        gridUri:
-            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
       );
       final c = MultiCrossReferenceDataEntity.fromJson(
         jsonValue: null,
-        gridUri:
-            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
       );
       expect(a, equals(b));
       expect(a, isNot(c));
@@ -227,7 +224,7 @@ void main() {
                 'required': ['uri'],
                 'objectType': 'entityreference',
                 'gridUri':
-                    '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06'
+                    '/api/users/userId/spaces/spaceId/grids/referencedGridId'
               }
             }
           },
@@ -242,7 +239,7 @@ void main() {
               {
                 'displayValue': 'Yeah!',
                 'uri':
-                    '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d',
+                    '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId',
               }
             ],
             'required': false,
@@ -257,22 +254,22 @@ void main() {
         '_links': {
           "submit": {
             "href":
-                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+                "/api/users/userId/spaces/spaceId/grids/gridId/forms/formId",
             "method": "post"
           },
           "remove": {
             "href":
-                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+                "/api/users/userId/spaces/spaceId/grids/gridId/forms/formId",
             "method": "delete"
           },
           "self": {
             "href":
-                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+                "/api/users/userId/spaces/spaceId/grids/gridId/forms/formId",
             "method": "get"
           },
           "update": {
             "href":
-                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+                "/api/users/userId/spaces/spaceId/grids/gridId/forms/formId",
             "method": "put"
           }
         },
@@ -288,11 +285,10 @@ void main() {
           {
             'displayValue': 'Yeah!',
             'uri':
-                '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
           }
         ],
-        gridUri:
-            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
       );
 
       final direct = MultiCrossReferenceFormComponent(

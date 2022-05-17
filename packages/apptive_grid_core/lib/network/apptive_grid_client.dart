@@ -31,26 +31,6 @@ class ApptiveGridClient {
         AttachmentProcessor(options, _authenticator, httpClient: _client);
   }
 
-  // coverage:ignore-start
-  /// Creates an Api Client on the Basis of a [http.Client]
-  ///
-  /// this should only be used for testing in order to pass in a Mocked [http.Client]
-  @visibleForTesting
-  @Deprecated('httpClient now is an argument in the unnamed constructor')
-  factory ApptiveGridClient.fromClient(
-    http.Client httpClient, {
-    ApptiveGridOptions options = const ApptiveGridOptions(),
-    ApptiveGridAuthenticator? authenticator,
-  }) {
-    return ApptiveGridClient(
-      options: options,
-      authenticator: authenticator,
-      httpClient: httpClient,
-    );
-  }
-
-  // coverage:ignore-end
-
   /// Configurations
   ApptiveGridOptions options;
 
@@ -222,7 +202,10 @@ class ApptiveGridClient {
   }) async {
     final gridViewUrl = _generateApptiveGridUri(gridUri.uri);
 
-    final gridViewResponse = await _client.get(gridViewUrl, headers: headers);
+    final gridHeaders = Map.fromEntries(headers.entries);
+    gridHeaders['Accept'] = 'application/vnd.apptivegrid.hal;version=2';
+    final gridViewResponse =
+        await _client.get(gridViewUrl, headers: gridHeaders);
     if (gridViewResponse.statusCode >= 400) {
       if (gridViewResponse.statusCode == 401 && !isRetry) {
         await _authenticator.checkAuthentication();

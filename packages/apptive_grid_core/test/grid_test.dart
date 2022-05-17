@@ -142,6 +142,100 @@ void main() {
           '_id': {'type': 'string'}
         }
       },
+      'fields': [
+        {
+          "type": {
+            "name": "string",
+            "componentTypes": ["textfield"]
+          },
+          "key": null,
+          "name": "String",
+          "schema": {"type": "string"},
+          "id": "6282104004bd30efc49b7f17",
+          "_links": {}
+        },
+        {
+          "type": {
+            "name": "integer",
+            "componentTypes": ["textfield"]
+          },
+          "key": null,
+          "name": "Number",
+          "schema": {"type": "integer"},
+          "id": "6282106a04bd30163b9b7f3b",
+          "_links": {}
+        },
+        {
+          "type": {
+            "name": "date-time",
+            "componentTypes": ["datePicker"]
+          },
+          "key": null,
+          "name": "DateTime",
+          "schema": {"type": "string", "format": "date-time"},
+          "id": "6282104e04bd30efc49b7f22",
+          "_links": {}
+        },
+        {
+          "type": {
+            "name": "date",
+            "componentTypes": ["datePicker", "textfield"]
+          },
+          "key": null,
+          "name": "Date",
+          "schema": {"type": "string", "format": "date"},
+          "id": "6282105c04bd30efc49b7f2e",
+          "_links": {}
+        },
+        {
+          "type": {
+            "name": "string",
+            "componentTypes": ["textfield"]
+          },
+          "key": null,
+          "name": "String",
+          "schema": {"type": "string"},
+          "id": "6282104004bd30efc49b7f17",
+          "_links": {}
+        },
+        {
+          "type": {
+            "name": "string",
+            "componentTypes": ["textfield"]
+          },
+          "key": null,
+          "name": "String",
+          "schema": {"type": "string"},
+          "id": "6282104004bd30efc49b7f17",
+          "_links": {}
+        },
+        {
+          "type": {
+            "name": "boolean",
+            "componentTypes": ["checkbox"]
+          },
+          "key": null,
+          "name": "Checkmark",
+          "schema": {"type": "boolean"},
+          "id": "6282107c04bd30163b9b7f4d",
+          "_links": {}
+        },
+        {
+          "type": {
+            "name": "enum",
+            "options": ["A", "B"],
+            "componentTypes": ["selectBox"]
+          },
+          "key": null,
+          "name": "SingleSelect",
+          "schema": {
+            "type": "string",
+            "enum": ["Enum1", "Enum2"]
+          },
+          "id": "6282108604bd30163b9b7f56",
+          "_links": {}
+        },
+      ],
       '_embedded': {
         "forms": [
           {
@@ -243,7 +337,6 @@ void main() {
       final grid = Grid.fromJson(json);
 
       expect(grid.name, equals('New grid'));
-      expect(grid.schema, isNot(null));
       expect(grid.fields!.length, equals(8));
       expect(grid.rows!.length, equals(5));
 
@@ -262,7 +355,6 @@ void main() {
       final saved = initialData.toJson();
       final restored = Grid.fromJson(saved);
 
-      expect(saved, equals(json));
       expect(restored, equals(initialData));
       expect(restored.hashCode, equals(initialData.hashCode));
     });

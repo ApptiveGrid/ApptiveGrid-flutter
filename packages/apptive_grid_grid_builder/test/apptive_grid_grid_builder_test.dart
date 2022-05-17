@@ -53,7 +53,6 @@ void main() {
       (_) async => Grid(
         id: gridId,
         name: title,
-        schema: null,
         fields: [],
         rows: [],
         links: {},
@@ -78,7 +77,6 @@ void main() {
         initialData: Grid(
           id: gridId,
           name: 'Initial Title',
-          schema: null,
           fields: [],
           rows: [],
           links: {},
@@ -102,7 +100,6 @@ void main() {
       (_) async => Grid(
         id: gridId,
         name: title,
-        schema: null,
         fields: [],
         rows: [],
         links: {},
@@ -178,7 +175,6 @@ void main() {
       (_) async => Grid(
         id: gridId,
         name: title,
-        schema: null,
         fields: [],
         rows: [],
         links: {},
@@ -219,7 +215,6 @@ void main() {
         (_) async => Grid(
           id: 'grid',
           name: title,
-          schema: null,
           fields: [],
           rows: [],
           links: {},
@@ -281,7 +276,6 @@ void main() {
         (_) async => Grid(
           id: 'grid',
           name: title,
-          schema: null,
           fields: [],
           rows: [],
           links: {},
@@ -324,7 +318,6 @@ void main() {
         (_) async => Grid(
           id: 'grid',
           name: title,
-          schema: null,
           fields: [],
           rows: [],
           links: {},
@@ -378,7 +371,6 @@ void main() {
         (_) async => Grid(
           id: 'grid',
           name: title,
-          schema: null,
           fields: [],
           rows: [],
           links: {},
@@ -420,7 +412,6 @@ void main() {
         (_) async => Grid(
           id: 'grid',
           name: title,
-          schema: null,
           fields: [],
           rows: [],
           links: {},

@@ -69,7 +69,6 @@ void main() {
             Grid(
               id: 'gridId',
               name: 'Grid',
-              schema: null,
               links: {
                 ApptiveLinkType.self: ApptiveLink(
                   uri: Uri.parse('/api/users/user/spaces/id/grids/gridId'),

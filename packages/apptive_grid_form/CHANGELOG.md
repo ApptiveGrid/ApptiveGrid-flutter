@@ -1,3 +1,6 @@
+## 0.10.0-alpha.4
+* Update Core Package to 0.10.0-alpha.4 to include breaking changes to GridField
+
 ## 0.10.0-alpha.3
 * Deprecate `FormActions`
 * Add `scrollController`, `buttonAlignment` and `buttonLabel` to `ApptiveGridForm` and `ApptiveGridFormData`

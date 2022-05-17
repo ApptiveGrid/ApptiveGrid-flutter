@@ -1,3 +1,11 @@
+## 0.9.0-alpha.3
+* Update Core Packate to 0.10.0-alpha.4
+* Adjust GridField to include `key` and `schema`
+
+### Breaking Changes
+* GridField now uses named arguments
+* Removed `schema` from `Grid`
+
 ## 0.9.0-alpha.2
 * Update Core Package to 0.10.0-alpha.2 to include breaking changes to GridRow
 ### Breaking Change

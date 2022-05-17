@@ -1,16 +1,16 @@
 name: apptive_grid_web_apptive
 description: A Flutter Package to enable Flutter Apptives on ApptiveGrid Web Client
-version: 0.0.3-alpha.1
+version: 0.0.3-alpha.2
 homepage: https://apptivegrid.de
 repository: https://github.com/ApptiveGrid/apptive_grid_flutter/tree/main/packages/apptive_grid_web_apptive
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
-  apptive_grid_core: ^0.10.0-alpha.1
+  apptive_grid_core: ^0.10.0-alpha.4
   flutter:
     sdk: flutter
 

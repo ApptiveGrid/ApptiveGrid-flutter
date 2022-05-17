@@ -7,8 +7,8 @@ void main() {
       const id = 'id';
       const name = 'name';
       const type = DataType.text;
-      final a = GridField(id, name, type);
-      final b = GridField(id, name, type);
+      final a = GridField(id: id, name: name, type: type);
+      final b = GridField(id: id, name: name, type: type);
 
       expect(a, equals(b));
       expect(a.hashCode, equals(b.hashCode));
@@ -18,8 +18,8 @@ void main() {
       const id = 'id';
       const name = 'name';
       const type = DataType.text;
-      final a = GridField(id, name, type);
-      final b = GridField(name, id, type);
+      final a = GridField(id: id, name: name, type: type);
+      final b = GridField(id: name, name: id, type: type);
 
       expect(a, isNot(b));
       expect(a.hashCode, isNot(b.hashCode));

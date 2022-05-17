@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -28,26 +26,27 @@ void main() {
       ],
       "fieldIds": ["78lnph2fb2olm9jtc696d66q9"],
       "filter": {},
-      "schema": {
-        "type": "object",
-        "properties": {
-          "fields": {
-            "type": "array",
-            "items": [
-              {
-                "type": "object",
-                "properties": {
-                  "lat": {"type": "number", "format": "double"},
-                  "lon": {"type": "number", "format": "double"}
-                },
-                "required": ["lat", "lon"],
-                "objectType": "geolocation"
-              }
-            ]
+      'fields': [
+        {
+          "type": {
+            "name": "geolocation",
+            "componentTypes": ["locationPicker"]
           },
-          "_id": {"type": "string"}
-        }
-      },
+          "key": null,
+          "name": "Geolocation",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "lat": {"type": "number", "format": "double"},
+              "lon": {"type": "number", "format": "double"}
+            },
+            "required": ["lat", "lon"],
+            "objectType": "geolocation"
+          },
+          "id": "628210c204bd301aa89b7f8a",
+          "_links": {}
+        },
+      ],
       "name": "Test Ansicht",
       'id': 'gridId',
       '_links': {
@@ -140,26 +139,27 @@ void main() {
       ],
       "fieldIds": ["78lnph2fb2olm9jtc696d66q9"],
       "filter": {},
-      "schema": {
-        "type": "object",
-        "properties": {
-          "fields": {
-            "type": "array",
-            "items": [
-              {
-                "type": "object",
-                "properties": {
-                  "lat": {"type": "number", "format": "double"},
-                  "lon": {"type": "number", "format": "double"}
-                },
-                "required": ["lat", "lon"],
-                "objectType": "geolocation"
-              }
-            ]
+      'fields': [
+        {
+          "type": {
+            "name": "geolocation",
+            "componentTypes": ["locationPicker"]
           },
-          "_id": {"type": "string"}
-        }
-      },
+          "key": null,
+          "name": "Geolocation",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "lat": {"type": "number", "format": "double"},
+              "lon": {"type": "number", "format": "double"}
+            },
+            "required": ["lat", "lon"],
+            "objectType": "geolocation"
+          },
+          "id": "628210c204bd301aa89b7f8a",
+          "_links": {}
+        },
+      ],
       "name": "Test Ansicht",
       'id': 'gridId',
       '_links': {
@@ -270,10 +270,7 @@ void main() {
     test('Grid serializes back to original Response', () {
       final fromJson = Grid.fromJson(rawResponse);
 
-      expect(
-        jsonDecode(jsonEncode(fromJson.toJson())),
-        equals(jsonDecode(jsonEncode(rawResponse))),
-      );
+      expect(Grid.fromJson(fromJson.toJson()), fromJson);
     });
   });
 

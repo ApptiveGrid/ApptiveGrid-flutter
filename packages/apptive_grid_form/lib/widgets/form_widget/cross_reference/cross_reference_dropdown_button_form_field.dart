@@ -2,7 +2,7 @@ part of apptive_grid_form_widgets;
 
 class _CrossReferenceDropdownButtonFormField<T extends DataEntity>
     extends StatefulWidget {
-  _CrossReferenceDropdownButtonFormField({
+  const _CrossReferenceDropdownButtonFormField({
     Key? key,
     required this.component,
     required this.selectedItemBuilder,
