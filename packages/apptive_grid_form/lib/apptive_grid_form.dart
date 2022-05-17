@@ -25,9 +25,12 @@ class ApptiveGridForm extends StatefulWidget {
     Key? key,
     required this.formUri,
     this.titleStyle,
+    this.descriptionStyle,
     this.contentPadding,
     this.titlePadding,
+    this.descriptionPadding,
     this.hideTitle = false,
+    this.hideDescription = false,
     this.onFormLoaded,
     this.onActionSuccess,
     this.onError,
@@ -46,14 +49,23 @@ class ApptiveGridForm extends StatefulWidget {
   /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
   final TextStyle? titleStyle;
 
+  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  final TextStyle? descriptionStyle;
+
   /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
   final EdgeInsetsGeometry? contentPadding;
 
   /// Padding for the title. If no Padding is provided the [contentPadding] is used
   final EdgeInsetsGeometry? titlePadding;
 
+  /// Padding for the description. If no Padding is provided the [contentPadding] is used
+  final EdgeInsetsGeometry? descriptionPadding;
+
   /// Flag to hide the form title, default is false
   final bool hideTitle;
+
+  /// Flag to hide the form description, default is false
+  final bool hideDescription;
 
   /// Callback after [FormData] loads successfully
   ///
@@ -130,9 +142,12 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       formData: _formData,
       error: _error,
       titleStyle: widget.titleStyle,
+      descriptionStyle: widget.descriptionStyle,
       contentPadding: widget.contentPadding,
       titlePadding: widget.titlePadding,
+      descriptionPadding: widget.descriptionPadding,
       hideTitle: widget.hideTitle,
+      hideDescription: widget.hideDescription,
       onActionSuccess: widget.onActionSuccess,
       onError: widget.onError,
       triggerReload: () => loadForm(resetData: false),
@@ -183,9 +198,12 @@ class ApptiveGridFormData extends StatefulWidget {
     this.formData,
     this.error,
     this.titleStyle,
+    this.descriptionStyle,
     this.contentPadding,
     this.titlePadding,
+    this.descriptionPadding,
     this.hideTitle = false,
+    this.hideDescription = false,
     this.onActionSuccess,
     this.onError,
     this.triggerReload,
@@ -203,14 +221,23 @@ class ApptiveGridFormData extends StatefulWidget {
   /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
   final TextStyle? titleStyle;
 
+  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  final TextStyle? descriptionStyle;
+
   /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
   final EdgeInsetsGeometry? contentPadding;
 
   /// Padding for the title. If no Padding is provided the [contentPadding] is used
   final EdgeInsetsGeometry? titlePadding;
 
+  /// Padding for the description. If no Padding is provided the [contentPadding] is used
+  final EdgeInsetsGeometry? descriptionPadding;
+
   /// Flag to hide the form title, default is false
   final bool hideTitle;
+
+  /// Flag to hide the form description, default is false
+  final bool hideDescription;
 
   /// Callback after [ApptiveLink] completes Successfully
   ///
@@ -334,14 +361,17 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   Widget _buildForm(BuildContext context, FormData data) {
     final localization = ApptiveGridLocalization.of(context)!;
     final submitLink = data.links[ApptiveLinkType.submit];
+    // Offset for title and description
+    final indexOffset = 2;
     return Provider<AttachmentManager>.value(
       value: _attachmentManager,
       child: Form(
         key: _formKey,
         child: ListView.builder(
           controller: widget.scrollController,
-          itemCount:
-              1 + (data.components?.length ?? 0) + (submitLink != null ? 1 : 0),
+          itemCount: indexOffset +
+              (data.components?.length ?? 0) +
+              (submitLink != null ? 1 : 0),
           itemBuilder: (context, index) {
             // Title
             if (index == 0) {
@@ -359,8 +389,23 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                   ),
                 );
               }
-            } else if (index < (data.components?.length ?? 0) + 1) {
-              final componentIndex = index - 1;
+            } else if (index == 1) {
+              if (widget.hideDescription || data.description == null) {
+                return const SizedBox();
+              } else {
+                return Padding(
+                  padding: widget.descriptionPadding ??
+                      widget.contentPadding ??
+                      _defaultPadding,
+                  child: Text(
+                    data.description!,
+                    style: widget.descriptionStyle ??
+                        Theme.of(context).textTheme.bodyText1,
+                  ),
+                );
+              }
+            } else if (index < (data.components?.length ?? 0) + indexOffset) {
+              final componentIndex = index - indexOffset;
               final component = fromModel(data.components![componentIndex]);
               if (component is UserReferenceFormWidget) {
                 // UserReference Widget should be invisible in the Form
