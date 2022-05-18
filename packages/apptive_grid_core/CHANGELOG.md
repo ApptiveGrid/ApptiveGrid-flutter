@@ -1,5 +1,6 @@
 ## 0.10.0-alpha.5
 * Add `description` to forms
+* Fixed parsing for `key`s in GridField
 
 ## 0.10.0-alpha.4
 * Adjust GridField to include `key` and `schema`
