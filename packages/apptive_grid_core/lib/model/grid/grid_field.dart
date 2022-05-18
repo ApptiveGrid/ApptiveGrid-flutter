@@ -17,6 +17,7 @@ class GridField {
     return GridField(
       id: json['id'],
       name: json['name'],
+      key: json['key'],
       type: DataType.values
           .firstWhere((type) => type.backendName == json['type']['name']),
       links: linkMapFromJson(json['links']),
