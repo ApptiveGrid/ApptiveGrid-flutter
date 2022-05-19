@@ -15,6 +15,7 @@ import 'mocks.dart';
 
 void main() {
   final httpClient = MockHttpClient();
+  late ApptiveGridAuthenticator authenticator;
   late ApptiveGridClient apptiveGridClient;
 
   setUpAll(() {
@@ -43,7 +44,13 @@ void main() {
     final stream = StreamController<String?>.broadcast();
     when(() => mockUniLink.linkStream).thenAnswer((_) => stream.stream);
 
-    apptiveGridClient = ApptiveGridClient(httpClient: httpClient);
+    authenticator = MockApptiveGridAuthenticator();
+    when(() => authenticator.checkAuthentication()).thenAnswer((_) async {});
+
+    apptiveGridClient = ApptiveGridClient(
+      httpClient: httpClient,
+      authenticator: authenticator,
+    );
   });
 
   tearDown(() {
@@ -2828,6 +2835,7 @@ void main() {
         parseResponse: (response) async => linkCompleter.complete(response),
       );
 
+      verify(() => authenticator.checkAuthentication()).called(1);
       verify(
         () => httpClient.send(
           any(
