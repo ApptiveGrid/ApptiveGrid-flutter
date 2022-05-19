@@ -582,6 +582,7 @@ class ApptiveGridClient {
 
     if (response.statusCode >= 400) {
       if (response.statusCode == 401 && !isRetry) {
+        await _authenticator.checkAuthentication();
         return performApptiveLink(
           link: link,
           body: body,
