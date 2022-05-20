@@ -1483,7 +1483,7 @@ void main() {
   group('Headers', () {
     test('No Authentication only content type headers', () {
       final client = ApptiveGridClient();
-      expect(client.headers, {
+      expect(client.defaultHeaders, {
         HttpHeaders.contentTypeHeader: ContentType.json,
       });
     });
@@ -1496,7 +1496,7 @@ void main() {
         httpClient: httpClient,
         authenticator: authenticator,
       );
-      expect(client.headers, {
+      expect(client.defaultHeaders, {
         HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ=',
         HttpHeaders.contentTypeHeader: ContentType.json
       });

@@ -52,11 +52,17 @@ class ApptiveGridClient {
 
   /// Headers that are used for multiple Calls
   @visibleForTesting
-  Map<String, String> get headers => (<String, String?>{
+  Map<String, String> get defaultHeaders => (<String, String?>{
         HttpHeaders.authorizationHeader: _authenticator.header,
         HttpHeaders.contentTypeHeader: ContentType.json,
       }..removeWhere((key, value) => value == null))
           .map((key, value) => MapEntry(key, value!));
+
+  Map<String, String> defaultHeader(Map<String, String> customHeader) {
+    var newHeader = defaultHeaders;
+    newHeader.addAll(customHeader);
+    return newHeader;
+  }
 
   Uri _generateApptiveGridUri(Uri baseUri) {
     return baseUri.replace(
@@ -71,13 +77,18 @@ class ApptiveGridClient {
   /// throws [Response] if the request fails
   Future<FormData> loadForm({
     required FormUri formUri,
+    Map<String, String> headers = const {},
   }) async {
+    var formHeaders = defaultHeader(headers);
     final url = _generateApptiveGridUri(formUri.uri);
-    final response = await _client.get(url, headers: headers);
+    final response = await _client.get(url, headers: formHeaders);
     if (response.statusCode >= 400) {
       if (response.statusCode == 401) {
         await _authenticator.checkAuthentication();
-        return loadForm(formUri: formUri);
+        return loadForm(
+          formUri: formUri,
+          headers: formHeaders,
+        );
       }
       throw response;
     }
@@ -90,11 +101,13 @@ class ApptiveGridClient {
     FormAction action,
     FormData formData, {
     bool saveToPendingItems = true,
+    Map<String, String> headers = const {},
   }) =>
       submitForm(
         ApptiveLink(uri: Uri.parse(action.uri), method: action.method),
         formData,
         saveToPendingItems: saveToPendingItems,
+        headers: headers,
       );
 
   /// Submits [formData] against [link]
@@ -105,12 +118,14 @@ class ApptiveGridClient {
     ApptiveLink link,
     FormData formData, {
     bool saveToPendingItems = true,
+    Map<String, String> headers = const {},
   }) async {
     final actionItem = ActionItem(link: link, data: formData);
 
     final attachmentActions = await _performAttachmentActions(
       formData.attachmentActions,
       fromForm: true,
+      headers: headers,
     ).catchError(
       (error) => _handleActionError(
         error,
@@ -127,6 +142,7 @@ class ApptiveGridClient {
       response = await performApptiveLink<http.Response>(
         link: link,
         body: formData.toRequestObject(),
+        headers: headers,
         parseResponse: (response) async => response,
       );
     } catch (error) {
@@ -165,6 +181,7 @@ class ApptiveGridClient {
   Future<http.Response> _performAttachmentActions(
     Map<Attachment, AttachmentAction> actions, {
     bool fromForm = false,
+    Map<String, String> headers = const {},
   }) async {
     await Future.wait(
       actions.values.map((action) {
@@ -172,6 +189,7 @@ class ApptiveGridClient {
           case AttachmentActionType.add:
             return _attachmentProcessor.uploadAttachment(
               action as AddAttachmentAction,
+              headers: headers,
             );
           case AttachmentActionType.delete:
             debugPrint('Delete Attachment ${action.attachment}');
@@ -199,10 +217,11 @@ class ApptiveGridClient {
     List<ApptiveGridSorting>? sorting,
     ApptiveGridFilter? filter,
     bool isRetry = false,
+    Map<String, String> headers = const {},
   }) async {
     final gridViewUrl = _generateApptiveGridUri(gridUri.uri);
 
-    final gridHeaders = Map.fromEntries(headers.entries);
+    final gridHeaders = defaultHeader(headers);
     gridHeaders['Accept'] = 'application/vnd.apptivegrid.hal;version=2';
     final gridViewResponse =
         await _client.get(gridViewUrl, headers: gridHeaders);
@@ -263,6 +282,7 @@ class ApptiveGridClient {
     List<ApptiveGridSorting>? sorting,
     ApptiveGridFilter? filter,
     bool isRetry = false,
+    Map<String, String> headers = const {},
   }) async {
     final baseUrl = Uri.parse(options.environment.url);
     final requestUri = uri.replace(
@@ -278,7 +298,8 @@ class ApptiveGridClient {
         }),
     );
 
-    final response = await _client.get(requestUri, headers: headers);
+    final response =
+        await _client.get(requestUri, headers: defaultHeader(headers));
 
     if (response.statusCode >= 400) {
       if (response.statusCode == 401 && !isRetry) {
@@ -307,11 +328,13 @@ class ApptiveGridClient {
   ///
   /// Requires Authorization
   /// throws [Response] if the request fails
-  Future<User> getMe() async {
+  Future<User> getMe({
+    Map<String, String> headers = const {},
+  }) async {
     await _authenticator.checkAuthentication();
 
     final url = Uri.parse('${options.environment.url}/api/users/me');
-    final response = await _client.get(url, headers: headers);
+    final response = await _client.get(url, headers: defaultHeader(headers));
     if (response.statusCode >= 400) {
       throw response;
     }
@@ -324,11 +347,12 @@ class ApptiveGridClient {
   /// throws [Response] if the request fails
   Future<Space> getSpace({
     required SpaceUri spaceUri,
+    Map<String, String> headers = const {},
   }) async {
     await _authenticator.checkAuthentication();
 
     final url = _generateApptiveGridUri(spaceUri.uri);
-    final response = await _client.get(url, headers: headers);
+    final response = await _client.get(url, headers: defaultHeader(headers));
     if (response.statusCode >= 400) {
       throw response;
     }
@@ -341,6 +365,7 @@ class ApptiveGridClient {
   /// throws [Response] if the request fails
   Future<List<FormUri>> getForms({
     required GridUri gridUri,
+    Map<String, String> headers = const {},
   }) async {
     await _authenticator.checkAuthentication();
 
@@ -348,7 +373,8 @@ class ApptiveGridClient {
     final url = baseUrl.replace(
       pathSegments: [...baseUrl.pathSegments, 'forms'],
     );
-    final response = await _client.get(url, headers: headers);
+
+    final response = await _client.get(url, headers: defaultHeader(headers));
     if (response.statusCode >= 400) {
       throw response;
     }
@@ -363,6 +389,7 @@ class ApptiveGridClient {
   /// throws [Response] if the request fails
   Future<List<GridViewUri>> getGridViews({
     required GridUri gridUri,
+    Map<String, String> headers = const {},
   }) async {
     await _authenticator.checkAuthentication();
 
@@ -370,7 +397,8 @@ class ApptiveGridClient {
     final url = baseUrl.replace(
       pathSegments: [...baseUrl.pathSegments, 'views'],
     );
-    final response = await _client.get(url, headers: headers);
+
+    final response = await _client.get(url, headers: defaultHeader(headers));
     if (response.statusCode >= 400) {
       throw response;
     }
@@ -386,6 +414,7 @@ class ApptiveGridClient {
   Future<FormUri> getEditLink({
     required EntityUri entityUri,
     required String formId,
+    Map<String, String> headers = const {},
   }) async {
     await _authenticator.checkAuthentication();
 
@@ -396,7 +425,7 @@ class ApptiveGridClient {
 
     final response = await _client.post(
       url,
-      headers: headers,
+      headers: defaultHeader(headers),
       body: jsonEncode({
         'formId': formId,
       }),
@@ -423,7 +452,7 @@ class ApptiveGridClient {
 
     final url = _generateApptiveGridUri(entityUri.uri);
 
-    var entityHeader = this.headers;
+    var entityHeader = defaultHeaders;
 
     entityHeader.addAll(headers);
 
@@ -530,7 +559,8 @@ class ApptiveGridClient {
       },
     );
 
-    final signedResponse = await _client.get(signedUri, headers: headers);
+    final signedResponse =
+        await _client.get(signedUri, headers: defaultHeaders);
 
     if (signedResponse.statusCode >= 400) {
       throw signedResponse;
@@ -555,7 +585,7 @@ class ApptiveGridClient {
 
   /// Perform a action represented by [link]
   /// [body] is the body of the request
-  /// [headers] will be added in addition to [ApptiveGridClient.headers]
+  /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
   /// [queryParameters] will override any [queryParameters] in [ApptiveLink.uri]
   /// [parseResponse] will be called with [http.Response] if the request has been successful
   Future<T?> performApptiveLink<T>({
@@ -577,7 +607,7 @@ class ApptiveGridClient {
       request.body = json.encode(body);
     }
 
-    request.headers.addAll(this.headers);
+    request.headers.addAll(defaultHeaders);
     if (headers != null) {
       request.headers.addAll(headers);
     }
