@@ -59,7 +59,8 @@ class ApptiveGridClient {
           .map((key, value) => MapEntry(key, value!));
 
   Map<String, String> _createHeaderWithDefaults(
-      Map<String, String> customHeader) {
+    Map<String, String> customHeader,
+  ) {
     var newHeader = defaultHeaders;
     newHeader.addAll(customHeader);
     return newHeader;
@@ -299,8 +300,10 @@ class ApptiveGridClient {
         }),
     );
 
-    final response = await _client.get(requestUri,
-        headers: _createHeaderWithDefaults(headers));
+    final response = await _client.get(
+      requestUri,
+      headers: _createHeaderWithDefaults(headers),
+    );
 
     if (response.statusCode >= 400) {
       if (response.statusCode == 401 && !isRetry) {
