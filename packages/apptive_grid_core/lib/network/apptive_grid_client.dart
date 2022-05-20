@@ -417,14 +417,19 @@ class ApptiveGridClient {
   /// The id of the entity can be accessed via `['_id']`
   Future<Map<String, dynamic>> getEntity({
     required EntityUri entityUri,
+    Map<String, String> headers = const {},
   }) async {
     await _authenticator.checkAuthentication();
 
     final url = _generateApptiveGridUri(entityUri.uri);
 
+    var entityHeader = this.headers;
+
+    entityHeader.addAll(headers);
+
     final response = await _client.get(
       url,
-      headers: headers,
+      headers: entityHeader,
     );
 
     if (response.statusCode >= 400) {
