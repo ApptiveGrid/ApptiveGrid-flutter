@@ -88,15 +88,16 @@ class ApptiveGridClient {
     final response =
         await _client.get(url, headers: _createHeadersWithDefaults(headers));
     if (response.statusCode >= 400) {
-      if (response.statusCode == 401 && isRetry) {
+      if (response.statusCode == 401 && !isRetry) {
         await _authenticator.checkAuthentication();
         return loadForm(
           formUri: formUri,
           headers: headers,
           isRetry: true,
         );
+      } else {
+        throw response;
       }
-      throw response;
     }
     return FormData.fromJson(json.decode(response.body));
   }
