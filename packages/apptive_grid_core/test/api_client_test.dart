@@ -1550,7 +1550,8 @@ void main() {
       when(
         () => httpClient.get(
           Uri.parse(
-              '${ApptiveGridEnvironment.production.url}${mockEntityUri.uri.toString()}'),
+            '${ApptiveGridEnvironment.production.url}${mockEntityUri.uri.toString()}',
+          ),
           headers: any(named: 'headers'),
         ),
       ).thenAnswer((invocation) async {
