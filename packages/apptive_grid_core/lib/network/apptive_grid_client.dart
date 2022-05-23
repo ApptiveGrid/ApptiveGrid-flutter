@@ -58,10 +58,10 @@ class ApptiveGridClient {
       }..removeWhere((key, value) => value == null))
           .map((key, value) => MapEntry(key, value!));
 
-  Map<String, String> _createHeaderWithDefaults(
+  Map<String, String> _createHeadersWithDefaults(
     Map<String, String> customHeader,
   ) {
-    var newHeader = defaultHeaders;
+    final newHeader = defaultHeaders;
     newHeader.addAll(customHeader);
     return newHeader;
   }
@@ -82,16 +82,18 @@ class ApptiveGridClient {
   Future<FormData> loadForm({
     required FormUri formUri,
     Map<String, String> headers = const {},
+    bool isRetry = false,
   }) async {
-    var formHeaders = _createHeaderWithDefaults(headers);
     final url = _generateApptiveGridUri(formUri.uri);
-    final response = await _client.get(url, headers: formHeaders);
+    final response =
+        await _client.get(url, headers: _createHeadersWithDefaults(headers));
     if (response.statusCode >= 400) {
-      if (response.statusCode == 401) {
+      if (response.statusCode == 401 && isRetry) {
         await _authenticator.checkAuthentication();
         return loadForm(
           formUri: formUri,
-          headers: formHeaders,
+          headers: headers,
+          isRetry: true,
         );
       }
       throw response;
@@ -196,7 +198,6 @@ class ApptiveGridClient {
           case AttachmentActionType.add:
             return _attachmentProcessor.uploadAttachment(
               action as AddAttachmentAction,
-              headers: headers,
             );
           case AttachmentActionType.delete:
             debugPrint('Delete Attachment ${action.attachment}');
@@ -229,7 +230,7 @@ class ApptiveGridClient {
   }) async {
     final gridViewUrl = _generateApptiveGridUri(gridUri.uri);
 
-    final gridHeaders = _createHeaderWithDefaults(headers);
+    final gridHeaders = _createHeadersWithDefaults(headers);
     gridHeaders['Accept'] = 'application/vnd.apptivegrid.hal;version=2';
     final gridViewResponse =
         await _client.get(gridViewUrl, headers: gridHeaders);
@@ -309,7 +310,7 @@ class ApptiveGridClient {
 
     final response = await _client.get(
       requestUri,
-      headers: _createHeaderWithDefaults(headers),
+      headers: _createHeadersWithDefaults(headers),
     );
 
     if (response.statusCode >= 400) {
@@ -348,7 +349,7 @@ class ApptiveGridClient {
 
     final url = Uri.parse('${options.environment.url}/api/users/me');
     final response =
-        await _client.get(url, headers: _createHeaderWithDefaults(headers));
+        await _client.get(url, headers: _createHeadersWithDefaults(headers));
     if (response.statusCode >= 400) {
       throw response;
     }
@@ -369,7 +370,7 @@ class ApptiveGridClient {
 
     final url = _generateApptiveGridUri(spaceUri.uri);
     final response =
-        await _client.get(url, headers: _createHeaderWithDefaults(headers));
+        await _client.get(url, headers: _createHeadersWithDefaults(headers));
     if (response.statusCode >= 400) {
       throw response;
     }
@@ -394,7 +395,7 @@ class ApptiveGridClient {
     );
 
     final response =
-        await _client.get(url, headers: _createHeaderWithDefaults(headers));
+        await _client.get(url, headers: _createHeadersWithDefaults(headers));
     if (response.statusCode >= 400) {
       throw response;
     }
@@ -421,7 +422,7 @@ class ApptiveGridClient {
     );
 
     final response =
-        await _client.get(url, headers: _createHeaderWithDefaults(headers));
+        await _client.get(url, headers: _createHeadersWithDefaults(headers));
     if (response.statusCode >= 400) {
       throw response;
     }
@@ -450,7 +451,7 @@ class ApptiveGridClient {
 
     final response = await _client.post(
       url,
-      headers: _createHeaderWithDefaults(headers),
+      headers: _createHeadersWithDefaults(headers),
       body: jsonEncode({
         'formId': formId,
       }),
@@ -481,7 +482,7 @@ class ApptiveGridClient {
 
     final response = await _client.get(
       url,
-      headers: _createHeaderWithDefaults(headers),
+      headers: _createHeadersWithDefaults(headers),
     );
 
     if (response.statusCode >= 400) {
@@ -630,7 +631,7 @@ class ApptiveGridClient {
       request.body = json.encode(body);
     }
 
-    request.headers.addAll(_createHeaderWithDefaults(headers));
+    request.headers.addAll(_createHeadersWithDefaults(headers));
 
     final streamResponse = await _client.send(request);
     final response = await http.Response.fromStream(streamResponse);

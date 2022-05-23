@@ -96,9 +96,8 @@ class AttachmentProcessor {
   ///
   /// If the attachment is not an imge the file will be uploaded without any alterations
   Future<http.Response> uploadAttachment(
-    AddAttachmentAction attachmentAction, {
-    Map<String, String> headers = const {},
-  }) async {
+    AddAttachmentAction attachmentAction,
+  ) async {
     final config = await configuration;
     final authenticated = (await authenticator.isAuthenticated) ||
         config.signedUrlFormApiEndpoint == null;
@@ -112,7 +111,7 @@ class AttachmentProcessor {
           ? config.signedUrlApiEndpoint
           : config.signedUrlFormApiEndpoint!,
     );
-    var uploadHeaders = headers;
+    var uploadHeaders = <String, String>{};
     if (authenticated) {
       uploadHeaders[HttpHeaders.authorizationHeader] = authenticator.header!;
     }
