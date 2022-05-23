@@ -89,6 +89,8 @@ class AttachmentProcessor {
 
   /// Perform an [attachmentAction] to upload [AttachmentAction.byteData] for [AttachmentAction.attachment]
   ///
+  /// [headers] will be added in addition to the default headers
+  ///
   /// If the attachment is an image (see createAttachment) it will upload a scaled version of the original (max Side 1000px) and tries to upload thumbnails (256px and 64px)
   /// If uploading one or more of the thumnbnails fails the upload will still be handled as success as long as the main file did upload successfully
   ///
@@ -109,11 +111,10 @@ class AttachmentProcessor {
           ? config.signedUrlApiEndpoint
           : config.signedUrlFormApiEndpoint!,
     );
-    final uploadHeaders = authenticated
-        ? {
-            HttpHeaders.authorizationHeader: authenticator.header!,
-          }
-        : <String, String>{};
+    var uploadHeaders = <String, String>{};
+    if (authenticated) {
+      uploadHeaders[HttpHeaders.authorizationHeader] = authenticator.header!;
+    }
 
     if (attachmentAction.attachment.type.startsWith('image')) {
       final type = attachmentAction.attachment.type;

@@ -2,6 +2,7 @@
 * Add `description` to forms
 * Fixed parsing for `key`s in GridField
 * Fixed unauthorized retry for performing an ApptiveLink
+* Added custom header to calls where it was missing
 
 ## 0.10.0-alpha.4
 * Adjust GridField to include `key` and `schema`

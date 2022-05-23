@@ -129,7 +129,7 @@ void main() {
     });
 
     test('DirectUri checks authentication if call throws 401', () async {
-      final unauthorizedResponse = Response(json.encode(rawResponse), 401);
+      final unauthorizedResponse = Response('Error', 401);
       final response = Response(json.encode(rawResponse), 200);
       final authenticator = MockApptiveGridAuthenticator();
       final client = ApptiveGridClient(
@@ -157,6 +157,37 @@ void main() {
           form: 'FormId',
         ),
       );
+      verify(() => authenticator.checkAuthentication()).called(1);
+    });
+
+    test('DirectUri checks authentication only once if call throws 401',
+        () async {
+      final unauthorizedResponse = Response('Error', 401);
+      final authenticator = MockApptiveGridAuthenticator();
+      final client = ApptiveGridClient(
+        httpClient: httpClient,
+        authenticator: authenticator,
+      );
+
+      when(() => httpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async {
+        return unauthorizedResponse;
+      });
+      when(() => authenticator.checkAuthentication())
+          .thenAnswer((_) => Future.value());
+
+      try {
+        await client.loadForm(
+          formUri: DirectFormUri(
+            user: 'user',
+            space: 'space',
+            grid: 'grid',
+            form: 'FormId',
+          ),
+        );
+      } catch (error) {
+        expect(error, unauthorizedResponse);
+      }
       verify(() => authenticator.checkAuthentication()).called(1);
     });
 
@@ -1483,7 +1514,7 @@ void main() {
   group('Headers', () {
     test('No Authentication only content type headers', () {
       final client = ApptiveGridClient();
-      expect(client.headers, {
+      expect(client.defaultHeaders, {
         HttpHeaders.contentTypeHeader: ContentType.json,
       });
     });
@@ -1496,10 +1527,54 @@ void main() {
         httpClient: httpClient,
         authenticator: authenticator,
       );
-      expect(client.headers, {
+      expect(client.defaultHeaders, {
         HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ=',
         HttpHeaders.contentTypeHeader: ContentType.json
       });
+    });
+
+    test('Add custom header', () async {
+      final authenticator = MockApptiveGridAuthenticator();
+
+      when(
+        () => authenticator.checkAuthentication(),
+      ).thenAnswer((invocation) async {});
+
+      final mockEntityUri = EntityUri(
+        user: 'user',
+        space: 'space',
+        grid: 'grid',
+        entity: 'entity',
+      );
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}${mockEntityUri.uri.toString()}',
+      );
+
+      when(
+        () => httpClient.get(
+          uri,
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer(
+        (invocation) async => Response(json.encode({'test': 'test'}), 200),
+      );
+
+      final client = ApptiveGridClient(
+        httpClient: httpClient,
+        authenticator: authenticator,
+      );
+
+      await client.getEntity(
+        entityUri: mockEntityUri,
+        headers: {'custom': 'header'},
+      );
+
+      final receivedHeaders = verify(
+        () => httpClient.get(uri, headers: captureAny(named: 'headers')),
+      ).captured.first as Map<String, String>;
+
+      expect(receivedHeaders['custom'], 'header');
     });
   });
 
