@@ -1547,20 +1547,18 @@ void main() {
         entity: 'entity',
       );
 
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}${mockEntityUri.uri.toString()}',
+      );
+
       when(
         () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}${mockEntityUri.uri.toString()}',
-          ),
+          uri,
           headers: any(named: 'headers'),
         ),
-      ).thenAnswer((invocation) async {
-        final headers = invocation.namedArguments[const Symbol('headers')]
-            as Map<String, String>;
-
-        expect(headers['custom'], 'header');
-        return Response(json.encode({'test': 'test'}), 200);
-      });
+      ).thenAnswer(
+        (invocation) async => Response(json.encode({'test': 'test'}), 200),
+      );
 
       final client = ApptiveGridClient(
         httpClient: httpClient,
@@ -1571,6 +1569,12 @@ void main() {
         entityUri: mockEntityUri,
         headers: {'custom': 'header'},
       );
+
+      final receivedHeaders = verify(
+        () => httpClient.get(uri, headers: captureAny(named: 'headers')),
+      ).captured.first as Map<String, String>;
+
+      expect(receivedHeaders['custom'], 'header');
     });
   });
 
