@@ -460,6 +460,7 @@ class ApptiveGridClient {
   /// This will return a Map of fieldIds and the respective values
   /// To know what [DataType] they are you need to Load a Grid via [loadGrid] and compare [Grid.fields] with the ids
   ///
+  /// The entity will be layed out according to [layout]
   /// The id of the entity can be accessed via `['_id']`
   Future<Map<String, dynamic>> getEntity({
     required EntityUri entityUri,
