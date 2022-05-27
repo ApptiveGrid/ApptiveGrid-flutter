@@ -12,7 +12,7 @@ class DecimalFormWidget extends StatefulWidget {
   final DecimalFormComponent component;
 
   @override
-  _DecimalFormWidgetState createState() => _DecimalFormWidgetState();
+  State<DecimalFormWidget> createState() => _DecimalFormWidgetState();
 }
 
 class _DecimalFormWidgetState extends State<DecimalFormWidget>

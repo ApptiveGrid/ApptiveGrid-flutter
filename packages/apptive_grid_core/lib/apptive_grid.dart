@@ -37,7 +37,7 @@ class ApptiveGrid extends StatefulWidget {
   final ApptiveGridClient? client;
 
   @override
-  _ApptiveGridState createState() => _ApptiveGridState();
+  State<ApptiveGrid> createState() => _ApptiveGridState();
 
   /// Get direct Access to [ApptiveGridClient]
   ///

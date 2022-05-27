@@ -20,7 +20,7 @@ class ConfirmAccount extends StatefulWidget {
   final void Function(bool loggedIn) confirmAccount;
 
   @override
-  _ConfirmAccountState createState() => _ConfirmAccountState();
+  State<ConfirmAccount> createState() => _ConfirmAccountState();
 }
 
 class _ConfirmAccountState extends State<ConfirmAccount> {
@@ -32,7 +32,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
   Widget build(BuildContext context) {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     final spacing =
-        ApptiveGridUserManagementContent.maybeOf(context)?.spacing ?? 16;
+        ApptiveGridUserManagementContent.maybeOf(context)?.widget.spacing ?? 16;
     return AbsorbPointer(
       absorbing: _loading,
       child: Column(

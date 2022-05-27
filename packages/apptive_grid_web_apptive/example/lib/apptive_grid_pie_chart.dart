@@ -10,7 +10,7 @@ class ApptiveGridPieChart extends StatefulWidget {
   final Grid grid;
 
   @override
-  _ApptiveGridPieChartState createState() => _ApptiveGridPieChartState();
+  State<ApptiveGridPieChart> createState() => _ApptiveGridPieChartState();
 }
 
 class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
@@ -159,7 +159,7 @@ class FieldSelector extends StatefulWidget {
   final bool Function(GridField) validator;
 
   @override
-  _FieldSelectorState createState() => _FieldSelectorState();
+  State<FieldSelector> createState() => _FieldSelectorState();
 }
 
 class _FieldSelectorState extends State<FieldSelector> {

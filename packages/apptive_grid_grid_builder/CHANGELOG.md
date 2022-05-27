@@ -1,3 +1,6 @@
+## 0.9.0-alpha.4
+* Upgraded to `flutter_lints 2`
+
 ## 0.9.0-alpha.3
 * Update Core Packate to 0.10.0-alpha.4
 * Adjust GridField to include `key` and `schema`

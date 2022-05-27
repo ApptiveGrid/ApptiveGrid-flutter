@@ -1,3 +1,6 @@
+## 0.0.3-alpha.2
+* Upgraded to `flutter_lints 2`
+
 ## 0.0.3-alpha.1
 * Update Core Package.
 * Includes Breaking Changes in the Model

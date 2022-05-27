@@ -28,7 +28,7 @@ class PasswordFormField extends StatefulWidget {
   final Iterable<String> autofillHints;
 
   @override
-  _PasswordFormFieldState createState() => _PasswordFormFieldState();
+  State<PasswordFormField> createState() => _PasswordFormFieldState();
 }
 
 class _PasswordFormFieldState extends State<PasswordFormField> {

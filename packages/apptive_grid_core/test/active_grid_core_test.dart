@@ -271,7 +271,7 @@ class _UpdateOptionsWidget extends StatefulWidget {
   final Widget child;
 
   @override
-  _UpdateOptionsWidgetState createState() => _UpdateOptionsWidgetState();
+  State<_UpdateOptionsWidget> createState() => _UpdateOptionsWidgetState();
 }
 
 class _UpdateOptionsWidgetState extends State<_UpdateOptionsWidget> {

@@ -454,7 +454,7 @@ class _SortingAndFilterSwitcher extends StatefulWidget {
   final GridUri? gridUri2;
 
   @override
-  _SortingAndFilterSwitcherState createState() =>
+  State<_SortingAndFilterSwitcher> createState() =>
       _SortingAndFilterSwitcherState();
 }
 

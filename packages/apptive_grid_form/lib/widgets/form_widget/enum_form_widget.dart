@@ -12,7 +12,7 @@ class EnumFormWidget extends StatefulWidget {
   final EnumFormComponent component;
 
   @override
-  _EnumFormWidgetState createState() => _EnumFormWidgetState();
+  State<EnumFormWidget> createState() => _EnumFormWidgetState();
 }
 
 class _EnumFormWidgetState extends State<EnumFormWidget>
