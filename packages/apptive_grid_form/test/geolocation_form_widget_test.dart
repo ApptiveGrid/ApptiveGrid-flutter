@@ -21,10 +21,10 @@ void main() {
     registerFallbackValue(const LocationSettings());
     registerFallbackValue(const CameraPosition(target: LatLng(0, 0)));
     registerFallbackValue(TextDirection.ltr);
-    registerFallbackValue(MarkerUpdates.from({}, {}));
-    registerFallbackValue(CircleUpdates.from({}, {}));
-    registerFallbackValue(PolygonUpdates.from({}, {}));
-    registerFallbackValue(PolylineUpdates.from({}, {}));
+    registerFallbackValue(MarkerUpdates.from(const {}, const {}));
+    registerFallbackValue(CircleUpdates.from(const {}, const {}));
+    registerFallbackValue(PolygonUpdates.from(const {}, const {}));
+    registerFallbackValue(PolylineUpdates.from(const {}, const {}));
     registerFallbackValue(CameraUpdate.newLatLng(const LatLng(0, 0)));
     registerFallbackValue(
       FormData(id: 'id', links: {}, title: '', components: [], schema: {}),
