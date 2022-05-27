@@ -37,7 +37,7 @@ class LoginContent extends StatefulWidget {
   final RequestPasswordResetCallback? requestResetPassword;
 
   @override
-  _LoginContentState createState() => _LoginContentState();
+  State<LoginContent> createState() => _LoginContentState();
 }
 
 class _LoginContentState extends State<LoginContent> {
@@ -60,7 +60,7 @@ class _LoginContentState extends State<LoginContent> {
     final textTheme = Theme.of(context).textTheme;
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     final spacing =
-        ApptiveGridUserManagementContent.maybeOf(context)?.spacing ?? 16;
+        ApptiveGridUserManagementContent.maybeOf(context)?.widget.spacing ?? 16;
     return AbsorbPointer(
       absorbing: _loading,
       child: Column(

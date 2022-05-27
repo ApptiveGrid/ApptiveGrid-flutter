@@ -31,7 +31,7 @@ class GeolocationMap extends StatefulWidget {
   final void Function(Geolocation?)? onLocationChanged;
 
   @override
-  _GeolocationMapState createState() => _GeolocationMapState();
+  State<GeolocationMap> createState() => _GeolocationMapState();
 }
 
 class _GeolocationMapState extends State<GeolocationMap> {

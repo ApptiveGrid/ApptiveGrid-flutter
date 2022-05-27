@@ -29,7 +29,7 @@ dependencies:
   universal_platform: ^1.0.0+1
 
 dev_dependencies:
-  flutter_lints: ^1.0.4
+  flutter_lints: ^2.0.1
   flutter_localizations:
     sdk: flutter
   image_picker_platform_interface: ^2.4.1

@@ -275,7 +275,7 @@ class _RowMenuItem extends StatefulWidget {
   final void Function(bool)? onSelectionChanged;
 
   @override
-  _RowMenuItemState createState() => _RowMenuItemState();
+  State<_RowMenuItem> createState() => _RowMenuItemState();
 }
 
 class _RowMenuItemState extends State<_RowMenuItem> {

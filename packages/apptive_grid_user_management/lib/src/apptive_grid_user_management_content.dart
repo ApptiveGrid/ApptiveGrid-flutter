@@ -26,13 +26,15 @@ class ApptiveGridUserManagementContent extends StatefulWidget {
   final RequestPasswordResetCallback? requestResetPassword;
 
   @override
-  _ApptiveGridUserManagementContentState createState() =>
+  State<ApptiveGridUserManagementContent> createState() =>
       _ApptiveGridUserManagementContentState();
 
   /// Returns the closest nullable [_ApptiveGridUserManagementContentState]
-  static _ApptiveGridUserManagementContentState? maybeOf(BuildContext context) {
+  static State<ApptiveGridUserManagementContent>? maybeOf(
+    BuildContext context,
+  ) {
     return context
-        .findAncestorStateOfType<_ApptiveGridUserManagementContentState>();
+        .findAncestorStateOfType<State<ApptiveGridUserManagementContent>>();
   }
 }
 
@@ -69,8 +71,6 @@ class _ApptiveGridUserManagementContentState
         );
     }
   }
-
-  double get spacing => widget.spacing;
 }
 
 /// The different Content Types the user can see

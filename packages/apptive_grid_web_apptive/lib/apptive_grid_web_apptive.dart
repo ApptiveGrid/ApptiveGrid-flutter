@@ -30,7 +30,7 @@ class ApptiveGridWebApptive extends StatefulWidget {
   final StreamController<ApptiveMessage>? messageController;
 
   @override
-  _ApptiveGridWebApptiveState createState() => _ApptiveGridWebApptiveState();
+  State<ApptiveGridWebApptive> createState() => _ApptiveGridWebApptiveState();
 }
 
 class _ApptiveGridWebApptiveState extends State<ApptiveGridWebApptive> {

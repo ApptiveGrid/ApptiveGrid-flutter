@@ -32,7 +32,7 @@ class GeolocationInput extends StatefulWidget {
   final void Function(Geolocation?)? onLocationChanged;
 
   @override
-  _GeolocationInputState createState() => _GeolocationInputState();
+  State<GeolocationInput> createState() => _GeolocationInputState();
 }
 
 class _GeolocationInputState extends State<GeolocationInput> {

@@ -25,27 +25,8 @@ class ApptiveGridUserManagement extends StatefulWidget {
     this.onChangeEnvironment,
     required this.resetPasswordPrompt,
     required this.onPasswordReset,
-  })  : _client = null,
-        super(key: key);
-
-  /// Creates a new ApptiveGridUserManagement Widget with a custom [client]
-  /// Used for Testing
-  @visibleForTesting
-  const ApptiveGridUserManagement.withClient({
-    Key? key,
-    required this.group,
-    this.clientId = 'app',
-    this.redirectScheme,
-    this.child,
-    this.passwordRequirement = PasswordRequirement.enforced,
-    required this.confirmAccountPrompt,
-    required this.onAccountConfirmed,
-    this.onChangeEnvironment,
-    required ApptiveGridUserManagementClient client,
-    required this.resetPasswordPrompt,
-    required this.onPasswordReset,
-  })  : _client = client,
-        super(key: key);
+    this.client,
+  }) : super(key: key);
 
   /// User Group the users should be added to
   final String group;
@@ -85,19 +66,21 @@ class ApptiveGridUserManagement extends StatefulWidget {
   /// After this the User should be redirected to the login page
   final void Function(bool loggedIn) onPasswordReset;
 
-  final ApptiveGridUserManagementClient? _client;
+  /// ApptiveGridUserManagementClient that should be used
+  final ApptiveGridUserManagementClient? client;
 
   @override
   State<ApptiveGridUserManagement> createState() =>
-      _ApptiveGridUserManagementState();
+      ApptiveGridUserManagementState();
 
-  /// Returns the closest nullable [_ApptiveGridUserManagementState]
-  static _ApptiveGridUserManagementState? maybeOf(BuildContext context) {
-    return context.findAncestorStateOfType<_ApptiveGridUserManagementState>();
+  /// Returns the closest nullable [ApptiveGridUserManagementState]
+  static ApptiveGridUserManagementState? maybeOf(BuildContext context) {
+    return context.findAncestorStateOfType<ApptiveGridUserManagementState>();
   }
 }
 
-class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
+/// State for [ApptiveGridUserManagement]
+class ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
   late ApptiveGridUserManagementClient? _userManagementClient;
 
   StreamSubscription? _deepLinkSubscription;
@@ -114,7 +97,7 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _userManagementClient = widget._client ??
+    _userManagementClient = widget.client ??
         ApptiveGridUserManagementClient(
           group: widget.group,
           clientId: widget.clientId,
@@ -147,6 +130,7 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
     );
   }
 
+  /// Return the [ApptiveGridUserManagmentClient] used
   ApptiveGridUserManagementClient? get client => _userManagementClient;
 
   Future<List<bool>> _checkLink(Uri? uri) async {

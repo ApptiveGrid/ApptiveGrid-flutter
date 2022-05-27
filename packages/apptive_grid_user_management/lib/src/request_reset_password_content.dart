@@ -48,7 +48,7 @@ class RequestResetPasswordContentState
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
 
     final spacing =
-        ApptiveGridUserManagementContent.maybeOf(context)?.spacing ?? 16;
+        ApptiveGridUserManagementContent.maybeOf(context)?.widget.spacing ?? 16;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -22,7 +22,7 @@ class AddAttachmentButton extends StatefulWidget {
   final void Function(List<Attachment>?)? onAttachmentsAdded;
 
   @override
-  _AddAttachmentButtonState createState() => _AddAttachmentButtonState();
+  State<AddAttachmentButton> createState() => _AddAttachmentButtonState();
 }
 
 class _AddAttachmentButtonState extends State<AddAttachmentButton> {
@@ -118,14 +118,15 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
     final result = await FilePicker.platform
         .pickFiles(allowMultiple: true, withData: true, type: FileType.any);
 
-    if (result != null && result.files.isNotEmpty) {
+    if (result != null && result.files.isNotEmpty && mounted) {
       final newAttachments = <Attachment>[];
+      final client = ApptiveGrid.getClient(context, listen: false);
+      final attachmentManager =
+          Provider.of<AttachmentManager>(context, listen: false);
       for (final file in result.files) {
-        final attachment = await ApptiveGrid.getClient(context, listen: false)
-            .attachmentProcessor
-            .createAttachment(file.name);
-        Provider.of<AttachmentManager>(context, listen: false)
-            .addAttachment(attachment, file.bytes);
+        final attachment =
+            await client.attachmentProcessor.createAttachment(file.name);
+        attachmentManager.addAttachment(attachment, file.bytes);
         newAttachments.add(attachment);
       }
       return newAttachments;
@@ -137,16 +138,17 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
   Future<List<Attachment>?> _pickFromImageLibrary() async {
     final result = await _imagePicker.pickMultiImage();
 
-    if (result != null && result.isNotEmpty) {
+    if (result != null && result.isNotEmpty && mounted) {
       final newAttachments = <Attachment>[];
+      final client = ApptiveGrid.getClient(context, listen: false);
+      final attachmentManager =
+          Provider.of<AttachmentManager>(context, listen: false);
       for (final file in result) {
-        final attachment = await ApptiveGrid.getClient(context, listen: false)
-            .attachmentProcessor
-            .createAttachment(file.name);
+        final attachment =
+            await client.attachmentProcessor.createAttachment(file.name);
 
         final bytes = await file.readAsBytes();
-        Provider.of<AttachmentManager>(context, listen: false)
-            .addAttachment(attachment, bytes);
+        attachmentManager.addAttachment(attachment, bytes);
         newAttachments.add(attachment);
       }
       return newAttachments;
@@ -158,13 +160,14 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
   Future<List<Attachment>?> _takePicture() async {
     final file = await _imagePicker.pickImage(source: ImageSource.camera);
 
-    if (file != null) {
-      final newAttachment = await ApptiveGrid.getClient(context, listen: false)
-          .attachmentProcessor
-          .createAttachment(file.name);
+    if (file != null && mounted) {
+      final client = ApptiveGrid.getClient(context, listen: false);
+      final attachmentManager =
+          Provider.of<AttachmentManager>(context, listen: false);
+      final newAttachment =
+          await client.attachmentProcessor.createAttachment(file.name);
       final bytes = await file.readAsBytes();
-      Provider.of<AttachmentManager>(context, listen: false)
-          .addAttachment(newAttachment, bytes);
+      attachmentManager.addAttachment(newAttachment, bytes);
       return [newAttachment];
     } else {
       return null;
