@@ -14,7 +14,7 @@ class GeolocationFormWidget extends StatefulWidget {
   final GeolocationFormComponent component;
 
   @override
-  _GeolocationFormWidgetState createState() => _GeolocationFormWidgetState();
+  State<GeolocationFormWidget> createState() => _GeolocationFormWidgetState();
 }
 
 class _GeolocationFormWidgetState extends State<GeolocationFormWidget>

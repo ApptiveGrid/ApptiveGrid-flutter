@@ -45,7 +45,7 @@ class _MyHomePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<_MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<_MyHomePage> {

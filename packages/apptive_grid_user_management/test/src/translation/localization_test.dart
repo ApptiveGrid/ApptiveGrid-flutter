@@ -111,7 +111,7 @@ class _ReloadLocalizations extends StatefulWidget {
   final Widget child;
 
   @override
-  _ReloadLocalizationsState createState() => _ReloadLocalizationsState();
+  State<_ReloadLocalizations> createState() => _ReloadLocalizationsState();
 }
 
 class _ReloadLocalizationsState extends State<_ReloadLocalizations> {

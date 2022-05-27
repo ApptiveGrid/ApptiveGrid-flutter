@@ -1,3 +1,8 @@
+## 0.0.5-alpha.2
+* Upgraded to `flutter_lints 2`
+### Breaking Change
+* Remove `ApptiveGridUserManagement.withClient` in favor of a named argument in the default constructor
+
 ## 0.0.5-alpha.1
 * Update apptive_grid_core to 0.10.0 to include breaking model changes
 

@@ -12,7 +12,7 @@ class TextFormWidget extends StatefulWidget {
   final StringFormComponent component;
 
   @override
-  _TextFormWidgetState createState() => _TextFormWidgetState();
+  State<TextFormWidget> createState() => _TextFormWidgetState();
 }
 
 class _TextFormWidgetState extends State<TextFormWidget>

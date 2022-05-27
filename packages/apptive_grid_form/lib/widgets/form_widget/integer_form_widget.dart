@@ -12,7 +12,7 @@ class IntegerFormWidget extends StatefulWidget {
   final IntegerFormComponent component;
 
   @override
-  _IntegerFormWidgetState createState() => _IntegerFormWidgetState();
+  State<IntegerFormWidget> createState() => _IntegerFormWidgetState();
 }
 
 class _IntegerFormWidgetState extends State<IntegerFormWidget>

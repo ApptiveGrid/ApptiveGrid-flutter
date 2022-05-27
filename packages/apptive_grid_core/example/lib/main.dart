@@ -18,7 +18,7 @@ void main() async {
 /// You can access the ApptiveGridClient via ApptiveGrid.getClient()
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -73,7 +73,7 @@ class _UserSection extends StatefulWidget {
   final Function(User) onUserLoaded;
 
   @override
-  _UserSectionState createState() => _UserSectionState();
+  State<_UserSection> createState() => _UserSectionState();
 }
 
 class _UserSectionState extends State<_UserSection> {
@@ -151,7 +151,7 @@ class _SpaceSection extends StatefulWidget {
   final SpaceUri spaceUri;
 
   @override
-  _SpaceSectionState createState() => _SpaceSectionState();
+  State<_SpaceSection> createState() => _SpaceSectionState();
 }
 
 class _SpaceSectionState extends State<_SpaceSection> {
@@ -219,7 +219,7 @@ class _GridSection extends StatefulWidget {
   final GridUri gridUri;
 
   @override
-  _GridSectionState createState() => _GridSectionState();
+  State<_GridSection> createState() => _GridSectionState();
 }
 
 class _GridSectionState extends State<_GridSection> {

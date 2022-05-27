@@ -12,7 +12,7 @@ class CheckBoxFormWidget extends StatefulWidget {
   final BooleanFormComponent component;
 
   @override
-  _CheckBoxFormWidgetState createState() => _CheckBoxFormWidgetState();
+  State<CheckBoxFormWidget> createState() => _CheckBoxFormWidgetState();
 }
 
 class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget>

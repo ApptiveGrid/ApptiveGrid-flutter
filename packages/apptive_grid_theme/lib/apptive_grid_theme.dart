@@ -26,7 +26,7 @@ class ApptiveGridTheme {
     } else {
       darkWindowBackground = const Color(0xFF282625);
     }
-    final _windowBackground = _withBrightness(
+    final windowBackground = _withBrightness(
       light: const Color(0xFFF7F7F7),
       dark: darkWindowBackground,
     );
@@ -125,7 +125,7 @@ class ApptiveGridTheme {
         titleTextStyle: textTheme.headline4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      scaffoldBackgroundColor: _windowBackground,
+      scaffoldBackgroundColor: windowBackground,
       textTheme: textTheme,
       cardTheme: baseTheme.cardTheme.copyWith(
         clipBehavior: Clip.hardEdge,

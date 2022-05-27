@@ -22,7 +22,7 @@ class StubUserManagement extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Material(
-        child: ApptiveGridUserManagement.withClient(
+        child: ApptiveGridUserManagement(
           group: 'group',
           clientId: 'clientId',
           passwordRequirement: passwordRequirement,

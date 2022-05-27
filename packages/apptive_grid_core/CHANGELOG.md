@@ -3,6 +3,7 @@
 * Fixed parsing for `key`s in GridField
 * Fixed unauthorized retry for performing an ApptiveLink
 * Added custom header to calls where it was missing
+* Upgraded to `flutter_lints 2`
 * Added support for all `ApptiveGridLayout` layouts
 * Add parameter `loadEntities` to `loadGrid` to enable not loading entities for the Grid to only get the GridFields and Grid Meta Data
 ### Breaking Change

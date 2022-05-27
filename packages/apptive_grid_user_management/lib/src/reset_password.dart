@@ -23,7 +23,7 @@ class ResetPassword extends StatefulWidget {
   final void Function(bool loggedIn) onReset;
 
   @override
-  _ResetPasswordState createState() => _ResetPasswordState();
+  State<ResetPassword> createState() => _ResetPasswordState();
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
@@ -42,7 +42,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget build(BuildContext context) {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     final spacing =
-        ApptiveGridUserManagementContent.maybeOf(context)?.spacing ?? 16;
+        ApptiveGridUserManagementContent.maybeOf(context)?.widget.spacing ?? 16;
     return AbsorbPointer(
       absorbing: _loading,
       child: Form(

@@ -1121,7 +1121,7 @@ class _ChangingFormWidget extends StatefulWidget {
   final FormUri form2;
 
   @override
-  _ChangingFormWidgetState createState() => _ChangingFormWidgetState();
+  State<_ChangingFormWidget> createState() => _ChangingFormWidgetState();
 }
 
 class _ChangingFormWidgetState extends State<_ChangingFormWidget> {
