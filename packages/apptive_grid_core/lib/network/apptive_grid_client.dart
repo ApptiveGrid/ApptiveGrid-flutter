@@ -270,7 +270,7 @@ class ApptiveGridClient {
   }
 
   /// Load Entities of a Grid that are accessed by [uri]
-  /// [viewId] specifies allows to request the entities of a specific GridView which allows for getting Filters/Sorting that was applied from the web client
+  /// the layout in which the entities will be returned is determined by [layout]
   ///
   /// [sorting] allows to apply custom sorting
   /// [filter] allows to get custom filters
