@@ -1,3 +1,6 @@
+## 0.1.0
+* Upgraded to `flutter_lints 2`
+
 ## 0.0.3+1
 * Fix nullable access
 
