@@ -220,6 +220,7 @@ class ApptiveGridClient {
   /// The order of [ApptiveGridSorting] in [sorting] will rank the order in which values should be sorted
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
   ///
+  /// If [loadEntities] is `true` and there is a [ApptiveLinkType.entities] Link it will also fetch the entities
   /// Requires Authorization
   /// throws [Response] if the request fails
   Future<Grid> loadGrid({
@@ -228,6 +229,7 @@ class ApptiveGridClient {
     ApptiveGridFilter? filter,
     bool isRetry = false,
     Map<String, String> headers = const {},
+    bool loadEntities = true,
   }) async {
     final gridViewUrl = _generateApptiveGridUri(gridUri.uri);
 
@@ -250,8 +252,8 @@ class ApptiveGridClient {
 
     final gridToParse = jsonDecode(gridViewResponse.body);
     final grid = Grid.fromJson(gridToParse);
-    if (grid.links.containsKey(ApptiveLinkType.entities)) {
-      final entitiesResponse = await loadEntities(
+    if (loadEntities && grid.links.containsKey(ApptiveLinkType.entities)) {
+      final entitiesResponse = await this.loadEntities(
         uri: grid.links[ApptiveLinkType.entities]!.uri,
         layout: ApptiveGridLayout.indexed,
         filter: filter,

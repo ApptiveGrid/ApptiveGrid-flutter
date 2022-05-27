@@ -432,6 +432,57 @@ void main() {
         ),
       ).called(2);
     });
+
+    test('Do not load entities', () async {
+      reset(httpClient);
+      const user = 'userId';
+      const space = 'spaceId';
+      const gridId = 'gridId';
+
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities?layout=indexed',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          jsonEncode(rawResponse['entities']),
+          200,
+        ),
+      );
+
+      final grid = await apptiveGridClient.loadGrid(
+        gridUri: GridUri(
+          user: user,
+          space: space,
+          grid: gridId,
+        ),
+        loadEntities: false,
+      );
+
+      expect(grid, isNot(null));
+      verifyNever(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities?layout=indexed',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      );
+    });
   });
 
   group('submitForm', () {

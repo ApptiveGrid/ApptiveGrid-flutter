@@ -4,6 +4,7 @@
 * Fixed unauthorized retry for performing an ApptiveLink
 * Added custom header to calls where it was missing
 * Added support for all `ApptiveGridLayout` layouts
+* Add parameter `loadEntities` to `loadGrid` to enable not loading entities for the Grid to only get the GridFields and Grid Meta Data
 ### Breaking Change
 * `layout` in `loadEntities` is now `ApptiveGridLayout` instead of `String?`
 
