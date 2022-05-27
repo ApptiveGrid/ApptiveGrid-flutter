@@ -1548,7 +1548,7 @@ void main() {
       );
 
       final uri = Uri.parse(
-        '${ApptiveGridEnvironment.production.url}${mockEntityUri.uri.toString()}',
+        '${ApptiveGridEnvironment.production.url}${mockEntityUri.uri.toString()}?layout=property',
       );
 
       when(
@@ -1567,6 +1567,7 @@ void main() {
 
       await client.getEntity(
         entityUri: mockEntityUri,
+        layout: ApptiveGridLayout.property,
         headers: {'custom': 'header'},
       );
 
@@ -2542,7 +2543,7 @@ void main() {
       when(
         () => httpClient.get(
           Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
           ),
           headers: any(named: 'headers'),
         ),
@@ -2559,7 +2560,7 @@ void main() {
       when(
         () => httpClient.get(
           Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
           ),
           headers: any(named: 'headers'),
         ),
@@ -2569,6 +2570,26 @@ void main() {
         () => apptiveGridClient.getEntity(entityUri: entityUri),
         throwsA(isInstanceOf<Response>()),
       );
+    });
+
+    test('Adjust Layout', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=key',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      final entity = await apptiveGridClient.getEntity(
+        entityUri: entityUri,
+        layout: ApptiveGridLayout.key,
+      );
+
+      expect(entity, equals(rawResponse));
     });
   });
 
@@ -2801,10 +2822,58 @@ void main() {
 
       verify(
         () => httpClient.get(
-          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters['layout'] ==
+                      ApptiveGridLayout.field.queryParameter,
+            ),
+          ),
           headers: any(named: 'headers'),
         ),
       ).called(2);
+    });
+
+    test('Uses layout', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
+
+      final response = Response(
+        '{'
+        '"items": []}',
+        200,
+      );
+      const layout = ApptiveGridLayout.keyAndField;
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        return response;
+      });
+
+      await apptiveGridClient.loadEntities(uri: uri, layout: layout);
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters['layout'] == layout.queryParameter,
+            ),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
     });
   });
 
