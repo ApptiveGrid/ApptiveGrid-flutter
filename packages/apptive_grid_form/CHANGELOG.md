@@ -1,3 +1,6 @@
+## 0.10.0-alpha.6
+* Upgraded to dart 2.17
+
 ## 0.10.0-alpha.5
 * Add `description` to forms
 * Upgraded to `flutter_lints 2`
