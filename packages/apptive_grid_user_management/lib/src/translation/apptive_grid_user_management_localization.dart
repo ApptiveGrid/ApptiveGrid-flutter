@@ -60,7 +60,6 @@ class ApptiveGridUserManagementLocalization extends StatelessWidget {
 
 class _InheritedApptiveGridUserManagementTranslation extends InheritedWidget {
   _InheritedApptiveGridUserManagementTranslation({
-    super.key,
     required super.child,
   }) {
     final defaultTranslations = <Locale, ApptiveGridUserManagementTranslation>{

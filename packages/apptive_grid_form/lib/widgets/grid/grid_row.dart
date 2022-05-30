@@ -194,7 +194,6 @@ class HeaderRowWidget extends StatelessWidget {
 
 class _GridRow extends StatelessWidget {
   const _GridRow({
-    super.key,
     required this.labels,
     this.cellSize = const Size(150, 50),
     this.textStyle,

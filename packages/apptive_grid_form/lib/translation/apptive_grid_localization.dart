@@ -57,7 +57,6 @@ class ApptiveGridLocalization extends StatelessWidget {
 
 class _InheritedApptiveGridTranslation extends InheritedWidget {
   _InheritedApptiveGridTranslation({
-    super.key,
     required super.child,
   }) {
     final defaultTranslations = <Locale, ApptiveGridTranslation>{

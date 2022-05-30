@@ -176,7 +176,6 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
 
 class _SourceOptionPopupItem extends StatelessWidget {
   const _SourceOptionPopupItem({
-    super.key,
     required this.label,
     required this.icon,
   });

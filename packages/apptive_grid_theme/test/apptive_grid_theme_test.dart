@@ -5,7 +5,6 @@ import 'package:golden_toolkit/golden_toolkit.dart';
 
 class _TestApp extends StatelessWidget {
   _TestApp({
-    super.key,
     this.appBarBuilder,
     this.isDark = false,
     required this.childBuilder,

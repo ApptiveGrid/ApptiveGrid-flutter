@@ -435,7 +435,6 @@ void main() {
 
 class _SortingAndFilterSwitcher extends StatefulWidget {
   const _SortingAndFilterSwitcher({
-    super.key,
     this.sorting1,
     this.sorting2,
     this.filter1,
