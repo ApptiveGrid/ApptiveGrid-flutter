@@ -10,13 +10,13 @@ export 'package:apptive_grid_core/apptive_grid_core.dart';
 class ApptiveGridGridBuilder extends StatefulWidget {
   /// Creates a Builder Widet
   const ApptiveGridGridBuilder({
-    Key? key,
+    super.key,
     required this.gridUri,
     this.initialData,
     this.sorting,
     this.filter,
     required this.builder,
-  }) : super(key: key);
+  });
 
   /// GridUri of the grid that should be used
   final GridUri gridUri;

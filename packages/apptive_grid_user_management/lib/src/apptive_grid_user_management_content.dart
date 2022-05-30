@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 class ApptiveGridUserManagementContent extends StatefulWidget {
   /// Creates a Content Widget to show the user Content
   const ApptiveGridUserManagementContent({
-    Key? key,
+    super.key,
     this.initialContentType = ContentType.register,
     this.onLogin,
     this.spacing = 16.0,
     this.requestResetPassword,
-  }) : super(key: key);
+  });
 
   /// The initial [ContentType] that should be displayed
   final ContentType initialContentType;

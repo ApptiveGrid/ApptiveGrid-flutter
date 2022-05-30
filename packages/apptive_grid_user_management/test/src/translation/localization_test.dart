@@ -104,9 +104,9 @@ void main() {
 
 class _ReloadLocalizations extends StatefulWidget {
   const _ReloadLocalizations({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
 

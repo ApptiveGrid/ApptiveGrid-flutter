@@ -38,8 +38,8 @@ class MyApp extends StatelessWidget {
 
 class _MyHomePage extends StatefulWidget {
   _MyHomePage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<_MyHomePage> createState() => _MyHomePageState();

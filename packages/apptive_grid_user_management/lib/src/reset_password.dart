@@ -10,10 +10,10 @@ import 'package:password_rule_check/password_rule_check.dart';
 class ResetPassword extends StatefulWidget {
   /// Creates a Widget that allows users to reset their password
   const ResetPassword({
-    Key? key,
+    super.key,
     required this.resetUri,
     required this.onReset,
-  }) : super(key: key);
+  });
 
   /// Uri the Reset Call should be made against
   final Uri resetUri;

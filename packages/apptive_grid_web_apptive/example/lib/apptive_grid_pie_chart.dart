@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class ApptiveGridPieChart extends StatefulWidget {
-  const ApptiveGridPieChart({Key? key, required this.grid}) : super(key: key);
+  const ApptiveGridPieChart({super.key, required this.grid});
 
   final Grid grid;
 
@@ -144,13 +144,13 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
 
 class FieldSelector extends StatefulWidget {
   const FieldSelector({
-    Key? key,
+    super.key,
     required this.label,
     required this.onSelected,
     required this.grid,
     this.value,
     required this.validator,
-  }) : super(key: key);
+  });
 
   final String label;
   final Grid grid;

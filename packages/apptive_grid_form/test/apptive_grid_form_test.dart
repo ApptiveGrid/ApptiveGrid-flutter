@@ -1112,10 +1112,10 @@ void main() {
 
 class _ChangingFormWidget extends StatefulWidget {
   const _ChangingFormWidget({
-    Key? key,
+    super.key,
     required this.form1,
     required this.form2,
-  }) : super(key: key);
+  });
 
   final FormUri form1;
   final FormUri form2;

@@ -6,10 +6,10 @@ import 'package:flutter/services.dart';
 class EmailFormField extends StatelessWidget {
   /// Creates a new EmailFormField
   const EmailFormField({
-    Key? key,
+    super.key,
     this.controller,
     this.validator,
-  }) : super(key: key);
+  });
 
   /// Controller for the input
   final TextEditingController? controller;

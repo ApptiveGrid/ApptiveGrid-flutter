@@ -435,14 +435,14 @@ void main() {
 
 class _SortingAndFilterSwitcher extends StatefulWidget {
   const _SortingAndFilterSwitcher({
-    Key? key,
+    super.key,
     this.sorting1,
     this.sorting2,
     this.filter1,
     this.filter2,
     required this.gridUri1,
     this.gridUri2,
-  }) : super(key: key);
+  });
 
   final List<ApptiveGridSorting>? sorting1;
   final List<ApptiveGridSorting>? sorting2;

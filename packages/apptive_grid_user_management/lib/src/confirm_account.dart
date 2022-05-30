@@ -7,10 +7,10 @@ import 'package:http/http.dart';
 class ConfirmAccount extends StatefulWidget {
   /// Creates a Widget that allows users to confirm their account
   const ConfirmAccount({
-    Key? key,
+    super.key,
     required this.confirmationUri,
     required this.confirmAccount,
-  }) : super(key: key);
+  });
 
   /// Uri the Confirmation should be made against
   final Uri confirmationUri;

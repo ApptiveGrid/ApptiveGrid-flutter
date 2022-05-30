@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 class PasswordFormField extends StatefulWidget {
   /// Creates a new PasswordFormField
   const PasswordFormField({
-    Key? key,
+    super.key,
     this.controller,
     this.decoration = const InputDecoration(),
     this.validator,
     this.readOnly = false,
     this.autofillHints = const [AutofillHints.password],
-  }) : super(key: key);
+  });
 
   /// Controller for the input
   final TextEditingController? controller;

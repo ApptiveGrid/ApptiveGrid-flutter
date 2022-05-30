@@ -6,11 +6,11 @@ import 'mocks.dart';
 
 class StubUserManagement extends StatelessWidget {
   const StubUserManagement({
-    Key? key,
+    super.key,
     required this.child,
     this.client,
     this.passwordRequirement = PasswordRequirement.enforced,
-  }) : super(key: key);
+  });
 
   final Widget child;
 

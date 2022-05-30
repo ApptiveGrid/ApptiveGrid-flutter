@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 class ApptiveGridLocalization extends StatelessWidget {
   /// Creates a wrapper around a Form so that the descendants can use localized Strings
   const ApptiveGridLocalization({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   /// The child that should be wrapped
   final Widget child;
@@ -57,9 +57,9 @@ class ApptiveGridLocalization extends StatelessWidget {
 
 class _InheritedApptiveGridTranslation extends InheritedWidget {
   _InheritedApptiveGridTranslation({
-    Key? key,
-    required Widget child,
-  }) : super(key: key, child: child) {
+    super.key,
+    required super.child,
+  }) {
     final defaultTranslations = <Locale, ApptiveGridTranslation>{
       const Locale.fromSubtags(languageCode: 'en'):
           const en.ApptiveGridLocalizedTranslation(),

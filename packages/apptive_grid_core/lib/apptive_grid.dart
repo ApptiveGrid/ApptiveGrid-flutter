@@ -10,19 +10,18 @@ import 'package:provider/provider.dart';
 class ApptiveGrid extends StatefulWidget {
   /// Creates ApptiveGrid
   const ApptiveGrid({
-    Key? key,
+    super.key,
     this.child,
     this.options = const ApptiveGridOptions(),
-  })  : client = null,
-        super(key: key);
+  }) : client = null;
 
   /// Creates ApptiveGrid with a shared defined ApptiveGridClient
   const ApptiveGrid.withClient({
-    Key? key,
+    super.key,
     required this.client,
     this.child,
     this.options = const ApptiveGridOptions(),
-  }) : super(key: key);
+  });
 
   /// Widget that should be wrapped. Normally this is something like [MaterialApp]
   final Widget? child;

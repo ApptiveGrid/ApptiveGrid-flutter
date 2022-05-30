@@ -6,11 +6,11 @@ class MockApptiveGridClient extends Mock implements ApptiveGridClient {}
 
 class TestApp extends StatelessWidget {
   const TestApp({
-    Key? key,
+    super.key,
     this.client,
     this.child,
     this.options = const ApptiveGridOptions(),
-  }) : super(key: key);
+  });
 
   final Widget? child;
 

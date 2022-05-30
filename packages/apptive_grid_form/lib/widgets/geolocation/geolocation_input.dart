@@ -14,10 +14,10 @@ import 'package:provider/provider.dart';
 class GeolocationInput extends StatefulWidget {
   /// Creates the Input Widget
   const GeolocationInput({
-    Key? key,
+    super.key,
     this.location,
     this.onLocationChanged,
-  }) : super(key: key);
+  });
 
   /// Currently select [Geolocation]
   ///

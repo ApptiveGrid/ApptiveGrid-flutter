@@ -48,12 +48,9 @@ class TextComponentOptions extends FormComponentOptions {
   const TextComponentOptions({
     this.multi = false,
     this.placeholder,
-    String? description,
-    String? label,
-  }) : super(
-          description: description,
-          label: label,
-        );
+    super.description,
+    super.label,
+  });
 
   /// Deserializes [json] into [TextComponentOptions]
   factory TextComponentOptions.fromJson(Map<String, dynamic> json) {

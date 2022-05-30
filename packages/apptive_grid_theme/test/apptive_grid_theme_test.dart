@@ -5,11 +5,11 @@ import 'package:golden_toolkit/golden_toolkit.dart';
 
 class _TestApp extends StatelessWidget {
   _TestApp({
-    Key? key,
+    super.key,
     this.appBarBuilder,
     this.isDark = false,
     required this.childBuilder,
-  }) : super(key: key);
+  });
 
   final Widget Function(ThemeData data) childBuilder;
   final bool isDark;
