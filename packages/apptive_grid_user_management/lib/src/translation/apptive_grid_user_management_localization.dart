@@ -11,15 +11,19 @@ class ApptiveGridUserManagementLocalization extends StatelessWidget {
   /// Creates a wrapper so that the descendants can use localized Strings
   const ApptiveGridUserManagementLocalization({
     Key? key,
+    this.customTranslations = const {},
     required this.child,
   }) : super(key: key);
 
   /// The child that should be wrapped
   final Widget child;
 
+  final Map<Locale, ApptiveGridUserManagementTranslation> customTranslations;
+
   @override
   Widget build(BuildContext context) {
     return _InheritedApptiveGridUserManagementTranslation(
+      customTranslations: customTranslations,
       child: Builder(
         builder: (_) => child,
       ),
@@ -61,6 +65,8 @@ class ApptiveGridUserManagementLocalization extends StatelessWidget {
 class _InheritedApptiveGridUserManagementTranslation extends InheritedWidget {
   _InheritedApptiveGridUserManagementTranslation({
     Key? key,
+    required Map<Locale, ApptiveGridUserManagementTranslation>
+        customTranslations,
     required Widget child,
   }) : super(key: key, child: child) {
     final defaultTranslations = <Locale, ApptiveGridUserManagementTranslation>{
@@ -70,6 +76,7 @@ class _InheritedApptiveGridUserManagementTranslation extends InheritedWidget {
           const de.ApptiveGridUserManagementLocalizedTranslation(),
     };
     _translations.addAll(defaultTranslations);
+    _translations.addAll(customTranslations);
   }
 
   final Map<Locale, ApptiveGridUserManagementTranslation> _translations =
