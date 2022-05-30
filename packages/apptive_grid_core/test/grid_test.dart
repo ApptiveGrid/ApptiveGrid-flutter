@@ -253,6 +253,7 @@ void main() {
       },
       'name': 'New grid',
       'id': 'gridId',
+      'key': 'gridKey',
       '_links': {
         "addLink": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
@@ -337,6 +338,7 @@ void main() {
       final grid = Grid.fromJson(json);
 
       expect(grid.name, equals('New grid'));
+      expect(grid.key, equals('gridKey'));
       expect(grid.fields!.length, equals(8));
       expect(grid.rows!.length, equals(5));
 
@@ -357,6 +359,7 @@ void main() {
 
       expect(restored, equals(initialData));
       expect(restored.hashCode, equals(initialData.hashCode));
+      expect(restored.key, equals('gridKey'));
     });
   });
 }

@@ -6,6 +6,8 @@
 * Upgraded to `flutter_lints 2`
 * Added support for all `ApptiveGridLayout` layouts
 * Add parameter `loadEntities` to `loadGrid` to enable not loading entities for the Grid to only get the GridFields and Grid Meta Data
+* Add `key` to Grid
+* Add `key` and `category` to Space
 ### Breaking Change
 * `layout` in `loadEntities` is now `ApptiveGridLayout` instead of `String?`
 
