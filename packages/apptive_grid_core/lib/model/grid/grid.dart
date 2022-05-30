@@ -32,6 +32,7 @@ class Grid {
     required this.name,
     this.fields,
     this.rows,
+    this.key,
     this.filter,
     this.sorting,
     required this.links,
@@ -54,6 +55,7 @@ class Grid {
     return Grid(
       id: id,
       name: json['name'],
+      key: json['key'],
       fields: fields,
       rows: entries,
       filter: filter,
@@ -70,6 +72,9 @@ class Grid {
 
   /// Name of the Grid
   final String name;
+
+  /// Key of the Grid
+  final String? key;
 
   /// Filter applied to this GridView. If this is not null the Grid is actually a GridView
   final dynamic filter;
@@ -94,6 +99,7 @@ class Grid {
     final jsonMap = {
       'id': id,
       'name': name,
+      if (key != null) 'key': key,
       if (rows != null) 'entities': rows!.map((e) => e.toJson()).toList(),
       if (fields != null) 'fields': fields!.map((e) => e.toJson()).toList(),
       if (filter != null) 'filter': filter,
@@ -114,7 +120,7 @@ class Grid {
 
   @override
   String toString() {
-    return 'Grid(id: $id, name: $name, fields: $fields, rows: $rows, filter: $filter, sorting: $sorting, links: $links)';
+    return 'Grid(id: $id, name: $name, key: $key fields: $fields, rows: $rows, filter: $filter, sorting: $sorting, links: $links)';
   }
 
   @override
@@ -122,6 +128,7 @@ class Grid {
     return other is Grid &&
         id == other.id &&
         name == other.name &&
+        key == other.key &&
         f.listEquals(fields, other.fields) &&
         f.listEquals(rows, other.rows) &&
         filter.toString() == other.filter.toString() &&
