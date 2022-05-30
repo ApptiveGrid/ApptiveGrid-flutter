@@ -97,7 +97,7 @@ class DateDataEntity extends ComparableDataEntity<DateTime, String> {
 /// [DataEntity] representing [boolean] Objects
 class BooleanDataEntity extends DataEntity<bool, bool> {
   /// Creates a new BooleanDataEntity Object
-  BooleanDataEntity([super.value = false]);
+  BooleanDataEntity([bool? value]) : super(value ?? false);
 
   @override
   bool? get schemaValue => value;
