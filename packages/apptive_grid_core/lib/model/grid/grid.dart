@@ -120,7 +120,7 @@ class Grid {
 
   @override
   String toString() {
-    return 'Grid(id: $id, name: $name, key: $key fields: $fields, rows: $rows, filter: $filter, sorting: $sorting, links: $links)';
+    return 'Grid(id: $id, name: $name, key: $key, fields: $fields, rows: $rows, filter: $filter, sorting: $sorting, links: $links)';
   }
 
   @override
