@@ -27,6 +27,8 @@ class Space {
     required this.name,
     required this.links,
     this.embeddedGrids,
+    this.key,
+    this.category,
   });
 
   /// Deserializes [json] into a [Space] Object
@@ -42,6 +44,8 @@ class Space {
         embeddedGrids: (json['_embedded']?['grids'] as List?)
             ?.map((e) => Grid.fromJson(e))
             .toList(),
+        key: json['key'],
+        category: json['belongsTo'],
       );
     }
   }
@@ -52,8 +56,14 @@ class Space {
   /// Id of this space
   final String id;
 
-  /// Links for relavant actions for this Space
+  /// Links for relevant actions for this Space
   final LinkMap links;
+
+  /// The key of this space
+  final String? key;
+
+  /// The category this space belongs to
+  final String? category;
 
   /// A List of [Grid]s that are embedded in this Space
   final List<Grid>? embeddedGrids;
@@ -65,6 +75,8 @@ class Space {
       'id': id,
       'type': 'space',
       '_links': links.toJson(),
+      if (key != null) 'key': key,
+      if (category != null) 'belongsTo': category,
     };
 
     if (embeddedGrids != null) {
@@ -80,7 +92,7 @@ class Space {
 
   @override
   String toString() {
-    return 'Space(name: $name, id: $id, links: $links)';
+    return 'Space(name: $name, id: $id, key: $key, category: $category, links: $links)';
   }
 
   @override
@@ -88,7 +100,10 @@ class Space {
     return other is Space &&
         id == other.id &&
         name == other.name &&
-        f.mapEquals(links, other.links);
+        key == other.key &&
+        category == other.category &&
+        f.mapEquals(links, other.links) &&
+        f.listEquals(embeddedGrids, other.embeddedGrids);
   }
 
   @override
@@ -106,11 +121,15 @@ class SharedSpace extends Space {
     required this.realSpace,
     required LinkMap links,
     List<Grid>? embeddedGrids,
+    String? key,
+    String? category,
   }) : super(
           id: id,
           name: name,
           links: links,
           embeddedGrids: embeddedGrids,
+          key: key,
+          category: category,
         );
 
   /// Deserializes [json] into a [Space] Object
@@ -123,6 +142,8 @@ class SharedSpace extends Space {
       embeddedGrids: (json['_embedded']?['grids'] as List?)
           ?.map((e) => Grid.fromJson(e))
           .toList(),
+      key: json['key'],
+      category: json['belongsTo'],
     );
   }
 
@@ -139,7 +160,7 @@ class SharedSpace extends Space {
 
   @override
   String toString() {
-    return 'SharedSpace(name: $name, id: $id, realSpace: ${realSpace.toString()}, links: $links)';
+    return 'SharedSpace(name: $name, id: $id, key: $key, category: $category, realSpace: ${realSpace.toString()}, links: $links)';
   }
 
   @override
@@ -148,6 +169,8 @@ class SharedSpace extends Space {
         id == other.id &&
         name == other.name &&
         realSpace == other.realSpace &&
+        key == other.key &&
+        category == other.category &&
         f.mapEquals(links, other.links) &&
         f.listEquals(embeddedGrids, other.embeddedGrids);
   }

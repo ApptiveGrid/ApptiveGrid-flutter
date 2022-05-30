@@ -29,6 +29,8 @@ void main() {
           'id': 'id',
           'name': 'name',
           'type': 'space',
+          'key': 'key',
+          'belongsTo': 'belongsTo',
           '_links': {
             'self': {
               'href': '/api/users/user/spaces/id',
@@ -54,6 +56,8 @@ void main() {
         final doubleParse = Space.fromJson(jsonSpace.toJson());
 
         expect(doubleParse, equals(jsonSpace));
+        expect(jsonSpace.key, equals('key'));
+        expect(jsonSpace.category, equals('belongsTo'));
       });
     });
 
@@ -95,7 +99,7 @@ void main() {
                 'name': 'Grid',
                 '_links': {
                   'self': {
-                    'href': '/api/users/user/spaces/id/grid/gridId',
+                    'href': '/api/users/user/spaces/id/grids/gridId',
                     'method': 'get',
                   },
                 },
