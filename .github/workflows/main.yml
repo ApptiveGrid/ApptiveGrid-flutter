@@ -29,7 +29,7 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v1
         with:
           path: ./packages/apptive_grid_core/coverage/lcov.info
-          min_coverage: 98.5
+          min_coverage: 98.45
       - name: Form Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1
         with:

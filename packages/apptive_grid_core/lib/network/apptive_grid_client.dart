@@ -220,6 +220,7 @@ class ApptiveGridClient {
   /// The order of [ApptiveGridSorting] in [sorting] will rank the order in which values should be sorted
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
   ///
+  /// If [loadEntities] is `true` and there is a [ApptiveLinkType.entities] Link it will also fetch the entities
   /// Requires Authorization
   /// throws [Response] if the request fails
   Future<Grid> loadGrid({
@@ -228,6 +229,7 @@ class ApptiveGridClient {
     ApptiveGridFilter? filter,
     bool isRetry = false,
     Map<String, String> headers = const {},
+    bool loadEntities = true,
   }) async {
     final gridViewUrl = _generateApptiveGridUri(gridUri.uri);
 
@@ -250,10 +252,10 @@ class ApptiveGridClient {
 
     final gridToParse = jsonDecode(gridViewResponse.body);
     final grid = Grid.fromJson(gridToParse);
-    if (grid.links.containsKey(ApptiveLinkType.entities)) {
-      final entitiesResponse = await loadEntities(
+    if (loadEntities && grid.links.containsKey(ApptiveLinkType.entities)) {
+      final entitiesResponse = await this.loadEntities(
         uri: grid.links[ApptiveLinkType.entities]!.uri,
-        layout: 'indexed',
+        layout: ApptiveGridLayout.indexed,
         filter: filter,
         sorting: sorting,
       );
@@ -268,28 +270,14 @@ class ApptiveGridClient {
   }
 
   /// Load Entities of a Grid that are accessed by [uri]
-  /// [viewId] specifies allows to request the entities of a specific GridView which allows for getting Filters/Sorting that was applied from the web client
-  ///
-  /// if [layout] is not set the items will be a Map<String, dynamic> with the keys being the fieldIds and the value being the values as json objects
-  /// `indexed` layout will return the items in the following format:
-  /// ```
-  /// {
-  ///   "fields": [
-  ///     `jsonValue of First Column`,
-  ///     `jsonValue of Second Column`,
-  ///     `jsonValue of Third Column`,
-  ///     `jsonValue of Fourth Column`,
-  ///     ...
-  ///   ]
-  /// }
-  /// ```
+  /// the layout in which the entities will be returned is determined by [layout]
   ///
   /// [sorting] allows to apply custom sorting
   /// [filter] allows to get custom filters
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
   Future<EntitiesResponse<T>> loadEntities<T>({
     required Uri uri,
-    String? layout,
+    ApptiveGridLayout layout = ApptiveGridLayout.field,
     List<ApptiveGridSorting>? sorting,
     ApptiveGridFilter? filter,
     bool isRetry = false,
@@ -299,14 +287,14 @@ class ApptiveGridClient {
     final requestUri = uri.replace(
       scheme: baseUrl.scheme,
       host: baseUrl.host,
-      queryParameters: Map.from(uri.queryParameters)
-        ..addAll({
-          if (layout != null) 'layout': layout,
-          if (sorting != null)
-            'sorting':
-                jsonEncode(sorting.map((e) => e.toRequestObject()).toList()),
-          if (filter != null) 'filter': jsonEncode(filter.toJson()),
-        }),
+      queryParameters: {
+        ...uri.queryParameters,
+        'layout': layout.queryParameter,
+        if (sorting != null)
+          'sorting':
+              jsonEncode(sorting.map((e) => e.toRequestObject()).toList()),
+        if (filter != null) 'filter': jsonEncode(filter.toJson()),
+      },
     );
 
     final response = await _client.get(
@@ -472,17 +460,23 @@ class ApptiveGridClient {
   /// This will return a Map of fieldIds and the respective values
   /// To know what [DataType] they are you need to Load a Grid via [loadGrid] and compare [Grid.fields] with the ids
   ///
+  /// The entity will be layed out according to [layout]
   /// The id of the entity can be accessed via `['_id']`
   Future<Map<String, dynamic>> getEntity({
     required EntityUri entityUri,
     Map<String, String> headers = const {},
+    ApptiveGridLayout layout = ApptiveGridLayout.field,
   }) async {
     await _authenticator.checkAuthentication();
 
     final url = _generateApptiveGridUri(entityUri.uri);
 
     final response = await _client.get(
-      url,
+      url.replace(
+        queryParameters: {
+          'layout': layout.queryParameter,
+        },
+      ),
       headers: _createHeadersWithDefaults(headers),
     );
 

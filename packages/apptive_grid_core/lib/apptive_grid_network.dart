@@ -21,6 +21,7 @@ export 'package:apptive_grid_core/network/sorting/apptive_grid_sorting.dart';
 
 export 'network/apptive_grid_client.dart';
 
+part 'network/apptive_grid_layout.dart';
 part 'network/authentication/apptive_grid_authentication_options.dart';
 part 'network/authentication/apptive_grid_authenticator.dart';
 part 'network/constants.dart';
