@@ -175,7 +175,7 @@ class _LoginContentState extends State<LoginContent> {
 
     final customTranslations =
         ApptiveGridUserManagement.maybeOf(context)?.widget.customTranslations ??
-            {};
+            {}; // coverage:ignore-line
 
     if (widget.requestResetPassword != null) {
       final content = ApptiveGridUserManagementLocalization(
