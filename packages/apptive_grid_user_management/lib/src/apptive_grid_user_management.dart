@@ -5,6 +5,7 @@ import 'package:apptive_grid_user_management/src/confirm_account.dart';
 import 'package:apptive_grid_user_management/src/password_check.dart';
 import 'package:apptive_grid_user_management/src/reset_password.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
+import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_translation.dart';
 import 'package:apptive_grid_user_management/src/user_management_client.dart';
 import 'package:flutter/material.dart';
 import 'package:uni_links/uni_links.dart' as uni_links;
@@ -26,6 +27,7 @@ class ApptiveGridUserManagement extends StatefulWidget {
     required this.resetPasswordPrompt,
     required this.onPasswordReset,
     this.client,
+    this.customTranslations = const {},
   }) : super(key: key);
 
   /// User Group the users should be added to
@@ -68,6 +70,9 @@ class ApptiveGridUserManagement extends StatefulWidget {
 
   /// ApptiveGridUserManagementClient that should be used
   final ApptiveGridUserManagementClient? client;
+
+  /// Provide custom Translations. This can be used to either add additional Translations or override existing translations
+  final Map<Locale, ApptiveGridUserManagementTranslation> customTranslations;
 
   @override
   State<ApptiveGridUserManagement> createState() =>
@@ -126,6 +131,7 @@ class ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
   @override
   Widget build(BuildContext context) {
     return ApptiveGridUserManagementLocalization(
+      customTranslations: widget.customTranslations,
       child: widget.child ?? const SizedBox(),
     );
   }
@@ -152,6 +158,7 @@ class ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
 
       widget.confirmAccountPrompt(
         ApptiveGridUserManagementLocalization(
+          customTranslations: widget.customTranslations,
           child: ConfirmAccount(
             confirmationUri: uri!,
             confirmAccount: widget.onAccountConfirmed,
@@ -182,6 +189,7 @@ class ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
 
       widget.resetPasswordPrompt(
         ApptiveGridUserManagementLocalization(
+          customTranslations: widget.customTranslations,
           child: ResetPassword(
             resetUri: uri!,
             onReset: widget.onPasswordReset,

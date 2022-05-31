@@ -173,8 +173,13 @@ class _LoginContentState extends State<LoginContent> {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     final contentKey = GlobalKey<RequestResetPasswordContentState>();
 
+    final customTranslations =
+        ApptiveGridUserManagement.maybeOf(context)?.widget.customTranslations ??
+            {}; // coverage:ignore-line
+
     if (widget.requestResetPassword != null) {
       final content = ApptiveGridUserManagementLocalization(
+        customTranslations: customTranslations,
         child: RequestResetPasswordContent(
           key: contentKey,
         ),
@@ -182,6 +187,7 @@ class _LoginContentState extends State<LoginContent> {
       widget.requestResetPassword!.call(content, contentKey);
     } else {
       final content = ApptiveGridUserManagementLocalization(
+        customTranslations: customTranslations,
         child: RequestResetPasswordContent(
           key: contentKey,
           // Provide function to get the client from the dialog
