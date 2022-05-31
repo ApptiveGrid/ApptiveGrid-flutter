@@ -18,6 +18,7 @@ class ApptiveGridUserManagementLocalization extends StatelessWidget {
   /// The child that should be wrapped
   final Widget child;
 
+  /// Provide custom Translations. This can be used to either add additional Translations or override existing translations
   final Map<Locale, ApptiveGridUserManagementTranslation> customTranslations;
 
   @override

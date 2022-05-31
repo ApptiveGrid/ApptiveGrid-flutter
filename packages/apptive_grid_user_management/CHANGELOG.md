@@ -1,3 +1,6 @@
+## 0.0.5-alpha.3
+* Add support for custom translations
+
 ## 0.0.5-alpha.2
 * Upgraded to `flutter_lints 2`
 ### Breaking Change

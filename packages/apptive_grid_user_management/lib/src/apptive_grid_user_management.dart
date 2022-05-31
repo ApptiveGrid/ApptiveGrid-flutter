@@ -71,6 +71,7 @@ class ApptiveGridUserManagement extends StatefulWidget {
   /// ApptiveGridUserManagementClient that should be used
   final ApptiveGridUserManagementClient? client;
 
+  /// Provide custom Translations. This can be used to either add additional Translations or override existing translations
   final Map<Locale, ApptiveGridUserManagementTranslation> customTranslations;
 
   @override
