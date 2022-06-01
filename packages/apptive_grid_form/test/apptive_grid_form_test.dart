@@ -163,7 +163,7 @@ void main() {
     final target = TestApp(
       client: client,
       child: ApptiveGridForm(
-        uri: Uri.parse('/api/a/forms/form'),
+        uri: Uri.parse('/api/a/form'),
         onFormLoaded: (data) {
           completer.complete(data);
         },
@@ -334,7 +334,7 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            uri: Uri.parse('/api/a/forms/form'),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
 
@@ -354,7 +354,7 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            uri: Uri.parse('/api/a/forms/form'),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
         when(
@@ -379,7 +379,7 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            uri: Uri.parse('/api/a/forms/form'),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
         final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
@@ -412,7 +412,7 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            uri: Uri.parse('/api/a/forms/form'),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
         final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
@@ -442,7 +442,7 @@ void main() {
       });
 
       testWidgets('Back to Form shows Form', (tester) async {
-        final formUri = Uri.parse('/api/a/forms/form');
+        final formUri = Uri.parse('/api/a/form');
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
@@ -496,7 +496,7 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            uri: Uri.parse('/api/a/forms/form'),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
         final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
@@ -534,7 +534,7 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            uri: Uri.parse('/api/a/forms/form'),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
         final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
@@ -567,7 +567,7 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            uri: Uri.parse('/api/a/forms/form'),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
         final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
