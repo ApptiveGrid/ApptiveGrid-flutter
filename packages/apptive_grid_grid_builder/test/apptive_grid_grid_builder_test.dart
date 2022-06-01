@@ -14,7 +14,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(
-      Uri.parse('/api/a/users/user/spaces/space/grids/grid'),
+      Uri.parse('/api/users/user/spaces/space/grids/grid'),
     );
     registerFallbackValue(
       [ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)],
@@ -31,7 +31,7 @@ void main() {
     final target = TestApp(
       client: client,
       child: ApptiveGridGridBuilder(
-        uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
@@ -45,7 +45,7 @@ void main() {
     final title = 'Title';
     when(
       () => client.loadGrid(
-        uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
       ),
     ).thenAnswer(
       (_) async => Grid(
@@ -67,7 +67,7 @@ void main() {
     final target = TestApp(
       client: client,
       child: ApptiveGridGridBuilder(
-        uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
         initialData: Grid(
           id: gridId,
           name: 'Initial Title',
@@ -88,7 +88,7 @@ void main() {
     final title = 'Title';
     when(
       () => client.loadGrid(
-        uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
       ),
     ).thenAnswer(
       (_) async => Grid(
@@ -112,7 +112,7 @@ void main() {
     final target = TestApp(
       client: client,
       child: ApptiveGridGridBuilder(
-        uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error');
@@ -125,7 +125,7 @@ void main() {
 
     when(
       () => client.loadGrid(
-        uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
       ),
     ).thenAnswer((_) => Future.error(''));
 
@@ -141,7 +141,7 @@ void main() {
       client: client,
       child: ApptiveGridGridBuilder(
         key: key,
-        uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
@@ -155,7 +155,7 @@ void main() {
     final title = 'Title';
     when(
       () => client.loadGrid(
-        uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
       ),
     ).thenAnswer(
       (_) async => Grid(
@@ -174,7 +174,7 @@ void main() {
 
     verify(
       () => client.loadGrid(
-        uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
       ),
     ).called(2);
   });
@@ -237,7 +237,7 @@ void main() {
         client: client,
         child: ApptiveGridGridBuilder(
           sorting: sorting,
-          uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Text(snapshot.data!.name);
@@ -251,7 +251,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
           sorting: sorting,
         ),
       ).thenAnswer(
@@ -282,7 +282,7 @@ void main() {
       final target = TestApp(
         client: client,
         child: _SortingAndFilterSwitcher(
-          gridUri1: Uri.parse('/api/a/users/$user/spaces/$space/grids/$gridId'),
+          gridUri1: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           sorting1: sorting,
           sorting2: [
             ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.desc)
@@ -293,7 +293,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
           sorting: any(named: 'sorting'),
         ),
       ).thenAnswer(
@@ -328,7 +328,7 @@ void main() {
         client: client,
         child: ApptiveGridGridBuilder(
           filter: filter,
-          uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Text(snapshot.data!.name);
@@ -342,7 +342,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
           filter: filter,
         ),
       ).thenAnswer(
@@ -374,7 +374,7 @@ void main() {
       final target = TestApp(
         client: client,
         child: _SortingAndFilterSwitcher(
-          gridUri1: Uri.parse('/api/a/users/$user/spaces/$space/grids/$gridId'),
+          gridUri1: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           filter1: filter1,
           filter2: filter2,
         ),
@@ -383,7 +383,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
+          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
           filter: any(named: 'filter'),
         ),
       ).thenAnswer(

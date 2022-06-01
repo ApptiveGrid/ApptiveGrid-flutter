@@ -67,14 +67,14 @@ void main() {
     group('Equality', () {
       test('From UriString equals to direct invocation', () {
         final parsed = RedirectFormUri.fromUri('/api/r/a1s2d3f4');
-        final direct = Uri.parse('/api/a/a1s2d3f4');
+        final direct = RedirectFormUri(components: ['a1s2d3f4']);
         expect(parsed, equals(direct));
         expect(parsed.hashCode, equals(direct.hashCode));
       });
 
       test('Different Values do not equal', () {
         final one = RedirectFormUri.fromUri('/api/r/a1s2d3f4');
-        final two = Uri.parse('/api/a/a1s2d3f45');
+        final two = RedirectFormUri(components: ['a1s2d3f45']);
         expect(one, isNot(two));
         expect(one.hashCode, isNot(two.hashCode));
       });

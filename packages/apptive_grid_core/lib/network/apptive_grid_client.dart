@@ -80,13 +80,16 @@ class ApptiveGridClient {
   /// Based on [formUri] this might require Authentication
   /// throws [Response] if the request fails
   Future<FormData> loadForm({
+    Uri? uri,
     // ignore: deprecated_member_use_from_same_package
     @Deprecated('Use `uri` instead') FormUri? formUri,
-    Uri? uri,
     Map<String, String> headers = const {},
     bool isRetry = false,
   }) async {
-    assert(uri != null || formUri != null);
+    assert(
+      uri != null || formUri != null,
+      'Either uri ($uri) or formUri ($formUri) must not be null',
+    );
     final url = _generateApptiveGridUri(uri ?? formUri!.uri);
     final response =
         await _client.get(url, headers: _createHeadersWithDefaults(headers));
@@ -95,6 +98,7 @@ class ApptiveGridClient {
         await _authenticator.checkAuthentication();
         return loadForm(
           formUri: formUri,
+          uri: uri,
           headers: headers,
           isRetry: true,
         );
@@ -247,6 +251,7 @@ class ApptiveGridClient {
       if (gridViewResponse.statusCode == 401 && !isRetry) {
         await _authenticator.checkAuthentication();
         return loadGrid(
+          uri: uri,
           gridUri: gridUri,
           sorting: sorting,
           filter: filter,
@@ -466,7 +471,10 @@ class ApptiveGridClient {
       throw response;
     }
 
-    return Uri.parse((json.decode(response.body) as Map)['uri']);
+    return Uri.parse(
+      ((json.decode(response.body) as Map)['uri'] as String)
+          .replaceAll(RegExp('/r/'), '/a/'),
+    );
   }
 
   /// Get a specific entity via a [uri]

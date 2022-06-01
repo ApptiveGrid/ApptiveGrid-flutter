@@ -21,7 +21,8 @@ void main() {
       ),
     );
     registerFallbackValue(
-        Uri.parse('/api/a/users/user/spaces/space/grids/grid'));
+      Uri.parse('/api/users/user/spaces/space/grids/grid'),
+    );
   });
 
   group('FormWidget', () {
@@ -29,7 +30,7 @@ void main() {
     late Widget target;
     late GlobalKey<FormState> formKey;
 
-    final gridUri = Uri.parse('/api/a/users/user/spaces/space/grids/grid');
+    final gridUri = Uri.parse('/api/users/user/spaces/space/grids/grid');
     final field = GridField(id: 'field', name: 'Name', type: DataType.text);
     final grid = Grid(
       id: 'grid',
@@ -264,7 +265,8 @@ void main() {
                   value: 'CrossRef',
                   gridUri: Uri.parse('/api/a/user/spaces/space/grids/grid'),
                   entityUri: Uri.parse(
-                      '/api/a/user/spaces/space/grids/grid/entities/entity'),
+                    '/api/a/user/spaces/space/grids/grid/entities/entity',
+                  ),
                 ),
               ],
             ),

@@ -84,7 +84,7 @@ class _MyHomePageState extends State<_MyHomePage> {
       // Add the ApptiveGridGridBuilder to your Widget Tree
       body: ApptiveGridGridBuilder(
         key: _builderKey,
-        uri: Uri.parse('/api/a/users/USER_ID/spaces/SPACE_ID/grids/GRID_ID'),
+        uri: Uri.parse('/api/users/USER_ID/spaces/SPACE_ID/grids/GRID_ID'),
         sorting: _sorting,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
