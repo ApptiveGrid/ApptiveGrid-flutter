@@ -293,7 +293,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
+          uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           sorting: any(named: 'sorting'),
         ),
       ).thenAnswer(
@@ -328,7 +328,7 @@ void main() {
         client: client,
         child: ApptiveGridGridBuilder(
           filter: filter,
-          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
+          uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Text(snapshot.data!.name);
@@ -342,7 +342,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
+          uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           filter: filter,
         ),
       ).thenAnswer(
@@ -383,7 +383,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
+          uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           filter: any(named: 'filter'),
         ),
       ).thenAnswer(
