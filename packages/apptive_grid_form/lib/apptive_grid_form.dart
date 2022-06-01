@@ -62,7 +62,8 @@ class ApptiveGridForm extends StatefulWidget {
   /// [FormUri..fromRedirect] with the id
   /// If you display Data gathered from a Grid you more likely want to use [FormUri..directForm]
   @Deprecated('Use `uri` instead')
-  FormUri get formUri => _formUri ?? FormUri.fromUri(_uri!.toString());
+  FormUri get formUri =>
+      _uri != null ? FormUri.fromUri(_uri!.toString()) : _formUri!;
 
   /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
   final TextStyle? titleStyle;

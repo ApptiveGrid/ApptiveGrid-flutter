@@ -36,7 +36,8 @@ class ApptiveGridGridBuilder extends StatefulWidget {
   /// GridUri of the grid that should be used
   // ignore: deprecated_member_use
   @Deprecated('Use `uri` instead')
-  GridUri get gridUri => _gridUri ?? GridUri.fromUri(_uri!.toString());
+  GridUri get gridUri =>
+      _uri != null ? GridUri.fromUri(_uri!.toString()) : _gridUri!;
 
   /// Initial [Grid] data that should be shown
   final Grid? initialData;

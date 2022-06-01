@@ -86,10 +86,7 @@ class ApptiveGridClient {
     Map<String, String> headers = const {},
     bool isRetry = false,
   }) async {
-    assert(
-      uri != null || formUri != null,
-      'Either uri ($uri) or formUri ($formUri) must not be null',
-    );
+    assert(uri != null || formUri != null);
     final url = _generateApptiveGridUri(uri ?? formUri!.uri);
     final response =
         await _client.get(url, headers: _createHeadersWithDefaults(headers));
