@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -65,14 +67,14 @@ void main() {
     group('Equality', () {
       test('From UriString equals to direct invocation', () {
         final parsed = RedirectFormUri.fromUri('/api/r/a1s2d3f4');
-        final direct = RedirectFormUri(components: ['a1s2d3f4']);
+        final direct = Uri.parse('/api/a/a1s2d3f4');
         expect(parsed, equals(direct));
         expect(parsed.hashCode, equals(direct.hashCode));
       });
 
       test('Different Values do not equal', () {
         final one = RedirectFormUri.fromUri('/api/r/a1s2d3f4');
-        final two = RedirectFormUri(components: ['a1s2d3f45']);
+        final two = Uri.parse('/api/a/a1s2d3f45');
         expect(one, isNot(two));
         expect(one.hashCode, isNot(two.hashCode));
       });

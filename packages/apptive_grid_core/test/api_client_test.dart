@@ -118,7 +118,7 @@ void main() {
           .thenAnswer((_) async => response);
 
       final formData = await apptiveGridClient.loadForm(
-        formUri: RedirectFormUri(components: ['FormId']),
+        uri: Uri.parse('/api/a/FormId'),
       );
 
       expect(formData.title, equals('Form'));
@@ -150,12 +150,8 @@ void main() {
           .thenAnswer((_) => Future.value());
 
       await client.loadForm(
-        formUri: DirectFormUri(
-          user: 'user',
-          space: 'space',
-          grid: 'grid',
-          form: 'FormId',
-        ),
+        uri:
+            Uri.parse('/api/a/users/user/spaces/space/grids/grid/forms/FormId'),
       );
       verify(() => authenticator.checkAuthentication()).called(1);
     });
@@ -178,11 +174,8 @@ void main() {
 
       try {
         await client.loadForm(
-          formUri: DirectFormUri(
-            user: 'user',
-            space: 'space',
-            grid: 'grid',
-            form: 'FormId',
+          uri: Uri.parse(
+            '/api/a/users/user/spaces/space/grids/grid/forms/FormId',
           ),
         );
       } catch (error) {
@@ -199,7 +192,7 @@ void main() {
 
       expect(
         () => apptiveGridClient.loadForm(
-          formUri: RedirectFormUri(components: ['FormId']),
+          uri: Uri.parse('/api/a/FormId'),
         ),
         throwsA(isInstanceOf<Response>()),
       );
@@ -350,11 +343,7 @@ void main() {
       );
 
       final grid = await apptiveGridClient.loadGrid(
-        gridUri: GridUri(
-          user: user,
-          space: space,
-          grid: gridId,
-        ),
+        uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
       );
 
       expect(grid, isNot(null));
@@ -378,7 +367,7 @@ void main() {
 
       expect(
         () => apptiveGridClient.loadGrid(
-          gridUri: GridUri(user: user, space: space, grid: gridId),
+          uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
         ),
         throwsA(isInstanceOf<Response>()),
       );
@@ -393,12 +382,12 @@ void main() {
       final retryResponse = Response(json.encode(rawResponse), 200);
       bool isRetry = false;
 
-      final uri = GridUri.fromUri(
+      final uri = Uri.parse(
         '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
       );
       when(
         () => httpClient.get(
-          any(that: predicate<Uri>((testUri) => testUri.path == uri.uri.path)),
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
           headers: any(named: 'headers'),
         ),
       ).thenAnswer((_) async {
@@ -423,11 +412,11 @@ void main() {
         ),
       );
 
-      await apptiveGridClient.loadGrid(gridUri: uri);
+      await apptiveGridClient.loadGrid(uri: uri);
 
       verify(
         () => httpClient.get(
-          any(that: predicate<Uri>((testUri) => testUri.path == uri.uri.path)),
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
           headers: any(named: 'headers'),
         ),
       ).called(2);
@@ -465,11 +454,7 @@ void main() {
       );
 
       final grid = await apptiveGridClient.loadGrid(
-        gridUri: GridUri(
-          user: user,
-          space: space,
-          grid: gridId,
-        ),
+        uri: Uri.parse('/api/a/users/user/spaces/space/grids/gridId'),
         loadEntities: false,
       );
 
@@ -1591,15 +1576,12 @@ void main() {
         () => authenticator.checkAuthentication(),
       ).thenAnswer((invocation) async {});
 
-      final mockEntityUri = EntityUri(
-        user: 'user',
-        space: 'space',
-        grid: 'grid',
-        entity: 'entity',
+      final mockEntityUri = Uri.parse(
+        '/api/a/users/user/spaces/space/grids/grid/entities/entity',
       );
 
       final uri = Uri.parse(
-        '${ApptiveGridEnvironment.production.url}${mockEntityUri.uri.toString()}?layout=property',
+        '${ApptiveGridEnvironment.production.url}${mockEntityUri.toString()}?layout=property',
       );
 
       when(
@@ -1617,7 +1599,7 @@ void main() {
       );
 
       await client.getEntity(
-        entityUri: mockEntityUri,
+        uri: mockEntityUri,
         layout: ApptiveGridLayout.property,
         headers: {'custom': 'header'},
       );
@@ -1747,7 +1729,7 @@ void main() {
   group('get Space', () {
     const userId = 'userId';
     const spaceId = 'spaceId';
-    final spaceUri = SpaceUri(user: userId, space: spaceId);
+    final spaceUri = Uri.parse('api/a/users/$userId/spaces/$spaceId');
     final rawResponse = {
       'id': spaceId,
       'name': 'TestSpace',
@@ -1767,7 +1749,7 @@ void main() {
         ),
       ).thenAnswer((_) async => response);
 
-      final space = await apptiveGridClient.getSpace(spaceUri: spaceUri);
+      final space = await apptiveGridClient.getSpace(uri: spaceUri);
 
       expect(space, isNot(null));
     });
@@ -1785,7 +1767,7 @@ void main() {
       ).thenAnswer((_) async => response);
 
       expect(
-        () => apptiveGridClient.getSpace(spaceUri: spaceUri),
+        () => apptiveGridClient.getSpace(uri: spaceUri),
         throwsA(isInstanceOf<Response>()),
       );
     });
@@ -1797,6 +1779,7 @@ void main() {
     const gridId = 'gridId';
     const form0 = 'formId0';
     const form1 = 'formId1';
+    // ignore: deprecated_member_use_from_same_package
     final gridUri = GridUri(user: userId, space: spaceId, grid: gridId);
     final rawResponse = [
       '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
@@ -1814,6 +1797,7 @@ void main() {
         ),
       ).thenAnswer((_) async => response);
 
+      // ignore: deprecated_member_use_from_same_package
       final forms = await apptiveGridClient.getForms(gridUri: gridUri);
 
       expect(forms.length, equals(2));
@@ -1840,6 +1824,7 @@ void main() {
       ).thenAnswer((_) async => response);
 
       expect(
+        // ignore: deprecated_member_use_from_same_package
         () => apptiveGridClient.getForms(gridUri: gridUri),
         throwsA(isInstanceOf<Response>()),
       );
@@ -1852,6 +1837,7 @@ void main() {
     const gridId = 'gridId';
     const view0 = 'viewId0';
     const view1 = 'viewId1';
+    // ignore: deprecated_member_use_from_same_package
     final gridUri = GridUri(user: userId, space: spaceId, grid: gridId);
     final rawResponse = [
       '/api/users/id/spaces/spaceId/grids/gridId/views/$view0',
@@ -1869,6 +1855,7 @@ void main() {
         ),
       ).thenAnswer((_) async => response);
 
+      // ignore: deprecated_member_use_from_same_package
       final views = await apptiveGridClient.getGridViews(gridUri: gridUri);
 
       expect(views.length, equals(2));
@@ -1895,6 +1882,7 @@ void main() {
       ).thenAnswer((_) async => response);
 
       expect(
+        // ignore: deprecated_member_use_from_same_package
         () => apptiveGridClient.getGridViews(gridUri: gridUri),
         throwsA(isInstanceOf<Response>()),
       );
@@ -2061,12 +2049,7 @@ void main() {
       });
 
       final gridView = await apptiveGridClient.loadGrid(
-        gridUri: GridViewUri(
-          user: userId,
-          space: spaceId,
-          grid: gridId,
-          view: view0,
-        ),
+        uri: Uri.parse('/api/a/users/$userId/spaces/$spaceId/grids/$view0'),
       );
 
       expect(gridView.filter, isNot(null));
@@ -2233,12 +2216,7 @@ void main() {
             order: SortOrder.desc,
           )
         ],
-        gridUri: GridViewUri(
-          user: userId,
-          space: spaceId,
-          grid: gridId,
-          view: view0,
-        ),
+        uri: Uri.parse('/api/a/users/$userId/spaces/$spaceId/grids/$view0'),
       );
 
       verify(
@@ -2412,12 +2390,7 @@ void main() {
           fieldId: '9fqx8om03flgh8d4m1l953x29',
           value: StringDataEntity('a'),
         ),
-        gridUri: GridViewUri(
-          user: userId,
-          space: spaceId,
-          grid: gridId,
-          view: view0,
-        ),
+        uri: Uri.parse('/api/a/users/$userId/spaces/$spaceId/grids/$view0'),
       );
 
       verify(
@@ -2530,8 +2503,9 @@ void main() {
     const gridId = 'gridId';
     const entityId = 'entityId';
     const form = 'form';
-    final entityUri =
-        EntityUri(user: userId, space: spaceId, grid: gridId, entity: entityId);
+    final entityUri = Uri.parse(
+      '/api/a/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+    );
     final rawResponse = {
       'uri': '/api/r/$form',
     };
@@ -2549,11 +2523,11 @@ void main() {
       ).thenAnswer((_) async => response);
 
       final formUri = await apptiveGridClient.getEditLink(
-        entityUri: entityUri,
+        uri: entityUri,
         formId: form,
       );
 
-      expect(formUri.uri, equals(Uri(path: '/api/a/$form')));
+      expect(formUri, equals(Uri(path: '/api/a/$form')));
     });
 
     test('400 Status throws Response', () async {
@@ -2570,7 +2544,7 @@ void main() {
       ).thenAnswer((_) async => response);
 
       expect(
-        () => apptiveGridClient.getEditLink(entityUri: entityUri, formId: form),
+        () => apptiveGridClient.getEditLink(uri: entityUri, formId: form),
         throwsA(isInstanceOf<Response>()),
       );
     });
@@ -2581,8 +2555,9 @@ void main() {
     const spaceId = 'spaceId';
     const gridId = 'gridId';
     const entityId = 'entityId';
-    final entityUri =
-        EntityUri(user: userId, space: spaceId, grid: gridId, entity: entityId);
+    final entityUri = Uri.parse(
+      '/api/a/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+    );
     final rawResponse = {
       '4um33znbt8l6x0vzvo0mperwj': null,
       '_id': 'entityId',
@@ -2600,7 +2575,7 @@ void main() {
         ),
       ).thenAnswer((_) async => response);
 
-      final entity = await apptiveGridClient.getEntity(entityUri: entityUri);
+      final entity = await apptiveGridClient.getEntity(uri: entityUri);
 
       expect(entity, equals(rawResponse));
     });
@@ -2618,7 +2593,7 @@ void main() {
       ).thenAnswer((_) async => response);
 
       expect(
-        () => apptiveGridClient.getEntity(entityUri: entityUri),
+        () => apptiveGridClient.getEntity(uri: entityUri),
         throwsA(isInstanceOf<Response>()),
       );
     });
@@ -2636,7 +2611,7 @@ void main() {
       ).thenAnswer((_) async => response);
 
       final entity = await apptiveGridClient.getEntity(
-        entityUri: entityUri,
+        uri: entityUri,
         layout: ApptiveGridLayout.key,
       );
 

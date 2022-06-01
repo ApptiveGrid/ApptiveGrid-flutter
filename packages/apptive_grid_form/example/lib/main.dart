@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           title: const Text('ApptiveGrid Forms'),
         ),
         body: ApptiveGridForm(
-          formUri: FormUri.fromUri(
+          uri: Uri.parse(
             'YOUR_FORM_URI',
           ),
           titleStyle: Theme.of(context).textTheme.headline6,
