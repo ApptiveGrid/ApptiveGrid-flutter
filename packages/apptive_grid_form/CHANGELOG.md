@@ -1,3 +1,6 @@
+## 0.10.0-alpha.6
+* Remove dependency on google_maps_webservice in favor of a local copy to be able to release stable versions of this package
+
 ## 0.10.0-alpha.5
 * Add `description` to forms
 * Upgraded to `flutter_lints 2`
