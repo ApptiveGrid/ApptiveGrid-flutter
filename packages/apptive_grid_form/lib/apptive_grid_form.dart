@@ -23,7 +23,9 @@ class ApptiveGridForm extends StatefulWidget {
   /// The [formId] determines what Form is displayed. It works with empty and pre-filled forms.
   const ApptiveGridForm({
     Key? key,
-    required this.formUri,
+    Uri? uri,
+    // ignore: deprecated_member_use
+    @Deprecated('Use `uri` instead') FormUri? formUri,
     this.titleStyle,
     this.descriptionStyle,
     this.contentPadding,
@@ -37,14 +39,31 @@ class ApptiveGridForm extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
-  }) : super(key: key);
+  })  : assert(uri != null || formUri != null),
+        _uri = uri,
+        _formUri = formUri,
+        super(key: key);
+
+  /// [Uri] of the Form to display
+  ///
+  /// If you copied the id from a EditLink or Preview Window on apptivegrid you should use:
+  /// [FormUri..fromRedirect] with the id
+  /// If you display Data gathered from a Grid you more likely want to use [FormUri..directForm]
+  Uri get uri => _uri ?? _formUri!.uri;
+
+  // TODO: Remove this once FormUri is removed
+  final Uri? _uri;
+  // ignore: deprecated_member_use
+  final FormUri? _formUri;
 
   /// [FormUri] of the Form to display
   ///
   /// If you copied the id from a EditLink or Preview Window on apptivegrid you should use:
   /// [FormUri..fromRedirect] with the id
   /// If you display Data gathered from a Grid you more likely want to use [FormUri..directForm]
-  final FormUri formUri;
+  @Deprecated('Use `uri` instead')
+  FormUri get formUri =>
+      _uri != null ? FormUri.fromUri(_uri!.toString()) : _formUri!;
 
   /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
   final TextStyle? titleStyle;
@@ -123,7 +142,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
   @override
   void didUpdateWidget(covariant ApptiveGridForm oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.formUri != oldWidget.formUri) {
+    if (widget.uri != oldWidget.uri) {
       loadForm();
     }
   }
@@ -167,7 +186,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
         _formData = null;
       });
     }
-    _client.loadForm(formUri: widget.formUri).then((value) {
+    _client.loadForm(uri: widget.uri).then((value) {
       if (widget.onFormLoaded != null) {
         widget.onFormLoaded!(value);
       }

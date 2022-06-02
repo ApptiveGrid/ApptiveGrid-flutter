@@ -1,3 +1,6 @@
+## 0.10.0-alpha.6
+* Deprecate all `ApptiveLink` in favor of plain `Uri`
+
 ## 0.10.0-alpha.5
 * Add `description` to forms
 * Fixed parsing for `key`s in GridField

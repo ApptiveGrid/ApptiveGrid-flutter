@@ -80,11 +80,14 @@ class ApptiveGridClient {
   /// Based on [formUri] this might require Authentication
   /// throws [Response] if the request fails
   Future<FormData> loadForm({
-    required FormUri formUri,
+    Uri? uri,
+    // ignore: deprecated_member_use_from_same_package
+    @Deprecated('Use `uri` instead') FormUri? formUri,
     Map<String, String> headers = const {},
     bool isRetry = false,
   }) async {
-    final url = _generateApptiveGridUri(formUri.uri);
+    assert(uri != null || formUri != null);
+    final url = _generateApptiveGridUri(uri ?? formUri!.uri);
     final response =
         await _client.get(url, headers: _createHeadersWithDefaults(headers));
     if (response.statusCode >= 400) {
@@ -92,6 +95,7 @@ class ApptiveGridClient {
         await _authenticator.checkAuthentication();
         return loadForm(
           formUri: formUri,
+          uri: uri,
           headers: headers,
           isRetry: true,
         );
@@ -224,14 +228,17 @@ class ApptiveGridClient {
   /// Requires Authorization
   /// throws [Response] if the request fails
   Future<Grid> loadGrid({
-    required GridUri gridUri,
+    // ignore: deprecated_member_use_from_same_package
+    @Deprecated('Use `uri` instead') GridUri? gridUri,
+    Uri? uri,
     List<ApptiveGridSorting>? sorting,
     ApptiveGridFilter? filter,
     bool isRetry = false,
     Map<String, String> headers = const {},
     bool loadEntities = true,
   }) async {
-    final gridViewUrl = _generateApptiveGridUri(gridUri.uri);
+    assert(uri != null || gridUri != null);
+    final gridViewUrl = _generateApptiveGridUri(uri ?? gridUri!.uri);
 
     final gridHeaders = _createHeadersWithDefaults(headers);
     gridHeaders['Accept'] = 'application/vnd.apptivegrid.hal;version=2';
@@ -241,6 +248,7 @@ class ApptiveGridClient {
       if (gridViewResponse.statusCode == 401 && !isRetry) {
         await _authenticator.checkAuthentication();
         return loadGrid(
+          uri: uri,
           gridUri: gridUri,
           sorting: sorting,
           filter: filter,
@@ -352,12 +360,15 @@ class ApptiveGridClient {
   /// Requires Authorization
   /// throws [Response] if the request fails
   Future<Space> getSpace({
-    required SpaceUri spaceUri,
+    // ignore: deprecated_member_use_from_same_package
+    @Deprecated('Use `uri` instead') SpaceUri? spaceUri,
+    Uri? uri,
     Map<String, String> headers = const {},
   }) async {
+    assert(uri != null || spaceUri != null);
     await _authenticator.checkAuthentication();
 
-    final url = _generateApptiveGridUri(spaceUri.uri);
+    final url = _generateApptiveGridUri(uri ?? spaceUri!.uri);
     final response =
         await _client.get(url, headers: _createHeadersWithDefaults(headers));
     if (response.statusCode >= 400) {
@@ -372,6 +383,9 @@ class ApptiveGridClient {
   ///
   /// Requires Authorization
   /// throws [Response] if the request fails
+  @Deprecated(
+    'Consider using the `ApptiveLinkType.forms` link of a `Grid` and call `performApptiveLink` instead. This function will be removed in the future',
+  )
   Future<List<FormUri>> getForms({
     required GridUri gridUri,
     Map<String, String> headers = const {},
@@ -399,6 +413,9 @@ class ApptiveGridClient {
   ///
   /// Requires Authorization
   /// throws [Response] if the request fails
+  @Deprecated(
+    'Consider using the `ApptiveLinkType.views` link of a `Grid` and call `performApptiveLink` instead. This function will be removed in the future',
+  )
   Future<List<GridViewUri>> getGridViews({
     required GridUri gridUri,
     Map<String, String> headers = const {},
@@ -420,23 +437,24 @@ class ApptiveGridClient {
         .toList();
   }
 
-  /// Creates and returns a [FormUri] filled with the Data represented by [entityUri]
+  /// Creates and returns a [Uri] pointing to a Form filled with the Data represented for a given entitiy
   ///
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
   ///
   /// Requires Authorization
   /// throws [Response] if the request fails
-  Future<FormUri> getEditLink({
-    required EntityUri entityUri,
+  Future<Uri> getEditLink({
+    @Deprecated('Use `uri` instead. This Uri should be taken from the `ApptiveLinkType.addEditionLink`')
+        // ignore: deprecated_member_use_from_same_package
+        EntityUri? entityUri,
+    Uri? uri,
     required String formId,
     Map<String, String> headers = const {},
   }) async {
+    assert(uri != null || entityUri != null);
     await _authenticator.checkAuthentication();
 
-    final baseUrl = _generateApptiveGridUri(entityUri.uri);
-    final url = baseUrl.replace(
-      pathSegments: [...baseUrl.pathSegments, 'EditLink'],
-    );
+    final url = _generateApptiveGridUri(uri ?? entityUri!.uri);
 
     final response = await _client.post(
       url,
@@ -450,10 +468,13 @@ class ApptiveGridClient {
       throw response;
     }
 
-    return FormUri.fromUri((json.decode(response.body) as Map)['uri']);
+    return Uri.parse(
+      ((json.decode(response.body) as Map)['uri'] as String)
+          .replaceAll(RegExp('/r/'), '/a/'),
+    );
   }
 
-  /// Get a specific entity via a [entityUri]
+  /// Get a specific entity via a [uri]
   ///
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
   ///
@@ -462,14 +483,17 @@ class ApptiveGridClient {
   ///
   /// The entity will be layed out according to [layout]
   /// The id of the entity can be accessed via `['_id']`
-  Future<Map<String, dynamic>> getEntity({
-    required EntityUri entityUri,
+  Future<dynamic> getEntity({
+    // ignore: deprecated_member_use_from_same_package
+    @Deprecated('Use `uri` instead') EntityUri? entityUri,
+    Uri? uri,
     Map<String, String> headers = const {},
     ApptiveGridLayout layout = ApptiveGridLayout.field,
   }) async {
+    assert(uri != null || entityUri != null);
     await _authenticator.checkAuthentication();
 
-    final url = _generateApptiveGridUri(entityUri.uri);
+    final url = _generateApptiveGridUri(uri ?? entityUri!.uri);
 
     final response = await _client.get(
       url.replace(

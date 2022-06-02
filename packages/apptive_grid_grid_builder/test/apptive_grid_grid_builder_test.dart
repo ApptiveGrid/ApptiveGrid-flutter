@@ -13,7 +13,9 @@ void main() {
   late ApptiveGridClient client;
 
   setUpAll(() {
-    registerFallbackValue(GridUri(user: 'user', space: 'space', grid: 'grid'));
+    registerFallbackValue(
+      Uri.parse('/api/users/user/spaces/space/grids/grid'),
+    );
     registerFallbackValue(
       [ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)],
     );
@@ -29,11 +31,7 @@ void main() {
     final target = TestApp(
       client: client,
       child: ApptiveGridGridBuilder(
-        gridUri: GridUri(
-          user: user,
-          space: space,
-          grid: gridId,
-        ),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
@@ -47,7 +45,7 @@ void main() {
     final title = 'Title';
     when(
       () => client.loadGrid(
-        gridUri: GridUri(user: user, space: space, grid: gridId),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
       ),
     ).thenAnswer(
       (_) async => Grid(
@@ -69,11 +67,7 @@ void main() {
     final target = TestApp(
       client: client,
       child: ApptiveGridGridBuilder(
-        gridUri: GridUri(
-          user: user,
-          space: space,
-          grid: gridId,
-        ),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
         initialData: Grid(
           id: gridId,
           name: 'Initial Title',
@@ -94,7 +88,7 @@ void main() {
     final title = 'Title';
     when(
       () => client.loadGrid(
-        gridUri: GridUri(user: user, space: space, grid: gridId),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
       ),
     ).thenAnswer(
       (_) async => Grid(
@@ -118,11 +112,7 @@ void main() {
     final target = TestApp(
       client: client,
       child: ApptiveGridGridBuilder(
-        gridUri: GridUri(
-          user: user,
-          space: space,
-          grid: gridId,
-        ),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error');
@@ -135,7 +125,7 @@ void main() {
 
     when(
       () => client.loadGrid(
-        gridUri: GridUri(user: user, space: space, grid: gridId),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
       ),
     ).thenAnswer((_) => Future.error(''));
 
@@ -151,11 +141,7 @@ void main() {
       client: client,
       child: ApptiveGridGridBuilder(
         key: key,
-        gridUri: GridUri(
-          user: user,
-          space: space,
-          grid: gridId,
-        ),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
@@ -169,7 +155,7 @@ void main() {
     final title = 'Title';
     when(
       () => client.loadGrid(
-        gridUri: GridUri(user: user, space: space, grid: gridId),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
       ),
     ).thenAnswer(
       (_) async => Grid(
@@ -188,15 +174,15 @@ void main() {
 
     verify(
       () => client.loadGrid(
-        gridUri: GridUri(user: user, space: space, grid: gridId),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
       ),
     ).called(2);
   });
 
   group('GridUri', () {
     testWidgets('Changing GridUri reloads', (tester) async {
-      final uri1 = GridUri.fromUri('/uri1');
-      final uri2 = GridUri.fromUri('/uri2');
+      final uri1 = Uri.parse('/uri1');
+      final uri2 = Uri.parse('/uri2');
       final target = TestApp(
         client: client,
         child: _SortingAndFilterSwitcher(
@@ -208,7 +194,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          gridUri: any(named: 'gridUri'),
+          uri: any(named: 'uri'),
           filter: any(named: 'filter'),
         ),
       ).thenAnswer(
@@ -228,14 +214,14 @@ void main() {
 
       verify(
         () => client.loadGrid(
-          gridUri: uri1,
+          uri: uri1,
           filter: any(named: 'filter'),
         ),
       ).called(1);
 
       verify(
         () => client.loadGrid(
-          gridUri: uri2,
+          uri: uri2,
           filter: any(named: 'filter'),
         ),
       ).called(1);
@@ -251,11 +237,7 @@ void main() {
         client: client,
         child: ApptiveGridGridBuilder(
           sorting: sorting,
-          gridUri: GridUri(
-            user: user,
-            space: space,
-            grid: gridId,
-          ),
+          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Text(snapshot.data!.name);
@@ -269,7 +251,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          gridUri: GridUri(user: user, space: space, grid: gridId),
+          uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
           sorting: sorting,
         ),
       ).thenAnswer(
@@ -286,7 +268,7 @@ void main() {
 
       final capturedSorting = verify(
         () => client.loadGrid(
-          gridUri: any(named: 'gridUri'),
+          uri: any(named: 'uri'),
           sorting: captureAny(named: 'sorting'),
         ),
       ).captured.first as List<ApptiveGridSorting>;
@@ -300,7 +282,7 @@ void main() {
       final target = TestApp(
         client: client,
         child: _SortingAndFilterSwitcher(
-          gridUri1: GridUri(user: user, space: space, grid: gridId),
+          gridUri1: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           sorting1: sorting,
           sorting2: [
             ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.desc)
@@ -311,7 +293,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          gridUri: GridUri(user: user, space: space, grid: gridId),
+          uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           sorting: any(named: 'sorting'),
         ),
       ).thenAnswer(
@@ -331,7 +313,7 @@ void main() {
 
       verify(
         () => client.loadGrid(
-          gridUri: any(named: 'gridUri'),
+          uri: any(named: 'uri'),
           sorting: any(named: 'sorting'),
         ),
       ).called(2);
@@ -346,11 +328,7 @@ void main() {
         client: client,
         child: ApptiveGridGridBuilder(
           filter: filter,
-          gridUri: GridUri(
-            user: user,
-            space: space,
-            grid: gridId,
-          ),
+          uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Text(snapshot.data!.name);
@@ -364,7 +342,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          gridUri: GridUri(user: user, space: space, grid: gridId),
+          uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           filter: filter,
         ),
       ).thenAnswer(
@@ -381,7 +359,7 @@ void main() {
 
       final capturedSorting = verify(
         () => client.loadGrid(
-          gridUri: any(named: 'gridUri'),
+          uri: any(named: 'uri'),
           filter: captureAny(named: 'filter'),
         ),
       ).captured.first as ApptiveGridFilter;
@@ -396,7 +374,7 @@ void main() {
       final target = TestApp(
         client: client,
         child: _SortingAndFilterSwitcher(
-          gridUri1: GridUri(user: user, space: space, grid: gridId),
+          gridUri1: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           filter1: filter1,
           filter2: filter2,
         ),
@@ -405,7 +383,7 @@ void main() {
       final title = 'Title';
       when(
         () => client.loadGrid(
-          gridUri: GridUri(user: user, space: space, grid: gridId),
+          uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           filter: any(named: 'filter'),
         ),
       ).thenAnswer(
@@ -425,10 +403,52 @@ void main() {
 
       verify(
         () => client.loadGrid(
-          gridUri: any(named: 'gridUri'),
+          uri: any(named: 'uri'),
           filter: any(named: 'filter'),
         ),
       ).called(2);
+    });
+  });
+
+  group('GridUri', () {
+    final uri = Uri.parse('uri');
+    // ignore: deprecated_member_use
+    final gridUri = GridUri.fromUri('gridUri');
+
+    test('No GridUri returns Uri as GridUri', () async {
+      final apptiveGridGridBuilder = ApptiveGridGridBuilder(
+        uri: uri,
+        builder: (_, __) => const SizedBox(),
+      );
+
+      // ignore: deprecated_member_use_from_same_package
+      expect(apptiveGridGridBuilder.gridUri.uri, equals(uri));
+      expect(apptiveGridGridBuilder.uri, equals(uri));
+    });
+
+    test('No Uri returns GridUri', () async {
+      final apptiveGridGridBuilder = ApptiveGridGridBuilder(
+        // ignore: deprecated_member_use_from_same_package
+        gridUri: gridUri,
+        builder: (_, __) => const SizedBox(),
+      );
+
+      // ignore: deprecated_member_use_from_same_package
+      expect(apptiveGridGridBuilder.gridUri.uri, equals(gridUri.uri));
+      expect(apptiveGridGridBuilder.uri, equals(gridUri.uri));
+    });
+
+    test('Uri prioritized over gridUri', () async {
+      final apptiveGridGridBuilder = ApptiveGridGridBuilder(
+        uri: uri,
+        // ignore: deprecated_member_use_from_same_package
+        gridUri: gridUri,
+        builder: (_, __) => const SizedBox(),
+      );
+
+      // ignore: deprecated_member_use_from_same_package
+      expect(apptiveGridGridBuilder.gridUri.uri, equals(uri));
+      expect(apptiveGridGridBuilder.uri, equals(uri));
     });
   });
 }
@@ -450,8 +470,8 @@ class _SortingAndFilterSwitcher extends StatefulWidget {
   final ApptiveGridFilter? filter1;
   final ApptiveGridFilter? filter2;
 
-  final GridUri gridUri1;
-  final GridUri? gridUri2;
+  final Uri gridUri1;
+  final Uri? gridUri2;
 
   @override
   State<_SortingAndFilterSwitcher> createState() =>
@@ -461,7 +481,7 @@ class _SortingAndFilterSwitcher extends StatefulWidget {
 class _SortingAndFilterSwitcherState extends State<_SortingAndFilterSwitcher> {
   late List<ApptiveGridSorting>? _sorting;
   late ApptiveGridFilter? _filter;
-  late GridUri _gridUri;
+  late Uri _gridUri;
 
   @override
   void initState() {
@@ -490,7 +510,7 @@ class _SortingAndFilterSwitcherState extends State<_SortingAndFilterSwitcher> {
         ApptiveGridGridBuilder(
           sorting: _sorting,
           filter: _filter,
-          gridUri: _gridUri,
+          uri: _gridUri,
           builder: (_, __) => const SizedBox(),
         ),
       ],
