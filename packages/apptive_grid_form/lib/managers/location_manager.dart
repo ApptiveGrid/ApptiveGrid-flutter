@@ -1,7 +1,6 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/google_maps_web_service/google_maps_web_service.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_webservice/geocoding.dart' as geocoding;
 
 /// Manager for handling Location based Requests and Services
 class LocationManager {
@@ -16,13 +15,13 @@ class LocationManager {
           apiKey: configuration.placesApiKey,
           httpClient: configuration.httpClient,
         ),
-        _googleMapsGeocoding = geocoding.GoogleMapsGeocoding(
+        _googleMapsGeocoding = GoogleMapsGeocoding(
           apiKey: configuration.geocodingApiKey ?? configuration.placesApiKey,
           httpClient: configuration.httpClient,
         );
 
   final GoogleMapsPlaces _googleMapsPlaces;
-  final geocoding.GoogleMapsGeocoding _googleMapsGeocoding;
+  final GoogleMapsGeocoding _googleMapsGeocoding;
 
   /// Returns the current User Position using [Geolocator]
   ///
@@ -71,14 +70,14 @@ class LocationManager {
   /// Queries the GoogleGeocoding API for [location]
   ///
   /// Uses [GoogleMapsGeocoding.getPlaceByLocation]
-  Future<geocoding.GeocodingResponse> getPlaceByLocation(
+  Future<GeocodingResponse> getPlaceByLocation(
     Geolocation location, {
     String? language,
     List<String> resultType = const [],
     List<String> locationType = const [],
   }) {
     return _googleMapsGeocoding.searchByLocation(
-      geocoding.Location(lat: location.latitude, lng: location.longitude),
+      Location(lat: location.latitude, lng: location.longitude),
       language: language,
       resultType: resultType,
       locationType: locationType,
