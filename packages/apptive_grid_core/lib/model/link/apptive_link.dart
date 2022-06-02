@@ -9,7 +9,7 @@ class ApptiveLink {
   /// Expect [uri] in a field called `href` and [method] in a field called `method`
   factory ApptiveLink.fromJson(dynamic json) {
     return ApptiveLink(
-      uri: Uri.parse(json['href'] ?? json['url']),
+      uri: Uri.parse(json['href'] ?? json['url'] ?? json['uri']),
       method: json['method'],
     );
   }
