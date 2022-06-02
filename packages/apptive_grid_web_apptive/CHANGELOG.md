@@ -1,3 +1,6 @@
+## 0.0.3-alpha.3
+* Update example to style it with `apptive_grid_theme`
+
 ## 0.0.3-alpha.2
 * Upgraded to `flutter_lints 2`
 
