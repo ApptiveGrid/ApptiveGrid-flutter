@@ -79,7 +79,8 @@ abstract class GoogleWebService {
 DateTime dayTimeToDateTime(int day, String time) {
   if (time.length < 4) {
     throw ArgumentError(
-        "'time' is not a valid string. It must be four integers.");
+      "'time' is not a valid string. It must be four integers.",
+    );
   }
 
   day = day == 0 ? DateTime.sunday : day;

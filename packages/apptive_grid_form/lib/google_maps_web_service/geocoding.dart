@@ -104,8 +104,6 @@ class GoogleMapsGeocoding extends GoogleWebService {
 }
 
 class GeocodingResponse extends GoogleResponseStatus {
-  final List<GeocodingResult> results;
-
   GeocodingResponse({
     required String status,
     String? errorMessage,
@@ -117,10 +115,23 @@ class GeocodingResponse extends GoogleResponseStatus {
 
   factory GeocodingResponse.fromJson(Map<String, dynamic> json) =>
       _$GeocodingResponseFromJson(json);
+  final List<GeocodingResult> results;
   Map<String, dynamic> toJson() => _$GeocodingResponseToJson(this);
 }
 
 class GeocodingResult {
+  factory GeocodingResult.fromJson(Map<String, dynamic> json) =>
+      _$GeocodingResultFromJson(json);
+
+  GeocodingResult({
+    required this.geometry,
+    required this.placeId,
+    this.types = const <String>[],
+    this.addressComponents = const <AddressComponent>[],
+    this.postcodeLocalities = const <String>[],
+    this.partialMatch = false,
+    this.formattedAddress,
+  });
   final List<String> types;
 
   /// JSON formatted_address
@@ -142,40 +153,10 @@ class GeocodingResult {
 
   /// JSON place_id
   final String placeId;
-
-  GeocodingResult({
-    required this.geometry,
-    required this.placeId,
-    this.types = const <String>[],
-    this.addressComponents = const <AddressComponent>[],
-    this.postcodeLocalities = const <String>[],
-    this.partialMatch = false,
-    this.formattedAddress,
-  });
-
-  factory GeocodingResult.fromJson(Map<String, dynamic> json) =>
-      _$GeocodingResultFromJson(json);
   Map<String, dynamic> toJson() => _$GeocodingResultToJson(this);
 }
 
 class StreetAddress {
-  final Geometry? geometry;
-  final String? addressLine;
-  final String? countryName;
-  final String? countryCode;
-  final String? featureName;
-  final String? postalCode;
-  final String? adminArea;
-  final String? subAdminArea;
-  final String? locality;
-  final String? subLocality;
-
-  /// Route
-  final String? thoroughfare;
-
-  /// Street Number
-  final String? subThoroughfare;
-
   StreetAddress({
     this.geometry,
     this.addressLine,
@@ -228,5 +209,21 @@ class StreetAddress {
 
   factory StreetAddress.fromJson(Map<String, dynamic> json) =>
       _$StreetAddressFromJson(json);
+  final Geometry? geometry;
+  final String? addressLine;
+  final String? countryName;
+  final String? countryCode;
+  final String? featureName;
+  final String? postalCode;
+  final String? adminArea;
+  final String? subAdminArea;
+  final String? locality;
+  final String? subLocality;
+
+  /// Route
+  final String? thoroughfare;
+
+  /// Street Number
+  final String? subThoroughfare;
   Map<String, dynamic> toJson() => _$StreetAddressToJson(this);
 }
