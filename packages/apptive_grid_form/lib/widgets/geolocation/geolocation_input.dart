@@ -1,5 +1,5 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
-import 'package:apptive_grid_form/google_maps_web_service/google_maps_web_service.dart';
+import 'package:apptive_grid_form/google_maps_webservice/google_maps_webservice.dart';
 import 'package:apptive_grid_form/managers/location_manager.dart';
 import 'package:apptive_grid_form/managers/permission_manager.dart';
 import 'package:flutter/material.dart';

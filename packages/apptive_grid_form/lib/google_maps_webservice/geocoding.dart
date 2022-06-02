@@ -4,8 +4,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:apptive_grid_form/google_maps_web_service/core.dart';
-import 'package:apptive_grid_form/google_maps_web_service/utils.dart';
+import 'package:apptive_grid_form/google_maps_webservice/core.dart';
+import 'package:apptive_grid_form/google_maps_webservice/utils.dart';
 import 'package:http/http.dart';
 
 part 'geocoding.g.dart';
