@@ -33,19 +33,19 @@ abstract class DataEntity<T, S> {
 /// Class for DataEntities that are support in Comparison Filters like [LesserThanFilter] and [GreaterThanFilter]
 abstract class ComparableDataEntity<T, S> extends DataEntity<T, S> {
   /// Creates a new DataEntity with [value]
-  ComparableDataEntity([T? value]) : super(value);
+  ComparableDataEntity([super.value]);
 }
 
 /// Class for DataEntities that support Collection Filters like [AnyOfFilter], [AllOfFilter] and [NoneOfFilter]
 abstract class CollectionDataEntity<T, S> extends DataEntity<T, S> {
   /// Creates a new DataEntity with [value]
-  CollectionDataEntity([T? value]) : super(value);
+  CollectionDataEntity([super.value]);
 }
 
 /// [DataEntity] representing [String] Objects
 class StringDataEntity extends DataEntity<String, String> {
   /// Creates a new StringDataEntity Object with value [value]
-  StringDataEntity([String? value]) : super(value);
+  StringDataEntity([super.value]);
 
   @override
   String? get schemaValue => value;
@@ -54,7 +54,7 @@ class StringDataEntity extends DataEntity<String, String> {
 /// [DataEntity] representing [DateTime] Objects
 class DateTimeDataEntity extends ComparableDataEntity<DateTime, String> {
   /// Creates a new DateTimeDataEntity Object with value [value]
-  DateTimeDataEntity([DateTime? value]) : super(value);
+  DateTimeDataEntity([super.value]);
 
   /// Creates a new DateTimeDataEntity Object from json
   /// [json] needs to be a Iso8601String
@@ -75,7 +75,7 @@ class DateTimeDataEntity extends ComparableDataEntity<DateTime, String> {
 /// Internally this is using [DateTime] ignoring the Time Part
 class DateDataEntity extends ComparableDataEntity<DateTime, String> {
   /// Creates a new DateTimeDataEntity Object with value [value]
-  DateDataEntity([DateTime? value]) : super(value);
+  DateDataEntity([super.value]);
 
   /// Creates a new DateTimeDataEntity Object from json
   /// [json] needs to be a Date String with Format yyyy-MM-dd
@@ -97,7 +97,7 @@ class DateDataEntity extends ComparableDataEntity<DateTime, String> {
 /// [DataEntity] representing [boolean] Objects
 class BooleanDataEntity extends DataEntity<bool, bool> {
   /// Creates a new BooleanDataEntity Object
-  BooleanDataEntity([bool? value = false]) : super(value ?? false);
+  BooleanDataEntity([bool? value]) : super(value ?? false);
 
   @override
   bool? get schemaValue => value;
@@ -106,7 +106,7 @@ class BooleanDataEntity extends DataEntity<bool, bool> {
 /// [DataEntity] representing [int] Objects
 class IntegerDataEntity extends ComparableDataEntity<int, int> {
   /// Creates a new IntegerDataEntity Object
-  IntegerDataEntity([int? value]) : super(value);
+  IntegerDataEntity([super.value]);
 
   @override
   int? get schemaValue => value;
@@ -286,7 +286,7 @@ class AttachmentDataEntity
 /// [DataEntity] representing [Geolocation]s
 class GeolocationDataEntity extends DataEntity<Geolocation, dynamic> {
   /// Creates a new GeolocationDataEntity Object with value [value]
-  GeolocationDataEntity([Geolocation? value]) : super(value);
+  GeolocationDataEntity([super.value]);
 
   /// Creates a new GeolocationDataEntity Object from json
   /// [json] needs to be an array of double
@@ -364,7 +364,7 @@ class MultiCrossReferenceDataEntity
 /// [DataEntity] representing [UserReference]s
 class UserReferenceDataEntity extends DataEntity<UserReference, dynamic> {
   /// Creates a new UserReferenceDataEntity Object with value [value]
-  UserReferenceDataEntity([UserReference? value]) : super(value);
+  UserReferenceDataEntity([super.value]);
 
   /// Creates a new UserReferenceDataEntity Object from json
   /// [json] needs to be an object that is parsed with [UserReference.fromJson]

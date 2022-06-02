@@ -5,7 +5,7 @@ part of apptive_grid_form_widgets;
 class GridRowWidget extends StatefulWidget {
   /// Creates a new RowWidget
   const GridRowWidget({
-    Key? key,
+    super.key,
     required this.row,
     this.cellSize = const Size(150, 50),
     this.textStyle,
@@ -15,7 +15,7 @@ class GridRowWidget extends StatefulWidget {
     this.selected = false,
     this.onSelectionChanged,
     this.filterController,
-  }) : super(key: key);
+  });
 
   /// Row to be displayed
   final GridRow row;
@@ -142,14 +142,14 @@ typedef FilterListener = void Function();
 class HeaderRowWidget extends StatelessWidget {
   /// Creates a new RowWidget
   const HeaderRowWidget({
-    Key? key,
+    super.key,
     required this.fields,
     this.cellSize = const Size(150, 50),
     this.textStyle,
     this.color,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
     this.controller,
-  }) : super(key: key);
+  });
 
   /// Fields that should be displayed
   final List<GridField> fields;
@@ -194,14 +194,13 @@ class HeaderRowWidget extends StatelessWidget {
 
 class _GridRow extends StatelessWidget {
   const _GridRow({
-    Key? key,
     required this.labels,
     this.cellSize = const Size(150, 50),
     this.textStyle,
     this.color,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
     this.controller,
-  }) : super(key: key);
+  });
 
   final List<String?> labels;
   final Size cellSize;

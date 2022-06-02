@@ -22,7 +22,7 @@ class ApptiveGridForm extends StatefulWidget {
   ///
   /// The [formId] determines what Form is displayed. It works with empty and pre-filled forms.
   const ApptiveGridForm({
-    Key? key,
+    super.key,
     Uri? uri,
     // ignore: deprecated_member_use
     @Deprecated('Use `uri` instead') FormUri? formUri,
@@ -41,8 +41,7 @@ class ApptiveGridForm extends StatefulWidget {
     this.buttonLabel,
   })  : assert(uri != null || formUri != null),
         _uri = uri,
-        _formUri = formUri,
-        super(key: key);
+        _formUri = formUri;
 
   /// [Uri] of the Form to display
   ///
@@ -217,7 +216,7 @@ class ApptiveGridFormData extends StatefulWidget {
   ///
   /// if [error] is not null it will display a error
   const ApptiveGridFormData({
-    Key? key,
+    super.key,
     this.formData,
     this.error,
     this.titleStyle,
@@ -233,7 +232,7 @@ class ApptiveGridFormData extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
-  }) : super(key: key);
+  });
 
   /// [FormData] that should be displayed
   final FormData? formData;

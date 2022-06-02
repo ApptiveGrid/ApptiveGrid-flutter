@@ -3,15 +3,14 @@ part of apptive_grid_form_widgets;
 class _CrossReferenceDropdownButtonFormField<T extends DataEntity>
     extends StatefulWidget {
   const _CrossReferenceDropdownButtonFormField({
-    Key? key,
+    super.key,
     required this.component,
     required this.selectedItemBuilder,
     required this.onSelected,
     this.isSelected,
-  })  : assert(
+  }) : assert(
           T == CrossReferenceDataEntity || T == MultiCrossReferenceDataEntity,
-        ),
-        super(key: key);
+        );
 
   final FormComponent<T> component;
 
@@ -253,14 +252,14 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
 
 class _RowMenuItem extends StatefulWidget {
   const _RowMenuItem({
-    Key? key,
+    super.key,
     required this.grid,
     required this.row,
     this.controller,
     this.initiallySelected = false,
     this.onSelectionChanged,
     this.filterController,
-  }) : super(key: key);
+  });
 
   final Grid grid;
   final GridRow row;

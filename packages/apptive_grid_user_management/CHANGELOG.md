@@ -1,3 +1,6 @@
+## 0.0.5-alpha.4
+* Upgraded to dart 2.17
+
 ## 0.0.5-alpha.3
 * Add support for custom translations
 

@@ -10,7 +10,7 @@ export 'package:apptive_grid_core/apptive_grid_core.dart';
 class ApptiveGridGridBuilder extends StatefulWidget {
   /// Creates a Builder Widet
   const ApptiveGridGridBuilder({
-    Key? key,
+    super.key,
     Uri? uri,
     @Deprecated('Use `uri` instead')
         // ignore: deprecated_member_use
@@ -21,8 +21,7 @@ class ApptiveGridGridBuilder extends StatefulWidget {
     required this.builder,
   })  : assert(uri != null || gridUri != null),
         _uri = uri,
-        _gridUri = gridUri,
-        super(key: key);
+        _gridUri = gridUri;
 
   // TODO: Remove once GridUri is removed. Make _uri public and required
   // ignore: deprecated_member_use

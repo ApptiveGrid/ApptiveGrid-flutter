@@ -66,9 +66,8 @@ class _MyAppState extends State<MyApp> {
 
 class _UserSection extends StatefulWidget {
   const _UserSection({
-    Key? key,
     required this.onUserLoaded,
-  }) : super(key: key);
+  });
 
   final Function(User) onUserLoaded;
 
@@ -144,9 +143,8 @@ class _UserSectionState extends State<_UserSection> {
 
 class _SpaceSection extends StatefulWidget {
   const _SpaceSection({
-    Key? key,
     required this.uri,
-  }) : super(key: key);
+  });
 
   final Uri uri;
 
@@ -212,9 +210,8 @@ class _SpaceSectionState extends State<_SpaceSection> {
 
 class _GridSection extends StatefulWidget {
   const _GridSection({
-    Key? key,
     required this.uri,
-  }) : super(key: key);
+  });
 
   final Uri uri;
 

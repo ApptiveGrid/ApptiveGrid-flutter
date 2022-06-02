@@ -6,11 +6,11 @@ class ActionButton extends StatelessWidget {
   ///
   /// This uses a RaisedButton.
   const ActionButton({
-    Key? key,
+    super.key,
     required this.action,
     this.child,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   /// The action the Button represents
   final ApptiveLink action;

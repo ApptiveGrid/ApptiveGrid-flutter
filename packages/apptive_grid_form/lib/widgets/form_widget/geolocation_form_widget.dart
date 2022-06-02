@@ -6,9 +6,9 @@ class GeolocationFormWidget extends StatefulWidget {
   ///
   /// Shows a [GeolocationInput] and [GeolocationMap] Widget to allow the user to change the value
   const GeolocationFormWidget({
-    Key? key,
+    super.key,
     required this.component,
-  }) : super(key: key);
+  });
 
   /// Component this Widget should reflect
   final GeolocationFormComponent component;

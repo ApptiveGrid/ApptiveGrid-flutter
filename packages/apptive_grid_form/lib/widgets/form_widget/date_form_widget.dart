@@ -6,9 +6,9 @@ class DateFormWidget extends StatefulWidget {
   ///
   /// Clicking on this will show a DatePicker using [showDatePicker]
   const DateFormWidget({
-    Key? key,
+    super.key,
     required this.component,
-  }) : super(key: key);
+  });
 
   /// Component this Widget should reflect
   final DateFormComponent component;

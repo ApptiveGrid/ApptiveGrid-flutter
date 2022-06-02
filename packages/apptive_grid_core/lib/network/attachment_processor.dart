@@ -150,7 +150,7 @@ class AttachmentProcessor {
             ).catchError((error) {
               debugPrint('Could not upload large thumbnail');
               debugPrint(error);
-              return http.Response('', 200);
+              return http.Response('', 200); // coverage:ignore-line
             }),
           if (attachmentAction.attachment.smallThumbnail != null)
             _uploadFile(
@@ -167,7 +167,7 @@ class AttachmentProcessor {
             ).catchError((error) {
               debugPrint('Could not upload small thumbnail');
               debugPrint(error);
-              return http.Response(error, 200);
+              return http.Response('', 200); // coverage:ignore-line
             }),
         ],
       ).catchError((error) {

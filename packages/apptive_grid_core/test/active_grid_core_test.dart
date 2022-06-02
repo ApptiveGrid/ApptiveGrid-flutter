@@ -262,10 +262,10 @@ class _StubFormWidgetConfiguration extends FormWidgetConfiguration {
 
 class _UpdateOptionsWidget extends StatefulWidget {
   const _UpdateOptionsWidget({
-    Key? key,
+    super.key,
     required this.initalEnvironment,
     required this.child,
-  }) : super(key: key);
+  });
 
   final ApptiveGridEnvironment initalEnvironment;
   final Widget child;

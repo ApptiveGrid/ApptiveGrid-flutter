@@ -15,8 +15,7 @@ import 'package:universal_platform/universal_platform.dart';
 /// Users can chosse to add Attachment from Camera, Image Gallery and Files
 class AddAttachmentButton extends StatefulWidget {
   /// Creates a new PopupMenuButton
-  const AddAttachmentButton({Key? key, this.onAttachmentsAdded})
-      : super(key: key);
+  const AddAttachmentButton({super.key, this.onAttachmentsAdded});
 
   /// Callback invoked when the user has added new Attachments
   final void Function(List<Attachment>?)? onAttachmentsAdded;
@@ -177,10 +176,9 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
 
 class _SourceOptionPopupItem extends StatelessWidget {
   const _SourceOptionPopupItem({
-    Key? key,
     required this.label,
     required this.icon,
-  }) : super(key: key);
+  });
 
   final String label;
   final IconData icon;

@@ -8,7 +8,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  MyApp({super.key});
 
   final _navigatorKey = GlobalKey<NavigatorState>();
 
@@ -72,8 +72,8 @@ class MyApp extends StatelessWidget {
 
 class LoginRegistrationPage extends StatelessWidget {
   const LoginRegistrationPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

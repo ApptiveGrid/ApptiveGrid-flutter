@@ -18,10 +18,10 @@ class ApptiveGridWebApptive extends StatefulWidget {
   ///
   /// Received [ApptiveMessages] are passed into [messageController]
   const ApptiveGridWebApptive({
-    Key? key,
+    super.key,
     required this.builder,
     this.messageController,
-  }) : super(key: key);
+  });
 
   /// Called when there is a [ApptiveGridEvent] changing the data
   final Widget Function(BuildContext, ApptiveGridEvent) builder;
