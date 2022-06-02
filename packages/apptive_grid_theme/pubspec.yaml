@@ -1,6 +1,6 @@
 name: apptive_grid_theme
 description: All theming for apps using ApptiveGrid. This includes colors, icons and fonts used by ApptiveGrid.
-version: 0.1.1
+version: 0.1.2
 homepage: https://www.apptivegrid.de
 repository: https://github.com/ApptiveGrid/apptive_grid_flutter/tree/main/packages/apptive_grid_theme
 

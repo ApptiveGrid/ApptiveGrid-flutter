@@ -1,5 +1,8 @@
-## 0.1.1
+## 0.1.2
 * Upgraded to dart 2.17
+
+## 0.1.1
+* Add `ApptiveGridColors.kanban` and `ApptiveGridColors.calendar`
 
 ## 0.1.0
 * Upgraded to `flutter_lints 2`

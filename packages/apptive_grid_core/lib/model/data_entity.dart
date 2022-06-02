@@ -204,24 +204,23 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
   }) =>
       CrossReferenceDataEntity(
         value: jsonValue?['displayValue'],
-        entityUri: jsonValue?['uri'] != null
-            ? EntityUri.fromUri(jsonValue?['uri'])
-            : null,
-        gridUri: GridUri.fromUri(gridUri),
+        entityUri:
+            jsonValue?['uri'] != null ? Uri.parse(jsonValue?['uri']) : null,
+        gridUri: Uri.parse(gridUri),
       );
 
-  /// The [EntityUri] pointing to the Entity this is referencing
-  EntityUri? entityUri;
+  /// The [Uri] pointing to the Entity this is referencing
+  Uri? entityUri;
 
   /// Pointing to the [Grid] this is referencing
-  final GridUri gridUri;
+  final Uri gridUri;
 
   @override
   dynamic get schemaValue {
     if (entityUri == null) {
       return null;
     } else {
-      return {'displayValue': value ?? '', 'uri': entityUri!.uri.toString()};
+      return {'displayValue': value ?? '', 'uri': entityUri!.toString()};
     }
   }
 
@@ -328,12 +327,12 @@ class MultiCrossReferenceDataEntity
               )
               .toList() ??
           [],
-      gridUri: GridUri.fromUri(gridUri),
+      gridUri: Uri.parse(gridUri),
     );
   }
 
   /// Pointing to the [Grid] this is referencing
-  final GridUri gridUri;
+  final Uri gridUri;
 
   @override
   dynamic get schemaValue {

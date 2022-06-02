@@ -1,6 +1,10 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+// coverage:ignore-file
+
 part of apptive_grid_model;
 
 /// Base class used to represent Objects with a Uri
+@Deprecated('Use a normal `Uri` instead')
 abstract class ApptiveGridUri {
   ApptiveGridUri._(Uri uri, this.type) : _uri = uri;
 
@@ -33,6 +37,7 @@ abstract class ApptiveGridUri {
 }
 
 /// The type that a [ApptiveGridUri] is pointing to
+@Deprecated('Use a normal `Uri` instead')
 enum UriType {
   /// An unknown type. This should normally not occur
   unknown,

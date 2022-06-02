@@ -1,6 +1,7 @@
 part of apptive_grid_model;
 
 /// A Uri representing a GridView
+@Deprecated('Use a normal `Uri` instead')
 class GridViewUri extends GridUri {
   /// Creates a new [GridViewUri] based on known ids for [user], [space], [grid] and [view]
   GridViewUri({

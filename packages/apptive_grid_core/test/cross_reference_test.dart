@@ -158,7 +158,7 @@ void main() {
           as CrossReferenceDataEntity;
 
       expect(
-        dataEntity.gridUri.uri.toString(),
+        dataEntity.gridUri.toString(),
         (rawResponse['fields'] as List).first['schema']['gridUri'],
       );
     });
@@ -198,9 +198,9 @@ void main() {
     group('Schema Object', () {
       test('Value and EntityUri are set', () {
         final entity = CrossReferenceDataEntity(
-          gridUri: GridUri.fromUri('uri'),
+          gridUri: Uri.parse('uri'),
           value: 'Display Value',
-          entityUri: EntityUri.fromUri('entityUri'),
+          entityUri: Uri.parse('entityUri'),
         );
 
         expect(
@@ -214,9 +214,9 @@ void main() {
 
       test('No Value still produces object if EntityUri is set', () {
         final entity = CrossReferenceDataEntity(
-          gridUri: GridUri.fromUri('uri'),
+          gridUri: Uri.parse('uri'),
           value: null,
-          entityUri: EntityUri.fromUri('entityUri'),
+          entityUri: Uri.parse('entityUri'),
         );
 
         expect(
@@ -230,7 +230,7 @@ void main() {
 
       test('No Entity Uri sends null', () {
         final entity = CrossReferenceDataEntity(
-          gridUri: GridUri.fromUri('uri'),
+          gridUri: Uri.parse('uri'),
           value: 'Display Value',
           entityUri: null,
         );

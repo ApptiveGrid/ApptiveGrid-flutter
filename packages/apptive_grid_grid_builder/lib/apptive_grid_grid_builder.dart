@@ -11,15 +11,32 @@ class ApptiveGridGridBuilder extends StatefulWidget {
   /// Creates a Builder Widet
   const ApptiveGridGridBuilder({
     super.key,
-    required this.gridUri,
+    Uri? uri,
+    @Deprecated('Use `uri` instead')
+        // ignore: deprecated_member_use
+        GridUri? gridUri,
     this.initialData,
     this.sorting,
     this.filter,
     required this.builder,
-  });
+  })  : assert(uri != null || gridUri != null),
+        _uri = uri,
+        _gridUri = gridUri;
+
+  // TODO: Remove once GridUri is removed. Make _uri public and required
+  // ignore: deprecated_member_use
+  final GridUri? _gridUri;
+  final Uri? _uri;
+
+  /// Uri of the grid that should be used
+  // ignore: deprecated_member_use
+  Uri get uri => _uri ?? _gridUri!.uri;
 
   /// GridUri of the grid that should be used
-  final GridUri gridUri;
+  // ignore: deprecated_member_use
+  @Deprecated('Use `uri` instead')
+  GridUri get gridUri =>
+      _uri != null ? GridUri.fromUri(_uri!.toString()) : _gridUri!;
 
   /// Initial [Grid] data that should be shown
   final Grid? initialData;
@@ -59,7 +76,7 @@ class ApptiveGridGridBuilderState extends State<ApptiveGridGridBuilder> {
     super.didUpdateWidget(oldWidget);
     if (!listEquals(oldWidget.sorting, widget.sorting) ||
         oldWidget.filter != widget.filter ||
-        oldWidget.gridUri != widget.gridUri) {
+        oldWidget.uri != widget.uri) {
       reload(listen: false);
     }
   }
@@ -77,7 +94,7 @@ class ApptiveGridGridBuilderState extends State<ApptiveGridGridBuilder> {
   }) {
     return ApptiveGrid.getClient(context, listen: listen)
         .loadGrid(
-          gridUri: widget.gridUri,
+          uri: widget.uri,
           sorting: widget.sorting,
           filter: widget.filter,
         )

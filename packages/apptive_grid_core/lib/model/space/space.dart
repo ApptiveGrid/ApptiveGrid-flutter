@@ -1,6 +1,7 @@
 part of apptive_grid_model;
 
 /// A Uri representation used for performing Space based Api Calls
+@Deprecated('Use a normal `Uri` instead')
 class SpaceUri extends ApptiveGridUri {
   /// Creates a new [SpaceUri] based on known ids for [user] and [space]
   SpaceUri({

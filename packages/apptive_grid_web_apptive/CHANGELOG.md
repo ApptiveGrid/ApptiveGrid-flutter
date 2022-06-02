@@ -1,5 +1,8 @@
-## 0.3.0-alpha.3
+## 0.3.0-alpha.4
 * Upgraded to dart 2.17
+
+## 0.0.3-alpha.3
+* Update example to style it with `apptive_grid_theme`
 
 ## 0.0.3-alpha.2
 * Upgraded to `flutter_lints 2`

@@ -132,7 +132,7 @@ In order to display an ApptiveGrid Form in your App use the `ApptiveGridForm` Wi
         title: Text(widget.title),
       ),
       body: ApptiveGridForm(
-        formUri: FormUri.fromUri('YOUR_FORM_URI'),
+        uri: Uri.parse('YOUR_FORM_URI'),
       ),
     );
   }

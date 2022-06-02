@@ -1,5 +1,8 @@
-## 0.0.5-alpha.3
+## 0.0.5-alpha.4
 * Upgraded to dart 2.17
+
+## 0.0.5-alpha.3
+* Add support for custom translations
 
 ## 0.0.5-alpha.2
 * Upgraded to `flutter_lints 2`

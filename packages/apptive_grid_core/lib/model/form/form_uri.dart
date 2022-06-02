@@ -10,6 +10,7 @@ part of apptive_grid_model;
 ///
 /// [RedirectFormUri] should be used if you accessed a Form via a Redirect Link e.g. https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa
 /// [DirectFormUri] should be used if accessed
+@Deprecated('Use a normal `Uri` instead')
 class FormUri extends ApptiveGridUri {
   FormUri._(Uri uri)
       : super._(
@@ -34,6 +35,7 @@ class FormUri extends ApptiveGridUri {
 }
 
 /// A FormUri for a Form represented by a redirect Link
+@Deprecated('Use a normal `Uri` instead')
 class RedirectFormUri extends FormUri {
   /// Create a FormUri accessed via a redirect Link from the ApptiveGrid UI Console
   /// for https://app.apptivegrid.de/api/r/609bd6f89fcca3c4c77e70fa `609bd6f89fcca3c4c77e70fa` would be [components]
@@ -46,6 +48,7 @@ class RedirectFormUri extends FormUri {
 }
 
 /// A FormUri for a Form represented by a direct Link
+@Deprecated('Use a normal `Uri` instead')
 class DirectFormUri extends FormUri {
   /// Create a FormUri with known attributes for [user], [space], [grid], [form]
   DirectFormUri({

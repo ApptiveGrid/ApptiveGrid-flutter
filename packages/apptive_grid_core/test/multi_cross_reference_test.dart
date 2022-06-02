@@ -167,7 +167,7 @@ void main() {
           as MultiCrossReferenceDataEntity;
 
       expect(
-        dataEntity.gridUri.uri.toString(),
+        dataEntity.gridUri.toString(),
         (rawResponse['fields'] as List).first['schema']['items']['gridUri'],
       );
     });
