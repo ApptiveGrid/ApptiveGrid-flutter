@@ -1,7 +1,6 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/google_maps_webservice/google_maps_webservice.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_webservice/geocoding.dart';
-import 'package:google_maps_webservice/places.dart';
 
 /// Manager for handling Location based Requests and Services
 class LocationManager {

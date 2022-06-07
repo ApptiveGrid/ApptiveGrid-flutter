@@ -5,6 +5,7 @@ analyzer:
     - '**/grid_row_dropdown.dart'
     - '**/apptive_grid_icons_icons.dart'
     - '**/generated_plugin_registrant.dart'
+    - '**/*.g.dart'
 
 linter:
   rules:
