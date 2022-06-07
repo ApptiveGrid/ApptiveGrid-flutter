@@ -349,5 +349,13 @@ void main() {
         ),
       );
     });
+
+    group('Filter Expression', () {
+      test('Today', () {
+        const todayExpression = Today();
+
+        expect(todayExpression.filterValue, equals('{{ today() }}'));
+      });
+    });
   });
 }
