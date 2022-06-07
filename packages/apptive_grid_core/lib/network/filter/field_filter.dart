@@ -6,6 +6,7 @@ enum _FieldOperator {
   equal(operation: '='),
   greaterThan(operation: 'gt'),
   lesserThan(operation: 'lt'),
+  empty(operation: 'isEmpty'),
 
   // Collections
   any(operation: 'hasAnyOf'),
@@ -138,4 +139,22 @@ class NoneOfFilter extends _FieldFilter {
   }) : super._(
           operator: _FieldOperator.none,
         );
+}
+
+/// Filter to check if a Field is Empty
+class IsEmptyFilter extends _FieldFilter {
+  /// Checks if a field with [fieldId] is empty
+  const IsEmptyFilter({
+    required super.fieldId,
+  }) : super._(
+          operator: _FieldOperator.empty,
+          value: const _EmptyOperatorValue(),
+        );
+}
+
+class _EmptyOperatorValue with FilterableMixin {
+  const _EmptyOperatorValue();
+
+  @override
+  get filterValue => true;
 }
