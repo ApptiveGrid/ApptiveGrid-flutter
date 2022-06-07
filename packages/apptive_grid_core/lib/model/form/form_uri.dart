@@ -44,7 +44,7 @@ class RedirectFormUri extends FormUri {
   }) : super._(Uri(path: '/api/a/${components.join('/')}'));
 
   /// Creates a FormUri based on a [uri]
-  RedirectFormUri.fromUri(String uri) : super.fromUri(uri);
+  RedirectFormUri.fromUri(super.uri) : super.fromUri();
 }
 
 /// A FormUri for a Form represented by a direct Link
@@ -65,5 +65,5 @@ class DirectFormUri extends FormUri {
         );
 
   /// Creates a FormUri based on a [uri]
-  DirectFormUri.fromUri(String uri) : super.fromUri(uri);
+  DirectFormUri.fromUri(super.uri) : super.fromUri();
 }

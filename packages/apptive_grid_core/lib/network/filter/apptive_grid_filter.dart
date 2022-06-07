@@ -67,15 +67,15 @@ abstract class _FilterComposition extends ApptiveGridFilter {
 /// Creates a Filter that checks that all [conditions] are true
 class AndFilterComposition extends _FilterComposition {
   /// Creates a Filter that checks that all [conditions] are true
-  const AndFilterComposition({required List<ApptiveGridFilter> conditions})
-      : super._(conditions: conditions, operator: _ComposeOperator.and);
+  const AndFilterComposition({required super.conditions})
+      : super._(operator: _ComposeOperator.and);
 }
 
 /// Creates a Filter that checks that one [FilterCondition] in [conditions] is true
 class OrFilterComposition extends _FilterComposition {
   /// Creates a Filter that checks that one [FilterCondition] in [conditions] is true
-  const OrFilterComposition({required List<ApptiveGridFilter> conditions})
-      : super._(conditions: conditions, operator: _ComposeOperator.or);
+  const OrFilterComposition({required super.conditions})
+      : super._(operator: _ComposeOperator.or);
 }
 
 /// Filter Operators for Filters that check on a Field
@@ -135,11 +135,9 @@ abstract class _FieldFilter extends ApptiveGridFilter {
 class SubstringFilter extends _FieldFilter {
   /// Creates a Filter that checks if the [StringDataEntity.schemaValue] of [value] is a substring in a [GridField] with [fieldId]
   const SubstringFilter({
-    required String fieldId,
-    required StringDataEntity value,
+    required super.fieldId,
+    required StringDataEntity super.value,
   }) : super._(
-          fieldId: fieldId,
-          value: value,
           operator: _FieldOperator.substring,
         );
 }
@@ -148,11 +146,9 @@ class SubstringFilter extends _FieldFilter {
 class EqualsFilter extends _FieldFilter {
   /// Creates a Filter that checks if [DataEntity.value] equals the [fieldId] [GridField]
   const EqualsFilter({
-    required String fieldId,
-    required DataEntity value,
+    required super.fieldId,
+    required super.value,
   }) : super._(
-          fieldId: fieldId,
-          value: value,
           operator: _FieldOperator.equal,
         );
 }
@@ -163,11 +159,9 @@ class GreaterThanFilter extends _FieldFilter {
   ///
   /// Only possible with [ComparableDataEntity]
   const GreaterThanFilter({
-    required String fieldId,
-    required ComparableDataEntity value,
+    required super.fieldId,
+    required ComparableDataEntity super.value,
   }) : super._(
-          fieldId: fieldId,
-          value: value,
           operator: _FieldOperator.greaterThan,
         );
 }
@@ -178,11 +172,9 @@ class LesserThanFilter extends _FieldFilter {
   ///
   /// Only possible with [ComparableDataEntity]
   const LesserThanFilter({
-    required String fieldId,
-    required ComparableDataEntity value,
+    required super.fieldId,
+    required ComparableDataEntity super.value,
   }) : super._(
-          fieldId: fieldId,
-          value: value,
           operator: _FieldOperator.lesserThan,
         );
 }
@@ -193,11 +185,9 @@ class AnyOfFilter extends _FieldFilter {
   ///
   /// Only possible with [CollectionDataEntity]
   const AnyOfFilter({
-    required String fieldId,
-    required CollectionDataEntity value,
+    required super.fieldId,
+    required CollectionDataEntity super.value,
   }) : super._(
-          fieldId: fieldId,
-          value: value,
           operator: _FieldOperator.any,
         );
 }
@@ -208,11 +198,9 @@ class AllOfFilter extends _FieldFilter {
   ///
   /// Only possible with [CollectionDataEntity]
   const AllOfFilter({
-    required String fieldId,
-    required CollectionDataEntity value,
+    required super.fieldId,
+    required CollectionDataEntity super.value,
   }) : super._(
-          fieldId: fieldId,
-          value: value,
           operator: _FieldOperator.all,
         );
 }
@@ -223,11 +211,9 @@ class NoneOfFilter extends _FieldFilter {
   ///
   /// Only possible with [CollectionDataEntity]
   const NoneOfFilter({
-    required String fieldId,
-    required CollectionDataEntity value,
+    required super.fieldId,
+    required CollectionDataEntity super.value,
   }) : super._(
-          fieldId: fieldId,
-          value: value,
           operator: _FieldOperator.none,
         );
 }
