@@ -13,5 +13,5 @@ class GridViewUri extends GridUri {
 
   /// Creates a new [GridViewUri] based on a string [uri]
   /// Main usage of this is for [GridViewUri] retrieved through other Api Calls
-  GridViewUri.fromUri(String uri) : super.fromUri(uri);
+  GridViewUri.fromUri(super.uri) : super.fromUri();
 }
