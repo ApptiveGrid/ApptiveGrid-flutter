@@ -4,7 +4,7 @@ part of apptive_grid_model;
 ///
 /// [T] type of the data used in Flutter
 /// [S] type used when sending Data back
-abstract class DataEntity<T, S> {
+abstract class DataEntity<T, S> with FilterableMixin {
   /// Create a new DataEntity with [value]
   DataEntity([this.value]);
 
@@ -28,18 +28,9 @@ abstract class DataEntity<T, S> {
 
   @override
   int get hashCode => toString().hashCode;
-}
 
-/// Class for DataEntities that are support in Comparison Filters like [LesserThanFilter] and [GreaterThanFilter]
-abstract class ComparableDataEntity<T, S> extends DataEntity<T, S> {
-  /// Creates a new DataEntity with [value]
-  ComparableDataEntity([super.value]);
-}
-
-/// Class for DataEntities that support Collection Filters like [AnyOfFilter], [AllOfFilter] and [NoneOfFilter]
-abstract class CollectionDataEntity<T, S> extends DataEntity<T, S> {
-  /// Creates a new DataEntity with [value]
-  CollectionDataEntity([super.value]);
+  @override
+  dynamic get filterValue => schemaValue;
 }
 
 /// [DataEntity] representing [String] Objects
@@ -52,7 +43,8 @@ class StringDataEntity extends DataEntity<String, String> {
 }
 
 /// [DataEntity] representing [DateTime] Objects
-class DateTimeDataEntity extends ComparableDataEntity<DateTime, String> {
+class DateTimeDataEntity extends DataEntity<DateTime, String>
+    with ComparableFilterableMixin {
   /// Creates a new DateTimeDataEntity Object with value [value]
   DateTimeDataEntity([super.value]);
 
@@ -73,7 +65,8 @@ class DateTimeDataEntity extends ComparableDataEntity<DateTime, String> {
 
 /// [DataEntity] representing a Date
 /// Internally this is using [DateTime] ignoring the Time Part
-class DateDataEntity extends ComparableDataEntity<DateTime, String> {
+class DateDataEntity extends DataEntity<DateTime, String>
+    with ComparableFilterableMixin {
   /// Creates a new DateTimeDataEntity Object with value [value]
   DateDataEntity([super.value]);
 
@@ -104,7 +97,8 @@ class BooleanDataEntity extends DataEntity<bool, bool> {
 }
 
 /// [DataEntity] representing [int] Objects
-class IntegerDataEntity extends ComparableDataEntity<int, int> {
+class IntegerDataEntity extends DataEntity<int, int>
+    with ComparableFilterableMixin {
   /// Creates a new IntegerDataEntity Object
   IntegerDataEntity([super.value]);
 
@@ -113,7 +107,8 @@ class IntegerDataEntity extends ComparableDataEntity<int, int> {
 }
 
 /// [DataEntity] representing [double] Objects
-class DecimalDataEntity extends ComparableDataEntity<double, double> {
+class DecimalDataEntity extends DataEntity<double, double>
+    with ComparableFilterableMixin {
   /// Creates a new DecimalDataEntity Object
   DecimalDataEntity([num? value]) : super(value?.toDouble());
 
@@ -149,8 +144,8 @@ class EnumDataEntity extends DataEntity<String, String> {
 }
 
 /// [DataEntity] representing an enum like Object
-class EnumCollectionDataEntity
-    extends CollectionDataEntity<Set<String>, List<String>> {
+class EnumCollectionDataEntity extends DataEntity<Set<String>, List<String>>
+    with CollectionFilterableMixin {
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
   EnumCollectionDataEntity._({
     required Set<String> value,
@@ -242,8 +237,8 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 }
 
 /// [DataEntity] representing an array of Attachments
-class AttachmentDataEntity
-    extends CollectionDataEntity<List<Attachment>, dynamic> {
+class AttachmentDataEntity extends DataEntity<List<Attachment>, dynamic>
+    with CollectionFilterableMixin {
   /// Create a new Attachment Data Entity
   AttachmentDataEntity([
     List<Attachment>? value,
@@ -305,7 +300,8 @@ class GeolocationDataEntity extends DataEntity<Geolocation, dynamic> {
 
 /// [DataEntity] representing a list of objects CrossReferencing to a different Grid
 class MultiCrossReferenceDataEntity
-    extends CollectionDataEntity<List<CrossReferenceDataEntity>, dynamic> {
+    extends DataEntity<List<CrossReferenceDataEntity>, dynamic>
+    with CollectionFilterableMixin {
   /// Create a new CrossReference Data Entity
   MultiCrossReferenceDataEntity({
     List<CrossReferenceDataEntity>? references,
