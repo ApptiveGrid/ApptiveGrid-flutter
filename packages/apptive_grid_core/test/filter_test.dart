@@ -31,6 +31,21 @@ void main() {
       );
     });
 
+    test('isEmpty', () async {
+      expect(
+        jsonEncode(
+          const IsEmptyFilter(
+            fieldId: 'fieldId',
+          ).toJson(),
+        ),
+        equals(
+          jsonEncode({
+            'fieldId': {'\$isEmpty': true}
+          }),
+        ),
+      );
+    });
+
     test('GreaterThan', () async {
       expect(
         jsonEncode(
@@ -303,6 +318,92 @@ void main() {
           }),
         ),
       );
+    });
+  });
+
+  group('Not Filter', () {
+    group('Equality', () {
+      test('Same sub filter equals', () async {
+        final filter1 = NotFilter(
+          filter: EqualsFilter(
+            fieldId: 'field',
+            value: StringDataEntity('test'),
+          ),
+        );
+        final filter2 = NotFilter(
+          filter: EqualsFilter(
+            fieldId: 'field',
+            value: StringDataEntity('test'),
+          ),
+        );
+
+        expect(filter1, equals(filter2));
+        expect(filter1.hashCode, equals(filter2.hashCode));
+      });
+
+      test('Different su filters are not equal', () async {
+        final filter1 = NotFilter(
+          filter: EqualsFilter(
+            fieldId: 'field',
+            value: StringDataEntity('test'),
+          ),
+        );
+        final filter2 = NotFilter(
+          filter: EqualsFilter(
+            fieldId: 'field1',
+            value: StringDataEntity('test2'),
+          ),
+        );
+
+        expect(filter1, isNot(equals(filter2)));
+        expect(filter1.hashCode, isNot(equals(filter2.hashCode)));
+      });
+    });
+
+    test('Produces correct json', () {
+      final filter = NotFilter(
+        filter: EqualsFilter(fieldId: 'field', value: StringDataEntity('test')),
+      );
+
+      expect(
+        jsonEncode(filter.toJson()),
+        equals(
+          jsonEncode({
+            '\$not': {
+              'field': 'test',
+            }
+          }),
+        ),
+      );
+    });
+
+    group('Filter Expression', () {
+      test('Equality', () {
+        const todayExpression = Today();
+        const loggedInExpression = LoggedInUser();
+
+        expect(todayExpression, isNot(equals(loggedInExpression)));
+        expect(
+          todayExpression.hashCode,
+          isNot(equals(loggedInExpression.hashCode)),
+        );
+        expect(
+          todayExpression.filterValue,
+          isNot(equals(loggedInExpression.filterValue)),
+        );
+      });
+
+      test('Today', () {
+        const todayExpression = Today();
+
+        expect(todayExpression.filterValue, equals('{{ today() }}'));
+      });
+
+      test('LoggedIn User', () {
+        const loggedInExpression = LoggedInUser();
+
+        expect(loggedInExpression.filterValue, equals('{{ loggedInUser() }}'));
+      });
     });
   });
 }

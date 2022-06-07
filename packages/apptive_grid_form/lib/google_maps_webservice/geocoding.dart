@@ -15,16 +15,12 @@ const _geocodeUrl = '/geocode/json';
 /// https://developers.google.com/maps/documentation/geocoding/start
 class GoogleMapsGeocoding extends GoogleWebService {
   GoogleMapsGeocoding({
-    String? apiKey,
-    String? baseUrl,
-    Client? httpClient,
-    Map<String, String>? apiHeaders,
+    super.apiKey,
+    super.baseUrl,
+    super.httpClient,
+    super.apiHeaders,
   }) : super(
-          apiKey: apiKey,
-          baseUrl: baseUrl,
           apiPath: _geocodeUrl,
-          httpClient: httpClient,
-          apiHeaders: apiHeaders,
         );
 
   Future<GeocodingResponse> searchByLocation(
@@ -105,13 +101,10 @@ class GoogleMapsGeocoding extends GoogleWebService {
 
 class GeocodingResponse extends GoogleResponseStatus {
   GeocodingResponse({
-    required String status,
-    String? errorMessage,
+    required super.status,
+    super.errorMessage,
     required this.results,
-  }) : super(
-          status: status,
-          errorMessage: errorMessage,
-        );
+  });
 
   factory GeocodingResponse.fromJson(Map<String, dynamic> json) =>
       _$GeocodingResponseFromJson(json);

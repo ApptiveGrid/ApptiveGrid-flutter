@@ -1,6 +1,10 @@
 ## 0.10.0-alpha.6
 * Deprecate all `ApptiveLink` in favor of plain `Uri`
 * Upgraded to dart 2.17
+* Add new Filter Options
+  * `IsEmptyFilter`
+  * `Today()` for filtering `DataType.date`
+  * `LoggedInUser()` for filtering createdBy and in the future assignee
 
 ## 0.10.0-alpha.5
 * Add `description` to forms

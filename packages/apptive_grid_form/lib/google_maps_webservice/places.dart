@@ -17,16 +17,12 @@ const _queryAutocompleteUrl = '/queryautocomplete/json';
 /// https://developers.google.com/places/web-service/
 class GoogleMapsPlaces extends GoogleWebService {
   GoogleMapsPlaces({
-    String? apiKey,
-    String? baseUrl,
-    Client? httpClient,
-    Map<String, String>? apiHeaders,
+    super.apiKey,
+    super.baseUrl,
+    super.httpClient,
+    super.apiHeaders,
   }) : super(
-          apiKey: apiKey,
-          baseUrl: baseUrl,
           apiPath: _placesUrl,
-          httpClient: httpClient,
-          apiHeaders: apiHeaders,
         );
 
   Future<PlacesDetailsResponse> getDetailsByPlaceId(
@@ -325,14 +321,11 @@ class PlacesDetailsResponse extends GoogleResponseStatus {
       _$PlacesDetailsResponseFromJson(json);
 
   PlacesDetailsResponse({
-    required String status,
-    String? errorMessage,
+    required super.status,
+    super.errorMessage,
     required this.result,
     required this.htmlAttributions,
-  }) : super(
-          status: status,
-          errorMessage: errorMessage,
-        );
+  });
   final PlaceDetails result;
 
   /// JSON html_attributions
@@ -379,13 +372,10 @@ class Review {
 
 class PlacesAutocompleteResponse extends GoogleResponseStatus {
   PlacesAutocompleteResponse({
-    required String status,
-    String? errorMessage,
+    required super.status,
+    super.errorMessage,
     required this.predictions,
-  }) : super(
-          status: status,
-          errorMessage: errorMessage,
-        );
+  });
 
   factory PlacesAutocompleteResponse.fromJson(Map<String, dynamic> json) =>
       _$PlacesAutocompleteResponseFromJson(json);
