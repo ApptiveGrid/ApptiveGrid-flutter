@@ -1,9 +1,9 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/google_maps_webservice/google_maps_webservice.dart';
 import 'package:apptive_grid_form/managers/location_manager.dart';
 import 'package:apptive_grid_form/managers/permission_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:google_maps_webservice/places.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 

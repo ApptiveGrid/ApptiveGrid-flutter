@@ -1,6 +1,7 @@
 ## 0.10.0-alpha.6
 * Deprecate all `ApptiveLink` in favor of plain `Uri`
 * Upgraded to dart 2.17
+* Remove dependency on google_maps_webservice in favor of a local copy to be able to release stable versions of this package
 
 ## 0.10.0-alpha.5
 * Add `description` to forms
