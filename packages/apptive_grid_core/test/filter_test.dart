@@ -351,10 +351,27 @@ void main() {
     });
 
     group('Filter Expression', () {
+      test('Equality', () {
+        const todayExpression = Today();
+        const loggedInExpression = LoggedInUser();
+
+        expect(todayExpression, isNot(equals(loggedInExpression)));
+        expect(todayExpression.hashCode,
+            isNot(equals(loggedInExpression.hashCode)));
+        expect(todayExpression.filterValue,
+            isNot(equals(loggedInExpression.filterValue)));
+      });
+
       test('Today', () {
         const todayExpression = Today();
 
         expect(todayExpression.filterValue, equals('{{ today() }}'));
+      });
+
+      test('LoggedIn User', () {
+        const loggedInExpression = LoggedInUser();
+
+        expect(loggedInExpression.filterValue, equals('{{ loggedInUser() }}'));
       });
     });
   });
