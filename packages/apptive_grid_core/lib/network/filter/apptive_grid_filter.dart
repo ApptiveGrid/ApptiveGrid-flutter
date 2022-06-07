@@ -92,3 +92,25 @@ class OrFilterComposition extends _FilterComposition {
   const OrFilterComposition({required super.conditions})
       : super._(operator: _ComposeOperator.or);
 }
+
+/// Filter to negate a specific [filter]
+class NotFilter extends ApptiveGridFilter {
+  /// Creates a new [ApptiveGridFilter] that negates a given [filter]
+  const NotFilter({required this.filter}) : super._();
+
+  /// The [ApptiveGridFilter] that should be negated
+  final ApptiveGridFilter filter;
+
+  @override
+  Map<String, dynamic> toJson() => {
+        '\$not': filter.toJson(),
+      };
+
+  @override
+  bool operator ==(Object other) {
+    return other is NotFilter && filter == other.filter;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
+}

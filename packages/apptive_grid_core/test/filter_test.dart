@@ -305,4 +305,49 @@ void main() {
       );
     });
   });
+
+  group('Not Filter', () {
+    group('Equality', () {
+      test('Same sub filter equals', () async {
+        final filter1 = NotFilter(
+            filter: EqualsFilter(
+                fieldId: 'field', value: StringDataEntity('test')));
+        final filter2 = NotFilter(
+            filter: EqualsFilter(
+                fieldId: 'field', value: StringDataEntity('test')));
+
+        expect(filter1, equals(filter2));
+        expect(filter1.hashCode, equals(filter2.hashCode));
+      });
+
+      test('Different su filters are not equal', () async {
+        final filter1 = NotFilter(
+            filter: EqualsFilter(
+                fieldId: 'field', value: StringDataEntity('test')));
+        final filter2 = NotFilter(
+            filter: EqualsFilter(
+                fieldId: 'field1', value: StringDataEntity('test2')));
+
+        expect(filter1, isNot(equals(filter2)));
+        expect(filter1.hashCode, isNot(equals(filter2.hashCode)));
+      });
+    });
+
+    test('Produces correct json', () {
+      final filter = NotFilter(
+          filter:
+              EqualsFilter(fieldId: 'field', value: StringDataEntity('test')));
+
+      expect(
+        jsonEncode(filter.toJson()),
+        equals(
+          jsonEncode({
+            '\$not': {
+              'field': 'test',
+            }
+          }),
+        ),
+      );
+    });
+  });
 }
