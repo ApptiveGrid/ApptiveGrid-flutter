@@ -10,10 +10,10 @@ import 'package:flutter/material.dart';
 class ApptiveGridUserManagementLocalization extends StatelessWidget {
   /// Creates a wrapper so that the descendants can use localized Strings
   const ApptiveGridUserManagementLocalization({
-    Key? key,
+    super.key,
     this.customTranslations = const {},
     required this.child,
-  }) : super(key: key);
+  });
 
   /// The child that should be wrapped
   final Widget child;
@@ -65,11 +65,10 @@ class ApptiveGridUserManagementLocalization extends StatelessWidget {
 
 class _InheritedApptiveGridUserManagementTranslation extends InheritedWidget {
   _InheritedApptiveGridUserManagementTranslation({
-    Key? key,
     required Map<Locale, ApptiveGridUserManagementTranslation>
         customTranslations,
-    required Widget child,
-  }) : super(key: key, child: child) {
+    required super.child,
+  }) {
     final defaultTranslations = <Locale, ApptiveGridUserManagementTranslation>{
       const Locale.fromSubtags(languageCode: 'en'):
           const en.ApptiveGridUserManagementLocalizedTranslation(),

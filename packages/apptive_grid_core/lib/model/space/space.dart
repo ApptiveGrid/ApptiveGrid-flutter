@@ -1,6 +1,7 @@
 part of apptive_grid_model;
 
 /// A Uri representation used for performing Space based Api Calls
+@Deprecated('Use a normal `Uri` instead')
 class SpaceUri extends ApptiveGridUri {
   /// Creates a new [SpaceUri] based on known ids for [user] and [space]
   SpaceUri({
@@ -116,21 +117,14 @@ class SharedSpace extends Space {
   /// [gridUris] is [List<GridUri>] pointing to the [Grid]s contained in this [Space]
   /// [realSpace] points to the Uri of the actual [Space]
   SharedSpace({
-    required String id,
-    required String name,
     required this.realSpace,
-    required LinkMap links,
-    List<Grid>? embeddedGrids,
-    String? key,
-    String? category,
-  }) : super(
-          id: id,
-          name: name,
-          links: links,
-          embeddedGrids: embeddedGrids,
-          key: key,
-          category: category,
-        );
+    required super.id,
+    required super.name,
+    required super.links,
+    super.embeddedGrids,
+    super.key,
+    super.category,
+  });
 
   /// Deserializes [json] into a [Space] Object
   factory SharedSpace.fromJson(Map<String, dynamic> json) {

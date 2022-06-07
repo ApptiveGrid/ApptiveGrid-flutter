@@ -4,9 +4,9 @@ part of apptive_grid_form_widgets;
 class AttachmentFormWidget extends StatefulWidget {
   /// Creates a Widget to display and select a Attachment contained in [component]
   const AttachmentFormWidget({
-    Key? key,
+    super.key,
     required this.component,
-  }) : super(key: key);
+  });
 
   /// Component this Widget should reflect
   final AttachmentFormComponent component;

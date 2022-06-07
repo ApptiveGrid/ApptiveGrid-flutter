@@ -16,8 +16,7 @@ import 'package:provider/provider.dart';
 /// Allows the user to change the location by dragging and releasing the marker on a new Location
 class GeolocationMap extends StatefulWidget {
   /// Creates a new MapWidget
-  const GeolocationMap({Key? key, this.location, this.onLocationChanged})
-      : super(key: key);
+  const GeolocationMap({super.key, this.location, this.onLocationChanged});
 
   /// Currently select [Geolocation]
   ///

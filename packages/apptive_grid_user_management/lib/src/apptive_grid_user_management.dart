@@ -15,7 +15,7 @@ import 'package:uni_links/uni_links.dart' as uni_links;
 class ApptiveGridUserManagement extends StatefulWidget {
   /// Creates a new ApptiveGridUserManagement Widget
   const ApptiveGridUserManagement({
-    Key? key,
+    super.key,
     required this.group,
     required this.clientId,
     this.redirectScheme,
@@ -28,7 +28,7 @@ class ApptiveGridUserManagement extends StatefulWidget {
     required this.onPasswordReset,
     this.client,
     this.customTranslations = const {},
-  }) : super(key: key);
+  });
 
   /// User Group the users should be added to
   final String group;

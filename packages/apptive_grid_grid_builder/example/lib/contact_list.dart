@@ -40,9 +40,7 @@ class MyApp extends StatelessWidget {
 }
 
 class _MyHomePage extends StatefulWidget {
-  _MyHomePage({
-    Key? key,
-  }) : super(key: key);
+  _MyHomePage();
 
   @override
   State<_MyHomePage> createState() => _MyHomePageState();
@@ -60,11 +58,7 @@ class _MyHomePageState extends State<_MyHomePage> {
       // Add the ApptiveGridGridBuilder to your Widget Tree
       body: ApptiveGridGridBuilder(
         key: _builderKey,
-        gridUri: GridUri(
-          user: 'USER_ID',
-          space: 'SPACE_ID',
-          grid: 'GRID_ID',
-        ),
+        uri: Uri.parse('/api/users/USER_ID/spaces/SPACE_ID/grids/GRID_ID'),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(

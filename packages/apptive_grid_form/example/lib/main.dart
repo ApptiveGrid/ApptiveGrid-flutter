@@ -27,7 +27,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           title: const Text('ApptiveGrid Forms'),
         ),
         body: ApptiveGridForm(
-          formUri: FormUri.fromUri(
+          uri: Uri.parse(
             'YOUR_FORM_URI',
           ),
           titleStyle: Theme.of(context).textTheme.headline6,

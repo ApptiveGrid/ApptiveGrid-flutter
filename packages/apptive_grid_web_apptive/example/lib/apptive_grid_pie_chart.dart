@@ -1,11 +1,12 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:apptive_grid_theme/apptive_grid_theme.dart';
 import 'package:apptive_grid_web_apptive/apptive_grid_web_apptive.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class ApptiveGridPieChart extends StatefulWidget {
-  const ApptiveGridPieChart({Key? key, required this.grid}) : super(key: key);
+  const ApptiveGridPieChart({super.key, required this.grid});
 
   final Grid grid;
 
@@ -103,6 +104,13 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
                       showLegendsInRow: true,
                       legendPosition: LegendPosition.bottom,
                     ),
+                    colorList: [
+                      ApptiveGridColors.grid,
+                      ApptiveGridColors.form,
+                      ApptiveGridColors.kanban,
+                      ApptiveGridColors.calendar,
+                      ..._materialDefaultColors,
+                    ],
                   ),
                 ],
               ),
@@ -144,13 +152,13 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
 
 class FieldSelector extends StatefulWidget {
   const FieldSelector({
-    Key? key,
+    super.key,
     required this.label,
     required this.onSelected,
     required this.grid,
     this.value,
     required this.validator,
-  }) : super(key: key);
+  });
 
   final String label;
   final Grid grid;
@@ -202,3 +210,28 @@ class _FieldSelectorState extends State<FieldSelector> {
     );
   }
 }
+
+// Colors.primary with some colors commented out that are too close to already defined ApptiveGrid Colors
+const _materialDefaultColors = [
+  //Colors.red,
+  Colors.pink,
+  Colors.purple,
+  //Colors.deepPurple,
+  //Colors.indigo,
+  //Colors.blue,
+  //Colors.lightBlue,
+  Colors.cyan,
+  //Colors.teal,
+  //Colors.green,
+  //Colors.lightGreen,
+  Colors.lime,
+  //Colors.yellow,
+  //Colors.amber,
+  //Colors.orange,
+  //Colors.deepOrange,
+  //Colors.brown,
+  // The grey swatch is intentionally omitted because when picking a color
+  // randomly from this list to colorize an application, picking grey suddenly
+  // makes the app look disabled.
+  Colors.blueGrey,
+];

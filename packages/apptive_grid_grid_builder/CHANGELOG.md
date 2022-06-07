@@ -1,3 +1,7 @@
+## 0.9.0-alpha.5
+* Deprecate all `ApptiveLink` in favor of plain `Uri`
+* Upgraded to dart 2.17
+
 ## 0.9.0-alpha.4
 * Upgraded to `flutter_lints 2`
 

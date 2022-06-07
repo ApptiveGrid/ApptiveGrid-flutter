@@ -3,15 +3,14 @@ part of apptive_grid_form_widgets;
 class _CrossReferenceDropdownButtonFormField<T extends DataEntity>
     extends StatefulWidget {
   const _CrossReferenceDropdownButtonFormField({
-    Key? key,
+    super.key,
     required this.component,
     required this.selectedItemBuilder,
     required this.onSelected,
     this.isSelected,
-  })  : assert(
+  }) : assert(
           T == CrossReferenceDataEntity || T == MultiCrossReferenceDataEntity,
-        ),
-        super(key: key);
+        );
 
   final FormComponent<T> component;
 
@@ -23,7 +22,7 @@ class _CrossReferenceDropdownButtonFormField<T extends DataEntity>
     _CrossReferenceDropdownButtonFormFieldState<T> state,
   ) onSelected;
 
-  final bool Function(EntityUri)? isSelected;
+  final bool Function(Uri)? isSelected;
 
   @override
   _CrossReferenceDropdownButtonFormFieldState<T> createState() =>
@@ -46,7 +45,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
 
   final _filterController = FilterController();
 
-  late final GridUri _gridUri;
+  late final Uri _gridUri;
 
   final _overlayKey = GlobalKey();
 
@@ -87,7 +86,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
     });
 
     ApptiveGrid.getClient(context, listen: false)
-        .loadGrid(gridUri: _gridUri)
+        .loadGrid(uri: _gridUri)
         .then((value) {
       for (final row in (value.rows ?? [])) {
         _controllers[row.id]?.dispose();
@@ -199,13 +198,9 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
           itemCount: _grid!.rows?.length ?? 0,
           itemBuilder: (context, index) {
             final row = _grid!.rows![index];
-            String path = _gridUri.uri.path;
-            final viewsIndex = path.indexOf('/views');
-            if (viewsIndex > 0) {
-              path = path.substring(0, viewsIndex);
-            }
-            final entityUri = EntityUri.fromUri(
-              '$path/entities/${row.id}',
+            String path = _grid!.links[ApptiveLinkType.entities]!.uri.path;
+            final entityUri = Uri.parse(
+              '$path/${row.id}',
             );
             return _RowMenuItem(
               key: ValueKey(widget.component.fieldId + row.id),
@@ -257,14 +252,14 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
 
 class _RowMenuItem extends StatefulWidget {
   const _RowMenuItem({
-    Key? key,
+    super.key,
     required this.grid,
     required this.row,
     this.controller,
     this.initiallySelected = false,
     this.onSelectionChanged,
     this.filterController,
-  }) : super(key: key);
+  });
 
   final Grid grid;
   final GridRow row;

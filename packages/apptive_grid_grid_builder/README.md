@@ -4,7 +4,7 @@
 
 A Flutter Package to build Widgets based on Grid Data
 
-## Setup
+## Usage
 
 In order to use any ApptiveGrid Feature you must wrap your App with a `ApptiveGrid` Widget
 
@@ -19,7 +19,14 @@ void main() {
           autoAuthenticate = true,
         ),
       ),
-      child: MyApp(),
+      child: MyApp(
+        child: ApptiveGridGridBuilder(
+          uri: Uri.parse('LINK_TO_GRID'),
+          builder: (context, snapshot) {
+            // Build your app based on snapshot.data
+          }
+        ),
+      ),
     ),
   );
 }

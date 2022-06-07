@@ -20,11 +20,11 @@ typedef RequestPasswordResetCallback = void Function(
 class LoginContent extends StatefulWidget {
   /// Creates a new LoginContent Widget to display inputs for a user to log in
   const LoginContent({
-    Key? key,
+    super.key,
     this.requestRegistration,
     this.onLogin,
     this.requestResetPassword,
-  }) : super(key: key);
+  });
 
   /// Callback invoked when the user wants to switch to registering
   /// If this is `null` no option to switch to registration is shown

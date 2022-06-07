@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ...((_user?.embeddedSpaces) ?? []).map(
                   (e) => _SpaceSection(
-                    spaceUri: SpaceUri.fromUri(
+                    uri: Uri.parse(
                       e.links[ApptiveLinkType.self]!.uri.toString(),
                     ),
                   ),
@@ -66,9 +66,8 @@ class _MyAppState extends State<MyApp> {
 
 class _UserSection extends StatefulWidget {
   const _UserSection({
-    Key? key,
     required this.onUserLoaded,
-  }) : super(key: key);
+  });
 
   final Function(User) onUserLoaded;
 
@@ -144,11 +143,10 @@ class _UserSectionState extends State<_UserSection> {
 
 class _SpaceSection extends StatefulWidget {
   const _SpaceSection({
-    Key? key,
-    required this.spaceUri,
-  }) : super(key: key);
+    required this.uri,
+  });
 
-  final SpaceUri spaceUri;
+  final Uri uri;
 
   @override
   State<_SpaceSection> createState() => _SpaceSectionState();
@@ -161,7 +159,7 @@ class _SpaceSectionState extends State<_SpaceSection> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _spaceFuture = ApptiveGrid.getClient(context).getSpace(
-      spaceUri: widget.spaceUri,
+      uri: widget.uri,
     );
   }
 
@@ -182,7 +180,7 @@ class _SpaceSectionState extends State<_SpaceSection> {
                       children: space.embeddedGrids
                               ?.map(
                                 (e) => _GridSection(
-                                  gridUri: GridUri.fromUri(
+                                  uri: Uri.parse(
                                     e.links[ApptiveLinkType.self]!.uri
                                         .toString(),
                                   ),
@@ -212,11 +210,10 @@ class _SpaceSectionState extends State<_SpaceSection> {
 
 class _GridSection extends StatefulWidget {
   const _GridSection({
-    Key? key,
-    required this.gridUri,
-  }) : super(key: key);
+    required this.uri,
+  });
 
-  final GridUri gridUri;
+  final Uri uri;
 
   @override
   State<_GridSection> createState() => _GridSectionState();
@@ -229,7 +226,7 @@ class _GridSectionState extends State<_GridSection> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _gridFuture = ApptiveGrid.getClient(context).loadGrid(
-      gridUri: widget.gridUri,
+      uri: widget.uri,
     );
   }
 

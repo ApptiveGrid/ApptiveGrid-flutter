@@ -67,9 +67,9 @@ class DistanceApptiveGridSorting extends ApptiveGridSorting {
   /// [fieldId] needs to be referencing a [GridField] with type [DataType.geolocation]
   const DistanceApptiveGridSorting({
     required this.location,
-    required String fieldId,
-    required SortOrder order,
-  }) : super(fieldId: fieldId, order: order);
+    required super.fieldId,
+    required super.order,
+  });
 
   /// Items will be sorted by the distance to this [location]
   final Geolocation location;

@@ -10,7 +10,7 @@ import 'package:password_rule_check/password_rule_check.dart';
 /// A Widget to show Registration Controls
 class RegisterContent extends StatefulWidget {
   /// Creates a new RegisterContent Widget to display inputs for a user to register a new account
-  const RegisterContent({Key? key, this.requestLogin}) : super(key: key);
+  const RegisterContent({super.key, this.requestLogin});
 
   /// Callback invoked when the user wants to switch to registering
   /// If this is `null` no option to switch to registration is shown
