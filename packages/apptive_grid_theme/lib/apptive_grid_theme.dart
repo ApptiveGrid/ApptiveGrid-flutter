@@ -42,6 +42,7 @@ class ApptiveGridTheme {
 
     return baseTheme.copyWith(
       primaryColor: ApptiveGridColors.apptiveGridBlue,
+      indicatorColor: ApptiveGridColors.apptiveGridBlue,
       colorScheme: baseTheme.colorScheme.copyWith(
         primary: ApptiveGridColors.apptiveGridBlue,
         secondary: ApptiveGridColors.apptiveGridBlue,
@@ -94,6 +95,13 @@ class ApptiveGridTheme {
         ),
       ),
       hintColor: ApptiveGridColors.lightGrey.withOpacity(0.8),
+      tabBarTheme: baseTheme.tabBarTheme.copyWith(
+        labelColor: ApptiveGridColors.apptiveGridBlue,
+        unselectedLabelColor: _withBrightness(
+          light: ApptiveGridColors.lightGrey,
+          dark: Colors.white54,
+        ),
+      ),
       inputDecorationTheme: baseTheme.inputDecorationTheme.copyWith(
         filled: true,
         border: OutlineInputBorder(

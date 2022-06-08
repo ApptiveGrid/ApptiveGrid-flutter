@@ -388,4 +388,145 @@ void main() {
       ),
     },
   );
+
+  goldenTestInLightAndDark(
+    description: 'Checkbox',
+    fileName: 'checkbox',
+    scenarios: {
+      'Checked': Checkbox(
+        value: true,
+        onChanged: (_) {},
+      ),
+      'Un-Checked': Checkbox(
+        value: false,
+        onChanged: (_) {},
+      ),
+    },
+  );
+
+  goldenTestInLightAndDark(
+    description: 'Switch',
+    fileName: 'switch',
+    scenarios: {
+      'Checked': Switch(
+        value: true,
+        onChanged: (_) {},
+      ),
+      'Un-Checked': Switch(
+        value: false,
+        onChanged: (_) {},
+      ),
+    },
+  );
+
+  goldenTestInLightAndDark(
+    description: 'Radio',
+    fileName: 'radio',
+    scenarios: {
+      'Checked': Radio(
+        value: true,
+        groupValue: true,
+        onChanged: (_) {},
+      ),
+      'Un-Checked': Radio(
+        value: false,
+        groupValue: true,
+        onChanged: (_) {},
+      ),
+    },
+  );
+
+  goldenTestInLightAndDark(
+    description: 'Slider',
+    fileName: 'slider',
+    scenarios: {
+      'Default': Slider(
+        value: 0.5,
+        label: 'Label',
+        onChanged: (_) {},
+      ),
+    },
+  );
+
+  goldenTestInLightAndDark(
+    description: 'Progress Indicator',
+    fileName: 'progress_indicator',
+    scenarios: {
+      'Circular': const CircularProgressIndicator(
+        value: 0.5,
+      ),
+      'Linear': const LinearProgressIndicator(
+        value: 0.5,
+      ),
+    },
+  );
+
+  goldenTestInLightAndDark(
+    description: 'Divider',
+    fileName: 'divider',
+    scenarios: {
+      'Divider': const Divider(),
+    },
+  );
+
+  goldenTestInLightAndDark(
+    description: 'List Tile',
+    fileName: 'list_tile',
+    scenarios: {
+      'Title': const ListTile(
+        title: Text('Title'),
+      ),
+      'With Subtitle': const ListTile(
+        title: Text('Title'),
+        subtitle: Text('Subtitle'),
+      ),
+      'With Leading': const ListTile(
+        title: Text('Title'),
+        subtitle: Text('Subtitle'),
+        leading: Icon(Icons.account_circle),
+      ),
+      'With Trailing': const ListTile(
+        title: Text('Title'),
+        subtitle: Text('Subtitle'),
+        leading: Icon(Icons.account_circle),
+        trailing: Icon(Icons.chevron_right),
+      ),
+    },
+  );
+
+  goldenTestInLightAndDark(
+    description: 'Bottom Navigation Bar',
+    fileName: 'bottom_navigation_bar',
+    scenarios: {
+      'Bottom Navigation Bar': BottomNavigationBar(
+        currentIndex: 0,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Item 1',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Item 2',
+          ),
+        ],
+      )
+    },
+  );
+
+  goldenTestInLightAndDark(
+    description: 'TabBar',
+    fileName: 'tab_bar',
+    scenarios: {
+      'TabBar': const DefaultTabController(
+        length: 2,
+        child: TabBar(
+          tabs: [
+            Tab(icon: Icon(Icons.favorite), text: 'Item 1'),
+            Tab(icon: Icon(Icons.person), text: 'Item 2'),
+          ],
+        ),
+      )
+    },
+  );
 }
