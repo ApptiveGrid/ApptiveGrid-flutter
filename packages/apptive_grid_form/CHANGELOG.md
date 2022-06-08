@@ -1,3 +1,15 @@
+## 0.10.0
+* Update apptive_grid_core Package to include breaking [Model Changes from Version 0.10.0](https://pub.dev/packages/apptive_grid_core/changelog#0100)
+* Deprecate `FormActions`
+* Add `scrollController`, `buttonAlignment` and `buttonLabel` to `ApptiveGridForm` and `ApptiveGridFormData`
+* Add `description` to forms
+* Remove dependency on google_maps_webservice for location search and reverse geocoding
+* Deprecate `ApptiveLink`(`GridUri`, `FormUri`, `EntityUri`, etc) in favor of plain `Uri`
+### Breaking Change
+* Model changes from apptive_grid_core see [here]((https://pub.dev/packages/apptive_grid_core/changelog#0100)) for more details
+* Removed `spaceUris` from `User` and `gridUris` from `Space`
+* Remove `actions` from forms
+
 ## 0.10.0-alpha.6
 * Deprecate all `ApptiveLink` in favor of plain `Uri`
 * Upgraded to dart 2.17
