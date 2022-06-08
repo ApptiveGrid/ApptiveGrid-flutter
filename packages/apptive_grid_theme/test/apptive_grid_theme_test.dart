@@ -212,77 +212,140 @@ void main() {
     description: 'Text Theme',
     fileName: 'text',
     scenarios: {
-      'BodyText1': Builder(
-        builder: (context) => Text(
-          'BodyText1',
-          style: Theme.of(context).textTheme.bodyText1,
-        ),
+      'Display Large': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.displayLarge;
+          return Text(
+            'Display Large \n(Size: ${style?.fontSize},  Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
-      'BodyText2': Builder(
-        builder: (context) => Text(
-          'BodyText2',
-          style: Theme.of(context).textTheme.bodyText2,
-        ),
+      'Display Medium': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.displayMedium;
+          return Text(
+            'Display Medium \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
-      'Caption': Builder(
-        builder: (context) => Text(
-          'Caption',
-          style: Theme.of(context).textTheme.caption,
-        ),
+      'Display Small': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.displaySmall;
+          return Text(
+            'Display Small \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
-      'Headline1': Builder(
-        builder: (context) => Text(
-          'Headline1',
-          style: Theme.of(context).textTheme.headline1,
-        ),
+      'Headline Large': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.headlineLarge;
+          return Text(
+            'Headline Large \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
-      'Headline2': Builder(
-        builder: (context) => Text(
-          'Headline2',
-          style: Theme.of(context).textTheme.headline2,
-        ),
+      'Headline Medium': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.headlineMedium;
+          return Text(
+            'Headline Medium \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
-      'Headline3': Builder(
-        builder: (context) => Text(
-          'Headline3',
-          style: Theme.of(context).textTheme.headline3,
-        ),
+      'Headline Small': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.headlineSmall;
+          return Text(
+            'Headline Small \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
-      'Headline4': Builder(
-        builder: (context) => Text(
-          'Headline4',
-          style: Theme.of(context).textTheme.headline4,
-        ),
+      'Title Large': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.titleLarge;
+          return Text(
+            'Title Large \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
-      'Headline5': Builder(
-        builder: (context) => Text(
-          'Headline5',
-          style: Theme.of(context).textTheme.headline5,
-        ),
+      'Title Medium': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.titleMedium;
+          return Text(
+            'Title Medium \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
-      'Headline6': Builder(
-        builder: (context) => Text(
-          'Headline6',
-          style: Theme.of(context).textTheme.headline6,
-        ),
+      'Title Small': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.titleSmall;
+          return Text(
+            'Title Small \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
-      'Overline': Builder(
-        builder: (context) => Text(
-          'Overline',
-          style: Theme.of(context).textTheme.overline,
-        ),
+      'Body Large': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.bodyLarge;
+          return Text(
+            'Body Large \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
-      'Subtitle1': Builder(
-        builder: (context) => Text(
-          'Subtitle1',
-          style: Theme.of(context).textTheme.subtitle1,
-        ),
+      'Body Medium': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.bodyMedium;
+          return Text(
+            'Body Medium \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
-      'Subtitle2': Builder(
-        builder: (context) => Text(
-          'Subtitle2',
-          style: Theme.of(context).textTheme.subtitle2,
-        ),
+      'Body Small': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.bodySmall;
+          return Text(
+            'Body Small \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
+      ),
+      'Label Large': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.labelLarge;
+          return Text(
+            'Label Large \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
+      ),
+      'Label Medium': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.labelMedium;
+          return Text(
+            'Label Medium \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
+      ),
+      'Label Small': Builder(
+        builder: (context) {
+          final style = Theme.of(context).textTheme.labelSmall;
+          return Text(
+            'Label Small \n(Size: ${style?.fontSize}, Weight: ${style?.fontWeight})',
+            style: style,
+          );
+        },
       ),
     },
   );

@@ -122,7 +122,6 @@ class ApptiveGridTheme {
         ),
       ),
       dialogTheme: baseTheme.dialogTheme.copyWith(
-        titleTextStyle: textTheme.headline4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       scaffoldBackgroundColor: windowBackground,
@@ -147,8 +146,6 @@ class ApptiveGridTheme {
             dark: Colors.white,
           ),
         ),
-        titleTextStyle: textTheme.headline3,
-        toolbarTextStyle: textTheme.headline3,
         systemOverlayStyle: _withBrightness(
           light: SystemUiOverlayStyle.dark,
           dark: SystemUiOverlayStyle.light,
@@ -165,45 +162,85 @@ class ApptiveGridTheme {
 
   TextTheme _textTheme(TextTheme baseTheme) {
     const fontPackage = 'apptive_grid_theme';
-    final newTheme = baseTheme.copyWith(
-      bodyText1: const TextStyle(
-        fontSize: 14,
-        package: fontPackage,
-      ),
-      bodyText2: const TextStyle(
-        fontSize: 12,
-        package: fontPackage,
-      ),
-      headline1: const TextStyle(
+    const theme = TextTheme(
+      displayLarge: TextStyle(
         fontSize: 44,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w700,
         package: fontPackage,
       ),
-      headline2: const TextStyle(
+      displayMedium: TextStyle(
         fontSize: 32,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w700,
         package: fontPackage,
       ),
-      headline3: const TextStyle(
+      displaySmall: TextStyle(
         fontSize: 28,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w700,
         package: fontPackage,
       ),
-      headline4: const TextStyle(
+      headlineLarge: TextStyle(
+        fontSize: 40,
+        fontWeight: FontWeight.w400,
+        package: fontPackage,
+      ),
+      headlineMedium: TextStyle(
         fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w700,
         package: fontPackage,
       ),
-      headline5: const TextStyle(
+      headlineSmall: TextStyle(
         fontSize: 20,
+        fontWeight: FontWeight.w400,
         package: fontPackage,
       ),
-      headline6: const TextStyle(
+      titleLarge: TextStyle(
         fontSize: 16,
+        fontWeight: FontWeight.w500,
         package: fontPackage,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        package: fontPackage,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        package: fontPackage,
+      ),
+      bodyLarge: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        package: fontPackage,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        package: fontPackage,
+      ),
+      bodySmall: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        package: fontPackage,
+      ),
+      labelLarge: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        package: fontPackage,
+      ),
+      labelMedium: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        package: fontPackage,
+      ),
+      labelSmall: TextStyle(
+        fontSize: 10,
+        fontWeight: FontWeight.w400,
+        package: fontPackage,
+        letterSpacing: 1.4,
       ),
     );
-    return newTheme.apply(
+    return theme.apply(
       bodyColor: _withBrightness(
         light: ApptiveGridColors.lightGrey,
         dark: Colors.white54,
