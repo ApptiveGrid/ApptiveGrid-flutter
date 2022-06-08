@@ -1,87 +1,65 @@
+import 'package:alchemist/alchemist.dart';
 import 'package:apptive_grid_theme/apptive_grid_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
-
-class _TestApp extends StatelessWidget {
-  _TestApp({
-    this.appBarBuilder,
-    this.isDark = false,
-    required this.childBuilder,
-  });
-
-  final Widget Function(ThemeData data) childBuilder;
-  final bool isDark;
-  final AppBar? Function(ThemeData data)? appBarBuilder;
-
-  late final _themeData = isDark
-      ? ApptiveGridTheme(brightness: Brightness.dark).theme()
-      : ApptiveGridTheme(brightness: Brightness.light).theme();
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: _themeData,
-      darkTheme: _themeData,
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: appBarBuilder?.call(_themeData),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: childBuilder(_themeData),
-        ),
-      ),
-    );
-  }
-}
+import 'package:golden_toolkit/golden_toolkit.dart' show loadAppFonts;
 
 void main() {
-  String _goldenFilePath(String name, {bool isDark = false}) =>
-      'goldenFiles/${name}_${isDark ? 'dark' : 'light'}.png';
-
-  Future<void> _test(
-    Widget Function(ThemeData data) testableBuilder,
-    String name,
-    WidgetTester tester, {
-    AppBar? Function(ThemeData data)? appBarBuilder,
-  }) async {
+  setUpAll(() async {
     await loadAppFonts();
-    debugDisableShadows = false;
-    tester.binding.window.physicalSizeTestValue = const Size(720, 1290);
+  });
 
-    final testApp = _TestApp(
-      appBarBuilder: appBarBuilder,
-      childBuilder: testableBuilder,
+  Future<void> goldenTestInLightAndDark({
+    required String description,
+    required String fileName,
+    required Map<String, Widget> scenarios,
+    int columns = 1,
+  }) {
+    final themes = {
+      'Light': ApptiveGridTheme(brightness: Brightness.light).theme(),
+      'Dark': ApptiveGridTheme(brightness: Brightness.dark).theme(),
+    };
+    return goldenTest(
+      description,
+      fileName: fileName,
+      constraints: const BoxConstraints(maxWidth: 1600),
+      builder: () {
+        return GoldenTestGroup(
+          columns: themes.length,
+          columnWidthBuilder: (_) => FlexColumnWidth(),
+          children: [
+            for (final theme in themes.entries)
+              GoldenTestScenario(
+                name: theme.key,
+                child: Theme(
+                  data: theme.value,
+                  child: ColoredBox(
+                    color: theme.value.scaffoldBackgroundColor,
+                    child: GoldenTestGroup(
+                      columns: columns,
+                      columnWidthBuilder: (_) => FlexColumnWidth(),
+                      children: [
+                        for (final scenario in scenarios.entries)
+                          GoldenTestScenario(
+                            name: scenario.key,
+                            child: scenario.value,
+                          )
+                      ],
+                    ),
+                  ),
+                ),
+              )
+          ],
+        );
+      },
     );
-
-    await tester.pumpWidget(testApp);
-    await tester.pumpAndSettle();
-    await expectLater(
-      find.byType(_TestApp),
-      matchesGoldenFile(_goldenFilePath(name)),
-    );
-
-    final testAppDark = _TestApp(
-      isDark: true,
-      appBarBuilder: appBarBuilder,
-      childBuilder: testableBuilder,
-    );
-
-    await tester.pumpWidget(testAppDark);
-    await tester.pumpAndSettle();
-    await expectLater(
-      find.byType(_TestApp),
-      matchesGoldenFile(_goldenFilePath(name, isDark: true)),
-    );
-
-    debugDisableShadows = true;
-    tester.binding.window.clearAllTestValues();
   }
 
-  group('Buttons', () {
-    testWidgets('ElevatedButton Enabled', (widgetTester) async {
-      await _test(
-        (data) => Center(
+  goldenTestInLightAndDark(
+      description: 'Buttons',
+      fileName: 'buttons',
+      scenarios: {
+        'ElevatedButton Enabled': Center(
           child: ElevatedButton(
             onPressed: () {},
             child: const Text(
@@ -89,14 +67,7 @@ void main() {
             ),
           ),
         ),
-        'ElevatedButton_enabled',
-        widgetTester,
-      );
-    });
-
-    testWidgets('ElevatedButton disabled', (widgetTester) async {
-      await _test(
-        (data) => const Center(
+        'ElevatedButton disabled': const Center(
           child: ElevatedButton(
             onPressed: null,
             child: Text(
@@ -104,14 +75,7 @@ void main() {
             ),
           ),
         ),
-        'ElevatedButton_disabled',
-        widgetTester,
-      );
-    });
-
-    testWidgets('TextButton Enabled', (widgetTester) async {
-      await _test(
-        (data) => Center(
+        'TextButton Enabled': Center(
           child: TextButton(
             onPressed: () {},
             child: const Text(
@@ -119,14 +83,7 @@ void main() {
             ),
           ),
         ),
-        'TextButton_enabled',
-        widgetTester,
-      );
-    });
-
-    testWidgets('TextButton disabled', (widgetTester) async {
-      await _test(
-        (data) => const Center(
+        'TextButton disabled': const Center(
           child: TextButton(
             onPressed: null,
             child: Text(
@@ -134,14 +91,7 @@ void main() {
             ),
           ),
         ),
-        'TextButton_disabled',
-        widgetTester,
-      );
-    });
-
-    testWidgets('OutlinedButton Enabled', (widgetTester) async {
-      await _test(
-        (data) => Center(
+        'OutlinedButton Enabled': Center(
           child: OutlinedButton(
             onPressed: () {},
             child: const Text(
@@ -149,14 +99,7 @@ void main() {
             ),
           ),
         ),
-        'OutlinedButton_enabled',
-        widgetTester,
-      );
-    });
-
-    testWidgets('OutlinedButton disabled', (widgetTester) async {
-      await _test(
-        (data) => const Center(
+        'OutlinedButton disabled': const Center(
           child: OutlinedButton(
             onPressed: null,
             child: Text(
@@ -164,14 +107,7 @@ void main() {
             ),
           ),
         ),
-        'OutlinedButton_disabled',
-        widgetTester,
-      );
-    });
-
-    testWidgets('Icon button theme', (widgetTester) async {
-      await _test(
-        (data) => Center(
+        'Icon button': Center(
           child: IconButton(
             icon: const Icon(
               Icons.add,
@@ -179,30 +115,20 @@ void main() {
             onPressed: () {},
           ),
         ),
-        'IconButton',
-        widgetTester,
-      );
-    });
-  });
+      });
 
-  group('TextField', () {
-    testWidgets('TextField Empty', (widgetTester) async {
-      await _test(
-        (data) => Center(
+  goldenTestInLightAndDark(
+      description: 'Text Field',
+      fileName: 'text_field',
+      scenarios: {
+        'Empty': Center(
           child: TextFormField(
             decoration: const InputDecoration(
               hintText: 'Hint',
             ),
           ),
         ),
-        'TextField_empty',
-        widgetTester,
-      );
-    });
-
-    testWidgets('TextField Filled', (widgetTester) async {
-      await _test(
-        (data) => Center(
+        'Filled': Center(
           child: TextFormField(
             initialValue: 'Input',
             decoration: const InputDecoration(
@@ -210,14 +136,7 @@ void main() {
             ),
           ),
         ),
-        'TextField_filled',
-        widgetTester,
-      );
-    });
-
-    testWidgets('TextField Error', (widgetTester) async {
-      await _test(
-        (data) => Center(
+        'Error': Center(
           child: TextFormField(
             decoration: const InputDecoration(
               hintText: 'Hint',
@@ -225,166 +144,173 @@ void main() {
             ),
           ),
         ),
-        'TextField_error',
-        widgetTester,
-      );
-    });
-  });
+      });
 
-  testWidgets('Card theme', (widgetTester) async {
-    await _test(
-      (data) => const Center(
-        child: Card(
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Test',
-            ),
+  goldenTestInLightAndDark(description: 'Card', fileName: 'card', scenarios: {
+    'Card': Center(
+      child: Card(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text(
+            'Card Test',
           ),
         ),
       ),
-      'Card',
-      widgetTester,
-    );
+    )
   });
 
-  testWidgets('Alert dialog theme', (widgetTester) async {
-    await _test(
-      (data) => AlertDialog(
-        title: const Text(
-          'Title',
-        ),
-        content: const Padding(
-          padding: EdgeInsets.all(8),
-          child: Text('Dialog Content'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {},
-            child: const Text('OK'),
-          )
-        ],
-      ),
-      'AlertDialog',
-      widgetTester,
-    );
-  });
-
-  testWidgets('App bar theme', (widgetTester) async {
-    await _test(
-      (data) => const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Text(
-          'Body',
-        ),
-      ),
-      'AppBar',
-      widgetTester,
-      appBarBuilder: (data) => AppBar(
-        title: const Text(
-          'Test',
-        ),
-      ),
-    );
-  });
-
-  testWidgets('Text theme', (widgetTester) async {
-    await _test(
-      (data) => Center(
-        child: Column(
-          children: [
-            Text(
-              'BodyText1',
-              style: data.textTheme.bodyText1,
-            ),
-            Text(
-              'BodyText2',
-              style: data.textTheme.bodyText2,
-            ),
-            Text(
-              'Caption',
-              style: data.textTheme.caption,
-            ),
-            Text(
-              'Headline1',
-              style: data.textTheme.headline1,
-            ),
-            Text(
-              'Headline2',
-              style: data.textTheme.headline2,
-            ),
-            Text(
-              'Headline3',
-              style: data.textTheme.headline3,
-            ),
-            Text(
-              'Headline4',
-              style: data.textTheme.headline4,
-            ),
-            Text(
-              'Headline5',
-              style: data.textTheme.headline5,
-            ),
-            Text(
-              'Headline6',
-              style: data.textTheme.headline6,
-            ),
-            Text(
-              'Overline',
-              style: data.textTheme.overline,
-            ),
-            Text(
-              'Subtitle1',
-              style: data.textTheme.subtitle1,
-            ),
-            Text(
-              'Subtitle2',
-              style: data.textTheme.subtitle2,
-            ),
+  goldenTestInLightAndDark(
+      description: 'Alert Dialog',
+      fileName: 'alert_dialog',
+      scenarios: {
+        'Alert Dialog': AlertDialog(
+          title: const Text(
+            'Title',
+          ),
+          content: const Padding(
+            padding: EdgeInsets.all(8),
+            child: Text('Dialog Content'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {},
+              child: const Text('OK'),
+            )
           ],
-        ),
-      ),
-      'Text',
-      widgetTester,
-    );
-  });
+        )
+      });
 
-  testWidgets('Chips', (widgetTester) async {
-    await _test(
-      (data) => Center(
-        child: Column(
-          children: [
-            const Chip(
-              label: Text('Chip'),
-            ),
-            const InputChip(
-              label: Text('InputChip'),
-            ),
-            ChoiceChip(
-              label: const Text('Choice Chip, Selected'),
-              selected: true,
-              onSelected: (_) {},
-            ),
-            ChoiceChip(
-              label: const Text('Choice Chip, UnSelected'),
-              selected: false,
-              onSelected: (_) {},
-            ),
-            const ChoiceChip(
-              label: Text('Choice Chip, Selected, no Callback'),
-              selected: true,
-            ),
-            const ChoiceChip(
-              label: Text('Choice Chip, UnSelected, no Callback'),
-              selected: false,
-            ),
-            FilterChip(label: const Text('FilterChip'), onSelected: (_) {}),
-            ActionChip(label: const Text('ActionChip'), onPressed: () {}),
-          ],
+  goldenTestInLightAndDark(
+      description: 'App Bar',
+      fileName: 'app_bar',
+      scenarios: {
+        'Default': AppBar(
+          title: Text('App Bar'),
         ),
+        'With Leading Icon': AppBar(
+          title: Text('App Bar'),
+          leading: Icon(Icons.arrow_back),
+        ),
+        'With Actions': AppBar(
+          title: Text('App Bar'),
+          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add))],
+        )
+      });
+
+  goldenTestInLightAndDark(
+      description: 'Text Theme',
+      fileName: 'text',
+      scenarios: {
+        'BodyText1': Builder(
+          builder: (context) => Text(
+            'BodyText1',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ),
+        'BodyText2': Builder(
+          builder: (context) => Text(
+            'BodyText2',
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+        ),
+        'Caption': Builder(
+          builder: (context) => Text(
+            'Caption',
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ),
+        'Headline1': Builder(
+          builder: (context) => Text(
+            'Headline1',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+        ),
+        'Headline2': Builder(
+          builder: (context) => Text(
+            'Headline2',
+            style: Theme.of(context).textTheme.headline2,
+          ),
+        ),
+        'Headline3': Builder(
+          builder: (context) => Text(
+            'Headline3',
+            style: Theme.of(context).textTheme.headline3,
+          ),
+        ),
+        'Headline4': Builder(
+          builder: (context) => Text(
+            'Headline4',
+            style: Theme.of(context).textTheme.headline4,
+          ),
+        ),
+        'Headline5': Builder(
+          builder: (context) => Text(
+            'Headline5',
+            style: Theme.of(context).textTheme.headline5,
+          ),
+        ),
+        'Headline6': Builder(
+          builder: (context) => Text(
+            'Headline6',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+        ),
+        'Overline': Builder(
+          builder: (context) => Text(
+            'Overline',
+            style: Theme.of(context).textTheme.overline,
+          ),
+        ),
+        'Subtitle1': Builder(
+          builder: (context) => Text(
+            'Subtitle1',
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+        ),
+        'Subtitle2': Builder(
+          builder: (context) => Text(
+            'Subtitle2',
+            style: Theme.of(context).textTheme.subtitle2,
+          ),
+        ),
+      });
+
+  goldenTestInLightAndDark(
+    description: 'Chips',
+    fileName: 'chips',
+    scenarios: {
+      'Chip': Chip(
+        label: Text('Chip'),
       ),
-      'Chips',
-      widgetTester,
-    );
-  });
+      'InputChip': InputChip(
+        label: Text('InputChip'),
+      ),
+      'Choice Chip, Selected': ChoiceChip(
+        label: Text('Choice Chip, Selected'),
+        selected: true,
+        onSelected: (_) {},
+      ),
+      'Choice Chip, UnSelected': ChoiceChip(
+        label: Text('Choice Chip, UnSelected'),
+        selected: false,
+        onSelected: (_) {},
+      ),
+      'Choice Chip, Selected, no Callback': ChoiceChip(
+        label: Text('Choice Chip, Selected, no Callback'),
+        selected: true,
+      ),
+      'Choice Chip, UnSelected, no Callback': ChoiceChip(
+        label: Text('Choice Chip, UnSelected, no Callback'),
+        selected: false,
+      ),
+      'FilterChip': FilterChip(
+        label: Text('FilterChip'),
+        onSelected: (_) {},
+      ),
+      'ActionChip': ActionChip(
+        label: Text('ActionChip'),
+        onPressed: () {},
+      ),
+    },
+  );
 }
