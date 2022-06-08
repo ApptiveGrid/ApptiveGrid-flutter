@@ -61,6 +61,7 @@ void main() {
   goldenTestInLightAndDark(
     description: 'Buttons',
     fileName: 'buttons',
+    columns: 2,
     scenarios: {
       'ElevatedButton Enabled': Center(
         child: ElevatedButton(
@@ -110,12 +111,36 @@ void main() {
           ),
         ),
       ),
-      'Icon button': Center(
+      'Icon button enabled': Center(
         child: IconButton(
           icon: const Icon(
             Icons.add,
           ),
           onPressed: () {},
+        ),
+      ),
+      'Icon button disabled': const Center(
+        child: IconButton(
+          icon: Icon(
+            Icons.add,
+          ),
+          onPressed: null,
+        ),
+      ),
+      'Floating Action Button Enabled': Center(
+        child: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(
+            Icons.add,
+          ),
+        ),
+      ),
+      'Floating Action Button Disabled': const Center(
+        child: FloatingActionButton(
+          onPressed: null,
+          child: Icon(
+            Icons.add,
+          ),
         ),
       ),
     },
