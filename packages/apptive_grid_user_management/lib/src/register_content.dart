@@ -304,7 +304,9 @@ class _RegisterContentState extends State<RegisterContent> {
   }
 }
 
+// coverage:ignore-start
 enum _RegisterContentStep {
+// coverage:ignore-end
   waitingForInput._(),
   loading._(),
   waitForConfirmationExisting._(_ConfirmationType.existingUser),

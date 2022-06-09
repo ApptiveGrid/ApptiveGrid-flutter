@@ -166,6 +166,25 @@ class _LoginContentState extends State<LoginContent> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(localization.joinGroup(appName)),
+                  if (_error != null) ...[
+                    SizedBox(
+                      height: spacing,
+                    ),
+                    Text(
+                      localization.errorUnknown,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).errorColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (_error is Response)
+                      Text(
+                        (_error as Response).body,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Theme.of(context).errorColor),
+                      ),
+                  ],
                   Center(
                     child: !_loading
                         ? Center(
