@@ -84,4 +84,9 @@ class ApptiveGridUserManagementLocalizedTranslation
       'Es existiert bereits ein Account mit der Adresse $email.\nWir haben dir einen Link geschickt, mit dem du bestätigen kannst, dass du den Account für "$app" freischalten möchtest.\nDein Passwort wurde nicht geändert.';
   @override
   String get actionBack => 'Zurück';
+  @override
+  String joinGroup(String app) =>
+      'Dein Account ist noch nicht für $app freigeschaltet.\nWillst du deinen Account jetzt freischalten?';
+  @override
+  String get actionJoinGroup => 'Freischalten';
 }

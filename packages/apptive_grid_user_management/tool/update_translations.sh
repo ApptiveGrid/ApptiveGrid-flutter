@@ -64,11 +64,15 @@ for lang in "en" "de"; do
       wildcard="email"
       printf "   String %s(String %s) => \'%s\';\n" $key "$wildcard" "$translation" >>$langFile
     else if [ $key == "registerConfirmAddToGroup" ]; then
-              wildcardEmail="email"
-              wildcardApp="app"
-              printf "   String %s({required String %s, required String %s,}) => \'%s\';\n" $key "$wildcardEmail" "$wildcardApp" "$translation" >>$langFile
-    else
+      wildcardEmail="email"
+      wildcardApp="app"
+      printf "   String %s({required String %s, required String %s,}) => \'%s\';\n" $key "$wildcardEmail" "$wildcardApp" "$translation" >>$langFile
+    else if [ $key == "joinGroup" ]; then
+      wildcard="app"
+      printf "   String %s(String %s) => \'%s\';\n" $key "$wildcard" "$translation" >>$langFile
+     else
       printf "   String get %s => \'%s\';\n" $key "$translation" >>$langFile
+    fi
     fi
     fi
     n=$(($n + 1))

@@ -77,4 +77,9 @@ class ApptiveGridUserManagementLocalizedTranslation
       'There already exists an account for $email.\nWe have send you a link to confirm that you want to activate the account for "$app".\nYour password has not been changed.';
   @override
   String get actionBack => 'Back';
+  @override
+  String joinGroup(String app) =>
+      'Your account is not yet activated for $app.\nDo you want to activate it now?';
+  @override
+  String get actionJoinGroup => 'Activate';
 }

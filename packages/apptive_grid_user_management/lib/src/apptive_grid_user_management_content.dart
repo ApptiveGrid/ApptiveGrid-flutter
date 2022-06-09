@@ -56,6 +56,7 @@ class _ApptiveGridUserManagementContentState
     switch (_contentType) {
       case ContentType.login:
         return LoginContent(
+          appName: widget.appName,
           requestRegistration: () {
             setState(() {
               _contentType = ContentType.register;
