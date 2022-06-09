@@ -10,14 +10,14 @@ import 'package:password_rule_check/password_rule_check.dart';
 /// A Widget to show Registration Controls
 class RegisterContent extends StatefulWidget {
   /// Creates a new RegisterContent Widget to display inputs for a user to register a new account
-  const RegisterContent({Key? key, this.requestLogin}) : super(key: key);
+  const RegisterContent({super.key, this.requestLogin});
 
   /// Callback invoked when the user wants to switch to registering
   /// If this is `null` no option to switch to registration is shown
   final void Function()? requestLogin;
 
   @override
-  _RegisterContentState createState() => _RegisterContentState();
+  State<RegisterContent> createState() => _RegisterContentState();
 }
 
 class _RegisterContentState extends State<RegisterContent> {
@@ -56,7 +56,8 @@ class _RegisterContentState extends State<RegisterContent> {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     if (_step != _RegisterContentStep.waitForConfirmation) {
       final spacing =
-          ApptiveGridUserManagementContent.maybeOf(context)?.spacing ?? 16;
+          ApptiveGridUserManagementContent.maybeOf(context)?.widget.spacing ??
+              16;
       return AbsorbPointer(
         absorbing: _step == _RegisterContentStep.loading,
         child: Form(

@@ -4,15 +4,15 @@ part of apptive_grid_form_widgets;
 class DecimalFormWidget extends StatefulWidget {
   /// Creates a [TextFormField] to show and edit an integer contained in [component]
   const DecimalFormWidget({
-    Key? key,
+    super.key,
     required this.component,
-  }) : super(key: key);
+  });
 
   /// Component this Widget should reflect
   final DecimalFormComponent component;
 
   @override
-  _DecimalFormWidgetState createState() => _DecimalFormWidgetState();
+  State<DecimalFormWidget> createState() => _DecimalFormWidgetState();
 }
 
 class _DecimalFormWidgetState extends State<DecimalFormWidget>

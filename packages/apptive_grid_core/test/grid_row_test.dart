@@ -5,28 +5,31 @@ void main() {
   group('Equality', () {
     test('From Json equals direct', () {
       const id = 'id';
-      final field = GridField('fieldId', 'fieldName', DataType.text);
-      const value = 'value';
-      final entries = <GridEntry>[
-        GridEntry(field, StringDataEntity(value)),
-      ];
-      final direct = GridRow(id, entries);
-      final fromJson = GridRow.fromJson({
-        '_id': id,
-        'fields': [value]
-      }, [
-        field
-      ], {
-        'type': 'object',
-        'properties': {
-          'fields': {
+      final field = GridField(
+        id: 'fieldId',
+        name: 'fieldName',
+        type: DataType.text,
+        schema: {
+          {
             'type': 'array',
             'items': [
               {'type': 'string'},
             ]
-          }
+          },
         },
-      });
+      );
+      const value = 'value';
+      final entries = <GridEntry>[
+        GridEntry(field, StringDataEntity(value)),
+      ];
+      final direct = GridRow(id: id, entries: entries, links: {});
+      final fromJson = GridRow.fromJson(
+        {
+          '_id': id,
+          'fields': [value]
+        },
+        [field],
+      );
 
       expect(direct.hashCode, equals(fromJson.hashCode));
       expect(direct, equals(direct));

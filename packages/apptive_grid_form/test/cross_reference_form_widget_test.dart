@@ -11,8 +11,18 @@ import 'common.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(FormData(title: 'title', components: [], schema: {}));
-    registerFallbackValue(GridUri(user: 'user', space: 'space', grid: 'grid'));
+    registerFallbackValue(
+      FormData(
+        id: 'id',
+        title: 'title',
+        components: [],
+        schema: {},
+        links: {},
+      ),
+    );
+    registerFallbackValue(
+      Uri.parse('/api/users/user/spaces/space/grids/grid'),
+    );
   });
 
   group('FormWidget', () {
@@ -20,16 +30,31 @@ void main() {
     late Widget target;
     late GlobalKey<FormState> formKey;
 
-    final gridUri = GridUri(user: 'user', space: 'space', grid: 'grid');
-    final field = GridField('field', 'Name', DataType.text);
+    final gridUri = Uri.parse('/api/users/user/spaces/space/grids/grid');
+    final field = GridField(id: 'field', name: 'Name', type: DataType.text);
     final grid = Grid(
+      id: 'grid',
       name: 'Test',
-      schema: null,
       fields: [field],
       rows: [
-        GridRow('row1', [GridEntry(field, StringDataEntity('First'))]),
-        GridRow('row2', [GridEntry(field, StringDataEntity('Second'))]),
+        GridRow(
+          id: 'row1',
+          entries: [GridEntry(field, StringDataEntity('First'))],
+          links: {},
+        ),
+        GridRow(
+          id: 'row2',
+          entries: [GridEntry(field, StringDataEntity('Second'))],
+          links: {},
+        ),
       ],
+      links: {
+        ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
+        ApptiveLinkType.entities: ApptiveLink(
+          uri: gridUri.replace(path: '${gridUri.path}/entities'),
+          method: 'get',
+        ),
+      },
     );
 
     setUp(() {
@@ -44,7 +69,7 @@ void main() {
       );
 
       when(() => client.sendPendingActions()).thenAnswer((_) async {});
-      when(() => client.loadGrid(gridUri: any(named: 'gridUri')))
+      when(() => client.loadGrid(uri: any(named: 'uri')))
           .thenAnswer((_) async => grid);
 
       target = TestApp(
@@ -89,43 +114,8 @@ void main() {
       expect(find.text('First'), findsOneWidget);
     });
 
-    testWidgets('Strips /views from url', (tester) async {
-      final gridUri =
-          GridUri(user: 'user', space: 'space', grid: 'grid', view: 'view');
-      final testComponent = CrossReferenceFormComponent(
-        property: 'Property',
-        data: CrossReferenceDataEntity(
-          gridUri: gridUri,
-        ),
-        fieldId: 'fieldId',
-        required: true,
-      );
-
-      target = TestApp(
-        client: client,
-        child: Form(
-          key: formKey,
-          child: CrossReferenceFormWidget(component: testComponent),
-        ),
-      );
-
-      await tester.pumpWidget(target);
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.byIcon(Icons.arrow_drop_down));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.text('First').last);
-      await tester.pumpAndSettle();
-
-      expect(
-        testComponent.data.entityUri?.uri.toString(),
-        equals('/api/users/user/spaces/space/grids/grid/entities/row1'),
-      );
-    });
-
     testWidgets('Loading Grid has Error, displays error', (tester) async {
-      when(() => client.loadGrid(gridUri: gridUri))
+      when(() => client.loadGrid(uri: gridUri))
           .thenAnswer((_) => Future.error('Error loading Grid'));
 
       await tester.pumpWidget(target);
@@ -142,7 +132,7 @@ void main() {
 
     testWidgets('Loading Grid shows Loading State', (tester) async {
       final completer = Completer<Grid>();
-      when(() => client.loadGrid(gridUri: gridUri))
+      when(() => client.loadGrid(uri: gridUri))
           .thenAnswer((_) => completer.future);
 
       await tester.pumpWidget(target);
@@ -174,15 +164,26 @@ void main() {
 
     testWidgets('Empty null values', (tester) async {
       final gridWithNull = Grid(
+        id: 'grid',
         name: 'Test',
-        schema: null,
         fields: [field],
         rows: [
-          GridRow('row1', [GridEntry(field, StringDataEntity())]),
+          GridRow(
+            id: 'row1',
+            entries: [GridEntry(field, StringDataEntity())],
+            links: {},
+          ),
         ],
+        links: {
+          ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
+          ApptiveLinkType.entities: ApptiveLink(
+            uri: gridUri.replace(path: '${gridUri.path}/entities'),
+            method: 'get',
+          ),
+        },
       );
 
-      when(() => client.loadGrid(gridUri: gridUri))
+      when(() => client.loadGrid(uri: gridUri))
           .thenAnswer((_) async => gridWithNull);
 
       await tester.pumpWidget(target);
@@ -201,36 +202,39 @@ void main() {
 
   group('Validation', () {
     testWidgets('is required but filled sends', (tester) async {
-      final action = FormAction('formAction', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
       final formData = FormData(
+        id: 'formId',
         title: 'title',
         components: [
           CrossReferenceFormComponent(
             property: 'Property',
             data: CrossReferenceDataEntity(
               value: 'CrossRef',
-              gridUri: GridUri(user: 'user', space: 'space', grid: 'grid'),
-              entityUri: EntityUri(
-                user: 'user',
-                space: 'space',
-                grid: 'grid',
-                entity: 'entity',
+              gridUri: Uri.parse('/api/a/user/spaces/space/grids/grid'),
+              entityUri: Uri.parse(
+                '/api/a/user/spaces/space/grids/grid/entities/entity',
               ),
             ),
             fieldId: 'fieldId',
             required: true,
           )
         ],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: null,
       );
       final client = MockApptiveGridClient();
-      when(() => client.loadGrid(gridUri: any(named: 'gridUri'))).thenAnswer(
-        (invocation) async =>
-            Grid(name: 'name', schema: {}, fields: [], rows: []),
+      when(() => client.loadGrid(uri: any(named: 'uri'))).thenAnswer(
+        (invocation) async => Grid(
+          id: 'grid',
+          name: 'name',
+          fields: [],
+          rows: [],
+          links: {},
+        ),
       );
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((_) async => Response('body', 200));
 
       final target = TestApp(

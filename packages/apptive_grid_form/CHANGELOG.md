@@ -1,3 +1,42 @@
+## 0.10.0
+* Update apptive_grid_core Package to include breaking [Model Changes from Version 0.10.0](https://pub.dev/packages/apptive_grid_core/changelog#0100)
+* Deprecate `FormActions`
+* Add `scrollController`, `buttonAlignment` and `buttonLabel` to `ApptiveGridForm` and `ApptiveGridFormData`
+* Add `description` to forms
+* Remove dependency on google_maps_webservice for location search and reverse geocoding
+* Deprecate `ApptiveLink`(`GridUri`, `FormUri`, `EntityUri`, etc) in favor of plain `Uri`
+### Breaking Change
+* Model changes from apptive_grid_core see [here]((https://pub.dev/packages/apptive_grid_core/changelog#0100)) for more details
+* Removed `spaceUris` from `User` and `gridUris` from `Space`
+* Remove `actions` from forms
+
+## 0.10.0-alpha.6
+* Deprecate all `ApptiveLink` in favor of plain `Uri`
+* Upgraded to dart 2.17
+* Remove dependency on google_maps_webservice in favor of a local copy to be able to release stable versions of this package
+
+## 0.10.0-alpha.5
+* Add `description` to forms
+* Upgraded to `flutter_lints 2`
+
+## 0.10.0-alpha.4
+* Update Core Package to 0.10.0-alpha.4 to include breaking changes to GridField
+
+## 0.10.0-alpha.3
+* Deprecate `FormActions`
+* Add `scrollController`, `buttonAlignment` and `buttonLabel` to `ApptiveGridForm` and `ApptiveGridFormData`
+### Breaking Changes
+* Remove `actions` from forms
+
+## 0.10.0-alpha.2
+* Update Core Package to 0.10.0-alpha.2 to include breaking changes to GridRow
+### Breaking Change
+* Removed `spaceUris` from `User` and `gridUris` from `Space`
+
+## 0.10.0-alpha.1
+* Update Core Package
+* Includes a lot of breaking changes in the Models. Including in `FormData`
+
 ## 0.9.1
 * Use new Attachment System
 * Show Error Message in Form Error

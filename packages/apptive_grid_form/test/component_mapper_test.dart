@@ -120,7 +120,7 @@ void main() {
       final component = CrossReferenceFormComponent(
         fieldId: 'id',
         data: CrossReferenceDataEntity(
-          gridUri: GridUri(user: 'user', space: 'space', grid: 'grid'),
+          gridUri: Uri.parse('/api/a/user/spaces/space/grids/grid'),
         ),
         property: 'Property',
         required: false,
@@ -136,7 +136,7 @@ void main() {
       final component = MultiCrossReferenceFormComponent(
         fieldId: 'id',
         data: MultiCrossReferenceDataEntity(
-          gridUri: GridUri(user: 'user', space: 'space', grid: 'grid'),
+          gridUri: Uri.parse('/api/a/user/spaces/space/grids/grid'),
         ),
         property: 'Property',
         required: false,
@@ -195,7 +195,7 @@ class UnknownComponent extends FormComponent<UnknownDataEntity> {
 }
 
 class UnknownDataEntity extends DataEntity<String, String> {
-  UnknownDataEntity([String? value]) : super(value);
+  UnknownDataEntity([super.value]);
 
   @override
   String? get schemaValue => null;

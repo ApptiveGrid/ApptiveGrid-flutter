@@ -51,7 +51,7 @@ void main() {
     });
   });
 
-  group('Options are reflected in client', () {
+  group('Options', () {
     group('Environment', () {
       testWidgets('Alpha', (tester) async {
         late BuildContext context;
@@ -169,6 +169,36 @@ void main() {
         expect(client.options.authenticationOptions, equals(authentication));
       });
     });
+
+    testWidgets('Update Options', (tester) async {
+      late BuildContext context;
+      final key = GlobalKey<_UpdateOptionsWidgetState>();
+      final target = _UpdateOptionsWidget(
+        key: key,
+        initalEnvironment: ApptiveGridEnvironment.alpha,
+        child: Builder(
+          builder: (buildContext) {
+            context = buildContext;
+            return Container();
+          },
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        ApptiveGrid.getOptions(context).environment,
+        equals(ApptiveGridEnvironment.alpha),
+      );
+
+      key.currentState!.environment = ApptiveGridEnvironment.beta;
+      await tester.pumpAndSettle();
+      expect(
+        ApptiveGrid.getOptions(context).environment,
+        equals(ApptiveGridEnvironment.beta),
+      );
+    });
   });
 
   group('Mock Client', () {
@@ -228,4 +258,42 @@ void main() {
 
 class _StubFormWidgetConfiguration extends FormWidgetConfiguration {
   const _StubFormWidgetConfiguration() : super();
+}
+
+class _UpdateOptionsWidget extends StatefulWidget {
+  const _UpdateOptionsWidget({
+    super.key,
+    required this.initalEnvironment,
+    required this.child,
+  });
+
+  final ApptiveGridEnvironment initalEnvironment;
+  final Widget child;
+
+  @override
+  State<_UpdateOptionsWidget> createState() => _UpdateOptionsWidgetState();
+}
+
+class _UpdateOptionsWidgetState extends State<_UpdateOptionsWidget> {
+  late ApptiveGridEnvironment _environment;
+
+  @override
+  void initState() {
+    super.initState();
+    _environment = widget.initalEnvironment;
+  }
+
+  set environment(ApptiveGridEnvironment environment) {
+    setState(() {
+      _environment = environment;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ApptiveGrid(
+      options: ApptiveGridOptions(environment: _environment),
+      child: widget.child,
+    );
+  }
 }

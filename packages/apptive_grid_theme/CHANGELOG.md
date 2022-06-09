@@ -1,3 +1,16 @@
+## 0.2.0
+* Migrate TextStyles to Material 3 Specification (Large, Medium and Small variants Display, Headline, Title, Body and Label)
+* Use default Styles for AppBar and Dialog instead of overriding
+
+## 0.1.2
+* Upgraded to dart 2.17
+
+## 0.1.1
+* Add `ApptiveGridColors.kanban` and `ApptiveGridColors.calendar`
+
+## 0.1.0
+* Upgraded to `flutter_lints 2`
+
 ## 0.0.3+1
 * Fix nullable access
 

@@ -10,8 +10,7 @@ import 'package:http/http.dart' as http;
 /// Shows Messaging on what is happening and provides a Input field to provide an email
 class RequestResetPasswordContent extends StatefulWidget {
   /// Creates a new ResetPasswordContent Widget
-  const RequestResetPasswordContent({Key? key, this.getClient})
-      : super(key: key);
+  const RequestResetPasswordContent({super.key, this.getClient});
 
   /// Function to get a [ApptiveGridUserManagementClient]
   ///
@@ -48,7 +47,7 @@ class RequestResetPasswordContentState
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
 
     final spacing =
-        ApptiveGridUserManagementContent.maybeOf(context)?.spacing ?? 16;
+        ApptiveGridUserManagementContent.maybeOf(context)?.widget.spacing ?? 16;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -18,12 +18,13 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=2.17.0 <3.0.0'
 
 dependency_overrides:
   pointycastle: 3.1.1
 
 dependencies:
+  apptive_grid_theme: ^0.1.1
   apptive_grid_web_apptive:
     path: ../
   flutter:

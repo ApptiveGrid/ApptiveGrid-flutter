@@ -6,10 +6,10 @@ import 'package:password_rule_check/password_rule_check.dart';
 class PasswordCheck extends StatelessWidget {
   /// Shows a [PasswordRuleCheck] based on [ApptiveGridUserManagement.passwordRequirement]
   const PasswordCheck({
-    Key? key,
+    super.key,
     required this.controller,
     required this.validationKey,
-  }) : super(key: key);
+  });
 
   /// [TextEditingController] managing the input of the password field
   final TextEditingController controller;

@@ -18,7 +18,7 @@ void main() async {
 /// You can access the ApptiveGridClient via ApptiveGrid.getClient()
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -48,8 +48,13 @@ class _MyAppState extends State<MyApp> {
                     'Spaces',
                     style: Theme.of(context).textTheme.headline4,
                   ),
-                ...((_user?.spaces) ?? [])
-                    .map((e) => _SpaceSection(spaceUri: e)),
+                ...((_user?.embeddedSpaces) ?? []).map(
+                  (e) => _SpaceSection(
+                    uri: Uri.parse(
+                      e.links[ApptiveLinkType.self]!.uri.toString(),
+                    ),
+                  ),
+                ),
               ],
             ),
           );
@@ -61,14 +66,13 @@ class _MyAppState extends State<MyApp> {
 
 class _UserSection extends StatefulWidget {
   const _UserSection({
-    Key? key,
     required this.onUserLoaded,
-  }) : super(key: key);
+  });
 
   final Function(User) onUserLoaded;
 
   @override
-  _UserSectionState createState() => _UserSectionState();
+  State<_UserSection> createState() => _UserSectionState();
 }
 
 class _UserSectionState extends State<_UserSection> {
@@ -139,14 +143,13 @@ class _UserSectionState extends State<_UserSection> {
 
 class _SpaceSection extends StatefulWidget {
   const _SpaceSection({
-    Key? key,
-    required this.spaceUri,
-  }) : super(key: key);
+    required this.uri,
+  });
 
-  final SpaceUri spaceUri;
+  final Uri uri;
 
   @override
-  _SpaceSectionState createState() => _SpaceSectionState();
+  State<_SpaceSection> createState() => _SpaceSectionState();
 }
 
 class _SpaceSectionState extends State<_SpaceSection> {
@@ -156,7 +159,7 @@ class _SpaceSectionState extends State<_SpaceSection> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _spaceFuture = ApptiveGrid.getClient(context).getSpace(
-      spaceUri: widget.spaceUri,
+      uri: widget.uri,
     );
   }
 
@@ -174,9 +177,17 @@ class _SpaceSectionState extends State<_SpaceSection> {
                     Text(space.name),
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: space.grids
-                          .map((e) => _GridSection(gridUri: e))
-                          .toList(),
+                      children: space.embeddedGrids
+                              ?.map(
+                                (e) => _GridSection(
+                                  uri: Uri.parse(
+                                    e.links[ApptiveLinkType.self]!.uri
+                                        .toString(),
+                                  ),
+                                ),
+                              )
+                              .toList() ??
+                          [SizedBox()],
                     )
                   ],
                 );
@@ -199,14 +210,13 @@ class _SpaceSectionState extends State<_SpaceSection> {
 
 class _GridSection extends StatefulWidget {
   const _GridSection({
-    Key? key,
-    required this.gridUri,
-  }) : super(key: key);
+    required this.uri,
+  });
 
-  final GridUri gridUri;
+  final Uri uri;
 
   @override
-  _GridSectionState createState() => _GridSectionState();
+  State<_GridSection> createState() => _GridSectionState();
 }
 
 class _GridSectionState extends State<_GridSection> {
@@ -216,7 +226,7 @@ class _GridSectionState extends State<_GridSection> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _gridFuture = ApptiveGrid.getClient(context).loadGrid(
-      gridUri: widget.gridUri,
+      uri: widget.uri,
     );
   }
 
@@ -235,10 +245,12 @@ class _GridSectionState extends State<_GridSection> {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: grid.rows
-                          .map(
-                            (e) => Text(e.entries.first.data.value.toString()),
-                          )
-                          .toList(),
+                              ?.map(
+                                (e) =>
+                                    Text(e.entries.first.data.value.toString()),
+                              )
+                              .toList() ??
+                          [SizedBox()],
                     )
                   ],
                 );

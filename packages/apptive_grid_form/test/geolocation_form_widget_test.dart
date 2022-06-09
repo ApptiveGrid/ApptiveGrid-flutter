@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/google_maps_webservice/google_maps_webservice.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
-import 'package:google_maps_webservice/geocoding.dart';
-import 'package:google_maps_webservice/places.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
@@ -21,12 +20,14 @@ void main() {
     registerFallbackValue(const LocationSettings());
     registerFallbackValue(const CameraPosition(target: LatLng(0, 0)));
     registerFallbackValue(TextDirection.ltr);
-    registerFallbackValue(MarkerUpdates.from({}, {}));
-    registerFallbackValue(CircleUpdates.from({}, {}));
-    registerFallbackValue(PolygonUpdates.from({}, {}));
-    registerFallbackValue(PolylineUpdates.from({}, {}));
+    registerFallbackValue(MarkerUpdates.from(const {}, const {}));
+    registerFallbackValue(CircleUpdates.from(const {}, const {}));
+    registerFallbackValue(PolygonUpdates.from(const {}, const {}));
+    registerFallbackValue(PolylineUpdates.from(const {}, const {}));
     registerFallbackValue(CameraUpdate.newLatLng(const LatLng(0, 0)));
-    registerFallbackValue(FormData(title: '', components: [], schema: {}));
+    registerFallbackValue(
+      FormData(id: 'id', links: {}, title: '', components: [], schema: {}),
+    );
   });
 
   group('TextInput', () {
@@ -43,6 +44,7 @@ void main() {
         ),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -53,6 +55,7 @@ void main() {
                 fieldId: 'fieldId',
               ),
             ],
+            links: {},
             schema: null,
           ),
         ),
@@ -103,6 +106,7 @@ void main() {
         ),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -113,6 +117,7 @@ void main() {
                 fieldId: 'fieldId',
               ),
             ],
+            links: {},
             schema: null,
           ),
         ),
@@ -206,6 +211,7 @@ void main() {
         ),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -214,6 +220,7 @@ void main() {
                 fieldId: 'fieldId',
               ),
             ],
+            links: {},
             schema: null,
           ),
         ),
@@ -303,6 +310,7 @@ void main() {
         ),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -312,6 +320,7 @@ void main() {
               ),
             ],
             schema: null,
+            links: {},
           ),
         ),
       );
@@ -381,6 +390,7 @@ void main() {
         ),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -390,6 +400,7 @@ void main() {
               ),
             ],
             schema: null,
+            links: {},
           ),
         ),
       );
@@ -481,6 +492,7 @@ void main() {
         ),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -490,6 +502,7 @@ void main() {
               ),
             ],
             schema: null,
+            links: {},
           ),
         ),
       );
@@ -609,6 +622,7 @@ void main() {
         ),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -618,6 +632,7 @@ void main() {
               ),
             ],
             schema: null,
+            links: {},
           ),
         ),
       );
@@ -727,6 +742,7 @@ void main() {
         ),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -736,6 +752,7 @@ void main() {
               ),
             ],
             schema: null,
+            links: {},
           ),
         ),
       );
@@ -925,6 +942,7 @@ void main() {
         ),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -934,6 +952,7 @@ void main() {
               ),
             ],
             schema: null,
+            links: {},
           ),
         ),
       );
@@ -1017,6 +1036,7 @@ void main() {
         ),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -1026,6 +1046,7 @@ void main() {
               ),
             ],
             schema: null,
+            links: {},
           ),
         ),
       );
@@ -1151,6 +1172,7 @@ void main() {
         options: const ApptiveGridOptions(formWidgetConfigurations: []),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -1160,6 +1182,7 @@ void main() {
               ),
             ],
             schema: null,
+            links: {},
           ),
         ),
       );
@@ -1229,7 +1252,7 @@ void main() {
   group('Decoration', () {
     testWidgets('Required shows hint and updates message if changed',
         (tester) async {
-      final action = FormAction('actionUri', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
 
       final mockGeolocator = MockGeolocator();
       GeolocatorPlatform.instance = mockGeolocator;
@@ -1276,6 +1299,7 @@ void main() {
         ),
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -1285,7 +1309,7 @@ void main() {
                 required: true,
               ),
             ],
-            actions: [action],
+            links: {ApptiveLinkType.submit: action},
             schema: null,
           ),
         ),
@@ -1376,7 +1400,7 @@ void main() {
     });
 
     testWidgets('Prefilled Required Form is validated', (tester) async {
-      final action = FormAction('actionUri', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
 
       final mockGeolocator = MockGeolocator();
       GeolocatorPlatform.instance = mockGeolocator;
@@ -1426,6 +1450,7 @@ void main() {
         client: apptiveGridClient,
         child: ApptiveGridFormData(
           formData: FormData(
+            id: 'formId',
             title: 'title',
             components: [
               GeolocationFormComponent(
@@ -1435,7 +1460,7 @@ void main() {
                 required: true,
               ),
             ],
-            actions: [action],
+            links: {ApptiveLinkType.submit: action},
             schema: null,
           ),
         ),
@@ -1496,7 +1521,7 @@ void main() {
       when(() => apptiveGridClient.sendPendingActions())
           .thenAnswer((_) async {});
       when(
-        () => apptiveGridClient.performAction(
+        () => apptiveGridClient.submitForm(
           action,
           any(),
           saveToPendingItems: any(named: 'saveToPendingItems'),
@@ -1523,7 +1548,7 @@ void main() {
 
       expect(find.text(requiredString), findsNothing);
       verify(
-        () => apptiveGridClient.performAction(
+        () => apptiveGridClient.submitForm(
           action,
           any(),
           saveToPendingItems: any(named: 'saveToPendingItems'),

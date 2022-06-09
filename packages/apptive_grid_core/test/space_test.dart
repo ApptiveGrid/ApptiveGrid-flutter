@@ -2,77 +2,298 @@ import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('Parsing', () {
-    test('From Json maps correctly', () {
-      const id = 'id';
-      const name = 'name';
-      final grid = GridUri(user: 'user', space: id, grid: 'gridId');
+  group('Space', () {
+    group('Parsing', () {
+      test('From Json maps correctly', () {
+        const id = 'id';
+        const name = 'name';
 
-      final jsonSpace = Space.fromJson({
-        'id': 'id',
-        'name': 'name',
-        'gridUris': [
-          '/api/users/user/spaces/id/grids/gridId',
-        ]
+        final jsonSpace = Space.fromJson({
+          'id': 'id',
+          'name': 'name',
+          '_links': {
+            'self': {
+              'href': '/api/users/user/spaces/id',
+              'method': 'get',
+            }
+          },
+        });
+
+        expect(jsonSpace.id, equals(id));
+        expect(jsonSpace.name, equals(name));
+        expect(jsonSpace.links.length, equals(1));
       });
 
-      expect(jsonSpace.id, equals(id));
-      expect(jsonSpace.name, equals(name));
-      expect(jsonSpace.grids.length, equals(1));
-      expect(jsonSpace.grids[0], equals(grid));
+      test('From Json, toJson equals', () {
+        final jsonSpace = Space.fromJson({
+          'id': 'id',
+          'name': 'name',
+          'type': 'space',
+          'key': 'key',
+          'belongsTo': 'belongsTo',
+          '_links': {
+            'self': {
+              'href': '/api/users/user/spaces/id',
+              'method': 'get',
+            },
+          },
+          '_embedded': {
+            'grids': [
+              {
+                'id': 'gridId',
+                'name': 'Grid',
+                '_links': {
+                  'self': {
+                    'href': '/api/users/user/spaces/id/grid/gridId',
+                    'method': 'get',
+                  },
+                },
+              },
+            ],
+          },
+        });
+
+        final doubleParse = Space.fromJson(jsonSpace.toJson());
+
+        expect(doubleParse, equals(jsonSpace));
+        expect(jsonSpace.key, equals('key'));
+        expect(jsonSpace.category, equals('belongsTo'));
+      });
     });
 
-    test('From Json, toJson equals', () {
-      final jsonSpace = Space.fromJson({
-        'id': 'id',
-        'name': 'name',
-        'gridUris': [
-          '/api/users/user/spaces/id/grids/gridId',
-        ]
+    group('Equality', () {
+      test('Plain and From json equal', () {
+        const id = 'id';
+        const name = 'name';
+
+        final plain = Space(
+          id: id,
+          name: name,
+          embeddedGrids: [
+            Grid(
+              id: 'gridId',
+              name: 'Grid',
+              links: {
+                ApptiveLinkType.self: ApptiveLink(
+                  uri: Uri.parse('/api/users/user/spaces/id/grids/gridId'),
+                  method: 'get',
+                )
+              },
+            ),
+          ],
+          links: {
+            ApptiveLinkType.self: ApptiveLink(
+              uri: Uri.parse('/api/users/user/spaces/id'),
+              method: 'get',
+            ),
+          },
+        );
+
+        final jsonSpace = Space.fromJson({
+          'id': 'id',
+          'name': 'name',
+          '_embedded': {
+            'grids': [
+              {
+                'id': 'gridId',
+                'name': 'Grid',
+                '_links': {
+                  'self': {
+                    'href': '/api/users/user/spaces/id/grids/gridId',
+                    'method': 'get',
+                  },
+                },
+              },
+            ],
+          },
+          'type': 'space',
+          '_links': {
+            'self': {
+              'href': '/api/users/user/spaces/id',
+              'method': 'get',
+            }
+          },
+        });
+
+        expect(plain, equals(jsonSpace));
+        expect(plain.hashCode, equals(jsonSpace.hashCode));
       });
 
-      final doubleParse = Space.fromJson(jsonSpace.toJson());
+      test('Plain and From json not equal with different values', () {
+        const id = 'id';
+        const name = 'name';
 
-      expect(doubleParse, equals(jsonSpace));
+        final plain = Space(
+          id: id,
+          name: name,
+          links: {
+            ApptiveLinkType.self: ApptiveLink(
+              uri: Uri.parse('/api/users/user/spaces/id'),
+              method: 'get',
+            ),
+          },
+        );
+
+        final jsonSpace = Space.fromJson({
+          'id': 'id',
+          'name': 'name',
+          'type': 'space',
+        });
+
+        expect(plain, isNot(jsonSpace));
+        expect(plain.hashCode, isNot(jsonSpace.hashCode));
+      });
     });
   });
 
-  group('Equality', () {
-    test('Plain and From json equal', () {
-      const id = 'id';
-      const name = 'name';
-      final grid = GridUri(user: 'user', space: id, grid: 'gridId');
+  group('sharedSpace', () {
+    group('Parsing', () {
+      test('From Json maps correctly', () {
+        const id = 'id';
+        const name = 'name';
 
-      final plain = Space(id: id, name: name, grids: [grid]);
+        final jsonSharedSpace = SharedSpace.fromJson({
+          'id': 'id',
+          'name': 'name',
+          'realSpace': 'realSpace.uri',
+          '_links': {
+            'self': {
+              'href': '/api/users/user/spaces/id',
+              'method': 'get',
+            }
+          },
+        });
 
-      final jsonSpace = Space.fromJson({
-        'id': 'id',
-        'name': 'name',
-        'gridUris': [
-          '/api/users/user/spaces/id/grids/gridId',
-        ]
+        expect(jsonSharedSpace.id, equals(id));
+        expect(jsonSharedSpace.name, equals(name));
+        expect(jsonSharedSpace.links.length, equals(1));
       });
 
-      expect(plain, equals(jsonSpace));
-      expect(plain.hashCode, equals(jsonSpace.hashCode));
+      test('From Json, toJson equals', () {
+        final jsonSharedSpace = SharedSpace.fromJson({
+          'id': 'id',
+          'name': 'name',
+          'realSpace': 'realSpace.uri',
+          'type': 'sharedSpace',
+          '_links': {
+            'self': {
+              'href': '/api/users/user/spaces/id',
+              'method': 'get',
+            }
+          },
+        });
+
+        final doubleParse = SharedSpace.fromJson(jsonSharedSpace.toJson());
+
+        expect(doubleParse, equals(jsonSharedSpace));
+      });
+
+      test('Space.fromJson returns shared Space', () {
+        final space = Space.fromJson({
+          'id': 'id',
+          'name': 'name',
+          'type': 'sharedSpace',
+          'realSpace': 'realSpace.uri',
+          '_links': {
+            'self': {
+              'href': '/api/users/user/spaces/id',
+              'method': 'get',
+            },
+          },
+        });
+
+        expect(space.runtimeType, equals(SharedSpace));
+      });
     });
 
-    test('Plain and From json not equal with different values', () {
-      const id = 'id';
-      const name = 'name';
+    group('Equality', () {
+      test('Plain and From json equal', () {
+        const id = 'id';
+        const name = 'name';
+        final realSpace = Uri.parse('realSpace.uri');
 
-      final plain = Space(id: id, name: name, grids: []);
+        final plain = SharedSpace(
+          id: id,
+          name: name,
+          realSpace: realSpace,
+          links: {
+            ApptiveLinkType.self: ApptiveLink(
+              uri: Uri.parse('/api/users/user/spaces/id'),
+              method: 'get',
+            ),
+          },
+        );
 
-      final jsonSpace = Space.fromJson({
-        'id': 'id',
-        'name': 'name',
-        'gridUris': [
-          '/api/users/user/spaces/id/grids/gridId',
-        ]
+        final jsonSharedSpace = SharedSpace.fromJson({
+          'id': 'id',
+          'name': 'name',
+          'realSpace': 'realSpace.uri',
+          'type': 'sharedSpace',
+          '_links': {
+            'self': {
+              'href': '/api/users/user/spaces/id',
+              'method': 'get',
+            }
+          },
+        });
+
+        expect(plain, equals(jsonSharedSpace));
+        expect(plain.hashCode, equals(jsonSharedSpace.hashCode));
       });
 
-      expect(plain, isNot(jsonSpace));
-      expect(plain.hashCode, isNot(jsonSpace.hashCode));
+      test('Plain and From json not equal with different values', () {
+        const id = 'id';
+        const name = 'name';
+        final realSpace = Uri.parse('realSpace.uri');
+
+        final plain = SharedSpace(
+          id: id,
+          name: name,
+          realSpace: realSpace,
+          embeddedGrids: [
+            Grid(
+              id: 'gridId',
+              name: 'Grid',
+              links: {
+                ApptiveLinkType.self: ApptiveLink(
+                  uri: Uri.parse('/api/users/user/spaces/id/grids/gridId'),
+                  method: 'get',
+                ),
+              },
+            ),
+          ],
+          links: {
+            ApptiveLinkType.self: ApptiveLink(
+              uri: Uri.parse('/api/users/user/spaces/id'),
+              method: 'get',
+            ),
+          },
+        );
+
+        final jsonSharedSpace = SharedSpace.fromJson({
+          'id': 'id',
+          'name': 'name',
+          'type': 'sharedSpace',
+          'realSpace': 'realSpace.uri',
+          '_embedded': {
+            'grids': [
+              {
+                'id': 'gridId',
+                'name': 'Grid',
+                '_links': {
+                  'self': {
+                    'href': '/api/users/user/spaces/id/grid/gridId',
+                    'method': 'get',
+                  },
+                },
+              },
+            ],
+          },
+        });
+
+        expect(plain, isNot(jsonSharedSpace));
+        expect(plain.hashCode, isNot(jsonSharedSpace.hashCode));
+      });
     });
   });
 }

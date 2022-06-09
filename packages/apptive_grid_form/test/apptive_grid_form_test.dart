@@ -15,12 +15,18 @@ void main() {
   late ApptiveGridClient client;
 
   setUpAll(() {
-    registerFallbackValue(RedirectFormUri(components: ['components']));
+    registerFallbackValue(Uri.parse('/api/a/components'));
     registerFallbackValue(http.Request('POST', Uri()));
     registerFallbackValue(
       ActionItem(
-        action: FormAction('', ''),
-        data: FormData(title: '', components: [], schema: null),
+        link: ApptiveLink(uri: Uri(), method: ''),
+        data: FormData(
+          id: 'formId',
+          title: '',
+          components: [],
+          schema: null,
+          links: {},
+        ),
       ),
     );
   });
@@ -35,21 +41,20 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer(
         (realInvocation) async => FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [],
           schema: {},
+          links: {},
         ),
       );
 
@@ -59,26 +64,25 @@ void main() {
       expect(find.text('Form Title'), findsOneWidget);
     });
 
-    testWidgets('Title do not displays', (tester) async {
+    testWidgets('Title does not display', (tester) async {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
           hideTitle: true,
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer(
         (realInvocation) async => FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [],
           schema: {},
+          links: {},
         ),
       );
 
@@ -89,28 +93,84 @@ void main() {
     });
   });
 
+  group('Description', () {
+    testWidgets('Description Displays', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer(
+        (realInvocation) async => FormData(
+          id: 'formId',
+          name: 'Form Name',
+          description: 'Form Description',
+          components: [],
+          schema: {},
+          links: {},
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Form Description'), findsOneWidget);
+    });
+
+    testWidgets('Description does not display', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+          hideDescription: true,
+        ),
+      );
+
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer(
+        (realInvocation) async => FormData(
+          id: 'formId',
+          name: 'Form Name',
+          description: 'Form Description',
+          components: [],
+          schema: {},
+          links: {},
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Form Description'), findsNothing);
+    });
+  });
+
   testWidgets('OnLoadedCallback gets called', (tester) async {
     final form = FormData(
+      id: 'formId',
       name: 'Form Name',
       title: 'Form Title',
       components: [],
-      actions: [],
       schema: {},
+      links: {},
     );
     final completer = Completer<FormData>();
     final target = TestApp(
       client: client,
       child: ApptiveGridForm(
-        formUri: RedirectFormUri(
-          components: ['form'],
-        ),
+        uri: Uri.parse('/api/a/form'),
         onFormLoaded: (data) {
           completer.complete(data);
         },
       ),
     );
 
-    when(() => client.loadForm(formUri: RedirectFormUri(components: ['form'])))
+    when(() => client.loadForm(uri: Uri.parse('/api/a/form')))
         .thenAnswer((realInvocation) async => form);
 
     await tester.pumpWidget(target);
@@ -125,20 +185,19 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
         ),
       );
       final form = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [],
         schema: {},
+        links: {},
       );
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => form);
 
       await tester.pumpWidget(target);
@@ -150,6 +209,51 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets('Reload with reset resets', (tester) async {
+      final key = GlobalKey<ApptiveGridFormState>();
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          key: key,
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+      final form = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        schema: {},
+        links: {},
+      );
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer(
+        (realInvocation) =>
+            Future.delayed(const Duration(seconds: 2), () => form),
+      );
+
+      await tester.pumpWidget(target);
+
+      final loadingFinder = find.byType(
+        CircularProgressIndicator,
+      );
+      expect(
+        loadingFinder,
+        findsOneWidget,
+      );
+
+      await tester.pumpAndSettle();
+      expect(loadingFinder, findsNothing);
+
+      key.currentState?.loadForm(resetData: true);
+
+      await tester.pump();
+      expect(loadingFinder, findsOneWidget);
+      await tester.pumpAndSettle();
+      expect(loadingFinder, findsNothing);
+    });
   });
 
   group('Success', () {
@@ -157,24 +261,23 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
         ),
       );
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -191,24 +294,23 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
         ),
       );
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -221,7 +323,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).called(2);
     });
   });
@@ -232,14 +334,12 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            formUri: RedirectFormUri(
-              components: ['form'],
-            ),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
 
         when(
-          () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -254,13 +354,11 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            formUri: RedirectFormUri(
-              components: ['form'],
-            ),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
         when(
-          () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -271,7 +369,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(
-          () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).called(2);
       });
     });
@@ -281,24 +379,23 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            formUri: RedirectFormUri(
-              components: ['form'],
-            ),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
-          () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData))
+        when(() => client.submitForm(action, formData))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -315,24 +412,23 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            formUri: RedirectFormUri(
-              components: ['form'],
-            ),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
-          () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData))
+        when(() => client.submitForm(action, formData))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -346,28 +442,27 @@ void main() {
       });
 
       testWidgets('Back to Form shows Form', (tester) async {
-        final formUri = RedirectFormUri(
-          components: ['form'],
-        );
+        final formUri = Uri.parse('/api/a/form');
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            formUri: formUri,
+            uri: formUri,
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
-          () => client.loadForm(formUri: formUri),
+          () => client.loadForm(uri: formUri),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData))
+        when(() => client.submitForm(action, formData))
             .thenAnswer((_) => Future.error(''));
 
         await tester.pumpWidget(target);
@@ -381,7 +476,7 @@ void main() {
 
         expect(find.text('Form Title'), findsOneWidget);
         // Don't reload here
-        verify(() => client.loadForm(formUri: formUri)).called(1);
+        verify(() => client.loadForm(uri: formUri)).called(1);
       });
 
       testWidgets('Cache Response. Additional Answer shows Form',
@@ -401,24 +496,23 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            formUri: RedirectFormUri(
-              components: ['form'],
-            ),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
-          () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData))
+        when(() => client.submitForm(action, formData))
             .thenAnswer((_) async => http.Response('', 500));
 
         await tester.pumpWidget(target);
@@ -431,7 +525,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Form Title'), findsOneWidget);
-        verify(() => client.loadForm(formUri: any(named: 'formUri'))).called(2);
+        verify(() => client.loadForm(uri: any(named: 'uri'))).called(2);
       });
     });
 
@@ -440,24 +534,23 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            formUri: RedirectFormUri(
-              components: ['form'],
-            ),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
-          () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData))
+        when(() => client.submitForm(action, formData))
             .thenAnswer((_) => Future.error(Exception('Testing Errors')));
 
         await tester.pumpWidget(target);
@@ -474,24 +567,23 @@ void main() {
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
-            formUri: RedirectFormUri(
-              components: ['form'],
-            ),
+            uri: Uri.parse('/api/a/form'),
           ),
         );
-        final action = FormAction('uri', 'method');
+        final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
         final formData = FormData(
+          id: 'formId',
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          actions: [action],
+          links: {ApptiveLinkType.submit: action},
           schema: {},
         );
 
         when(
-          () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.performAction(action, formData)).thenAnswer(
+        when(() => client.submitForm(action, formData)).thenAnswer(
           (_) => Future.error(http.Response('Testing Errors', 400)),
         );
 
@@ -512,27 +604,26 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
           onActionSuccess: (action, data) async {
             return false;
           },
         ),
       );
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -547,27 +638,26 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
           onError: (error) async {
             return false;
           },
         ),
       );
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) => Future.error(''));
 
       await tester.pumpWidget(target);
@@ -582,21 +672,24 @@ void main() {
   group('Cache', () {
     late http.Client httpClient;
 
-    final action = FormAction('actionUri', 'POST');
+    final action = ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
     final data = FormData(
+      id: 'formId',
       name: 'Form Name',
       title: 'Title',
       components: [],
-      actions: [action],
+      links: {ApptiveLinkType.submit: action},
       schema: {},
     );
 
-    final formUri = RedirectFormUri(components: ['form']);
+    final formUri = Uri.parse('/api/a/form');
     const env = ApptiveGridEnvironment.production;
 
     setUpAll(() {
       registerFallbackValue(http.Request('POST', Uri()));
-      registerFallbackValue(ActionItem(action: action, data: data));
+      registerFallbackValue(
+        ActionItem(link: action, data: data),
+      );
     });
 
     setUp(() {
@@ -604,7 +697,7 @@ void main() {
 
       when(
         () => httpClient.get(
-          Uri.parse(env.url + formUri.uri.toString()),
+          Uri.parse(env.url + formUri.toString()),
           headers: any(named: 'headers'),
         ),
       ).thenAnswer(
@@ -621,7 +714,7 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: formUri,
+          uri: formUri,
         ),
       );
 
@@ -658,7 +751,7 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: formUri,
+          uri: formUri,
         ),
       );
 
@@ -684,24 +777,23 @@ void main() {
     testWidgets('Current Data returns data', (tester) async {
       final key = GlobalKey<ApptiveGridFormDataState>();
       final form = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [],
         schema: {},
+        links: {},
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
           key: key,
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => form);
 
       await tester.pumpWidget(target);
@@ -718,28 +810,27 @@ void main() {
         'Action Success '
         'Current Data returns null', (tester) async {
       final key = GlobalKey<ApptiveGridFormDataState>();
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
           key: key,
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) async => http.Response('', 200));
 
       await tester.pumpWidget(target);
@@ -758,12 +849,13 @@ void main() {
         'Action Error '
         'Current Data data', (tester) async {
       final key = GlobalKey<ApptiveGridFormDataState>();
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
       final target = TestApp(
@@ -773,16 +865,14 @@ void main() {
         ),
         child: ApptiveGridForm(
           key: key,
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) async => http.Response('', 400));
 
       await tester.pumpWidget(target);
@@ -803,25 +893,24 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
         ),
       );
-      final action = FormAction('uri', 'method');
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: {},
       );
 
       final actionCompleter = Completer<http.Response>();
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.performAction(action, formData))
+      when(() => client.submitForm(action, formData))
           .thenAnswer((_) => actionCompleter.future);
 
       await tester.pumpWidget(target);
@@ -838,12 +927,51 @@ void main() {
       expect(find.text('Thank You!', skipOffstage: false), findsOneWidget);
       expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
     });
+
+    testWidgets('Custom Button Label', (tester) async {
+      const label = 'Custom Label';
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+          buttonLabel: label,
+        ),
+      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      final formData = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        links: {ApptiveLinkType.submit: action},
+        schema: {},
+      );
+
+      final actionCompleter = Completer<http.Response>();
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.submitForm(action, formData))
+          .thenAnswer((_) => actionCompleter.future);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(
+          of: find.byType(ActionButton),
+          matching: find.text(label),
+        ),
+        findsOneWidget,
+      );
+    });
   });
 
   group('User Reference', () {
     testWidgets('UserReference Form Widget is build without padding',
         (tester) async {
       final formData = FormData(
+        id: 'formId',
         title: 'Form Data',
         components: [
           UserReferenceFormComponent(
@@ -852,6 +980,7 @@ void main() {
             fieldId: 'field3',
           ),
         ],
+        links: {},
         schema: {
           'properties': {
             'field3': {
@@ -871,13 +1000,11 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['form'],
-          ),
+          uri: Uri.parse('/api/a/form'),
         ),
       );
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['form'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
 
       await tester.pumpWidget(target);
@@ -895,18 +1022,20 @@ void main() {
 
   group('Reload', () {
     testWidgets('Changing Form Uri triggers reload', (tester) async {
-      final firstForm = FormUri.fromUri('/form1');
-      final secondForm = FormUri.fromUri('/form2');
+      final firstForm = Uri.parse('/form1');
+      final secondForm = Uri.parse('/form2');
 
       final globalKey = GlobalKey<_ChangingFormWidgetState>();
       final client = MockApptiveGridClient();
 
       when(client.sendPendingActions).thenAnswer((_) async {});
-      when(() => client.loadForm(formUri: any(named: 'formUri'))).thenAnswer(
+      when(() => client.loadForm(uri: any(named: 'uri'))).thenAnswer(
         (_) async => FormData(
+          id: 'formId',
           title: 'title',
           components: [],
           schema: {},
+          links: {},
         ),
       );
 
@@ -925,28 +1054,67 @@ void main() {
       globalKey.currentState?._changeForm();
       await tester.pump();
 
-      verify(() => client.loadForm(formUri: firstForm)).called(1);
-      verify(() => client.loadForm(formUri: secondForm)).called(1);
+      verify(() => client.loadForm(uri: firstForm)).called(1);
+      verify(() => client.loadForm(uri: secondForm)).called(1);
+    });
+  });
+
+  group('FormUri', () {
+    final uri = Uri.parse('uri');
+    // ignore: deprecated_member_use
+    final formUri = FormUri.fromUri('formUri');
+
+    test('No FormUri returns Uri as FormUri', () async {
+      final apptiveGridForm = ApptiveGridForm(
+        uri: uri,
+      );
+
+      // ignore: deprecated_member_use_from_same_package
+      expect(apptiveGridForm.formUri.uri, equals(uri));
+      expect(apptiveGridForm.uri, equals(uri));
+    });
+
+    test('No Uri returns FormUri', () async {
+      final apptiveGridForm = ApptiveGridForm(
+        // ignore: deprecated_member_use_from_same_package
+        formUri: formUri,
+      );
+
+      // ignore: deprecated_member_use_from_same_package
+      expect(apptiveGridForm.formUri.uri, equals(formUri.uri));
+      expect(apptiveGridForm.uri, equals(formUri.uri));
+    });
+
+    test('Uri prioritized over formUri', () async {
+      final apptiveGridForm = ApptiveGridForm(
+        uri: uri,
+        // ignore: deprecated_member_use_from_same_package
+        formUri: formUri,
+      );
+
+      // ignore: deprecated_member_use_from_same_package
+      expect(apptiveGridForm.formUri.uri, equals(uri));
+      expect(apptiveGridForm.uri, equals(uri));
     });
   });
 }
 
 class _ChangingFormWidget extends StatefulWidget {
   const _ChangingFormWidget({
-    Key? key,
+    super.key,
     required this.form1,
     required this.form2,
-  }) : super(key: key);
+  });
 
-  final FormUri form1;
-  final FormUri form2;
+  final Uri form1;
+  final Uri form2;
 
   @override
-  _ChangingFormWidgetState createState() => _ChangingFormWidgetState();
+  State<_ChangingFormWidget> createState() => _ChangingFormWidgetState();
 }
 
 class _ChangingFormWidgetState extends State<_ChangingFormWidget> {
-  late FormUri _displayingUri;
+  late Uri _displayingUri;
 
   @override
   void initState() {
@@ -963,6 +1131,6 @@ class _ChangingFormWidgetState extends State<_ChangingFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ApptiveGridForm(formUri: _displayingUri);
+    return ApptiveGridForm(uri: _displayingUri);
   }
 }

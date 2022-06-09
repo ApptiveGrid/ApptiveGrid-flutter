@@ -6,15 +6,15 @@ class GeolocationFormWidget extends StatefulWidget {
   ///
   /// Shows a [GeolocationInput] and [GeolocationMap] Widget to allow the user to change the value
   const GeolocationFormWidget({
-    Key? key,
+    super.key,
     required this.component,
-  }) : super(key: key);
+  });
 
   /// Component this Widget should reflect
   final GeolocationFormComponent component;
 
   @override
-  _GeolocationFormWidgetState createState() => _GeolocationFormWidgetState();
+  State<GeolocationFormWidget> createState() => _GeolocationFormWidgetState();
 }
 
 class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
@@ -55,7 +55,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
                     .firstWhere(
                   (element) => element is GeolocationFormWidgetConfiguration,
                   orElse: () {
-                    WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
                       setState(() {
                         _error = Exception(
                           'Missing GeolocationFormWidgetConfiguration in ApptiveGrid Widget',

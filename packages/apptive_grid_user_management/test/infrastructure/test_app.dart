@@ -6,11 +6,11 @@ import 'mocks.dart';
 
 class StubUserManagement extends StatelessWidget {
   const StubUserManagement({
-    Key? key,
+    super.key,
     required this.child,
     this.client,
     this.passwordRequirement = PasswordRequirement.enforced,
-  }) : super(key: key);
+  });
 
   final Widget child;
 
@@ -22,7 +22,7 @@ class StubUserManagement extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Material(
-        child: ApptiveGridUserManagement.withClient(
+        child: ApptiveGridUserManagement(
           group: 'group',
           clientId: 'clientId',
           passwordRequirement: passwordRequirement,

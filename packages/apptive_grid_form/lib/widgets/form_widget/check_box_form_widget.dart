@@ -4,15 +4,15 @@ part of apptive_grid_form_widgets;
 class CheckBoxFormWidget extends StatefulWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
   const CheckBoxFormWidget({
-    Key? key,
+    super.key,
     required this.component,
-  }) : super(key: key);
+  });
 
   /// Component this Widget should reflect
   final BooleanFormComponent component;
 
   @override
-  _CheckBoxFormWidgetState createState() => _CheckBoxFormWidgetState();
+  State<CheckBoxFormWidget> createState() => _CheckBoxFormWidgetState();
 }
 
 class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget>

@@ -1,5 +1,5 @@
-import 'package:apptive_grid_core/apptive_grid_options.dart';
 import 'package:apptive_grid_core/apptive_grid_network.dart';
+import 'package:apptive_grid_core/apptive_grid_options.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -10,19 +10,18 @@ import 'package:provider/provider.dart';
 class ApptiveGrid extends StatefulWidget {
   /// Creates ApptiveGrid
   const ApptiveGrid({
-    Key? key,
+    super.key,
     this.child,
     this.options = const ApptiveGridOptions(),
-  })  : client = null,
-        super(key: key);
+  }) : client = null;
 
   /// Creates ApptiveGrid with a shared defined ApptiveGridClient
   const ApptiveGrid.withClient({
-    Key? key,
+    super.key,
     required this.client,
     this.child,
     this.options = const ApptiveGridOptions(),
-  }) : super(key: key);
+  });
 
   /// Widget that should be wrapped. Normally this is something like [MaterialApp]
   final Widget? child;
@@ -37,7 +36,7 @@ class ApptiveGrid extends StatefulWidget {
   final ApptiveGridClient? client;
 
   @override
-  _ApptiveGridState createState() => _ApptiveGridState();
+  State<ApptiveGrid> createState() => _ApptiveGridState();
 
   /// Get direct Access to [ApptiveGridClient]
   ///
@@ -96,7 +95,9 @@ class _ApptiveGridState extends State<ApptiveGrid> {
 
   @override
   void dispose() {
-    _client.dispose();
+    if (widget.client == null) {
+      _client.dispose();
+    }
     super.dispose();
   }
 }

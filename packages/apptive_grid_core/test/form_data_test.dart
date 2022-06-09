@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   const title = 'title';
   const name = 'name';
+  const description = 'description';
   final response = {
     'schema': {
       'type': 'object',
@@ -78,7 +79,31 @@ void main() {
       }
     ],
     'name': name,
-    'title': title
+    'title': title,
+    'description': description,
+    'id': 'formId',
+    '_links': {
+      "submit": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "post"
+      },
+      "remove": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "delete"
+      },
+      "self": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "get"
+      },
+      "update": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "put"
+      }
+    },
   };
 
   group('Parsing', () {
@@ -87,12 +112,14 @@ void main() {
 
       expect(formData.name, equals(name));
       expect(formData.title, equals(title));
+      expect(formData.description, equals(description));
 
-      expect(formData.actions.length, equals(1));
+      // ignore: deprecated_member_use_from_same_package
+      expect(formData.actions!.length, equals(1));
 
-      expect(formData.components.length, equals(5));
+      expect(formData.components!.length, equals(5));
 
-      expect(formData.components.map((e) => e.runtimeType).toList(), [
+      expect(formData.components!.map((e) => e.runtimeType).toList(), [
         StringFormComponent,
         IntegerFormComponent,
         DateTimeFormComponent,
@@ -104,7 +131,7 @@ void main() {
 
   group('Serializing', () {
     test('toJson -> fromJson -> equals', () {
-      final action = FormAction('/uri', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       final schema = response['schema'];
       final component = IntegerFormComponent(
         fieldId: '4zc4l48ffin5v8pa2emyx9s15',
@@ -114,10 +141,12 @@ void main() {
       );
 
       final formData = FormData(
-        name: 'name',
+        id: 'formId',
+        name: name,
         title: title,
+        description: description,
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: schema,
       );
 
@@ -125,7 +154,7 @@ void main() {
     });
 
     test('AttachmentActions get Restored', () {
-      final action = FormAction('/uri', 'POST');
+      final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       final schema = {
         'type': 'object',
         'properties': {
@@ -156,10 +185,11 @@ void main() {
       );
 
       final formData = FormData(
+        id: 'formId',
         name: 'name',
         title: title,
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: schema,
       );
 
@@ -188,10 +218,21 @@ void main() {
         isNot([]),
       );
     });
+
+    test('toRequestObject returns Empty Map for non component', () {
+      final formWithoutComponents = FormData.fromJson(
+        FormData.fromJson(response).toJson()..['components'] = null,
+      );
+
+      expect(
+        formWithoutComponents.toRequestObject().cast<dynamic, String?>(),
+        equals({}),
+      );
+    });
   });
 
   group('Equality', () {
-    final action = FormAction('/uri', 'POST');
+    final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
     final schema = response['schema'];
     final component = IntegerFormComponent(
       fieldId: '4zc4l48ffin5v8pa2emyx9s15',
@@ -201,17 +242,19 @@ void main() {
     );
 
     final a = FormData(
+      id: 'formId',
       name: 'name',
       title: title,
       components: [component],
-      actions: [action],
+      links: {ApptiveLinkType.submit: action},
       schema: schema,
     );
     final b = FormData(
+      id: 'formId',
       name: 'name',
       title: title,
       components: [component],
-      actions: [action],
+      links: {ApptiveLinkType.submit: action},
       schema: schema,
     );
     final c = FormData.fromJson(response);
@@ -227,8 +270,8 @@ void main() {
     });
   });
 
-  group('Without Actions', () {
-    final responseWithoutActions = {
+  group('Without Submit Link', () {
+    final responseWithoutSubmitLink = {
       'schema': {
         'type': 'object',
         'properties': {
@@ -255,11 +298,30 @@ void main() {
       ],
       'name': 'Name',
       'title': 'New title',
+      'id': 'formId',
+      '_links': {
+        "remove": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "delete"
+        },
+        "self": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "get"
+        },
+        "update": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "put"
+        }
+      },
     };
     test('Form Without Actions parses correctly', () {
-      final formData = FormData.fromJson(responseWithoutActions);
+      final formData = FormData.fromJson(responseWithoutSubmitLink);
 
-      expect(formData.actions.length, equals(0));
+      // ignore: deprecated_member_use_from_same_package
+      expect(formData.actions, isNull);
     });
   });
 
@@ -296,24 +358,47 @@ void main() {
           }
         ],
         'name': 'Name',
-        'title': 'New title'
+        'title': 'New title',
+        'id': 'formId',
+        '_links': {
+          "submit": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "post"
+          },
+          "remove": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "delete"
+          },
+          "self": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "get"
+          },
+          "update": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "put"
+          }
+        },
       };
 
       final formData = FormData.fromJson(responseWithCrossReference);
 
       expect(formData.title, equals('New title'));
       expect(
-        formData.components[0].runtimeType,
+        formData.components![0].runtimeType,
         equals(CrossReferenceFormComponent),
       );
-      expect(formData.components[0].data.value, equals(null));
+      expect(formData.components![0].data.value, equals(null));
       expect(
-        (formData.components[0].data as CrossReferenceDataEntity).entityUri,
+        (formData.components![0].data as CrossReferenceDataEntity).entityUri,
         null,
       );
       expect(
-        (formData.components[0].data as CrossReferenceDataEntity).gridUri,
-        GridUri.fromUri(
+        (formData.components![0].data as CrossReferenceDataEntity).gridUri,
+        Uri.parse(
           '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
         ),
       );
@@ -355,26 +440,49 @@ void main() {
           }
         ],
         'name': 'Name',
-        'title': 'New title'
+        'title': 'New title',
+        'id': 'formId',
+        '_links': {
+          "submit": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "post"
+          },
+          "remove": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "delete"
+          },
+          "self": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "get"
+          },
+          "update": {
+            "href":
+                "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+            "method": "put"
+          }
+        },
       };
 
       final formData = FormData.fromJson(responseWithCrossReference);
 
       expect(formData.title, equals('New title'));
       expect(
-        formData.components[0].runtimeType,
+        formData.components![0].runtimeType,
         equals(CrossReferenceFormComponent),
       );
-      expect(formData.components[0].data.value, equals('Yeah!'));
+      expect(formData.components![0].data.value, equals('Yeah!'));
       expect(
-        (formData.components[0].data as CrossReferenceDataEntity).entityUri,
-        EntityUri.fromUri(
+        (formData.components![0].data as CrossReferenceDataEntity).entityUri,
+        Uri.parse(
           '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d',
         ),
       );
       expect(
-        (formData.components[0].data as CrossReferenceDataEntity).gridUri,
-        GridUri.fromUri(
+        (formData.components![0].data as CrossReferenceDataEntity).gridUri,
+        Uri.parse(
           '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
         ),
       );

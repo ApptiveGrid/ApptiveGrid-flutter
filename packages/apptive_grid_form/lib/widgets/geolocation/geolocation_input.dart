@@ -1,9 +1,9 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/google_maps_webservice/google_maps_webservice.dart';
 import 'package:apptive_grid_form/managers/location_manager.dart';
 import 'package:apptive_grid_form/managers/permission_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:google_maps_webservice/places.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -14,10 +14,10 @@ import 'package:provider/provider.dart';
 class GeolocationInput extends StatefulWidget {
   /// Creates the Input Widget
   const GeolocationInput({
-    Key? key,
+    super.key,
     this.location,
     this.onLocationChanged,
-  }) : super(key: key);
+  });
 
   /// Currently select [Geolocation]
   ///
@@ -32,7 +32,7 @@ class GeolocationInput extends StatefulWidget {
   final void Function(Geolocation?)? onLocationChanged;
 
   @override
-  _GeolocationInputState createState() => _GeolocationInputState();
+  State<GeolocationInput> createState() => _GeolocationInputState();
 }
 
 class _GeolocationInputState extends State<GeolocationInput> {
@@ -47,7 +47,7 @@ class _GeolocationInputState extends State<GeolocationInput> {
   void initState() {
     super.initState();
     if (widget.location != null) {
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         _updateTextField(widget.location);
       });
     }

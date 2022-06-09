@@ -4,15 +4,15 @@ part of apptive_grid_form_widgets;
 class EnumCollectionFormWidget extends StatefulWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
   const EnumCollectionFormWidget({
-    Key? key,
+    super.key,
     required this.component,
-  }) : super(key: key);
+  });
 
   /// Component this Widget should reflect
   final EnumCollectionFormComponent component;
 
   @override
-  _EnumCollectionFormWidgetState createState() =>
+  State<EnumCollectionFormWidget> createState() =>
       _EnumCollectionFormWidgetState();
 }
 

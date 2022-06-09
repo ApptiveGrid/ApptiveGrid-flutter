@@ -14,11 +14,12 @@ void main() {
   setUpAll(() {
     registerFallbackValue(
       FormData(
+        id: 'formId',
         name: 'name',
         title: 'title',
         components: [],
-        actions: [],
         schema: {},
+        links: {},
       ),
     );
   });
@@ -52,10 +53,7 @@ void main() {
 
   group('Text', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = StringFormComponent(
         fieldId: 'id',
         data: StringDataEntity(),
@@ -64,26 +62,25 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       final completer = Completer<FormData>();
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -100,14 +97,11 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals('Value'));
+      expect(result.components!.first.data.value, equals('Value'));
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = StringFormComponent(
         fieldId: 'id',
         data: StringDataEntity(),
@@ -116,23 +110,22 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -143,17 +136,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
   group('DateTime', () {
     testWidgets('Value is send and used with Date Picker', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DateTimeFormComponent(
         fieldId: 'id',
         data: DateTimeDataEntity(),
@@ -162,26 +152,25 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', format: 'date-time'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       final completer = Completer<FormData>();
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -210,14 +199,11 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals(date));
+      expect(result.components!.first.data.value, equals(date));
     });
 
     testWidgets('Value is send and used with Time Picker', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DateTimeFormComponent(
         fieldId: 'id',
         data: DateTimeDataEntity(),
@@ -226,26 +212,25 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', format: 'date-time'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       final completer = Completer<FormData>();
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -274,7 +259,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future
-          .then((data) => data.components.first.data.value as DateTime);
+          .then((data) => data.components!.first.data.value as DateTime);
       expect(
         DateTime(
           result.year,
@@ -288,10 +273,7 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DateTimeFormComponent(
         fieldId: 'id',
         data: DateTimeDataEntity(),
@@ -300,23 +282,22 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', format: 'date-time'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -327,17 +308,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
   group('Date', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DateFormComponent(
         fieldId: 'id',
         data: DateDataEntity(),
@@ -346,26 +324,25 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', format: 'date'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       final completer = Completer<FormData>();
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -393,14 +370,11 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals(date));
+      expect(result.components!.first.data.value, equals(date));
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DateFormComponent(
         fieldId: 'id',
         data: DateDataEntity(),
@@ -409,23 +383,22 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', format: 'date'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -436,17 +409,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
   group('Number', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = IntegerFormComponent(
         fieldId: 'id',
         data: IntegerDataEntity(),
@@ -455,26 +425,25 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('integer'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       final completer = Completer<FormData>();
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -491,7 +460,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals(12));
+      expect(result.components!.first.data.value, equals(12));
     });
 
     testWidgets('Prefilled Value gets displayed', (tester) async {
@@ -503,23 +472,22 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [],
         schema: getSchema('integer'),
+        links: {},
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -529,10 +497,7 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = IntegerFormComponent(
         fieldId: 'id',
         data: IntegerDataEntity(),
@@ -541,23 +506,22 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('integer'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -568,17 +532,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
   group('Decimal', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DecimalFormComponent(
         fieldId: 'id',
         data: DecimalDataEntity(),
@@ -587,26 +548,25 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('number'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       final completer = Completer<FormData>();
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -623,7 +583,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals(12));
+      expect(result.components!.first.data.value, equals(12));
     });
 
     testWidgets('Prefilled Value gets displayed', (tester) async {
@@ -635,23 +595,22 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [],
         schema: getSchema('number'),
+        links: {},
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -661,10 +620,7 @@ void main() {
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = DecimalFormComponent(
         fieldId: 'id',
         data: DecimalDataEntity(),
@@ -673,23 +629,22 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('number'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -700,17 +655,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
 
   group('CheckBox', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = BooleanFormComponent(
         fieldId: 'id',
         data: BooleanDataEntity(),
@@ -719,26 +671,25 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('boolean'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       final completer = Completer<FormData>();
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -755,14 +706,11 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals(true));
+      expect(result.components!.first.data.value, equals(true));
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = BooleanFormComponent(
         fieldId: 'id',
         data: BooleanDataEntity(),
@@ -771,23 +719,22 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('boolean'),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -798,17 +745,14 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Required'), findsOneWidget);
     });
   });
 
   group('Enum', () {
     testWidgets('Value is send', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = EnumFormComponent(
         fieldId: 'id',
         data: EnumDataEntity(value: 'value', options: {'value', 'newValue'}),
@@ -817,26 +761,25 @@ void main() {
         required: false,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema('string', options: ['value', 'newValue']),
       );
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       final completer = Completer<FormData>();
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.performAction(action, any()))
+      when(() => client.submitForm(action, any()))
           .thenAnswer((realInvocation) async {
         completer.complete(realInvocation.positionalArguments[1]);
         return Response('', 200);
@@ -857,14 +800,11 @@ void main() {
       await tester.pumpAndSettle();
 
       final result = await completer.future;
-      expect(result.components.first.data.value, equals('newValue'));
+      expect(result.components!.first.data.value, equals('newValue'));
     });
 
     testWidgets('Required shows Error', (tester) async {
-      final action = FormAction(
-        'uri',
-        'method',
-      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
       final component = EnumFormComponent(
         fieldId: 'id',
         data: EnumDataEntity(options: {'value'}),
@@ -873,10 +813,11 @@ void main() {
         required: true,
       );
       final formData = FormData(
+        id: 'formId',
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: getSchema(
           'string',
           options: [
@@ -887,14 +828,12 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridForm(
-          formUri: RedirectFormUri(
-            components: ['formId'],
-          ),
+          uri: Uri.parse('/api/a/formId'),
         ),
       );
 
       when(
-        () => client.loadForm(formUri: RedirectFormUri(components: ['formId'])),
+        () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
 
       await tester.pumpWidget(target);
@@ -905,7 +844,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.performAction(action, formData));
+      verifyNever(() => client.submitForm(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });

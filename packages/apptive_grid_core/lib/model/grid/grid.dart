@@ -1,6 +1,7 @@
 part of apptive_grid_model;
 
 /// A Uri representation used for performing Grid based Api Calls
+@Deprecated('Use a normal `Uri` instead')
 class GridUri extends ApptiveGridUri {
   /// Creates a new [GridUri] based on known ids for [user], [space] and [grid]
   GridUri({
@@ -28,49 +29,53 @@ class GridUri extends ApptiveGridUri {
 class Grid {
   /// Creates a GridData Object
   Grid({
+    required this.id,
     required this.name,
-    required this.schema,
-    required this.fields,
-    required this.rows,
+    this.fields,
+    this.rows,
+    this.key,
     this.filter,
     this.sorting,
+    required this.links,
+    this.embeddedForms,
   });
 
   /// Deserializes [json] into a [Grid] Object
   factory Grid.fromJson(Map<String, dynamic> json) {
-    final ids = json['fieldIds'] as List;
-    final names = json['fieldNames'] as List;
-    final schema = json['schema'];
-    final fields = List<GridField>.generate(
-      ids.length,
-      (i) => GridField(
-        ids[i],
-        names[i],
-        dataTypeFromSchemaProperty(
-          schemaProperty: schema['properties']['fields']['items'][i],
-        ),
-      ),
-    );
-    final entries = (json['entities'] as List)
-        .map((e) => GridRow.fromJson(e, fields, schema))
+    final id = json['id'];
+    final fields = (json['fields'] as List?)
+        ?.map((json) => GridField.fromJson(json))
         .toList();
+    final entries = fields != null
+        ? (json['entities'] as List?)
+            ?.map((e) => GridRow.fromJson(e, fields))
+            .toList()
+        : null;
     final filter = json['filter'];
     final sorting = json['sorting'];
     return Grid(
+      id: id,
       name: json['name'],
-      schema: schema,
+      key: json['key'],
       fields: fields,
       rows: entries,
       filter: filter,
       sorting: sorting,
+      links: linkMapFromJson(json['_links']),
+      embeddedForms: (json['_embedded']?['forms'] as List?)
+          ?.map((e) => FormData.fromJson(e))
+          .toList(),
     );
   }
+
+  /// Id of this Grid
+  final String id;
 
   /// Name of the Grid
   final String name;
 
-  /// Schema used for deserializing and validating data send back to the server
-  final dynamic schema;
+  /// Key of the Grid
+  final String? key;
 
   /// Filter applied to this GridView. If this is not null the Grid is actually a GridView
   final dynamic filter;
@@ -79,36 +84,58 @@ class Grid {
   final dynamic sorting;
 
   /// List of [GridField] representing the Columns the Grid has
-  final List<GridField> fields;
+  final List<GridField>? fields;
 
   /// Rows of the Grid
-  final List<GridRow> rows;
+  final List<GridRow>? rows;
+
+  /// Links for actions relevant to this grid
+  final LinkMap links;
+
+  /// List of [FormData] that is embedded in this.
+  final List<FormData>? embeddedForms;
 
   /// Serializes [Grid] into a json Map
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'schema': schema,
-        'entities': rows.map((e) => e.toJson()).toList(),
-        'fieldIds': fields.map((e) => e.id).toList(),
-        'fieldNames': fields.map((e) => e.name).toList(),
-        if (filter != null) 'filter': filter,
-        if (sorting != null) 'sorting': sorting,
-      };
+  Map<String, dynamic> toJson() {
+    final jsonMap = {
+      'id': id,
+      'name': name,
+      if (key != null) 'key': key,
+      if (rows != null) 'entities': rows!.map((e) => e.toJson()).toList(),
+      if (fields != null) 'fields': fields!.map((e) => e.toJson()).toList(),
+      if (filter != null) 'filter': filter,
+      if (sorting != null) 'sorting': sorting,
+      '_links': links.toJson(),
+    };
+
+    if (embeddedForms != null) {
+      final embeddedMap =
+          jsonMap['_embedded'] as Map<String, dynamic>? ?? <String, dynamic>{};
+      embeddedMap['forms'] = embeddedForms?.map((e) => e.toJson()).toList();
+
+      jsonMap['_embedded'] = embeddedMap;
+    }
+
+    return jsonMap;
+  }
 
   @override
   String toString() {
-    return 'GridData(name: $name, fields: $fields, rows: $rows, filter: $filter, sorting: $sorting)';
+    return 'Grid(id: $id, name: $name, key: $key, fields: $fields, rows: $rows, filter: $filter, sorting: $sorting, links: $links)';
   }
 
   @override
   bool operator ==(Object other) {
     return other is Grid &&
+        id == other.id &&
         name == other.name &&
-        schema.toString() == other.schema.toString() &&
+        key == other.key &&
         f.listEquals(fields, other.fields) &&
         f.listEquals(rows, other.rows) &&
         filter.toString() == other.filter.toString() &&
-        sorting.toString() == other.sorting.toString();
+        sorting.toString() == other.sorting.toString() &&
+        f.mapEquals(links, other.links) &&
+        f.listEquals(embeddedForms, other.embeddedForms);
   }
 
   @override

@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_core/apptive_grid_network.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
@@ -14,6 +15,7 @@ import 'mocks.dart';
 
 void main() {
   final httpClient = MockHttpClient();
+  late ApptiveGridAuthenticator authenticator;
   late ApptiveGridClient apptiveGridClient;
 
   setUpAll(() {
@@ -23,13 +25,14 @@ void main() {
 
     registerFallbackValue(
       ActionItem(
-        action: FormAction('uri', 'method'),
+        link: ApptiveLink(uri: Uri.parse('uri'), method: 'method'),
         data: FormData(
+          id: 'formId',
           name: 'name',
           title: 'title',
           components: [],
-          actions: [],
           schema: {},
+          links: {},
         ),
       ),
     );
@@ -41,7 +44,13 @@ void main() {
     final stream = StreamController<String?>.broadcast();
     when(() => mockUniLink.linkStream).thenAnswer((_) => stream.stream);
 
-    apptiveGridClient = ApptiveGridClient(httpClient: httpClient);
+    authenticator = MockApptiveGridAuthenticator();
+    when(() => authenticator.checkAuthentication()).thenAnswer((_) async {});
+
+    apptiveGridClient = ApptiveGridClient(
+      httpClient: httpClient,
+      authenticator: authenticator,
+    );
   });
 
   tearDown(() {
@@ -76,7 +85,30 @@ void main() {
         },
       ],
       'name': 'Name',
-      'title': 'Form'
+      'title': 'Form',
+      'id': 'formId',
+      '_links': {
+        "submit": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "post"
+        },
+        "remove": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "delete"
+        },
+        "self": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "get"
+        },
+        "update": {
+          "href":
+              "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+          "method": "put"
+        }
+      },
     };
 
     test('Success', () async {
@@ -86,17 +118,18 @@ void main() {
           .thenAnswer((_) async => response);
 
       final formData = await apptiveGridClient.loadForm(
-        formUri: RedirectFormUri(components: ['FormId']),
+        uri: Uri.parse('/api/a/FormId'),
       );
 
       expect(formData.title, equals('Form'));
-      expect(formData.components.length, equals(1));
-      expect(formData.components[0].runtimeType, equals(StringFormComponent));
-      expect(formData.actions.length, equals(1));
+      expect(formData.components?.length, equals(1));
+      expect(formData.components![0].runtimeType, equals(StringFormComponent));
+      // ignore: deprecated_member_use_from_same_package
+      expect(formData.actions!.length, equals(1));
     });
 
     test('DirectUri checks authentication if call throws 401', () async {
-      final unauthorizedResponse = Response(json.encode(rawResponse), 401);
+      final unauthorizedResponse = Response('Error', 401);
       final response = Response(json.encode(rawResponse), 200);
       final authenticator = MockApptiveGridAuthenticator();
       final client = ApptiveGridClient(
@@ -117,13 +150,36 @@ void main() {
           .thenAnswer((_) => Future.value());
 
       await client.loadForm(
-        formUri: DirectFormUri(
-          user: 'user',
-          space: 'space',
-          grid: 'grid',
-          form: 'FormId',
-        ),
+        uri: Uri.parse('/api/users/user/spaces/space/grids/grid/forms/FormId'),
       );
+      verify(() => authenticator.checkAuthentication()).called(1);
+    });
+
+    test('DirectUri checks authentication only once if call throws 401',
+        () async {
+      final unauthorizedResponse = Response('Error', 401);
+      final authenticator = MockApptiveGridAuthenticator();
+      final client = ApptiveGridClient(
+        httpClient: httpClient,
+        authenticator: authenticator,
+      );
+
+      when(() => httpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async {
+        return unauthorizedResponse;
+      });
+      when(() => authenticator.checkAuthentication())
+          .thenAnswer((_) => Future.value());
+
+      try {
+        await client.loadForm(
+          uri: Uri.parse(
+            '/api/users/user/spaces/space/grids/grid/forms/FormId',
+          ),
+        );
+      } catch (error) {
+        expect(error, unauthorizedResponse);
+      }
       verify(() => authenticator.checkAuthentication()).called(1);
     });
 
@@ -135,7 +191,7 @@ void main() {
 
       expect(
         () => apptiveGridClient.loadForm(
-          formUri: RedirectFormUri(components: ['FormId']),
+          uri: Uri.parse('/api/a/FormId'),
         ),
         throwsA(isInstanceOf<Response>()),
       );
@@ -143,6 +199,10 @@ void main() {
   });
 
   group('Load Grid', () {
+    const userId = 'userId';
+    const spaceId = 'spaceId';
+    const gridId = 'gridId';
+
     final rawResponse = {
       'fieldNames': ['First Name', 'Last Name', 'imgUrl'],
       'entities': [
@@ -174,12 +234,200 @@ void main() {
           '_id': {'type': 'string'}
         }
       },
-      'name': 'Contacts'
+      'name': 'Contacts',
+      'id': 'gridId',
+      '_links': {
+        "addLink": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/AddLink",
+          "method": "post"
+        },
+        "forms": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
+          "method": "get"
+        },
+        "updateFieldType": {
+          "href":
+              "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnTypeChange",
+          "method": "post"
+        },
+        "removeField": {
+          "href":
+              "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRemove",
+          "method": "post"
+        },
+        "addEntity": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
+          "method": "post"
+        },
+        "views": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
+          "method": "get"
+        },
+        "addView": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
+          "method": "post"
+        },
+        "self": {
+          "href":
+              "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+          "method": "get"
+        },
+        "updateFieldKey": {
+          "href":
+              "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnKeyChange",
+          "method": "post"
+        },
+        "query": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/query",
+          "method": "get"
+        },
+        "entities": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
+          "method": "get"
+        },
+        "updates": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/updates",
+          "method": "get"
+        },
+        "schema": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/schema",
+          "method": "get"
+        },
+        "updateFieldName": {
+          "href":
+              "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRename",
+          "method": "post"
+        },
+        "addForm": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
+          "method": "post"
+        },
+        "addField": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnAdd",
+          "method": "post"
+        },
+        "rename": {
+          "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/Rename",
+          "method": "post"
+        },
+        "remove": {
+          "href":
+              "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+          "method": "delete"
+        }
+      },
     };
     test('Success', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities?layout=indexed',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          jsonEncode(rawResponse['entities']),
+          200,
+        ),
+      );
+
+      final grid = await apptiveGridClient.loadGrid(
+        uri: Uri.parse('/api/users/$userId/spaces/$spaceId/grids/$gridId'),
+      );
+
+      expect(grid, isNot(null));
+    });
+
+    test('400 Status throws Response', () async {
       const user = 'user';
       const space = 'space';
       const gridId = 'grid';
+
+      final response = Response(json.encode(rawResponse), 400);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      expect(
+        () => apptiveGridClient.loadGrid(
+          uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
+        ),
+        throwsA(isInstanceOf<Response>()),
+      );
+    });
+    test('401 -> Authenticates and retries', () async {
+      reset(httpClient);
+      const user = 'userId';
+      const space = 'spaceId';
+      const gridId = 'gridId';
+
+      final response = Response('', 401);
+      final retryResponse = Response(json.encode(rawResponse), 200);
+      bool isRetry = false;
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        if (!isRetry) {
+          isRetry = true;
+          return response;
+        } else {
+          return retryResponse;
+        }
+      });
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities?layout=indexed',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          jsonEncode(rawResponse['entities']),
+          200,
+        ),
+      );
+
+      await apptiveGridClient.loadGrid(uri: uri);
+
+      verify(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).called(2);
+    });
+
+    test('Do not load entities', () async {
+      reset(httpClient);
+      const user = 'userId';
+      const space = 'spaceId';
+      const gridId = 'gridId';
 
       final response = Response(json.encode(rawResponse), 200);
 
@@ -207,44 +455,25 @@ void main() {
       );
 
       final grid = await apptiveGridClient.loadGrid(
-        gridUri: GridUri(
-          user: user,
-          space: space,
-          grid: gridId,
-        ),
+        uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
+        loadEntities: false,
       );
 
       expect(grid, isNot(null));
-    });
-
-    test('400 Status throws Response', () async {
-      const user = 'user';
-      const space = 'space';
-      const gridId = 'grid';
-
-      final response = Response(json.encode(rawResponse), 400);
-
-      when(
+      verifyNever(
         () => httpClient.get(
           Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
+            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities?layout=indexed',
           ),
           headers: any(named: 'headers'),
         ),
-      ).thenAnswer((_) async => response);
-
-      expect(
-        () => apptiveGridClient.loadGrid(
-          gridUri: GridUri(user: user, space: space, grid: gridId),
-        ),
-        throwsA(isInstanceOf<Response>()),
       );
     });
   });
 
-  group('performAction', () {
-    test('Successful', () async {
-      final action = FormAction('/uri', 'POST');
+  group('submitForm', () {
+    test('Deprecated performAction still works', () async {
+      final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       const property = 'Checkbox';
       const id = 'id';
       final component = BooleanFormComponent(
@@ -262,10 +491,11 @@ void main() {
         'required': []
       };
       final formData = FormData(
+        id: 'formId',
         name: 'Name',
         title: 'Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
         schema: schema,
       );
 
@@ -282,13 +512,15 @@ void main() {
         return StreamedResponse(Stream.value([]), 200);
       });
 
-      final response = await apptiveGridClient.performAction(action, formData);
+      final response =
+          // ignore: deprecated_member_use_from_same_package
+          await apptiveGridClient.performAction(action.asFormAction, formData);
 
-      expect(response.statusCode, equals(200));
+      expect(response?.statusCode, equals(200));
       expect(calledRequest.method, equals(action.method));
       expect(
-        calledRequest.url.toString(),
-        '${ApptiveGridEnvironment.production.url}${action.uri}',
+        calledRequest.url.path,
+        Uri.parse('${ApptiveGridEnvironment.production.url}${action.uri}').path,
       );
       expect(
         calledRequest.headers[HttpHeaders.contentTypeHeader],
@@ -296,8 +528,8 @@ void main() {
       );
     });
 
-    test('Error without Cache throws Response', () async {
-      final action = FormAction('/uri', 'POST');
+    test('Successful', () async {
+      final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       const property = 'Checkbox';
       const id = 'id';
       final component = BooleanFormComponent(
@@ -315,10 +547,65 @@ void main() {
         'required': []
       };
       final formData = FormData(
+        id: 'formId',
         name: 'Name',
         title: 'Title',
         components: [component],
-        actions: [action],
+        links: {ApptiveLinkType.submit: action},
+        schema: schema,
+      );
+
+      final request = Request(
+        'POST',
+        Uri.parse('${ApptiveGridEnvironment.production.url}/uri}'),
+      );
+      request.body = jsonEncode(jsonEncode(formData.toRequestObject()));
+
+      late BaseRequest calledRequest;
+
+      when(() => httpClient.send(any())).thenAnswer((realInvocation) async {
+        calledRequest = realInvocation.positionalArguments[0];
+        return StreamedResponse(Stream.value([]), 200);
+      });
+
+      final response = await apptiveGridClient.submitForm(action, formData);
+
+      expect(response?.statusCode, equals(200));
+      expect(calledRequest.method, equals(action.method));
+      expect(
+        calledRequest.url.path,
+        Uri.parse('${ApptiveGridEnvironment.production.url}${action.uri}').path,
+      );
+      expect(
+        calledRequest.headers[HttpHeaders.contentTypeHeader],
+        ContentType.json,
+      );
+    });
+
+    test('Error without Cache throws Response', () async {
+      final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
+      const property = 'Checkbox';
+      const id = 'id';
+      final component = BooleanFormComponent(
+        fieldId: id,
+        property: property,
+        data: BooleanDataEntity(true),
+        options: FormComponentOptions.fromJson({}),
+        required: false,
+      );
+      final schema = {
+        'type': 'object',
+        'properties': {
+          id: {'type': 'boolean'},
+        },
+        'required': []
+      };
+      final formData = FormData(
+        id: 'formId',
+        name: 'Name',
+        title: 'Title',
+        components: [component],
+        links: {ApptiveLinkType.submit: action},
         schema: schema,
       );
 
@@ -333,7 +620,7 @@ void main() {
       );
 
       await expectLater(
-        () async => await apptiveGridClient.performAction(action, formData),
+        () async => await apptiveGridClient.submitForm(action, formData),
         throwsA(isInstanceOf<Response>()),
       );
     });
@@ -385,9 +672,11 @@ void main() {
 
         test('Upload Attachment, throws Error', () {
           final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
-          final action = FormAction('actionUri', 'POST');
+          final action =
+              ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
           final bytes = Uint8List(10);
           final formData = FormData(
+            id: 'formId',
             title: 'Title',
             components: [
               AttachmentFormComponent(
@@ -397,7 +686,7 @@ void main() {
               ),
             ],
             schema: null,
-            actions: [action],
+            links: {ApptiveLinkType.submit: action},
             attachmentActions: {
               attachment:
                   AddAttachmentAction(byteData: bytes, attachment: attachment)
@@ -405,7 +694,7 @@ void main() {
           );
 
           expect(
-            () => client.performAction(action, formData),
+            () => client.submitForm(action, formData),
             throwsException,
           );
         });
@@ -549,11 +838,13 @@ void main() {
               ),
               type: 'type',
             );
-            final action = FormAction('actionUri', 'POST');
+            final action =
+                ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
             final bytes = Uint8List(10);
             final attachmentAction =
                 AddAttachmentAction(byteData: bytes, attachment: attachment);
             final formData = FormData(
+              id: 'formId',
               title: 'Title',
               components: [
                 AttachmentFormComponent(
@@ -563,7 +854,7 @@ void main() {
                 ),
               ],
               schema: null,
-              actions: [action],
+              links: {ApptiveLinkType.submit: action},
               attachmentActions: {attachment: attachmentAction},
             );
 
@@ -592,7 +883,7 @@ void main() {
               });
 
               expect(
-                () async => await client.performAction(action, formData),
+                () async => await client.submitForm(action, formData),
                 throwsA(equals(response)),
               );
             });
@@ -634,7 +925,7 @@ void main() {
                     StreamedResponse(Stream.value([]), 200),
               );
 
-              await client.performAction(action, formData);
+              await client.submitForm(action, formData);
 
               verify(
                 () => httpClient.get(
@@ -696,7 +987,7 @@ void main() {
               ).thenAnswer((_) async => putResponse);
 
               await expectLater(
-                () async => await client.performAction(action, formData),
+                () async => await client.submitForm(action, formData),
                 throwsA(equals(putResponse)),
               );
 
@@ -740,11 +1031,13 @@ void main() {
                 ),
                 type: 'image/png',
               );
-              final action = FormAction('actionUri', 'POST');
+              final action =
+                  ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
               final bytes = Uint8List(10);
               final attachmentAction =
                   AddAttachmentAction(byteData: bytes, attachment: attachment);
               final formData = FormData(
+                id: 'formId',
                 title: 'Title',
                 components: [
                   AttachmentFormComponent(
@@ -754,7 +1047,7 @@ void main() {
                   ),
                 ],
                 schema: null,
-                actions: [action],
+                links: {ApptiveLinkType.submit: action},
                 attachmentActions: {attachment: attachmentAction},
               );
 
@@ -795,7 +1088,7 @@ void main() {
                       StreamedResponse(Stream.value([]), 200),
                 );
 
-                await client.performAction(action, formData);
+                await client.submitForm(action, formData);
 
                 verify(
                   () => httpClient.get(
@@ -883,7 +1176,7 @@ void main() {
                       StreamedResponse(Stream.value([]), 200),
                 );
 
-                await client.performAction(action, formData);
+                await client.submitForm(action, formData);
 
                 verify(
                   () => httpClient.get(
@@ -976,7 +1269,7 @@ void main() {
                 );
 
                 expect(
-                  () => client.performAction(action, formData),
+                  () => client.submitForm(action, formData),
                   throwsA(isInstanceOf<Response>()),
                 );
               });
@@ -1021,12 +1314,14 @@ void main() {
           test('Rename Action', () async {
             final attachment =
                 Attachment(name: 'name', url: Uri(), type: 'type');
-            final action = FormAction('actionUri', 'POST');
+            final action =
+                ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
             final attachmentAction = RenameAttachmentAction(
               newName: 'NewName',
               attachment: attachment,
             );
             final formData = FormData(
+              id: 'formId',
               title: 'Title',
               components: [
                 AttachmentFormComponent(
@@ -1036,7 +1331,7 @@ void main() {
                 ),
               ],
               schema: null,
-              actions: [action],
+              links: {ApptiveLinkType.submit: action},
               attachmentActions: {attachment: attachmentAction},
             );
 
@@ -1044,7 +1339,7 @@ void main() {
               (realInvocation) async => StreamedResponse(Stream.value([]), 200),
             );
 
-            await client.performAction(action, formData);
+            await client.submitForm(action, formData);
 
             verify(() => httpClient.send(any())).called(1);
           });
@@ -1052,10 +1347,12 @@ void main() {
           test('Delete Action', () async {
             final attachment =
                 Attachment(name: 'name', url: Uri(), type: 'type');
-            final action = FormAction('actionUri', 'POST');
+            final action =
+                ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
             final attachmentAction =
                 DeleteAttachmentAction(attachment: attachment);
             final formData = FormData(
+              id: 'formId',
               title: 'Title',
               components: [
                 AttachmentFormComponent(
@@ -1065,7 +1362,7 @@ void main() {
                 ),
               ],
               schema: null,
-              actions: [action],
+              links: {ApptiveLinkType.submit: action},
               attachmentActions: {attachment: attachmentAction},
             );
 
@@ -1073,7 +1370,7 @@ void main() {
               (realInvocation) async => StreamedResponse(Stream.value([]), 200),
             );
 
-            await client.performAction(action, formData);
+            await client.submitForm(action, formData);
 
             verify(() => httpClient.send(any())).called(1);
           });
@@ -1131,11 +1428,13 @@ void main() {
             url: Uri(path: 'with/path'),
             type: 'type',
           );
-          final action = FormAction('actionUri', 'POST');
+          final action =
+              ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
           final bytes = Uint8List(10);
           final attachmentAction =
               AddAttachmentAction(byteData: bytes, attachment: attachment);
           final formData = FormData(
+            id: 'formId',
             title: 'Title',
             components: [
               AttachmentFormComponent(
@@ -1145,7 +1444,7 @@ void main() {
               ),
             ],
             schema: null,
-            actions: [action],
+            links: {ApptiveLinkType.submit: action},
             attachmentActions: {attachment: attachmentAction},
           );
 
@@ -1187,7 +1486,7 @@ void main() {
               (realInvocation) async => StreamedResponse(Stream.value([]), 200),
             );
 
-            await client.performAction(action, formData);
+            await client.submitForm(action, formData);
 
             final captures = verify(
               () => httpClient.get(
@@ -1252,7 +1551,7 @@ void main() {
   group('Headers', () {
     test('No Authentication only content type headers', () {
       final client = ApptiveGridClient();
-      expect(client.headers, {
+      expect(client.defaultHeaders, {
         HttpHeaders.contentTypeHeader: ContentType.json,
       });
     });
@@ -1265,10 +1564,52 @@ void main() {
         httpClient: httpClient,
         authenticator: authenticator,
       );
-      expect(client.headers, {
+      expect(client.defaultHeaders, {
         HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ=',
         HttpHeaders.contentTypeHeader: ContentType.json
       });
+    });
+
+    test('Add custom header', () async {
+      final authenticator = MockApptiveGridAuthenticator();
+
+      when(
+        () => authenticator.checkAuthentication(),
+      ).thenAnswer((invocation) async {});
+
+      final mockEntityUri = Uri.parse(
+        '/api/users/user/spaces/space/grids/grid/entities/entity',
+      );
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}${mockEntityUri.toString()}?layout=property',
+      );
+
+      when(
+        () => httpClient.get(
+          uri,
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer(
+        (invocation) async => Response(json.encode({'test': 'test'}), 200),
+      );
+
+      final client = ApptiveGridClient(
+        httpClient: httpClient,
+        authenticator: authenticator,
+      );
+
+      await client.getEntity(
+        uri: mockEntityUri,
+        layout: ApptiveGridLayout.property,
+        headers: {'custom': 'header'},
+      );
+
+      final receivedHeaders = verify(
+        () => httpClient.get(uri, headers: captureAny(named: 'headers')),
+      ).captured.first as Map<String, String>;
+
+      expect(receivedHeaders['custom'], 'header');
     });
   });
 
@@ -1389,7 +1730,7 @@ void main() {
   group('get Space', () {
     const userId = 'userId';
     const spaceId = 'spaceId';
-    final spaceUri = SpaceUri(user: userId, space: spaceId);
+    final spaceUri = Uri.parse('api/users/$userId/spaces/$spaceId');
     final rawResponse = {
       'id': spaceId,
       'name': 'TestSpace',
@@ -1409,7 +1750,7 @@ void main() {
         ),
       ).thenAnswer((_) async => response);
 
-      final space = await apptiveGridClient.getSpace(spaceUri: spaceUri);
+      final space = await apptiveGridClient.getSpace(uri: spaceUri);
 
       expect(space, isNot(null));
     });
@@ -1427,7 +1768,7 @@ void main() {
       ).thenAnswer((_) async => response);
 
       expect(
-        () => apptiveGridClient.getSpace(spaceUri: spaceUri),
+        () => apptiveGridClient.getSpace(uri: spaceUri),
         throwsA(isInstanceOf<Response>()),
       );
     });
@@ -1439,6 +1780,7 @@ void main() {
     const gridId = 'gridId';
     const form0 = 'formId0';
     const form1 = 'formId1';
+    // ignore: deprecated_member_use_from_same_package
     final gridUri = GridUri(user: userId, space: spaceId, grid: gridId);
     final rawResponse = [
       '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
@@ -1456,6 +1798,7 @@ void main() {
         ),
       ).thenAnswer((_) async => response);
 
+      // ignore: deprecated_member_use_from_same_package
       final forms = await apptiveGridClient.getForms(gridUri: gridUri);
 
       expect(forms.length, equals(2));
@@ -1482,6 +1825,7 @@ void main() {
       ).thenAnswer((_) async => response);
 
       expect(
+        // ignore: deprecated_member_use_from_same_package
         () => apptiveGridClient.getForms(gridUri: gridUri),
         throwsA(isInstanceOf<Response>()),
       );
@@ -1494,10 +1838,11 @@ void main() {
     const gridId = 'gridId';
     const view0 = 'viewId0';
     const view1 = 'viewId1';
+    // ignore: deprecated_member_use_from_same_package
     final gridUri = GridUri(user: userId, space: spaceId, grid: gridId);
     final rawResponse = [
-      '/api/users/id/spaces/spaceId/grids/gridId/views/$view0',
-      '/api/users/id/spaces/spaceId/grids/gridId/views/$view1',
+      '/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view0',
+      '/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view1',
     ];
     test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);
@@ -1511,16 +1856,17 @@ void main() {
         ),
       ).thenAnswer((_) async => response);
 
+      // ignore: deprecated_member_use_from_same_package
       final views = await apptiveGridClient.getGridViews(gridUri: gridUri);
 
       expect(views.length, equals(2));
       expect(
         views[0].uri.toString(),
-        '/api/users/id/spaces/spaceId/grids/gridId/views/$view0',
+        '/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view0',
       );
       expect(
         views[1].uri.toString(),
-        '/api/users/id/spaces/spaceId/grids/gridId/views/$view1',
+        '/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view1',
       );
     });
 
@@ -1537,6 +1883,7 @@ void main() {
       ).thenAnswer((_) async => response);
 
       expect(
+        // ignore: deprecated_member_use_from_same_package
         () => apptiveGridClient.getGridViews(gridUri: gridUri),
         throwsA(isInstanceOf<Response>()),
       );
@@ -1563,21 +1910,124 @@ void main() {
         'filter': {
           '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
         },
-        'schema': {
-          'type': 'object',
-          'properties': {
-            'fields': {
-              'type': 'array',
-              'items': [
-                {'type': 'string'},
-                {'type': 'string'},
-                {'type': 'string'}
-              ]
+        'fields': [
+          {
+            "type": {
+              "name": "string",
+              "componentTypes": ["textfield"]
             },
-            '_id': {'type': 'string'}
+            "key": null,
+            "name": "String",
+            "schema": {"type": "string"},
+            "id": "6282104004bd30efc49b7f17",
+            "_links": {}
+          },
+          {
+            "type": {
+              "name": "string",
+              "componentTypes": ["textfield"]
+            },
+            "key": null,
+            "name": "String",
+            "schema": {"type": "string"},
+            "id": "6282104004bd30efc49b7f17",
+            "_links": {}
+          },
+          {
+            "type": {
+              "name": "string",
+              "componentTypes": ["textfield"]
+            },
+            "key": null,
+            "name": "String",
+            "schema": {"type": "string"},
+            "id": "6282104004bd30efc49b7f17",
+            "_links": {}
+          },
+        ],
+        'name': 'New grid view',
+        'id': 'gridId',
+        '_links': {
+          "addLink": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/AddLink",
+            "method": "post"
+          },
+          "forms": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
+            "method": "get"
+          },
+          "updateFieldType": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnTypeChange",
+            "method": "post"
+          },
+          "removeField": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRemove",
+            "method": "post"
+          },
+          "addEntity": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
+            "method": "post"
+          },
+          "views": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
+            "method": "get"
+          },
+          "addView": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
+            "method": "post"
+          },
+          "self": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "get"
+          },
+          "updateFieldKey": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnKeyChange",
+            "method": "post"
+          },
+          "query": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/query",
+            "method": "get"
+          },
+          "entities": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
+            "method": "get"
+          },
+          "updates": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/updates",
+            "method": "get"
+          },
+          "schema": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/schema",
+            "method": "get"
+          },
+          "updateFieldName": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRename",
+            "method": "post"
+          },
+          "addForm": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
+            "method": "post"
+          },
+          "addField": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnAdd",
+            "method": "post"
+          },
+          "rename": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/Rename",
+            "method": "post"
+          },
+          "remove": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "delete"
           }
         },
-        'name': 'New grid view'
       };
 
       final response = Response(json.encode(gridViewResponse), 200);
@@ -1591,7 +2041,7 @@ void main() {
         ),
       ).thenAnswer((invocation) async {
         final uri = invocation.positionalArguments.first as Uri;
-        if (uri.path.endsWith('/views/$view0')) {
+        if (uri.path.endsWith('/grids/$gridId')) {
           return response;
         } else if (uri.path.endsWith('entities')) {
           return Response(json.encode(gridViewResponse['entities']), 200);
@@ -1601,17 +2051,12 @@ void main() {
       });
 
       final gridView = await apptiveGridClient.loadGrid(
-        gridUri: GridViewUri(
-          user: userId,
-          space: spaceId,
-          grid: gridId,
-          view: view0,
-        ),
+        uri: Uri.parse('/api/users/$userId/spaces/$spaceId/grids/$gridId'),
       );
 
       expect(gridView.filter, isNot(null));
-      expect(gridView.fields.length, equals(3));
-      expect(gridView.rows.length, equals(1));
+      expect(gridView.fields!.length, equals(3));
+      expect(gridView.rows!.length, equals(1));
     });
 
     test('GridView sorting gets applied in request', () async {
@@ -1649,7 +2094,89 @@ void main() {
             '_id': {'type': 'string'}
           }
         },
-        'name': 'New grid view'
+        'name': 'New grid view',
+        'id': 'gridId',
+        '_links': {
+          "addLink": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/AddLink",
+            "method": "post"
+          },
+          "forms": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
+            "method": "get"
+          },
+          "updateFieldType": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnTypeChange",
+            "method": "post"
+          },
+          "removeField": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRemove",
+            "method": "post"
+          },
+          "addEntity": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
+            "method": "post"
+          },
+          "views": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
+            "method": "get"
+          },
+          "addView": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
+            "method": "post"
+          },
+          "self": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "get"
+          },
+          "updateFieldKey": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnKeyChange",
+            "method": "post"
+          },
+          "query": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/query",
+            "method": "get"
+          },
+          "entities": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
+            "method": "get"
+          },
+          "updates": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/updates",
+            "method": "get"
+          },
+          "schema": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/schema",
+            "method": "get"
+          },
+          "updateFieldName": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRename",
+            "method": "post"
+          },
+          "addForm": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
+            "method": "post"
+          },
+          "addField": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnAdd",
+            "method": "post"
+          },
+          "rename": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/Rename",
+            "method": "post"
+          },
+          "remove": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "delete"
+          }
+        },
       };
 
       final rawGridViewEntitiesResponse = [
@@ -1676,7 +2203,7 @@ void main() {
         ),
       ).thenAnswer((invocation) async {
         final uri = invocation.positionalArguments.first as Uri;
-        if (uri.path.endsWith('/views/$view0')) {
+        if (uri.path.endsWith('/grids/$gridId')) {
           return gridViewResponse;
         } else if (uri.path.endsWith('entities')) {
           return gridViewEntitiesResponse;
@@ -1692,12 +2219,7 @@ void main() {
             order: SortOrder.desc,
           )
         ],
-        gridUri: GridViewUri(
-          user: userId,
-          space: spaceId,
-          grid: gridId,
-          view: view0,
-        ),
+        uri: Uri.parse('/api/users/$userId/spaces/$spaceId/grids/$gridId'),
       );
 
       verify(
@@ -1749,7 +2271,89 @@ void main() {
             '_id': {'type': 'string'}
           }
         },
-        'name': 'New grid view'
+        'name': 'New grid view',
+        'id': 'gridId',
+        '_links': {
+          "addLink": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/AddLink",
+            "method": "post"
+          },
+          "forms": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
+            "method": "get"
+          },
+          "updateFieldType": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnTypeChange",
+            "method": "post"
+          },
+          "removeField": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRemove",
+            "method": "post"
+          },
+          "addEntity": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
+            "method": "post"
+          },
+          "views": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
+            "method": "get"
+          },
+          "addView": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
+            "method": "post"
+          },
+          "self": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "get"
+          },
+          "updateFieldKey": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnKeyChange",
+            "method": "post"
+          },
+          "query": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/query",
+            "method": "get"
+          },
+          "entities": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
+            "method": "get"
+          },
+          "updates": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/updates",
+            "method": "get"
+          },
+          "schema": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/schema",
+            "method": "get"
+          },
+          "updateFieldName": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRename",
+            "method": "post"
+          },
+          "addForm": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
+            "method": "post"
+          },
+          "addField": {
+            "href":
+                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnAdd",
+            "method": "post"
+          },
+          "rename": {
+            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/Rename",
+            "method": "post"
+          },
+          "remove": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
+            "method": "delete"
+          }
+        },
       };
 
       final rawGridViewEntitiesResponse = [
@@ -1776,7 +2380,7 @@ void main() {
         ),
       ).thenAnswer((invocation) async {
         final uri = invocation.positionalArguments.first as Uri;
-        if (uri.path.endsWith('/views/$view0')) {
+        if (uri.path.endsWith('/grids/$gridId')) {
           return gridViewResponse;
         } else if (uri.path.endsWith('entities')) {
           return gridViewEntitiesResponse;
@@ -1790,12 +2394,7 @@ void main() {
           fieldId: '9fqx8om03flgh8d4m1l953x29',
           value: StringDataEntity('a'),
         ),
-        gridUri: GridViewUri(
-          user: userId,
-          space: spaceId,
-          grid: gridId,
-          view: view0,
-        ),
+        uri: Uri.parse('/api/users/$userId/spaces/$spaceId/grids/$gridId'),
       );
 
       verify(
@@ -1805,7 +2404,7 @@ void main() {
               (uri) =>
                   uri.path ==
                       '/api/users/$userId/spaces/$spaceId/grids/$gridId/entities' &&
-                  uri.queryParameters['viewId'] == view0 &&
+                  //uri.queryParameters['viewId'] == view0 &&
                   uri.queryParameters.containsKey('filter'),
             ),
           ),
@@ -1824,14 +2423,15 @@ void main() {
 
     late ApptiveGridClient client;
 
-    final action = FormAction('actionUri', 'POST');
+    final action = ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
 
     final data = FormData(
+      id: 'formId',
       name: 'Name',
       title: 'title',
       components: [],
-      actions: [],
       schema: {},
+      links: {},
     );
 
     final cacheMap = <String, dynamic>{};
@@ -1859,7 +2459,7 @@ void main() {
       });
 
       await expectLater(
-        (await client.performAction(action, data)).statusCode,
+        (await client.submitForm(action, data))?.statusCode,
         400,
       );
 
@@ -1879,7 +2479,7 @@ void main() {
           .thenThrow(const SocketException('Socket Exception'));
 
       await expectLater(
-        (await client.performAction(action, data)).statusCode,
+        (await client.submitForm(action, data))?.statusCode,
         400,
       );
 
@@ -1887,7 +2487,7 @@ void main() {
     });
 
     test('Resubmit fails does not crash', () async {
-      final actionItem = ActionItem(action: action, data: data);
+      final actionItem = ActionItem(link: action, data: data);
       cacheMap[actionItem.toString()] = actionItem.toJson();
 
       when(() => httpClient.send(any())).thenAnswer((realInvocation) async {
@@ -1907,8 +2507,9 @@ void main() {
     const gridId = 'gridId';
     const entityId = 'entityId';
     const form = 'form';
-    final entityUri =
-        EntityUri(user: userId, space: spaceId, grid: gridId, entity: entityId);
+    final entityUri = Uri.parse(
+      '/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+    );
     final rawResponse = {
       'uri': '/api/r/$form',
     };
@@ -1926,11 +2527,16 @@ void main() {
       ).thenAnswer((_) async => response);
 
       final formUri = await apptiveGridClient.getEditLink(
-        entityUri: entityUri,
+        uri: entityUri.replace(
+          pathSegments: [
+            ...entityUri.pathSegments,
+            'EditLink',
+          ],
+        ),
         formId: form,
       );
 
-      expect(formUri.uri, equals(Uri(path: '/api/a/$form')));
+      expect(formUri, equals(Uri(path: '/api/a/$form')));
     });
 
     test('400 Status throws Response', () async {
@@ -1947,7 +2553,15 @@ void main() {
       ).thenAnswer((_) async => response);
 
       expect(
-        () => apptiveGridClient.getEditLink(entityUri: entityUri, formId: form),
+        () => apptiveGridClient.getEditLink(
+          uri: entityUri.replace(
+            pathSegments: [
+              ...entityUri.pathSegments,
+              'EditLink',
+            ],
+          ),
+          formId: form,
+        ),
         throwsA(isInstanceOf<Response>()),
       );
     });
@@ -1958,8 +2572,9 @@ void main() {
     const spaceId = 'spaceId';
     const gridId = 'gridId';
     const entityId = 'entityId';
-    final entityUri =
-        EntityUri(user: userId, space: spaceId, grid: gridId, entity: entityId);
+    final entityUri = Uri.parse(
+      '/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+    );
     final rawResponse = {
       '4um33znbt8l6x0vzvo0mperwj': null,
       '_id': 'entityId',
@@ -1971,13 +2586,13 @@ void main() {
       when(
         () => httpClient.get(
           Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
           ),
           headers: any(named: 'headers'),
         ),
       ).thenAnswer((_) async => response);
 
-      final entity = await apptiveGridClient.getEntity(entityUri: entityUri);
+      final entity = await apptiveGridClient.getEntity(uri: entityUri);
 
       expect(entity, equals(rawResponse));
     });
@@ -1988,16 +2603,36 @@ void main() {
       when(
         () => httpClient.get(
           Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId',
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
           ),
           headers: any(named: 'headers'),
         ),
       ).thenAnswer((_) async => response);
 
       expect(
-        () => apptiveGridClient.getEntity(entityUri: entityUri),
+        () => apptiveGridClient.getEntity(uri: entityUri),
         throwsA(isInstanceOf<Response>()),
       );
+    });
+
+    test('Adjust Layout', () async {
+      final response = Response(json.encode(rawResponse), 200);
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=key',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => response);
+
+      final entity = await apptiveGridClient.getEntity(
+        uri: entityUri,
+        layout: ApptiveGridLayout.key,
+      );
+
+      expect(entity, equals(rawResponse));
     });
   });
 
@@ -2064,7 +2699,8 @@ void main() {
       lastName: 'lastName',
       firstName: 'firstName',
       id: 'userId',
-      spaces: [],
+      links: {},
+      embeddedSpaces: [],
     );
 
     group('Errors', () {
@@ -2188,6 +2824,265 @@ void main() {
             HttpHeaders.contentTypeHeader: 'image/jpeg',
           },
           body: bytes,
+        ),
+      ).called(1);
+    });
+  });
+
+  group('Load Entities', () {
+    test('401 -> Authenticates and retries', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
+
+      final response = Response('', 401);
+      final retryResponse = Response(
+        '{'
+        '"items": []}',
+        200,
+      );
+      bool isRetry = false;
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        if (!isRetry) {
+          isRetry = true;
+          return response;
+        } else {
+          return retryResponse;
+        }
+      });
+
+      await apptiveGridClient.loadEntities(uri: uri);
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters['layout'] ==
+                      ApptiveGridLayout.field.queryParameter,
+            ),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(2);
+    });
+
+    test('Uses layout', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
+
+      final response = Response(
+        '{'
+        '"items": []}',
+        200,
+      );
+      const layout = ApptiveGridLayout.keyAndField;
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        return response;
+      });
+
+      await apptiveGridClient.loadEntities(uri: uri, layout: layout);
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters['layout'] == layout.queryParameter,
+            ),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
+    });
+  });
+
+  group('Perform ApptiveLink', () {
+    const actionResponse = 'Action Response';
+
+    test('Success', () async {
+      final link = ApptiveLink(uri: Uri.parse('/apptive/link'), method: 'get');
+
+      final response =
+          StreamedResponse(Stream.value(utf8.encode(actionResponse)), 200);
+      final linkCompleter = Completer();
+
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+
+      await apptiveGridClient.performApptiveLink(
+        link: link,
+        parseResponse: (response) async =>
+            linkCompleter.complete(response.body),
+      );
+
+      expect(await linkCompleter.future, equals(actionResponse));
+    });
+
+    test('400 Status throws Response', () async {
+      final link = ApptiveLink(uri: Uri.parse('/apptive/link'), method: 'get');
+
+      final response =
+          StreamedResponse(Stream.value(utf8.encode(actionResponse)), 400);
+      final linkCompleter = Completer();
+
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((_) async => response);
+      expect(
+        () => apptiveGridClient.performApptiveLink(
+          link: link,
+          parseResponse: (response) async => linkCompleter.complete(response),
+        ),
+        throwsA(isInstanceOf<Response>()),
+      );
+    });
+
+    test('401 -> Authenticates and retries', () async {
+      reset(httpClient);
+      final link = ApptiveLink(uri: Uri.parse('/apptive/link'), method: 'get');
+
+      bool isRetry = false;
+
+      final response =
+          StreamedResponse(Stream.value(utf8.encode(actionResponse)), 401);
+      final retryResponse =
+          StreamedResponse(Stream.value(utf8.encode(actionResponse)), 200);
+      final linkCompleter = Completer();
+
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((_) async {
+        if (!isRetry) {
+          isRetry = true;
+          return response;
+        } else {
+          return retryResponse;
+        }
+      });
+
+      await apptiveGridClient.performApptiveLink(
+        link: link,
+        parseResponse: (response) async => linkCompleter.complete(response),
+      );
+
+      verify(() => authenticator.checkAuthentication()).called(1);
+      verify(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).called(2);
+    });
+
+    test('Headers, Body, Query get applied', () async {
+      final link = ApptiveLink(uri: Uri.parse('/apptive/link'), method: 'post');
+
+      const body = 'testBody';
+      final headers = {'TestHeader': 'Value'};
+      final queryParameters = {'QueryParameter': 'Value'};
+
+      final response =
+          StreamedResponse(Stream.value(utf8.encode(actionResponse)), 200);
+      final linkCompleter = Completer();
+
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+
+      await apptiveGridClient.performApptiveLink(
+        link: link,
+        body: body,
+        headers: headers,
+        queryParameters: queryParameters,
+        parseResponse: (response) async =>
+            linkCompleter.complete(response.body),
+      );
+
+      verify(
+        () => httpClient.send(
+          any(
+            that: predicate<Request>((request) {
+              return mapEquals(request.url.queryParameters, queryParameters) &&
+                  request.headers[headers.keys.first] == headers.values.first &&
+                  request.body == jsonEncode(body);
+            }),
+          ),
         ),
       ).called(1);
     });

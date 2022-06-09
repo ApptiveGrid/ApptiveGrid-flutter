@@ -40,12 +40,10 @@ class MyApp extends StatelessWidget {
 }
 
 class _MyHomePage extends StatefulWidget {
-  _MyHomePage({
-    Key? key,
-  }) : super(key: key);
+  _MyHomePage();
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<_MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<_MyHomePage> {
@@ -60,11 +58,7 @@ class _MyHomePageState extends State<_MyHomePage> {
       // Add the ApptiveGridGridBuilder to your Widget Tree
       body: ApptiveGridGridBuilder(
         key: _builderKey,
-        gridUri: GridUri(
-          user: 'USER_ID',
-          space: 'SPACE_ID',
-          grid: 'GRID_ID',
-        ),
+        uri: Uri.parse('/api/users/USER_ID/spaces/SPACE_ID/grids/GRID_ID'),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -80,12 +74,12 @@ class _MyHomePageState extends State<_MyHomePage> {
                 return _builderKey.currentState?.reload() ?? Future.value();
               },
               child: ListView.separated(
-                itemCount: snapshot.data!.rows.length,
+                itemCount: snapshot.data!.rows?.length ?? 0,
                 separatorBuilder: (context, index) {
                   return Divider();
                 },
                 itemBuilder: (context, index) {
-                  final row = snapshot.data!.rows[index];
+                  final row = snapshot.data!.rows![index];
                   return ListTile(
                     leading: Padding(
                       padding: const EdgeInsets.fromLTRB(4, 4, 4, 8),

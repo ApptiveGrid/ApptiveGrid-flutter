@@ -4,6 +4,8 @@ analyzer:
   exclude:
     - '**/grid_row_dropdown.dart'
     - '**/apptive_grid_icons_icons.dart'
+    - '**/generated_plugin_registrant.dart'
+    - '**/*.g.dart'
 
 linter:
   rules:
@@ -13,3 +15,4 @@ linter:
     avoid_print: true
     require_trailing_commas: true
     always_use_package_imports: true
+    use_super_parameters: true

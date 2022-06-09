@@ -20,11 +20,11 @@ typedef RequestPasswordResetCallback = void Function(
 class LoginContent extends StatefulWidget {
   /// Creates a new LoginContent Widget to display inputs for a user to log in
   const LoginContent({
-    Key? key,
+    super.key,
     this.requestRegistration,
     this.onLogin,
     this.requestResetPassword,
-  }) : super(key: key);
+  });
 
   /// Callback invoked when the user wants to switch to registering
   /// If this is `null` no option to switch to registration is shown
@@ -37,7 +37,7 @@ class LoginContent extends StatefulWidget {
   final RequestPasswordResetCallback? requestResetPassword;
 
   @override
-  _LoginContentState createState() => _LoginContentState();
+  State<LoginContent> createState() => _LoginContentState();
 }
 
 class _LoginContentState extends State<LoginContent> {
@@ -60,7 +60,7 @@ class _LoginContentState extends State<LoginContent> {
     final textTheme = Theme.of(context).textTheme;
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     final spacing =
-        ApptiveGridUserManagementContent.maybeOf(context)?.spacing ?? 16;
+        ApptiveGridUserManagementContent.maybeOf(context)?.widget.spacing ?? 16;
     return AbsorbPointer(
       absorbing: _loading,
       child: Column(
@@ -173,8 +173,13 @@ class _LoginContentState extends State<LoginContent> {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     final contentKey = GlobalKey<RequestResetPasswordContentState>();
 
+    final customTranslations =
+        ApptiveGridUserManagement.maybeOf(context)?.widget.customTranslations ??
+            {}; // coverage:ignore-line
+
     if (widget.requestResetPassword != null) {
       final content = ApptiveGridUserManagementLocalization(
+        customTranslations: customTranslations,
         child: RequestResetPasswordContent(
           key: contentKey,
         ),
@@ -182,6 +187,7 @@ class _LoginContentState extends State<LoginContent> {
       widget.requestResetPassword!.call(content, contentKey);
     } else {
       final content = ApptiveGridUserManagementLocalization(
+        customTranslations: customTranslations,
         child: RequestResetPasswordContent(
           key: contentKey,
           // Provide function to get the client from the dialog

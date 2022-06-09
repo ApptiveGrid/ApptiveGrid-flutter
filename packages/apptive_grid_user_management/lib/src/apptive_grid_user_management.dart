@@ -5,6 +5,7 @@ import 'package:apptive_grid_user_management/src/confirm_account.dart';
 import 'package:apptive_grid_user_management/src/password_check.dart';
 import 'package:apptive_grid_user_management/src/reset_password.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
+import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_translation.dart';
 import 'package:apptive_grid_user_management/src/user_management_client.dart';
 import 'package:flutter/material.dart';
 import 'package:uni_links/uni_links.dart' as uni_links;
@@ -14,7 +15,7 @@ import 'package:uni_links/uni_links.dart' as uni_links;
 class ApptiveGridUserManagement extends StatefulWidget {
   /// Creates a new ApptiveGridUserManagement Widget
   const ApptiveGridUserManagement({
-    Key? key,
+    super.key,
     required this.group,
     required this.clientId,
     this.redirectScheme,
@@ -25,27 +26,9 @@ class ApptiveGridUserManagement extends StatefulWidget {
     this.onChangeEnvironment,
     required this.resetPasswordPrompt,
     required this.onPasswordReset,
-  })  : _client = null,
-        super(key: key);
-
-  /// Creates a new ApptiveGridUserManagement Widget with a custom [client]
-  /// Used for Testing
-  @visibleForTesting
-  const ApptiveGridUserManagement.withClient({
-    Key? key,
-    required this.group,
-    this.clientId = 'app',
-    this.redirectScheme,
-    this.child,
-    this.passwordRequirement = PasswordRequirement.enforced,
-    required this.confirmAccountPrompt,
-    required this.onAccountConfirmed,
-    this.onChangeEnvironment,
-    required ApptiveGridUserManagementClient client,
-    required this.resetPasswordPrompt,
-    required this.onPasswordReset,
-  })  : _client = client,
-        super(key: key);
+    this.client,
+    this.customTranslations = const {},
+  });
 
   /// User Group the users should be added to
   final String group;
@@ -85,19 +68,24 @@ class ApptiveGridUserManagement extends StatefulWidget {
   /// After this the User should be redirected to the login page
   final void Function(bool loggedIn) onPasswordReset;
 
-  final ApptiveGridUserManagementClient? _client;
+  /// ApptiveGridUserManagementClient that should be used
+  final ApptiveGridUserManagementClient? client;
+
+  /// Provide custom Translations. This can be used to either add additional Translations or override existing translations
+  final Map<Locale, ApptiveGridUserManagementTranslation> customTranslations;
 
   @override
   State<ApptiveGridUserManagement> createState() =>
-      _ApptiveGridUserManagementState();
+      ApptiveGridUserManagementState();
 
-  /// Returns the closest nullable [_ApptiveGridUserManagementState]
-  static _ApptiveGridUserManagementState? maybeOf(BuildContext context) {
-    return context.findAncestorStateOfType<_ApptiveGridUserManagementState>();
+  /// Returns the closest nullable [ApptiveGridUserManagementState]
+  static ApptiveGridUserManagementState? maybeOf(BuildContext context) {
+    return context.findAncestorStateOfType<ApptiveGridUserManagementState>();
   }
 }
 
-class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
+/// State for [ApptiveGridUserManagement]
+class ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
   late ApptiveGridUserManagementClient? _userManagementClient;
 
   StreamSubscription? _deepLinkSubscription;
@@ -114,7 +102,7 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _userManagementClient = widget._client ??
+    _userManagementClient = widget.client ??
         ApptiveGridUserManagementClient(
           group: widget.group,
           clientId: widget.clientId,
@@ -143,10 +131,12 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
   @override
   Widget build(BuildContext context) {
     return ApptiveGridUserManagementLocalization(
+      customTranslations: widget.customTranslations,
       child: widget.child ?? const SizedBox(),
     );
   }
 
+  /// Return the [ApptiveGridUserManagmentClient] used
   ApptiveGridUserManagementClient? get client => _userManagementClient;
 
   Future<List<bool>> _checkLink(Uri? uri) async {
@@ -168,6 +158,7 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
 
       widget.confirmAccountPrompt(
         ApptiveGridUserManagementLocalization(
+          customTranslations: widget.customTranslations,
           child: ConfirmAccount(
             confirmationUri: uri!,
             confirmAccount: widget.onAccountConfirmed,
@@ -198,6 +189,7 @@ class _ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
 
       widget.resetPasswordPrompt(
         ApptiveGridUserManagementLocalization(
+          customTranslations: widget.customTranslations,
           child: ResetPassword(
             resetUri: uri!,
             onReset: widget.onPasswordReset,

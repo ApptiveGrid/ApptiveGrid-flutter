@@ -1,13 +1,14 @@
 part of apptive_grid_model;
 
 /// Model for a Action inside a Form
+@Deprecated('Use ApptiveLinks instead')
 class FormAction {
   /// Creates a Form Action
   FormAction(this.uri, this.method);
 
   /// Deserialize [json] into a [FormAction]
   FormAction.fromJson(Map<String, dynamic> json)
-      : uri = json['uri'],
+      : uri = json['uri'] ?? json['href'],
         method = json['method'];
 
   /// Path the Action points to
@@ -40,35 +41,41 @@ class FormAction {
 class ActionItem {
   /// Creates a new Action Item
   ActionItem({
-    required this.action,
+    required this.link,
     required this.data,
   });
 
   /// Creates a ActionItem base on a [json] map
   ActionItem.fromJson(Map<String, dynamic> json)
-      : action = FormAction.fromJson(json['action']),
+      // ignore: deprecated_member_use_from_same_package
+      : link = ApptiveLink.fromJson(json['link'] ?? json['action']),
         data = FormData.fromJson(json['data']);
 
+  /// Returns [link] as a [FormAction] for compatibility
+  @Deprecated('Use link instead')
+  FormAction get action => link.asFormAction;
+
   /// Action to be performed
-  final FormAction action;
+  // ignore: deprecated_member_use_from_same_package
+  final ApptiveLink link;
 
   /// Data to be send in the Action
   final FormData data;
 
   /// Serializes the ActionItem to a json map
   Map<String, dynamic> toJson() => {
-        'action': action.toJson(),
+        'link': link.toJson(),
         'data': data.toJson(),
       };
 
   @override
   String toString() {
-    return 'ActionItem(action: $action, data: $data)';
+    return 'ActionItem(link: $link, data: $data)';
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ActionItem && action == other.action && data == other.data;
+    return other is ActionItem && link == other.link && data == other.data;
   }
 
   @override

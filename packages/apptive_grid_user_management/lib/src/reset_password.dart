@@ -10,10 +10,10 @@ import 'package:password_rule_check/password_rule_check.dart';
 class ResetPassword extends StatefulWidget {
   /// Creates a Widget that allows users to reset their password
   const ResetPassword({
-    Key? key,
+    super.key,
     required this.resetUri,
     required this.onReset,
-  }) : super(key: key);
+  });
 
   /// Uri the Reset Call should be made against
   final Uri resetUri;
@@ -23,7 +23,7 @@ class ResetPassword extends StatefulWidget {
   final void Function(bool loggedIn) onReset;
 
   @override
-  _ResetPasswordState createState() => _ResetPasswordState();
+  State<ResetPassword> createState() => _ResetPasswordState();
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
@@ -42,7 +42,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget build(BuildContext context) {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     final spacing =
-        ApptiveGridUserManagementContent.maybeOf(context)?.spacing ?? 16;
+        ApptiveGridUserManagementContent.maybeOf(context)?.widget.spacing ?? 16;
     return AbsorbPointer(
       absorbing: _loading,
       child: Form(

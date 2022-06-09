@@ -4,15 +4,15 @@ part of apptive_grid_form_widgets;
 class TextFormWidget extends StatefulWidget {
   /// Creates a [TextFormField] to show and edit Text contained in [component]
   const TextFormWidget({
-    Key? key,
+    super.key,
     required this.component,
-  }) : super(key: key);
+  });
 
   /// Component this Widget should reflect
   final StringFormComponent component;
 
   @override
-  _TextFormWidgetState createState() => _TextFormWidgetState();
+  State<TextFormWidget> createState() => _TextFormWidgetState();
 }
 
 class _TextFormWidgetState extends State<TextFormWidget>

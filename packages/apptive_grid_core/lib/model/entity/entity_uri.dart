@@ -1,6 +1,7 @@
 part of apptive_grid_model;
 
 /// A Uri representation used for performing Grid based Api Calls
+@Deprecated('Use a normal `Uri` instead')
 class EntityUri extends ApptiveGridUri {
   /// Creates a new [EntityUri] based on known ids for [user], [space] and [grid]
   EntityUri({

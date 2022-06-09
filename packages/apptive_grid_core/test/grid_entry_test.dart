@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Equality', () {
     test('From Json == Direct', () {
-      final field = GridField('id', 'name', DataType.text);
+      final field = GridField(id: 'id', name: 'name', type: DataType.text);
       const value = 'value';
 
       final direct = GridEntry(field, StringDataEntity(value));
@@ -19,7 +19,7 @@ void main() {
     });
 
     test('UnEqual', () {
-      final field = GridField('id', 'name', DataType.text);
+      final field = GridField(id: 'id', name: 'name', type: DataType.text);
       const value = 'value';
 
       final single = GridEntry(field, StringDataEntity(value));

@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 class ApptiveGridUserManagementContent extends StatefulWidget {
   /// Creates a Content Widget to show the user Content
   const ApptiveGridUserManagementContent({
-    Key? key,
+    super.key,
     this.initialContentType = ContentType.register,
     this.onLogin,
     this.spacing = 16.0,
     this.requestResetPassword,
-  }) : super(key: key);
+  });
 
   /// The initial [ContentType] that should be displayed
   final ContentType initialContentType;
@@ -26,13 +26,15 @@ class ApptiveGridUserManagementContent extends StatefulWidget {
   final RequestPasswordResetCallback? requestResetPassword;
 
   @override
-  _ApptiveGridUserManagementContentState createState() =>
+  State<ApptiveGridUserManagementContent> createState() =>
       _ApptiveGridUserManagementContentState();
 
   /// Returns the closest nullable [_ApptiveGridUserManagementContentState]
-  static _ApptiveGridUserManagementContentState? maybeOf(BuildContext context) {
+  static State<ApptiveGridUserManagementContent>? maybeOf(
+    BuildContext context,
+  ) {
     return context
-        .findAncestorStateOfType<_ApptiveGridUserManagementContentState>();
+        .findAncestorStateOfType<State<ApptiveGridUserManagementContent>>();
   }
 }
 
@@ -69,8 +71,6 @@ class _ApptiveGridUserManagementContentState
         );
     }
   }
-
-  double get spacing => widget.spacing;
 }
 
 /// The different Content Types the user can see

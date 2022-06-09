@@ -299,7 +299,7 @@ void main() {
           .thenAnswer((invocation) async => token);
       authenticator.testAuthenticator = testAuthenticator;
       when(() => testAuthenticator.authorize()).thenAnswer((invocation) async {
-        launch(_zweidenkerIssuer.metadata.tokenEndpoint.toString());
+        launchUrl(_zweidenkerIssuer.metadata.tokenEndpoint!);
         return credential;
       });
 

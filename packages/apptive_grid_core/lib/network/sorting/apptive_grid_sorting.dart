@@ -3,21 +3,16 @@ import 'package:apptive_grid_core/apptive_grid_core.dart';
 /// Order that entities can be sorted
 enum SortOrder {
   /// Descending Order
-  desc,
+  desc(requestValue: 'descending'),
 
   /// Ascending Sort Order
-  asc,
-}
+  asc(requestValue: 'ascending');
 
-extension _SortOrderX on SortOrder {
-  String get requestValue {
-    switch (this) {
-      case SortOrder.desc:
-        return 'descending';
-      case SortOrder.asc:
-        return 'ascending';
-    }
-  }
+  /// Creates a new SortOrder
+  const SortOrder({required this.requestValue});
+
+  /// The Value used in the backend for the
+  final String requestValue;
 }
 
 /// Basic Sorting operation
@@ -72,9 +67,9 @@ class DistanceApptiveGridSorting extends ApptiveGridSorting {
   /// [fieldId] needs to be referencing a [GridField] with type [DataType.geolocation]
   const DistanceApptiveGridSorting({
     required this.location,
-    required String fieldId,
-    required SortOrder order,
-  }) : super(fieldId: fieldId, order: order);
+    required super.fieldId,
+    required super.order,
+  });
 
   /// Items will be sorted by the distance to this [location]
   final Geolocation location;

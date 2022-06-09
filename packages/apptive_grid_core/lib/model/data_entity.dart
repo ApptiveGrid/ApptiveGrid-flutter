@@ -4,7 +4,7 @@ part of apptive_grid_model;
 ///
 /// [T] type of the data used in Flutter
 /// [S] type used when sending Data back
-abstract class DataEntity<T, S> {
+abstract class DataEntity<T, S> with FilterableMixin {
   /// Create a new DataEntity with [value]
   DataEntity([this.value]);
 
@@ -28,33 +28,25 @@ abstract class DataEntity<T, S> {
 
   @override
   int get hashCode => toString().hashCode;
-}
 
-/// Class for DataEntities that are support in Comparison Filters like [LesserThanFilter] and [GreaterThanFilter]
-abstract class ComparableDataEntity<T, S> extends DataEntity<T, S> {
-  /// Creates a new DataEntity with [value]
-  ComparableDataEntity([T? value]) : super(value);
-}
-
-/// Class for DataEntities that support Collection Filters like [AnyOfFilter], [AllOfFilter] and [NoneOfFilter]
-abstract class CollectionDataEntity<T, S> extends DataEntity<T, S> {
-  /// Creates a new DataEntity with [value]
-  CollectionDataEntity([T? value]) : super(value);
+  @override
+  dynamic get filterValue => schemaValue;
 }
 
 /// [DataEntity] representing [String] Objects
 class StringDataEntity extends DataEntity<String, String> {
   /// Creates a new StringDataEntity Object with value [value]
-  StringDataEntity([String? value]) : super(value);
+  StringDataEntity([super.value]);
 
   @override
   String? get schemaValue => value;
 }
 
 /// [DataEntity] representing [DateTime] Objects
-class DateTimeDataEntity extends ComparableDataEntity<DateTime, String> {
+class DateTimeDataEntity extends DataEntity<DateTime, String>
+    with ComparableFilterableMixin {
   /// Creates a new DateTimeDataEntity Object with value [value]
-  DateTimeDataEntity([DateTime? value]) : super(value);
+  DateTimeDataEntity([super.value]);
 
   /// Creates a new DateTimeDataEntity Object from json
   /// [json] needs to be a Iso8601String
@@ -73,9 +65,10 @@ class DateTimeDataEntity extends ComparableDataEntity<DateTime, String> {
 
 /// [DataEntity] representing a Date
 /// Internally this is using [DateTime] ignoring the Time Part
-class DateDataEntity extends ComparableDataEntity<DateTime, String> {
+class DateDataEntity extends DataEntity<DateTime, String>
+    with ComparableFilterableMixin {
   /// Creates a new DateTimeDataEntity Object with value [value]
-  DateDataEntity([DateTime? value]) : super(value);
+  DateDataEntity([super.value]);
 
   /// Creates a new DateTimeDataEntity Object from json
   /// [json] needs to be a Date String with Format yyyy-MM-dd
@@ -97,23 +90,25 @@ class DateDataEntity extends ComparableDataEntity<DateTime, String> {
 /// [DataEntity] representing [boolean] Objects
 class BooleanDataEntity extends DataEntity<bool, bool> {
   /// Creates a new BooleanDataEntity Object
-  BooleanDataEntity([bool? value = false]) : super(value ?? false);
+  BooleanDataEntity([bool? value]) : super(value ?? false);
 
   @override
   bool? get schemaValue => value;
 }
 
 /// [DataEntity] representing [int] Objects
-class IntegerDataEntity extends ComparableDataEntity<int, int> {
+class IntegerDataEntity extends DataEntity<int, int>
+    with ComparableFilterableMixin {
   /// Creates a new IntegerDataEntity Object
-  IntegerDataEntity([int? value]) : super(value);
+  IntegerDataEntity([super.value]);
 
   @override
   int? get schemaValue => value;
 }
 
 /// [DataEntity] representing [double] Objects
-class DecimalDataEntity extends ComparableDataEntity<double, double> {
+class DecimalDataEntity extends DataEntity<double, double>
+    with ComparableFilterableMixin {
   /// Creates a new DecimalDataEntity Object
   DecimalDataEntity([num? value]) : super(value?.toDouble());
 
@@ -149,8 +144,8 @@ class EnumDataEntity extends DataEntity<String, String> {
 }
 
 /// [DataEntity] representing an enum like Object
-class EnumCollectionDataEntity
-    extends CollectionDataEntity<Set<String>, List<String>> {
+class EnumCollectionDataEntity extends DataEntity<Set<String>, List<String>>
+    with CollectionFilterableMixin {
   /// Creates a new EnumDataEntity Object with [value] out of possible [options]
   EnumCollectionDataEntity._({
     required Set<String> value,
@@ -204,24 +199,23 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
   }) =>
       CrossReferenceDataEntity(
         value: jsonValue?['displayValue'],
-        entityUri: jsonValue?['uri'] != null
-            ? EntityUri.fromUri(jsonValue?['uri'])
-            : null,
-        gridUri: GridUri.fromUri(gridUri),
+        entityUri:
+            jsonValue?['uri'] != null ? Uri.parse(jsonValue?['uri']) : null,
+        gridUri: Uri.parse(gridUri),
       );
 
-  /// The [EntityUri] pointing to the Entity this is referencing
-  EntityUri? entityUri;
+  /// The [Uri] pointing to the Entity this is referencing
+  Uri? entityUri;
 
   /// Pointing to the [Grid] this is referencing
-  final GridUri gridUri;
+  final Uri gridUri;
 
   @override
   dynamic get schemaValue {
     if (entityUri == null) {
       return null;
     } else {
-      return {'displayValue': value ?? '', 'uri': entityUri!.uri.toString()};
+      return {'displayValue': value ?? '', 'uri': entityUri!.toString()};
     }
   }
 
@@ -243,8 +237,8 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
 }
 
 /// [DataEntity] representing an array of Attachments
-class AttachmentDataEntity
-    extends CollectionDataEntity<List<Attachment>, dynamic> {
+class AttachmentDataEntity extends DataEntity<List<Attachment>, dynamic>
+    with CollectionFilterableMixin {
   /// Create a new Attachment Data Entity
   AttachmentDataEntity([
     List<Attachment>? value,
@@ -287,7 +281,7 @@ class AttachmentDataEntity
 /// [DataEntity] representing [Geolocation]s
 class GeolocationDataEntity extends DataEntity<Geolocation, dynamic> {
   /// Creates a new GeolocationDataEntity Object with value [value]
-  GeolocationDataEntity([Geolocation? value]) : super(value);
+  GeolocationDataEntity([super.value]);
 
   /// Creates a new GeolocationDataEntity Object from json
   /// [json] needs to be an array of double
@@ -306,7 +300,8 @@ class GeolocationDataEntity extends DataEntity<Geolocation, dynamic> {
 
 /// [DataEntity] representing a list of objects CrossReferencing to a different Grid
 class MultiCrossReferenceDataEntity
-    extends CollectionDataEntity<List<CrossReferenceDataEntity>, dynamic> {
+    extends DataEntity<List<CrossReferenceDataEntity>, dynamic>
+    with CollectionFilterableMixin {
   /// Create a new CrossReference Data Entity
   MultiCrossReferenceDataEntity({
     List<CrossReferenceDataEntity>? references,
@@ -328,12 +323,12 @@ class MultiCrossReferenceDataEntity
               )
               .toList() ??
           [],
-      gridUri: GridUri.fromUri(gridUri),
+      gridUri: Uri.parse(gridUri),
     );
   }
 
   /// Pointing to the [Grid] this is referencing
-  final GridUri gridUri;
+  final Uri gridUri;
 
   @override
   dynamic get schemaValue {
@@ -365,7 +360,7 @@ class MultiCrossReferenceDataEntity
 /// [DataEntity] representing [UserReference]s
 class UserReferenceDataEntity extends DataEntity<UserReference, dynamic> {
   /// Creates a new UserReferenceDataEntity Object with value [value]
-  UserReferenceDataEntity([UserReference? value]) : super(value);
+  UserReferenceDataEntity([super.value]);
 
   /// Creates a new UserReferenceDataEntity Object from json
   /// [json] needs to be an object that is parsed with [UserReference.fromJson]

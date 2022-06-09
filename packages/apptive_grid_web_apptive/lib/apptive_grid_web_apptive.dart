@@ -18,10 +18,10 @@ class ApptiveGridWebApptive extends StatefulWidget {
   ///
   /// Received [ApptiveMessages] are passed into [messageController]
   const ApptiveGridWebApptive({
-    Key? key,
+    super.key,
     required this.builder,
     this.messageController,
-  }) : super(key: key);
+  });
 
   /// Called when there is a [ApptiveGridEvent] changing the data
   final Widget Function(BuildContext, ApptiveGridEvent) builder;
@@ -30,7 +30,7 @@ class ApptiveGridWebApptive extends StatefulWidget {
   final StreamController<ApptiveMessage>? messageController;
 
   @override
-  _ApptiveGridWebApptiveState createState() => _ApptiveGridWebApptiveState();
+  State<ApptiveGridWebApptive> createState() => _ApptiveGridWebApptiveState();
 }
 
 class _ApptiveGridWebApptiveState extends State<ApptiveGridWebApptive> {
@@ -40,7 +40,7 @@ class _ApptiveGridWebApptiveState extends State<ApptiveGridWebApptive> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       html.window.addEventListener('message', (event) {
         final message = (event as html.MessageEvent);
         try {

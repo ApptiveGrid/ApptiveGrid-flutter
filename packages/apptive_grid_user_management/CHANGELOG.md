@@ -1,3 +1,24 @@
+## 0.0.5
+* Update apptive_grid_core Package to include breaking [Model Changes from Version 0.10.0](https://pub.dev/packages/apptive_grid_core/changelog#0100)
+* Add support for custom translations
+### Breaking Change
+* Model changes from apptive_grid_core see [here]((https://pub.dev/packages/apptive_grid_core/changelog#0100)) for more details
+* Remove `ApptiveGridUserManagement.withClient` in favor of a named argument in the default constructor
+
+## 0.0.5-alpha.4
+* Upgraded to dart 2.17
+
+## 0.0.5-alpha.3
+* Add support for custom translations
+
+## 0.0.5-alpha.2
+* Upgraded to `flutter_lints 2`
+### Breaking Change
+* Remove `ApptiveGridUserManagement.withClient` in favor of a named argument in the default constructor
+
+## 0.0.5-alpha.1
+* Update apptive_grid_core to 0.10.0 to include breaking model changes
+
 ## 0.0.4+1
 * Add Group to Login call url
 

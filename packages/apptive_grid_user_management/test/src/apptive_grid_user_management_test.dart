@@ -48,7 +48,7 @@ void main() {
 
         final apptiveGridUserManagement = MaterialApp(
           home: Material(
-            child: ApptiveGridUserManagement.withClient(
+            child: ApptiveGridUserManagement(
               group: 'group',
               clientId: 'clientId',
               confirmAccountPrompt: (_) {},
@@ -97,7 +97,7 @@ void main() {
 
         final apptiveGridUserManagement = MaterialApp(
           home: Material(
-            child: ApptiveGridUserManagement.withClient(
+            child: ApptiveGridUserManagement(
               group: 'group',
               clientId: 'clientId',
               confirmAccountPrompt: (_) {},
@@ -145,7 +145,7 @@ void main() {
 
         final apptiveGridUserManagement = MaterialApp(
           home: Material(
-            child: ApptiveGridUserManagement.withClient(
+            child: ApptiveGridUserManagement(
               group: 'group',
               clientId: 'clientId',
               confirmAccountPrompt: (_) {},
@@ -182,7 +182,7 @@ void main() {
 
         final apptiveGridUserManagement = MaterialApp(
           home: Material(
-            child: ApptiveGridUserManagement.withClient(
+            child: ApptiveGridUserManagement(
               group: 'group',
               clientId: 'clientId',
               confirmAccountPrompt: (widget) {
@@ -256,7 +256,7 @@ void main() {
 
         final apptiveGridUserManagement = MaterialApp(
           home: Material(
-            child: ApptiveGridUserManagement.withClient(
+            child: ApptiveGridUserManagement(
               group: 'group',
               clientId: 'clientId',
               confirmAccountPrompt: (widget) {
@@ -303,7 +303,7 @@ void main() {
 
         final apptiveGridUserManagement = MaterialApp(
           home: Material(
-            child: ApptiveGridUserManagement.withClient(
+            child: ApptiveGridUserManagement(
               group: 'group',
               clientId: 'clientId',
               confirmAccountPrompt: (widget) {
@@ -352,7 +352,7 @@ void main() {
 
         final apptiveGridUserManagement = MaterialApp(
           home: Material(
-            child: ApptiveGridUserManagement.withClient(
+            child: ApptiveGridUserManagement(
               group: 'group',
               clientId: 'clientId',
               confirmAccountPrompt: (_) {},
@@ -389,7 +389,7 @@ void main() {
 
         final apptiveGridUserManagement = MaterialApp(
           home: Material(
-            child: ApptiveGridUserManagement.withClient(
+            child: ApptiveGridUserManagement(
               group: 'group',
               clientId: 'clientId',
               confirmAccountPrompt: (widget) {

@@ -1,6 +1,9 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter/foundation.dart';
 
+part 'package:apptive_grid_core/network/filter/field_filter.dart';
+part 'package:apptive_grid_core/network/filter/filter_expressions.dart';
+
 /// Filter to load a Grid with a specific Filter
 ///
 /// Available Filters are
@@ -31,6 +34,19 @@ abstract class ApptiveGridFilter {
     return toJson().toString();
   }
 }
+
+/// Mixin for DataEntities that can be used in Filters
+mixin FilterableMixin {
+  /// The value that is used to create the filter
+  /// For implementations of [DataEntity] this is usually the [DataEntity.schemaValue]
+  dynamic get filterValue;
+}
+
+/// Mixin for DataEntities that support Comparison Filters like [LesserThanFilter] and [GreaterThanFilter]
+mixin ComparableFilterableMixin on FilterableMixin {}
+
+/// Mixin for DataEntities that support Collection Filters like [AnyOfFilter], [AllOfFilter] and [NoneOfFilter]
+mixin CollectionFilterableMixin on FilterableMixin {}
 
 enum _ComposeOperator {
   and,
@@ -67,184 +83,35 @@ abstract class _FilterComposition extends ApptiveGridFilter {
 /// Creates a Filter that checks that all [conditions] are true
 class AndFilterComposition extends _FilterComposition {
   /// Creates a Filter that checks that all [conditions] are true
-  const AndFilterComposition({required List<ApptiveGridFilter> conditions})
-      : super._(conditions: conditions, operator: _ComposeOperator.and);
+  const AndFilterComposition({required super.conditions})
+      : super._(operator: _ComposeOperator.and);
 }
 
 /// Creates a Filter that checks that one [FilterCondition] in [conditions] is true
 class OrFilterComposition extends _FilterComposition {
   /// Creates a Filter that checks that one [FilterCondition] in [conditions] is true
-  const OrFilterComposition({required List<ApptiveGridFilter> conditions})
-      : super._(conditions: conditions, operator: _ComposeOperator.or);
+  const OrFilterComposition({required super.conditions})
+      : super._(operator: _ComposeOperator.or);
 }
 
-/// Filter Operators for Filters that check on a Field
-enum _FieldOperator {
-  substring,
-  equal,
-  greaterThan,
-  lesserThan,
+/// Filter to negate a specific [filter]
+class NotFilter extends ApptiveGridFilter {
+  /// Creates a new [ApptiveGridFilter] that negates a given [filter]
+  const NotFilter({required this.filter}) : super._();
 
-  // Collections
-  any,
-  all,
-  none
-}
-
-extension _FieldOperatorX on _FieldOperator {
-  String get operation {
-    switch (this) {
-      case _FieldOperator.substring:
-        return 'substring';
-      case _FieldOperator.equal:
-        return '=';
-      case _FieldOperator.greaterThan:
-        return 'gt';
-      case _FieldOperator.lesserThan:
-        return 'lt';
-      case _FieldOperator.any:
-        return 'hasAnyOf';
-      case _FieldOperator.all:
-        return 'hasAllOf';
-      case _FieldOperator.none:
-        return 'hasNoneOf';
-    }
-  }
-}
-
-/// Filter to check for a single Field with [fieldId]
-abstract class _FieldFilter extends ApptiveGridFilter {
-  const _FieldFilter._({
-    required this.operator,
-    required this.fieldId,
-    required this.value,
-  }) : super._();
-
-  final _FieldOperator operator;
-  final String fieldId;
-  final DataEntity value;
+  /// The [ApptiveGridFilter] that should be negated
+  final ApptiveGridFilter filter;
 
   @override
-  Map<String, dynamic> toJson() {
-    if (operator == _FieldOperator.equal) {
-      return {fieldId: value.schemaValue};
-    }
-    return {
-      fieldId: {'\$${operator.operation}': value.schemaValue}
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        '\$not': filter.toJson(),
+      };
 
   @override
   bool operator ==(Object other) {
-    return other is _FieldFilter &&
-        operator == other.operator &&
-        fieldId == other.fieldId &&
-        value == other.value;
+    return other is NotFilter && filter == other.filter;
   }
 
   @override
   int get hashCode => toString().hashCode;
-}
-
-/// Filter to check for a Substring
-///
-/// Only available with [StringDataEntity]
-class SubstringFilter extends _FieldFilter {
-  /// Creates a Filter that checks if the [StringDataEntity.schemaValue] of [value] is a substring in a [GridField] with [fieldId]
-  const SubstringFilter({
-    required String fieldId,
-    required StringDataEntity value,
-  }) : super._(
-          fieldId: fieldId,
-          value: value,
-          operator: _FieldOperator.substring,
-        );
-}
-
-/// Filter to check if a [GridField]'s value is equal to [value]
-class EqualsFilter extends _FieldFilter {
-  /// Creates a Filter that checks if [DataEntity.value] equals the [fieldId] [GridField]
-  const EqualsFilter({
-    required String fieldId,
-    required DataEntity value,
-  }) : super._(
-          fieldId: fieldId,
-          value: value,
-          operator: _FieldOperator.equal,
-        );
-}
-
-/// Filter to check if a value is greater than [value]
-class GreaterThanFilter extends _FieldFilter {
-  /// Creates a Filter that checks if [value] is greater than the [GridField] with [fieldId]
-  ///
-  /// Only possible with [ComparableDataEntity]
-  const GreaterThanFilter({
-    required String fieldId,
-    required ComparableDataEntity value,
-  }) : super._(
-          fieldId: fieldId,
-          value: value,
-          operator: _FieldOperator.greaterThan,
-        );
-}
-
-/// Filter to check if a value is lesser than [value]
-class LesserThanFilter extends _FieldFilter {
-  /// Creates a Filter that checks if [value] is lesser than the [GridField] with [fieldId]
-  ///
-  /// Only possible with [ComparableDataEntity]
-  const LesserThanFilter({
-    required String fieldId,
-    required ComparableDataEntity value,
-  }) : super._(
-          fieldId: fieldId,
-          value: value,
-          operator: _FieldOperator.lesserThan,
-        );
-}
-
-/// Filter to check if a [CollectionDataEntity] contains any of the values in [value]
-class AnyOfFilter extends _FieldFilter {
-  /// Creates a Filter that checks if [GridField] with [fieldId] value contains any of the values present in [values]
-  ///
-  /// Only possible with [CollectionDataEntity]
-  const AnyOfFilter({
-    required String fieldId,
-    required CollectionDataEntity value,
-  }) : super._(
-          fieldId: fieldId,
-          value: value,
-          operator: _FieldOperator.any,
-        );
-}
-
-/// Filter to check if a [CollectionDataEntity] contains all of the values in [value]
-class AllOfFilter extends _FieldFilter {
-  /// Creates a Filter that checks if [GridField] with [fieldId] value contains all of the values present in [values]
-  ///
-  /// Only possible with [CollectionDataEntity]
-  const AllOfFilter({
-    required String fieldId,
-    required CollectionDataEntity value,
-  }) : super._(
-          fieldId: fieldId,
-          value: value,
-          operator: _FieldOperator.all,
-        );
-}
-
-/// Filter to check if a [CollectionDataEntity] contains none of the values in [value]
-class NoneOfFilter extends _FieldFilter {
-  /// Creates a Filter that checks if [GridField] with [fieldId] value contains none of the values present in [values]
-  ///
-  /// Only possible with [CollectionDataEntity]
-  const NoneOfFilter({
-    required String fieldId,
-    required CollectionDataEntity value,
-  }) : super._(
-          fieldId: fieldId,
-          value: value,
-          operator: _FieldOperator.none,
-        );
 }

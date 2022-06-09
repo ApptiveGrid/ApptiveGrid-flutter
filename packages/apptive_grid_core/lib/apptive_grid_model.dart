@@ -18,6 +18,9 @@ part 'model/data_entity.dart';
 
 part 'model/apptive_grid_uri.dart';
 
+part 'model/link/apptive_link.dart';
+part 'model/link/apptive_link_type.dart';
+
 part 'model/entity/entity_uri.dart';
 part 'model/entity/entities_response.dart';
 part 'model/form/component/form_component.dart';
