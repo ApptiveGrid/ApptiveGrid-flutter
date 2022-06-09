@@ -1,3 +1,32 @@
+## 0.10.0
+* Add HAL `ApptiveLink`s to User, Space, Grid, Form, GridRow
+* Add embedded Objects to User, Space, Grid
+* Deprecate `FormActions`
+* Adjust GridField to include `key` and `schema`
+* Add `description` to forms
+* Added custom header to calls
+* Added support for all `ApptiveGridLayout` layouts
+* Add parameter `loadEntities` to `loadGrid` to enable not loading entities for the Grid to only get the GridFields and Grid Meta Data
+* Add `key` to Grid
+* Add `key` and `category` to Space
+* Deprecate `ApptiveLink`(`GridUri`, `FormUri`, `EntityUri`, etc) in favor of plain `Uri`
+* Add new Filter Options
+    * `IsEmptyFilter`
+    * `Today()` for filtering `DataType.date`
+    * `LoggedInUser()` for filtering createdBy and in the future assignee
+### Breaking Changes
+* `rows` and `fields` of `Grid` are now `nullable`
+* Added required parameter `id` to Grid
+* Added required parameter `id' to FormData
+* `title`, `actions` and `components` of `FormData` are now `nullable`
+* id, entities and links are now required named arguments in GridRow
+* Removed `spaces` from `User` and `grids` from `Space`
+* Remove `actions` from forms
+* GridField now uses named arguments
+* Removed `schema` from `Grid`
+* Removed deprecated `ApptiveGridAuthenticator.withAuthenticationStorage`
+* `layout` in `loadEntities` is now `ApptiveGridLayout` instead of `String?`
+
 ## 0.10.0-alpha.6
 * Deprecate all `ApptiveLink` in favor of plain `Uri`
 * Upgraded to dart 2.17
@@ -32,7 +61,6 @@
 * Deprecate `FormActions`
 ### Breaking Changes
 * Remove `actions` from forms
-* Changed constructor arguments for
 
 ## 0.10.0-alpha.2
 * Add HAL Links to GridRow

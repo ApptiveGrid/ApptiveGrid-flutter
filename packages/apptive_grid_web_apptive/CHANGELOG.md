@@ -1,3 +1,7 @@
+## 0.3.0
+* Update apptive_grid_core Package to include breaking [Model Changes from Version 0.10.0](https://pub.dev/packages/apptive_grid_core/changelog#0100)
+* Updated example to use [apptive_grid_theme](https://pub.dev/packages/apptive_grid_theme)
+
 ## 0.3.0-alpha.4
 * Upgraded to dart 2.17
 
