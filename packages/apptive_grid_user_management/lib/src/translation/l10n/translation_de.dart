@@ -60,7 +60,7 @@ class ApptiveGridUserManagementLocalizedTranslation
   String get actionOk => 'OK';
   @override
   String requestResetPasswordSuccess(String email) =>
-      'Wir haben einen Link zum zurücksetzen an $email gesendet.';
+      'Wir haben einen Link zum Zurücksetzen an $email gesendet.';
   @override
   String get resetPasswordMessage => 'Passwort zurücksetzen';
   @override
