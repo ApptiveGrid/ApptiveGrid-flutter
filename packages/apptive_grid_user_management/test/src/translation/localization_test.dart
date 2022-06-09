@@ -479,4 +479,13 @@ class CustomTestTranslation extends ApptiveGridUserManagementTranslation {
   @override
   String get validateErrorPasswordsNotMatching =>
       'validateErrorPasswordsNotMatching';
+
+  @override
+  String get actionBack => 'actionBack';
+
+  @override
+  String registerConfirmAddToGroup(
+      {required String email, required String app}) {
+    return 'registerConfirmAddToGroup({required String $email, required String $app})';
+  }
 }

@@ -16,7 +16,7 @@
     "actionConfirm": "Bestätigen",
     "errorLogin": "Beim Login ist ein Fehler aufgetreten. Bitte versuche es erneut.",
     "errorRegister": "Bei der Registrierung ist ein Fehler aufgetreten. Bitte versuche es erneut.",
-    "errorConfirm": "Beim bestätigen des Accounts ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+    "errorConfirm": "Beim Bestätigen des Accounts ist ein Fehler aufgetreten. Bitte versuche es erneut.",
     "forgotPassword": "Passwort vergessen?",
     "forgotPasswordMessage": "Wir können dir einen Link schicken, mit dem du dein Passwort zurücksetzen kannst.",
     "actionResetPassword": "Zurücksetzen",
@@ -28,5 +28,7 @@
     "actionPasswordReset": "Zurücksetzen",
     "resetPasswordSuccess": "Dein Passwort wurde erfolgreich zurückgesetzt",
     "errorUnknown": "Leider ist ein Fehler aufgetreten. Bitte versuche es erneut.",
-    "errorReset": "Passwort konnte nicht zurückgesetzt werden. Bitte versuche es erneut."
+    "errorReset": "Passwort konnte nicht zurückgesetzt werden. Bitte versuche es erneut.",
+    "registerConfirmAddToGroup": "Es existiert bereits ein Account mit der Adresse $email.\\nWir haben dir einen Link geschickt, mit dem du bestätigen kannst, dass du den Account für \"$app\" freischalten möchtest.\\nDein Passwort wurde nicht geändert.",
+    "actionBack": "Zurück"
 }

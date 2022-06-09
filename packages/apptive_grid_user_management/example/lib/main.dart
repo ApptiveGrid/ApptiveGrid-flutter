@@ -27,10 +27,25 @@ class MyApp extends StatelessWidget {
             redirectScheme: 'resetTest',
             confirmAccountPrompt: (confirmWidget) {
               // Show [confirmWidget] to allow Users to confirm their account
+              _navigatorKey.currentState?.push(
+                MaterialPageRoute(
+                  builder: (_) => Scaffold(
+                    appBar: AppBar(
+                      title: const Text('Confirm Account'),
+                    ),
+                    body: SingleChildScrollView(
+                      child: confirmWidget,
+                    ),
+                  ),
+                ),
+              );
             },
             onAccountConfirmed: (loggedIn) {
               // Account was confirmed
               // go to login screen if [loggedIn] is false
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Account Confirmed. LoggedIn: $loggedIn')));
+              _navigatorKey.currentState?.pop();
             },
             resetPasswordPrompt: (resetPasswordWidget) {
               // Show [resetPasswordWidget] to allow Users to set a new password
@@ -82,13 +97,19 @@ class LoginRegistrationPage extends StatelessWidget {
         title: const Text('Login/Register'),
       ),
       body: ListView(
-        children: const [
+        children: [
           Padding(
             padding: EdgeInsets.all(8),
             child: Card(
               child: Padding(
                 padding: EdgeInsets.all(8.0),
-                child: ApptiveGridUserManagementContent(),
+                child: ApptiveGridUserManagementContent(
+                  appName: 'ApptiveGridUserManagement Example',
+                  onLogin: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('User logged in')));
+                  },
+                ),
               ),
             ),
           ),

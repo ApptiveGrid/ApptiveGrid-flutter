@@ -62,9 +62,14 @@ for lang in "en" "de"; do
     fi
     if [ $key == "requestResetPasswordSuccess" ]; then
       wildcard="email"
-      printf "   String %s(String %s) => \"%s\";\n" $key "$wildcard" "$translation" >>$langFile
+      printf "   String %s(String %s) => \'%s\';\n" $key "$wildcard" "$translation" >>$langFile
+    else if [ $key == "registerConfirmAddToGroup" ]; then
+              wildcardEmail="email"
+              wildcardApp="app"
+              printf "   String %s({required String %s, required String %s,}) => \'%s\';\n" $key "$wildcardEmail" "$wildcardApp" "$translation" >>$langFile
     else
-      printf "   String get %s => \"%s\";\n" $key "$translation" >>$langFile
+      printf "   String get %s => \'%s\';\n" $key "$translation" >>$langFile
+    fi
     fi
     n=$(($n + 1))
   done
