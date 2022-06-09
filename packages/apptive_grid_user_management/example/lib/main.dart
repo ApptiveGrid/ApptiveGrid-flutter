@@ -43,8 +43,11 @@ class MyApp extends StatelessWidget {
             onAccountConfirmed: (loggedIn) {
               // Account was confirmed
               // go to login screen if [loggedIn] is false
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Account Confirmed. LoggedIn: $loggedIn')));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Account Confirmed. LoggedIn: $loggedIn'),
+                ),
+              );
               _navigatorKey.currentState?.pop();
             },
             resetPasswordPrompt: (resetPasswordWidget) {
@@ -99,15 +102,16 @@ class LoginRegistrationPage extends StatelessWidget {
       body: ListView(
         children: [
           Padding(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: Card(
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: ApptiveGridUserManagementContent(
                   appName: 'ApptiveGridUserManagement Example',
                   onLogin: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('User logged in')));
+                      const SnackBar(content: Text('User logged in')),
+                    );
                   },
                 ),
               ),

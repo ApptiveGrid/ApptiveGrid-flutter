@@ -11,8 +11,12 @@ import 'package:password_rule_check/password_rule_check.dart';
 /// A Widget to show Registration Controls
 class RegisterContent extends StatefulWidget {
   /// Creates a new RegisterContent Widget to display inputs for a user to register a new account
-  const RegisterContent(
-      {super.key, this.requestLogin, this.onLogin, this.appName});
+  const RegisterContent({
+    super.key,
+    this.requestLogin,
+    this.onLogin,
+    this.appName,
+  });
 
   /// Callback invoked when the user wants to switch to registering
   /// If this is `null` no option to switch to registration is shown
@@ -219,22 +223,24 @@ class _RegisterContentState extends State<RegisterContent> {
           if (_step.type == _ConfirmationType.existingUser)
             Text(
               localization.registerConfirmAddToGroup(
-                  email: _emailController.text,
-                  app: widget.appName ?? _client?.group ?? ''),
+                email: _emailController.text,
+                app: widget.appName ?? _client?.group ?? '',
+              ),
             ),
           Center(
             child: TextButton(
-                onPressed: () {
-                  _firstNameController.clear();
-                  _lastNameController.clear();
-                  _emailController.clear();
-                  _passwordController.clear();
-                  _confirmPasswordController.clear();
-                  setState(() {
-                    _step = _RegisterContentStep.waitingForInput;
-                  });
-                },
-                child: Text(localization.actionBack)),
+              onPressed: () {
+                _firstNameController.clear();
+                _lastNameController.clear();
+                _emailController.clear();
+                _passwordController.clear();
+                _confirmPasswordController.clear();
+                setState(() {
+                  _step = _RegisterContentStep.waitingForInput;
+                });
+              },
+              child: Text(localization.actionBack),
+            ),
           )
         ],
       );
@@ -257,7 +263,8 @@ class _RegisterContentState extends State<RegisterContent> {
           .catchError((error) {
         if (widget.onLogin != null &&
             error is Response &&
-            error.statusCode == 409 && tryLoginOn409) {
+            error.statusCode == 409 &&
+            tryLoginOn409) {
           _login();
         } else {
           setState(() {
@@ -282,7 +289,9 @@ class _RegisterContentState extends State<RegisterContent> {
     if (mounted) {
       _client
           ?.login(
-              email: _emailController.text, password: _passwordController.text)
+        email: _emailController.text,
+        password: _passwordController.text,
+      )
           .catchError((error) {
         _register(tryLoginOn409: false);
         return error;
