@@ -42,6 +42,7 @@ abstract class ApptiveGridUserManagementTranslation {
   /// Message shown after registration to indicate the user that they should confirm their account via the link in an email
   String get registerWaitingForConfirmation;
 
+  /// Message shown to show that the user received an email to confirm they want to activate this app for their account
   String registerConfirmAddToGroup({
     required String email,
     required String app,
@@ -98,9 +99,12 @@ abstract class ApptiveGridUserManagementTranslation {
   /// Message that there has been an error while resetting the password
   String get errorReset;
 
+  /// Action to go back
   String get actionBack;
 
+  /// Displayed when the user has an ApptiveGrid Account which is not yet added to the group for this app
   String joinGroup(String app);
 
+  /// Action to join this group
   String get actionJoinGroup;
 }

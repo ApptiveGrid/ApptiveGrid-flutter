@@ -26,6 +26,7 @@ class ApptiveGridUserManagementContent extends StatefulWidget {
   /// Called with [resetPasswordContent] and [resetPasswordKey] to be able to build custom UIs to request a new Password
   final RequestPasswordResetCallback? requestResetPassword;
 
+  /// The name to display when showing users info if their account is already connected to this app. Defaults to [ApptiveGridUserManagementClient.group]
   final String? appName;
 
   @override

@@ -38,6 +38,7 @@ class LoginContent extends StatefulWidget {
   /// Show a custom Dialog/Widget when the User requests a new password
   final RequestPasswordResetCallback? requestResetPassword;
 
+  /// The name to display when showing users info if their account is already connected to this app. Defaults to [ApptiveGridUserManagementClient.group]
   final String? appName;
 
   @override

@@ -22,8 +22,12 @@ class RegisterContent extends StatefulWidget {
   /// If this is `null` no option to switch to registration is shown
   final void Function()? requestLogin;
 
+  /// Called when the user is logged in.
+  /// This will be called when the user has already an account that is connected to this app
+  /// As well as when the password matches their password
   final void Function()? onLogin;
 
+  /// The name to display when showing users info if their account is already connected to this app. Defaults to [ApptiveGridUserManagementClient.group]
   final String? appName;
 
   @override
