@@ -1,3 +1,9 @@
+## 0.0.6
+* Adjust handling of different scenarios
+  * Login with valid credentials but user not part of the group: Ask to join group
+  * Register with valid credentials and user is already part of the group: Login User
+  * Register with email that is already registered: Hint that mail with confirmation link has been sent
+
 ## 0.0.5
 * Update apptive_grid_core Package to include breaking [Model Changes from Version 0.10.0](https://pub.dev/packages/apptive_grid_core/changelog#0100)
 * Add support for custom translations

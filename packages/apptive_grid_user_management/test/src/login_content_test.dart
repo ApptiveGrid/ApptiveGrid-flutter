@@ -159,6 +159,180 @@ void main() {
       );
       expect(find.text('Error Message'), findsOneWidget);
     });
+
+    group('Join Group', () {
+      late MockApptiveGridUserManagementClient client;
+      const app = 'Testing App';
+      const email = 'email@2denker.de';
+      const password = 'Sup3rStrongPassword!';
+
+      setUp(() {
+        client = MockApptiveGridUserManagementClient();
+      });
+
+      Future<void> produceTestData(WidgetTester tester) async {
+        final target = MaterialApp(
+          home: Material(
+            child: StubUserManagement(
+              client: client,
+              child: const LoginContent(
+                appName: app,
+              ),
+            ),
+          ),
+        );
+
+        when(
+          () => client.login(
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenAnswer((_) => Future.error(Response('Error Message', 403)));
+
+        await tester.pumpWidget(target);
+
+        await tester.enterText(
+          find.ancestor(
+            of: find.text('Email Address'),
+            matching: find.byType(TextFormField),
+          ),
+          email,
+        );
+        await tester.pump();
+        await tester.enterText(
+          find.ancestor(
+            of: find.text('Password'),
+            matching: find.byType(TextFormField),
+          ),
+          password,
+        );
+        await tester.pump();
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pump();
+      }
+
+      testWidgets('Asks to join group', (tester) async {
+        await produceTestData(tester);
+
+        expect(
+          find.text(
+            'Your account is not yet activated for $app.\nDo you want to activate it now?',
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.ancestor(
+            of: find.text('Activate'),
+            matching: find.byType(ElevatedButton),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.ancestor(
+            of: find.text('Back'),
+            matching: find.byType(TextButton),
+          ),
+          findsOneWidget,
+        );
+      });
+
+      testWidgets('Go back keeps data', (tester) async {
+        await produceTestData(tester);
+
+        await tester.tap(find.byType(TextButton));
+        await tester.pump();
+
+        expect(find.text(email), findsOneWidget);
+        expect(find.text(password), findsOneWidget);
+      });
+
+      group('Registers User', () {
+        testWidgets('Registers User with Success', (tester) async {
+          when(
+            () => client.register(
+              firstName: any(named: 'firstName'),
+              lastName: any(named: 'lastName'),
+              email: any(named: 'email'),
+              password: any(named: 'password'),
+            ),
+          ).thenAnswer((_) async => Response('body', 200));
+          await produceTestData(tester);
+
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pump();
+
+          verify(
+            () => client.register(
+              firstName: '',
+              lastName: '',
+              email: email,
+              password: password,
+            ),
+          ).called(1);
+          expect(
+            find.text(
+              'All Set!\nCheck your Email for a link to verify your account.',
+            ),
+            findsOneWidget,
+          );
+        });
+
+        testWidgets(
+            'Wait for confirmation, go back goes back to login with cleared data',
+            (tester) async {
+          when(
+            () => client.register(
+              firstName: any(named: 'firstName'),
+              lastName: any(named: 'lastName'),
+              email: any(named: 'email'),
+              password: any(named: 'password'),
+            ),
+          ).thenAnswer((_) async => Response('body', 200));
+          await produceTestData(tester);
+
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pump();
+
+          await tester.tap(find.byType(TextButton));
+          await tester.pump();
+
+          expect(
+            find.ancestor(
+              of: find.text('Login'),
+              matching: find.byType(ElevatedButton),
+            ),
+            findsOneWidget,
+          );
+          expect(find.byType(TextFormField), findsNWidgets(2));
+          expect(
+            find.byWidgetPredicate(
+              (widget) =>
+                  widget.runtimeType == TextFormField &&
+                  (widget as TextFormField).controller!.text.isNotEmpty,
+            ),
+            findsNothing,
+          );
+        });
+
+        testWidgets('Shows error', (tester) async {
+          when(
+            () => client.register(
+              firstName: any(named: 'firstName'),
+              lastName: any(named: 'lastName'),
+              email: any(named: 'email'),
+              password: any(named: 'password'),
+            ),
+          ).thenAnswer((_) async => Future.error(Response('Error', 400)));
+          await produceTestData(tester);
+
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pump();
+
+          expect(find.text('Error'), findsOneWidget);
+        });
+      });
+    });
   });
 
   group('Forgot Password', () {

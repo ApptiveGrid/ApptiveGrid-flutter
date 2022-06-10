@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:apptive_grid_user_management/apptive_grid_user_management.dart';
 import 'package:apptive_grid_user_management/src/password_form_field.dart';
 import 'package:apptive_grid_user_management/src/register_content.dart';
@@ -31,6 +33,7 @@ void main() {
           password: any(named: 'password'),
         ),
       ).thenAnswer((_) async => Response('body', 200));
+      when(() => client.group).thenReturn('Test Group');
 
       await tester.pumpWidget(target);
 
@@ -473,6 +476,103 @@ void main() {
       });
     });
 
+    group('Register User', () {
+      testWidgets('New User', (tester) async {
+        final client = MockApptiveGridUserManagementClient();
+
+        final target = MaterialApp(
+          home: Material(
+            child: StubUserManagement(
+              client: client,
+              child: const SingleChildScrollView(child: RegisterContent()),
+            ),
+          ),
+        );
+
+        when(
+          () => client.register(
+            firstName: any(named: 'firstName'),
+            lastName: any(named: 'lastName'),
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenAnswer((_) async => Response('body', 201));
+        when(() => client.group).thenReturn('Test Group');
+
+        await tester.pumpWidget(target);
+
+        const firstName = 'Amelie';
+        const lastName = 'Testing';
+        const email = 'email@2denker.de';
+        const password = 'Sup3rStrongPassword!';
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('First Name'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('First Name'),
+          firstName,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Last Name'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Last Name'),
+          lastName,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Email Address'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Email Address'),
+          email,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Password'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Password'),
+          password,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Confirm Password'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Confirm Password'),
+          password,
+        );
+        await tester.pump();
+
+        await tester.scrollUntilVisible(
+          find.byType(ElevatedButton),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pump();
+
+        expect(
+          find.text(
+            'All Set!\nCheck your Email for a link to verify your account.',
+          ),
+          findsOneWidget,
+        );
+      });
+    });
+
     testWidgets('Shows Error', (tester) async {
       final client = MockApptiveGridUserManagementClient();
 
@@ -561,6 +661,430 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('Error Message'), findsOneWidget);
+    });
+
+    testWidgets('Existing User', (tester) async {
+      final client = MockApptiveGridUserManagementClient();
+
+      const group = 'Test Group';
+
+      final target = MaterialApp(
+        home: Material(
+          child: StubUserManagement(
+            client: client,
+            child: const SingleChildScrollView(child: RegisterContent()),
+          ),
+        ),
+      );
+
+      when(
+        () => client.register(
+          firstName: any(named: 'firstName'),
+          lastName: any(named: 'lastName'),
+          email: any(named: 'email'),
+          password: any(named: 'password'),
+        ),
+      ).thenAnswer((_) async => Response('body', 200));
+      when(() => client.group).thenReturn(group);
+
+      await tester.pumpWidget(target);
+
+      const firstName = 'Amelie';
+      const lastName = 'Testing';
+      const email = 'email@2denker.de';
+      const password = 'Sup3rStrongPassword!';
+      await tester.scrollUntilVisible(
+        find.textFormFieldWithLabel('First Name'),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.enterText(
+        find.textFormFieldWithLabel('First Name'),
+        firstName,
+      );
+      await tester.pump();
+      await tester.scrollUntilVisible(
+        find.textFormFieldWithLabel('Last Name'),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.enterText(
+        find.textFormFieldWithLabel('Last Name'),
+        lastName,
+      );
+      await tester.pump();
+      await tester.scrollUntilVisible(
+        find.textFormFieldWithLabel('Email Address'),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.enterText(
+        find.textFormFieldWithLabel('Email Address'),
+        email,
+      );
+      await tester.pump();
+      await tester.scrollUntilVisible(
+        find.textFormFieldWithLabel('Password'),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.enterText(find.textFormFieldWithLabel('Password'), password);
+      await tester.pump();
+      await tester.scrollUntilVisible(
+        find.textFormFieldWithLabel('Confirm Password'),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.enterText(
+        find.textFormFieldWithLabel('Confirm Password'),
+        password,
+      );
+      await tester.pump();
+
+      await tester.scrollUntilVisible(
+        find.byType(ElevatedButton),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+
+      expect(
+        find.text(
+          'There already exists an account for $email.\nWe have send you a link to confirm that you want to activate the account for "$group".\nYour password has not been changed.',
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Go back', (tester) async {
+      final client = MockApptiveGridUserManagementClient();
+
+      const group = 'Test Group';
+
+      final target = MaterialApp(
+        home: Material(
+          child: StubUserManagement(
+            client: client,
+            child: const SingleChildScrollView(child: RegisterContent()),
+          ),
+        ),
+      );
+
+      when(
+        () => client.register(
+          firstName: any(named: 'firstName'),
+          lastName: any(named: 'lastName'),
+          email: any(named: 'email'),
+          password: any(named: 'password'),
+        ),
+      ).thenAnswer((_) async => Response('body', 200));
+      when(() => client.group).thenReturn(group);
+
+      await tester.pumpWidget(target);
+
+      const firstName = 'Amelie';
+      const lastName = 'Testing';
+      const email = 'email@2denker.de';
+      const password = 'Sup3rStrongPassword!';
+      await tester.scrollUntilVisible(
+        find.textFormFieldWithLabel('First Name'),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.enterText(
+        find.textFormFieldWithLabel('First Name'),
+        firstName,
+      );
+      await tester.pump();
+      await tester.scrollUntilVisible(
+        find.textFormFieldWithLabel('Last Name'),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.enterText(
+        find.textFormFieldWithLabel('Last Name'),
+        lastName,
+      );
+      await tester.pump();
+      await tester.scrollUntilVisible(
+        find.textFormFieldWithLabel('Email Address'),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.enterText(
+        find.textFormFieldWithLabel('Email Address'),
+        email,
+      );
+      await tester.pump();
+      await tester.scrollUntilVisible(
+        find.textFormFieldWithLabel('Password'),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.enterText(find.textFormFieldWithLabel('Password'), password);
+      await tester.pump();
+      await tester.scrollUntilVisible(
+        find.textFormFieldWithLabel('Confirm Password'),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.enterText(
+        find.textFormFieldWithLabel('Confirm Password'),
+        password,
+      );
+      await tester.pump();
+
+      await tester.scrollUntilVisible(
+        find.byType(ElevatedButton),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+
+      await tester.tap(find.text('Back'));
+      await tester.pump();
+
+      expect(
+        find.ancestor(
+          of: find.text('Register'),
+          matching: find.byType(ElevatedButton),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget.runtimeType == TextFormField &&
+              (widget as TextFormField).controller!.text.isNotEmpty,
+        ),
+        findsNothing,
+      );
+    });
+
+    group('Try to login a already registered user', () {
+      testWidgets('Login Success calls login once and calls callback',
+          (tester) async {
+        final client = MockApptiveGridUserManagementClient();
+
+        const group = 'Test Group';
+
+        final loginCompleter = Completer<bool>();
+        final target = MaterialApp(
+          home: Material(
+            child: StubUserManagement(
+              client: client,
+              child: SingleChildScrollView(
+                child: RegisterContent(
+                  onLogin: () => loginCompleter.complete(true),
+                ),
+              ),
+            ),
+          ),
+        );
+
+        when(
+          () => client.register(
+            firstName: any(named: 'firstName'),
+            lastName: any(named: 'lastName'),
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenAnswer((_) async => Future.error(Response('body', 409)));
+        when(() => client.group).thenReturn(group);
+        when(
+          () => client.login(
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenAnswer((_) async => Response('body', 200));
+
+        await tester.pumpWidget(target);
+
+        const firstName = 'Amelie';
+        const lastName = 'Testing';
+        const email = 'email@2denker.de';
+        const password = 'Sup3rStrongPassword!';
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('First Name'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('First Name'),
+          firstName,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Last Name'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Last Name'),
+          lastName,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Email Address'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Email Address'),
+          email,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Password'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Password'),
+          password,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Confirm Password'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Confirm Password'),
+          password,
+        );
+        await tester.pump();
+
+        await tester.scrollUntilVisible(
+          find.byType(ElevatedButton),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pump();
+        await tester.pump();
+        await tester.pump();
+
+        verify(() => client.login(email: email, password: password)).called(1);
+        expect(await loginCompleter.future, equals(true));
+      });
+
+      testWidgets(
+          'Login failed. Only calls login once. Calls register twice for error',
+          (tester) async {
+        final client = MockApptiveGridUserManagementClient();
+
+        const group = 'Test Group';
+
+        final target = MaterialApp(
+          home: Material(
+            child: StubUserManagement(
+              client: client,
+              child: SingleChildScrollView(
+                child: RegisterContent(
+                  onLogin: () {},
+                ),
+              ),
+            ),
+          ),
+        );
+
+        when(
+          () => client.register(
+            firstName: any(named: 'firstName'),
+            lastName: any(named: 'lastName'),
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenAnswer(
+          (_) async => Future.error(Response('Register Error', 409)),
+        );
+        when(() => client.group).thenReturn(group);
+        when(
+          () => client.login(
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenAnswer((_) async => Future.error(Response('body', 400)));
+
+        await tester.pumpWidget(target);
+
+        const firstName = 'Amelie';
+        const lastName = 'Testing';
+        const email = 'email@2denker.de';
+        const password = 'Sup3rStrongPassword!';
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('First Name'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('First Name'),
+          firstName,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Last Name'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Last Name'),
+          lastName,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Email Address'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Email Address'),
+          email,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Password'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Password'),
+          password,
+        );
+        await tester.pump();
+        await tester.scrollUntilVisible(
+          find.textFormFieldWithLabel('Confirm Password'),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.enterText(
+          find.textFormFieldWithLabel('Confirm Password'),
+          password,
+        );
+        await tester.pump();
+
+        await tester.scrollUntilVisible(
+          find.byType(ElevatedButton),
+          50,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        verify(() => client.login(email: email, password: password)).called(1);
+        verify(
+          () => client.register(
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+          ),
+        ).called(2);
+        expect(find.text('Register Error'), findsOneWidget);
+      });
     });
   });
 }

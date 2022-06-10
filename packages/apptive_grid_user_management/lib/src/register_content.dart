@@ -3,6 +3,7 @@ import 'package:apptive_grid_user_management/src/email_form_field.dart';
 import 'package:apptive_grid_user_management/src/password_check.dart';
 import 'package:apptive_grid_user_management/src/password_form_field.dart';
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_localization.dart';
+import 'package:apptive_grid_user_management/src/user_management_client.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:password_rule_check/password_rule_check.dart';
@@ -10,11 +11,24 @@ import 'package:password_rule_check/password_rule_check.dart';
 /// A Widget to show Registration Controls
 class RegisterContent extends StatefulWidget {
   /// Creates a new RegisterContent Widget to display inputs for a user to register a new account
-  const RegisterContent({super.key, this.requestLogin});
+  const RegisterContent({
+    super.key,
+    this.requestLogin,
+    this.onLogin,
+    this.appName,
+  });
 
   /// Callback invoked when the user wants to switch to registering
   /// If this is `null` no option to switch to registration is shown
   final void Function()? requestLogin;
+
+  /// Called when the user is logged in.
+  /// This will be called when the user has already an account that is connected to this app
+  /// As well as when the password matches their password
+  final void Function()? onLogin;
+
+  /// The name to display when showing users info if their account is already connected to this app. Defaults to [ApptiveGridUserManagementClient.group]
+  final String? appName;
 
   @override
   State<RegisterContent> createState() => _RegisterContentState();
@@ -35,10 +49,18 @@ class _RegisterContentState extends State<RegisterContent> {
 
   dynamic _error;
 
+  ApptiveGridUserManagementClient? _client;
+
   @override
   void initState() {
     super.initState();
     _step = _RegisterContentStep.waitingForInput;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _client = ApptiveGridUserManagement.maybeOf(context)?.client;
   }
 
   @override
@@ -54,7 +76,7 @@ class _RegisterContentState extends State<RegisterContent> {
   @override
   Widget build(BuildContext context) {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
-    if (_step != _RegisterContentStep.waitForConfirmation) {
+    if (_step.type == null) {
       final spacing =
           ApptiveGridUserManagementContent.maybeOf(context)?.widget.spacing ??
               16;
@@ -196,18 +218,46 @@ class _RegisterContentState extends State<RegisterContent> {
         ),
       );
     } else {
-      return Center(child: Text(localization.registerWaitingForConfirmation));
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (_step.type == _ConfirmationType.newUser)
+            Text(localization.registerWaitingForConfirmation),
+          if (_step.type == _ConfirmationType.existingUser)
+            Text(
+              localization.registerConfirmAddToGroup(
+                email: _emailController.text,
+                app: widget.appName ?? _client?.group ?? '',
+              ),
+            ),
+          Center(
+            child: TextButton(
+              onPressed: () {
+                _firstNameController.clear();
+                _lastNameController.clear();
+                _emailController.clear();
+                _passwordController.clear();
+                _confirmPasswordController.clear();
+                setState(() {
+                  _step = _RegisterContentStep.waitingForInput;
+                });
+              },
+              child: Text(localization.actionBack),
+            ),
+          )
+        ],
+      );
     }
   }
 
-  void _register() {
+  void _register({bool tryLoginOn409 = true}) {
     if (_formKey.currentState?.validate() == true) {
       setState(() {
         _step = _RegisterContentStep.loading;
         _error = null;
       });
-      final client = ApptiveGridUserManagement.maybeOf(context)!.client;
-      client
+      _client
           ?.register(
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
@@ -215,24 +265,59 @@ class _RegisterContentState extends State<RegisterContent> {
         password: _passwordController.text,
       )
           .catchError((error) {
-        setState(() {
-          _step = _RegisterContentStep.waitingForInput;
-          _error = error;
-        });
+        if (widget.onLogin != null &&
+            error is Response &&
+            error.statusCode == 409 &&
+            tryLoginOn409) {
+          _login();
+        } else {
+          setState(() {
+            _step = _RegisterContentStep.waitingForInput;
+            _error = error;
+          });
+        }
         return error;
       }).then((response) {
         if (response.statusCode < 400) {
           setState(() {
-            _step = _RegisterContentStep.waitForConfirmation;
+            _step = response.statusCode == 200
+                ? _RegisterContentStep.waitForConfirmationExisting
+                : _RegisterContentStep.waitForConfirmationNew;
           });
+        }
+      });
+    }
+  }
+
+  void _login() {
+    if (mounted) {
+      _client
+          ?.login(
+        email: _emailController.text,
+        password: _passwordController.text,
+      )
+          .catchError((error) {
+        _register(tryLoginOn409: false);
+        return error;
+      }).then((response) {
+        if (response.statusCode < 400) {
+          widget.onLogin?.call();
         }
       });
     }
   }
 }
 
+// coverage:ignore-start
 enum _RegisterContentStep {
-  waitingForInput,
-  loading,
-  waitForConfirmation,
+// coverage:ignore-end
+  waitingForInput._(),
+  loading._(),
+  waitForConfirmationExisting._(_ConfirmationType.existingUser),
+  waitForConfirmationNew._(_ConfirmationType.newUser);
+
+  const _RegisterContentStep._([this.type]);
+  final _ConfirmationType? type;
 }
+
+enum _ConfirmationType { existingUser, newUser }
