@@ -178,10 +178,11 @@ void main() {
       final schema = response['schema'];
       final component = FormComponent<IntegerDataEntity>(
         field: GridField(
-            id: 'Integer',
-            name: 'Property',
-            type: DataType.integer,
-            schema: schema),
+          id: 'Integer',
+          name: 'Property',
+          type: DataType.integer,
+          schema: schema,
+        ),
         options: const FormComponentOptions(),
         property: 'NumberC',
         data: IntegerDataEntity(),
@@ -226,10 +227,11 @@ void main() {
       final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
       final component = FormComponent<AttachmentDataEntity>(
         field: GridField(
-            id: '4zc4l48ffin5v8pa2emyx9s15',
-            name: 'Property',
-            type: DataType.attachment,
-            schema: schema),
+          id: '4zc4l48ffin5v8pa2emyx9s15',
+          name: 'Property',
+          type: DataType.attachment,
+          schema: schema,
+        ),
         options: const FormComponentOptions(),
         property: 'NumberC',
         data: AttachmentDataEntity([attachment]),
@@ -287,10 +289,11 @@ void main() {
     final schema = response['schema'];
     final component = FormComponent<IntegerDataEntity>(
       field: GridField(
-          id: '4zc4l48ffin5v8pa2emyx9s15',
-          name: 'Property',
-          type: DataType.integer,
-          schema: schema),
+        id: '4zc4l48ffin5v8pa2emyx9s15',
+        name: 'Property',
+        type: DataType.integer,
+        schema: schema,
+      ),
       data: IntegerDataEntity(),
       options: const FormComponentOptions(),
       property: 'NumberC',

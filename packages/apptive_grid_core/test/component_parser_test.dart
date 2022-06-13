@@ -64,7 +64,11 @@ void main() {
         }
       };
       final field = GridField(
-          id: id, name: property, type: DataType.dateTime, schema: schema);
+        id: id,
+        name: property,
+        type: DataType.dateTime,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -100,7 +104,11 @@ void main() {
         }
       };
       final field = GridField(
-          id: id, name: property, type: DataType.date, schema: schema);
+        id: id,
+        name: property,
+        type: DataType.date,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -370,7 +378,11 @@ void main() {
         }
       };
       final field = GridField(
-          id: id, name: property, type: DataType.dateTime, schema: schema);
+        id: id,
+        name: property,
+        type: DataType.dateTime,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -397,7 +409,11 @@ void main() {
         }
       };
       final field = GridField(
-          id: id, name: property, type: DataType.date, schema: schema);
+        id: id,
+        name: property,
+        type: DataType.date,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -538,7 +554,11 @@ void main() {
         'enum': ['GmbH', 'AG', 'Freiberuflich']
       };
       final field = GridField(
-          id: id, name: property, type: DataType.singleSelect, schema: schema);
+        id: id,
+        name: property,
+        type: DataType.singleSelect,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,

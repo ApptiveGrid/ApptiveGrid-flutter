@@ -300,9 +300,10 @@ void main() {
         property: 'name',
         data: directEntity,
         field: GridField(
-            id: '3ftoqhqbct15h5o730uknpvp5',
-            name: 'name',
-            type: DataType.multiCrossReference),
+          id: '3ftoqhqbct15h5o730uknpvp5',
+          name: 'name',
+          type: DataType.multiCrossReference,
+        ),
       );
 
       expect(fromJson, equals(direct));

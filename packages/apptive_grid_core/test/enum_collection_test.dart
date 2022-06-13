@@ -229,7 +229,7 @@ void main() {
         field: GridField(
             id: 'c75385nsbbji82k5wntoj6sj2',
             name: 'name',
-            type: DataType.enumCollection),
+            type: DataType.enumCollection,),
       );
 
       expect(fromJson, equals(direct));
