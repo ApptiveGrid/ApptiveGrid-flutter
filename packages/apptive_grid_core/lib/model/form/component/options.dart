@@ -39,7 +39,7 @@ class FormComponentOptions {
 
   @override
   String toString() {
-    return 'FormComponentOptions{multi: $multi, placeholder: $placeholder, description: $description, label: $label}';
+    return 'FormComponentOptions(multi: $multi, placeholder: $placeholder, description: $description, label: $label)';
   }
 
   /// Serializes [FormComponentOptions] to json
