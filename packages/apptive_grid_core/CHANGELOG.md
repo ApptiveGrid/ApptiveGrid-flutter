@@ -1,3 +1,11 @@
+## 0.11.0 - New Format for [FormData]
+* Added `fields` to `FormData`
+* Added `field` to `FormComponent`
+### Breaking Changes
+* Removed `schema` from `FormData`
+* Removed dedicated `FormComponent` Types in favor of a generic `FormComponent<T extends DataEntity>` type
+* Unified `FormComponentOptions`
+
 ## 0.10.0
 * Add HAL `ApptiveLink`s to User, Space, Grid, Form, GridRow
 * Add embedded Objects to User, Space, Grid
