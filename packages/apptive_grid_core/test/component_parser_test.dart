@@ -579,104 +579,9 @@ void main() {
       expect(parsedComponent.data.schemaValue, equals('AG'));
     });
   });
-/*
+
   group('Errors', () {
-    test('Unknown Type throws', () {
-      const property = 'property';
-      const id = 'id';
-
-      final schema = {
-        'properties': {
-          id: {
-            'type': 'unknown',
-          }
-        }
-      };
-      final field = GridField(
-          id: id, name: property, type: DataType.unknown, schema: schema);
-      final json = {
-        'property': property,
-        'fieldId': id,
-        'value': null,
-        'required': true,
-        'options': <String, dynamic>{},
-        'type': 'unknown'
-      };
-
-      expect(
-        () => FormComponent.fromJson(json, schema),
-        equals(throwsArgumentError),
-      );
-    });
-
-    test('Unknown Array Type throws', () {
-      const property = 'property';
-      const id = 'id';
-
-      final schema = {
-        'properties': {
-          id: {
-            'type': 'array',
-            'items': {
-              'type': 'string',
-            }
-          }
-        }
-      };
-      final json = {
-        'property': property,
-        'fieldId': id,
-        'value': null,
-        'required': true,
-        'options': <String, dynamic>{},
-        'type': 'unknown'
-      };
-
-      expect(
-        () => FormComponent.fromJson(json, schema),
-        throwsA(
-          predicate<ArgumentError>(
-            (e) => e.message == 'No defined Array type for type: DataType.text',
-            'ArgumentError with specific Message',
-          ),
-        ),
-      );
-    });
-
-    test('Unknown Object Type throws', () {
-      const property = 'property';
-      const id = 'id';
-
-      final schema = {
-        'properties': {
-          id: {
-            'type': 'object',
-            "properties": <String, dynamic>{},
-            "objectType": "unknown"
-          }
-        }
-      };
-      final json = {
-        'property': property,
-        'fieldId': id,
-        'value': null,
-        'required': true,
-        'options': <String, dynamic>{},
-        'type': 'unknown'
-      };
-
-      expect(
-        () => FormComponent.fromJson(json, schema),
-        throwsA(
-          predicate<ArgumentError>(
-            (e) => e.message == 'No defined Object type for type: unknown',
-            'ArgumentError with specific Message',
-          ),
-        ),
-      );
-    });
-
-    test('Unknown Property throws', () {
+    test('Unknown Id throws Exception', () {
       const property = 'property';
       const id = 'id';
 
@@ -688,7 +593,11 @@ void main() {
         }
       };
       final field = GridField(
-          id: id, name: property, type: DataType.unkown, schema: schema);
+        id: id,
+        name: property,
+        type: DataType.text,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'value': null,
@@ -699,11 +608,9 @@ void main() {
       };
 
       expect(
-        () => FormComponent.fromJson(json, schema),
-        equals(throwsArgumentError),
+        () => FormComponent.fromJson(json, [field]),
+        throwsException,
       );
     });
   });
-
- */
 }

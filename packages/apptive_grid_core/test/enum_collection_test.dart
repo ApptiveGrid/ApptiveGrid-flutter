@@ -227,9 +227,10 @@ void main() {
         property: 'New field',
         data: directEntity,
         field: GridField(
-            id: 'c75385nsbbji82k5wntoj6sj2',
-            name: 'name',
-            type: DataType.enumCollection,),
+          id: 'c75385nsbbji82k5wntoj6sj2',
+          name: 'name',
+          type: DataType.enumCollection,
+        ),
       );
 
       expect(fromJson, equals(direct));
