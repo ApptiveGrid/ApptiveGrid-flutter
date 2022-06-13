@@ -210,26 +210,32 @@ void main() {
   group('FormComponent', () {
     test('Direct equals from Json', () {
       final responseWithMultiCrossReference = {
-        'schema': {
-          'type': 'object',
-          'properties': {
-            '3ftoqhqbct15h5o730uknpvp5': {
-              'type': 'array',
-              'items': {
-                'type': 'object',
-                'properties': {
-                  'displayValue': {'type': 'string'},
-                  'uri': {'type': 'string'}
+        'fields': [
+          {
+            "type": {
+              "name": "references",
+              "componentTypes": ["multiSelectDropdown"]
+            },
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "displayValue": {"type": "string"},
+                  "uri": {"type": "string"}
                 },
-                'required': ['uri'],
-                'objectType': 'entityreference',
-                'gridUri':
-                    '/api/users/userId/spaces/spaceId/grids/referencedGridId'
+                "required": ["uri"],
+                "objectType": "entityreference",
+                "gridUri":
+                    "/api/users/userId/spaces/spaceId/grids/referencedGridId"
               }
-            }
-          },
-          'required': []
-        },
+            },
+            "id": "3ftoqhqbct15h5o730uknpvp5",
+            "name": "name",
+            "key": null,
+            "_links": {}
+          }
+        ],
         'schemaObject':
             '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036e50edfa83071816e03',
         'components': [
@@ -277,8 +283,7 @@ void main() {
 
       final formData = FormData.fromJson(responseWithMultiCrossReference);
 
-      final fromJson =
-          formData.components![0] as MultiCrossReferenceFormComponent;
+      final fromJson = formData.components![0];
 
       final directEntity = MultiCrossReferenceDataEntity.fromJson(
         jsonValue: [
@@ -291,10 +296,14 @@ void main() {
         gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
       );
 
-      final direct = MultiCrossReferenceFormComponent(
+      final direct = FormComponent<MultiCrossReferenceDataEntity>(
         property: 'name',
         data: directEntity,
-        fieldId: '3ftoqhqbct15h5o730uknpvp5',
+        field: GridField(
+          id: '3ftoqhqbct15h5o730uknpvp5',
+          name: 'name',
+          type: DataType.multiCrossReference,
+        ),
       );
 
       expect(fromJson, equals(direct));

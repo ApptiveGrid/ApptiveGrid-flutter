@@ -277,10 +277,13 @@ void main() {
   group('FormComponent', () {
     test('Direct equals from Json', () {
       final responseWithAttachment = {
-        "schema": {
-          "type": "object",
-          "properties": {
-            "78lnph2fb2olm9jtc696d66q9": {
+        'fields': [
+          {
+            "type": {
+              "name": "geolocation",
+              "componentTypes": ["locationPicker"]
+            },
+            "schema": {
               "type": "object",
               "properties": {
                 "lat": {"type": "number", "format": "double"},
@@ -288,10 +291,13 @@ void main() {
               },
               "required": ["lat", "lon"],
               "objectType": "geolocation"
-            }
-          },
-          "required": []
-        },
+            },
+            "id": "78lnph2fb2olm9jtc696d66q9",
+            "name": "Property",
+            "key": null,
+            "_links": {}
+          }
+        ],
         "title": "New title",
         "name": "Formular 1",
         "components": [
@@ -337,7 +343,7 @@ void main() {
 
       final formData = FormData.fromJson(responseWithAttachment);
 
-      final fromJson = formData.components![0] as GeolocationFormComponent;
+      final fromJson = formData.components![0];
 
       final directEntity = GeolocationDataEntity(
         const Geolocation(
@@ -346,10 +352,14 @@ void main() {
         ),
       );
 
-      final direct = GeolocationFormComponent(
+      final direct = FormComponent<GeolocationDataEntity>(
         property: 'Location',
         data: directEntity,
-        fieldId: '78lnph2fb2olm9jtc696d66q9',
+        field: GridField(
+          id: '78lnph2fb2olm9jtc696d66q9',
+          name: 'Property',
+          type: DataType.geolocation,
+        ),
       );
 
       expect(fromJson, equals(direct));

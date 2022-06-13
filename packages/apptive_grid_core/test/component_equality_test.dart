@@ -2,63 +2,63 @@ import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final textA = StringFormComponent(
-    fieldId: 'textId',
+  final textA = FormComponent<StringDataEntity>(
+    field: GridField(id: 'textId', name: 'Property', type: DataType.text),
     property: 'Property',
     data: StringDataEntity('Value'),
-    options: const TextComponentOptions(
+    options: const FormComponentOptions(
       label: 'Label',
     ),
     required: true,
   );
-  final textB = StringFormComponent(
-    fieldId: 'textId',
+  final textB = FormComponent<StringDataEntity>(
+    field: GridField(id: 'textId', name: 'Property', type: DataType.text),
     property: 'Property',
     data: StringDataEntity('Value'),
-    options: const TextComponentOptions(
+    options: const FormComponentOptions(
       label: 'Label',
     ),
     required: true,
   );
 
-  final textC = StringFormComponent(
-    fieldId: 'textC',
+  final textC = FormComponent<StringDataEntity>(
+    field: GridField(id: 'textC', name: 'Property', type: DataType.text),
     property: 'Property',
     data: StringDataEntity(),
-    options: const TextComponentOptions(
+    options: const FormComponentOptions(
       label: 'Label',
     ),
     required: false,
   );
 
-  final number = IntegerFormComponent(
-    fieldId: 'number',
+  final number = FormComponent<IntegerDataEntity>(
+    field: GridField(id: 'number', name: 'Property', type: DataType.integer),
     property: 'Property',
     data: IntegerDataEntity(),
-    options: const TextComponentOptions(
+    options: const FormComponentOptions(
       label: 'Label',
     ),
     required: false,
   );
 
-  final date = DateFormComponent(
-    fieldId: 'date',
+  final date = FormComponent<DateDataEntity>(
+    field: GridField(id: 'date', name: 'Property', type: DataType.date),
     property: 'Property',
     data: DateDataEntity(),
     options: const FormComponentOptions(),
     required: false,
   );
 
-  final dateTime = DateTimeFormComponent(
-    fieldId: 'dateTime',
+  final dateTime = FormComponent<DateTimeDataEntity>(
+    field: GridField(id: 'dateTime', name: 'Property', type: DataType.dateTime),
     property: 'Property',
     data: DateTimeDataEntity(),
     options: const FormComponentOptions(),
     required: false,
   );
 
-  final checkBox = BooleanFormComponent(
-    fieldId: 'checkBox',
+  final checkBox = FormComponent<BooleanDataEntity>(
+    field: GridField(id: 'checkBox', name: 'Property', type: DataType.checkbox),
     property: 'Property',
     data: BooleanDataEntity(),
     options: const FormComponentOptions(),
