@@ -26,10 +26,12 @@ void main() {
     registerFallbackValue(PolylineUpdates.from(const {}, const {}));
     registerFallbackValue(CameraUpdate.newLatLng(const LatLng(0, 0)));
     registerFallbackValue(
-      FormData(id: 'id', links: {}, title: '', components: [], schema: {}),
+      FormData(id: 'id', links: {}, title: '', components: [], fields: []),
     );
   });
 
+  final field =
+      GridField(id: 'fieldId', name: 'name', type: DataType.geolocation);
   group('TextInput', () {
     testWidgets('Initial Location Geocodes to address', (tester) async {
       final mockGeolocationHttpClient = MockHttpClient();
@@ -47,16 +49,16 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: GeolocationDataEntity(
                   const Geolocation(latitude: 47, longitude: 11),
                 ),
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
             links: {},
-            schema: null,
+            fields: [field],
           ),
         ),
       );
@@ -109,16 +111,16 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: GeolocationDataEntity(
                   const Geolocation(latitude: 47, longitude: 11),
                 ),
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
             links: {},
-            schema: null,
+            fields: [field],
           ),
         ),
       );
@@ -214,14 +216,14 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: geolocationDataEntity,
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
             links: {},
-            schema: null,
+            fields: [field],
           ),
         ),
       );
@@ -313,13 +315,13 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: geolocationData,
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
-            schema: null,
+            fields: [field],
             links: {},
           ),
         ),
@@ -393,13 +395,13 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: geolocationData,
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
-            schema: null,
+            fields: [field],
             links: {},
           ),
         ),
@@ -495,13 +497,13 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: geolocationData,
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
-            schema: null,
+            fields: [field],
             links: {},
           ),
         ),
@@ -625,13 +627,13 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: geolocationData,
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
-            schema: null,
+            fields: [field],
             links: {},
           ),
         ),
@@ -745,13 +747,13 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: geolocationData,
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
-            schema: null,
+            fields: [field],
             links: {},
           ),
         ),
@@ -945,13 +947,13 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: geolocationData,
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
-            schema: null,
+            fields: [field],
             links: {},
           ),
         ),
@@ -1039,13 +1041,13 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: geolocationData,
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
-            schema: null,
+            fields: [field],
             links: {},
           ),
         ),
@@ -1175,13 +1177,13 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: geolocationData,
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
-            schema: null,
+            fields: [field],
             links: {},
           ),
         ),
@@ -1302,15 +1304,15 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: geolocationData,
-                fieldId: 'fieldId',
+                field: field,
                 required: true,
               ),
             ],
             links: {ApptiveLinkType.submit: action},
-            schema: null,
+            fields: [field],
           ),
         ),
       );
@@ -1453,15 +1455,15 @@ void main() {
             id: 'formId',
             title: 'title',
             components: [
-              GeolocationFormComponent(
+              FormComponent<GeolocationDataEntity>(
                 property: 'property',
                 data: geolocationData,
-                fieldId: 'fieldId',
+                field: field,
                 required: true,
               ),
             ],
             links: {ApptiveLinkType.submit: action},
-            schema: null,
+            fields: [field],
           ),
         ),
       );

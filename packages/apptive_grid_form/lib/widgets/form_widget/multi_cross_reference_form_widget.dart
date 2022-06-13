@@ -1,6 +1,6 @@
 part of apptive_grid_form_widgets;
 
-/// FormComponent Widget to display a [MultiCrossReferenceFormComponent]
+/// FormComponent Widget to display a FormComponent<[MultiCrossReferenceDataEntity>]
 class MultiCrossReferenceFormWidget extends StatelessWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
   const MultiCrossReferenceFormWidget({
@@ -9,7 +9,7 @@ class MultiCrossReferenceFormWidget extends StatelessWidget {
   });
 
   /// Component this Widget should reflect
-  final MultiCrossReferenceFormComponent component;
+  final FormComponent<MultiCrossReferenceDataEntity> component;
 
   @override
   Widget build(BuildContext context) {

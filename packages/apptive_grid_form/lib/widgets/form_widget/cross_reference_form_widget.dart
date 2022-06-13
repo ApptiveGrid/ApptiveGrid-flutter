@@ -1,6 +1,6 @@
 part of apptive_grid_form_widgets;
 
-/// FormComponent Widget to display a [CrossReferenceFormComponent]
+/// FormComponent Widget to display a FormComponent<[CrossReferenceDataEntity>]
 class CrossReferenceFormWidget extends StatelessWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
   const CrossReferenceFormWidget({
@@ -9,7 +9,7 @@ class CrossReferenceFormWidget extends StatelessWidget {
   });
 
   /// Component this Widget should reflect
-  final CrossReferenceFormComponent component;
+  final FormComponent<CrossReferenceDataEntity> component;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class CrossReferenceFormWidget extends StatelessWidget {
       ),
       isSelected: (entityUri) => component.data.entityUri == entityUri,
       onSelected: (entity, selected, state) {
-        component.data = entity;
+        component.data.value = entity.value;
         state.closeOverlay();
         state.requestRebuild();
       },

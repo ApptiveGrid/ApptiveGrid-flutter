@@ -13,12 +13,12 @@ void main() {
         id: 'id',
         title: 'title',
         components: [],
-        schema: {},
+        fields: [],
         links: {},
       ),
     );
   });
-
+  final field = GridField(id: 'fieldId', name: 'name', type: DataType.checkbox);
   group('Validation', () {
     testWidgets('is required but filled sends', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
@@ -26,15 +26,15 @@ void main() {
         id: 'formId',
         title: 'title',
         components: [
-          BooleanFormComponent(
+          FormComponent<BooleanDataEntity>(
             property: 'Property',
             data: BooleanDataEntity(true),
-            fieldId: 'fieldId',
+            field: field,
             required: true,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());

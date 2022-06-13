@@ -18,7 +18,7 @@ void main() {
         name: 'name',
         title: 'title',
         components: [],
-        schema: {},
+        fields: [],
         links: {},
       ),
     );
@@ -42,23 +42,22 @@ void main() {
     if (options != null) {
       propertyMap['enum'] = options;
     }
-    return {
-      'type': 'object',
-      'properties': {
-        'id': propertyMap,
-      },
-      'required': []
-    };
+    return propertyMap;
   }
 
   group('Text', () {
     testWidgets('Value is send', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = StringFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<StringDataEntity>(
+        field: GridField(
+          id: 'String',
+          name: 'Property',
+          type: DataType.text,
+          schema: getSchema('string'),
+        ),
         data: StringDataEntity(),
         property: 'Property',
-        options: const TextComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -67,7 +66,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('string'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -102,11 +101,16 @@ void main() {
 
     testWidgets('Required shows Error', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = StringFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<StringDataEntity>(
+        field: GridField(
+          id: 'String',
+          name: 'Property',
+          type: DataType.text,
+          schema: getSchema('string'),
+        ),
         data: StringDataEntity(),
         property: 'Property',
-        options: const TextComponentOptions(),
+        options: const FormComponentOptions(),
         required: true,
       );
       final formData = FormData(
@@ -115,7 +119,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('string'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -144,8 +148,16 @@ void main() {
   group('DateTime', () {
     testWidgets('Value is send and used with Date Picker', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = DateTimeFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateTimeDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.dateTime,
+          schema: getSchema(
+            'string',
+            format: 'date-time',
+          ),
+        ),
         data: DateTimeDataEntity(),
         property: 'Property',
         options: const FormComponentOptions(),
@@ -157,7 +169,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('string', format: 'date-time'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -204,8 +216,16 @@ void main() {
 
     testWidgets('Value is send and used with Time Picker', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = DateTimeFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateTimeDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.dateTime,
+          schema: getSchema(
+            'string',
+            format: 'date-time',
+          ),
+        ),
         data: DateTimeDataEntity(),
         property: 'Property',
         options: const FormComponentOptions(),
@@ -217,7 +237,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('string', format: 'date-time'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -274,8 +294,16 @@ void main() {
 
     testWidgets('Required shows Error', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = DateTimeFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateTimeDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.dateTime,
+          schema: getSchema(
+            'string',
+            format: 'date-time',
+          ),
+        ),
         data: DateTimeDataEntity(),
         property: 'Property',
         options: const FormComponentOptions(),
@@ -287,7 +315,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('string', format: 'date-time'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -316,8 +344,13 @@ void main() {
   group('Date', () {
     testWidgets('Value is send', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = DateFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.date,
+          schema: getSchema('string', format: 'date'),
+        ),
         data: DateDataEntity(),
         property: 'Property',
         options: const FormComponentOptions(),
@@ -329,7 +362,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('string', format: 'date'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -375,8 +408,13 @@ void main() {
 
     testWidgets('Required shows Error', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = DateFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.date,
+          schema: getSchema('string', format: 'date'),
+        ),
         data: DateDataEntity(),
         property: 'Property',
         options: const FormComponentOptions(),
@@ -388,7 +426,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('string', format: 'date'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -417,11 +455,16 @@ void main() {
   group('Number', () {
     testWidgets('Value is send', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = IntegerFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<IntegerDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.integer,
+          schema: getSchema('integer'),
+        ),
         data: IntegerDataEntity(),
         property: 'Property',
-        options: const TextComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -430,7 +473,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('integer'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -464,11 +507,16 @@ void main() {
     });
 
     testWidgets('Prefilled Value gets displayed', (tester) async {
-      final component = IntegerFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<IntegerDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.integer,
+          schema: getSchema('integer'),
+        ),
         data: IntegerDataEntity(123),
         property: 'Property',
-        options: const TextComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -476,7 +524,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        schema: getSchema('integer'),
+        fields: [component.field],
         links: {},
       );
       final target = TestApp(
@@ -498,11 +546,16 @@ void main() {
 
     testWidgets('Required shows Error', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = IntegerFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<IntegerDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.integer,
+          schema: getSchema('integer'),
+        ),
         data: IntegerDataEntity(),
         property: 'Property',
-        options: const TextComponentOptions(),
+        options: const FormComponentOptions(),
         required: true,
       );
       final formData = FormData(
@@ -511,7 +564,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('integer'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -540,11 +593,16 @@ void main() {
   group('Decimal', () {
     testWidgets('Value is send', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = DecimalFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DecimalDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.decimal,
+          schema: getSchema('integer'),
+        ),
         data: DecimalDataEntity(),
         property: 'Property',
-        options: const TextComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -553,7 +611,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('number'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -587,11 +645,16 @@ void main() {
     });
 
     testWidgets('Prefilled Value gets displayed', (tester) async {
-      final component = DecimalFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DecimalDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.decimal,
+          schema: getSchema('number'),
+        ),
         data: DecimalDataEntity(47.11),
         property: 'Property',
-        options: const TextComponentOptions(),
+        options: const FormComponentOptions(),
         required: false,
       );
       final formData = FormData(
@@ -599,7 +662,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [component],
-        schema: getSchema('number'),
+        fields: [component.field],
         links: {},
       );
       final target = TestApp(
@@ -621,11 +684,16 @@ void main() {
 
     testWidgets('Required shows Error', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = DecimalFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DecimalDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.decimal,
+          schema: getSchema('number'),
+        ),
         data: DecimalDataEntity(),
         property: 'Property',
-        options: const TextComponentOptions(),
+        options: const FormComponentOptions(),
         required: true,
       );
       final formData = FormData(
@@ -634,7 +702,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('number'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -663,8 +731,13 @@ void main() {
   group('CheckBox', () {
     testWidgets('Value is send', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = BooleanFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<BooleanDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.checkbox,
+          schema: getSchema('boolean'),
+        ),
         data: BooleanDataEntity(),
         property: 'Property',
         options: const FormComponentOptions(),
@@ -676,7 +749,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('boolean'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -711,8 +784,13 @@ void main() {
 
     testWidgets('Required shows Error', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = BooleanFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<BooleanDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.checkbox,
+          schema: getSchema('boolean'),
+        ),
         data: BooleanDataEntity(),
         property: 'Property',
         options: const FormComponentOptions(),
@@ -724,7 +802,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('boolean'),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -753,8 +831,16 @@ void main() {
   group('Enum', () {
     testWidgets('Value is send', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = EnumFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<EnumDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.singleSelect,
+          schema: getSchema(
+            'string',
+            options: ['value', 'newValue'],
+          ),
+        ),
         data: EnumDataEntity(value: 'value', options: {'value', 'newValue'}),
         property: 'Property',
         options: const FormComponentOptions(),
@@ -766,7 +852,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema('string', options: ['value', 'newValue']),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
@@ -794,7 +880,9 @@ void main() {
       await tester.pumpAndSettle();
       // Dropdown creates multiple instances. Use last inspired by original test
       // https://github.com/flutter/flutter/blob/fc9addb88b5262ce98e8f39b0eefa6fa9be2ca6a/packages/flutter/test/material/dropdown_test.dart#L356
-      await tester.tap(find.text('newValue').last);
+      await tester.tap(
+        find.text('newValue').last,
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
@@ -805,8 +893,18 @@ void main() {
 
     testWidgets('Required shows Error', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final component = EnumFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<EnumDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.singleSelect,
+          schema: getSchema(
+            'string',
+            options: [
+              'value',
+            ],
+          ),
+        ),
         data: EnumDataEntity(options: {'value'}),
         property: 'Property',
         options: const FormComponentOptions(),
@@ -818,12 +916,7 @@ void main() {
         title: 'Form Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: getSchema(
-          'string',
-          options: [
-            'value',
-          ],
-        ),
+        fields: [component.field],
       );
       final target = TestApp(
         client: client,
