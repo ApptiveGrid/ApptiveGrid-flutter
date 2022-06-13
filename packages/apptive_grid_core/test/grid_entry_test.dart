@@ -4,15 +4,19 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Equality', () {
     test('From Json == Direct', () {
-      final field = GridField(id: 'id', name: 'name', type: DataType.text);
-      const value = 'value';
-
-      final direct = GridEntry(field, StringDataEntity(value));
-      final fromJson = GridEntry.fromJson(value, field, {
+      final field =
+          GridField(id: 'id', name: 'name', type: DataType.text, schema: {
         'properties': [
           {'type': 'string'}
         ]
       });
+      const value = 'value';
+
+      final direct = GridEntry(field, StringDataEntity(value));
+      final fromJson = GridEntry.fromJson(
+        value,
+        field,
+      );
 
       expect(fromJson, equals(direct));
       expect(fromJson.hashCode, equals(direct.hashCode));

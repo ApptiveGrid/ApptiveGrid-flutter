@@ -145,15 +145,19 @@ void main() {
   group('FormComponent', () {
     test('Direct equals from Json', () {
       final responseWithCrossReference = {
-        'schema': {
-          'type': 'object',
-          'properties': {
-            '3ftoqhqbct15h5o730uknpvp5': {
-              'type': 'number',
-            }
-          },
-          'required': []
-        },
+        'fields': [
+          {
+            "type": {
+              "name": "decimal",
+              "componentTypes": ["textfield"]
+            },
+            "schema": {"type": "number", "format": "float"},
+            "id": "3ftoqhqbct15h5o730uknpvp5",
+            "name": "name",
+            "key": null,
+            "_links": {}
+          }
+        ],
         'schemaObject':
             '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036e50edfa83071816e03',
         'components': [
@@ -195,14 +199,18 @@ void main() {
 
       final formData = FormData.fromJson(responseWithCrossReference);
 
-      final fromJson = formData.components![0] as DecimalFormComponent;
+      final fromJson = formData.components![0];
 
       final directEntity = DecimalDataEntity(47.11);
 
-      final direct = DecimalFormComponent(
+      final direct = FormComponent<DecimalDataEntity>(
         property: 'name',
         data: directEntity,
-        fieldId: '3ftoqhqbct15h5o730uknpvp5',
+        field: GridField(
+          id: '3ftoqhqbct15h5o730uknpvp5',
+          name: 'name',
+          type: DataType.decimal,
+        ),
       );
 
       expect(fromJson, equals(direct));

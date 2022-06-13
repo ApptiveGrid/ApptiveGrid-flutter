@@ -4,14 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Components', () {
     test('Text', () {
-      const options = TextComponentOptions(
+      const options = FormComponentOptions(
         multi: false,
         placeholder: 'Placeholder',
         label: 'Label',
         description: 'Description',
       );
-      final component = StringFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<StringDataEntity>(
+        field: GridField(id: 'id', name: 'Property', type: DataType.text),
         property: 'Property',
         data: StringDataEntity('Value'),
         options: options,
@@ -19,20 +19,20 @@ void main() {
       );
 
       expect(
-        StringFormComponent.fromJson(component.toJson()),
+        FormComponent.fromJson(component.toJson(), [component.field]),
         equals(component),
       );
     });
 
     test('Number', () {
-      const options = TextComponentOptions(
+      const options = FormComponentOptions(
         multi: false,
         placeholder: 'Placeholder',
         label: 'Label',
         description: 'Description',
       );
-      final component = IntegerFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<IntegerDataEntity>(
+        field: GridField(id: 'id', name: 'Property', type: DataType.integer),
         property: 'Property',
         data: IntegerDataEntity(1),
         options: options,
@@ -40,20 +40,20 @@ void main() {
       );
 
       expect(
-        IntegerFormComponent.fromJson(component.toJson()),
+        FormComponent.fromJson(component.toJson(), [component.field]),
         equals(component),
       );
     });
 
     test('Decimal', () {
-      const options = TextComponentOptions(
+      const options = FormComponentOptions(
         multi: false,
         placeholder: 'Placeholder',
         label: 'Label',
         description: 'Description',
       );
-      final component = DecimalFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DecimalDataEntity>(
+        field: GridField(id: 'id', name: 'Property', type: DataType.decimal),
         property: 'Property',
         data: DecimalDataEntity(30.0),
         options: options,
@@ -61,28 +61,31 @@ void main() {
       );
 
       expect(
-        DecimalFormComponent.fromJson(component.toJson()),
+        FormComponent.fromJson(component.toJson(), [component.field]),
         equals(component),
       );
     });
 
     test('Date', () {
       final options = FormComponentOptions.fromJson({});
-      final component = DateFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateDataEntity>(
+        field: GridField(id: 'id', name: 'Property', type: DataType.date),
         property: 'Property',
         data: DateDataEntity(DateTime(2020, 07, 12)),
         options: options,
         required: true,
       );
 
-      expect(DateFormComponent.fromJson(component.toJson()), equals(component));
+      expect(
+        FormComponent.fromJson(component.toJson(), [component.field]),
+        equals(component),
+      );
     });
 
     test('DateTime', () {
       final options = FormComponentOptions.fromJson({});
-      final component = DateTimeFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateTimeDataEntity>(
+        field: GridField(id: 'id', name: 'Property', type: DataType.dateTime),
         property: 'Property',
         data: DateTimeDataEntity(DateTime(2020, 07, 12, 12, 0, 0, 0)),
         options: options,
@@ -90,15 +93,15 @@ void main() {
       );
 
       expect(
-        DateTimeFormComponent.fromJson(component.toJson()),
+        FormComponent.fromJson(component.toJson(), [component.field]),
         equals(component),
       );
     });
 
     test('Checkbox', () {
       final options = FormComponentOptions.fromJson({});
-      final component = BooleanFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<BooleanDataEntity>(
+        field: GridField(id: 'id', name: 'Property', type: DataType.checkbox),
         property: 'Property',
         data: BooleanDataEntity(false),
         options: options,
@@ -106,7 +109,7 @@ void main() {
       );
 
       expect(
-        BooleanFormComponent.fromJson(component.toJson()),
+        FormComponent.fromJson(component.toJson(), [component.field]),
         equals(component),
       );
     });
@@ -116,13 +119,16 @@ void main() {
       const id = 'id';
 
       final schema = {
-        'properties': {
-          id: {
-            'type': 'string',
-            'enum': ['GmbH', 'AG', 'Freiberuflich']
-          }
-        },
+        'type': 'string',
+        'enum': ['GmbH', 'AG', 'Freiberuflich']
       };
+
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.singleSelect,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -132,9 +138,9 @@ void main() {
         'type': 'selectBox'
       };
 
-      final jsonComponent = FormComponent.fromJson(json, schema);
-      final component = EnumFormComponent(
-        fieldId: id,
+      final jsonComponent = FormComponent.fromJson(json, [field]);
+      final component = FormComponent<EnumDataEntity>(
+        field: GridField(id: id, name: property, type: DataType.singleSelect),
         property: property,
         data: EnumDataEntity(
           value: 'AG',
@@ -144,9 +150,9 @@ void main() {
       );
 
       expect(
-        EnumFormComponent.fromJson(
+        FormComponent.fromJson(
           jsonComponent.toJson(),
-          schema['properties']![id],
+          [field],
         ),
         component,
       );
@@ -156,17 +162,19 @@ void main() {
       const id = 'id';
 
       final schema = {
-        'properties': {
-          id: {
-            'type': 'array',
-            'items': {
-              'type': 'string',
-              'enum': ['GmbH', 'AG', 'Freiberuflich']
-            }
-          },
-          '_id': {'type': 'string'}
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ['GmbH', 'AG', 'Freiberuflich']
         }
       };
+
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.enumCollection,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -176,9 +184,9 @@ void main() {
         'type': 'selectBox'
       };
 
-      final jsonComponent = FormComponent.fromJson(json, schema);
-      final component = EnumCollectionFormComponent(
-        fieldId: id,
+      final jsonComponent = FormComponent.fromJson(json, [field]);
+      final component = FormComponent<EnumCollectionDataEntity>(
+        field: GridField(id: id, name: property, type: DataType.enumCollection),
         property: property,
         data: EnumCollectionDataEntity(
           value: {'AG'},
@@ -188,9 +196,9 @@ void main() {
       );
 
       expect(
-        EnumCollectionFormComponent.fromJson(
+        FormComponent.fromJson(
           jsonComponent.toJson(),
-          schema['properties']![id],
+          [field],
         ),
         component,
       );

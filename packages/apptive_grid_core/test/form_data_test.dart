@@ -6,19 +6,62 @@ void main() {
   const name = 'name';
   const description = 'description';
   final response = {
-    'schema': {
-      'type': 'object',
-      'properties': {
-        '4zc4l4c5coyi7qh6q1ozrg54u': {'type': 'string', 'format': 'date-time'},
-        '4zc4l456pca5ursrt9rxefpsc': {'type': 'boolean'},
-        '4zc4l49to77dhfagr844flaey': {'type': 'string', 'format': 'date'},
-        '4zc4l45nmww7ujq7y4axlbtjg': {'type': 'string'},
-        '4zc4l48ffin5v8pa2emyx9s15': {'type': 'integer'}
+    'fields': [
+      {
+        "type": {
+          "name": "date-time",
+          "componentTypes": ["datePicker"]
+        },
+        "schema": {"type": "string", "format": "date-time"},
+        "id": "4zc4l4c5coyi7qh6q1ozrg54u",
+        "name": "Date Time",
+        "key": null,
+        "_links": {}
       },
-      'required': []
-    },
-    'actions': [
-      {'uri': '/api/a/95fzpo7jg09dthz394nkdf21g', 'method': 'POST'}
+      {
+        "type": {
+          "name": "boolean",
+          "componentTypes": ["checkbox"]
+        },
+        "schema": {"type": "boolean"},
+        "id": "4zc4l456pca5ursrt9rxefpsc",
+        "name": "Checkmark",
+        "key": null,
+        "_links": {}
+      },
+      {
+        "type": {
+          "name": "date",
+          "componentTypes": ["datePicker", "textfield"]
+        },
+        "schema": {"type": "string", "format": "date"},
+        "id": "4zc4l49to77dhfagr844flaey",
+        "name": "Date",
+        "key": null,
+        "_links": {}
+      },
+      {
+        "type": {
+          "name": "string",
+          "componentTypes": ["textfield"]
+        },
+        "schema": {"type": "string"},
+        "id": "4zc4l45nmww7ujq7y4axlbtjg",
+        "name": "Text",
+        "key": null,
+        "_links": {}
+      },
+      {
+        "type": {
+          "name": "integer",
+          "componentTypes": ["textfield"]
+        },
+        "schema": {"type": "integer"},
+        "id": "4zc4l48ffin5v8pa2emyx9s15",
+        "name": "Number",
+        "key": null,
+        "_links": {}
+      },
     ],
     'components': [
       {
@@ -119,12 +162,12 @@ void main() {
 
       expect(formData.components!.length, equals(5));
 
-      expect(formData.components!.map((e) => e.runtimeType).toList(), [
-        StringFormComponent,
-        IntegerFormComponent,
-        DateTimeFormComponent,
-        DateFormComponent,
-        BooleanFormComponent,
+      expect(formData.components!.map((e) => e.data.runtimeType).toList(), [
+        StringDataEntity,
+        IntegerDataEntity,
+        DateTimeDataEntity,
+        DateDataEntity,
+        BooleanDataEntity,
       ]);
     });
   });
@@ -133,9 +176,13 @@ void main() {
     test('toJson -> fromJson -> equals', () {
       final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       final schema = response['schema'];
-      final component = IntegerFormComponent(
-        fieldId: '4zc4l48ffin5v8pa2emyx9s15',
-        options: const TextComponentOptions(),
+      final component = FormComponent<IntegerDataEntity>(
+        field: GridField(
+            id: 'Integer',
+            name: 'Property',
+            type: DataType.integer,
+            schema: schema),
+        options: const FormComponentOptions(),
         property: 'NumberC',
         data: IntegerDataEntity(),
       );
@@ -147,7 +194,7 @@ void main() {
         description: description,
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: schema,
+        fields: [component.field],
       );
 
       expect(FormData.fromJson(formData.toJson()), equals(formData));
@@ -177,9 +224,13 @@ void main() {
         'required': []
       };
       final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
-      final component = AttachmentFormComponent(
-        fieldId: '4zc4l48ffin5v8pa2emyx9s15',
-        options: const TextComponentOptions(),
+      final component = FormComponent<AttachmentDataEntity>(
+        field: GridField(
+            id: '4zc4l48ffin5v8pa2emyx9s15',
+            name: 'Property',
+            type: DataType.attachment,
+            schema: schema),
+        options: const FormComponentOptions(),
         property: 'NumberC',
         data: AttachmentDataEntity([attachment]),
       );
@@ -190,7 +241,7 @@ void main() {
         title: title,
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: schema,
+        fields: [component.field],
       );
 
       final attachmentAction =
@@ -234,10 +285,14 @@ void main() {
   group('Equality', () {
     final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
     final schema = response['schema'];
-    final component = IntegerFormComponent(
-      fieldId: '4zc4l48ffin5v8pa2emyx9s15',
+    final component = FormComponent<IntegerDataEntity>(
+      field: GridField(
+          id: '4zc4l48ffin5v8pa2emyx9s15',
+          name: 'Property',
+          type: DataType.integer,
+          schema: schema),
       data: IntegerDataEntity(),
-      options: const TextComponentOptions(),
+      options: const FormComponentOptions(),
       property: 'NumberC',
     );
 
@@ -247,7 +302,7 @@ void main() {
       title: title,
       components: [component],
       links: {ApptiveLinkType.submit: action},
-      schema: schema,
+      fields: [component.field],
     );
     final b = FormData(
       id: 'formId',
@@ -255,7 +310,7 @@ void main() {
       title: title,
       components: [component],
       links: {ApptiveLinkType.submit: action},
-      schema: schema,
+      fields: [component.field],
     );
     final c = FormData.fromJson(response);
 
@@ -272,15 +327,19 @@ void main() {
 
   group('Without Submit Link', () {
     final responseWithoutSubmitLink = {
-      'schema': {
-        'type': 'object',
-        'properties': {
-          'b8qscjhfw5mukbred3tae8bd2': {'type': 'string'}
+      'fields': [
+        {
+          "type": {
+            "name": "string",
+            "componentTypes": ["textfield"]
+          },
+          "schema": {"type": "string"},
+          "id": "b8qscjhfw5mukbred3tae8bd2",
+          "name": "Text",
+          "key": null,
+          "_links": {}
         },
-        'required': []
-      },
-      'schemaObject':
-          '/api/users/609bc536dad545d1af7e82db/spaces/60ae6036e65b14482e7f99ac/grids/60ae6039e65b14482e7f99af',
+      ],
       'components': [
         {
           'property': 'name',
@@ -328,25 +387,29 @@ void main() {
   group('Cross Reference', () {
     test('Form with Cross Reference without Value parses', () {
       final responseWithCrossReference = {
-        'schema': {
-          'type': 'object',
-          'properties': {
-            '3ftoqhqbct15h5o730uknpvp5': {
-              'type': 'object',
-              'properties': {
-                'displayValue': {'type': 'string'},
-                'uri': {'type': 'string'}
+        'fields': [
+          {
+            "type": {
+              "name": "reference",
+              "componentTypes": ["entitySelect"]
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "displayValue": {"type": "string"},
+                "uri": {"type": "string"}
               },
-              'required': ['uri'],
-              'objectType': 'entityreference',
-              'gridUri':
-                  '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06'
-            }
-          },
-          'required': []
-        },
-        'schemaObject':
-            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036e50edfa83071816e03',
+              "required": ["uri"],
+              "objectType": "entityreference",
+              "gridUri":
+                  "/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06"
+            },
+            "id": "3ftoqhqbct15h5o730uknpvp5",
+            "name": "Cross Ref",
+            "key": null,
+            "_links": {}
+          }
+        ],
         'components': [
           {
             'property': 'name',
@@ -388,8 +451,8 @@ void main() {
 
       expect(formData.title, equals('New title'));
       expect(
-        formData.components![0].runtimeType,
-        equals(CrossReferenceFormComponent),
+        formData.components![0].data.runtimeType,
+        equals(CrossReferenceDataEntity),
       );
       expect(formData.components![0].data.value, equals(null));
       expect(
@@ -406,25 +469,29 @@ void main() {
 
     test('Form with Cross Reference with prefilled Value parses', () {
       final responseWithCrossReference = {
-        'schema': {
-          'type': 'object',
-          'properties': {
-            '3ftoqhqbct15h5o730uknpvp5': {
-              'type': 'object',
-              'properties': {
-                'displayValue': {'type': 'string'},
-                'uri': {'type': 'string'}
+        'fields': [
+          {
+            "type": {
+              "name": "reference",
+              "componentTypes": ["entitySelect"]
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "displayValue": {"type": "string"},
+                "uri": {"type": "string"}
               },
-              'required': ['uri'],
-              'objectType': 'entityreference',
-              'gridUri':
-                  '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06'
-            }
-          },
-          'required': []
-        },
-        'schemaObject':
-            '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036e50edfa83071816e03',
+              "required": ["uri"],
+              "objectType": "entityreference",
+              "gridUri":
+                  "/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06"
+            },
+            "id": "3ftoqhqbct15h5o730uknpvp5",
+            "name": "Cross Ref",
+            "key": null,
+            "_links": {}
+          }
+        ],
         'components': [
           {
             'property': 'name',
@@ -470,8 +537,8 @@ void main() {
 
       expect(formData.title, equals('New title'));
       expect(
-        formData.components![0].runtimeType,
-        equals(CrossReferenceFormComponent),
+        formData.components![0].data.runtimeType,
+        equals(CrossReferenceDataEntity),
       );
       expect(formData.components![0].data.value, equals('Yeah!'));
       expect(
