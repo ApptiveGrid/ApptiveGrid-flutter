@@ -31,6 +31,53 @@ abstract class DataEntity<T, S> with FilterableMixin {
 
   @override
   dynamic get filterValue => schemaValue;
+
+  static DataEntity fromJson(
+      {required dynamic json, required GridField field}) {
+    switch (field.type) {
+      case DataType.text:
+        return StringDataEntity(json);
+      case DataType.dateTime:
+        return DateTimeDataEntity.fromJson(json);
+      case DataType.date:
+        return DateDataEntity.fromJson(json);
+      case DataType.integer:
+        return IntegerDataEntity(json);
+      case DataType.checkbox:
+        return BooleanDataEntity(json);
+      case DataType.singleSelect:
+        return EnumDataEntity(
+          value: json,
+          options:
+              (field.schema['enum'].cast<String>() as List<String>).toSet(),
+        );
+      case DataType.crossReference:
+        return CrossReferenceDataEntity.fromJson(
+          jsonValue: json,
+          gridUri: field.schema['gridUri'],
+        );
+      case DataType.decimal:
+        return DecimalDataEntity(json);
+      case DataType.attachment:
+        return AttachmentDataEntity.fromJson(json);
+      case DataType.enumCollection:
+        return EnumCollectionDataEntity(
+          value: ((json ?? <String>[]).cast<String>() as List<String>).toSet(),
+          options:
+              (field.schema['items']['enum'].cast<String>() as List<String>)
+                  .toSet(),
+        );
+      case DataType.geolocation:
+        return GeolocationDataEntity.fromJson(json);
+      case DataType.multiCrossReference:
+        return MultiCrossReferenceDataEntity.fromJson(
+          jsonValue: json,
+          gridUri: field.schema['items']['gridUri'],
+        );
+      case DataType.userReference:
+        return UserReferenceDataEntity.fromJson(json);
+    }
+  }
 }
 
 /// [DataEntity] representing [String] Objects

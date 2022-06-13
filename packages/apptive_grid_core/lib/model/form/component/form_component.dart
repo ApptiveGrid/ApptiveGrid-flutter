@@ -3,23 +3,33 @@ part of apptive_grid_model;
 /// Data Object that represents a entry in a Form
 ///
 /// [T] is the [DataEntity] type of [data]
-abstract class FormComponent<T extends DataEntity> {
+class FormComponent<T extends DataEntity> {
+  const FormComponent({
+    required this.property,
+    required this.data,
+    this.options = const FormComponentOptions(),
+    this.required = false,
+    required this.field,
+  });
+
+  final GridField field;
+
   /// Name of the Component
-  String get property;
+  final String property;
 
   /// Value of the Component
-  T get data;
+  final T data;
 
   /// Additional options of a component
-  FormComponentOptions get options;
+  final FormComponentOptions options;
 
   /// Shows if the field can be [null]
   ///
   /// For [DataType.checkbox] this will make only `true` values valid
-  bool get required;
+  final bool required;
 
   /// Id of this FormComponent
-  String get fieldId;
+  String get fieldId => field.id;
 
   /// Saves this into a [Map] that can be encoded using [json.encode]
   Map<String, dynamic> toJson() => {
@@ -32,14 +42,13 @@ abstract class FormComponent<T extends DataEntity> {
 
   @override
   String toString() {
-    return '$runtimeType(property: $property, fieldId: $fieldId data: $data, options: $options, required: $required)';
+    return 'FormComponent(property: $property, field: $field data: $data, options: $options, required: $required)';
   }
 
   @override
   bool operator ==(Object other) {
-    return runtimeType == other.runtimeType &&
-        other is FormComponent<T> &&
-        fieldId == other.fieldId &&
+    return other is FormComponent &&
+        field == other.field &&
         property == other.property &&
         data == other.data &&
         options == other.options &&
@@ -47,46 +56,33 @@ abstract class FormComponent<T extends DataEntity> {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode =>
+      field.hashCode +
+      property.hashCode +
+      data.hashCode +
+      options.hashCode +
+      required.hashCode;
 
   /// Mapping to a concrete implementation based on [json] and [schema]
   ///
   /// Throws an [ArgumentError] if not matching implementation is found.
-  static FormComponent fromJson(dynamic json, dynamic schema) {
-    final properties = schema['properties'][json['fieldId']];
-    if (properties == null) {
-      throw ArgumentError(
-        'No Schema Entry found for ${json['property']} with id ${json['fieldId']}',
-      );
-    }
-    final dataType = dataTypeFromSchemaProperty(schemaProperty: properties);
-    switch (dataType) {
-      case DataType.text:
-        return StringFormComponent.fromJson(json);
-      case DataType.dateTime:
-        return DateTimeFormComponent.fromJson(json);
-      case DataType.date:
-        return DateFormComponent.fromJson(json);
-      case DataType.integer:
-        return IntegerFormComponent.fromJson(json);
-      case DataType.checkbox:
-        return BooleanFormComponent.fromJson(json);
-      case DataType.singleSelect:
-        return EnumFormComponent.fromJson(json, properties);
-      case DataType.crossReference:
-        return CrossReferenceFormComponent.fromJson(json, properties);
-      case DataType.decimal:
-        return DecimalFormComponent.fromJson(json);
-      case DataType.attachment:
-        return AttachmentFormComponent.fromJson(json);
-      case DataType.enumCollection:
-        return EnumCollectionFormComponent.fromJson(json, properties);
-      case DataType.geolocation:
-        return GeolocationFormComponent.fromJson(json);
-      case DataType.multiCrossReference:
-        return MultiCrossReferenceFormComponent.fromJson(json, properties);
-      case DataType.userReference:
-        return UserReferenceFormComponent.fromJson(json);
-    }
+  static FormComponent fromJson(dynamic json, List<GridField> fields) {
+    final id = json['fieldId'];
+    final property = json['property'];
+    final field = fields.firstWhere(
+      (e) => e.id == id,
+      orElse: () => throw Exception('Field with id $id not found'),
+    );
+    final options = FormComponentOptions.fromJson(json['options']);
+    final required = json['required'] ?? false;
+    final data = DataEntity.fromJson(json: json['value'], field: field);
+
+    return FormComponent(
+      property: property,
+      data: data,
+      options: options,
+      required: required,
+      field: field,
+    );
   }
 }
