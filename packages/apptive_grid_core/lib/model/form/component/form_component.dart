@@ -4,6 +4,7 @@ part of apptive_grid_model;
 ///
 /// [T] is the [DataEntity] type of [data]
 class FormComponent<T extends DataEntity> {
+  /// Creates a new FormComponent
   const FormComponent({
     required this.property,
     required this.data,
@@ -12,6 +13,7 @@ class FormComponent<T extends DataEntity> {
     required this.field,
   });
 
+  /// The GridField this [FormComponent] is associated with
   final GridField field;
 
   /// Name of the Component

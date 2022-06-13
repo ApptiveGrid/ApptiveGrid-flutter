@@ -32,8 +32,12 @@ abstract class DataEntity<T, S> with FilterableMixin {
   @override
   dynamic get filterValue => schemaValue;
 
-  static DataEntity fromJson(
-      {required dynamic json, required GridField field}) {
+  /// Creates a new DataEntity from [json]
+  /// [field] is used to determine the runtimeType of the [DataEntity] based on [GridField.type]
+  static DataEntity fromJson({
+    required dynamic json,
+    required GridField field,
+  }) {
     switch (field.type) {
       case DataType.text:
         return StringDataEntity(json);

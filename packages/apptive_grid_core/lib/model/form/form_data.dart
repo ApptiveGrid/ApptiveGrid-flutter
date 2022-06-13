@@ -62,9 +62,10 @@ class FormData {
   /// Description of the Form
   final String? description;
 
-  /// List of [FormComponent] represented in the Form
+  /// List of [FormComponent]s represented in the Form
   final List<FormComponent>? components;
 
+  /// List of [GridField]s represented in the Form
   final List<GridField>? fields;
 
   /// List of [FormActions] available for this Form
