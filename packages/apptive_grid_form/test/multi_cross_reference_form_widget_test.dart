@@ -17,7 +17,7 @@ void main() {
         links: {},
         title: 'title',
         components: [],
-        schema: {},
+        fields: [],
       ),
     );
     registerFallbackValue(
@@ -61,10 +61,10 @@ void main() {
       client = MockApptiveGridClient();
       formKey = GlobalKey();
       final data = MultiCrossReferenceDataEntity(gridUri: gridUri);
-      final component = MultiCrossReferenceFormComponent(
+      final component = FormComponent<MultiCrossReferenceDataEntity>(
         property: 'Property',
         data: data,
-        fieldId: 'fieldId',
+        field: field,
         required: true,
       );
 
@@ -252,11 +252,13 @@ void main() {
   group('Validation', () {
     testWidgets('is required but filled sends', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+      final field = GridField(
+          id: 'fieldId', name: 'name', type: DataType.multiCrossReference);
       final formData = FormData(
         id: 'formId',
         title: 'title',
         components: [
-          MultiCrossReferenceFormComponent(
+          FormComponent<MultiCrossReferenceDataEntity>(
             property: 'Property',
             data: MultiCrossReferenceDataEntity(
               gridUri: Uri.parse('/api/a/user/spaces/space/grids/grid'),
@@ -270,12 +272,12 @@ void main() {
                 ),
               ],
             ),
-            fieldId: 'fieldId',
+            field: field,
             required: true,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.loadGrid(uri: any(named: 'uri'))).thenAnswer(

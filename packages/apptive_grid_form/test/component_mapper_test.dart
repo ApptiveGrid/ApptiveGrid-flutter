@@ -5,12 +5,12 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Mapping', () {
     test('TextComponent', () {
-      final component = StringFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<StringDataEntity>(
+        field: GridField(id: 'String', name: 'Property', type: DataType.text),
         data: StringDataEntity(),
         property: 'Property',
         required: false,
-        options: const TextComponentOptions(),
+        options: const FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -19,12 +19,16 @@ void main() {
     });
 
     test('NumberComponent', () {
-      final component = IntegerFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<IntegerDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.integer,
+        ),
         data: IntegerDataEntity(),
         property: 'Property',
         required: false,
-        options: const TextComponentOptions(),
+        options: const FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -33,12 +37,16 @@ void main() {
     });
 
     test('DecimalComponent', () {
-      final component = DecimalFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DecimalDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.decimal,
+        ),
         data: DecimalDataEntity(),
         property: 'Property',
         required: false,
-        options: const TextComponentOptions(),
+        options: const FormComponentOptions(),
       );
 
       final widget = fromModel(component);
@@ -47,8 +55,12 @@ void main() {
     });
 
     test('DateComponent', () {
-      final component = DateFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.date,
+        ),
         data: DateDataEntity(),
         property: 'Property',
         required: false,
@@ -61,8 +73,12 @@ void main() {
     });
 
     test('DateTimeComponent', () {
-      final component = DateTimeFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateTimeDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.dateTime,
+        ),
         data: DateTimeDataEntity(),
         property: 'Property',
         required: false,
@@ -75,8 +91,12 @@ void main() {
     });
 
     test('CheckBoxComponent', () {
-      final component = BooleanFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<BooleanDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.checkbox,
+        ),
         data: BooleanDataEntity(),
         property: 'Property',
         required: false,
@@ -89,8 +109,12 @@ void main() {
     });
 
     test('EnumComponent', () {
-      final component = EnumFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<EnumDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.singleSelect,
+        ),
         data: EnumDataEntity(),
         property: 'Property',
         required: false,
@@ -103,8 +127,12 @@ void main() {
     });
 
     test('EnumCollectionComponent', () {
-      final component = EnumCollectionFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<EnumCollectionDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.enumCollection,
+        ),
         data: EnumCollectionDataEntity(),
         property: 'Property',
         required: false,
@@ -117,8 +145,12 @@ void main() {
     });
 
     test('CrossReferenceComponent', () {
-      final component = CrossReferenceFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<CrossReferenceDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.crossReference,
+        ),
         data: CrossReferenceDataEntity(
           gridUri: Uri.parse('/api/a/user/spaces/space/grids/grid'),
         ),
@@ -133,8 +165,12 @@ void main() {
     });
 
     test('MultiCrossReferenceComponent', () {
-      final component = MultiCrossReferenceFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<MultiCrossReferenceDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.multiCrossReference,
+        ),
         data: MultiCrossReferenceDataEntity(
           gridUri: Uri.parse('/api/a/user/spaces/space/grids/grid'),
         ),
@@ -149,8 +185,12 @@ void main() {
     });
 
     test('UserReferenceComponent', () {
-      final component = UserReferenceFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<UserReferenceDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.userReference,
+        ),
         data: UserReferenceDataEntity(
           const UserReference(
             id: 'userId',
@@ -168,35 +208,5 @@ void main() {
 
       expect(widget.runtimeType, equals(UserReferenceFormWidget));
     });
-
-    test('ArgumentError', () {
-      final component = UnknownComponent();
-
-      expect(() => fromModel(component), equals(throwsArgumentError));
-    });
   });
-}
-
-class UnknownComponent extends FormComponent<UnknownDataEntity> {
-  @override
-  FormComponentOptions get options => const FormComponentOptions();
-
-  @override
-  String get property => 'Property';
-
-  @override
-  bool get required => false;
-
-  @override
-  String get fieldId => 'id';
-
-  @override
-  UnknownDataEntity get data => UnknownDataEntity();
-}
-
-class UnknownDataEntity extends DataEntity<String, String> {
-  UnknownDataEntity([super.value]);
-
-  @override
-  String? get schemaValue => null;
 }

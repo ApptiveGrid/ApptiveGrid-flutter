@@ -24,7 +24,7 @@ void main() {
           id: 'formId',
           title: '',
           components: [],
-          schema: null,
+          fields: [],
           links: {},
         ),
       ),
@@ -53,7 +53,7 @@ void main() {
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          schema: {},
+          fields: [],
           links: {},
         ),
       );
@@ -81,7 +81,7 @@ void main() {
           name: 'Form Name',
           title: 'Form Title',
           components: [],
-          schema: {},
+          fields: [],
           links: {},
         ),
       );
@@ -110,7 +110,7 @@ void main() {
           name: 'Form Name',
           description: 'Form Description',
           components: [],
-          schema: {},
+          fields: [],
           links: {},
         ),
       );
@@ -138,7 +138,7 @@ void main() {
           name: 'Form Name',
           description: 'Form Description',
           components: [],
-          schema: {},
+          fields: [],
           links: {},
         ),
       );
@@ -156,7 +156,7 @@ void main() {
       name: 'Form Name',
       title: 'Form Title',
       components: [],
-      schema: {},
+      fields: [],
       links: {},
     );
     final completer = Completer<FormData>();
@@ -193,7 +193,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        schema: {},
+        fields: [],
         links: {},
       );
       when(
@@ -224,7 +224,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        schema: {},
+        fields: [],
         links: {},
       );
       when(
@@ -271,7 +271,7 @@ void main() {
         title: 'Form Title',
         components: [],
         links: {ApptiveLinkType.submit: action},
-        schema: {},
+        fields: [],
       );
 
       when(
@@ -304,7 +304,7 @@ void main() {
         title: 'Form Title',
         components: [],
         links: {ApptiveLinkType.submit: action},
-        schema: {},
+        fields: [],
       );
 
       when(
@@ -389,7 +389,7 @@ void main() {
           title: 'Form Title',
           components: [],
           links: {ApptiveLinkType.submit: action},
-          schema: {},
+          fields: [],
         );
 
         when(
@@ -422,7 +422,7 @@ void main() {
           title: 'Form Title',
           components: [],
           links: {ApptiveLinkType.submit: action},
-          schema: {},
+          fields: [],
         );
 
         when(
@@ -456,7 +456,7 @@ void main() {
           title: 'Form Title',
           components: [],
           links: {ApptiveLinkType.submit: action},
-          schema: {},
+          fields: [],
         );
 
         when(
@@ -506,7 +506,7 @@ void main() {
           title: 'Form Title',
           components: [],
           links: {ApptiveLinkType.submit: action},
-          schema: {},
+          fields: [],
         );
 
         when(
@@ -544,7 +544,7 @@ void main() {
           title: 'Form Title',
           components: [],
           links: {ApptiveLinkType.submit: action},
-          schema: {},
+          fields: [],
         );
 
         when(
@@ -577,7 +577,7 @@ void main() {
           title: 'Form Title',
           components: [],
           links: {ApptiveLinkType.submit: action},
-          schema: {},
+          fields: [],
         );
 
         when(
@@ -617,7 +617,7 @@ void main() {
         title: 'Form Title',
         components: [],
         links: {ApptiveLinkType.submit: action},
-        schema: {},
+        fields: [],
       );
 
       when(
@@ -651,7 +651,7 @@ void main() {
         title: 'Form Title',
         components: [],
         links: {ApptiveLinkType.submit: action},
-        schema: {},
+        fields: [],
       );
 
       when(
@@ -679,7 +679,7 @@ void main() {
       title: 'Title',
       components: [],
       links: {ApptiveLinkType.submit: action},
-      schema: {},
+      fields: [],
     );
 
     final formUri = Uri.parse('/api/a/form');
@@ -781,7 +781,7 @@ void main() {
         name: 'Form Name',
         title: 'Form Title',
         components: [],
-        schema: {},
+        fields: [],
         links: {},
       );
       final target = TestApp(
@@ -817,7 +817,7 @@ void main() {
         title: 'Form Title',
         components: [],
         links: {ApptiveLinkType.submit: action},
-        schema: {},
+        fields: [],
       );
       final target = TestApp(
         client: client,
@@ -856,7 +856,7 @@ void main() {
         title: 'Form Title',
         components: [],
         links: {ApptiveLinkType.submit: action},
-        schema: {},
+        fields: [],
       );
       final target = TestApp(
         client: client,
@@ -903,7 +903,7 @@ void main() {
         title: 'Form Title',
         components: [],
         links: {ApptiveLinkType.submit: action},
-        schema: {},
+        fields: [],
       );
 
       final actionCompleter = Completer<http.Response>();
@@ -944,7 +944,7 @@ void main() {
         title: 'Form Title',
         components: [],
         links: {ApptiveLinkType.submit: action},
-        schema: {},
+        fields: [],
       );
 
       final actionCompleter = Completer<http.Response>();
@@ -970,31 +970,31 @@ void main() {
   group('User Reference', () {
     testWidgets('UserReference Form Widget is build without padding',
         (tester) async {
+      final field = GridField(
+          id: 'field3',
+          name: 'name',
+          type: DataType.userReference,
+          schema: {
+            'type': 'object',
+            'properties': {
+              'displayValue': {'type': 'string'},
+              'id': {'type': 'string'},
+              'type': {'type': 'string'},
+              'name': {'type': 'string'}
+            },
+            'objectType': 'userReference'
+          });
       final formData = FormData(
         id: 'formId',
         title: 'Form Data',
         components: [
-          UserReferenceFormComponent(
-            property: 'Created By',
-            data: UserReferenceDataEntity(),
-            fieldId: 'field3',
-          ),
+          FormComponent<UserReferenceDataEntity>(
+              property: 'Created By',
+              data: UserReferenceDataEntity(),
+              field: field),
         ],
         links: {},
-        schema: {
-          'properties': {
-            'field3': {
-              'type': 'object',
-              'properties': {
-                'displayValue': {'type': 'string'},
-                'id': {'type': 'string'},
-                'type': {'type': 'string'},
-                'name': {'type': 'string'}
-              },
-              'objectType': 'userReference'
-            },
-          },
-        },
+        fields: [field],
       );
 
       final target = TestApp(
@@ -1034,7 +1034,7 @@ void main() {
           id: 'formId',
           title: 'title',
           components: [],
-          schema: {},
+          fields: [],
           links: {},
         ),
       );

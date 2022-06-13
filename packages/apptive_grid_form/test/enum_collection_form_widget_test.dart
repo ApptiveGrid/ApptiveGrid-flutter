@@ -15,13 +15,14 @@ void main() {
         links: {},
         title: 'title',
         components: [],
-        schema: null,
+        fields: [],
       ),
     );
   });
-
+  final field =
+      GridField(id: 'id', name: 'name', type: DataType.enumCollection);
   testWidgets('Options get a chip', (tester) async {
-    final component = EnumCollectionFormComponent(
+    final component = FormComponent<EnumCollectionDataEntity>(
       property: 'Property',
       data: EnumCollectionDataEntity(
         value: {},
@@ -30,7 +31,7 @@ void main() {
           'B',
         },
       ),
-      fieldId: 'fieldId',
+      field: field,
     );
 
     final target = TestApp(
@@ -52,7 +53,7 @@ void main() {
   });
 
   testWidgets('Tapping on chips updates value', (tester) async {
-    final component = EnumCollectionFormComponent(
+    final component = FormComponent<EnumCollectionDataEntity>(
       property: 'Property',
       data: EnumCollectionDataEntity(
         value: {},
@@ -61,7 +62,7 @@ void main() {
           'B',
         },
       ),
-      fieldId: 'fieldId',
+      field: field,
     );
 
     final target = TestApp(
@@ -89,18 +90,18 @@ void main() {
         id: 'formId',
         title: 'title',
         components: [
-          EnumCollectionFormComponent(
+          FormComponent<EnumCollectionDataEntity>(
             property: 'Property',
             data: EnumCollectionDataEntity(
               value: {'A', 'B'},
               options: {'A', 'B', 'C'},
             ),
-            fieldId: 'fieldId',
+            field: field,
             required: true,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
@@ -127,7 +128,7 @@ void main() {
     });
 
     testWidgets('Required Status Updates', (tester) async {
-      final component = EnumCollectionFormComponent(
+      final component = FormComponent<EnumCollectionDataEntity>(
         property: 'Property',
         data: EnumCollectionDataEntity(
           value: {},
@@ -136,7 +137,7 @@ void main() {
             'B',
           },
         ),
-        fieldId: 'fieldId',
+        field: field,
         required: true,
       );
 
@@ -148,7 +149,7 @@ void main() {
           component,
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());

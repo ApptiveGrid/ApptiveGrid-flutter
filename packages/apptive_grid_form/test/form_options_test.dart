@@ -8,8 +8,8 @@ void main() {
   group('CheckBox', () {
     testWidgets('Default Label is Property', (tester) async {
       const property = 'Property';
-      final component = BooleanFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<BooleanDataEntity>(
+        field: GridField(id: 'id', name: 'Property', type: DataType.checkbox),
         data: BooleanDataEntity(),
         property: property,
         options: const FormComponentOptions(),
@@ -30,8 +30,8 @@ void main() {
       const property = 'Property';
       const customLabel = 'CustomLabel';
       const description = 'Description';
-      final component = BooleanFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<BooleanDataEntity>(
+        field: GridField(id: 'id', name: 'Property', type: DataType.checkbox),
         data: BooleanDataEntity(),
         property: property,
         options: const FormComponentOptions(
@@ -56,8 +56,8 @@ void main() {
   group('Date', () {
     testWidgets('Default Label is Property', (tester) async {
       const property = 'Property';
-      final component = DateFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateDataEntity>(
+        field: GridField(id: 'id', name: 'Property', type: DataType.date),
         data: DateDataEntity(),
         property: property,
         options: const FormComponentOptions(),
@@ -78,8 +78,8 @@ void main() {
       const property = 'Property';
       const customLabel = 'CustomLabel';
       const description = 'Description';
-      final component = DateFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateDataEntity>(
+        field: GridField(id: 'id', name: 'Property', type: DataType.date),
         data: DateDataEntity(),
         property: property,
         options: const FormComponentOptions(
@@ -104,8 +104,12 @@ void main() {
   group('DateTime', () {
     testWidgets('Default Label is Property', (tester) async {
       const property = 'Property';
-      final component = DateTimeFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateTimeDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.dateTime,
+        ),
         data: DateTimeDataEntity(),
         property: property,
         options: const FormComponentOptions(),
@@ -126,8 +130,12 @@ void main() {
       const property = 'Property';
       const customLabel = 'CustomLabel';
       const description = 'Description';
-      final component = DateTimeFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<DateTimeDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.dateTime,
+        ),
         data: DateTimeDataEntity(),
         property: property,
         options: const FormComponentOptions(
@@ -152,8 +160,12 @@ void main() {
   group('Enum', () {
     testWidgets('Default Label is Property', (tester) async {
       const property = 'Property';
-      final component = EnumFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<EnumDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.singleSelect,
+        ),
         data: EnumDataEntity(),
         property: property,
         options: const FormComponentOptions(),
@@ -174,8 +186,12 @@ void main() {
       const property = 'Property';
       const customLabel = 'CustomLabel';
       const description = 'Description';
-      final component = EnumFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<EnumDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.singleSelect,
+        ),
         data: EnumDataEntity(),
         property: property,
         options: const FormComponentOptions(
@@ -200,8 +216,12 @@ void main() {
   group('EnumCollection', () {
     testWidgets('Default Label is Property', (tester) async {
       const property = 'Property';
-      final component = EnumCollectionFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<EnumCollectionDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.enumCollection,
+        ),
         data: EnumCollectionDataEntity(),
         property: property,
         options: const FormComponentOptions(),
@@ -222,8 +242,12 @@ void main() {
       const property = 'Property';
       const customLabel = 'CustomLabel';
       const description = 'Description';
-      final component = EnumCollectionFormComponent(
-        fieldId: 'id',
+      final component = FormComponent<EnumCollectionDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.enumCollection,
+        ),
         data: EnumCollectionDataEntity(),
         property: property,
         options: const FormComponentOptions(
