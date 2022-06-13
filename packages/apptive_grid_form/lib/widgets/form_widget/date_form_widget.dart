@@ -11,7 +11,7 @@ class DateFormWidget extends StatefulWidget {
   });
 
   /// Component this Widget should reflect
-  final DateFormComponent component;
+  final FormComponent<DateDataEntity> component;
 
   @override
   State<StatefulWidget> createState() => _DateFormWidgetState();

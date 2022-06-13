@@ -1,6 +1,6 @@
 part of apptive_grid_form_widgets;
 
-/// FormComponent Widget to display a [DateTimeFormComponent]
+/// FormComponent Widget to display a FormComponent<[DateTimeDataEntity>]
 class DateTimeFormWidget extends StatefulWidget {
   /// Creates a Widget to display and select a Date and a Time contained in [component]
   ///
@@ -12,7 +12,7 @@ class DateTimeFormWidget extends StatefulWidget {
   });
 
   /// Component this Widget should reflect
-  final DateTimeFormComponent component;
+  final FormComponent<DateTimeDataEntity> component;
 
   @override
   State<StatefulWidget> createState() => _DateTimeFormWidgetState();
