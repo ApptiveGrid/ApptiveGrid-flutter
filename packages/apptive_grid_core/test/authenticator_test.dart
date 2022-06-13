@@ -261,9 +261,32 @@ void main() {
   });
 
   group('Header', () {
+    late MockHttpClient httpClient;
+
+    setUp(() {
+      httpClient = MockHttpClient();
+
+      when(() => httpClient.get(any())).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+
+        if (uri == discoveryUri) {
+          return Response(
+            jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+            200,
+            request: Request('GET', uri),
+            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+          );
+        }
+
+        throw 'No Response defined for $uri';
+      });
+    });
+
     test('Has Token returns Token', () {
-      authenticator =
-          ApptiveGridAuthenticator(options: const ApptiveGridOptions());
+      authenticator = ApptiveGridAuthenticator(
+        options: const ApptiveGridOptions(),
+        httpClient: httpClient,
+      );
       final token = TokenResponse.fromJson(
         {'token_type': 'Bearer', 'access_token': '12345'},
       );
@@ -273,13 +296,36 @@ void main() {
     });
 
     test('Has no Token returns null', () {
-      authenticator =
-          ApptiveGridAuthenticator(options: const ApptiveGridOptions());
+      authenticator = ApptiveGridAuthenticator(
+        options: const ApptiveGridOptions(),
+        httpClient: httpClient,
+      );
       expect(authenticator.header, isNull);
     });
   });
 
   group('checkAuthentication', () {
+    late MockHttpClient httpClient;
+
+    setUp(() {
+      httpClient = MockHttpClient();
+
+      when(() => httpClient.get(any())).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+
+        if (uri == discoveryUri) {
+          return Response(
+            jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+            200,
+            request: Request('GET', uri),
+            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+          );
+        }
+
+        throw 'No Response defined for $uri';
+      });
+    });
+
     test('No Token, Auto Authenticate, authenticates', () async {
       final urlLauncher = MockUrlLauncher();
       when(() => urlLauncher.closeWebView()).thenAnswer((invocation) async {});
@@ -287,6 +333,7 @@ void main() {
       UrlLauncherPlatform.instance = urlLauncher;
 
       authenticator = ApptiveGridAuthenticator(
+        httpClient: httpClient,
         options: const ApptiveGridOptions(
           authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
@@ -316,8 +363,10 @@ void main() {
     });
 
     test('Expired Token Refreshes', () async {
-      authenticator =
-          ApptiveGridAuthenticator(options: const ApptiveGridOptions());
+      authenticator = ApptiveGridAuthenticator(
+        options: const ApptiveGridOptions(),
+        httpClient: httpClient,
+      );
 
       // Current token should be Expired
       final now = DateTime.now();
@@ -629,9 +678,30 @@ void main() {
   });
 
   group('Is Authenticated', () {
+    late MockHttpClient httpClient;
+
+    setUp(() {
+      httpClient = MockHttpClient();
+
+      when(() => httpClient.get(any())).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+
+        if (uri == discoveryUri) {
+          return Response(
+            jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+            200,
+            request: Request('GET', uri),
+            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+          );
+        }
+
+        throw 'No Response defined for $uri';
+      });
+    });
+
     group('isAuthenticated', () {
       test('With token returns true', () async {
-        authenticator = ApptiveGridAuthenticator();
+        authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
 
         expect(await authenticator.isAuthenticated, equals(false));
 
@@ -646,6 +716,7 @@ void main() {
 
       test('With Api Key returns true', () async {
         authenticator = ApptiveGridAuthenticator(
+          httpClient: httpClient,
           options: const ApptiveGridOptions(
             authenticationOptions: ApptiveGridAuthenticationOptions(
               apiKey: ApptiveGridApiKey(
@@ -662,7 +733,7 @@ void main() {
 
     group('isAuthenticated with User token', () {
       test('With token returns true', () async {
-        authenticator = ApptiveGridAuthenticator();
+        authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
 
         expect(await authenticator.isAuthenticatedWithToken, false);
 
@@ -677,6 +748,7 @@ void main() {
 
       test('With Api Key returns true', () async {
         authenticator = ApptiveGridAuthenticator(
+          httpClient: httpClient,
           options: const ApptiveGridOptions(
             authenticationOptions: ApptiveGridAuthenticationOptions(
               apiKey: ApptiveGridApiKey(
