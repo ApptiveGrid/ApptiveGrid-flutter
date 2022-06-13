@@ -253,7 +253,10 @@ void main() {
     testWidgets('is required but filled sends', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
       final field = GridField(
-          id: 'fieldId', name: 'name', type: DataType.multiCrossReference);
+        id: 'fieldId',
+        name: 'name',
+        type: DataType.multiCrossReference,
+      );
       final formData = FormData(
         id: 'formId',
         title: 'title',

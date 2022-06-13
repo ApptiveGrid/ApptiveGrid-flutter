@@ -971,27 +971,29 @@ void main() {
     testWidgets('UserReference Form Widget is build without padding',
         (tester) async {
       final field = GridField(
-          id: 'field3',
-          name: 'name',
-          type: DataType.userReference,
-          schema: {
-            'type': 'object',
-            'properties': {
-              'displayValue': {'type': 'string'},
-              'id': {'type': 'string'},
-              'type': {'type': 'string'},
-              'name': {'type': 'string'}
-            },
-            'objectType': 'userReference'
-          });
+        id: 'field3',
+        name: 'name',
+        type: DataType.userReference,
+        schema: {
+          'type': 'object',
+          'properties': {
+            'displayValue': {'type': 'string'},
+            'id': {'type': 'string'},
+            'type': {'type': 'string'},
+            'name': {'type': 'string'}
+          },
+          'objectType': 'userReference'
+        },
+      );
       final formData = FormData(
         id: 'formId',
         title: 'Form Data',
         components: [
           FormComponent<UserReferenceDataEntity>(
-              property: 'Created By',
-              data: UserReferenceDataEntity(),
-              field: field),
+            property: 'Created By',
+            data: UserReferenceDataEntity(),
+            field: field,
+          ),
         ],
         links: {},
         fields: [field],
