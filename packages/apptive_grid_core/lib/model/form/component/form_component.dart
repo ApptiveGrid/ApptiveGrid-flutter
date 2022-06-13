@@ -13,6 +13,17 @@ class FormComponent<T extends DataEntity> {
     required this.field,
   });
 
+  /// Casts this FormComponent to a FormComponent with a specific DataEntity Type
+  FormComponent<U> cast<U extends DataEntity>() {
+    return FormComponent<U>(
+      property: property,
+      data: data as U,
+      options: options,
+      required: required,
+      field: field,
+    );
+  }
+
   /// The GridField this [FormComponent] is associated with
   final GridField field;
 
