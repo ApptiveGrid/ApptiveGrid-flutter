@@ -1,3 +1,7 @@
+## 0.11.0
+* Updated to apptive_grid_core  to 0.11.0
+* This includes breaking changes regarding the FormData Model. Most important there is now no dedicated FormComponent per type but one generic one
+
 ## 0.10.0
 * Update apptive_grid_core Package to include breaking [Model Changes from Version 0.10.0](https://pub.dev/packages/apptive_grid_core/changelog#0100)
 * Deprecate `FormActions`
