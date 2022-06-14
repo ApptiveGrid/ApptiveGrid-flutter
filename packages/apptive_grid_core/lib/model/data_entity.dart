@@ -82,6 +82,8 @@ abstract class DataEntity<T, S> with FilterableMixin {
       case DataType.userReference:
       case DataType.createdBy:
         return CreatedByDataEntity.fromJson(json);
+      case DataType.user:
+        return UserDataEntity.fromJson(json);
     }
   }
 }
@@ -427,6 +429,25 @@ class CreatedByDataEntity extends DataEntity<CreatedBy, dynamic> {
       jsonValue = CreatedBy.fromJson(json);
     }
     return CreatedByDataEntity(jsonValue);
+  }
+
+  /// Returns [value] as a json object map
+  @override
+  dynamic get schemaValue => value?.toJson();
+}
+
+class UserDataEntity extends DataEntity<DataUser, dynamic> {
+  /// Creates a new UserDataEntity Object with value [value]
+  UserDataEntity([super.value]);
+
+  /// Creates a new UserDataEntity Object from json
+  /// [json] needs to be an object that is parsed with [DataUser.fromJson]
+  factory UserDataEntity.fromJson(dynamic json) {
+    DataUser? jsonUser;
+    if (json != null) {
+      jsonUser = DataUser.fromJson(json);
+    }
+    return UserDataEntity(jsonUser);
   }
 
   /// Returns [value] as a json object map

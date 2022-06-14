@@ -42,8 +42,11 @@ enum DataType {
   @Deprecated('Use createdBy instead')
   userReference(backendName: 'createdby'),
 
-  /// Type for UserReferences. Used for createdBy
-  createdBy(backendName: 'createdby');
+  /// Type for CreatedBy.
+  createdBy(backendName: 'createdby'),
+
+  /// Type for User. A use case might be to assign a task to a user
+  user(backendName: 'user');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({
