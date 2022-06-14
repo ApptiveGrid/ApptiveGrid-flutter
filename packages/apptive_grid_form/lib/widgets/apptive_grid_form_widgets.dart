@@ -1,5 +1,6 @@
 library apptive_grid_form_widgets;
 
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
@@ -32,4 +33,6 @@ part 'form_widget/geolocation_form_widget.dart';
 part 'form_widget/integer_form_widget.dart';
 part 'form_widget/multi_cross_reference_form_widget.dart';
 part 'form_widget/text_form_widget.dart';
+part 'form_widget/user/user_dropdown_button_form_field.dart';
+part 'form_widget/user_form_widget.dart';
 part 'package:apptive_grid_form/widgets/grid/grid_row.dart';

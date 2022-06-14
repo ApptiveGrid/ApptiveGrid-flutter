@@ -20,7 +20,7 @@ class GridField {
       key: json['key'],
       type: DataType.values
           .firstWhere((type) => type.backendName == json['type']['name']),
-      links: linkMapFromJson(json['links']),
+      links: linkMapFromJson(json['_links']),
       schema: json['schema'],
     );
   }
@@ -54,7 +54,7 @@ class GridField {
         'name': name,
         if (key != null) 'key': key,
         if (schema != null) 'schema': schema,
-        'links': links.toJson(),
+        '_links': links.toJson(),
         'type': {'name': type.backendName},
       };
 
