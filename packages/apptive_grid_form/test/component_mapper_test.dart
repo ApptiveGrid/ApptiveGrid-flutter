@@ -185,16 +185,16 @@ void main() {
     });
 
     test('UserReferenceComponent', () {
-      final component = FormComponent<UserReferenceDataEntity>(
+      final component = FormComponent<CreatedByDataEntity>(
         field: GridField(
           id: 'id',
           name: 'Property',
-          type: DataType.userReference,
+          type: DataType.createdBy,
         ),
-        data: UserReferenceDataEntity(
-          const UserReference(
+        data: CreatedByDataEntity(
+          const CreatedBy(
             id: 'userId',
-            type: UserReferenceType.user,
+            type: CreatedByType.user,
             displayValue: 'Jane Doe',
             name: 'jane.doe@2denker.de',
           ),
@@ -206,7 +206,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, equals(UserReferenceFormWidget));
+      expect(widget.runtimeType, equals(CreatedByFormWidget));
     });
   });
 }

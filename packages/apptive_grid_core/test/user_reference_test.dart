@@ -192,17 +192,17 @@ void main() {
       test('Null', () {
         expect(
           grid.rows![0].entries.first.data,
-          UserReferenceDataEntity(),
+          CreatedByDataEntity(),
         );
       });
 
       test('User', () {
         expect(
           grid.rows![1].entries.first.data,
-          UserReferenceDataEntity(
-            const UserReference(
+          CreatedByDataEntity(
+            const CreatedBy(
               id: 'userId',
-              type: UserReferenceType.user,
+              type: CreatedByType.user,
               displayValue: 'Jane Doe',
               name: 'jane.doe@2denker.de',
             ),
@@ -213,10 +213,10 @@ void main() {
       test('Form Link', () {
         expect(
           grid.rows![2].entries.first.data,
-          UserReferenceDataEntity(
-            const UserReference(
+          CreatedByDataEntity(
+            const CreatedBy(
               id: '61eeac4686c4f1d22992f260',
-              type: UserReferenceType.formLink,
+              type: CreatedByType.formLink,
               displayValue: '',
               name: '',
             ),
@@ -227,10 +227,10 @@ void main() {
       test('Api Key', () {
         expect(
           grid.rows![3].entries.first.data,
-          UserReferenceDataEntity(
-            const UserReference(
+          CreatedByDataEntity(
+            const CreatedBy(
               id: '61eeac4686c4f1d22992f263',
-              type: UserReferenceType.apiCredentials,
+              type: CreatedByType.apiCredentials,
               displayValue: '',
               name: '',
             ),
@@ -248,19 +248,19 @@ void main() {
 
   group('DataEntity', () {
     test('Equality', () {
-      final a = UserReferenceDataEntity.fromJson({
+      final a = CreatedByDataEntity.fromJson({
         'name': 'jane.doe@2denker.de',
         'displayValue': 'Jane Doe',
         'id': 'userId',
         'type': 'user'
       });
-      final b = UserReferenceDataEntity.fromJson({
+      final b = CreatedByDataEntity.fromJson({
         'name': 'jane.doe@2denker.de',
         'displayValue': 'Jane Doe',
         'id': 'userId',
         'type': 'user'
       });
-      final c = UserReferenceDataEntity.fromJson({
+      final c = CreatedByDataEntity.fromJson({
         'name': '',
         'displayValue': '',
         'id': 'userId',
@@ -276,14 +276,14 @@ void main() {
 
   group('UserReference', () {
     test('Equality', () {
-      const one = UserReference(
+      const one = CreatedBy(
         id: 'userId',
-        type: UserReferenceType.user,
+        type: CreatedByType.user,
         displayValue: 'Jane Doe',
         name: 'jane.doe@2denker.de',
       );
 
-      final two = UserReference.fromJson(
+      final two = CreatedBy.fromJson(
         {
           'name': 'jane.doe@2denker.de',
           'displayValue': 'Jane Doe',

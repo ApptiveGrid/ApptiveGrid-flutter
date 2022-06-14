@@ -1,3 +1,6 @@
+## 0.10.0
+* Renamed `UserReference` to `CreatedBy`. The old `UserReference` is still available but deprecated
+
 ## 0.9.0
 * Update apptive_grid_core Package to include breaking [Model Changes from Version 0.10.0](https://pub.dev/packages/apptive_grid_core/changelog#0100)
 * GridField now includes `key` and `schema`

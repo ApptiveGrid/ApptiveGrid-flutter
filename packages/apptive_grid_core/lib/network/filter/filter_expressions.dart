@@ -24,7 +24,7 @@ class Today extends _FilterExpression with ComparableFilterableMixin {
 }
 
 /// Filter columns by the logged in user
-/// This works for [DataType.userReference] and [DataType.assignee]
+/// This works for [DataType.createdBy] and [DataType.assignee]
 class LoggedInUser extends _FilterExpression {
   /// Creates a Filter Expression to check the loggedIn User
   const LoggedInUser() : super(expression: 'loggedInUser()');
