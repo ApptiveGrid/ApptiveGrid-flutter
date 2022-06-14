@@ -57,5 +57,8 @@ Widget fromModel(FormComponent component) {
     case DataType.userReference:
     case DataType.createdBy:
       return const CreatedByFormWidget();
+    case DataType.user:
+      // TODO: Implement UserFormWidget
+      return const SizedBox();
   }
 }
