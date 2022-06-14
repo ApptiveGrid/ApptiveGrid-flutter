@@ -1,6 +1,7 @@
-## 0.11.0 - New Format for [FormData]
+## 0.11.0
 * Added `fields` to `FormData`
 * Added `field` to `FormComponent`
+* Renamed `UserReference` to `CreatedBy`. The old `UserReference` is still available but deprecated
 ### Breaking Changes
 * Removed `schema` from `FormData`
 * Removed dedicated `FormComponent` Types in favor of a generic `FormComponent<T extends DataEntity>` type

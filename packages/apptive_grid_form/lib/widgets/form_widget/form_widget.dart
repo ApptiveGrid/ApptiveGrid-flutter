@@ -53,7 +53,9 @@ Widget fromModel(FormComponent component) {
       return MultiCrossReferenceFormWidget(
         component: component.cast<MultiCrossReferenceDataEntity>(),
       );
+    // ignore: deprecated_member_use
     case DataType.userReference:
-      return const UserReferenceFormWidget();
+    case DataType.createdBy:
+      return const CreatedByFormWidget();
   }
 }

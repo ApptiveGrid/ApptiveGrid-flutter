@@ -973,7 +973,7 @@ void main() {
       final field = GridField(
         id: 'field3',
         name: 'name',
-        type: DataType.userReference,
+        type: DataType.createdBy,
         schema: {
           'type': 'object',
           'properties': {
@@ -989,9 +989,9 @@ void main() {
         id: 'formId',
         title: 'Form Data',
         components: [
-          FormComponent<UserReferenceDataEntity>(
+          FormComponent<CreatedByDataEntity>(
             property: 'Created By',
-            data: UserReferenceDataEntity(),
+            data: CreatedByDataEntity(),
             field: field,
           ),
         ],
@@ -1014,7 +1014,7 @@ void main() {
 
       expect(
         find.ancestor(
-          of: find.byType(UserReferenceFormWidget),
+          of: find.byType(CreatedByFormWidget),
           matching: find.byType(Padding),
         ),
         findsNothing,

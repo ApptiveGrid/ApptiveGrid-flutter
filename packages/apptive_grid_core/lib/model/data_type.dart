@@ -39,7 +39,11 @@ enum DataType {
   multiCrossReference(backendName: 'references'),
 
   /// Type for UserReferences. Used for createdBy
-  userReference(backendName: 'createdby');
+  @Deprecated('Use createdBy instead')
+  userReference(backendName: 'createdby'),
+
+  /// Type for UserReferences. Used for createdBy
+  createdBy(backendName: 'createdby');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({

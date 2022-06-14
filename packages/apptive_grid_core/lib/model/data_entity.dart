@@ -78,8 +78,10 @@ abstract class DataEntity<T, S> with FilterableMixin {
           jsonValue: json,
           gridUri: field.schema['items']['gridUri'],
         );
+      // ignore: deprecated_member_use_from_same_package
       case DataType.userReference:
-        return UserReferenceDataEntity.fromJson(json);
+      case DataType.createdBy:
+        return CreatedByDataEntity.fromJson(json);
     }
   }
 }
@@ -408,19 +410,23 @@ class MultiCrossReferenceDataEntity
   int get hashCode => toString().hashCode;
 }
 
-/// [DataEntity] representing [UserReference]s
-class UserReferenceDataEntity extends DataEntity<UserReference, dynamic> {
+/// Deprecated [DataEntity] representing [CreatedBy]s
+@Deprecated('Use CreatedByDataEntity instead')
+typedef UserReferenceDataEntity = CreatedByDataEntity;
+
+/// [DataEntity] representing [CreatedBy]s
+class CreatedByDataEntity extends DataEntity<CreatedBy, dynamic> {
   /// Creates a new UserReferenceDataEntity Object with value [value]
-  UserReferenceDataEntity([super.value]);
+  CreatedByDataEntity([super.value]);
 
   /// Creates a new UserReferenceDataEntity Object from json
-  /// [json] needs to be an object that is parsed with [UserReference.fromJson]
-  factory UserReferenceDataEntity.fromJson(dynamic json) {
-    UserReference? jsonValue;
+  /// [json] needs to be an object that is parsed with [CreatedBy.fromJson]
+  factory CreatedByDataEntity.fromJson(dynamic json) {
+    CreatedBy? jsonValue;
     if (json != null) {
-      jsonValue = UserReference.fromJson(json);
+      jsonValue = CreatedBy.fromJson(json);
     }
-    return UserReferenceDataEntity(jsonValue);
+    return CreatedByDataEntity(jsonValue);
   }
 
   /// Returns [value] as a json object map

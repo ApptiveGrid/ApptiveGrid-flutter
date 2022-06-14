@@ -1,27 +1,31 @@
 part of apptive_grid_model;
 
-/// Object representing a UserReference
-class UserReference {
-  /// Creates a new UserReference
-  const UserReference({
+/// Deprecated Object representing a CreatedBy Field
+@Deprecated('Use CreatedBy instead')
+typedef UserReference = CreatedBy;
+
+/// Object representing a CreatedBy Field
+class CreatedBy {
+  /// Creates a new CreatedBy
+  const CreatedBy({
     this.displayValue,
     required this.id,
     this.name = '',
     required this.type,
   });
 
-  /// Creates a new UserReference from a [json] response
-  factory UserReference.fromJson(dynamic json) {
-    return UserReference(
+  /// Creates a new CreatedBy Object from a [json] response
+  factory CreatedBy.fromJson(dynamic json) {
+    return CreatedBy(
       displayValue: json['displayValue'],
       id: json['id'],
       name: json['name'],
-      type: UserReferenceType.values
+      type: CreatedByType.values
           .firstWhere((element) => element.backendType == json['type']),
     );
   }
 
-  /// Maps the [UserReference] to a format the server can understand
+  /// Maps the [CreatedBy] to a format the server can understand
   Map<String, String?> toJson() => {
         'displayValue': displayValue ?? '',
         'id': id,
@@ -30,7 +34,7 @@ class UserReference {
       };
 
   /// Display Value for the Reference
-  /// If [type] is [UserReferenceType.user] this will be the First Name Last Name of the user
+  /// If [type] is [CreatedByType.user] this will be the First Name Last Name of the user
   final String? displayValue;
 
   /// Id of the user
@@ -40,12 +44,12 @@ class UserReference {
 
   /// Name of the User
   ///
-  /// If [type] is [UserReferenceType.user] this will be the email of the user
-  /// If [type] is [UserReferenceType.apiCredentials] this will be the name of the api credentials
+  /// If [type] is [CreatedByType.user] this will be the email of the user
+  /// If [type] is [CreatedByType.apiCredentials] this will be the name of the api credentials
   final String name;
 
   /// Type of the creating user
-  final UserReferenceType type;
+  final CreatedByType type;
 
   @override
   String toString() {
@@ -54,7 +58,7 @@ class UserReference {
 
   @override
   bool operator ==(Object other) {
-    return other is UserReference &&
+    return other is CreatedBy &&
         displayValue == other.displayValue &&
         id == other.id &&
         name == other.name &&
@@ -65,8 +69,12 @@ class UserReference {
   int get hashCode => toString().hashCode;
 }
 
+/// Deprecated types that have created a specific entity
+@Deprecated('Use CreatedByType instead')
+typedef UserReferenceType = CreatedByType;
+
 /// Different types that have created a specific entity
-enum UserReferenceType {
+enum CreatedByType {
   /// The entity was created by a logged in user
   user,
 
@@ -77,14 +85,14 @@ enum UserReferenceType {
   apiCredentials,
 }
 
-extension _UserReferenceX on UserReferenceType {
+extension _UserReferenceX on CreatedByType {
   String get backendType {
     switch (this) {
-      case UserReferenceType.user:
+      case CreatedByType.user:
         return 'user';
-      case UserReferenceType.formLink:
+      case CreatedByType.formLink:
         return 'link';
-      case UserReferenceType.apiCredentials:
+      case CreatedByType.apiCredentials:
         return 'accesscredentials';
     }
   }
