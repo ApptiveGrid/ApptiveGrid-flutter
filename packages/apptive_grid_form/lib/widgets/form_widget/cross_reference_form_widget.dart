@@ -21,6 +21,7 @@ class CrossReferenceFormWidget extends StatelessWidget {
       isSelected: (entityUri) => component.data.entityUri == entityUri,
       onSelected: (entity, selected, state) {
         component.data.value = entity.value;
+        component.data.entityUri = entity.entityUri;
         state.closeOverlay();
         state.requestRebuild();
       },

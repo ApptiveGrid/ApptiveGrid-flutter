@@ -10,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:openid_client/openid_client.dart';
+import 'package:openid_client/openid_client_io.dart' as openid;
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
@@ -26,8 +27,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(Uri());
-  });
-  setUp(() {
+
     final mockUniLink = MockUniLinks();
     UniLinksPlatform.instance = mockUniLink;
     streamController = StreamController<String?>.broadcast();
@@ -35,7 +35,7 @@ void main() {
         .thenAnswer((_) => streamController.stream);
   });
 
-  tearDown(() {
+  tearDownAll(() {
     authenticator.dispose();
     streamController.close();
   });
@@ -154,12 +154,139 @@ void main() {
       await credential.getTokenResponse();
       verify(() => testAuthenticator.processResult(responseMap)).called(1);
     });
+
+    test('True Client', () async {
+      final tokenTime = DateTime.now();
+      final tokenResponse = TokenResponse.fromJson({
+        'token_type': 'Bearer',
+        'access_token': '12345',
+        'expires_at': tokenTime.millisecondsSinceEpoch,
+        'expires_in': tokenTime.microsecondsSinceEpoch
+      });
+      final httpClient = MockHttpClient();
+      when(
+        () => httpClient.post(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).thenAnswer(
+        (invocation) async => Response(
+          jsonEncode(tokenResponse.toJson()),
+          200,
+          request: Request('POST', invocation.positionalArguments[0]),
+          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+        ),
+      );
+
+      final urlCompleter = Completer<String>();
+      final urlLauncher = MockUrlLauncher();
+      when(
+        () => urlLauncher.launch(
+          any(),
+          useSafariVC: any(named: 'useSafariVC'),
+          useWebView: any(named: 'useWebView'),
+          enableJavaScript: any(named: 'enableJavaScript'),
+          enableDomStorage: any(named: 'enableDomStorage'),
+          universalLinksOnly: any(named: 'universalLinksOnly'),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async {
+        urlCompleter.complete(
+          Uri.parse(invocation.positionalArguments[0]).queryParameters['state'],
+        );
+        return true;
+      });
+      when(() => urlLauncher.canLaunch(any()))
+          .thenAnswer((invocation) async => true);
+      when(() => urlLauncher.closeWebView())
+          .thenThrow(MissingPluginException());
+      UrlLauncherPlatform.instance = urlLauncher;
+
+      const customScheme = 'customscheme';
+      authenticator = ApptiveGridAuthenticator(
+        options: const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            redirectScheme: customScheme,
+          ),
+        ),
+        httpClient: httpClient,
+      );
+      final authClient = MockAuthClient();
+      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      authenticator.setAuthClient(authClient);
+      when(() => authClient.clientSecret).thenReturn('');
+      when(() => authClient.clientId).thenReturn('test');
+      when(() => authClient.httpClient).thenReturn(httpClient);
+
+      final credential = Credential.fromJson({
+        'issuer': authClient.issuer.metadata.toJson(),
+        'client_id': authClient.clientId,
+        'client_secret': authClient.clientSecret,
+        'token': tokenResponse.toJson(),
+        'nonce': null
+      });
+      when(
+        () => authClient.createCredential(
+          tokenType: any(named: 'tokenType'),
+          accessToken: any(named: 'accessToken'),
+        ),
+      ).thenReturn(credential);
+
+      final mockCredential = MockCredential();
+      final token = MockToken();
+      when(() => token.toJson()).thenReturn(<String, dynamic>{});
+      when(() => mockCredential.getTokenResponse())
+          .thenAnswer((invocation) async => token);
+
+      final credentialCompleter = Completer<Credential>();
+      authenticator
+          .authenticate()
+          .then((value) => credentialCompleter.complete(value));
+      final state = await urlCompleter.future;
+      final responseMap = {
+        'state': state,
+        'code': 'code',
+      };
+
+      final uri =
+          Uri(scheme: customScheme, queryParameters: responseMap, host: 'host');
+
+      streamController.add(uri.toString());
+      final authResult = await credentialCompleter.future;
+
+      expect(authResult.toJson(), credential.toJson());
+    });
   });
 
   group('Header', () {
+    late MockHttpClient httpClient;
+
+    setUp(() {
+      httpClient = MockHttpClient();
+
+      when(() => httpClient.get(any())).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+
+        if (uri == discoveryUri) {
+          return Response(
+            jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+            200,
+            request: Request('GET', uri),
+            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+          );
+        }
+
+        throw 'No Response defined for $uri';
+      });
+    });
+
     test('Has Token returns Token', () {
-      authenticator =
-          ApptiveGridAuthenticator(options: const ApptiveGridOptions());
+      authenticator = ApptiveGridAuthenticator(
+        options: const ApptiveGridOptions(),
+        httpClient: httpClient,
+      );
       final token = TokenResponse.fromJson(
         {'token_type': 'Bearer', 'access_token': '12345'},
       );
@@ -169,13 +296,36 @@ void main() {
     });
 
     test('Has no Token returns null', () {
-      authenticator =
-          ApptiveGridAuthenticator(options: const ApptiveGridOptions());
+      authenticator = ApptiveGridAuthenticator(
+        options: const ApptiveGridOptions(),
+        httpClient: httpClient,
+      );
       expect(authenticator.header, isNull);
     });
   });
 
   group('checkAuthentication', () {
+    late MockHttpClient httpClient;
+
+    setUp(() {
+      httpClient = MockHttpClient();
+
+      when(() => httpClient.get(any())).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+
+        if (uri == discoveryUri) {
+          return Response(
+            jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+            200,
+            request: Request('GET', uri),
+            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+          );
+        }
+
+        throw 'No Response defined for $uri';
+      });
+    });
+
     test('No Token, Auto Authenticate, authenticates', () async {
       final urlLauncher = MockUrlLauncher();
       when(() => urlLauncher.closeWebView()).thenAnswer((invocation) async {});
@@ -183,6 +333,7 @@ void main() {
       UrlLauncherPlatform.instance = urlLauncher;
 
       authenticator = ApptiveGridAuthenticator(
+        httpClient: httpClient,
         options: const ApptiveGridOptions(
           authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
@@ -212,8 +363,10 @@ void main() {
     });
 
     test('Expired Token Refreshes', () async {
-      authenticator =
-          ApptiveGridAuthenticator(options: const ApptiveGridOptions());
+      authenticator = ApptiveGridAuthenticator(
+        options: const ApptiveGridOptions(),
+        httpClient: httpClient,
+      );
 
       // Current token should be Expired
       final now = DateTime.now();
@@ -525,9 +678,30 @@ void main() {
   });
 
   group('Is Authenticated', () {
+    late MockHttpClient httpClient;
+
+    setUp(() {
+      httpClient = MockHttpClient();
+
+      when(() => httpClient.get(any())).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+
+        if (uri == discoveryUri) {
+          return Response(
+            jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+            200,
+            request: Request('GET', uri),
+            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+          );
+        }
+
+        throw 'No Response defined for $uri';
+      });
+    });
+
     group('isAuthenticated', () {
       test('With token returns true', () async {
-        authenticator = ApptiveGridAuthenticator();
+        authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
 
         expect(await authenticator.isAuthenticated, equals(false));
 
@@ -542,6 +716,7 @@ void main() {
 
       test('With Api Key returns true', () async {
         authenticator = ApptiveGridAuthenticator(
+          httpClient: httpClient,
           options: const ApptiveGridOptions(
             authenticationOptions: ApptiveGridAuthenticationOptions(
               apiKey: ApptiveGridApiKey(
@@ -558,7 +733,7 @@ void main() {
 
     group('isAuthenticated with User token', () {
       test('With token returns true', () async {
-        authenticator = ApptiveGridAuthenticator();
+        authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
 
         expect(await authenticator.isAuthenticatedWithToken, false);
 
@@ -573,6 +748,7 @@ void main() {
 
       test('With Api Key returns true', () async {
         authenticator = ApptiveGridAuthenticator(
+          httpClient: httpClient,
           options: const ApptiveGridOptions(
             authenticationOptions: ApptiveGridAuthenticationOptions(
               apiKey: ApptiveGridApiKey(
@@ -830,6 +1006,84 @@ void main() {
 
     test(
         'Storage Provided '
+        'Error '
+        'Calls authenticate', () async {
+      final tokenTime = DateTime.now();
+      final httpClient = MockHttpClient();
+      final authClient = MockAuthClient();
+      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.clientSecret).thenReturn('');
+      when(() => authClient.clientId).thenReturn('test');
+      when(() => authClient.httpClient).thenReturn(httpClient);
+
+      final tokenResponse = TokenResponse.fromJson({
+        'token_type': 'Bearer',
+        'access_token': '12345',
+        'expires_at': tokenTime.millisecondsSinceEpoch,
+        'expires_in': tokenTime.microsecondsSinceEpoch
+      });
+      final credential = Credential.fromJson({
+        'issuer': authClient.issuer.metadata.toJson(),
+        'client_id': authClient.clientId,
+        'client_secret': authClient.clientSecret,
+        'token': tokenResponse.toJson(),
+        'nonce': null
+      });
+      when(
+        () => authClient.createCredential(
+          tokenType: any(named: 'tokenType'),
+          accessToken: any(named: 'accessToken'),
+        ),
+      ).thenReturn(credential);
+      when(
+        () => httpClient.post(
+          any(),
+          body: any(named: 'body'),
+          headers: any(named: 'headers'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).thenAnswer(
+        (invocation) => Future.error(Exception('Error')),
+      );
+
+      final testAuthenticator = MockAuthenticator();
+
+      final storage = MockAuthenticationStorage();
+      authenticator = ApptiveGridAuthenticator(
+        options: const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+            persistCredentials: true,
+          ),
+        ),
+        authenticationStorage: storage,
+        httpClient: httpClient,
+      );
+      authenticator.testAuthenticator = testAuthenticator;
+      authenticator.setAuthClient(MockAuthClient());
+
+      when(() => storage.credential)
+          .thenAnswer((invocation) => jsonEncode(credential.toJson()));
+      final authCredential = MockCredential();
+      when(() => authCredential.getTokenResponse(any()))
+          .thenAnswer((invocation) async => tokenResponse);
+      when(() => testAuthenticator.authorize())
+          .thenAnswer((_) async => authCredential);
+      when(() => authCredential.toJson()).thenReturn({});
+
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
+      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.clientId).thenReturn('clientId');
+
+      await authenticator.checkAuthentication();
+
+      verify(testAuthenticator.authorize).called(1);
+      expect(await authenticator.isAuthenticated, equals(true));
+    });
+
+    test(
+        'Storage Provided '
         'No Stored '
         'Authenticate is called', () async {
       final testAuthenticator = MockAuthenticator();
@@ -982,6 +1236,91 @@ void main() {
       await authenticator.setUserToken(tokenResponse);
 
       expect(await authenticator.isAuthenticatedWithToken, true);
+    });
+  });
+
+  group('Authenticator', () {
+    final urlLauncher = MockUrlLauncher();
+
+    setUp(() {
+      UrlLauncherPlatform.instance = urlLauncher;
+    });
+
+    test('Authenticates', () async {
+      final httpClient = MockHttpClient();
+
+      late final openid.Credential credential;
+      authenticator = ApptiveGridAuthenticator(
+        httpClient: httpClient,
+        options: const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            redirectScheme: 'customRedirect',
+          ),
+        ),
+      );
+
+      when(() => urlLauncher.canLaunch(any())).thenAnswer((_) async => true);
+      when(() => urlLauncher.closeWebView()).thenAnswer((_) async {});
+      when(
+        () => urlLauncher.launch(
+          any(),
+          useSafariVC: any(named: 'useSafariVC'),
+          useWebView: any(named: 'useWebView'),
+          enableJavaScript: any(named: 'enableJavaScript'),
+          enableDomStorage: any(named: 'enableDomStorage'),
+          universalLinksOnly: any(named: 'universalLinksOnly'),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async {
+        final uri = Uri.parse(invocation.positionalArguments.first as String);
+        final state = uri.queryParameters['state']!;
+
+        final tokenResponse = TokenResponse.fromJson({
+          'state': state,
+          'token_type': 'Bearer',
+          'access_token': '12345',
+        });
+
+        credential = Credential.fromJson(
+          {
+            'state': state,
+            'issuer': _zweidenkerIssuer.metadata.toJson(),
+            'client_id': 'app',
+            'client_secret': '',
+            'token': tokenResponse.toJson(),
+          },
+          httpClient: httpClient,
+        );
+
+        final response = {
+          'state': state,
+          ...tokenResponse
+              .toJson()
+              .map((key, value) => MapEntry(key, value.toString())),
+        };
+        await openid.Authenticator.processResult(response);
+
+        return true;
+      });
+
+      when(() => httpClient.get(any())).thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments.first as Uri;
+
+        if (uri == discoveryUri) {
+          return Response(
+            jsonEncode(_zweidenkerIssuer.metadata.toJson()),
+            200,
+            request: Request('GET', uri),
+            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+          );
+        }
+
+        throw 'No Response defined for $uri';
+      });
+
+      final authResult = await authenticator.authenticate();
+
+      expect(authResult!.toJson(), credential.toJson());
     });
   });
 }

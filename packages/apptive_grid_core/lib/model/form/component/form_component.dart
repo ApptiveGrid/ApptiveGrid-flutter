@@ -55,7 +55,7 @@ class FormComponent<T extends DataEntity> {
 
   @override
   String toString() {
-    return 'FormComponent(property: $property, field: $field data: $data, options: $options, required: $required)';
+    return 'FormComponent(property: $property, field: $field, data: $data, options: $options, required: $required)';
   }
 
   @override

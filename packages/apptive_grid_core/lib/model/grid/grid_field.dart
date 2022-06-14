@@ -45,7 +45,7 @@ class GridField {
 
   @override
   String toString() {
-    return 'GridField(id: $id, name: $name, type: $type}';
+    return 'GridField(id: $id, name: $name, type: $type)';
   }
 
   /// Converts this GridField to a json representation
