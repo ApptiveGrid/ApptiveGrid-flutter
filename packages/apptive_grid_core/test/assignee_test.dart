@@ -240,8 +240,10 @@ void main() {
         uri: Uri.parse('/api/users/userId'),
       );
 
-      expect(user.toString(),
-          equals('DataUser(displayValue: Jane Doe, uri: /api/users/userId)'));
+      expect(
+        user.toString(),
+        equals('DataUser(displayValue: Jane Doe, uri: /api/users/userId)'),
+      );
     });
   });
 }

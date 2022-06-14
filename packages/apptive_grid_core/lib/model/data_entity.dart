@@ -436,6 +436,7 @@ class CreatedByDataEntity extends DataEntity<CreatedBy, dynamic> {
   dynamic get schemaValue => value?.toJson();
 }
 
+/// [DataEntity] representing a [DataUser]
 class UserDataEntity extends DataEntity<DataUser, dynamic> {
   /// Creates a new UserDataEntity Object with value [value]
   UserDataEntity([super.value]);
