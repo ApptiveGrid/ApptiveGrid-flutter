@@ -31,6 +31,9 @@ enum ApptiveLinkType {
   /// Adds a new Share
   addShare,
 
+  /// Copy the space to the current user
+  copy,
+
   /// Lists [Grid]s
   grids,
 

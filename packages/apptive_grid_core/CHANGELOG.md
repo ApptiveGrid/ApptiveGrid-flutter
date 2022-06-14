@@ -6,6 +6,9 @@
 * Removed dedicated `FormComponent` Types in favor of a generic `FormComponent<T extends DataEntity>` type
 * Unified `FormComponentOptions`
 
+## 0.10.1
+* Add `copy` link to `ApptiveLink`s
+
 ## 0.10.0
 * Add HAL `ApptiveLink`s to User, Space, Grid, Form, GridRow
 * Add embedded Objects to User, Space, Grid
