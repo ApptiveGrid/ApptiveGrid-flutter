@@ -14,7 +14,7 @@ void main() {
         links: {},
         title: 'title',
         components: [],
-        schema: {},
+        fields: [],
       ),
     );
   });
@@ -23,16 +23,17 @@ void main() {
     const value = '''A
 multi-line
 string''';
+    final field = GridField(id: 'Field', name: 'name', type: DataType.text);
     final target = TextFormWidget(
-      component: StringFormComponent(
+      component: FormComponent<StringDataEntity>(
         property: 'Text',
         data: StringDataEntity(
           value,
         ),
-        options: const TextComponentOptions(
+        options: const FormComponentOptions(
           multi: true,
         ),
-        fieldId: 'Field',
+        field: field,
       ),
     );
 
@@ -51,22 +52,23 @@ string''';
     const value = '''A
 multi-line
 string''';
+    final field = GridField(id: 'Field', name: 'name', type: DataType.text);
     final formData = FormData(
       id: 'formId',
       title: 'Title',
       components: [
-        StringFormComponent(
+        FormComponent<StringDataEntity>(
           property: 'Text',
           data: StringDataEntity(
             value,
           ),
-          options: const TextComponentOptions(
+          options: const FormComponentOptions(
             multi: true,
           ),
-          fieldId: 'Field',
+          field: field,
         ),
       ],
-      schema: null,
+      fields: [field],
       links: {},
     );
 
@@ -87,19 +89,20 @@ string''';
   group('Validation', () {
     testWidgets('is required but filled sends', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+      final field = GridField(id: 'fieldId', name: 'name', type: DataType.text);
       final formData = FormData(
         id: 'formId',
         title: 'title',
         components: [
-          StringFormComponent(
+          FormComponent<StringDataEntity>(
             property: 'Property',
             data: StringDataEntity('Value'),
-            fieldId: 'fieldId',
+            field: field,
             required: true,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());

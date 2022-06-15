@@ -1,6 +1,6 @@
 part of apptive_grid_form_widgets;
 
-/// FormComponent Widget to display a [AttachmentFormComponent]
+/// FormComponent Widget to display a FormComponent<[AttachmentDataEntity>]
 class AttachmentFormWidget extends StatefulWidget {
   /// Creates a Widget to display and select a Attachment contained in [component]
   const AttachmentFormWidget({
@@ -9,7 +9,7 @@ class AttachmentFormWidget extends StatefulWidget {
   });
 
   /// Component this Widget should reflect
-  final AttachmentFormComponent component;
+  final FormComponent<AttachmentDataEntity> component;
 
   @override
   State<StatefulWidget> createState() => _AttachmentFormWidgetState();

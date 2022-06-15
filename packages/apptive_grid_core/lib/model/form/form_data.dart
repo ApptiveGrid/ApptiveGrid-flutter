@@ -9,32 +9,46 @@ class FormData {
     this.title,
     this.description,
     required this.components,
-    required this.schema,
+    required this.fields,
     required this.links,
     Map<Attachment, AttachmentAction>? attachmentActions,
   }) : attachmentActions = attachmentActions ?? HashMap();
 
   /// Deserializes [json] into a FormData Object
-  FormData.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json['name'],
-        title = json['title'],
-        description = json['description'],
-        components = (json['components'] as List?)
-            ?.map<FormComponent>(
-              (e) => FormComponent.fromJson(e, json['schema']),
-            )
-            .toList(),
-        schema = json['schema'],
-        links = linkMapFromJson(json['_links']),
-        attachmentActions = json['attachmentActions'] != null
-            ? Map.fromEntries(
-                (json['attachmentActions'] as List).map((entry) {
-                  final action = AttachmentAction.fromJson(entry);
-                  return MapEntry(action.attachment, action);
-                }).toList(),
-              )
-            : HashMap();
+  factory FormData.fromJson(Map<String, dynamic> json) {
+    final id = json['id'];
+    final name = json['name'];
+    final title = json['title'];
+    final description = json['description'];
+    final fields = (json['fields'] as List?)
+            ?.map((json) => GridField.fromJson(json))
+            .toList() ??
+        [];
+    final components = (json['components'] as List?)
+        ?.map<FormComponent>(
+          (e) => FormComponent.fromJson(e, fields),
+        )
+        .toList();
+    final links = linkMapFromJson(json['_links']);
+    final attachmentActions = json['attachmentActions'] != null
+        ? Map.fromEntries(
+            (json['attachmentActions'] as List).map((entry) {
+              final action = AttachmentAction.fromJson(entry);
+              return MapEntry(action.attachment, action);
+            }).toList(),
+          )
+        : <Attachment, AttachmentAction>{};
+    return FormData(
+      id: id,
+      name: name,
+      title: title,
+      description: description,
+      components: components,
+      fields: fields,
+      links: links,
+      attachmentActions: attachmentActions,
+    );
+  }
 
   /// Id of the Form
   final String id;
@@ -48,17 +62,17 @@ class FormData {
   /// Description of the Form
   final String? description;
 
-  /// List of [FormComponent] represented in the Form
+  /// List of [FormComponent]s represented in the Form
   final List<FormComponent>? components;
+
+  /// List of [GridField]s represented in the Form
+  final List<GridField>? fields;
 
   /// List of [FormActions] available for this Form
   @Deprecated('Use submitAction instead which is based on HAL links')
   List<FormAction>? get actions => links[ApptiveLinkType.submit] != null
       ? [links[ApptiveLinkType.submit]!.asFormAction]
       : null;
-
-  /// Schema used to deserialize [components] and verify data send back to the server
-  final dynamic schema;
 
   /// Links to actions that are used
   final LinkMap links;
@@ -74,7 +88,8 @@ class FormData {
         if (description != null) 'description': description,
         if (components != null)
           'components': components!.map((e) => e.toJson()).toList(),
-        if (schema != null) 'schema': schema,
+        if (fields != null)
+          'fields': fields!.map((field) => field.toJson()).toList(),
         '_links': links.toJson(),
         if (attachmentActions.isNotEmpty)
           'attachmentActions':
@@ -103,7 +118,7 @@ class FormData {
         name == other.name &&
         description == other.description &&
         title == other.title &&
-        schema.toString() == other.schema.toString() &&
+        f.listEquals(fields, other.fields) &&
         f.listEquals(components, other.components) &&
         f.mapEquals(attachmentActions, other.attachmentActions) &&
         f.mapEquals(links, other.links);

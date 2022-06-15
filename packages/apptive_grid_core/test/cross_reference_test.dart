@@ -46,7 +46,7 @@ void main() {
             "gridUri": "/api/users/userId/spaces/spaceId/grids/referencedGrid"
           },
           "id": "628210a604bd30163b9b7f77",
-          "_links": {}
+          "_links": <String, dynamic>{}
         }
       ],
       'name': 'New grid view',
@@ -243,22 +243,28 @@ void main() {
   group('FormComponent', () {
     test('Direct equals from Json', () {
       final responseWithCrossReference = {
-        'schema': {
-          'type': 'object',
-          'properties': {
-            '3ftoqhqbct15h5o730uknpvp5': {
-              'type': 'object',
-              'properties': {
-                'displayValue': {'type': 'string'},
-                'uri': {'type': 'string'}
+        'fields': [
+          {
+            "type": {
+              "name": "reference",
+              "componentTypes": ["entitySelect"]
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "displayValue": {"type": "string"},
+                "uri": {"type": "string"}
               },
-              'required': ['uri'],
-              'objectType': 'entityreference',
-              'gridUri': '/api/users/userId/spaces/spaceId/grids/referencedGrid'
-            }
-          },
-          'required': []
-        },
+              "required": ["uri"],
+              "objectType": "entityreference",
+              "gridUri": "/api/users/userId/spaces/spaceId/grids/referencedGrid"
+            },
+            "id": "3ftoqhqbct15h5o730uknpvp5",
+            "name": "name",
+            "key": null,
+            "_links": <String, dynamic>{}
+          }
+        ],
         'schemaObject':
             '/api/users/userId/spaces/spaceId/grids/60d036e50edfa83071816e03',
         'components': [
@@ -304,7 +310,7 @@ void main() {
 
       final formData = FormData.fromJson(responseWithCrossReference);
 
-      final fromJson = formData.components![0] as CrossReferenceFormComponent;
+      final fromJson = formData.components![0];
 
       final directEntity = CrossReferenceDataEntity.fromJson(
         jsonValue: {
@@ -315,10 +321,14 @@ void main() {
         gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGrid',
       );
 
-      final direct = CrossReferenceFormComponent(
+      final direct = FormComponent<CrossReferenceDataEntity>(
         property: 'name',
         data: directEntity,
-        fieldId: '3ftoqhqbct15h5o730uknpvp5',
+        field: GridField(
+          id: '3ftoqhqbct15h5o730uknpvp5',
+          name: 'name',
+          type: DataType.crossReference,
+        ),
       );
 
       expect(fromJson, equals(direct));

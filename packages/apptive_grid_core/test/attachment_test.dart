@@ -55,7 +55,7 @@ void main() {
             }
           },
           "id": "628210b904bd301aa89b7f81",
-          "_links": {}
+          "_links": <String, dynamic>{}
         }
       ],
       'name': 'Grid 4 View',
@@ -176,7 +176,7 @@ void main() {
             }
           },
           "id": "628210b904bd301aa89b7f81",
-          "_links": {}
+          "_links": <String, dynamic>{}
         }
       ],
       'name': 'Grid 4 View',
@@ -301,44 +301,36 @@ void main() {
   group('FormComponent', () {
     test('Direct equals from Json', () {
       final responseWithAttachment = {
-        'schema': {
-          'type': 'object',
-          'properties': {
-            'c75385nsbbji82k5wntoj6sj2': {
-              'type': 'array',
-              'items': {
-                'type': 'object',
-                'properties': {
-                  'smallThumbnail': {'type': 'string'},
-                  'url': {'type': 'string'},
-                  'largeThumbnail': {'type': 'string'},
-                  'name': {'type': 'string'},
-                  'type': {'type': 'string'}
+        'fields': [
+          {
+            "type": {
+              "name": "attachments",
+              "componentTypes": ["filePicker"]
+            },
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "smallThumbnail": {"type": "string", "format": "string"},
+                  "url": {"type": "string", "format": "string"},
+                  "largeThumbnail": {"type": "string", "format": "string"},
+                  "name": {"type": "string", "format": "string"},
+                  "type": {"type": "string", "format": "string"}
                 },
-                'required': ['url', 'type'],
-                'objectType': 'attachment'
+                "required": ["url", "type"],
+                "objectType": "attachment"
               }
             },
-            '347ps3ra879kvuxivaoy42onw': {'type': 'string'}
-          },
-          'required': []
-        },
+            "id": "id",
+            "name": "property",
+            "key": null,
+            "_links": <String, dynamic>{}
+          }
+        ],
         'title': 'New title',
         'name': 'Form 1',
         'components': [
-          {
-            'property': 'name',
-            'value': 'AttachmentTest',
-            'required': false,
-            'options': {
-              'multi': false,
-              'placeholder': null,
-              'description': null,
-              'label': null
-            },
-            'fieldId': '347ps3ra879kvuxivaoy42onw',
-            'type': 'textfield'
-          },
           {
             'property': 'New field',
             'value': [
@@ -352,7 +344,7 @@ void main() {
             ],
             'required': false,
             'options': {'label': null, 'description': null},
-            'fieldId': 'c75385nsbbji82k5wntoj6sj2',
+            'fieldId': 'id',
             'type': null
           }
         ],
@@ -386,7 +378,7 @@ void main() {
 
       final formData = FormData.fromJson(responseWithAttachment);
 
-      final fromJson = formData.components![1] as AttachmentFormComponent;
+      final fromJson = formData.components![0];
 
       final directEntity = AttachmentDataEntity.fromJson([
         {
@@ -398,10 +390,12 @@ void main() {
         }
       ]);
 
-      final direct = AttachmentFormComponent(
+      final field =
+          GridField(id: 'id', name: 'property', type: DataType.attachment);
+      final direct = FormComponent<AttachmentDataEntity>(
         property: 'New field',
         data: directEntity,
-        fieldId: 'c75385nsbbji82k5wntoj6sj2',
+        field: field,
       );
 
       expect(fromJson, equals(direct));

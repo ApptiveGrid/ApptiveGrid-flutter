@@ -1,5 +1,18 @@
+## 0.11.0
+* Add `fields` to `FormData`
+* Add `field` to `FormComponent`
+* Rename `UserReference` to `CreatedBy`. The old `UserReference` is still available but deprecated
+* Add new `ApptiveLinkTypes`: `collaborators`, `patch`
+* Add `DataType.user` to handle Use cases like assigning a User to a Task
+  * Additional models are: `DataUser` and `UserDataEntity`
+* Fix Google Login on Android
+### Breaking Changes
+* Removed `schema` from `FormData`
+* Removed dedicated `FormComponent` Types in favor of a generic `FormComponent<T extends DataEntity>` type
+* Unified `FormComponentOptions`
+
 ## 0.10.1
-* Add `copy` link to `ApptiveLink`s
+* Added `copy` link to `ApptiveLink`s
 
 ## 0.10.0
 * Add HAL `ApptiveLink`s to User, Space, Grid, Form, GridRow

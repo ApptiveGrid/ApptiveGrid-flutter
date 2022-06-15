@@ -5,6 +5,9 @@ enum ApptiveLinkType {
   /// A link to the ApptiveObject itself
   self,
 
+  /// Updates a [Space], [Grid], [Form], [GridRow] or [GridField]
+  patch,
+
   // User Related
   /// Returns a List of Access Credentials
   accessCredentials,
@@ -108,4 +111,8 @@ enum ApptiveLinkType {
 
   /// Create a Link to a [FormData] for this [GridRow]
   addEditionLink,
+
+  //Field Related Links
+  /// Query for Collaborators in a [DataType.user] Field
+  collaborators,
 }

@@ -18,6 +18,12 @@ void main() {
           }
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.text,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -32,16 +38,15 @@ void main() {
         'type': 'textfield'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(StringFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
       expect(parsedComponent.required, equals(true));
       expect(parsedComponent.data.runtimeType, equals(StringDataEntity));
       expect(parsedComponent.data.schemaValue, equals(value));
 
-      final parsedOptions = parsedComponent.options as TextComponentOptions;
+      final parsedOptions = parsedComponent.options;
       expect(parsedOptions.multi, equals(true));
       expect(parsedOptions.placeholder, equals(placeholder));
       expect(parsedOptions.description, equals(description));
@@ -58,6 +63,12 @@ void main() {
           id: {'type': 'string', 'format': 'date-time'}
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.dateTime,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -67,9 +78,8 @@ void main() {
         'type': 'datePicker'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(DateTimeFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
       expect(parsedComponent.required, equals(true));
@@ -93,6 +103,12 @@ void main() {
           id: {'type': 'string', 'format': 'date'}
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.date,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -102,9 +118,8 @@ void main() {
         'type': 'datePicker'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(DateFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
       expect(parsedComponent.required, equals(true));
@@ -130,6 +145,12 @@ void main() {
           }
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.integer,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -144,16 +165,15 @@ void main() {
         'type': 'textfield'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(IntegerFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
       expect(parsedComponent.required, equals(true));
       expect(parsedComponent.data.runtimeType, equals(IntegerDataEntity));
       expect(parsedComponent.data.schemaValue, equals(value));
 
-      final parsedOptions = parsedComponent.options as TextComponentOptions;
+      final parsedOptions = parsedComponent.options;
       expect(parsedOptions.multi, equals(true));
       expect(parsedOptions.placeholder, equals(placeholder));
       expect(parsedOptions.description, equals(description));
@@ -175,6 +195,12 @@ void main() {
           }
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.decimal,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -189,16 +215,15 @@ void main() {
         'type': 'textfield'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(DecimalFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
       expect(parsedComponent.required, equals(true));
       expect(parsedComponent.data.runtimeType, equals(DecimalDataEntity));
       expect(parsedComponent.data.schemaValue, equals(value));
 
-      final parsedOptions = parsedComponent.options as TextComponentOptions;
+      final parsedOptions = parsedComponent.options;
       expect(parsedOptions.multi, equals(true));
       expect(parsedOptions.placeholder, equals(placeholder));
       expect(parsedOptions.description, equals(description));
@@ -220,6 +245,12 @@ void main() {
           }
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.decimal,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -234,16 +265,15 @@ void main() {
         'type': 'textfield'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(DecimalFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(47.0));
       expect(parsedComponent.required, equals(true));
       expect(parsedComponent.data.runtimeType, equals(DecimalDataEntity));
       expect(parsedComponent.data.schemaValue, equals(47.0));
 
-      final parsedOptions = parsedComponent.options as TextComponentOptions;
+      final parsedOptions = parsedComponent.options;
       expect(parsedOptions.multi, equals(true));
       expect(parsedOptions.placeholder, equals(placeholder));
       expect(parsedOptions.description, equals(description));
@@ -264,6 +294,12 @@ void main() {
           }
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.checkbox,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -276,9 +312,8 @@ void main() {
         'type': 'checkbox'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(BooleanFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
       expect(parsedComponent.required, equals(true));
@@ -306,6 +341,12 @@ void main() {
           }
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.text,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -320,9 +361,8 @@ void main() {
         'type': 'textfield'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(StringFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
       expect(parsedComponent.data.schemaValue, equals(null));
@@ -337,6 +377,12 @@ void main() {
           id: {'type': 'string', 'format': 'date-time'}
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.dateTime,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -346,9 +392,8 @@ void main() {
         'type': 'datePicker'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(DateTimeFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
       expect(parsedComponent.data.schemaValue, equals(null));
@@ -363,6 +408,12 @@ void main() {
           id: {'type': 'string', 'format': 'date'}
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.date,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -372,9 +423,8 @@ void main() {
         'type': 'datePicker'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(DateFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
       expect(parsedComponent.data.schemaValue, equals(null));
@@ -394,6 +444,12 @@ void main() {
           }
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.integer,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -408,9 +464,8 @@ void main() {
         'type': 'textfield'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(IntegerFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
       expect(parsedComponent.data.schemaValue, equals(null));
@@ -430,6 +485,12 @@ void main() {
           }
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.integer,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -444,9 +505,8 @@ void main() {
         'type': 'textfield'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(DecimalFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
       expect(parsedComponent.data.schemaValue, equals(null));
@@ -463,6 +523,12 @@ void main() {
           }
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.checkbox,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -472,9 +538,8 @@ void main() {
         'type': 'checkbox'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(BooleanFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(false));
       expect(parsedComponent.data.schemaValue, equals(false));
@@ -485,13 +550,15 @@ void main() {
       const id = 'id';
 
       final schema = {
-        'properties': {
-          id: {
-            'type': 'string',
-            'enum': ['GmbH', 'AG', 'Freiberuflich']
-          }
-        },
+        'type': 'string',
+        'enum': ['GmbH', 'AG', 'Freiberuflich']
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.singleSelect,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'fieldId': id,
@@ -501,9 +568,8 @@ void main() {
         'type': 'selectBox'
       };
 
-      final parsedComponent = FormComponent.fromJson(json, schema);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
-      expect(parsedComponent.runtimeType, equals(EnumFormComponent));
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals('AG'));
       expect(
@@ -515,100 +581,7 @@ void main() {
   });
 
   group('Errors', () {
-    test('Unknown Type throws', () {
-      const property = 'property';
-      const id = 'id';
-
-      final schema = {
-        'properties': {
-          id: {
-            'type': 'unknown',
-          }
-        }
-      };
-      final json = {
-        'property': property,
-        'fieldId': id,
-        'value': null,
-        'required': true,
-        'options': <String, dynamic>{},
-        'type': 'unknown'
-      };
-
-      expect(
-        () => FormComponent.fromJson(json, schema),
-        equals(throwsArgumentError),
-      );
-    });
-
-    test('Unknown Array Type throws', () {
-      const property = 'property';
-      const id = 'id';
-
-      final schema = {
-        'properties': {
-          id: {
-            'type': 'array',
-            'items': {
-              'type': 'string',
-            }
-          }
-        }
-      };
-      final json = {
-        'property': property,
-        'fieldId': id,
-        'value': null,
-        'required': true,
-        'options': <String, dynamic>{},
-        'type': 'unknown'
-      };
-
-      expect(
-        () => FormComponent.fromJson(json, schema),
-        throwsA(
-          predicate<ArgumentError>(
-            (e) => e.message == 'No defined Array type for type: DataType.text',
-            'ArgumentError with specific Message',
-          ),
-        ),
-      );
-    });
-
-    test('Unknown Object Type throws', () {
-      const property = 'property';
-      const id = 'id';
-
-      final schema = {
-        'properties': {
-          id: {
-            'type': 'object',
-            "properties": <String, dynamic>{},
-            "objectType": "unknown"
-          }
-        }
-      };
-      final json = {
-        'property': property,
-        'fieldId': id,
-        'value': null,
-        'required': true,
-        'options': <String, dynamic>{},
-        'type': 'unknown'
-      };
-
-      expect(
-        () => FormComponent.fromJson(json, schema),
-        throwsA(
-          predicate<ArgumentError>(
-            (e) => e.message == 'No defined Object type for type: unknown',
-            'ArgumentError with specific Message',
-          ),
-        ),
-      );
-    });
-
-    test('Unknown Property throws', () {
+    test('Unknown Id throws Exception', () {
       const property = 'property';
       const id = 'id';
 
@@ -619,6 +592,12 @@ void main() {
           }
         }
       };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.text,
+        schema: schema,
+      );
       final json = {
         'property': property,
         'value': null,
@@ -629,8 +608,8 @@ void main() {
       };
 
       expect(
-        () => FormComponent.fromJson(json, schema),
-        equals(throwsArgumentError),
+        () => FormComponent.fromJson(json, [field]),
+        throwsException,
       );
     });
   });

@@ -9,7 +9,7 @@ class EnumCollectionFormWidget extends StatefulWidget {
   });
 
   /// Component this Widget should reflect
-  final EnumCollectionFormComponent component;
+  final FormComponent<EnumCollectionDataEntity> component;
 
   @override
   State<EnumCollectionFormWidget> createState() =>

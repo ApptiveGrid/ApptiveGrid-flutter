@@ -429,7 +429,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             } else if (index < (data.components?.length ?? 0) + indexOffset) {
               final componentIndex = index - indexOffset;
               final component = fromModel(data.components![componentIndex]);
-              if (component is UserReferenceFormWidget) {
+              if (component is CreatedByFormWidget) {
                 // UserReference Widget should be invisible in the Form
                 // So returning without any Padding
                 return component;

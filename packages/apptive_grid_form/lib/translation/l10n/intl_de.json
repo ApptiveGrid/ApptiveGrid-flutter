@@ -17,5 +17,6 @@
     "searchLocationNoResult": "Keine Ergebnisse",
     "attachmentSourceGallery": "Fotomediathek",
     "attachmentSourceCamera": "Foto od. Video. aufnehmen",
-    "attachmentSourceFiles": "Dateien auswählen"
+    "attachmentSourceFiles": "Dateien auswählen",
+    "searchUserNoResult": "Kein Nutzer mit \"$query\" gefunden"
 }

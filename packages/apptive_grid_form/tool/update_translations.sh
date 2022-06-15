@@ -63,8 +63,12 @@ for lang in "en" "de"; do
     if [ $key == "fieldIsRequired" ]; then
       wildcard="fieldName"
       printf "   String %s(String %s) => \"%s\";\n" $key "$wildcard" "$translation" >>$langFile
+    else if [ $key == "searchUserNoResult" ]; then
+      wildcard="query"
+      printf "   String %s(String %s) => \'%s\';\n" $key "$wildcard" "$translation" >>$langFile
     else
       printf "   String get %s => \"%s\";\n" $key "$translation" >>$langFile
+    fi
     fi
     n=$(($n + 1))
   done

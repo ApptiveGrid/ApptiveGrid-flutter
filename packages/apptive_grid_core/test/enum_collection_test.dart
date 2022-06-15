@@ -39,7 +39,7 @@ void main() {
             }
           },
           "id": "6282109204bd30163b9b7f5f",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
       ],
       'name': 'Name',
@@ -144,19 +144,29 @@ void main() {
   group('FormComponent', () {
     test('Direct equals from Json', () {
       final responseWithEnumCollection = {
-        'schema': {
-          'type': 'object',
-          'properties': {
-            'c75385nsbbji82k5wntoj6sj2': {
-              'type': 'array',
-              'items': {
-                'type': 'string',
-                'enum': ['GmbH', 'AG', 'Freiberuflich']
+        'fields': [
+          {
+            "type": {
+              "name": "enumcollection",
+              "componentTypes": ["multiSelectDropdown"]
+            },
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  'GmbH',
+                  'AG',
+                  'Freiberuflich',
+                ]
               }
             },
-          },
-          'required': []
-        },
+            "id": "c75385nsbbji82k5wntoj6sj2",
+            "name": "name",
+            "key": null,
+            "_links": <String, dynamic>{}
+          }
+        ],
         'title': 'New title',
         'name': 'Form 1',
         'components': [
@@ -202,8 +212,7 @@ void main() {
 
       final formData = FormData.fromJson(responseWithEnumCollection);
 
-      final fromJson =
-          formData.components!.first as EnumCollectionFormComponent;
+      final fromJson = formData.components!.first;
 
       final directEntity = EnumCollectionDataEntity(
         value: {'AG', 'GmbH'},
@@ -214,10 +223,14 @@ void main() {
         },
       );
 
-      final direct = EnumCollectionFormComponent(
+      final direct = FormComponent<EnumCollectionDataEntity>(
         property: 'New field',
         data: directEntity,
-        fieldId: 'c75385nsbbji82k5wntoj6sj2',
+        field: GridField(
+          id: 'c75385nsbbji82k5wntoj6sj2',
+          name: 'name',
+          type: DataType.enumCollection,
+        ),
       );
 
       expect(fromJson, equals(direct));

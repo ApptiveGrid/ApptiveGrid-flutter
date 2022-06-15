@@ -14,7 +14,7 @@ void main() {
         links: {},
         title: 'title',
         components: [],
-        schema: {},
+        fields: [],
       ),
     );
   });
@@ -22,19 +22,21 @@ void main() {
   group('Validation', () {
     testWidgets('is required but filled sends', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+      final field =
+          GridField(id: 'fieldId', name: 'name', type: DataType.integer);
       final formData = FormData(
         id: 'formId',
         title: 'title',
         components: [
-          IntegerFormComponent(
+          FormComponent<IntegerDataEntity>(
             property: 'Property',
             data: IntegerDataEntity(4711),
-            fieldId: 'fieldId',
+            field: field,
             required: true,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());

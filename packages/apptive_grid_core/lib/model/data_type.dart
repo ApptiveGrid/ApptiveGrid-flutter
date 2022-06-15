@@ -39,7 +39,14 @@ enum DataType {
   multiCrossReference(backendName: 'references'),
 
   /// Type for UserReferences. Used for createdBy
-  userReference(backendName: 'createdby');
+  @Deprecated('Use createdBy instead')
+  userReference(backendName: 'createdby'),
+
+  /// Type for CreatedBy.
+  createdBy(backendName: 'createdby'),
+
+  /// Type for User. A use case might be to assign a task to a user
+  user(backendName: 'user');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({
@@ -48,67 +55,4 @@ enum DataType {
 
   /// The name that is used in the ApptiveGridBackend for this [DataType]
   final String backendName;
-}
-
-/// Returns [DataType] that matching a certain schema [schemaProperty]
-///
-/// throws [ArgumentError] if DataType is not supported yet
-DataType dataTypeFromSchemaProperty({
-  required dynamic schemaProperty,
-}) {
-  final schemaType = schemaProperty['type'];
-  final format = schemaProperty['format'];
-  switch (schemaType) {
-    case 'string':
-      if (schemaProperty['enum'] != null) {
-        return DataType.singleSelect;
-      }
-      switch (format) {
-        case 'date-time':
-          return DataType.dateTime;
-        case 'date':
-          return DataType.date;
-      }
-      return DataType.text;
-    case 'integer':
-      return DataType.integer;
-    case 'number':
-      return DataType.decimal;
-    case 'boolean':
-      return DataType.checkbox;
-    case 'object':
-      final objectType = schemaProperty['objectType'];
-      switch (objectType) {
-        case 'entityreference':
-          return DataType.crossReference;
-        case 'attachment':
-          return DataType.attachment;
-        case 'geolocation':
-          return DataType.geolocation;
-        case 'userReference':
-          return DataType.userReference;
-        default:
-          throw ArgumentError(
-            'No defined Object type for type: $objectType',
-          );
-      }
-    case 'array':
-      final itemType =
-          dataTypeFromSchemaProperty(schemaProperty: schemaProperty['items']);
-      switch (itemType) {
-        case DataType.attachment:
-          return DataType.attachment;
-        case DataType.singleSelect:
-          return DataType.enumCollection;
-        case DataType.crossReference:
-          return DataType.multiCrossReference;
-        default:
-          throw ArgumentError(
-            'No defined Array type for type: $itemType',
-          );
-      }
-  }
-  throw ArgumentError(
-    'No according DataType found for "$schemaType". Supported DataTypes are ${DataType.values}',
-  );
 }

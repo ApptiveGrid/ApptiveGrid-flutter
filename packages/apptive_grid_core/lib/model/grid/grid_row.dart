@@ -19,11 +19,7 @@ class GridRow {
     final data = json['fields'] as List;
     final entries = List<GridEntry>.generate(
       data.length,
-      (i) => GridEntry.fromJson(
-        data[i],
-        fields[i],
-        fields[i].schema,
-      ),
+      (i) => GridEntry.fromJson(data[i], fields[i]),
     );
     return GridRow(
       id: json['_id'],

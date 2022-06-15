@@ -1,6 +1,6 @@
 part of apptive_grid_form_widgets;
 
-/// FormComponent Widget to display a [StringFormComponent]
+/// FormComponent Widget to display a FormComponent<[StringDataEntity>]
 class TextFormWidget extends StatefulWidget {
   /// Creates a [TextFormField] to show and edit Text contained in [component]
   const TextFormWidget({
@@ -9,7 +9,7 @@ class TextFormWidget extends StatefulWidget {
   });
 
   /// Component this Widget should reflect
-  final StringFormComponent component;
+  final FormComponent<StringDataEntity> component;
 
   @override
   State<TextFormWidget> createState() => _TextFormWidgetState();

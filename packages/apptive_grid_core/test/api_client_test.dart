@@ -31,7 +31,7 @@ void main() {
           name: 'name',
           title: 'title',
           components: [],
-          schema: {},
+          fields: [],
           links: {},
         ),
       ),
@@ -59,15 +59,18 @@ void main() {
 
   group('loadForm', () {
     final rawResponse = {
-      'schema': {
-        'type': 'object',
-        'properties': {
-          '4zc4l48ffin5v8pa2emyx9s15': {'type': 'string'},
-        },
-        'required': []
-      },
-      'actions': [
-        {'uri': '/api/a/3ojhtqiltc0kiylfp8nddmxmk', 'method': 'POST'}
+      'fields': [
+        {
+          "type": {
+            "name": "string",
+            "componentTypes": ["textfield"]
+          },
+          "schema": {"type": "string"},
+          "id": "4zc4l48ffin5v8pa2emyx9s15",
+          "name": "Text",
+          "key": null,
+          "_links": <String, dynamic>{}
+        }
       ],
       'components': [
         {
@@ -123,7 +126,10 @@ void main() {
 
       expect(formData.title, equals('Form'));
       expect(formData.components?.length, equals(1));
-      expect(formData.components![0].runtimeType, equals(StringFormComponent));
+      expect(
+        formData.components![0].data.runtimeType,
+        equals(StringDataEntity),
+      );
       // ignore: deprecated_member_use_from_same_package
       expect(formData.actions!.length, equals(1));
     });
@@ -476,13 +482,6 @@ void main() {
       final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       const property = 'Checkbox';
       const id = 'id';
-      final component = BooleanFormComponent(
-        fieldId: id,
-        property: property,
-        data: BooleanDataEntity(true),
-        options: FormComponentOptions.fromJson({}),
-        required: false,
-      );
       final schema = {
         'type': 'object',
         'properties': {
@@ -490,13 +489,26 @@ void main() {
         },
         'required': []
       };
+      final component = FormComponent<BooleanDataEntity>(
+        property: property,
+        data: BooleanDataEntity(true),
+        options: FormComponentOptions.fromJson({}),
+        required: false,
+        field: GridField(
+          id: id,
+          name: property,
+          type: DataType.checkbox,
+          schema: schema,
+        ),
+      );
+
       final formData = FormData(
         id: 'formId',
         name: 'Name',
         title: 'Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: schema,
+        fields: [component.field],
       );
 
       final request = Request(
@@ -532,13 +544,6 @@ void main() {
       final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       const property = 'Checkbox';
       const id = 'id';
-      final component = BooleanFormComponent(
-        fieldId: id,
-        property: property,
-        data: BooleanDataEntity(true),
-        options: FormComponentOptions.fromJson({}),
-        required: false,
-      );
       final schema = {
         'type': 'object',
         'properties': {
@@ -546,13 +551,25 @@ void main() {
         },
         'required': []
       };
+      final component = FormComponent<BooleanDataEntity>(
+        property: property,
+        data: BooleanDataEntity(true),
+        options: FormComponentOptions.fromJson({}),
+        required: false,
+        field: GridField(
+          id: id,
+          name: property,
+          type: DataType.checkbox,
+          schema: schema,
+        ),
+      );
       final formData = FormData(
         id: 'formId',
         name: 'Name',
         title: 'Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: schema,
+        fields: [component.field],
       );
 
       final request = Request(
@@ -586,13 +603,6 @@ void main() {
       final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       const property = 'Checkbox';
       const id = 'id';
-      final component = BooleanFormComponent(
-        fieldId: id,
-        property: property,
-        data: BooleanDataEntity(true),
-        options: FormComponentOptions.fromJson({}),
-        required: false,
-      );
       final schema = {
         'type': 'object',
         'properties': {
@@ -600,13 +610,25 @@ void main() {
         },
         'required': []
       };
+      final component = FormComponent<BooleanDataEntity>(
+        property: property,
+        data: BooleanDataEntity(true),
+        options: FormComponentOptions.fromJson({}),
+        required: false,
+        field: GridField(
+          id: id,
+          name: property,
+          type: DataType.checkbox,
+          schema: schema,
+        ),
+      );
       final formData = FormData(
         id: 'formId',
         name: 'Name',
         title: 'Title',
         components: [component],
         links: {ApptiveLinkType.submit: action},
-        schema: schema,
+        fields: [component.field],
       );
 
       final request = Request(
@@ -675,17 +697,19 @@ void main() {
           final action =
               ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
           final bytes = Uint8List(10);
+          final field =
+              GridField(id: 'id', name: 'property', type: DataType.attachment);
           final formData = FormData(
             id: 'formId',
             title: 'Title',
             components: [
-              AttachmentFormComponent(
+              FormComponent<AttachmentDataEntity>(
                 property: 'property',
                 data: AttachmentDataEntity([attachment]),
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
-            schema: null,
+            fields: [field],
             links: {ApptiveLinkType.submit: action},
             attachmentActions: {
               attachment:
@@ -843,17 +867,22 @@ void main() {
             final bytes = Uint8List(10);
             final attachmentAction =
                 AddAttachmentAction(byteData: bytes, attachment: attachment);
+            final field = GridField(
+              id: 'id',
+              name: 'property',
+              type: DataType.attachment,
+            );
             final formData = FormData(
               id: 'formId',
               title: 'Title',
               components: [
-                AttachmentFormComponent(
+                FormComponent<AttachmentDataEntity>(
                   property: 'property',
                   data: AttachmentDataEntity([attachment]),
-                  fieldId: 'fieldId',
+                  field: field,
                 ),
               ],
-              schema: null,
+              fields: [field],
               links: {ApptiveLinkType.submit: action},
               attachmentActions: {attachment: attachmentAction},
             );
@@ -1036,17 +1065,22 @@ void main() {
               final bytes = Uint8List(10);
               final attachmentAction =
                   AddAttachmentAction(byteData: bytes, attachment: attachment);
+              final field = GridField(
+                id: 'id',
+                name: 'property',
+                type: DataType.attachment,
+              );
               final formData = FormData(
                 id: 'formId',
                 title: 'Title',
                 components: [
-                  AttachmentFormComponent(
+                  FormComponent<AttachmentDataEntity>(
                     property: 'property',
                     data: AttachmentDataEntity([attachment]),
-                    fieldId: 'fieldId',
+                    field: field,
                   ),
                 ],
-                schema: null,
+                fields: [field],
                 links: {ApptiveLinkType.submit: action},
                 attachmentActions: {attachment: attachmentAction},
               );
@@ -1320,17 +1354,22 @@ void main() {
               newName: 'NewName',
               attachment: attachment,
             );
+            final field = GridField(
+              id: 'id',
+              name: 'property',
+              type: DataType.attachment,
+            );
             final formData = FormData(
               id: 'formId',
               title: 'Title',
               components: [
-                AttachmentFormComponent(
+                FormComponent<AttachmentDataEntity>(
                   property: 'property',
                   data: AttachmentDataEntity([attachment]),
-                  fieldId: 'fieldId',
+                  field: field,
                 ),
               ],
-              schema: null,
+              fields: [field],
               links: {ApptiveLinkType.submit: action},
               attachmentActions: {attachment: attachmentAction},
             );
@@ -1351,17 +1390,22 @@ void main() {
                 ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
             final attachmentAction =
                 DeleteAttachmentAction(attachment: attachment);
+            final field = GridField(
+              id: 'id',
+              name: 'property',
+              type: DataType.attachment,
+            );
             final formData = FormData(
               id: 'formId',
               title: 'Title',
               components: [
-                AttachmentFormComponent(
+                FormComponent<AttachmentDataEntity>(
                   property: 'property',
                   data: AttachmentDataEntity([attachment]),
-                  fieldId: 'fieldId',
+                  field: field,
                 ),
               ],
-              schema: null,
+              fields: [field],
               links: {ApptiveLinkType.submit: action},
               attachmentActions: {attachment: attachmentAction},
             );
@@ -1433,17 +1477,19 @@ void main() {
           final bytes = Uint8List(10);
           final attachmentAction =
               AddAttachmentAction(byteData: bytes, attachment: attachment);
+          final field =
+              GridField(id: 'id', name: 'property', type: DataType.attachment);
           final formData = FormData(
             id: 'formId',
             title: 'Title',
             components: [
-              AttachmentFormComponent(
+              FormComponent<AttachmentDataEntity>(
                 property: 'property',
                 data: AttachmentDataEntity([attachment]),
-                fieldId: 'fieldId',
+                field: field,
               ),
             ],
-            schema: null,
+            fields: [field],
             links: {ApptiveLinkType.submit: action},
             attachmentActions: {attachment: attachmentAction},
           );
@@ -1920,7 +1966,7 @@ void main() {
             "name": "String",
             "schema": {"type": "string"},
             "id": "6282104004bd30efc49b7f17",
-            "_links": {}
+            "_links": <String, dynamic>{}
           },
           {
             "type": {
@@ -1931,7 +1977,7 @@ void main() {
             "name": "String",
             "schema": {"type": "string"},
             "id": "6282104004bd30efc49b7f17",
-            "_links": {}
+            "_links": <String, dynamic>{}
           },
           {
             "type": {
@@ -1942,7 +1988,7 @@ void main() {
             "name": "String",
             "schema": {"type": "string"},
             "id": "6282104004bd30efc49b7f17",
-            "_links": {}
+            "_links": <String, dynamic>{}
           },
         ],
         'name': 'New grid view',
@@ -2430,7 +2476,7 @@ void main() {
       name: 'Name',
       title: 'title',
       components: [],
-      schema: {},
+      fields: [],
       links: {},
     );
 

@@ -9,7 +9,7 @@ class IntegerFormWidget extends StatefulWidget {
   });
 
   /// Component this Widget should reflect
-  final IntegerFormComponent component;
+  final FormComponent<IntegerDataEntity> component;
 
   @override
   State<IntegerFormWidget> createState() => _IntegerFormWidgetState();

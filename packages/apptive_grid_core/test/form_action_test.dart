@@ -66,7 +66,7 @@ void main() {
         name: 'name',
         title: 'title',
         components: [],
-        schema: {},
+        fields: [],
         links: {},
       );
 
@@ -89,7 +89,7 @@ void main() {
         name: 'name',
         title: 'title',
         components: [],
-        schema: {},
+        fields: [],
         links: {},
       );
       expect(ActionItem(link: link, data: data).action, action);

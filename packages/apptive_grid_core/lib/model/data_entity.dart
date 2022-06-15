@@ -31,6 +31,61 @@ abstract class DataEntity<T, S> with FilterableMixin {
 
   @override
   dynamic get filterValue => schemaValue;
+
+  /// Creates a new DataEntity from [json]
+  /// [field] is used to determine the runtimeType of the [DataEntity] based on [GridField.type]
+  static DataEntity fromJson({
+    required dynamic json,
+    required GridField field,
+  }) {
+    switch (field.type) {
+      case DataType.text:
+        return StringDataEntity(json);
+      case DataType.dateTime:
+        return DateTimeDataEntity.fromJson(json);
+      case DataType.date:
+        return DateDataEntity.fromJson(json);
+      case DataType.integer:
+        return IntegerDataEntity(json);
+      case DataType.checkbox:
+        return BooleanDataEntity(json);
+      case DataType.singleSelect:
+        return EnumDataEntity(
+          value: json,
+          options:
+              (field.schema['enum'].cast<String>() as List<String>).toSet(),
+        );
+      case DataType.crossReference:
+        return CrossReferenceDataEntity.fromJson(
+          jsonValue: json,
+          gridUri: field.schema['gridUri'],
+        );
+      case DataType.decimal:
+        return DecimalDataEntity(json);
+      case DataType.attachment:
+        return AttachmentDataEntity.fromJson(json);
+      case DataType.enumCollection:
+        return EnumCollectionDataEntity(
+          value: ((json ?? <String>[]).cast<String>() as List<String>).toSet(),
+          options:
+              (field.schema['items']['enum'].cast<String>() as List<String>)
+                  .toSet(),
+        );
+      case DataType.geolocation:
+        return GeolocationDataEntity.fromJson(json);
+      case DataType.multiCrossReference:
+        return MultiCrossReferenceDataEntity.fromJson(
+          jsonValue: json,
+          gridUri: field.schema['items']['gridUri'],
+        );
+      // ignore: deprecated_member_use_from_same_package
+      case DataType.userReference:
+      case DataType.createdBy:
+        return CreatedByDataEntity.fromJson(json);
+      case DataType.user:
+        return UserDataEntity.fromJson(json);
+    }
+  }
 }
 
 /// [DataEntity] representing [String] Objects
@@ -357,19 +412,43 @@ class MultiCrossReferenceDataEntity
   int get hashCode => toString().hashCode;
 }
 
-/// [DataEntity] representing [UserReference]s
-class UserReferenceDataEntity extends DataEntity<UserReference, dynamic> {
+/// Deprecated [DataEntity] representing [CreatedBy]s
+@Deprecated('Use CreatedByDataEntity instead')
+typedef UserReferenceDataEntity = CreatedByDataEntity;
+
+/// [DataEntity] representing [CreatedBy]s
+class CreatedByDataEntity extends DataEntity<CreatedBy, dynamic> {
   /// Creates a new UserReferenceDataEntity Object with value [value]
-  UserReferenceDataEntity([super.value]);
+  CreatedByDataEntity([super.value]);
 
   /// Creates a new UserReferenceDataEntity Object from json
-  /// [json] needs to be an object that is parsed with [UserReference.fromJson]
-  factory UserReferenceDataEntity.fromJson(dynamic json) {
-    UserReference? jsonValue;
+  /// [json] needs to be an object that is parsed with [CreatedBy.fromJson]
+  factory CreatedByDataEntity.fromJson(dynamic json) {
+    CreatedBy? jsonValue;
     if (json != null) {
-      jsonValue = UserReference.fromJson(json);
+      jsonValue = CreatedBy.fromJson(json);
     }
-    return UserReferenceDataEntity(jsonValue);
+    return CreatedByDataEntity(jsonValue);
+  }
+
+  /// Returns [value] as a json object map
+  @override
+  dynamic get schemaValue => value?.toJson();
+}
+
+/// [DataEntity] representing a [DataUser]
+class UserDataEntity extends DataEntity<DataUser, dynamic> {
+  /// Creates a new UserDataEntity Object with value [value]
+  UserDataEntity([super.value]);
+
+  /// Creates a new UserDataEntity Object from json
+  /// [json] needs to be an object that is parsed with [DataUser.fromJson]
+  factory UserDataEntity.fromJson(dynamic json) {
+    DataUser? jsonUser;
+    if (json != null) {
+      jsonUser = DataUser.fromJson(json);
+    }
+    return UserDataEntity(jsonUser);
   }
 
   /// Returns [value] as a json object map

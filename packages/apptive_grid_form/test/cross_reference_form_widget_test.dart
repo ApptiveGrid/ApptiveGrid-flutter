@@ -16,7 +16,7 @@ void main() {
         id: 'id',
         title: 'title',
         components: [],
-        schema: {},
+        fields: [],
         links: {},
       ),
     );
@@ -24,7 +24,8 @@ void main() {
       Uri.parse('/api/users/user/spaces/space/grids/grid'),
     );
   });
-
+  final field =
+      GridField(id: 'fieldId', name: 'name', type: DataType.crossReference);
   group('FormWidget', () {
     late ApptiveGridClient client;
     late Widget target;
@@ -61,10 +62,10 @@ void main() {
       client = MockApptiveGridClient();
       formKey = GlobalKey();
       final data = CrossReferenceDataEntity(gridUri: gridUri);
-      final component = CrossReferenceFormComponent(
+      final component = FormComponent<CrossReferenceDataEntity>(
         property: 'Property',
         data: data,
-        fieldId: 'fieldId',
+        field: field,
         required: true,
       );
 
@@ -207,7 +208,7 @@ void main() {
         id: 'formId',
         title: 'title',
         components: [
-          CrossReferenceFormComponent(
+          FormComponent<CrossReferenceDataEntity>(
             property: 'Property',
             data: CrossReferenceDataEntity(
               value: 'CrossRef',
@@ -216,12 +217,12 @@ void main() {
                 '/api/a/user/spaces/space/grids/grid/entities/entity',
               ),
             ),
-            fieldId: 'fieldId',
+            field: field,
             required: true,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.loadGrid(uri: any(named: 'uri'))).thenAnswer(
@@ -251,7 +252,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.text('Property must not be empty', skipOffstage: true),
+        find.text('Property must not be empty', skipOffstage: false),
         findsNothing,
       );
     });

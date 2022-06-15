@@ -20,12 +20,13 @@ void main() {
         id: 'formId',
         title: 'title',
         components: [],
-        schema: null,
+        fields: [],
         links: {},
       ),
     );
   });
-
+  final field =
+      GridField(id: 'fieldId', name: 'name', type: DataType.attachment);
   group('Add attachment', () {
     group('Files', () {
       testWidgets('Add Attachment from file picker', (tester) async {
@@ -60,14 +61,14 @@ void main() {
           id: 'formId',
           title: 'title',
           components: [
-            AttachmentFormComponent(
+            FormComponent<AttachmentDataEntity>(
               property: 'property',
               data: AttachmentDataEntity(),
-              fieldId: 'fieldId',
+              field: field,
             )
           ],
           links: {ApptiveLinkType.submit: action},
-          schema: null,
+          fields: [field],
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
@@ -159,14 +160,14 @@ void main() {
           id: 'formId',
           title: 'title',
           components: [
-            AttachmentFormComponent(
+            FormComponent<AttachmentDataEntity>(
               property: 'property',
               data: AttachmentDataEntity(),
-              fieldId: 'fieldId',
+              field: field,
             )
           ],
           links: {ApptiveLinkType.submit: action},
-          schema: null,
+          fields: [field],
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
@@ -243,14 +244,14 @@ void main() {
           id: 'formId',
           title: 'title',
           components: [
-            AttachmentFormComponent(
+            FormComponent<AttachmentDataEntity>(
               property: 'property',
               data: AttachmentDataEntity(),
-              fieldId: 'fieldId',
+              field: field,
             )
           ],
           links: {ApptiveLinkType.submit: action},
-          schema: null,
+          fields: [field],
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
@@ -340,14 +341,14 @@ void main() {
           id: 'formId',
           title: 'title',
           components: [
-            AttachmentFormComponent(
+            FormComponent<AttachmentDataEntity>(
               property: 'property',
               data: AttachmentDataEntity(),
-              fieldId: 'fieldId',
+              field: field,
             )
           ],
           links: {ApptiveLinkType.submit: action},
-          schema: null,
+          fields: [field],
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
@@ -441,14 +442,14 @@ void main() {
           id: 'formId',
           title: 'title',
           components: [
-            AttachmentFormComponent(
+            FormComponent<AttachmentDataEntity>(
               property: 'property',
               data: AttachmentDataEntity(),
-              fieldId: 'fieldId',
+              field: field,
             )
           ],
           links: {ApptiveLinkType.submit: action},
-          schema: null,
+          fields: [field],
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
@@ -558,14 +559,14 @@ void main() {
           id: 'formId',
           title: 'title',
           components: [
-            AttachmentFormComponent(
+            FormComponent<AttachmentDataEntity>(
               property: 'property',
               data: AttachmentDataEntity(),
-              fieldId: 'fieldId',
+              field: field,
             )
           ],
           links: {ApptiveLinkType.submit: action},
-          schema: null,
+          fields: [field],
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
@@ -629,14 +630,14 @@ void main() {
           id: 'formId',
           title: 'title',
           components: [
-            AttachmentFormComponent(
+            FormComponent<AttachmentDataEntity>(
               property: 'property',
               data: AttachmentDataEntity(),
-              fieldId: 'fieldId',
+              field: field,
             )
           ],
           links: {ApptiveLinkType.submit: action},
-          schema: null,
+          fields: [field],
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
@@ -694,14 +695,14 @@ void main() {
         id: 'formId',
         title: 'title',
         components: [
-          AttachmentFormComponent(
+          FormComponent<AttachmentDataEntity>(
             property: 'property',
             data: AttachmentDataEntity(),
-            fieldId: 'fieldId',
+            field: field,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
@@ -766,14 +767,14 @@ void main() {
         id: 'formId',
         title: 'title',
         components: [
-          AttachmentFormComponent(
+          FormComponent<AttachmentDataEntity>(
             property: 'property',
             data: AttachmentDataEntity([attachment]),
-            fieldId: 'fieldId',
+            field: field,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
@@ -809,15 +810,15 @@ void main() {
         id: 'formId',
         title: 'title',
         components: [
-          AttachmentFormComponent(
+          FormComponent<AttachmentDataEntity>(
             property: 'Property',
             data: AttachmentDataEntity(),
-            fieldId: 'fieldId',
+            field: field,
             required: true,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
@@ -849,17 +850,17 @@ void main() {
         id: 'formId',
         title: 'title',
         components: [
-          AttachmentFormComponent(
+          FormComponent<AttachmentDataEntity>(
             property: 'Property',
             data: AttachmentDataEntity(
               [Attachment(name: 'name', url: Uri(), type: 'image/png')],
             ),
-            fieldId: 'fieldId',
+            field: field,
             required: true,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
@@ -919,15 +920,15 @@ void main() {
         id: 'formId',
         title: 'title',
         components: [
-          AttachmentFormComponent(
+          FormComponent<AttachmentDataEntity>(
             property: 'Property',
             data: AttachmentDataEntity(),
-            fieldId: 'fieldId',
+            field: field,
             required: true,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());

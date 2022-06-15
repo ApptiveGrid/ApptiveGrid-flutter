@@ -9,7 +9,7 @@ class CheckBoxFormWidget extends StatefulWidget {
   });
 
   /// Component this Widget should reflect
-  final BooleanFormComponent component;
+  final FormComponent<BooleanDataEntity> component;
 
   @override
   State<CheckBoxFormWidget> createState() => _CheckBoxFormWidgetState();

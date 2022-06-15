@@ -15,19 +15,19 @@ void main() {
         links: {},
         title: 'title',
         components: [],
-        schema: {},
+        fields: [],
       ),
     );
   });
-
+  final field = GridField(id: 'field', name: 'name', type: DataType.decimal);
   group('Input Sanitation', () {
     testWidgets('Wrong Input does not get added', (tester) async {
       final dataEntity = DecimalDataEntity();
       final target = TestApp(
         child: DecimalFormWidget(
-          component: DecimalFormComponent(
+          component: FormComponent<DecimalDataEntity>(
             data: dataEntity,
-            fieldId: 'field',
+            field: field,
             property: 'property',
           ),
         ),
@@ -47,9 +47,9 @@ void main() {
       final dataEntity = DecimalDataEntity();
       final target = TestApp(
         child: DecimalFormWidget(
-          component: DecimalFormComponent(
+          component: FormComponent<DecimalDataEntity>(
             data: dataEntity,
-            fieldId: 'field',
+            field: field,
             property: 'property',
           ),
         ),
@@ -73,15 +73,15 @@ void main() {
         id: 'formId',
         title: 'title',
         components: [
-          DecimalFormComponent(
+          FormComponent<DecimalDataEntity>(
             property: 'Property',
             data: DecimalDataEntity(47.11),
-            fieldId: 'fieldId',
+            field: field,
             required: true,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());

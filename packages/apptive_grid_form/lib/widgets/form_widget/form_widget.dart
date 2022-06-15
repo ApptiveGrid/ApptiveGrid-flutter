@@ -4,60 +4,62 @@ part of apptive_grid_form_widgets;
 ///
 /// Throws an [ArgumentError] if no Widget for a specific [DataType] is found
 Widget fromModel(FormComponent component) {
-  switch (component.data.runtimeType) {
-    case StringDataEntity:
+  switch (component.field.type) {
+    case DataType.text:
       return TextFormWidget(
-        component: component as StringFormComponent,
+        component: component.cast<StringDataEntity>(),
       );
-    case DateTimeDataEntity:
+    case DataType.dateTime:
       return DateTimeFormWidget(
-        component: component as DateTimeFormComponent,
+        component: component.cast<DateTimeDataEntity>(),
       );
-    case DateDataEntity:
+    case DataType.date:
       return DateFormWidget(
-        component: component as DateFormComponent,
+        component: component.cast<DateDataEntity>(),
       );
-    case IntegerDataEntity:
+    case DataType.integer:
       return IntegerFormWidget(
-        component: component as IntegerFormComponent,
+        component: component.cast<IntegerDataEntity>(),
       );
-    case DecimalDataEntity:
+    case DataType.decimal:
       return DecimalFormWidget(
-        component: component as DecimalFormComponent,
+        component: component.cast<DecimalDataEntity>(),
       );
-    case BooleanDataEntity:
+    case DataType.checkbox:
       return CheckBoxFormWidget(
-        component: component as BooleanFormComponent,
+        component: component.cast<BooleanDataEntity>(),
       );
-    case EnumDataEntity:
+    case DataType.singleSelect:
       return EnumFormWidget(
-        component: component as EnumFormComponent,
+        component: component.cast<EnumDataEntity>(),
       );
-    case CrossReferenceDataEntity:
+    case DataType.crossReference:
       return CrossReferenceFormWidget(
-        component: component as CrossReferenceFormComponent,
+        component: component.cast<CrossReferenceDataEntity>(),
       );
-    case AttachmentDataEntity:
+    case DataType.attachment:
       return AttachmentFormWidget(
-        component: component as AttachmentFormComponent,
+        component: component.cast<AttachmentDataEntity>(),
       );
-    case EnumCollectionDataEntity:
+    case DataType.enumCollection:
       return EnumCollectionFormWidget(
-        component: component as EnumCollectionFormComponent,
+        component: component.cast<EnumCollectionDataEntity>(),
       );
-    case GeolocationDataEntity:
+    case DataType.geolocation:
       return GeolocationFormWidget(
-        component: component as GeolocationFormComponent,
+        component: component.cast<GeolocationDataEntity>(),
       );
-    case MultiCrossReferenceDataEntity:
+    case DataType.multiCrossReference:
       return MultiCrossReferenceFormWidget(
-        component: component as MultiCrossReferenceFormComponent,
+        component: component.cast<MultiCrossReferenceDataEntity>(),
       );
-    case UserReferenceDataEntity:
-      return const UserReferenceFormWidget();
-    default:
-      throw ArgumentError(
-        'No Widget found for component $component. Please make sure you are you using the latest version of this package?',
+    // ignore: deprecated_member_use
+    case DataType.userReference:
+    case DataType.createdBy:
+      return const CreatedByFormWidget();
+    case DataType.user:
+      return UserFormWidget(
+        component: component.cast<UserDataEntity>(),
       );
   }
 }

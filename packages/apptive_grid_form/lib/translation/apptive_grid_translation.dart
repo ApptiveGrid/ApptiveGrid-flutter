@@ -59,4 +59,7 @@ abstract class ApptiveGridTranslation {
 
   /// Prompt to get files to use as attachments
   String get attachmentSourceFiles;
+
+  /// Hint that no user was found in list of collaborators that matches [query]
+  String searchUserNoResult(String query);
 }

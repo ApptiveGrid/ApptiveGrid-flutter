@@ -15,9 +15,7 @@ extension FormComponentX on FormComponent {
       labelText: label,
       helperText: options.description,
       helperMaxLines: 100,
-      hintText: options is TextComponentOptions
-          ? (options as TextComponentOptions).placeholder
-          : null,
+      hintText: options.placeholder,
     );
   }
 }

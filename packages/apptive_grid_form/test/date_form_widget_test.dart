@@ -15,12 +15,12 @@ void main() {
         id: 'id',
         title: 'title',
         components: [],
-        schema: {},
+        fields: [],
         links: {},
       ),
     );
   });
-
+  final field = GridField(id: 'fieldId', name: 'name', type: DataType.date);
   group('Localization', () {
     final date = DateTime(2021, 11, 5);
 
@@ -37,10 +37,10 @@ void main() {
         home: Material(
           child: ApptiveGridLocalization(
             child: DateFormWidget(
-              component: DateFormComponent(
+              component: FormComponent<DateDataEntity>(
                 property: 'property',
                 data: DateDataEntity(date),
-                fieldId: 'fieldId',
+                field: field,
               ),
             ),
           ),
@@ -67,10 +67,10 @@ void main() {
         home: Material(
           child: ApptiveGridLocalization(
             child: DateFormWidget(
-              component: DateFormComponent(
+              component: FormComponent<DateDataEntity>(
                 property: 'property',
                 data: DateDataEntity(date),
-                fieldId: 'fieldId',
+                field: field,
               ),
             ),
           ),
@@ -91,15 +91,15 @@ void main() {
         id: 'formId',
         title: 'title',
         components: [
-          DateFormComponent(
+          FormComponent<DateDataEntity>(
             property: 'Property',
             data: DateDataEntity(DateTime.now()),
-            fieldId: 'fieldId',
+            field: field,
             required: true,
           )
         ],
         links: {ApptiveLinkType.submit: action},
-        schema: null,
+        fields: [field],
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());

@@ -152,7 +152,7 @@ void main() {
           "name": "String",
           "schema": {"type": "string"},
           "id": "6282104004bd30efc49b7f17",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
         {
           "type": {
@@ -163,7 +163,7 @@ void main() {
           "name": "Number",
           "schema": {"type": "integer"},
           "id": "6282106a04bd30163b9b7f3b",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
         {
           "type": {
@@ -174,7 +174,7 @@ void main() {
           "name": "DateTime",
           "schema": {"type": "string", "format": "date-time"},
           "id": "6282104e04bd30efc49b7f22",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
         {
           "type": {
@@ -185,7 +185,7 @@ void main() {
           "name": "Date",
           "schema": {"type": "string", "format": "date"},
           "id": "6282105c04bd30efc49b7f2e",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
         {
           "type": {
@@ -196,7 +196,7 @@ void main() {
           "name": "String",
           "schema": {"type": "string"},
           "id": "6282104004bd30efc49b7f17",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
         {
           "type": {
@@ -207,7 +207,7 @@ void main() {
           "name": "String",
           "schema": {"type": "string"},
           "id": "6282104004bd30efc49b7f17",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
         {
           "type": {
@@ -218,7 +218,7 @@ void main() {
           "name": "Checkmark",
           "schema": {"type": "boolean"},
           "id": "6282107c04bd30163b9b7f4d",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
         {
           "type": {
@@ -233,7 +233,7 @@ void main() {
             "enum": ["Enum1", "Enum2"]
           },
           "id": "6282108604bd30163b9b7f56",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
       ],
       '_embedded': {
