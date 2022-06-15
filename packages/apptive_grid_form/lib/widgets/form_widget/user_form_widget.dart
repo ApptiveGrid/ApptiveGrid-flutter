@@ -29,9 +29,13 @@ class _UserFormWidgetState extends State<UserFormWidget> {
   }
 }
 
+/// A Widget to Display a [DataUser]
 class DataUserWidget extends StatelessWidget {
+  /// Creates a Widget that displays [user] with a Profile Image and a Name
+  /// If the user does not have a profile image, their iniitials are displayed
   const DataUserWidget({super.key, required this.user});
 
+  /// The [DataUser] to display
   final DataUser user;
 
   @override
