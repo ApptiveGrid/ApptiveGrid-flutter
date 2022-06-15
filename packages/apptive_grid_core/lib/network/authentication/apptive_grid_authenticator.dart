@@ -256,7 +256,12 @@ class ApptiveGridAuthenticator {
   Future<void> _launchUrl(String url) async {
     if (await canLaunchUrlString(url)) {
       try {
-        await launchUrlString(url);
+        await launchUrlString(
+          url,
+          mode: UniversalPlatform.isAndroid
+              ? LaunchMode.externalApplication
+              : LaunchMode.inAppWebView,
+        );
       } on PlatformException {
         // Could not launch Url
       }

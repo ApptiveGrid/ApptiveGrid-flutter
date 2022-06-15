@@ -16,6 +16,7 @@ dependencies:
   provider: ^6.0.3
   openid_client: ^0.4.6
   uni_links: ^0.5.1
+  universal_platform: ^1.0.0+1
   url_launcher: ^6.1.2
   uuid: ^3.0.6
   flutter_secure_storage: ^5.0.2

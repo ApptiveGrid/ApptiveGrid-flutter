@@ -5,6 +5,7 @@
 * Add new `ApptiveLinkTypes`: `collaborators`, `patch`
 * Add `DataType.user` to handle Use cases like assigning a User to a Task
   * Additional models are: `DataUser` and `UserDataEntity`
+* Fix Google Login on Android
 ### Breaking Changes
 * Removed `schema` from `FormData`
 * Removed dedicated `FormComponent` Types in favor of a generic `FormComponent<T extends DataEntity>` type
