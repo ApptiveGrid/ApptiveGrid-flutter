@@ -69,7 +69,7 @@ void main() {
           "id": "4zc4l48ffin5v8pa2emyx9s15",
           "name": "Text",
           "key": null,
-          "_links": {}
+          "_links": <String, dynamic>{}
         }
       ],
       'components': [
@@ -1966,7 +1966,7 @@ void main() {
             "name": "String",
             "schema": {"type": "string"},
             "id": "6282104004bd30efc49b7f17",
-            "_links": {}
+            "_links": <String, dynamic>{}
           },
           {
             "type": {
@@ -1977,7 +1977,7 @@ void main() {
             "name": "String",
             "schema": {"type": "string"},
             "id": "6282104004bd30efc49b7f17",
-            "_links": {}
+            "_links": <String, dynamic>{}
           },
           {
             "type": {
@@ -1988,7 +1988,7 @@ void main() {
             "name": "String",
             "schema": {"type": "string"},
             "id": "6282104004bd30efc49b7f17",
-            "_links": {}
+            "_links": <String, dynamic>{}
           },
         ],
         'name': 'New grid view',

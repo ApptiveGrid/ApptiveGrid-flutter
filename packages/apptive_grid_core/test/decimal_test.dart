@@ -30,7 +30,7 @@ void main() {
           "name": "Decimal",
           "schema": {"type": "number", "format": "float"},
           "id": "6282107404bd30163b9b7f44",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
       ],
       'name': 'New grid view',
@@ -155,7 +155,7 @@ void main() {
             "id": "3ftoqhqbct15h5o730uknpvp5",
             "name": "name",
             "key": null,
-            "_links": {}
+            "_links": <String, dynamic>{}
           }
         ],
         'schemaObject':

@@ -39,7 +39,7 @@ void main() {
             }
           },
           "id": "6282109204bd30163b9b7f5f",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
       ],
       'name': 'Name',
@@ -164,7 +164,7 @@ void main() {
             "id": "c75385nsbbji82k5wntoj6sj2",
             "name": "name",
             "key": null,
-            "_links": {}
+            "_links": <String, dynamic>{}
           }
         ],
         'title': 'New title',

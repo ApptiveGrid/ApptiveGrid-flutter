@@ -46,7 +46,7 @@ void main() {
             "gridUri": "/api/users/userId/spaces/spaceId/grids/referencedGrid"
           },
           "id": "628210a604bd30163b9b7f77",
-          "_links": {}
+          "_links": <String, dynamic>{}
         }
       ],
       'name': 'New grid view',
@@ -262,7 +262,7 @@ void main() {
             "id": "3ftoqhqbct15h5o730uknpvp5",
             "name": "name",
             "key": null,
-            "_links": {}
+            "_links": <String, dynamic>{}
           }
         ],
         'schemaObject':

@@ -51,7 +51,7 @@ void main() {
             }
           },
           "id": "628210cb04bd301aa89b7f93",
-          "_links": {}
+          "_links": <String, dynamic>{}
         }
       ],
       'name': 'New grid view',
@@ -233,7 +233,7 @@ void main() {
             "id": "3ftoqhqbct15h5o730uknpvp5",
             "name": "name",
             "key": null,
-            "_links": {}
+            "_links": <String, dynamic>{}
           }
         ],
         'schemaObject':

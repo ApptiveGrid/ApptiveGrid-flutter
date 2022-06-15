@@ -55,7 +55,7 @@ void main() {
             }
           },
           "id": "628210b904bd301aa89b7f81",
-          "_links": {}
+          "_links": <String, dynamic>{}
         }
       ],
       'name': 'Grid 4 View',
@@ -176,7 +176,7 @@ void main() {
             }
           },
           "id": "628210b904bd301aa89b7f81",
-          "_links": {}
+          "_links": <String, dynamic>{}
         }
       ],
       'name': 'Grid 4 View',
@@ -325,7 +325,7 @@ void main() {
             "id": "id",
             "name": "property",
             "key": null,
-            "_links": {}
+            "_links": <String, dynamic>{}
           }
         ],
         'title': 'New title',
