@@ -44,4 +44,7 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get attachmentSourceCamera => "Take Photo or Video";
   @override
   String get attachmentSourceFiles => "Select files";
+  @override
+  String searchUserNoResult(String query) =>
+      'No Users found that match "$query"';
 }

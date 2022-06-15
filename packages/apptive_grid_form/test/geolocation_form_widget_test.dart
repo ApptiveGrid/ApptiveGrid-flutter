@@ -28,6 +28,14 @@ void main() {
     registerFallbackValue(
       FormData(id: 'id', links: {}, title: '', components: [], fields: []),
     );
+    registerFallbackValue(
+      const MapWidgetConfiguration(
+        initialCameraPosition: CameraPosition(target: LatLng(0, 0)),
+        textDirection: TextDirection.ltr,
+      ),
+    );
+    registerFallbackValue(const MapConfiguration());
+    registerFallbackValue(const MapObjects());
   });
 
   final field =
@@ -860,6 +868,26 @@ void main() {
         }
         markers = invocation.namedArguments[const Symbol('markers')]
             .map<MarkerId>((e) => (e as Marker).markerId)
+            .toSet();
+        return Container();
+      });
+      when(
+        () => mockMap.buildViewWithConfiguration(
+          any(),
+          any(),
+          widgetConfiguration: any(named: 'widgetConfiguration'),
+          mapConfiguration: any(named: 'mapConfiguration'),
+          mapObjects: any(named: 'mapObjects'),
+        ),
+      ).thenAnswer((invocation) {
+        if (!initCompleter.isCompleted) {
+          (invocation.positionalArguments[1] as Function(int))
+              .call(invocation.positionalArguments[0]);
+        }
+        markers = (invocation.namedArguments[const Symbol('mapObjects')]
+                as MapObjects)
+            .markers
+            .map<MarkerId>((e) => e.markerId)
             .toSet();
         return Container();
       });

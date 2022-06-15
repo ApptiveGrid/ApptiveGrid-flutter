@@ -94,7 +94,7 @@ void main() {
             "objectType": "userReference"
           },
           "id": "628210d604bd30b6b19b7f9d",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
       ],
       'name': 'Yeah Ansicht',

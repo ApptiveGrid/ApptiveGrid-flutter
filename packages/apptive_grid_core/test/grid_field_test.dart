@@ -41,7 +41,7 @@ void main() {
           "enum": ["a", "b"]
         },
         "id": "ep8m43a1i4v1lgj4q8r31ba2f",
-        "_links": {}
+        "_links": <String, dynamic>{}
       };
 
       final fromJson = GridField.fromJson(json);

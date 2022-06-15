@@ -44,7 +44,7 @@ void main() {
             "objectType": "geolocation"
           },
           "id": "628210c204bd301aa89b7f8a",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
       ],
       "name": "Test Ansicht",
@@ -157,7 +157,7 @@ void main() {
             "objectType": "geolocation"
           },
           "id": "628210c204bd301aa89b7f8a",
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
       ],
       "name": "Test Ansicht",
@@ -295,7 +295,7 @@ void main() {
             "id": "78lnph2fb2olm9jtc696d66q9",
             "name": "Property",
             "key": null,
-            "_links": {}
+            "_links": <String, dynamic>{}
           }
         ],
         "title": "New title",

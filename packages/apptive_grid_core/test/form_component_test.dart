@@ -22,7 +22,7 @@ void main() {
         },
         "required": true,
         "property": "Text",
-        "_links": {}
+        "_links": <String, dynamic>{}
       }, [
         field
       ]);

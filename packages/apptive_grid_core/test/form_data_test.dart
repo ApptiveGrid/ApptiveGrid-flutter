@@ -16,7 +16,7 @@ void main() {
         "id": "4zc4l4c5coyi7qh6q1ozrg54u",
         "name": "Date Time",
         "key": null,
-        "_links": {}
+        "_links": <String, dynamic>{}
       },
       {
         "type": {
@@ -27,7 +27,7 @@ void main() {
         "id": "4zc4l456pca5ursrt9rxefpsc",
         "name": "Checkmark",
         "key": null,
-        "_links": {}
+        "_links": <String, dynamic>{}
       },
       {
         "type": {
@@ -38,7 +38,7 @@ void main() {
         "id": "4zc4l49to77dhfagr844flaey",
         "name": "Date",
         "key": null,
-        "_links": {}
+        "_links": <String, dynamic>{}
       },
       {
         "type": {
@@ -49,7 +49,7 @@ void main() {
         "id": "4zc4l45nmww7ujq7y4axlbtjg",
         "name": "Text",
         "key": null,
-        "_links": {}
+        "_links": <String, dynamic>{}
       },
       {
         "type": {
@@ -60,7 +60,7 @@ void main() {
         "id": "4zc4l48ffin5v8pa2emyx9s15",
         "name": "Number",
         "key": null,
-        "_links": {}
+        "_links": <String, dynamic>{}
       },
     ],
     'components': [
@@ -340,7 +340,7 @@ void main() {
           "id": "b8qscjhfw5mukbred3tae8bd2",
           "name": "Text",
           "key": null,
-          "_links": {}
+          "_links": <String, dynamic>{}
         },
       ],
       'components': [
@@ -410,7 +410,7 @@ void main() {
             "id": "3ftoqhqbct15h5o730uknpvp5",
             "name": "Cross Ref",
             "key": null,
-            "_links": {}
+            "_links": <String, dynamic>{}
           }
         ],
         'components': [
@@ -492,7 +492,7 @@ void main() {
             "id": "3ftoqhqbct15h5o730uknpvp5",
             "name": "Cross Ref",
             "key": null,
-            "_links": {}
+            "_links": <String, dynamic>{}
           }
         ],
         'components': [
