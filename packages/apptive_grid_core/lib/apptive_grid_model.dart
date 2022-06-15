@@ -33,3 +33,4 @@ part 'model/link/apptive_link.dart';
 part 'model/link/apptive_link_type.dart';
 part 'model/space/space.dart';
 part 'model/user/user.dart';
+part 'model/user/data_user.dart';
