@@ -31,13 +31,6 @@ class _UserDropdownButtonFormFieldState
     }
   }
 
-  void requestRebuild() {
-    setState(() {
-      (_overlayKey.currentState as FormFieldState?)
-          ?.didChange(widget.component.data.value);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -46,7 +39,7 @@ class _UserDropdownButtonFormFieldState
       isExpanded: true,
       items: _items(),
       menuMaxHeight: MediaQuery.of(context).size.height * 0.95,
-      onChanged: (_) {},
+      onChanged: (_) {}, // coverage:ignore-line
       onTap: () {
         _filterController.text = '';
       },
@@ -214,7 +207,7 @@ class _UserMenuSelectionListState extends State<_UserMenuSelectionList> {
     if (_users!.isEmpty) {
       return Text(
         widget.translation?.searchUserNoResult(widget.controller.text) ??
-            'No User that matches "${widget.controller.text}"',
+            'No User that matches "${widget.controller.text}"', // coverage:ignore-line
       );
     }
     return ListView.builder(

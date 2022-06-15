@@ -184,7 +184,7 @@ void main() {
       expect(widget.runtimeType, equals(MultiCrossReferenceFormWidget));
     });
 
-    test('UserReferenceComponent', () {
+    test('CreatedByComponent', () {
       final component = FormComponent<CreatedByDataEntity>(
         field: GridField(
           id: 'id',
@@ -207,6 +207,25 @@ void main() {
       final widget = fromModel(component);
 
       expect(widget.runtimeType, equals(CreatedByFormWidget));
+    });
+
+    test('UserComponent', () {
+      final component = FormComponent<UserDataEntity>(
+        field: GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.user,
+        ),
+        data: UserDataEntity(),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, equals(UserFormWidget));
+      expect((widget as UserFormWidget).component, equals(component));
     });
   });
 }

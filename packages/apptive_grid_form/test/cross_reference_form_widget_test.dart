@@ -252,7 +252,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.text('Property must not be empty', skipOffstage: true),
+        find.text('Property must not be empty', skipOffstage: false),
         findsNothing,
       );
     });
