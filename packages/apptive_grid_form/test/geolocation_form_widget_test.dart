@@ -29,13 +29,13 @@ void main() {
       FormData(id: 'id', links: {}, title: '', components: [], fields: []),
     );
     registerFallbackValue(
-      MapWidgetConfiguration(
+      const MapWidgetConfiguration(
         initialCameraPosition: CameraPosition(target: LatLng(0, 0)),
         textDirection: TextDirection.ltr,
       ),
     );
-    registerFallbackValue(MapConfiguration());
-    registerFallbackValue(MapObjects());
+    registerFallbackValue(const MapConfiguration());
+    registerFallbackValue(const MapObjects());
   });
 
   final field =
