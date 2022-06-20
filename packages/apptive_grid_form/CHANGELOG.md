@@ -1,3 +1,7 @@
+## 0.11.1
+* Query backend when searching for CrossReferences
+* Fix Bug where CrossReferences could only be selected if their type was String
+
 ## 0.11.0
 * Updated to apptive_grid_core  to 0.11.0
 * This includes breaking changes regarding the FormData Model. Most important there is now no dedicated FormComponent per type but one generic one

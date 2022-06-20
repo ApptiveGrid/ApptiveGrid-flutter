@@ -1,6 +1,6 @@
 name: apptive_grid_form
 description: A Flutter Package to display ApptiveGrid Forms inside a Flutter App.
-version: 0.11.0
+version: 0.11.1
 homepage: https://www.apptivegrid.de
 repository: https://github.com/ApptiveGrid/apptive_grid_flutter/tree/main/packages/apptive_grid_form
 
