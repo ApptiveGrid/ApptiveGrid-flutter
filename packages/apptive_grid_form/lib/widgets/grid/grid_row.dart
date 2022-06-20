@@ -94,6 +94,7 @@ class _GridRowWidgetState extends State<GridRowWidget> {
               )
             : const BoxDecoration(),
         child: _GridRow(
+          id: widget.row.id,
           labels:
               widget.row.entries.map((e) => e.data.value?.toString()).toList(),
           cellSize: widget.cellSize,
@@ -138,12 +139,13 @@ class FilterController {
 /// Listener invoked when [FilterController.query] changes
 typedef FilterListener = void Function();
 
-/// Widget to display a Header Row for a [Grid] given the grids [fields]
+/// Widget to display a Header Row for a [grid]
 class HeaderRowWidget extends StatelessWidget {
   /// Creates a new RowWidget
   const HeaderRowWidget({
     super.key,
-    required this.fields,
+    required this.grid,
+    @Deprecated('Fields are accessed through grid') List<GridField>? fields,
     this.cellSize = const Size(150, 50),
     this.textStyle,
     this.color,
@@ -151,8 +153,12 @@ class HeaderRowWidget extends StatelessWidget {
     this.controller,
   });
 
+  /// Grid this shows the headers for
+  final Grid? grid;
+
   /// Fields that should be displayed
-  final List<GridField> fields;
+  @Deprecated('Fields are accessed through [grid]')
+  List<GridField> get fields => grid?.fields ?? [];
 
   /// Size of the cell. [cellSize.width] will be used as the width of each cell [cellSize.height] will be used as the height of the complete row
   /// defaults to Size(150, 50)
@@ -178,7 +184,8 @@ class HeaderRowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return _GridRow(
-      labels: fields.map((e) => e.name).toList(),
+      id: grid?.id ?? 'grid',
+      labels: grid?.fields?.map((e) => e.name).toList() ?? [],
       cellSize: cellSize,
       textStyle: textStyle ??
           TextStyle(
@@ -195,6 +202,7 @@ class HeaderRowWidget extends StatelessWidget {
 class _GridRow extends StatelessWidget {
   const _GridRow({
     required this.labels,
+    required this.id,
     this.cellSize = const Size(150, 50),
     this.textStyle,
     this.color,
@@ -203,6 +211,7 @@ class _GridRow extends StatelessWidget {
   });
 
   final List<String?> labels;
+  final String id;
   final Size cellSize;
   final TextStyle? textStyle;
   final Color? color;
@@ -216,6 +225,7 @@ class _GridRow extends StatelessWidget {
       padding: padding,
       color: color,
       child: SingleChildScrollView(
+        key: ValueKey(id),
         controller: controller,
         scrollDirection: Axis.horizontal,
         child: Row(

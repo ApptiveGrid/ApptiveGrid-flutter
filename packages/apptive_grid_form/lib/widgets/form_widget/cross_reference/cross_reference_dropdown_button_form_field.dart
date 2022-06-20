@@ -7,7 +7,7 @@ class _CrossReferenceDropdownButtonFormField<T extends DataEntity>
     required this.component,
     required this.selectedItemBuilder,
     required this.onSelected,
-    this.isSelected,
+    required this.selectedNotifier,
   }) : assert(
           T == CrossReferenceDataEntity || T == MultiCrossReferenceDataEntity,
         );
@@ -22,7 +22,7 @@ class _CrossReferenceDropdownButtonFormField<T extends DataEntity>
     _CrossReferenceDropdownButtonFormFieldState<T> state,
   ) onSelected;
 
-  final bool Function(Uri)? isSelected;
+  final _SelectedRowsNotifier selectedNotifier;
 
   @override
   _CrossReferenceDropdownButtonFormFieldState<T> createState() =>
@@ -43,7 +43,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
   final _controllers = <String, ScrollController>{};
   ScrollController? _headerController;
 
-  final _filterController = FilterController();
+  final _filterController = TextEditingController();
 
   late final Uri _gridUri;
 
@@ -86,12 +86,8 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
     });
 
     ApptiveGrid.getClient(context, listen: false)
-        .loadGrid(uri: _gridUri)
+        .loadGrid(uri: _gridUri, loadEntities: false)
         .then((value) {
-      for (final row in (value.rows ?? [])) {
-        _controllers[row.id]?.dispose();
-        _controllers[row.id] = _scrollControllerGroup.addAndGet();
-      }
       _headerController?.dispose();
       _headerController = _scrollControllerGroup.addAndGet();
       setState(() {
@@ -129,7 +125,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       menuMaxHeight: MediaQuery.of(context).size.height * 0.95,
       onChanged: (_) {},
       onTap: () {
-        _filterController.query = '';
+        _filterController.text = '';
       },
       validator: (value) {
         if (widget.component.required &&
@@ -168,14 +164,12 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextField(
+            controller: _filterController,
             decoration: InputDecoration(
               icon: const Icon(Icons.search),
               hintText: localization.crossRefSearch,
               border: InputBorder.none,
             ),
-            onChanged: (input) {
-              _filterController.query = input;
-            },
           ),
         ),
       );
@@ -184,15 +178,40 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
         enabled: false,
         value: null,
         child: HeaderRowWidget(
-          fields: _grid!.fields ?? [],
+          grid: _grid,
           controller: _headerController,
         ),
       );
 
-      final list = DropdownMenuItem<dynamic>(
-        value: widget.component.data.value,
-        enabled: false,
-        child: ListView.builder(
+      late final DropdownMenuItem list;
+      if (_grid != null) {
+        list = DropdownMenuItem<dynamic>(
+          value: widget.component.data.value,
+          enabled: false,
+          child: _CrossReferenceSelectionGrid(
+            controller: _filterController,
+            scrollControllerGroup: _scrollControllerGroup,
+            grid: _grid!,
+            selectedNotifier: widget.selectedNotifier,
+            onSelected: (row, selected) {
+              final displayValue = row.entries
+                  .firstWhere(
+                    (element) =>
+                        element.field.type != DataType.crossReference ||
+                        element.field.type != DataType.multiCrossReference,
+                  )
+                  .data
+                  .value
+                  ?.toString();
+              final entity = CrossReferenceDataEntity(
+                value: displayValue,
+                gridUri: _gridUri,
+                entityUri: row.links[ApptiveLinkType.self]?.uri,
+              );
+              widget.onSelected(entity, selected, this);
+            },
+          ),
+          /* ListView.builder(
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
           itemCount: _grid!.rows?.length ?? 0,
@@ -202,6 +221,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
             final entityUri = Uri.parse(
               '$path/${row.id}',
             );
+
             return _RowMenuItem(
               key: ValueKey(widget.component.fieldId + row.id),
               grid: _grid!,
@@ -220,9 +240,10 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
               filterController: _filterController,
             );
           },
-        ),
-      );
-      return [searchBox, headerRow, list];
+        ),*/
+        );
+      }
+      return [searchBox, headerRow, if (_grid != null) list];
     }
   }
 
@@ -250,24 +271,181 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
   }
 }
 
-class _RowMenuItem extends StatefulWidget {
-  const _RowMenuItem({
-    super.key,
+class _CrossReferenceSelectionGrid extends StatefulWidget {
+  const _CrossReferenceSelectionGrid({
+    required this.controller,
+    required this.scrollControllerGroup,
     required this.grid,
-    required this.row,
-    this.controller,
-    this.initiallySelected = false,
-    this.onSelectionChanged,
-    this.filterController,
+    required this.selectedNotifier,
+    required this.onSelected,
   });
 
+  final TextEditingController controller;
+  final LinkedScrollControllerGroup scrollControllerGroup;
   final Grid grid;
+  final _SelectedRowsNotifier selectedNotifier;
+  final Function(GridRow, bool) onSelected;
+
+  @override
+  State<_CrossReferenceSelectionGrid> createState() =>
+      _CrossReferenceSelectionGridState();
+}
+
+class _CrossReferenceSelectionGridState
+    extends State<_CrossReferenceSelectionGrid> {
+  late ApptiveGridClient _client;
+  List<GridRow>? _rows;
+  final Map<String, ScrollController> _scrollControllers = {};
+  dynamic _error;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_loadRows);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _client = ApptiveGrid.getClient(context);
+    if (_rows == null) {
+      _loadRows();
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_loadRows);
+    for (final controller in _scrollControllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> _loadRows() async {
+    setState(() {
+      _error = null;
+    });
+
+    final entitiesLink = widget.grid.links[ApptiveLinkType.query];
+    if (entitiesLink != null && widget.grid.fields != null) {
+      final query = widget.controller.text;
+      final rows = await _client
+          .performApptiveLink<List<GridRow>>(
+        link: entitiesLink,
+        queryParameters: {
+          'matching': query,
+        },
+        parseResponse: (response) async {
+          final entities = (jsonDecode(response.body)['entities']) as List;
+          final newRows = <GridRow>[];
+          for (final entity in entities) {
+            final entries = <GridEntry>[];
+            final fields = entity['fields'] as List;
+            for (int fieldIndex = 0;
+                fieldIndex <
+                    min(
+                      widget.grid.fields!.length,
+                      fields.length,
+                    );
+                fieldIndex++) {
+              final field = widget.grid.fields![fieldIndex];
+              final dataEntity = DataEntity.fromJson(
+                json: fields[fieldIndex],
+                field: field,
+              );
+              entries.add(
+                GridEntry(
+                  field,
+                  dataEntity,
+                ),
+              );
+            }
+            final row = GridRow(
+              id: entity['_id'],
+              entries: entries,
+              links: linkMapFromJson(entity['_links']),
+            );
+            newRows.add(row);
+            if (_scrollControllers[row.id] == null) {
+              _scrollControllers[row.id] =
+                  widget.scrollControllerGroup.addAndGet();
+            }
+          }
+          return newRows;
+        },
+      )
+          .catchError((error) {
+        if (mounted) {
+          setState(() {
+            _error = error;
+            _rows = null;
+          });
+        }
+      });
+      if (mounted) {
+        setState(() {
+          _rows = rows;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          _rows = [];
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    if (_error != null) {
+      return Text(
+        _error is http.Response ? _error.body : _error!.toString(),
+        style: theme.textTheme.bodyMedium?.copyWith(
+          color: theme.colorScheme.error,
+        ),
+      );
+    }
+    if (_rows == null) {
+      return const LinearProgressIndicator();
+    }
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const BouncingScrollPhysics(),
+      itemCount: _rows?.length ?? 0,
+      itemBuilder: (context, index) {
+        final row = _rows![index];
+        return _RowMenuItem(
+          row: row,
+          selectedNotifier: widget.selectedNotifier,
+          onSelectionChanged: widget.onSelected,
+          controller: _scrollControllers[row.id],
+          color: index % 2 != 0
+              ? Theme.of(context).hintColor.withOpacity(0.04)
+              : null,
+        );
+      },
+    );
+  }
+}
+
+class _RowMenuItem extends StatefulWidget {
+  const _RowMenuItem({
+    required this.row,
+    required this.selectedNotifier,
+    this.onSelectionChanged,
+    required this.color,
+    this.controller,
+  });
+
   final GridRow row;
   final ScrollController? controller;
-  final FilterController? filterController;
+  final _SelectedRowsNotifier selectedNotifier;
 
-  final bool initiallySelected;
-  final void Function(bool)? onSelectionChanged;
+  final void Function(GridRow, bool)? onSelectionChanged;
+  final Color? color;
 
   @override
   State<_RowMenuItem> createState() => _RowMenuItemState();
@@ -276,48 +454,50 @@ class _RowMenuItem extends StatefulWidget {
 class _RowMenuItemState extends State<_RowMenuItem> {
   late bool _selected;
 
-  late final FilterListener _listener;
-
   @override
   void initState() {
     super.initState();
-    _selected = widget.initiallySelected;
-    _listener = () {
-      setState(() {
-        // Set State to update color
-      });
-    };
-    widget.filterController?.addListener(_listener);
+    _selected = widget.selectedNotifier.entities
+        .contains(widget.row.links[ApptiveLinkType.self]?.uri ?? Uri());
+    widget.selectedNotifier.addListener(_updateSelected);
   }
 
   @override
   void dispose() {
-    widget.filterController?.removeListener(_listener);
+    widget.selectedNotifier.removeListener(_updateSelected);
     super.dispose();
+  }
+
+  void _updateSelected() {
+    setState(() {
+      _selected = widget.selectedNotifier.entities
+          .contains(widget.row.links[ApptiveLinkType.self]?.uri ?? Uri());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final index = widget.grid.rows
-            ?.where((row) => row.matchesFilter(widget.filterController?.query))
-            .toList()
-            .indexOf(widget.row) ??
-        0;
     return GridRowWidget(
       row: widget.row,
       scrollController: widget.controller,
       selected: _selected,
-      onSelectionChanged: widget.onSelectionChanged != null
-          ? (selected) {
-              widget.onSelectionChanged?.call(selected);
-              setState(() {
-                _selected = selected;
-              });
-            }
-          : null,
-      color:
-          index % 2 != 0 ? Theme.of(context).hintColor.withOpacity(0.04) : null,
-      filterController: widget.filterController,
+      onSelectionChanged: (selected) {
+        widget.onSelectionChanged?.call(widget.row, selected);
+      },
+      color: widget.color,
     );
+  }
+}
+
+class _SelectedRowsNotifier extends ChangeNotifier {
+  _SelectedRowsNotifier(List<Uri?> entities) : _entities = entities;
+
+  List<Uri?> _entities;
+
+  List<Uri?> get entities => _entities;
+
+  set entities(List<Uri?> entities) {
+    _entities = entities;
+    notifyListeners();
   }
 }

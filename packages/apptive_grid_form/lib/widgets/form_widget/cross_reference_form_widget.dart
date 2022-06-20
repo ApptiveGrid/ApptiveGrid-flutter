@@ -1,7 +1,7 @@
 part of apptive_grid_form_widgets;
 
 /// FormComponent Widget to display a FormComponent<[CrossReferenceDataEntity>]
-class CrossReferenceFormWidget extends StatelessWidget {
+class CrossReferenceFormWidget extends StatefulWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
   const CrossReferenceFormWidget({
     super.key,
@@ -12,16 +12,32 @@ class CrossReferenceFormWidget extends StatelessWidget {
   final FormComponent<CrossReferenceDataEntity> component;
 
   @override
+  State<CrossReferenceFormWidget> createState() =>
+      _CrossReferenceFormWidgetState();
+}
+
+class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
+  late final _SelectedRowsNotifier _selectedNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedNotifier =
+        _SelectedRowsNotifier([widget.component.data.entityUri]);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _CrossReferenceDropdownButtonFormField<CrossReferenceDataEntity>(
-      component: component,
+      component: widget.component,
       selectedItemBuilder: (data) => Text(
         data?.value?.toString() ?? '',
       ),
-      isSelected: (entityUri) => component.data.entityUri == entityUri,
+      selectedNotifier: _selectedNotifier,
       onSelected: (entity, selected, state) {
-        component.data.value = entity.value;
-        component.data.entityUri = entity.entityUri;
+        widget.component.data.value = entity.value;
+        widget.component.data.entityUri = entity.entityUri;
+        _selectedNotifier.entities = [widget.component.data.entityUri];
         state.closeOverlay();
         state.requestRebuild();
       },
