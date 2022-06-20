@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
@@ -50,11 +51,47 @@ void main() {
       ],
       links: {
         ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
-        ApptiveLinkType.entities: ApptiveLink(
-          uri: gridUri.replace(path: '${gridUri.path}/entities'),
+        ApptiveLinkType.query: ApptiveLink(
+          uri: gridUri.replace(path: '${gridUri.path}/query'),
           method: 'get',
         ),
       },
+    );
+
+    final fullQueryResponse = {
+      'entities': [
+        {
+          '_id': 'row1',
+          'fields': ['First'],
+          '_links': {
+            'self': {'href': '/api/entities/row1', 'method': 'get'}
+          }
+        },
+        {
+          '_id': 'row2',
+          'fields': ['Second'],
+          '_links': {
+            'self': {'href': '/api/entities/row2', 'method': 'get'}
+          }
+        }
+      ]
+    };
+
+    final filteredQueryResponse = {
+      'entities': [
+        {
+          '_id': 'row2',
+          'fields': ['Second'],
+          '_links': {
+            'self': {'href': '/api/entities/row2', 'method': 'get'}
+          }
+        }
+      ]
+    };
+
+    final queryLink = ApptiveLink(
+      uri: gridUri.replace(path: '${gridUri.path}/query'),
+      method: 'get',
     );
 
     setUp(() {
@@ -69,7 +106,30 @@ void main() {
       );
 
       when(() => client.sendPendingActions()).thenAnswer((_) async {});
-      when(() => client.loadGrid(uri: gridUri)).thenAnswer((_) async => grid);
+      when(() => client.loadGrid(uri: gridUri, loadEntities: false))
+          .thenAnswer((_) async => grid);
+
+      when(
+        () => client.performApptiveLink<List<GridRow>>(
+          link: queryLink,
+          queryParameters: any(named: 'queryParameters'),
+          parseResponse: any(named: 'parseResponse'),
+        ),
+      ).thenAnswer((invocation) async {
+        final query = invocation.namedArguments[const Symbol('queryParameters')]
+            ['matching'];
+        final parseResponse =
+            invocation.namedArguments[const Symbol('parseResponse')]
+                as Future<List<GridRow>?> Function(Response);
+
+        if (query == null || query.isEmpty) {
+          return parseResponse(Response(jsonEncode(fullQueryResponse), 200));
+        } else {
+          return parseResponse(
+            Response(jsonEncode(filteredQueryResponse), 200),
+          );
+        }
+      });
 
       target = TestApp(
         client: client,
@@ -164,7 +224,7 @@ void main() {
     });
 
     testWidgets('Loading Grid has Error, displays error', (tester) async {
-      when(() => client.loadGrid(uri: gridUri))
+      when(() => client.loadGrid(uri: gridUri, loadEntities: false))
           .thenAnswer((_) => Future.error('Error loading Grid'));
 
       await tester.pumpWidget(target);
@@ -181,7 +241,7 @@ void main() {
 
     testWidgets('Loading Grid shows Loading State', (tester) async {
       final completer = Completer<Grid>();
-      when(() => client.loadGrid(uri: gridUri))
+      when(() => client.loadGrid(uri: gridUri, loadEntities: false))
           .thenAnswer((_) => completer.future);
 
       await tester.pumpWidget(target);
@@ -225,8 +285,8 @@ void main() {
         ],
         links: {
           ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
-          ApptiveLinkType.entities: ApptiveLink(
-            uri: gridUri.replace(path: '${gridUri.path}/entities'),
+          ApptiveLinkType.query: ApptiveLink(
+            uri: gridUri.replace(path: '${gridUri.path}/query'),
             method: 'get',
           ),
         },
@@ -234,6 +294,13 @@ void main() {
 
       when(() => client.loadGrid(uri: gridUri))
           .thenAnswer((_) async => gridWithNull);
+      when(
+        () => client.performApptiveLink<List<GridRow>>(
+          link: queryLink,
+          queryParameters: any(named: 'queryParameters'),
+          parseResponse: any(named: 'parseResponse'),
+        ),
+      ).thenAnswer((_) async => gridWithNull.rows);
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -283,7 +350,8 @@ void main() {
         fields: [field],
       );
       final client = MockApptiveGridClient();
-      when(() => client.loadGrid(uri: any(named: 'uri'))).thenAnswer(
+      when(() => client.loadGrid(uri: any(named: 'uri'), loadEntities: false))
+          .thenAnswer(
         (invocation) async => Grid(
           id: 'grid',
           name: 'name',
@@ -292,6 +360,7 @@ void main() {
           links: {},
         ),
       );
+
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
       when(() => client.submitForm(action, any()))
           .thenAnswer((_) async => Response('body', 200));

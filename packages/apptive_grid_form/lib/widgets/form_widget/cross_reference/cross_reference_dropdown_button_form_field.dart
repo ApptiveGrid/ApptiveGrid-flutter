@@ -108,13 +108,6 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
     }
   }
 
-  void requestRebuild() {
-    setState(() {
-      (_overlayKey.currentState as FormFieldState?)
-          ?.didChange(widget.component.data.value);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -209,6 +202,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
                 entityUri: row.links[ApptiveLinkType.self]?.uri,
               );
               widget.onSelected(entity, selected, this);
+              setState(() {});
             },
           ),
           /* ListView.builder(

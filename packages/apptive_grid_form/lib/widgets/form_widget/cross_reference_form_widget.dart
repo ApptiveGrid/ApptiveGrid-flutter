@@ -39,7 +39,6 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
         widget.component.data.entityUri = entity.entityUri;
         _selectedNotifier.entities = [widget.component.data.entityUri];
         state.closeOverlay();
-        state.requestRebuild();
       },
     );
   }
