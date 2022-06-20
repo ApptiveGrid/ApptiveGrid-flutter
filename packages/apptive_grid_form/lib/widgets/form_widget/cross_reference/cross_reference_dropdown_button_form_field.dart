@@ -328,7 +328,7 @@ class _CrossReferenceSelectionGridState
           .performApptiveLink<List<GridRow>>(
         link: entitiesLink,
         queryParameters: {
-          'matching': query,
+          if (query.isNotEmpty) 'matching': query,
         },
         parseResponse: (response) async {
           final entities = (jsonDecode(response.body)['entities']) as List;
