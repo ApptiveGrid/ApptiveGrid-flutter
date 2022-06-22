@@ -266,6 +266,175 @@ void main() {
 
       expect(find.text('null'), findsNothing);
     });
+
+    group('Preview Value', () {
+      final crossRefUri = Uri(path: '/crossRefGrid');
+      final crossEntity = Uri(path: '/crossEntity');
+      final multiCrossEntity = Uri(path: '/multiCrossEntity');
+      final crossField = GridField(
+        id: 'cross',
+        name: 'CrossRef',
+        type: DataType.crossReference,
+        schema: {
+          'gridUri': crossRefUri,
+        },
+      );
+      final multiCrossField = GridField(
+        id: 'multiCross',
+        name: 'MultiCrossRef',
+        type: DataType.multiCrossReference,
+        schema: {
+          'gridUri': crossRefUri,
+        },
+      );
+      final stringField =
+          GridField(id: 'string', name: 'String', type: DataType.text);
+
+      testWidgets('Takes first non Cross or MultiCross Value as Preview Value',
+          (tester) async {
+        final gridResponse = Grid(
+          id: 'grid',
+          name: 'Test',
+          fields: [crossField, multiCrossField, stringField],
+          rows: [
+            GridRow(
+              id: 'row1',
+              entries: [
+                GridEntry(
+                  crossField,
+                  CrossReferenceDataEntity(
+                    gridUri: crossRefUri,
+                    value: 'A',
+                    entityUri: crossEntity,
+                  ),
+                ),
+                GridEntry(
+                  multiCrossField,
+                  MultiCrossReferenceDataEntity(
+                    gridUri: crossRefUri,
+                    references: [
+                      CrossReferenceDataEntity(
+                        gridUri: crossRefUri,
+                        value: 'B',
+                        entityUri: multiCrossEntity,
+                      )
+                    ],
+                  ),
+                ),
+                GridEntry(stringField, StringDataEntity('C'))
+              ],
+              links: {
+                ApptiveLinkType.self: ApptiveLink(
+                  uri: Uri(path: '/api/entity/row1'),
+                  method: 'get',
+                ),
+              },
+            ),
+          ],
+          links: {
+            ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
+            ApptiveLinkType.query: ApptiveLink(
+              uri: gridUri.replace(path: '${gridUri.path}/query'),
+              method: 'get',
+            ),
+          },
+        );
+        when(
+          () => client.performApptiveLink<List<GridRow>>(
+            link: queryLink,
+            queryParameters: any(named: 'queryParameters'),
+            parseResponse: any(named: 'parseResponse'),
+          ),
+        ).thenAnswer((_) async => gridResponse.rows);
+        when(() => client.loadGrid(uri: gridUri, loadEntities: false))
+            .thenAnswer((_) async => gridResponse);
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.arrow_drop_down));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(GridRowWidget));
+        await tester.pumpAndSettle();
+
+        expect(find.text('A'), findsNothing);
+        expect(find.text('B'), findsNothing);
+        expect(find.text('C'), findsOneWidget);
+      });
+
+      testWidgets('Shows nothing if only CrossRef or MultiCrossRef Value',
+          (tester) async {
+        final gridResponse = Grid(
+          id: 'grid',
+          name: 'Test',
+          fields: [crossField, multiCrossField],
+          rows: [
+            GridRow(
+              id: 'row1',
+              entries: [
+                GridEntry(
+                  crossField,
+                  CrossReferenceDataEntity(
+                    gridUri: crossRefUri,
+                    value: 'A',
+                    entityUri: crossEntity,
+                  ),
+                ),
+                GridEntry(
+                  multiCrossField,
+                  MultiCrossReferenceDataEntity(
+                    gridUri: crossRefUri,
+                    references: [
+                      CrossReferenceDataEntity(
+                        gridUri: crossRefUri,
+                        value: 'B',
+                        entityUri: multiCrossEntity,
+                      )
+                    ],
+                  ),
+                ),
+              ],
+              links: {
+                ApptiveLinkType.self: ApptiveLink(
+                  uri: Uri(path: '/api/entity/row1'),
+                  method: 'get',
+                ),
+              },
+            ),
+          ],
+          links: {
+            ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
+            ApptiveLinkType.query: ApptiveLink(
+              uri: gridUri.replace(path: '${gridUri.path}/query'),
+              method: 'get',
+            ),
+          },
+        );
+        when(
+          () => client.performApptiveLink<List<GridRow>>(
+            link: queryLink,
+            queryParameters: any(named: 'queryParameters'),
+            parseResponse: any(named: 'parseResponse'),
+          ),
+        ).thenAnswer((_) async => gridResponse.rows);
+        when(() => client.loadGrid(uri: gridUri, loadEntities: false))
+            .thenAnswer((_) async => gridResponse);
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.arrow_drop_down));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(GridRowWidget));
+        await tester.pumpAndSettle();
+
+        expect(find.text('A'), findsNothing);
+        expect(find.text('B'), findsNothing);
+        expect(find.text(''), findsOneWidget);
+      });
+    });
   });
 
   group('Validation', () {

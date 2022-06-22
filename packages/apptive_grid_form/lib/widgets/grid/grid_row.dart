@@ -2,7 +2,7 @@ part of apptive_grid_form_widgets;
 
 /// Widget to display a [GridRow]
 /// Multiple of these in a Vertical Layout will display a full Grid
-class GridRowWidget extends StatefulWidget {
+class GridRowWidget extends StatelessWidget {
   /// Creates a new RowWidget
   const GridRowWidget({
     super.key,
@@ -14,7 +14,6 @@ class GridRowWidget extends StatefulWidget {
     this.scrollController,
     this.selected = false,
     this.onSelectionChanged,
-    this.filterController,
   });
 
   /// Row to be displayed
@@ -46,98 +45,32 @@ class GridRowWidget extends StatefulWidget {
   /// Will be called with ![selected]
   final void Function(bool)? onSelectionChanged;
 
-  /// The FilterController that determines if this row should be shown
-  final FilterController? filterController;
-
-  @override
-  State<GridRowWidget> createState() => _GridRowWidgetState();
-}
-
-class _GridRowWidgetState extends State<GridRowWidget> {
-  late final FilterListener _listener;
-
-  late bool _visible;
-
-  @override
-  void initState() {
-    super.initState();
-    _visible = widget.row.matchesFilter(widget.filterController?.query);
-    _listener = () {
-      final visible = widget.row.matchesFilter(widget.filterController?.query);
-      setState(() {
-        _visible = visible;
-      });
-    };
-    widget.filterController?.addListener(_listener);
-  }
-
-  @override
-  void dispose() {
-    widget.filterController?.removeListener(_listener);
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (!_visible) {
-      return const SizedBox();
-    }
     final selectedColor = Theme.of(context).primaryColor;
     return InkWell(
-      onTap: widget.onSelectionChanged != null
-          ? () => widget.onSelectionChanged!.call(!widget.selected)
+      onTap: onSelectionChanged != null
+          ? () => onSelectionChanged!.call(!selected)
           : null,
       child: DecoratedBox(
-        decoration: widget.selected
+        decoration: selected
             ? BoxDecoration(
                 color: selectedColor.withOpacity(0.3),
               )
             : const BoxDecoration(),
         child: _GridRow(
-          id: widget.row.id,
-          labels:
-              widget.row.entries.map((e) => e.data.value?.toString()).toList(),
-          cellSize: widget.cellSize,
-          textStyle: widget.textStyle,
-          color: widget.color,
-          padding: widget.padding,
-          controller: widget.scrollController,
+          id: row.id,
+          labels: row.entries.map((e) => e.data.value?.toString()).toList(),
+          cellSize: cellSize,
+          textStyle: textStyle,
+          color: color,
+          padding: padding,
+          controller: scrollController,
         ),
       ),
     );
   }
 }
-
-/// Controller to notify [FilterListener]s when a Filter changed so that [GridRowWidget]s can be shown/hidden
-class FilterController {
-  final Set<FilterListener> _listeners = {};
-
-  String? _query;
-
-  /// Returns the current filter query
-  String? get query => _query;
-
-  /// Setting the query will notify all registered [FilterListener]s
-  set query(String? query) {
-    _query = query;
-    _notifyListeners();
-  }
-
-  /// Adds a [FilterListener]
-  void addListener(FilterListener listener) => _listeners.add(listener);
-
-  /// Removes a [FilterListener]
-  void removeListener(FilterListener listener) => _listeners.remove(listener);
-
-  void _notifyListeners() {
-    for (final listener in _listeners) {
-      listener();
-    }
-  }
-}
-
-/// Listener invoked when [FilterController.query] changes
-typedef FilterListener = void Function();
 
 /// Widget to display a Header Row for a [grid]
 class HeaderRowWidget extends StatelessWidget {
@@ -145,7 +78,6 @@ class HeaderRowWidget extends StatelessWidget {
   const HeaderRowWidget({
     super.key,
     required this.grid,
-    @Deprecated('Fields are accessed through grid') List<GridField>? fields,
     this.cellSize = const Size(150, 50),
     this.textStyle,
     this.color,
@@ -155,10 +87,6 @@ class HeaderRowWidget extends StatelessWidget {
 
   /// Grid this shows the headers for
   final Grid? grid;
-
-  /// Fields that should be displayed
-  @Deprecated('Fields are accessed through [grid]')
-  List<GridField> get fields => grid?.fields ?? [];
 
   /// Size of the cell. [cellSize.width] will be used as the width of each cell [cellSize.height] will be used as the height of the complete row
   /// defaults to Size(150, 50)
@@ -245,25 +173,5 @@ class _GridRow extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-/// Extension for [GridRow]
-extension GridRowX on GridRow {
-  /// Checks if a [GridRow] matches a given [filter]
-  /// This will check if there is a [GridEntry] where the corresponding [DataEntity.schemaValue] contains [filter].
-  /// This check is performed case insensitive
-  bool matchesFilter(String? filter) {
-    if (filter == null || filter.isEmpty) return true;
-
-    final filterResult = entries.where(
-      (entry) =>
-          entry.data.schemaValue
-              ?.toString()
-              .toLowerCase()
-              .contains(filter.toLowerCase()) ??
-          false,
-    );
-    return filterResult.isNotEmpty;
   }
 }

@@ -72,7 +72,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
   @override
   void dispose() {
     for (final controller in _controllers.values) {
-      controller.dispose();
+      controller.dispose(); // coverage:ignore-line
     }
     _headerController?.dispose();
     _headerController = null;
@@ -116,7 +116,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       isExpanded: true,
       items: _items(),
       menuMaxHeight: MediaQuery.of(context).size.height * 0.95,
-      onChanged: (_) {},
+      onChanged: (_) {}, // coverage:ignore-line
       onTap: () {
         _filterController.text = '';
       },
@@ -188,12 +188,14 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
             selectedNotifier: widget.selectedNotifier,
             onSelected: (row, selected) {
               final displayValue = row.entries
+                  .cast<GridEntry?>()
                   .firstWhere(
                     (element) =>
-                        element.field.type != DataType.crossReference ||
-                        element.field.type != DataType.multiCrossReference,
+                        element?.field.type != DataType.crossReference &&
+                        element?.field.type != DataType.multiCrossReference,
+                    orElse: () => null,
                   )
-                  .data
+                  ?.data
                   .value
                   ?.toString();
               final entity = CrossReferenceDataEntity(
@@ -205,36 +207,6 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
               setState(() {});
             },
           ),
-          /* ListView.builder(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
-          itemCount: _grid!.rows?.length ?? 0,
-          itemBuilder: (context, index) {
-            final row = _grid!.rows![index];
-            String path = _grid!.links[ApptiveLinkType.entities]!.uri.path;
-            final entityUri = Uri.parse(
-              '$path/${row.id}',
-            );
-
-            return _RowMenuItem(
-              key: ValueKey(widget.component.fieldId + row.id),
-              grid: _grid!,
-              row: row,
-              controller: _controllers[row.id],
-              initiallySelected: widget.isSelected?.call(entityUri) ?? false,
-              onSelectionChanged: (selected) {
-                final displayValue = row.entries.first.data.value;
-                final entity = CrossReferenceDataEntity(
-                  value: displayValue,
-                  gridUri: _gridUri,
-                  entityUri: entityUri,
-                );
-                widget.onSelected(entity, selected, this);
-              },
-              filterController: _filterController,
-            );
-          },
-        ),*/
         );
       }
       return [searchBox, headerRow, if (_grid != null) list];

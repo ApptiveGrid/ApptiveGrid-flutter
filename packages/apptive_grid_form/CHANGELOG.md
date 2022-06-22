@@ -1,6 +1,10 @@
-## 0.11.1
+## 0.12.0
 * Query backend when searching for CrossReferences
 * Fix Bug where CrossReferences could only be selected if their type was String
+### Breaking Change
+* Remove `Fields` from `HeaderRowWidget`
+* Remove `FilterController` and `FilterListener`
+
 
 ## 0.11.0
 * Updated to apptive_grid_core  to 0.11.0

@@ -239,6 +239,37 @@ void main() {
       expect(find.text('Search'), findsNothing);
     });
 
+    testWidgets('Query entries has Error, displays error', (tester) async {
+      when(
+        () => client.performApptiveLink<List<GridRow>>(
+          link: queryLink,
+          queryParameters: any(named: 'queryParameters'),
+          parseResponse: any(named: 'parseResponse'),
+        ),
+      ).thenAnswer((_) => Future.error('Error loading Entities'));
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.arrow_drop_down));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Error loading Entities'), findsOneWidget);
+    });
+
+    testWidgets('No Entities Link shows no rows', (tester) async {
+      when(() => client.loadGrid(uri: gridUri, loadEntities: false))
+          .thenAnswer((_) async => Grid(id: 'id', name: 'name', links: {}));
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.arrow_drop_down));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(GridRowWidget), findsNothing);
+    });
+
     testWidgets('Loading Grid shows Loading State', (tester) async {
       final completer = Completer<Grid>();
       when(() => client.loadGrid(uri: gridUri, loadEntities: false))
