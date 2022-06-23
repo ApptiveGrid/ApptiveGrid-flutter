@@ -589,10 +589,10 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
   Future<void> _submitForm(ApptiveLink link) async {
-    setState(() {
-      _actionsInProgress.add(link);
-    });
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _actionsInProgress.add(link);
+      });
       _client.submitForm(link, _formData!).then((response) async {
         if (response != null && response.statusCode < 400) {
           if (await widget.onActionSuccess?.call(link, _formData!) ?? true) {
@@ -610,10 +610,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         setState(() {
           _actionsInProgress.remove(link);
         });
-      });
-    } else {
-      setState(() {
-        _actionsInProgress.remove(link);
       });
     }
   }
