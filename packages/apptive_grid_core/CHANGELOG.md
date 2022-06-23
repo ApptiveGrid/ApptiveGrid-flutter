@@ -1,3 +1,6 @@
+## 0.11.1
+* Resize Images in Isolate when uploading Attachments
+
 ## 0.11.0
 * Add `fields` to `FormData`
 * Add `field` to `FormComponent`

@@ -1,6 +1,7 @@
 ## 0.12.0
 * Query backend when searching for CrossReferences
 * Fix Bug where CrossReferences could only be selected if their type was String
+* Improve Loading behaviour. Show Loading after validation and disable inputs while form is uploading
 ### Breaking Change
 * Remove `Fields` from `HeaderRowWidget`
 * Remove `FilterController` and `FilterListener`
