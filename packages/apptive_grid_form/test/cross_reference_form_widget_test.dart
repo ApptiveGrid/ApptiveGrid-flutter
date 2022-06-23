@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
@@ -33,6 +34,43 @@ void main() {
 
     final gridUri = Uri.parse('/api/users/user/spaces/space/grids/grid');
     final field = GridField(id: 'field', name: 'Name', type: DataType.text);
+
+    final fullQueryResponse = {
+      'entities': [
+        {
+          '_id': 'row1',
+          'fields': ['First'],
+          '_links': {
+            'self': {'href': '/api/entities/row1', 'method': 'get'}
+          }
+        },
+        {
+          '_id': 'row2',
+          'fields': ['Second'],
+          '_links': {
+            'self': {'href': '/api/entities/row2', 'method': 'get'}
+          }
+        }
+      ]
+    };
+
+    final filteredQueryResponse = {
+      'entities': [
+        {
+          '_id': 'row2',
+          'fields': ['Second'],
+          '_links': {
+            'self': {'href': '/api/entities/row2', 'method': 'get'}
+          }
+        }
+      ]
+    };
+
+    final queryLink = ApptiveLink(
+      uri: gridUri.replace(path: '${gridUri.path}/query'),
+      method: 'get',
+    );
+
     final grid = Grid(
       id: 'grid',
       name: 'Test',
@@ -51,10 +89,7 @@ void main() {
       ],
       links: {
         ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
-        ApptiveLinkType.entities: ApptiveLink(
-          uri: gridUri.replace(path: '${gridUri.path}/entities'),
-          method: 'get',
-        ),
+        ApptiveLinkType.query: queryLink,
       },
     );
 
@@ -70,8 +105,29 @@ void main() {
       );
 
       when(() => client.sendPendingActions()).thenAnswer((_) async {});
-      when(() => client.loadGrid(uri: any(named: 'uri')))
+      when(() => client.loadGrid(uri: any(named: 'uri'), loadEntities: false))
           .thenAnswer((_) async => grid);
+      when(
+        () => client.performApptiveLink<List<GridRow>>(
+          link: queryLink,
+          queryParameters: any(named: 'queryParameters'),
+          parseResponse: any(named: 'parseResponse'),
+        ),
+      ).thenAnswer((invocation) async {
+        final query = invocation.namedArguments[const Symbol('queryParameters')]
+            ['matching'];
+        final parseResponse =
+            invocation.namedArguments[const Symbol('parseResponse')]
+                as Future<List<GridRow>?> Function(Response);
+
+        if (query == null || query.isEmpty) {
+          return parseResponse(Response(jsonEncode(fullQueryResponse), 200));
+        } else {
+          return parseResponse(
+            Response(jsonEncode(filteredQueryResponse), 200),
+          );
+        }
+      });
 
       target = TestApp(
         client: client,
@@ -116,7 +172,7 @@ void main() {
     });
 
     testWidgets('Loading Grid has Error, displays error', (tester) async {
-      when(() => client.loadGrid(uri: gridUri))
+      when(() => client.loadGrid(uri: gridUri, loadEntities: false))
           .thenAnswer((_) => Future.error('Error loading Grid'));
 
       await tester.pumpWidget(target);
@@ -133,7 +189,7 @@ void main() {
 
     testWidgets('Loading Grid shows Loading State', (tester) async {
       final completer = Completer<Grid>();
-      when(() => client.loadGrid(uri: gridUri))
+      when(() => client.loadGrid(uri: gridUri, loadEntities: false))
           .thenAnswer((_) => completer.future);
 
       await tester.pumpWidget(target);
@@ -172,19 +228,30 @@ void main() {
           GridRow(
             id: 'row1',
             entries: [GridEntry(field, StringDataEntity())],
-            links: {},
+            links: {
+              ApptiveLinkType.self: ApptiveLink(
+                uri: Uri(path: '/api/entity/row1'),
+                method: 'get',
+              ),
+            },
           ),
         ],
         links: {
           ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
-          ApptiveLinkType.entities: ApptiveLink(
-            uri: gridUri.replace(path: '${gridUri.path}/entities'),
+          ApptiveLinkType.query: ApptiveLink(
+            uri: gridUri.replace(path: '${gridUri.path}/query'),
             method: 'get',
           ),
         },
       );
-
-      when(() => client.loadGrid(uri: gridUri))
+      when(
+        () => client.performApptiveLink<List<GridRow>>(
+          link: queryLink,
+          queryParameters: any(named: 'queryParameters'),
+          parseResponse: any(named: 'parseResponse'),
+        ),
+      ).thenAnswer((_) async => gridWithNull.rows);
+      when(() => client.loadGrid(uri: gridUri, loadEntities: false))
           .thenAnswer((_) async => gridWithNull);
 
       await tester.pumpWidget(target);
@@ -198,6 +265,175 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('null'), findsNothing);
+    });
+
+    group('Preview Value', () {
+      final crossRefUri = Uri(path: '/crossRefGrid');
+      final crossEntity = Uri(path: '/crossEntity');
+      final multiCrossEntity = Uri(path: '/multiCrossEntity');
+      final crossField = GridField(
+        id: 'cross',
+        name: 'CrossRef',
+        type: DataType.crossReference,
+        schema: {
+          'gridUri': crossRefUri,
+        },
+      );
+      final multiCrossField = GridField(
+        id: 'multiCross',
+        name: 'MultiCrossRef',
+        type: DataType.multiCrossReference,
+        schema: {
+          'gridUri': crossRefUri,
+        },
+      );
+      final stringField =
+          GridField(id: 'string', name: 'String', type: DataType.text);
+
+      testWidgets('Takes first non Cross or MultiCross Value as Preview Value',
+          (tester) async {
+        final gridResponse = Grid(
+          id: 'grid',
+          name: 'Test',
+          fields: [crossField, multiCrossField, stringField],
+          rows: [
+            GridRow(
+              id: 'row1',
+              entries: [
+                GridEntry(
+                  crossField,
+                  CrossReferenceDataEntity(
+                    gridUri: crossRefUri,
+                    value: 'A',
+                    entityUri: crossEntity,
+                  ),
+                ),
+                GridEntry(
+                  multiCrossField,
+                  MultiCrossReferenceDataEntity(
+                    gridUri: crossRefUri,
+                    references: [
+                      CrossReferenceDataEntity(
+                        gridUri: crossRefUri,
+                        value: 'B',
+                        entityUri: multiCrossEntity,
+                      )
+                    ],
+                  ),
+                ),
+                GridEntry(stringField, StringDataEntity('C'))
+              ],
+              links: {
+                ApptiveLinkType.self: ApptiveLink(
+                  uri: Uri(path: '/api/entity/row1'),
+                  method: 'get',
+                ),
+              },
+            ),
+          ],
+          links: {
+            ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
+            ApptiveLinkType.query: ApptiveLink(
+              uri: gridUri.replace(path: '${gridUri.path}/query'),
+              method: 'get',
+            ),
+          },
+        );
+        when(
+          () => client.performApptiveLink<List<GridRow>>(
+            link: queryLink,
+            queryParameters: any(named: 'queryParameters'),
+            parseResponse: any(named: 'parseResponse'),
+          ),
+        ).thenAnswer((_) async => gridResponse.rows);
+        when(() => client.loadGrid(uri: gridUri, loadEntities: false))
+            .thenAnswer((_) async => gridResponse);
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.arrow_drop_down));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(GridRowWidget));
+        await tester.pumpAndSettle();
+
+        expect(find.text('A'), findsNothing);
+        expect(find.text('B'), findsNothing);
+        expect(find.text('C'), findsOneWidget);
+      });
+
+      testWidgets('Shows nothing if only CrossRef or MultiCrossRef Value',
+          (tester) async {
+        final gridResponse = Grid(
+          id: 'grid',
+          name: 'Test',
+          fields: [crossField, multiCrossField],
+          rows: [
+            GridRow(
+              id: 'row1',
+              entries: [
+                GridEntry(
+                  crossField,
+                  CrossReferenceDataEntity(
+                    gridUri: crossRefUri,
+                    value: 'A',
+                    entityUri: crossEntity,
+                  ),
+                ),
+                GridEntry(
+                  multiCrossField,
+                  MultiCrossReferenceDataEntity(
+                    gridUri: crossRefUri,
+                    references: [
+                      CrossReferenceDataEntity(
+                        gridUri: crossRefUri,
+                        value: 'B',
+                        entityUri: multiCrossEntity,
+                      )
+                    ],
+                  ),
+                ),
+              ],
+              links: {
+                ApptiveLinkType.self: ApptiveLink(
+                  uri: Uri(path: '/api/entity/row1'),
+                  method: 'get',
+                ),
+              },
+            ),
+          ],
+          links: {
+            ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
+            ApptiveLinkType.query: ApptiveLink(
+              uri: gridUri.replace(path: '${gridUri.path}/query'),
+              method: 'get',
+            ),
+          },
+        );
+        when(
+          () => client.performApptiveLink<List<GridRow>>(
+            link: queryLink,
+            queryParameters: any(named: 'queryParameters'),
+            parseResponse: any(named: 'parseResponse'),
+          ),
+        ).thenAnswer((_) async => gridResponse.rows);
+        when(() => client.loadGrid(uri: gridUri, loadEntities: false))
+            .thenAnswer((_) async => gridResponse);
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.arrow_drop_down));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(GridRowWidget));
+        await tester.pumpAndSettle();
+
+        expect(find.text('A'), findsNothing);
+        expect(find.text('B'), findsNothing);
+        expect(find.text(''), findsOneWidget);
+      });
     });
   });
 
@@ -225,7 +461,8 @@ void main() {
         fields: [field],
       );
       final client = MockApptiveGridClient();
-      when(() => client.loadGrid(uri: any(named: 'uri'))).thenAnswer(
+      when(() => client.loadGrid(uri: any(named: 'uri'), loadEntities: false))
+          .thenAnswer(
         (invocation) async => Grid(
           id: 'grid',
           name: 'name',

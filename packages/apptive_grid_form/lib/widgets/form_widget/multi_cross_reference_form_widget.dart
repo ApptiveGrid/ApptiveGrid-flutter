@@ -1,7 +1,7 @@
 part of apptive_grid_form_widgets;
 
 /// FormComponent Widget to display a FormComponent<[MultiCrossReferenceDataEntity>]
-class MultiCrossReferenceFormWidget extends StatelessWidget {
+class MultiCrossReferenceFormWidget extends StatefulWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
   const MultiCrossReferenceFormWidget({
     super.key,
@@ -12,27 +12,43 @@ class MultiCrossReferenceFormWidget extends StatelessWidget {
   final FormComponent<MultiCrossReferenceDataEntity> component;
 
   @override
+  State<MultiCrossReferenceFormWidget> createState() =>
+      _MultiCrossReferenceFormWidgetState();
+}
+
+class _MultiCrossReferenceFormWidgetState
+    extends State<MultiCrossReferenceFormWidget> {
+  late final _SelectedRowsNotifier _selectedNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedNotifier = _SelectedRowsNotifier(
+      widget.component.data.value?.map((e) => e.entityUri).toList() ?? [],
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _CrossReferenceDropdownButtonFormField<
         MultiCrossReferenceDataEntity>(
-      component: component,
+      component: widget.component,
       selectedItemBuilder: (data) => Text(
         data!.value!.map((e) => e.value ?? '').join(', '),
       ),
-      isSelected: (entityUri) => component.data.value!
-          .map((entity) => entity.entityUri)
-          .contains(entityUri),
+      selectedNotifier: _selectedNotifier,
       onSelected: (entity, selected, state) {
         if (selected) {
-          component.data.value!.add(
+          widget.component.data.value!.add(
             entity,
           );
         } else {
-          component.data.value!.removeWhere(
+          widget.component.data.value!.removeWhere(
             (element) => element.entityUri == entity.entityUri,
           );
         }
-        state.requestRebuild();
+        _selectedNotifier.entities =
+            widget.component.data.value?.map((e) => e.entityUri).toList() ?? [];
       },
     );
   }
