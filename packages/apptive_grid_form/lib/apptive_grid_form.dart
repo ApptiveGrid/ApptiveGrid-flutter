@@ -434,12 +434,15 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 // So returning without any Padding
                 return component;
               } else {
-                return Padding(
-                  padding: widget.contentPadding ?? _defaultPadding,
-                  child: Builder(
-                    builder: (context) {
-                      return fromModel(data.components![componentIndex]);
-                    },
+                return IgnorePointer(
+                  ignoring: _actionsInProgress.isNotEmpty,
+                  child: Padding(
+                    padding: widget.contentPadding ?? _defaultPadding,
+                    child: Builder(
+                      builder: (context) {
+                        return fromModel(data.components![componentIndex]);
+                      },
+                    ),
                   ),
                 );
               }
