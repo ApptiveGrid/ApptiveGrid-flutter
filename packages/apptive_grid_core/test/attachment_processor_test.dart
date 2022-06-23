@@ -125,11 +125,11 @@ void main() {
   });
 
   group('Scale Image', () {
-    test('No Image, Returns original bytes', () {
+    test('No Image, Returns original bytes', () async {
       final bytes = Uint8List(10);
 
       expect(
-        processor.scaleImageToMaxSize(
+        await processor.scaleImageToMaxSize(
           originalImage: bytes,
           size: 10,
           type: 'image/png',
@@ -138,14 +138,14 @@ void main() {
       );
     });
 
-    test('Image small enough does not scale', () {
+    test('Image small enough does not scale', () async {
       // 2x4 Image from https://png-pixel.com/#:~:text=So%20a%20base64%20encoded%201x1%20PNG%20pixel%20wastes%2028%20bytes.
       final originalImage = base64Decode(
         'iVBORw0KGgoAAAANSUhEUgAAAAIAAAAECAYAAACk7+45AAAAEklEQVR42mP8z/C/ngEIGHEzAMiQCfmnp5u6AAAAAElFTkSuQmCC',
       );
 
       expect(
-        processor.scaleImageToMaxSize(
+        await processor.scaleImageToMaxSize(
           originalImage: originalImage,
           size: 4,
           type: 'image/png',
@@ -154,13 +154,13 @@ void main() {
       );
     });
 
-    test('Scales Portrait Image', () {
+    test('Scales Portrait Image', () async {
       // 2x4 Image from https://png-pixel.com/#:~:text=So%20a%20base64%20encoded%201x1%20PNG%20pixel%20wastes%2028%20bytes.
       final originalImage = base64Decode(
         'iVBORw0KGgoAAAANSUhEUgAAAAIAAAAECAYAAACk7+45AAAAEklEQVR42mP8z/C/ngEIGHEzAMiQCfmnp5u6AAAAAElFTkSuQmCC',
       );
 
-      final scaledImage = processor.scaleImageToMaxSize(
+      final scaledImage = await processor.scaleImageToMaxSize(
         originalImage: originalImage,
         size: 2,
         type: 'image/png',
@@ -171,13 +171,13 @@ void main() {
       expect(image.height, equals(2));
     });
 
-    test('Scales Horizontal Image', () {
+    test('Scales Horizontal Image', () async {
       // 4x2 Image from https://png-pixel.com/#:~:text=So%20a%20base64%20encoded%201x1%20PNG%20pixel%20wastes%2028%20bytes.
       final originalImage = base64Decode(
         'iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAAE0lEQVR42mP8z/C/ngEJMKILAABzTAT9NQTQfQAAAABJRU5ErkJggg==',
       );
 
-      final scaledImage = processor.scaleImageToMaxSize(
+      final scaledImage = await processor.scaleImageToMaxSize(
         originalImage: originalImage,
         size: 2,
         type: 'image/png',

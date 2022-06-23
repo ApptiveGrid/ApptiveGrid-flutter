@@ -2,6 +2,7 @@ library apptive_grid_client;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:isolate';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
