@@ -124,7 +124,7 @@ class AttachmentProcessor {
           _uploadFile(
             baseUri: baseUploadUri,
             headers: uploadHeaders,
-            bytes: scaleImageToMaxSize(
+            createBytes: () => scaleImageToMaxSize(
               originalImage: attachmentAction.byteData!,
               size: 1000,
               type: type,
@@ -139,7 +139,7 @@ class AttachmentProcessor {
             _uploadFile(
               baseUri: baseUploadUri,
               headers: uploadHeaders,
-              bytes: scaleImageToMaxSize(
+              createBytes: () => scaleImageToMaxSize(
                 originalImage: attachmentAction.byteData!,
                 size: 256,
                 type: type,
@@ -156,7 +156,7 @@ class AttachmentProcessor {
             _uploadFile(
               baseUri: baseUploadUri,
               headers: uploadHeaders,
-              bytes: scaleImageToMaxSize(
+              createBytes: () => scaleImageToMaxSize(
                 originalImage: attachmentAction.byteData!,
                 size: 64,
                 type: type,
@@ -182,7 +182,7 @@ class AttachmentProcessor {
       return _uploadFile(
         baseUri: baseUploadUri,
         headers: uploadHeaders,
-        bytes: attachmentAction.byteData!,
+        createBytes: () async => attachmentAction.byteData!,
         name: attachmentAction.attachment.url.pathSegments.last,
         type: attachmentAction.attachment.type,
       );
@@ -192,7 +192,7 @@ class AttachmentProcessor {
   Future<http.Response> _uploadFile({
     required Uri baseUri,
     required Map<String, String> headers,
-    required Uint8List bytes,
+    required Future<Uint8List> Function() createBytes,
     required String name,
     required String type,
   }) async {
@@ -213,12 +213,14 @@ class AttachmentProcessor {
       jsonDecode(uploadUrlResponse.body)['uploadURL'],
     );
 
+    final bodyBytes = await createBytes();
+
     final putResponse = await _client.put(
       uploadUrl,
       headers: {
         HttpHeaders.contentTypeHeader: type,
       },
-      body: bytes,
+      body: bodyBytes,
     );
 
     if (putResponse.statusCode >= 400) {
@@ -230,32 +232,52 @@ class AttachmentProcessor {
 
   /// Scales down [originalImage] so that the largest size will be [size] pixels while keeping the aspect ratio
   /// [type] should be the mime type of the image. It is used to determine the file format when scaling
-  Uint8List scaleImageToMaxSize({
+  Future<Uint8List> scaleImageToMaxSize({
     required Uint8List originalImage,
     required int size,
     required String type,
-  }) {
-    final resizeData = originalImage;
+  }) async {
+    final port = ReceivePort();
+    await Isolate.spawn(_scaleImageWorker, [
+      port.sendPort,
+      originalImage,
+      size,
+      type,
+    ]);
+
+    return await port.first as Uint8List;
+  }
+
+  static Future<void> _scaleImageWorker(List<dynamic> args) async {
+    final port = args[0] as SendPort;
+    final byteData = args[1] as Uint8List;
+    final size = args[2] as int;
+    final type = args[3] as String;
+
+    final resizeData = byteData;
     final image = img.decodeImage(resizeData);
     if (image == null || math.max(image.width, image.height) <= size) {
-      return originalImage;
+      Isolate.exit(port, byteData);
+    } else {
+      final isPortrait = image.width < image.height;
+      final widthFactor = isPortrait ? image.width / image.height : 1.0;
+      final heightFactor = isPortrait ? 1.0 : image.height / image.width;
+
+      final resized = img.copyResize(
+        image,
+        width: (size * widthFactor).toInt(),
+        height: (size * heightFactor).toInt(),
+        interpolation: img.Interpolation.average,
+      );
+      Isolate.exit(
+        port,
+        Uint8List.fromList(
+          img.encodeNamedImage(
+            resized,
+            'name.${type.split('/').last}',
+          )!,
+        ),
+      );
     }
-
-    final isPortrait = image.width < image.height;
-    final widthFactor = isPortrait ? image.width / image.height : 1.0;
-    final heightFactor = isPortrait ? 1.0 : image.height / image.width;
-
-    final resized = img.copyResize(
-      image,
-      width: (size * widthFactor).toInt(),
-      height: (size * heightFactor).toInt(),
-      interpolation: img.Interpolation.average,
-    );
-    return Uint8List.fromList(
-      img.encodeNamedImage(
-        resized,
-        'name.${type.split('/').last}',
-      )!,
-    );
   }
 }

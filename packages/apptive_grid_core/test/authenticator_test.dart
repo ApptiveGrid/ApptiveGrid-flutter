@@ -27,6 +27,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(Uri());
+    registerFallbackValue(const LaunchOptions());
 
     final mockUniLink = MockUniLinks();
     UniLinksPlatform.instance = mockUniLink;
@@ -183,14 +184,9 @@ void main() {
       final urlCompleter = Completer<String>();
       final urlLauncher = MockUrlLauncher();
       when(
-        () => urlLauncher.launch(
+        () => urlLauncher.launchUrl(
           any(),
-          useSafariVC: any(named: 'useSafariVC'),
-          useWebView: any(named: 'useWebView'),
-          enableJavaScript: any(named: 'enableJavaScript'),
-          enableDomStorage: any(named: 'enableDomStorage'),
-          universalLinksOnly: any(named: 'universalLinksOnly'),
-          headers: any(named: 'headers'),
+          any(),
         ),
       ).thenAnswer((invocation) async {
         urlCompleter.complete(
@@ -418,14 +414,9 @@ void main() {
       final completer = Completer<String>();
       final urlLauncher = MockUrlLauncher();
       when(
-        () => urlLauncher.launch(
+        () => urlLauncher.launchUrl(
           any(),
-          useSafariVC: any(named: 'useSafariVC'),
-          useWebView: any(named: 'useWebView'),
-          enableJavaScript: any(named: 'enableJavaScript'),
-          enableDomStorage: any(named: 'enableDomStorage'),
-          universalLinksOnly: any(named: 'universalLinksOnly'),
-          headers: any(named: 'headers'),
+          any(),
         ),
       ).thenAnswer((invocation) async {
         completer.complete(invocation.positionalArguments[0]);
@@ -1262,14 +1253,9 @@ void main() {
       when(() => urlLauncher.canLaunch(any())).thenAnswer((_) async => true);
       when(() => urlLauncher.closeWebView()).thenAnswer((_) async {});
       when(
-        () => urlLauncher.launch(
+        () => urlLauncher.launchUrl(
           any(),
-          useSafariVC: any(named: 'useSafariVC'),
-          useWebView: any(named: 'useWebView'),
-          enableJavaScript: any(named: 'enableJavaScript'),
-          enableDomStorage: any(named: 'enableDomStorage'),
-          universalLinksOnly: any(named: 'universalLinksOnly'),
-          headers: any(named: 'headers'),
+          any(),
         ),
       ).thenAnswer((invocation) async {
         final uri = Uri.parse(invocation.positionalArguments.first as String);
