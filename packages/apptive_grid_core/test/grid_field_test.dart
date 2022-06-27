@@ -53,5 +53,49 @@ void main() {
 
       expect(GridField.fromJson(fromJson.toJson()), equals(fromJson));
     });
+
+    test('CreatedBy type is parsed correctly', () {
+      final json = {
+        "key": null,
+        "id": "fieldId",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "displayValue": {"type": "string", "format": "string"},
+            "id": {"type": "string", "format": "string"},
+            "type": {"type": "string", "format": "string"},
+            "name": {"type": "string", "format": "string"}
+          },
+          "objectType": "userReference"
+        },
+        "name": "Created by",
+        "type": {
+          "name": "createdby",
+          "typeName": "createdby",
+          "componentTypes": ["textfield"]
+        },
+        "_links": {
+          "patch": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
+            "method": "patch"
+          },
+          "query": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query",
+            "method": "get"
+          },
+          "self": {
+            "href":
+                "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
+            "method": "get"
+          }
+        }
+      };
+
+      final fromJson = GridField.fromJson(json);
+
+      expect(fromJson.type, DataType.createdBy);
+    });
   });
 }

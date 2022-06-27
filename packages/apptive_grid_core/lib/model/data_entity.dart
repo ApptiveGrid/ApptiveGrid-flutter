@@ -78,8 +78,6 @@ abstract class DataEntity<T, S> with FilterableMixin {
           jsonValue: json,
           gridUri: field.schema['items']['gridUri'],
         );
-      // ignore: deprecated_member_use_from_same_package
-      case DataType.userReference:
       case DataType.createdBy:
         return CreatedByDataEntity.fromJson(json);
       case DataType.user:
