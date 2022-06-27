@@ -1,5 +1,6 @@
 ## 0.11.2
 * Add `DataType.currency`
+* Sanitize Form Links to load correct format even if providing a redirect uri
 
 ## 0.11.1+1
 * Fix parsing of GridField with `createdBy`. Convert deprecated `userReference` type into a static variable pointing to the correct `createdBy` type
