@@ -85,6 +85,11 @@ abstract class DataEntity<T, S> with FilterableMixin {
         return CreatedByDataEntity.fromJson(json);
       case DataType.user:
         return UserDataEntity.fromJson(json);
+      case DataType.currency:
+        return CurrencyDataEntity(
+          value: json,
+          currency: (field as CurrencyGridField).currency,
+        );
     }
   }
 }
@@ -455,4 +460,27 @@ class UserDataEntity extends DataEntity<DataUser, dynamic> {
   /// Returns [value] as a json object map
   @override
   dynamic get schemaValue => value?.toJson();
+}
+
+class CurrencyDataEntity extends DataEntity<double, double> {
+  CurrencyDataEntity({num? value, required this.currency})
+      : super(value?.toDouble());
+
+  @override
+  double? get schemaValue => value;
+
+  final String currency;
+
+  @override
+  String toString() => 'CurrencyDataEntity($value, currency: $currency)';
+
+  @override
+  bool operator ==(Object other) {
+    return other is CurrencyDataEntity &&
+        value == other.value &&
+        currency == other.currency;
+  }
+
+  @override
+  int get hashCode => super.hashCode + currency.hashCode;
 }

@@ -42,7 +42,10 @@ enum DataType {
   createdBy(backendName: 'createdby'),
 
   /// Type for User. A use case might be to assign a task to a user
-  user(backendName: 'user');
+  user(backendName: 'user'),
+
+  /// Type for Currency
+  currency(backendName: 'currency');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({
