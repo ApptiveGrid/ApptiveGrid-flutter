@@ -168,7 +168,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       hideDescription: widget.hideDescription,
       onActionSuccess: widget.onActionSuccess,
       onError: widget.onError,
-      triggerReload: () => loadForm(resetData: false),
+      triggerReload: () => loadForm(resetData: true),
       scrollController: widget.scrollController,
       buttonAlignment: widget.buttonAlignment,
       buttonLabel: widget.buttonLabel,
@@ -183,6 +183,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
     if (resetData) {
       setState(() {
         _formData = null;
+        _error = null;
       });
     }
     _client.loadForm(uri: widget.uri).then((value) {
@@ -346,6 +347,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             ? FormData.fromJson(widget.formData!.toJson())
             : null;
         _attachmentManager = AttachmentManager(_formData);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          widget.triggerReload?.call();
+        });
       }
       _error = widget.error;
       _success = false;
@@ -580,7 +584,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               if (_formData == null) {
                 widget.triggerReload?.call();
               }
-              _updateView(resetFormData: false);
+              _updateView(resetFormData: true);
             },
             child: Text(localization.backToForm),
           ),
