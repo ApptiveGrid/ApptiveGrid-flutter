@@ -42,12 +42,13 @@ class MockMapPlatform extends Mock
     implements GoogleMapsFlutterPlatform {}
 
 class TestApp extends StatelessWidget {
-  const TestApp(
-      {super.key,
-      this.client,
-      this.child,
-      this.options = const ApptiveGridOptions(),
-      this.locale = const Locale('en', 'US')});
+  const TestApp({
+    super.key,
+    this.client,
+    this.child,
+    this.options = const ApptiveGridOptions(),
+    this.locale = const Locale('en', 'US'),
+  });
 
   final Widget? child;
 

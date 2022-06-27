@@ -281,22 +281,26 @@ void main() {
           links: {
             ApptiveLinkType.patch: ApptiveLink(
               uri: Uri.parse(
-                  '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId',),
+                '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId',
+              ),
               method: 'patch',
             ),
             ApptiveLinkType.self: ApptiveLink(
               uri: Uri.parse(
-                  '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId',),
+                '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId',
+              ),
               method: 'get',
             ),
             ApptiveLinkType.query: ApptiveLink(
               uri: Uri.parse(
-                  '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query',),
+                '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query',
+              ),
               method: 'get',
             ),
             ApptiveLinkType.currencies: ApptiveLink(
               uri: Uri.parse(
-                  '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/currencies',),
+                '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/currencies',
+              ),
               method: 'get',
             ),
           },

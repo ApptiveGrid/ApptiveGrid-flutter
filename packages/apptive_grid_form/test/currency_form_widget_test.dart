@@ -234,7 +234,7 @@ void main() {
 
       final target = TestApp(
         client: client,
-        locale: Locale('de', 'DE'),
+        locale: const Locale('de', 'DE'),
         child: ApptiveGridForm(
           uri: formUri,
         ),

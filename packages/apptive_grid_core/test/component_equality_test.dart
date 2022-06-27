@@ -32,7 +32,8 @@ void main() {
   );
 
   final number = FormComponent<IntegerDataEntity>(
-    field: const GridField(id: 'number', name: 'Property', type: DataType.integer),
+    field:
+        const GridField(id: 'number', name: 'Property', type: DataType.integer),
     property: 'Property',
     data: IntegerDataEntity(),
     options: const FormComponentOptions(
@@ -50,7 +51,11 @@ void main() {
   );
 
   final dateTime = FormComponent<DateTimeDataEntity>(
-    field: const GridField(id: 'dateTime', name: 'Property', type: DataType.dateTime),
+    field: const GridField(
+      id: 'dateTime',
+      name: 'Property',
+      type: DataType.dateTime,
+    ),
     property: 'Property',
     data: DateTimeDataEntity(),
     options: const FormComponentOptions(),
@@ -58,7 +63,11 @@ void main() {
   );
 
   final checkBox = FormComponent<BooleanDataEntity>(
-    field: const GridField(id: 'checkBox', name: 'Property', type: DataType.checkbox),
+    field: const GridField(
+      id: 'checkBox',
+      name: 'Property',
+      type: DataType.checkbox,
+    ),
     property: 'Property',
     data: BooleanDataEntity(),
     options: const FormComponentOptions(),
