@@ -62,5 +62,9 @@ Widget fromModel(FormComponent component) {
       return UserFormWidget(
         component: component.cast<UserDataEntity>(),
       );
+    case DataType.currency:
+      return CurrencyFormWidget(
+        component: component.cast<CurrencyDataEntity>(),
+      );
   }
 }
