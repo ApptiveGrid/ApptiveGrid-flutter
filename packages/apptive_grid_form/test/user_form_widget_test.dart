@@ -443,7 +443,7 @@ void main() {
 
     testWidgets('No collaborators shows nothing', (tester) async {
       final formUri = Uri.parse('form');
-      final fieldWithoutLink =
+      const fieldWithoutLink =
           GridField(id: 'id', name: 'name', type: DataType.user);
       when(() => client.loadForm(uri: formUri)).thenAnswer(
         (_) async => FormData(

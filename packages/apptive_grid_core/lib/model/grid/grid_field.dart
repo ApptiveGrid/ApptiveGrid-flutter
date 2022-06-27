@@ -4,7 +4,7 @@ part of apptive_grid_model;
 class GridField {
   /// Creates a GridField
   /// If [type] is [DataType.currency] use [CurrencyGridField] instead
-  GridField({
+  const GridField({
     required this.id,
     this.key,
     required this.name,
@@ -93,11 +93,11 @@ class GridField {
 /// A [GridField] for [DataType.currency]
 class CurrencyGridField extends GridField {
   /// Creates a new [GridField] for [DataType.currency] with [currency]
-  CurrencyGridField({
+  const CurrencyGridField({
     required super.id,
     super.key,
     required super.name,
-    required super.links,
+    super.links = const {},
     super.schema,
     required this.currency,
   }) : super(
@@ -132,13 +132,14 @@ class CurrencyGridField extends GridField {
 
   @override
   int get hashCode => Object.hash(
-      GridField(
-        id: id,
-        name: name,
-        type: type,
-        key: key,
-        links: links,
-        schema: schema,
-      ),
-      currency);
+        GridField(
+          id: id,
+          name: name,
+          type: type,
+          key: key,
+          links: links,
+          schema: schema,
+        ),
+        currency,
+      );
 }

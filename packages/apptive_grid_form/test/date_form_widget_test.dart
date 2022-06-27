@@ -20,7 +20,7 @@ void main() {
       ),
     );
   });
-  final field = GridField(id: 'fieldId', name: 'name', type: DataType.date);
+  const field = GridField(id: 'fieldId', name: 'name', type: DataType.date);
   group('Localization', () {
     final date = DateTime(2021, 11, 5);
 

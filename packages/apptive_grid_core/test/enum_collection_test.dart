@@ -226,7 +226,7 @@ void main() {
       final direct = FormComponent<EnumCollectionDataEntity>(
         property: 'New field',
         data: directEntity,
-        field: GridField(
+        field: const GridField(
           id: 'c75385nsbbji82k5wntoj6sj2',
           name: 'name',
           type: DataType.enumCollection,

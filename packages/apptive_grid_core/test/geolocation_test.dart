@@ -355,7 +355,7 @@ void main() {
       final direct = FormComponent<GeolocationDataEntity>(
         property: 'Location',
         data: directEntity,
-        field: GridField(
+        field: const GridField(
           id: '78lnph2fb2olm9jtc696d66q9',
           name: 'Property',
           type: DataType.geolocation,

@@ -25,7 +25,7 @@ void main() {
       Uri.parse('/api/users/user/spaces/space/grids/grid'),
     );
   });
-  final field =
+  const field =
       GridField(id: 'fieldId', name: 'name', type: DataType.crossReference);
   group('FormWidget', () {
     late ApptiveGridClient client;
@@ -33,7 +33,7 @@ void main() {
     late GlobalKey<FormState> formKey;
 
     final gridUri = Uri.parse('/api/users/user/spaces/space/grids/grid');
-    final field = GridField(id: 'field', name: 'Name', type: DataType.text);
+    const field = GridField(id: 'field', name: 'Name', type: DataType.text);
 
     final fullQueryResponse = {
       'entities': [
@@ -287,7 +287,7 @@ void main() {
           'gridUri': crossRefUri,
         },
       );
-      final stringField =
+      const stringField =
           GridField(id: 'string', name: 'String', type: DataType.text);
 
       testWidgets('Takes first non Cross or MultiCross Value as Preview Value',

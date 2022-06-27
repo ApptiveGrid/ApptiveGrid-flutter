@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Casting', () {
     test('Cast method works', () {
-      final field = GridField(
+      const field = GridField(
         id: 'id',
         name: 'Property',
         type: DataType.text,
@@ -38,7 +38,7 @@ void main() {
     test('To String produces expected outcome', () {
       expect(
         FormComponent<StringDataEntity>(
-          field: GridField(
+          field: const GridField(
             id: 'id',
             name: 'Property',
             type: DataType.text,

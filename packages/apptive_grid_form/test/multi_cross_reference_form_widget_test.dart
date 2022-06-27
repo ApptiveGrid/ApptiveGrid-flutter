@@ -32,7 +32,7 @@ void main() {
     late GlobalKey<FormState> formKey;
 
     final gridUri = Uri.parse('/api/users/user/spaces/space/grids/grid');
-    final field = GridField(id: 'field', name: 'Name', type: DataType.text);
+    const field = GridField(id: 'field', name: 'Name', type: DataType.text);
     final grid = Grid(
       id: 'grid',
       name: 'Test',
@@ -350,7 +350,7 @@ void main() {
   group('Validation', () {
     testWidgets('is required but filled sends', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
-      final field = GridField(
+      const field = GridField(
         id: 'fieldId',
         name: 'name',
         type: DataType.multiCrossReference,

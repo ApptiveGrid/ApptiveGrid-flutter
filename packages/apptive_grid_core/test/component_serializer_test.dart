@@ -11,7 +11,7 @@ void main() {
         description: 'Description',
       );
       final component = FormComponent<StringDataEntity>(
-        field: GridField(id: 'id', name: 'Property', type: DataType.text),
+        field: const GridField(id: 'id', name: 'Property', type: DataType.text),
         property: 'Property',
         data: StringDataEntity('Value'),
         options: options,
@@ -32,7 +32,8 @@ void main() {
         description: 'Description',
       );
       final component = FormComponent<IntegerDataEntity>(
-        field: GridField(id: 'id', name: 'Property', type: DataType.integer),
+        field:
+            const GridField(id: 'id', name: 'Property', type: DataType.integer),
         property: 'Property',
         data: IntegerDataEntity(1),
         options: options,
@@ -53,7 +54,8 @@ void main() {
         description: 'Description',
       );
       final component = FormComponent<DecimalDataEntity>(
-        field: GridField(id: 'id', name: 'Property', type: DataType.decimal),
+        field:
+            const GridField(id: 'id', name: 'Property', type: DataType.decimal),
         property: 'Property',
         data: DecimalDataEntity(30.0),
         options: options,
@@ -69,7 +71,7 @@ void main() {
     test('Date', () {
       final options = FormComponentOptions.fromJson({});
       final component = FormComponent<DateDataEntity>(
-        field: GridField(id: 'id', name: 'Property', type: DataType.date),
+        field: const GridField(id: 'id', name: 'Property', type: DataType.date),
         property: 'Property',
         data: DateDataEntity(DateTime(2020, 07, 12)),
         options: options,
@@ -85,7 +87,11 @@ void main() {
     test('DateTime', () {
       final options = FormComponentOptions.fromJson({});
       final component = FormComponent<DateTimeDataEntity>(
-        field: GridField(id: 'id', name: 'Property', type: DataType.dateTime),
+        field: const GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.dateTime,
+        ),
         property: 'Property',
         data: DateTimeDataEntity(DateTime(2020, 07, 12, 12, 0, 0, 0)),
         options: options,
@@ -101,7 +107,11 @@ void main() {
     test('Checkbox', () {
       final options = FormComponentOptions.fromJson({});
       final component = FormComponent<BooleanDataEntity>(
-        field: GridField(id: 'id', name: 'Property', type: DataType.checkbox),
+        field: const GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.checkbox,
+        ),
         property: 'Property',
         data: BooleanDataEntity(false),
         options: options,
@@ -140,7 +150,11 @@ void main() {
 
       final jsonComponent = FormComponent.fromJson(json, [field]);
       final component = FormComponent<EnumDataEntity>(
-        field: GridField(id: id, name: property, type: DataType.singleSelect),
+        field: const GridField(
+          id: id,
+          name: property,
+          type: DataType.singleSelect,
+        ),
         property: property,
         data: EnumDataEntity(
           value: 'AG',
@@ -186,7 +200,11 @@ void main() {
 
       final jsonComponent = FormComponent.fromJson(json, [field]);
       final component = FormComponent<EnumCollectionDataEntity>(
-        field: GridField(id: id, name: property, type: DataType.enumCollection),
+        field: const GridField(
+          id: id,
+          name: property,
+          type: DataType.enumCollection,
+        ),
         property: property,
         data: EnumCollectionDataEntity(
           value: {'AG'},

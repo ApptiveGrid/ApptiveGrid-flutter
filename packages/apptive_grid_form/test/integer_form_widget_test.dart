@@ -22,7 +22,7 @@ void main() {
   group('Validation', () {
     testWidgets('is required but filled sends', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
-      final field =
+      const field =
           GridField(id: 'fieldId', name: 'name', type: DataType.integer);
       final formData = FormData(
         id: 'formId',

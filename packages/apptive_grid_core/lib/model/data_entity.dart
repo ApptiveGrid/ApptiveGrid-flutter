@@ -462,13 +462,16 @@ class UserDataEntity extends DataEntity<DataUser, dynamic> {
   dynamic get schemaValue => value?.toJson();
 }
 
+/// [DataEntity] to display a currency
 class CurrencyDataEntity extends DataEntity<double, double> {
+  /// Creates a new CurrencyDataEntity to have a amount of [value] in a specific [currency]
   CurrencyDataEntity({num? value, required this.currency})
       : super(value?.toDouble());
 
   @override
   double? get schemaValue => value;
 
+  /// ISO4217 currency code of this [value]
   final String currency;
 
   @override

@@ -24,9 +24,11 @@ class _CurrencyFormWidgetState extends State<CurrencyFormWidget>
 
   String _formatCurrency(double value) {
     final formatter = NumberFormat.currency(
-        locale: Localizations.localeOf(context).toString(),
-        symbol: NumberFormat()
-            .simpleCurrencySymbol(widget.component.data.currency));
+      locale: Localizations.localeOf(context).toString(),
+      symbol: NumberFormat().simpleCurrencySymbol(
+        widget.component.data.currency,
+      ),
+    );
     return formatter.format(value);
   }
 

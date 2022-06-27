@@ -19,7 +19,7 @@ void main() {
       ),
     );
   });
-  final field =
+  const field =
       GridField(id: 'id', name: 'name', type: DataType.enumCollection);
   testWidgets('Options get a chip', (tester) async {
     final component = FormComponent<EnumCollectionDataEntity>(

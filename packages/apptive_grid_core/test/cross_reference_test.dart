@@ -324,7 +324,7 @@ void main() {
       final direct = FormComponent<CrossReferenceDataEntity>(
         property: 'name',
         data: directEntity,
-        field: GridField(
+        field: const GridField(
           id: '3ftoqhqbct15h5o730uknpvp5',
           name: 'name',
           type: DataType.crossReference,

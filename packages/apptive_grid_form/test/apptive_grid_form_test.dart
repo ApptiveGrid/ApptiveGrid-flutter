@@ -970,7 +970,7 @@ void main() {
   group('User Reference', () {
     testWidgets('UserReference Form Widget is build without padding',
         (tester) async {
-      final field = GridField(
+      const field = GridField(
         id: 'field3',
         name: 'name',
         type: DataType.createdBy,
