@@ -2,6 +2,7 @@ import 'package:apptive_grid_core/cache/apptive_grid_cache.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:http/http.dart' as http;
@@ -41,18 +42,20 @@ class MockMapPlatform extends Mock
     implements GoogleMapsFlutterPlatform {}
 
 class TestApp extends StatelessWidget {
-  const TestApp({
-    super.key,
-    this.client,
-    this.child,
-    this.options = const ApptiveGridOptions(),
-  });
+  const TestApp(
+      {super.key,
+      this.client,
+      this.child,
+      this.options = const ApptiveGridOptions(),
+      this.locale = const Locale('en', 'US')});
 
   final Widget? child;
 
   final ApptiveGridClient? client;
 
   final ApptiveGridOptions options;
+
+  final Locale locale;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +64,15 @@ class TestApp extends StatelessWidget {
       options: options,
       child: ApptiveGridLocalization(
         child: MaterialApp(
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            locale,
+          ],
+          locale: locale,
           home: Builder(
             builder: (context) {
               return Material(child: child);

@@ -36,7 +36,9 @@ class _CurrencyFormWidgetState extends State<CurrencyFormWidget>
   void initState() {
     super.initState();
     if (widget.component.data.value != null) {
-      _controller.text = _formatCurrency(widget.component.data.value!);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _controller.text = _formatCurrency(widget.component.data.value!);
+      });
     }
   }
 
@@ -65,9 +67,10 @@ class _CurrencyFormWidgetState extends State<CurrencyFormWidget>
         FilteringTextInputFormatter.allow(RegExp(r'\d')),
         TextInputFormatter.withFunction((oldValue, newValue) {
           final cleanedInput = newValue.text.replaceAll(RegExp('[^0-9]'), '');
-          double value = double.parse(cleanedInput);
+          double value = double.parse(cleanedInput) / 100;
+          widget.component.data.value = value;
 
-          String newText = _formatCurrency(value / 100);
+          String newText = _formatCurrency(value);
 
           return newValue.copyWith(
             text: newText,
