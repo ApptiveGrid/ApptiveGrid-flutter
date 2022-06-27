@@ -1,3 +1,6 @@
+## 0.12.1
+* Add support for `DataType.currency`
+
 ## 0.12.0
 * Query backend when searching for CrossReferences
 * Fix Bug where CrossReferences could only be selected if their type was String
