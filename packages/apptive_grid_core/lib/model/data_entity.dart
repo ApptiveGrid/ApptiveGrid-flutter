@@ -80,6 +80,7 @@ abstract class DataEntity<T, S> with FilterableMixin {
         );
       // ignore: deprecated_member_use_from_same_package
       case DataType.userReference:
+      // ignore: no_duplicate_case_values
       case DataType.createdBy:
         return CreatedByDataEntity.fromJson(json);
       case DataType.user:

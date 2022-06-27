@@ -55,6 +55,7 @@ Widget fromModel(FormComponent component) {
       );
     // ignore: deprecated_member_use
     case DataType.userReference:
+    // ignore: no_duplicate_case_values
     case DataType.createdBy:
       return const CreatedByFormWidget();
     case DataType.user:

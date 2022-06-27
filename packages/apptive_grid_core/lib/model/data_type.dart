@@ -38,10 +38,6 @@ enum DataType {
   /// Type for Multi Cross References
   multiCrossReference(backendName: 'references'),
 
-  /// Type for UserReferences. Used for createdBy
-  @Deprecated('Use createdBy instead')
-  userReference(backendName: 'createdby'),
-
   /// Type for CreatedBy.
   createdBy(backendName: 'createdby'),
 
@@ -55,4 +51,8 @@ enum DataType {
 
   /// The name that is used in the ApptiveGridBackend for this [DataType]
   final String backendName;
+
+  /// Deprecated Type for UserReferences. Used for createdBy
+  @Deprecated('Use createdBy instead')
+  static const DataType userReference = DataType.createdBy;
 }
