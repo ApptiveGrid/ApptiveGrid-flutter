@@ -68,3 +68,25 @@ jobs:
 
       - name: Build iOS Examples
         run: melos run build:ios
+
+  report:
+    name: Report to Slack
+    needs: [
+      quality,
+      android_examples,
+      ios_examples
+    ]
+    if: ${{ always() && !cancelled() && github.ref_name == 'main'}}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: martialonline/workflow-status@v3
+        id: check
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: 'ApptiveGrid Flutter Packages'
+          SLACK_ICON: "https://apptiveattachmentsprod-apptiveattachmentbucket-1g9k6859i00z1.s3.eu-central-1.amazonaws.com/8398ca4c-c339-4c3e-89c2-8d0495e4b868"
+          SLACK_COLOR: ${{ steps.check.outputs.status }}
+          SLACK_FOOTER: ''
