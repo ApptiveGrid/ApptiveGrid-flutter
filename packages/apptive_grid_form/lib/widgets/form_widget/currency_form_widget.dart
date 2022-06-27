@@ -1,6 +1,6 @@
 part of apptive_grid_form_widgets;
 
-/// FormComponent Widget to display a FormComponent<[CurrencyDataEntity>]
+/// FormComponent Widget to display a [FormComponent<CurrencyDataEntity>]
 class CurrencyFormWidget extends StatefulWidget {
   /// Creates a [TextFormField] to show and edit an integer contained in [component]
   const CurrencyFormWidget({
