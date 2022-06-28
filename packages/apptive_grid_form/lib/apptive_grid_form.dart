@@ -142,7 +142,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
   void didUpdateWidget(covariant ApptiveGridForm oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.uri != oldWidget.uri) {
-      loadForm();
+      loadForm(resetData: true);
     }
   }
 

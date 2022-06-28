@@ -496,7 +496,8 @@ class UriDataEntity extends DataEntity<Uri, String> {
   UriDataEntity([super.value]);
 
   /// Creates a new UriDataEntity to have a [value]
-  factory UriDataEntity.fromJson(String json) => UriDataEntity(Uri.parse(json));
+  factory UriDataEntity.fromJson(String? json) =>
+      UriDataEntity(json != null ? Uri.tryParse(json) : null);
 
   /// Returns [value] as a json object map
   @override
