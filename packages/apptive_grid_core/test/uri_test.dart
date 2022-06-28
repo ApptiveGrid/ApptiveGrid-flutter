@@ -200,7 +200,7 @@ void main() {
       final direct = FormComponent<UriDataEntity>(
         property: 'name',
         data: directEntity,
-        field: GridField(
+        field: const GridField(
           id: '62bab0b25e92ba8e899edeea',
           name: 'name',
           type: DataType.uri,

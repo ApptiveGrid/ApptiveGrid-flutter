@@ -28,10 +28,10 @@ class _UriFormWidgetState extends State<UriFormWidget>
     _controller.text = widget.component.data.value?.toString() ?? '';
     _controller.addListener(() {
       if (_controller.text.isNotEmpty) {
-        final uri = Uri.tryParse(_controller.text);
-        widget.component.data.value = uri?.replace(
-          scheme: uri.scheme.isEmpty ? 'https' : uri.scheme,
+        final uri = Uri.tryParse(
+          '${_controller.text.contains(':') ? '' : 'https://'}${_controller.text}',
         );
+        widget.component.data.value = uri;
       } else {
         widget.component.data.value = null;
       }

@@ -1,5 +1,5 @@
 ## 0.12.1
-* Add support for `DataType.currency`
+* Add support for `DataType.currency` and `DataType.uri`
 
 ## 0.12.0
 * Query backend when searching for CrossReferences
