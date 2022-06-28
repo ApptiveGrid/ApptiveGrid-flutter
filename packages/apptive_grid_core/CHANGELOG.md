@@ -1,5 +1,5 @@
 ## 0.11.2
-* Add `DataType.currency`
+* Add `DataType.currency` and `DataType.uri`
 * Sanitize Form Links to load correct format even if providing a redirect uri
 
 ## 0.11.1+1

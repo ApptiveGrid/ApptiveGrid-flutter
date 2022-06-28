@@ -35,6 +35,7 @@ part 'form_widget/geolocation_form_widget.dart';
 part 'form_widget/integer_form_widget.dart';
 part 'form_widget/multi_cross_reference_form_widget.dart';
 part 'form_widget/text_form_widget.dart';
+part 'form_widget/uri_form_widget.dart';
 part 'form_widget/user/user_dropdown_button_form_field.dart';
 part 'form_widget/user_form_widget.dart';
 part 'package:apptive_grid_form/widgets/grid/grid_row.dart';

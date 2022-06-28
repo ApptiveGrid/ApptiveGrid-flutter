@@ -90,6 +90,8 @@ abstract class DataEntity<T, S> with FilterableMixin {
           value: json,
           currency: (field as CurrencyGridField).currency,
         );
+      case DataType.uri:
+        return UriDataEntity.fromJson(json);
     }
   }
 }
@@ -486,4 +488,18 @@ class CurrencyDataEntity extends DataEntity<double, double> {
 
   @override
   int get hashCode => super.hashCode + currency.hashCode;
+}
+
+/// [DataEntity] to representing a [Uri]
+class UriDataEntity extends DataEntity<Uri, String> {
+  /// Creates a new UriDataEntity to have a [value]
+  UriDataEntity([super.value]);
+
+  /// Creates a new UriDataEntity to have a [value]
+  factory UriDataEntity.fromJson(String? json) =>
+      UriDataEntity(json != null ? Uri.tryParse(json) : null);
+
+  /// Returns [value] as a json object map
+  @override
+  String? get schemaValue => value?.toString();
 }
