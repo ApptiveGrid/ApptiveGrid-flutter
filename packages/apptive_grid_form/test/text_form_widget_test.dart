@@ -23,7 +23,7 @@ void main() {
     const value = '''A
 multi-line
 string''';
-    final field = GridField(id: 'Field', name: 'name', type: DataType.text);
+    const field = GridField(id: 'Field', name: 'name', type: DataType.text);
     final target = TextFormWidget(
       component: FormComponent<StringDataEntity>(
         property: 'Text',
@@ -52,7 +52,7 @@ string''';
     const value = '''A
 multi-line
 string''';
-    final field = GridField(id: 'Field', name: 'name', type: DataType.text);
+    const field = GridField(id: 'Field', name: 'name', type: DataType.text);
     final formData = FormData(
       id: 'formId',
       title: 'Title',
@@ -89,7 +89,7 @@ string''';
   group('Validation', () {
     testWidgets('is required but filled sends', (tester) async {
       final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
-      final field = GridField(id: 'fieldId', name: 'name', type: DataType.text);
+      const field = GridField(id: 'fieldId', name: 'name', type: DataType.text);
       final formData = FormData(
         id: 'formId',
         title: 'title',

@@ -390,7 +390,7 @@ void main() {
         }
       ]);
 
-      final field =
+      const field =
           GridField(id: 'id', name: 'property', type: DataType.attachment);
       final direct = FormComponent<AttachmentDataEntity>(
         property: 'New field',

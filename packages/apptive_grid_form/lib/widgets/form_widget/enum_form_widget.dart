@@ -1,6 +1,6 @@
 part of apptive_grid_form_widgets;
 
-/// FormComponent Widget to display a FormComponent<[EnumDataEntity>]
+/// FormComponent Widget to display a [FormComponent<EnumDataEntity>]
 class EnumFormWidget extends StatefulWidget {
   /// Creates a [Checkbox] to display a boolean value contained in [component]
   const EnumFormWidget({

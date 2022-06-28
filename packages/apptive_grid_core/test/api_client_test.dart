@@ -697,7 +697,7 @@ void main() {
           final action =
               ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
           final bytes = Uint8List(10);
-          final field =
+          const field =
               GridField(id: 'id', name: 'property', type: DataType.attachment);
           final formData = FormData(
             id: 'formId',
@@ -867,7 +867,7 @@ void main() {
             final bytes = Uint8List(10);
             final attachmentAction =
                 AddAttachmentAction(byteData: bytes, attachment: attachment);
-            final field = GridField(
+            const field = GridField(
               id: 'id',
               name: 'property',
               type: DataType.attachment,
@@ -1065,7 +1065,7 @@ void main() {
               final bytes = Uint8List(10);
               final attachmentAction =
                   AddAttachmentAction(byteData: bytes, attachment: attachment);
-              final field = GridField(
+              const field = GridField(
                 id: 'id',
                 name: 'property',
                 type: DataType.attachment,
@@ -1354,7 +1354,7 @@ void main() {
               newName: 'NewName',
               attachment: attachment,
             );
-            final field = GridField(
+            const field = GridField(
               id: 'id',
               name: 'property',
               type: DataType.attachment,
@@ -1390,7 +1390,7 @@ void main() {
                 ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
             final attachmentAction =
                 DeleteAttachmentAction(attachment: attachment);
-            final field = GridField(
+            const field = GridField(
               id: 'id',
               name: 'property',
               type: DataType.attachment,
@@ -1477,7 +1477,7 @@ void main() {
           final bytes = Uint8List(10);
           final attachmentAction =
               AddAttachmentAction(byteData: bytes, attachment: attachment);
-          final field =
+          const field =
               GridField(id: 'id', name: 'property', type: DataType.attachment);
           final formData = FormData(
             id: 'formId',

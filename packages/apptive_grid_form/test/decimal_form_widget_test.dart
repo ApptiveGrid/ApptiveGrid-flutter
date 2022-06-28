@@ -19,7 +19,7 @@ void main() {
       ),
     );
   });
-  final field = GridField(id: 'field', name: 'name', type: DataType.decimal);
+  const field = GridField(id: 'field', name: 'name', type: DataType.decimal);
   group('Input Sanitation', () {
     testWidgets('Wrong Input does not get added', (tester) async {
       final dataEntity = DecimalDataEntity();

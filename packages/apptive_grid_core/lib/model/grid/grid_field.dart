@@ -3,7 +3,8 @@ part of apptive_grid_model;
 /// Model representing a Field in a Grid
 class GridField {
   /// Creates a GridField
-  GridField({
+  /// If [type] is [DataType.currency] use [CurrencyGridField] instead
+  const GridField({
     required this.id,
     this.key,
     required this.name,
@@ -12,17 +13,34 @@ class GridField {
     this.schema,
   });
 
-  /// Create a Gridfield from [json]
+  /// Creates a GridField from [json]
   factory GridField.fromJson(Map<String, dynamic> json) {
-    return GridField(
-      id: json['id'],
-      name: json['name'],
-      key: json['key'],
-      type: DataType.values
-          .firstWhere((type) => type.backendName == json['type']['name']),
-      links: linkMapFromJson(json['_links']),
-      schema: json['schema'],
-    );
+    final type = DataType.values
+        .firstWhere((type) => type.backendName == json['type']['name']);
+    final id = json['id'];
+    final name = json['name'];
+    final key = json['key'];
+    final links = linkMapFromJson(json['_links']);
+    final schema = json['schema'];
+    if (type == DataType.currency) {
+      return CurrencyGridField(
+        id: id,
+        name: name,
+        key: key,
+        schema: schema,
+        links: links,
+        currency: json['type']['currency'],
+      );
+    } else {
+      return GridField(
+        id: id,
+        name: name,
+        key: key,
+        schema: schema,
+        links: links,
+        type: type,
+      );
+    }
   }
 
   /// id of the field
@@ -70,4 +88,58 @@ class GridField {
 
   @override
   int get hashCode => toString().hashCode;
+}
+
+/// A [GridField] for [DataType.currency]
+class CurrencyGridField extends GridField {
+  /// Creates a new [GridField] for [DataType.currency] with [currency]
+  const CurrencyGridField({
+    required super.id,
+    super.key,
+    required super.name,
+    super.links = const {},
+    super.schema,
+    required this.currency,
+  }) : super(
+          type: DataType.currency,
+        );
+
+  /// The ISO-4217 currency code for this field
+  final String currency;
+
+  @override
+  Map<String, dynamic> toJson() {
+    final json = super.toJson();
+    json['type'] = {
+      ...json['type'],
+      'currency': currency,
+    };
+    return json;
+  }
+
+  @override
+  String toString() =>
+      'CurrencyGridField(id: $id, name: $name, key: $key, currency: $currency)';
+
+  @override
+  bool operator ==(Object other) {
+    return other is CurrencyGridField &&
+        currency == other.currency &&
+        id == other.id &&
+        name == other.name &&
+        f.mapEquals(links, other.links);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        GridField(
+          id: id,
+          name: name,
+          type: type,
+          key: key,
+          links: links,
+          schema: schema,
+        ),
+        currency,
+      );
 }

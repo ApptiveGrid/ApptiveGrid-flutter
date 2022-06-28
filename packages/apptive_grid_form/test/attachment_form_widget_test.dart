@@ -25,7 +25,7 @@ void main() {
       ),
     );
   });
-  final field =
+  const field =
       GridField(id: 'fieldId', name: 'name', type: DataType.attachment);
   group('Add attachment', () {
     group('Files', () {

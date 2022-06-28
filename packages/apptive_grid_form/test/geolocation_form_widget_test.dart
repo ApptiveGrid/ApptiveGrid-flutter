@@ -38,7 +38,7 @@ void main() {
     registerFallbackValue(const MapObjects());
   });
 
-  final field =
+  const field =
       GridField(id: 'fieldId', name: 'name', type: DataType.geolocation);
   group('TextInput', () {
     testWidgets('Initial Location Geocodes to address', (tester) async {

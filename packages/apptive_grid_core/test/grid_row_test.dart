@@ -5,7 +5,7 @@ void main() {
   group('Equality', () {
     test('From Json equals direct', () {
       const id = 'id';
-      final field = GridField(
+      const field = GridField(
         id: 'fieldId',
         name: 'fieldName',
         type: DataType.text,

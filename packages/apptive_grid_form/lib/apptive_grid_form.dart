@@ -183,6 +183,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
     if (resetData) {
       setState(() {
         _formData = null;
+        _error = null;
       });
     }
     _client.loadForm(uri: widget.uri).then((value) {
@@ -192,6 +193,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       if (mounted) {
         setState(() {
           _formData = value;
+          _error = null;
         });
       }
     }).catchError((error) {

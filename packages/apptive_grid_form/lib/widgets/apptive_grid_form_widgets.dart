@@ -24,6 +24,7 @@ part 'form_widget/check_box_form_widget.dart';
 part 'form_widget/created_by_form_widget.dart';
 part 'form_widget/cross_reference/cross_reference_dropdown_button_form_field.dart';
 part 'form_widget/cross_reference_form_widget.dart';
+part 'form_widget/currency_form_widget.dart';
 part 'form_widget/date_form_widget.dart';
 part 'form_widget/date_time_form_widget.dart';
 part 'form_widget/decimal_form_widget.dart';

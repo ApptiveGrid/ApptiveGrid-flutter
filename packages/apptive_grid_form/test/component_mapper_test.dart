@@ -6,7 +6,11 @@ void main() {
   group('Mapping', () {
     test('TextComponent', () {
       final component = FormComponent<StringDataEntity>(
-        field: GridField(id: 'String', name: 'Property', type: DataType.text),
+        field: const GridField(
+          id: 'String',
+          name: 'Property',
+          type: DataType.text,
+        ),
         data: StringDataEntity(),
         property: 'Property',
         required: false,
@@ -20,7 +24,7 @@ void main() {
 
     test('NumberComponent', () {
       final component = FormComponent<IntegerDataEntity>(
-        field: GridField(
+        field: const GridField(
           id: 'id',
           name: 'Property',
           type: DataType.integer,
@@ -38,7 +42,7 @@ void main() {
 
     test('DecimalComponent', () {
       final component = FormComponent<DecimalDataEntity>(
-        field: GridField(
+        field: const GridField(
           id: 'id',
           name: 'Property',
           type: DataType.decimal,
@@ -56,7 +60,7 @@ void main() {
 
     test('DateComponent', () {
       final component = FormComponent<DateDataEntity>(
-        field: GridField(
+        field: const GridField(
           id: 'id',
           name: 'Property',
           type: DataType.date,
@@ -74,7 +78,7 @@ void main() {
 
     test('DateTimeComponent', () {
       final component = FormComponent<DateTimeDataEntity>(
-        field: GridField(
+        field: const GridField(
           id: 'id',
           name: 'Property',
           type: DataType.dateTime,
@@ -92,7 +96,7 @@ void main() {
 
     test('CheckBoxComponent', () {
       final component = FormComponent<BooleanDataEntity>(
-        field: GridField(
+        field: const GridField(
           id: 'id',
           name: 'Property',
           type: DataType.checkbox,
@@ -110,7 +114,7 @@ void main() {
 
     test('EnumComponent', () {
       final component = FormComponent<EnumDataEntity>(
-        field: GridField(
+        field: const GridField(
           id: 'id',
           name: 'Property',
           type: DataType.singleSelect,
@@ -128,7 +132,7 @@ void main() {
 
     test('EnumCollectionComponent', () {
       final component = FormComponent<EnumCollectionDataEntity>(
-        field: GridField(
+        field: const GridField(
           id: 'id',
           name: 'Property',
           type: DataType.enumCollection,
@@ -146,7 +150,7 @@ void main() {
 
     test('CrossReferenceComponent', () {
       final component = FormComponent<CrossReferenceDataEntity>(
-        field: GridField(
+        field: const GridField(
           id: 'id',
           name: 'Property',
           type: DataType.crossReference,
@@ -166,7 +170,7 @@ void main() {
 
     test('MultiCrossReferenceComponent', () {
       final component = FormComponent<MultiCrossReferenceDataEntity>(
-        field: GridField(
+        field: const GridField(
           id: 'id',
           name: 'Property',
           type: DataType.multiCrossReference,
@@ -186,7 +190,7 @@ void main() {
 
     test('CreatedByComponent', () {
       final component = FormComponent<CreatedByDataEntity>(
-        field: GridField(
+        field: const GridField(
           id: 'id',
           name: 'Property',
           type: DataType.createdBy,
@@ -211,7 +215,7 @@ void main() {
 
     test('UserComponent', () {
       final component = FormComponent<UserDataEntity>(
-        field: GridField(
+        field: const GridField(
           id: 'id',
           name: 'Property',
           type: DataType.user,
@@ -226,6 +230,26 @@ void main() {
 
       expect(widget.runtimeType, equals(UserFormWidget));
       expect((widget as UserFormWidget).component, equals(component));
+    });
+
+    test('Currency', () {
+      final component = FormComponent<CurrencyDataEntity>(
+        field: const CurrencyGridField(
+          id: 'id',
+          name: 'Property',
+          currency: 'EUR',
+          links: {},
+        ),
+        data: CurrencyDataEntity(currency: 'EUR'),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, equals(CurrencyFormWidget));
+      expect((widget as CurrencyFormWidget).component, equals(component));
     });
   });
 }

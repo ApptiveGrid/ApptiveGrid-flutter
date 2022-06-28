@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final textA = FormComponent<StringDataEntity>(
-    field: GridField(id: 'textId', name: 'Property', type: DataType.text),
+    field: const GridField(id: 'textId', name: 'Property', type: DataType.text),
     property: 'Property',
     data: StringDataEntity('Value'),
     options: const FormComponentOptions(
@@ -12,7 +12,7 @@ void main() {
     required: true,
   );
   final textB = FormComponent<StringDataEntity>(
-    field: GridField(id: 'textId', name: 'Property', type: DataType.text),
+    field: const GridField(id: 'textId', name: 'Property', type: DataType.text),
     property: 'Property',
     data: StringDataEntity('Value'),
     options: const FormComponentOptions(
@@ -22,7 +22,7 @@ void main() {
   );
 
   final textC = FormComponent<StringDataEntity>(
-    field: GridField(id: 'textC', name: 'Property', type: DataType.text),
+    field: const GridField(id: 'textC', name: 'Property', type: DataType.text),
     property: 'Property',
     data: StringDataEntity(),
     options: const FormComponentOptions(
@@ -32,7 +32,8 @@ void main() {
   );
 
   final number = FormComponent<IntegerDataEntity>(
-    field: GridField(id: 'number', name: 'Property', type: DataType.integer),
+    field:
+        const GridField(id: 'number', name: 'Property', type: DataType.integer),
     property: 'Property',
     data: IntegerDataEntity(),
     options: const FormComponentOptions(
@@ -42,7 +43,7 @@ void main() {
   );
 
   final date = FormComponent<DateDataEntity>(
-    field: GridField(id: 'date', name: 'Property', type: DataType.date),
+    field: const GridField(id: 'date', name: 'Property', type: DataType.date),
     property: 'Property',
     data: DateDataEntity(),
     options: const FormComponentOptions(),
@@ -50,7 +51,11 @@ void main() {
   );
 
   final dateTime = FormComponent<DateTimeDataEntity>(
-    field: GridField(id: 'dateTime', name: 'Property', type: DataType.dateTime),
+    field: const GridField(
+      id: 'dateTime',
+      name: 'Property',
+      type: DataType.dateTime,
+    ),
     property: 'Property',
     data: DateTimeDataEntity(),
     options: const FormComponentOptions(),
@@ -58,7 +63,11 @@ void main() {
   );
 
   final checkBox = FormComponent<BooleanDataEntity>(
-    field: GridField(id: 'checkBox', name: 'Property', type: DataType.checkbox),
+    field: const GridField(
+      id: 'checkBox',
+      name: 'Property',
+      type: DataType.checkbox,
+    ),
     property: 'Property',
     data: BooleanDataEntity(),
     options: const FormComponentOptions(),

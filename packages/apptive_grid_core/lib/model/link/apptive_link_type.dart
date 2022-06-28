@@ -77,6 +77,9 @@ enum ApptiveLinkType {
   /// Remove a field
   removeField,
 
+  /// Gets available currency for a [GridField] with [GridField.type] == [DataType.currency]
+  currencies,
+
   /// Get the schema of a [Grid]
   schema,
 

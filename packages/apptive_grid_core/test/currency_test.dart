@@ -8,13 +8,7 @@ void main() {
       'entities': [
         {
           'fields': [
-            [
-              {
-                'displayValue': 'Yeah!',
-                'uri':
-                    '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
-              }
-            ]
+            12345.12,
           ],
           '_id': '60d0370e0edfa83071816e12',
           '_links': {
@@ -30,28 +24,38 @@ void main() {
       'filter': {},
       'fields': [
         {
-          "type": {
-            "name": "references",
-            "componentTypes": ["multiSelectDropdown"]
-          },
           "key": null,
-          "name": "Multi Cross",
-          "schema": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "displayValue": {"type": "string"},
-                "uri": {"type": "string"}
-              },
-              "required": ["uri"],
-              "objectType": "entityreference",
-              "gridUri":
-                  "/api/users/userId/spaces/spaceId/grids/referencedGridId"
-            }
+          "id": "fieldId",
+          "schema": {"type": "number", "format": "float"},
+          "name": "Currency Field",
+          "type": {
+            "name": "currency",
+            "typeName": "currency",
+            "currency": "USD",
+            "componentTypes": ["textfield"]
           },
-          "id": "628210cb04bd301aa89b7f93",
-          "_links": <String, dynamic>{}
+          "_links": {
+            "patch": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
+              "method": "patch"
+            },
+            "query": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query",
+              "method": "get"
+            },
+            "self": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
+              "method": "get"
+            },
+            "currencies": {
+              "href":
+                  "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/currencies",
+              "method": "get"
+            }
+          }
         }
       ],
       'name': 'New grid view',
@@ -140,16 +144,8 @@ void main() {
       final grid = Grid.fromJson(rawResponse);
 
       expect(grid.fields!.length, equals(1));
-      final referenceValue = MultiCrossReferenceDataEntity.fromJson(
-        jsonValue: [
-          {
-            'displayValue': 'Yeah!',
-            'uri':
-                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
-          }
-        ],
-        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
-      );
+      final referenceValue =
+          CurrencyDataEntity(currency: 'USD', value: 12345.12);
       expect(
         grid.rows![0].entries[0].data,
         equals(referenceValue),
@@ -161,44 +157,28 @@ void main() {
 
       expect(Grid.fromJson(fromJson.toJson()), fromJson);
     });
+  });
 
-    test('GridUri is parsed Correctly', () {
-      final dataEntity = Grid.fromJson(rawResponse).rows![0].entries[0].data
-          as MultiCrossReferenceDataEntity;
-
+  group('GridFied', () {
+    test('CurrencyGridField toString() produces expected Outcome', () {
       expect(
-        dataEntity.gridUri.toString(),
-        (rawResponse['fields'] as List).first['schema']['items']['gridUri'],
+        const CurrencyGridField(
+          id: 'id',
+          name: 'Currency',
+          key: 'key',
+          links: {},
+          currency: 'USD',
+        ).toString(),
+        'CurrencyGridField(id: id, name: Currency, key: key, currency: USD)',
       );
     });
   });
 
   group('DataEntity', () {
     test('Equality', () {
-      final a = MultiCrossReferenceDataEntity.fromJson(
-        jsonValue: [
-          {
-            'displayValue': 'Yeah!',
-            'uri':
-                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
-          }
-        ],
-        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
-      );
-      final b = MultiCrossReferenceDataEntity.fromJson(
-        jsonValue: [
-          {
-            'displayValue': 'Yeah!',
-            'uri':
-                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
-          }
-        ],
-        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
-      );
-      final c = MultiCrossReferenceDataEntity.fromJson(
-        jsonValue: null,
-        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
-      );
+      final a = CurrencyDataEntity(currency: 'USD', value: 12345.12);
+      final b = CurrencyDataEntity(currency: 'USD', value: 12345.12);
+      final c = CurrencyDataEntity(currency: 'EUR', value: 12345.12);
       expect(a, equals(b));
       expect(a, isNot(c));
 
@@ -212,28 +192,38 @@ void main() {
       final responseWithMultiCrossReference = {
         'fields': [
           {
-            "type": {
-              "name": "references",
-              "componentTypes": ["multiSelectDropdown"]
-            },
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "displayValue": {"type": "string"},
-                  "uri": {"type": "string"}
-                },
-                "required": ["uri"],
-                "objectType": "entityreference",
-                "gridUri":
-                    "/api/users/userId/spaces/spaceId/grids/referencedGridId"
-              }
-            },
-            "id": "3ftoqhqbct15h5o730uknpvp5",
-            "name": "name",
             "key": null,
-            "_links": <String, dynamic>{}
+            "id": "3ftoqhqbct15h5o730uknpvp5",
+            "schema": {"type": "number", "format": "float"},
+            "name": "name",
+            "type": {
+              "name": "currency",
+              "typeName": "currency",
+              "currency": "USD",
+              "componentTypes": ["textfield"]
+            },
+            "_links": {
+              "patch": {
+                "href":
+                    "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
+                "method": "patch"
+              },
+              "query": {
+                "href":
+                    "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query",
+                "method": "get"
+              },
+              "self": {
+                "href":
+                    "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
+                "method": "get"
+              },
+              "currencies": {
+                "href":
+                    "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/currencies",
+                "method": "get"
+              }
+            }
           }
         ],
         'schemaObject':
@@ -241,13 +231,7 @@ void main() {
         'components': [
           {
             'property': 'name',
-            'value': [
-              {
-                'displayValue': 'Yeah!',
-                'uri':
-                    '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId',
-              }
-            ],
+            'value': 12345.12,
             'required': false,
             'options': {'label': null, 'description': null},
             'fieldId': '3ftoqhqbct15h5o730uknpvp5',
@@ -285,28 +269,46 @@ void main() {
 
       final fromJson = formData.components![0];
 
-      final directEntity = MultiCrossReferenceDataEntity.fromJson(
-        jsonValue: [
-          {
-            'displayValue': 'Yeah!',
-            'uri':
-                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
-          }
-        ],
-        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
-      );
+      final directEntity = CurrencyDataEntity(currency: 'USD', value: 12345.12);
 
-      final direct = FormComponent<MultiCrossReferenceDataEntity>(
+      final direct = FormComponent<CurrencyDataEntity>(
         property: 'name',
         data: directEntity,
-        field: const GridField(
+        field: CurrencyGridField(
           id: '3ftoqhqbct15h5o730uknpvp5',
           name: 'name',
-          type: DataType.multiCrossReference,
+          currency: 'USD',
+          links: {
+            ApptiveLinkType.patch: ApptiveLink(
+              uri: Uri.parse(
+                '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId',
+              ),
+              method: 'patch',
+            ),
+            ApptiveLinkType.self: ApptiveLink(
+              uri: Uri.parse(
+                '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId',
+              ),
+              method: 'get',
+            ),
+            ApptiveLinkType.query: ApptiveLink(
+              uri: Uri.parse(
+                '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query',
+              ),
+              method: 'get',
+            ),
+            ApptiveLinkType.currencies: ApptiveLink(
+              uri: Uri.parse(
+                '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/currencies',
+              ),
+              method: 'get',
+            ),
+          },
+          schema: {"type": "number", "format": "float"},
         ),
       );
 
-      expect(fromJson, equals(direct));
+      expect(fromJson.cast<CurrencyDataEntity>(), equals(direct));
       expect(fromJson.hashCode, equals(direct.hashCode));
     });
   });

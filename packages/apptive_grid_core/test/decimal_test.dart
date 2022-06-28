@@ -206,7 +206,7 @@ void main() {
       final direct = FormComponent<DecimalDataEntity>(
         property: 'name',
         data: directEntity,
-        field: GridField(
+        field: const GridField(
           id: '3ftoqhqbct15h5o730uknpvp5',
           name: 'name',
           type: DataType.decimal,

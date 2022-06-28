@@ -89,8 +89,12 @@ class ApptiveGridClient {
   }) async {
     assert(uri != null || formUri != null);
     final url = _generateApptiveGridUri(uri ?? formUri!.uri);
-    final response =
-        await _client.get(url, headers: _createHeadersWithDefaults(headers));
+    final sanitizedUrl =
+        url.replace(path: url.path.replaceAll(RegExp('/r/'), '/a/'));
+    final response = await _client.get(
+      sanitizedUrl,
+      headers: _createHeadersWithDefaults(headers),
+    );
     if (response.statusCode >= 400) {
       if (response.statusCode == 401 && !isRetry) {
         await _authenticator.checkAuthentication();

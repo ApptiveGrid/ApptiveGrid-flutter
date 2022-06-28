@@ -9,7 +9,11 @@ void main() {
     testWidgets('Default Label is Property', (tester) async {
       const property = 'Property';
       final component = FormComponent<StringDataEntity>(
-        field: GridField(id: 'String', name: 'Property', type: DataType.text),
+        field: const GridField(
+          id: 'String',
+          name: 'Property',
+          type: DataType.text,
+        ),
         data: StringDataEntity(),
         property: property,
         options: const FormComponentOptions(),
@@ -30,7 +34,11 @@ void main() {
       const property = 'Property';
       const customLabel = 'CustomLabel';
       final component = FormComponent<StringDataEntity>(
-        field: GridField(id: 'String', name: 'Property', type: DataType.text),
+        field: const GridField(
+          id: 'String',
+          name: 'Property',
+          type: DataType.text,
+        ),
         data: StringDataEntity(),
         property: property,
         options: const FormComponentOptions(
@@ -54,7 +62,8 @@ void main() {
     testWidgets('Default Label is Property', (tester) async {
       const property = 'Property';
       final component = FormComponent<IntegerDataEntity>(
-        field: GridField(id: 'id', name: 'Property', type: DataType.integer),
+        field:
+            const GridField(id: 'id', name: 'Property', type: DataType.integer),
         data: IntegerDataEntity(),
         property: property,
         options: const FormComponentOptions(),
@@ -75,7 +84,8 @@ void main() {
       const property = 'Property';
       const customLabel = 'CustomLabel';
       final component = FormComponent<IntegerDataEntity>(
-        field: GridField(id: 'id', name: 'Property', type: DataType.integer),
+        field:
+            const GridField(id: 'id', name: 'Property', type: DataType.integer),
         data: IntegerDataEntity(),
         property: property,
         options: const FormComponentOptions(
