@@ -62,4 +62,9 @@ abstract class ApptiveGridTranslation {
 
   /// Hint that no user was found in list of collaborators that matches [query]
   String searchUserNoResult(String query);
+
+  String progressProcessAttachment(
+      {required int processed, required int total});
+
+  String get progressSubmitForm;
 }

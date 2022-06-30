@@ -3,6 +3,7 @@ library apptive_grid_form;
 import 'dart:async';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_form/src/util/submit_progress.dart';
 import 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
 import 'package:apptive_grid_form/widgets/form_widget/attachment_manager.dart';
@@ -314,6 +315,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   bool _submitting = false;
 
   StreamSubscription<SubmitFormProgressEvent>? _submitProgressSubscription;
+  SubmitProgress? _progress;
 
   /// Returns the current [FormData] held in this Widget
   FormData? get currentData {
@@ -466,16 +468,29 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                   child: Builder(
                     builder: (_) {
                       if (_submitting) {
-                        return const TextButton(
-                          onPressed: null,
-                          child: Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          ),
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const TextButton(
+                              onPressed: null,
+                              child: Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              ),
+                            ),
+                            if (_progress != null)
+                              Padding(
+                                padding:
+                                    widget.contentPadding ?? _defaultPadding,
+                                child:
+                                    SubmitProgressWidget(progress: _progress!),
+                              ),
+                          ],
                         );
                       } else {
                         return ActionButton(
                           action: submitLink!,
-                          onPressed: _submitForm,
+                          onPressed: (link) => _submitForm(link, context),
                           child: Text(
                             widget.buttonLabel ?? localization.actionSend,
                           ),
@@ -603,24 +618,48 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
-  Future<void> _submitForm(ApptiveLink link) async {
+  Future<void> _submitForm(ApptiveLink link, BuildContext buildContext) async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _submitting = true;
       });
+      final l10n = ApptiveGridLocalization.of(buildContext)!;
+      const doneAttachmentPercentage = 0.6;
+      const uploadFormPercentage = 0.8;
+      const startPercentage = 0.1;
       _submitProgressSubscription?.cancel();
+      final attachmentsToUpload = _formData!.attachmentActions.length;
+      int attachmentCount = 0;
+      setState(() {
+        _progress = SubmitProgress(
+            message: l10n.progressProcessAttachment(
+                processed: attachmentCount, total: attachmentsToUpload),
+            progress: startPercentage);
+      });
       _submitProgressSubscription =
           _client.submitFormWithProgress(link, _formData!).listen(
         (event) async {
           if (event is ProcessedAttachmentProgressEvent) {
-            debugPrint('Processed Attachment');
+            setState(() {
+              _progress = SubmitProgress(
+                  message: l10n.progressProcessAttachment(
+                      processed: ++attachmentCount, total: attachmentsToUpload),
+                  progress: startPercentage +
+                      (attachmentCount *
+                          (doneAttachmentPercentage - startPercentage) /
+                          attachmentsToUpload));
+            });
           } else if (event is AttachmentCompleteProgressEvent) {
             final response = event.response;
             if (response != null && response.statusCode >= 400) {
               _onSavedOffline();
             }
           } else if (event is UploadFormProgressEvent) {
-            debugPrint('Uploading Form');
+            setState(() {
+              _progress = SubmitProgress(
+                  message: l10n.progressSubmitForm,
+                  progress: uploadFormPercentage);
+            });
           } else if (event is SubmitCompleteProgressEvent) {
             final response = event.response;
             if (response != null && response.statusCode < 400) {

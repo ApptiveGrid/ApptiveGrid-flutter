@@ -47,4 +47,10 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   @override
   String searchUserNoResult(String query) =>
       'No Users found that match "$query"';
+  @override
+  String progressProcessAttachment(
+          {required int processed, required int total}) =>
+      'Processing Attachments [$processed/$total]';
+  @override
+  String get progressSubmitForm => "Submitting Form";
 }
