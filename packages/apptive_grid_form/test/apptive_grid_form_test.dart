@@ -786,6 +786,53 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets('Cache, Error in Attachment, Shows Saved Screen',
+        (tester) async {
+      final cacheMap = <ActionItem>{};
+      final cache = MockApptiveGridCache();
+      when(() => cache.addPendingActionItem(any())).thenAnswer(
+        (invocation) => cacheMap.add(invocation.positionalArguments[0]),
+      );
+      when(() => cache.removePendingActionItem(any())).thenAnswer(
+        (invocation) => cacheMap.remove(invocation.positionalArguments[0]),
+      );
+      when(() => cache.getPendingActionItems())
+          .thenAnswer((invocation) => cacheMap.toList());
+
+      final client = MockApptiveGridClient();
+      when(() => client.loadForm(uri: formUri)).thenAnswer(
+        (invocation) => Future.value(data),
+      );
+      when(() => client.sendPendingActions()).thenAnswer((invocation) async {});
+      when(() => client.submitFormWithProgress(action, data)).thenAnswer(
+        (invocation) => Stream.value(
+          AttachmentCompleteProgressEvent(http.Response('', 400)),
+        ),
+      );
+      when(() => client.options).thenReturn(ApptiveGridOptions(cache: cache));
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: formUri,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(
+          'The form was saved and will be sent at the next opportunity',
+          skipOffstage: false,
+        ),
+        findsOneWidget,
+      );
+    });
   });
 
   group('Current Data', () {
@@ -1124,6 +1171,64 @@ void main() {
       // ignore: deprecated_member_use_from_same_package
       expect(apptiveGridForm.formUri.uri, equals(uri));
       expect(apptiveGridForm.uri, equals(uri));
+    });
+  });
+
+  group('Progress', () {
+    testWidgets('Shows Progress', (tester) async {
+      final controller = StreamController<SubmitFormProgressEvent>();
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+      final attachment = Attachment(
+        name: 'name',
+        url: Uri(path: '/attachment'),
+        type: 'image/png',
+      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      final formData = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        attachmentActions: {
+          attachment:
+              AddAttachmentAction(byteData: null, attachment: attachment)
+        },
+        links: {ApptiveLinkType.submit: action},
+        fields: [],
+      );
+
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+        (_) => controller.stream,
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pump();
+
+      expect(find.text('Processing Attachments [0/1]'), findsOneWidget);
+
+      controller.add(ProcessedAttachmentProgressEvent(attachment));
+      await tester.pump();
+      expect(find.text('Processing Attachments [1/1]'), findsOneWidget);
+      controller.add(UploadFormProgressEvent(formData));
+      await tester.pump();
+      expect(find.text('Submitting Form'), findsOneWidget);
+      controller.add(SubmitCompleteProgressEvent(http.Response('', 200)));
+      await tester.pump();
+
+      expect(find.byType(Lottie), findsOneWidget);
+      expect(find.text('Thank You!', skipOffstage: false), findsOneWidget);
+      expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
     });
   });
 }
