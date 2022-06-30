@@ -9,6 +9,7 @@ import 'dart:typed_data';
 import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:apptive_grid_core/apptive_grid_network.dart';
 import 'package:apptive_grid_core/apptive_grid_options.dart';
+import 'package:apptive_grid_core/model/form/submit_form_progress.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
@@ -131,31 +132,68 @@ class ApptiveGridClient {
   ///
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
   ///
-  /// if this returns a [http.Response] with a [http.Response.statusCode] >= 400 it means that the Item was saved in [options.cache]
-  /// throws [Response] if the request fails
-  Future<http.Response?> submitForm(
+  /// This will return a Stream of [SubmitFormProgressEvent]s to indicate the current step of the submission
+  Stream<SubmitFormProgressEvent> submitFormWithProgress(
     ApptiveLink link,
     FormData formData, {
     bool saveToPendingItems = true,
     Map<String, String> headers = const {},
-  }) async {
+  }) async* {
     final actionItem = ActionItem(link: link, data: formData);
 
-    final attachmentActions = await _performAttachmentActions(
+    final controller = StreamController<SubmitFormProgressEvent>();
+
+    _performAttachmentActions(
       formData.attachmentActions,
       fromForm: true,
       headers: headers,
-    ).catchError(
-      (error) => _handleActionError(
-        error,
-        actionItem: actionItem,
-        saveToPendingItems: saveToPendingItems,
-      ),
+      statusController: controller,
     );
-    if (attachmentActions.statusCode >= 400) {
-      return attachmentActions;
+
+    SubmitFormProgressEvent? attachmentActions;
+    yield* controller.stream.map((event) {
+      if (event is AttachmentCompleteProgressEvent ||
+          event is ErrorProgressEvent) {
+        attachmentActions ??= event;
+      }
+      return event;
+    }).handleError((error) async {
+      if (error is http.Response) {
+        attachmentActions ??= AttachmentCompleteProgressEvent(error);
+      } else {
+        attachmentActions ??= ErrorProgressEvent(error);
+      }
+    });
+
+    if ((attachmentActions is ErrorProgressEvent) ||
+        (attachmentActions is AttachmentCompleteProgressEvent &&
+            ((attachmentActions as AttachmentCompleteProgressEvent)
+                        .response
+                        ?.statusCode ??
+                    400) >=
+                400)) {
+      late final dynamic error;
+      if (attachmentActions is ErrorProgressEvent) {
+        error = (attachmentActions as ErrorProgressEvent).error;
+      } else {
+        error = (attachmentActions as AttachmentCompleteProgressEvent).response;
+      }
+      if (saveToPendingItems && error != null) {
+        yield SubmitCompleteProgressEvent(
+          await _handleActionError(
+            error,
+            actionItem: actionItem,
+            saveToPendingItems: saveToPendingItems,
+          ),
+        );
+      } else {
+        yield ErrorProgressEvent(error);
+      }
+
+      return;
     }
 
+    yield UploadFormProgressEvent(formData);
     late http.Response? response;
     try {
       response = await performApptiveLink<http.Response>(
@@ -166,20 +204,69 @@ class ApptiveGridClient {
       );
     } catch (error) {
       // Catch all Exception for compatibility Reasons between Web and non Web Apps
-      return _handleActionError(
-        error,
-        actionItem: actionItem,
-        saveToPendingItems: saveToPendingItems,
-      );
+
+      if (saveToPendingItems) {
+        yield SubmitCompleteProgressEvent(
+          await _handleActionError(
+            error,
+            actionItem: actionItem,
+            saveToPendingItems: saveToPendingItems,
+          ),
+        );
+      } else {
+        yield ErrorProgressEvent(error);
+      }
+      return;
     }
     if (response != null && response.statusCode < 400) {
       // Action was performed successfully. Remove it from pending Actions
       await options.cache?.removePendingActionItem(actionItem);
     }
-    return response;
+    yield SubmitCompleteProgressEvent(response);
   }
 
-  Future<http.Response> _handleActionError(
+  /// Submits [formData] against [link]
+  ///
+  /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
+  ///
+  /// if this returns a [http.Response] with a [http.Response.statusCode] >= 400 it means that the Item was saved in [options.cache]
+  /// throws [Response] if the request fails
+  Future<http.Response?> submitForm(
+    ApptiveLink link,
+    FormData formData, {
+    bool saveToPendingItems = true,
+    Map<String, String> headers = const {},
+  }) async {
+    final eventWithResponse = await submitFormWithProgress(
+      link,
+      formData,
+      saveToPendingItems: false, // Saving is handled below
+      headers: headers,
+    )
+        .firstWhere(
+      (element) =>
+          element is SubmitCompleteProgressEvent ||
+          element is ErrorProgressEvent,
+    )
+        .catchError((error) {
+      throw error;
+    });
+
+    if (eventWithResponse is SubmitCompleteProgressEvent) {
+      return eventWithResponse.response;
+    } else if (eventWithResponse is ErrorProgressEvent) {
+      final error = eventWithResponse.error;
+      return _handleActionError(
+        error,
+        actionItem: ActionItem(link: link, data: formData),
+        saveToPendingItems: saveToPendingItems,
+      );
+    } else {
+      return null;
+    }
+  }
+
+  Future<http.Response?> _handleActionError(
     Object error, {
     required ActionItem actionItem,
     required bool saveToPendingItems,
@@ -201,26 +288,62 @@ class ApptiveGridClient {
     Map<Attachment, AttachmentAction> actions, {
     bool fromForm = false,
     Map<String, String> headers = const {},
+    StreamController<SubmitFormProgressEvent>? statusController,
   }) async {
-    await Future.wait(
-      actions.values.map((action) {
-        switch (action.type) {
-          case AttachmentActionType.add:
-            return _attachmentProcessor.uploadAttachment(
-              action as AddAttachmentAction,
-            );
-          case AttachmentActionType.delete:
-            debugPrint('Delete Attachment ${action.attachment}');
-            return Future.value();
-          case AttachmentActionType.rename:
-            debugPrint(
-              'Rename Attachment ${action.attachment} to "${action.attachment.name}"',
-            );
-            return Future.value();
-        }
-      }),
-    );
-    return http.Response('AttachmentActionSuccess', 200);
+    try {
+      await Future.wait(
+        actions.values.map((action) {
+          switch (action.type) {
+            case AttachmentActionType.add:
+              return _attachmentProcessor
+                  .uploadAttachment(
+                action as AddAttachmentAction,
+              )
+                  .then((response) {
+                statusController?.add(
+                  ProcessedAttachmentProgressEvent(
+                    action.attachment,
+                  ),
+                );
+                return response;
+              }).catchError((error) {
+                throw error;
+              });
+            case AttachmentActionType.delete:
+              debugPrint('Delete Attachment ${action.attachment}');
+              return Future.value().then((response) {
+                statusController?.add(
+                  ProcessedAttachmentProgressEvent(
+                    action.attachment,
+                  ),
+                );
+                return response;
+              });
+            case AttachmentActionType.rename:
+              debugPrint(
+                'Rename Attachment ${action.attachment} to "${action.attachment.name}"',
+              );
+              return Future.value().then((response) {
+                statusController?.add(
+                  ProcessedAttachmentProgressEvent(
+                    action.attachment,
+                  ),
+                );
+                return response;
+              });
+          }
+        }),
+      );
+      final response = http.Response('AttachmentActionSuccess', 200);
+      statusController?.add(AttachmentCompleteProgressEvent(response));
+      statusController?.close();
+      return response;
+    } catch (error) {
+      statusController?.addError(error);
+      statusController?.close();
+      final response = http.Response('AttachmentActionError', 400);
+      return response;
+    }
   }
 
   /// Loads a [Grid] represented by [gridUri]
