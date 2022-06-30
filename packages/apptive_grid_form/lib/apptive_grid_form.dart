@@ -1,5 +1,7 @@
 library apptive_grid_form;
 
+import 'dart:async';
+
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_form/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
@@ -309,7 +311,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   late AttachmentManager _attachmentManager;
 
-  final Set<ApptiveLink> _actionsInProgress = {};
+  bool _submitting = false;
+
+  StreamSubscription<SubmitFormProgressEvent>? _submitProgressSubscription;
 
   /// Returns the current [FormData] held in this Widget
   FormData? get currentData {
@@ -337,6 +341,12 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _client = ApptiveGrid.getClient(context);
+  }
+
+  @override
+  void dispose() {
+    _submitProgressSubscription?.cancel();
+    super.dispose();
   }
 
   void _updateView({
@@ -437,7 +447,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 return component;
               } else {
                 return IgnorePointer(
-                  ignoring: _actionsInProgress.isNotEmpty,
+                  ignoring: _submitting,
                   child: Padding(
                     padding: widget.contentPadding ?? _defaultPadding,
                     child: Builder(
@@ -455,7 +465,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                   alignment: widget.buttonAlignment,
                   child: Builder(
                     builder: (_) {
-                      if (_actionsInProgress.contains(submitLink)) {
+                      if (_submitting) {
                         return const TextButton(
                           onPressed: null,
                           child: Center(
@@ -596,26 +606,47 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   Future<void> _submitForm(ApptiveLink link) async {
     if (_formKey.currentState!.validate()) {
       setState(() {
-        _actionsInProgress.add(link);
+        _submitting = true;
       });
-      _client.submitForm(link, _formData!).then((response) async {
-        if (response != null && response.statusCode < 400) {
-          if (await widget.onActionSuccess?.call(link, _formData!) ?? true) {
-            setState(() {
-              _success = true;
-            });
+      _submitProgressSubscription?.cancel();
+      _submitProgressSubscription =
+          _client.submitFormWithProgress(link, _formData!).listen(
+        (event) async {
+          if (event is ProcessedAttachmentProgressEvent) {
+            debugPrint('Processed Attachment');
+          } else if (event is AttachmentCompleteProgressEvent) {
+            final response = event.response;
+            if (response != null && response.statusCode >= 400) {
+              _onSavedOffline();
+            }
+          } else if (event is UploadFormProgressEvent) {
+            debugPrint('Uploading Form');
+          } else if (event is SubmitCompleteProgressEvent) {
+            final response = event.response;
+            if (response != null && response.statusCode < 400) {
+              if (await widget.onActionSuccess?.call(link, _formData!) ??
+                  true) {
+                setState(() {
+                  _success = true;
+                });
+              }
+            } else {
+              // FormData was saved to [ApptiveGridCache]
+              _onSavedOffline();
+            }
+          } else if (event is ErrorProgressEvent) {
+            _onError(event.error);
           }
-        } else {
-          // FormData was saved to [ApptiveGridCache]
-          _onSavedOffline();
-        }
-      }).catchError((error) {
-        _onError(error);
-      }).whenComplete(() {
-        setState(() {
-          _actionsInProgress.remove(link);
-        });
-      });
+        },
+        onError: (error) {
+          _onError(error);
+        },
+        onDone: () {
+          setState(() {
+            _submitting = false;
+          });
+        },
+      );
     }
   }
 

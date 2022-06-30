@@ -9,7 +9,6 @@ import 'dart:typed_data';
 import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:apptive_grid_core/apptive_grid_network.dart';
 import 'package:apptive_grid_core/apptive_grid_options.dart';
-import 'package:apptive_grid_core/model/form/submit_form_progress.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;

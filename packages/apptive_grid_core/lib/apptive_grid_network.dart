@@ -20,6 +20,7 @@ export 'package:apptive_grid_core/network/authentication/web_auth_enabler/web_au
 export 'package:apptive_grid_core/network/filter/apptive_grid_filter.dart';
 export 'package:apptive_grid_core/network/sorting/apptive_grid_sorting.dart';
 
+export 'model/form/submit_form_progress.dart';
 export 'network/apptive_grid_client.dart';
 
 part 'network/apptive_grid_layout.dart';

@@ -277,8 +277,11 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.submitForm(action, formData))
-          .thenAnswer((_) async => http.Response('', 200));
+      when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+        (_) => Stream.value(
+          SubmitCompleteProgressEvent(http.Response('', 200)),
+        ),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -310,8 +313,11 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.submitForm(action, formData))
-          .thenAnswer((_) async => http.Response('', 200));
+      when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+        (_) => Stream.value(
+          SubmitCompleteProgressEvent(http.Response('', 200)),
+        ),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -395,8 +401,8 @@ void main() {
         when(
           () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.submitForm(action, formData))
-            .thenAnswer((_) => Future.error(''));
+        when(() => client.submitFormWithProgress(action, formData))
+            .thenAnswer((_) => Stream.value(const ErrorProgressEvent('')));
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
@@ -428,8 +434,8 @@ void main() {
         when(
           () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.submitForm(action, formData))
-            .thenAnswer((_) => Future.error(''));
+        when(() => client.submitFormWithProgress(action, formData))
+            .thenAnswer((_) => Stream.value(const ErrorProgressEvent('')));
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
@@ -462,8 +468,8 @@ void main() {
         when(
           () => client.loadForm(uri: formUri),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.submitForm(action, formData))
-            .thenAnswer((_) => Future.error(''));
+        when(() => client.submitFormWithProgress(action, formData))
+            .thenAnswer((_) => Stream.value(const ErrorProgressEvent('')));
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
@@ -512,8 +518,11 @@ void main() {
         when(
           () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.submitForm(action, formData))
-            .thenAnswer((_) async => http.Response('', 500));
+        when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+          (_) => Stream.value(
+            SubmitCompleteProgressEvent(http.Response('', 500)),
+          ),
+        );
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
@@ -550,8 +559,9 @@ void main() {
         when(
           () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.submitForm(action, formData))
-            .thenAnswer((_) => Future.error(Exception('Testing Errors')));
+        when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+          (_) => Stream.value(ErrorProgressEvent(Exception('Testing Errors'))),
+        );
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
@@ -583,8 +593,10 @@ void main() {
         when(
           () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).thenAnswer((realInvocation) async => formData);
-        when(() => client.submitForm(action, formData)).thenAnswer(
-          (_) => Future.error(http.Response('Testing Errors', 400)),
+        when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+          (_) => Stream.value(
+            ErrorProgressEvent(http.Response('Testing Errors', 400)),
+          ),
         );
 
         await tester.pumpWidget(target);
@@ -623,8 +635,11 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.submitForm(action, formData))
-          .thenAnswer((_) async => http.Response('', 200));
+      when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+        (_) => Stream.value(
+          SubmitCompleteProgressEvent(http.Response('', 200)),
+        ),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -657,8 +672,8 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.submitForm(action, formData))
-          .thenAnswer((_) => Future.error(''));
+      when(() => client.submitFormWithProgress(action, formData))
+          .thenAnswer((_) => Stream.value(const ErrorProgressEvent('')));
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -830,8 +845,11 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.submitForm(action, formData))
-          .thenAnswer((_) async => http.Response('', 200));
+      when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+        (_) => Stream.value(
+          SubmitCompleteProgressEvent(http.Response('', 200)),
+        ),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -872,8 +890,9 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.submitForm(action, formData))
-          .thenAnswer((_) async => http.Response('', 400));
+      when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+        (_) => Stream.value(ErrorProgressEvent(http.Response('', 400))),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -910,8 +929,12 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.submitForm(action, formData))
-          .thenAnswer((_) => actionCompleter.future);
+      when(() => client.submitFormWithProgress(action, formData))
+          .thenAnswer((_) {
+        return actionCompleter.future
+            .asStream()
+            .map((event) => SubmitCompleteProgressEvent(event));
+      });
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -951,8 +974,12 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).thenAnswer((realInvocation) async => formData);
-      when(() => client.submitForm(action, formData))
-          .thenAnswer((_) => actionCompleter.future);
+      when(() => client.submitFormWithProgress(action, formData))
+          .thenAnswer((_) {
+        return actionCompleter.future
+            .asStream()
+            .map((event) => SubmitCompleteProgressEvent(event));
+      });
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
