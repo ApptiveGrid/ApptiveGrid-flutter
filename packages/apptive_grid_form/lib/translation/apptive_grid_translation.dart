@@ -63,8 +63,12 @@ abstract class ApptiveGridTranslation {
   /// Hint that no user was found in list of collaborators that matches [query]
   String searchUserNoResult(String query);
 
-  String progressProcessAttachment(
-      {required int processed, required int total});
+  /// Message that [processed] out of [total] attachments have been processed for a form submission
+  String progressProcessAttachment({
+    required int processed,
+    required int total,
+  });
 
+  /// Message that the form is being submitted
   String get progressSubmitForm;
 }

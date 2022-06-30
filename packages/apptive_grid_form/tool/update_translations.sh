@@ -69,7 +69,7 @@ for lang in "en" "de"; do
     else if [ $key == "progressProcessAttachment" ]; then
       wildcardProcessed="processed"
       wildcardTotal="total"
-      printf "   String %s({required int %s, required int %s}) => \'%s\';\n" $key "$wildcardProcessed" "$wildcardTotal" "$translation" >>$langFile
+      printf "   String %s({required int %s, required int %s,}) => \'%s\';\n" $key "$wildcardProcessed" "$wildcardTotal" "$translation" >>$langFile
     else
       printf "   String get %s => \"%s\";\n" $key "$translation" >>$langFile
     fi

@@ -632,9 +632,12 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       int attachmentCount = 0;
       setState(() {
         _progress = SubmitProgress(
-            message: l10n.progressProcessAttachment(
-                processed: attachmentCount, total: attachmentsToUpload),
-            progress: startPercentage);
+          message: l10n.progressProcessAttachment(
+            processed: attachmentCount,
+            total: attachmentsToUpload,
+          ),
+          progress: startPercentage,
+        );
       });
       _submitProgressSubscription =
           _client.submitFormWithProgress(link, _formData!).listen(
@@ -642,12 +645,15 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           if (event is ProcessedAttachmentProgressEvent) {
             setState(() {
               _progress = SubmitProgress(
-                  message: l10n.progressProcessAttachment(
-                      processed: ++attachmentCount, total: attachmentsToUpload),
-                  progress: startPercentage +
-                      (attachmentCount *
-                          (doneAttachmentPercentage - startPercentage) /
-                          attachmentsToUpload));
+                message: l10n.progressProcessAttachment(
+                  processed: ++attachmentCount,
+                  total: attachmentsToUpload,
+                ),
+                progress: startPercentage +
+                    (attachmentCount *
+                        (doneAttachmentPercentage - startPercentage) /
+                        attachmentsToUpload),
+              );
             });
           } else if (event is AttachmentCompleteProgressEvent) {
             final response = event.response;
@@ -657,8 +663,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           } else if (event is UploadFormProgressEvent) {
             setState(() {
               _progress = SubmitProgress(
-                  message: l10n.progressSubmitForm,
-                  progress: uploadFormPercentage);
+                message: l10n.progressSubmitForm,
+                progress: uploadFormPercentage,
+              );
             });
           } else if (event is SubmitCompleteProgressEvent) {
             final response = event.response;
