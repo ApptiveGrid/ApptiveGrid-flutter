@@ -1,3 +1,6 @@
+## 0.11.3
+* Add `submitFormWithProgress` to client to submit a Form and receive Progress Event Updates
+
 ## 0.11.2
 * Add `DataType.currency` and `DataType.uri`
 * Sanitize Form Links to load correct format even if providing a redirect uri

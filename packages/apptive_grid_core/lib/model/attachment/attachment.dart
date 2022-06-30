@@ -49,7 +49,7 @@ class Attachment {
 
   @override
   String toString() {
-    return 'Attachment(${toJson()})';
+    return 'Attachment(name: $name, url: $url, type: $type, smallThumbnail: $smallThumbnail, largeThumbnail: $largeThumbnail)';
   }
 
   @override

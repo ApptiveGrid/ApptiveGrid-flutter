@@ -98,7 +98,7 @@ class FormData {
 
   @override
   String toString() {
-    return 'FormData(${toJson()})';
+    return 'FormData(id: $id, name: $name, title: $title, description: $description, components: $components, fields: $fields, links: $links, attachmentActions: $attachmentActions)';
   }
 
   /// Creates a [Map] used to send this data back to a server
