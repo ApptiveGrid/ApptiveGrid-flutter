@@ -1551,12 +1551,14 @@ void main() {
       when(() => apptiveGridClient.sendPendingActions())
           .thenAnswer((_) async {});
       when(
-        () => apptiveGridClient.submitForm(
+        () => apptiveGridClient.submitFormWithProgress(
           action,
           any(),
           saveToPendingItems: any(named: 'saveToPendingItems'),
         ),
-      ).thenAnswer((_) async => Response('', 200));
+      ).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('', 200))),
+      );
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
@@ -1578,7 +1580,7 @@ void main() {
 
       expect(find.text(requiredString), findsNothing);
       verify(
-        () => apptiveGridClient.submitForm(
+        () => apptiveGridClient.submitFormWithProgress(
           action,
           any(),
           saveToPendingItems: any(named: 'saveToPendingItems'),

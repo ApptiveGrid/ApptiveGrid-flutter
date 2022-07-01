@@ -18,5 +18,7 @@
     "attachmentSourceGallery": "Choose existing",
     "attachmentSourceCamera": "Take Photo or Video",
     "attachmentSourceFiles": "Select files",
-    "searchUserNoResult": "No Users found that match \"$query\""
+    "searchUserNoResult": "No Users found that match \"$query\"",
+    "progressProcessAttachment": "Processing Attachments [$processed/$total]",
+    "progressSubmitForm": "Submitting Form"
 }

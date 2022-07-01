@@ -24,8 +24,10 @@ void main() {
   setUp(() {
     client = MockApptiveGridClient();
     when(() => client.sendPendingActions()).thenAnswer((_) async {});
-    when(() => client.submitForm(submitLink, any()))
-        .thenAnswer((invocation) async => Response('', 200));
+    when(() => client.submitFormWithProgress(submitLink, any())).thenAnswer(
+      (invocation) =>
+          Stream.value(SubmitCompleteProgressEvent(Response('', 200))),
+    );
   });
 
   group('Submit Logic', () {
@@ -64,7 +66,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verify(() => client.submitForm(submitLink, any())).called(1);
+      verify(() => client.submitFormWithProgress(submitLink, any())).called(1);
     });
 
     testWidgets('No Value but required, shows error', (tester) async {
@@ -100,7 +102,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.submitForm(submitLink, any()));
+      verifyNever(() => client.submitFormWithProgress(submitLink, any()));
       expect(
         find.text('name must not be empty', skipOffstage: false),
         findsOneWidget,
@@ -151,7 +153,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final capturedForm =
-          verify(() => client.submitForm(submitLink, captureAny()))
+          verify(() => client.submitFormWithProgress(submitLink, captureAny()))
               .captured
               .first as FormData;
       expect(
@@ -201,7 +203,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final capturedForm =
-          verify(() => client.submitForm(submitLink, captureAny()))
+          verify(() => client.submitFormWithProgress(submitLink, captureAny()))
               .captured
               .first as FormData;
       expect(
@@ -248,7 +250,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final capturedForm =
-          verify(() => client.submitForm(submitLink, captureAny()))
+          verify(() => client.submitFormWithProgress(submitLink, captureAny()))
               .captured
               .first as FormData;
       expect(
@@ -301,7 +303,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final capturedForm =
-          verify(() => client.submitForm(submitLink, captureAny()))
+          verify(() => client.submitFormWithProgress(submitLink, captureAny()))
               .captured
               .first as FormData;
       expect(capturedForm.components!.first.data.value, isNull);

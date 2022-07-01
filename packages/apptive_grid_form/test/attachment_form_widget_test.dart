@@ -73,8 +73,11 @@ void main() {
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.submitForm(action, any()))
-            .thenAnswer((_) async => Response('body', 200));
+        when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+          (_) => Stream.value(
+            SubmitCompleteProgressEvent(Response('body', 200)),
+          ),
+        );
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
         when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
@@ -111,7 +114,8 @@ void main() {
         await tester.pumpAndSettle();
 
         final captured =
-            verify(() => client.submitForm(action, captureAny())).captured;
+            verify(() => client.submitFormWithProgress(action, captureAny()))
+                .captured;
         expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
         expect(submittedData.components!.first.data, equals(data));
@@ -172,8 +176,11 @@ void main() {
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.submitForm(action, any()))
-            .thenAnswer((_) async => Response('body', 200));
+        when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+          (_) => Stream.value(
+            SubmitCompleteProgressEvent(Response('body', 200)),
+          ),
+        );
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
         when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
@@ -213,7 +220,8 @@ void main() {
         await tester.pumpAndSettle();
 
         final captured =
-            verify(() => client.submitForm(action, captureAny())).captured;
+            verify(() => client.submitFormWithProgress(action, captureAny()))
+                .captured;
         expect(captured.length, equals(1));
         final submittedData =
             captured.first.components!.first.data as AttachmentDataEntity;
@@ -256,8 +264,11 @@ void main() {
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.submitForm(action, any()))
-            .thenAnswer((_) async => Response('body', 200));
+        when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+          (_) => Stream.value(
+            SubmitCompleteProgressEvent(Response('body', 200)),
+          ),
+        );
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
         when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
@@ -353,8 +364,11 @@ void main() {
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.submitForm(action, any()))
-            .thenAnswer((_) async => Response('body', 200));
+        when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+          (_) => Stream.value(
+            SubmitCompleteProgressEvent(Response('body', 200)),
+          ),
+        );
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
         when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
@@ -391,7 +405,8 @@ void main() {
         await tester.pumpAndSettle();
 
         final captured =
-            verify(() => client.submitForm(action, captureAny())).captured;
+            verify(() => client.submitFormWithProgress(action, captureAny()))
+                .captured;
         expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
         expect(submittedData.components!.first.data, equals(data));
@@ -454,8 +469,11 @@ void main() {
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.submitForm(action, any()))
-            .thenAnswer((_) async => Response('body', 200));
+        when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+          (_) => Stream.value(
+            SubmitCompleteProgressEvent(Response('body', 200)),
+          ),
+        );
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
         when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
@@ -495,7 +513,8 @@ void main() {
         await tester.pumpAndSettle();
 
         final captured =
-            verify(() => client.submitForm(action, captureAny())).captured;
+            verify(() => client.submitFormWithProgress(action, captureAny()))
+                .captured;
         expect(captured.length, equals(1));
         final submittedData =
             captured.first.components!.first.data as AttachmentDataEntity;
@@ -571,8 +590,11 @@ void main() {
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
             .thenAnswer((_) => Future.value());
-        when(() => client.submitForm(action, any()))
-            .thenAnswer((_) async => Response('body', 200));
+        when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+          (_) => Stream.value(
+            SubmitCompleteProgressEvent(Response('body', 200)),
+          ),
+        );
         final attachmentProcessor = MockAttachmentProcessor();
         when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
         when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
@@ -609,7 +631,8 @@ void main() {
         await tester.pumpAndSettle();
 
         final captured =
-            verify(() => client.submitForm(action, captureAny())).captured;
+            verify(() => client.submitFormWithProgress(action, captureAny()))
+                .captured;
         expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
         expect(submittedData.components!.first.data, equals(data));
@@ -706,8 +729,9 @@ void main() {
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((_) async => Response('body', 200));
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+      );
       final attachmentProcessor = MockAttachmentProcessor();
       when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
       when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
@@ -744,7 +768,8 @@ void main() {
       await tester.pumpAndSettle();
 
       final captured =
-          verify(() => client.submitForm(action, captureAny())).captured;
+          verify(() => client.submitFormWithProgress(action, captureAny()))
+              .captured;
       expect(captured.length, equals(1));
       final submittedData = captured.first as FormData;
       expect(submittedData.components!.first.data, equals(data));
@@ -778,8 +803,9 @@ void main() {
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((_) async => Response('body', 200));
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+      );
 
       final target = TestApp(
         client: client,
@@ -796,7 +822,8 @@ void main() {
       await tester.pumpAndSettle();
 
       final captured =
-          verify(() => client.submitForm(action, captureAny())).captured;
+          verify(() => client.submitFormWithProgress(action, captureAny()))
+              .captured;
       expect(captured.length, equals(1));
       final submittedData = captured.first as FormData;
       expect(submittedData.components!.first.data, equals(data));
@@ -822,8 +849,9 @@ void main() {
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((_) async => Response('body', 200));
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+      );
 
       final target = TestApp(
         client: client,
@@ -864,8 +892,9 @@ void main() {
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((_) async => Response('body', 200));
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+      );
 
       final target = TestApp(
         client: client,
@@ -932,8 +961,9 @@ void main() {
       );
       final client = MockApptiveGridClient();
       when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((_) async => Response('body', 200));
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+      );
       final attachmentProcessor = MockAttachmentProcessor();
       when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
       when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
@@ -978,10 +1008,9 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      final capturedData =
-          verify(() => client.submitForm(action, captureAny<FormData>()))
-              .captured
-              .first as FormData;
+      final capturedData = verify(
+        () => client.submitFormWithProgress(action, captureAny<FormData>()),
+      ).captured.first as FormData;
       expect(capturedData.components!.first.data, equals(data));
     });
   });

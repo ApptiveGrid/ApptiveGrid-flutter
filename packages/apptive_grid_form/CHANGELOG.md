@@ -1,3 +1,6 @@
+## 0.12.2
+* Use new `submitFormWithProgress` and display the progress when submitting
+
 ## 0.12.1
 * Add support for `DataType.currency` and `DataType.uri`
 

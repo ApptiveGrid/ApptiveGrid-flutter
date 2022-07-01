@@ -79,10 +79,10 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((realInvocation) async {
+      when(() => client.submitFormWithProgress(action, any()))
+          .thenAnswer((realInvocation) {
         completer.complete(realInvocation.positionalArguments[1]);
-        return Response('', 200);
+        return Stream.value(SubmitCompleteProgressEvent(Response('', 200)));
       });
 
       await tester.pumpWidget(target);
@@ -140,7 +140,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.submitForm(action, formData));
+      verifyNever(() => client.submitFormWithProgress(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
@@ -182,10 +182,10 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((realInvocation) async {
+      when(() => client.submitFormWithProgress(action, any()))
+          .thenAnswer((realInvocation) {
         completer.complete(realInvocation.positionalArguments[1]);
-        return Response('', 200);
+        return Stream.value(SubmitCompleteProgressEvent(Response('', 200)));
       });
 
       final now = DateTime.now();
@@ -250,10 +250,10 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((realInvocation) async {
+      when(() => client.submitFormWithProgress(action, any()))
+          .thenAnswer((realInvocation) {
         completer.complete(realInvocation.positionalArguments[1]);
-        return Response('', 200);
+        return Stream.value(SubmitCompleteProgressEvent(Response('', 200)));
       });
 
       final now = DateTime.now();
@@ -336,7 +336,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.submitForm(action, formData));
+      verifyNever(() => client.submitFormWithProgress(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
@@ -375,10 +375,10 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((realInvocation) async {
+      when(() => client.submitFormWithProgress(action, any()))
+          .thenAnswer((realInvocation) {
         completer.complete(realInvocation.positionalArguments[1]);
-        return Response('', 200);
+        return Stream.value(SubmitCompleteProgressEvent(Response('', 200)));
       });
 
       final now = DateTime.now();
@@ -447,7 +447,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.submitForm(action, formData));
+      verifyNever(() => client.submitFormWithProgress(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
@@ -486,10 +486,10 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((realInvocation) async {
+      when(() => client.submitFormWithProgress(action, any()))
+          .thenAnswer((realInvocation) {
         completer.complete(realInvocation.positionalArguments[1]);
-        return Response('', 200);
+        return Stream.value(SubmitCompleteProgressEvent(Response('', 200)));
       });
 
       await tester.pumpWidget(target);
@@ -585,7 +585,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.submitForm(action, formData));
+      verifyNever(() => client.submitFormWithProgress(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
@@ -624,10 +624,10 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((realInvocation) async {
+      when(() => client.submitFormWithProgress(action, any()))
+          .thenAnswer((realInvocation) {
         completer.complete(realInvocation.positionalArguments[1]);
-        return Response('', 200);
+        return Stream.value(SubmitCompleteProgressEvent(Response('', 200)));
       });
 
       await tester.pumpWidget(target);
@@ -723,7 +723,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.submitForm(action, formData));
+      verifyNever(() => client.submitFormWithProgress(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });
@@ -762,10 +762,10 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((realInvocation) async {
+      when(() => client.submitFormWithProgress(action, any()))
+          .thenAnswer((realInvocation) {
         completer.complete(realInvocation.positionalArguments[1]);
-        return Response('', 200);
+        return Stream.value(SubmitCompleteProgressEvent(Response('', 200)));
       });
 
       await tester.pumpWidget(target);
@@ -823,7 +823,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.submitForm(action, formData));
+      verifyNever(() => client.submitFormWithProgress(action, formData));
       expect(find.text('Required'), findsOneWidget);
     });
   });
@@ -865,10 +865,10 @@ void main() {
       when(
         () => client.loadForm(uri: Uri.parse('/api/a/formId')),
       ).thenAnswer((_) async => formData);
-      when(() => client.submitForm(action, any()))
-          .thenAnswer((realInvocation) async {
+      when(() => client.submitFormWithProgress(action, any()))
+          .thenAnswer((realInvocation) {
         completer.complete(realInvocation.positionalArguments[1]);
-        return Response('', 200);
+        return Stream.value(SubmitCompleteProgressEvent(Response('', 200)));
       });
 
       await tester.pumpWidget(target);
@@ -937,7 +937,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => client.submitForm(action, formData));
+      verifyNever(() => client.submitFormWithProgress(action, formData));
       expect(find.text('Property must not be empty'), findsOneWidget);
     });
   });

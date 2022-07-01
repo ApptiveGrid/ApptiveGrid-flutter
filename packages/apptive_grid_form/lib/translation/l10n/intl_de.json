@@ -18,5 +18,7 @@
     "attachmentSourceGallery": "Fotomediathek",
     "attachmentSourceCamera": "Foto od. Video. aufnehmen",
     "attachmentSourceFiles": "Dateien auswählen",
-    "searchUserNoResult": "Kein Nutzer mit \"$query\" gefunden"
+    "searchUserNoResult": "Kein Nutzer mit \"$query\" gefunden",
+    "progressProcessAttachment": "Anhänge werden verarbeitet [$processed/$total]",
+    "progressSubmitForm": "Formular einsenden"
 }
