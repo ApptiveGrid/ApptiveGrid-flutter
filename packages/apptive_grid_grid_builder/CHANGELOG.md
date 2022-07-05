@@ -1,3 +1,6 @@
+## 0.11.0
+* Update apptive_grid_core to [0.12.0](https://pub.dev/packages/apptive_grid_core/changelog#0120)
+
 ## 0.10.0
 * Renamed `UserReference` to `CreatedBy`. The old `UserReference` is still available but deprecated
 

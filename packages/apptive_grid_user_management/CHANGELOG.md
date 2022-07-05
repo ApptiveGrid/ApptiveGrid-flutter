@@ -1,3 +1,7 @@
+## 0.1.0
+* Promote to 0.1.0 release
+* Update apptive_grid_core to [0.12.0](https://pub.dev/packages/apptive_grid_core/changelog#0120)
+
 ## 0.0.6
 * Adjust handling of different scenarios
   * Login with valid credentials but user not part of the group: Ask to join group

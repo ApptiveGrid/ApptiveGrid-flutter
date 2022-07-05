@@ -1,3 +1,12 @@
+## 0.12.0
+* Update Attachment Processing
+* Add option to add an attachment with a path to a file instead of only the raw bytes
+### Breaking Changes
+* Resizing of images was changed to the following
+  * Requires an id for the operation
+  * Takes in a list of sizes it should resize to instead of doing each resize separately
+  * Returns a List of paths to the Files where the resized Images are stored
+
 ## 0.11.3
 * Add `submitFormWithProgress` to client to submit a Form and receive Progress Event Updates
 

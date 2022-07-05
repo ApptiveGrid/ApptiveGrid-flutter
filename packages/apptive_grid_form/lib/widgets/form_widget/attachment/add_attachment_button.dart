@@ -122,10 +122,11 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
       final client = ApptiveGrid.getClient(context, listen: false);
       final attachmentManager =
           Provider.of<AttachmentManager>(context, listen: false);
-      for (final file in result.files) {
+      for (final file
+          in result.files.where((element) => element.path != null)) {
         final attachment =
             await client.attachmentProcessor.createAttachment(file.name);
-        attachmentManager.addAttachment(attachment, file.bytes);
+        attachmentManager.addAttachment(attachment, file.path);
         newAttachments.add(attachment);
       }
       return newAttachments;
@@ -146,8 +147,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
         final attachment =
             await client.attachmentProcessor.createAttachment(file.name);
 
-        final bytes = await file.readAsBytes();
-        attachmentManager.addAttachment(attachment, bytes);
+        attachmentManager.addAttachment(attachment, file.path);
         newAttachments.add(attachment);
       }
       return newAttachments;
@@ -165,8 +165,8 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
           Provider.of<AttachmentManager>(context, listen: false);
       final newAttachment =
           await client.attachmentProcessor.createAttachment(file.name);
-      final bytes = await file.readAsBytes();
-      attachmentManager.addAttachment(newAttachment, bytes);
+
+      attachmentManager.addAttachment(newAttachment, file.path);
       return [newAttachment];
     } else {
       return null;

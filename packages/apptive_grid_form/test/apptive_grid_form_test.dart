@@ -1196,8 +1196,7 @@ void main() {
         title: 'Form Title',
         components: [],
         attachmentActions: {
-          attachment:
-              AddAttachmentAction(byteData: null, attachment: attachment)
+          attachment: AddAttachmentAction(path: '', attachment: attachment)
         },
         links: {ApptiveLinkType.submit: action},
         fields: [],

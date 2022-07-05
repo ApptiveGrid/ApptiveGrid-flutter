@@ -13,7 +13,7 @@ class AttachmentProcessor {
     this.options,
     this.authenticator, {
     http.Client? httpClient,
-  }) : _client = httpClient ?? http.Client();
+  }) : _client = httpClient ?? http.Client(); // coverage:ignore-line
 
   final http.Client _client;
 
@@ -119,70 +119,82 @@ class AttachmentProcessor {
     if (attachmentAction.attachment.type.startsWith('image')) {
       final type = attachmentAction.attachment.type;
       http.Response? mainUpload;
-      final uploads = await Future.wait<http.Response>(
-        [
-          _uploadFile(
-            baseUri: baseUploadUri,
-            headers: uploadHeaders,
-            createBytes: () => scaleImageToMaxSize(
-              originalImage: attachmentAction.byteData!,
-              size: 1000,
-              type: type,
-            ),
-            name: attachmentAction.attachment.url.pathSegments.last,
-            type: type,
-          ).then((response) {
-            mainUpload = response;
-            return response;
-          }),
-          if (attachmentAction.attachment.largeThumbnail != null)
+
+      final resizeId = _uuid.v4();
+      final imagePaths = await scaleImageToMaxSize(
+        sizes: [1000, 256, 64],
+        type: type,
+        id: resizeId,
+        originalImageBytes: attachmentAction.byteData,
+        path: attachmentAction.path,
+      );
+
+      if (imagePaths != null) {
+        final uploads = await Future.wait<http.Response>(
+          [
             _uploadFile(
               baseUri: baseUploadUri,
               headers: uploadHeaders,
-              createBytes: () => scaleImageToMaxSize(
-                originalImage: attachmentAction.byteData!,
-                size: 256,
-                type: type,
-              ),
-              name:
-                  attachmentAction.attachment.largeThumbnail!.pathSegments.last,
+              createBytes: () => File(imagePaths[0]).readAsBytes(),
+              name: attachmentAction.attachment.url.pathSegments.last,
               type: type,
-            ).catchError((error) {
-              debugPrint('Could not upload large thumbnail');
-              debugPrint(error);
-              return http.Response('', 200); // coverage:ignore-line
+            ).then((response) {
+              mainUpload = response;
+              return response;
             }),
-          if (attachmentAction.attachment.smallThumbnail != null)
-            _uploadFile(
-              baseUri: baseUploadUri,
-              headers: uploadHeaders,
-              createBytes: () => scaleImageToMaxSize(
-                originalImage: attachmentAction.byteData!,
-                size: 64,
+            if (attachmentAction.attachment.largeThumbnail != null)
+              _uploadFile(
+                baseUri: baseUploadUri,
+                headers: uploadHeaders,
+                createBytes: () => File(imagePaths[1]).readAsBytes(),
+                name: attachmentAction
+                    .attachment.largeThumbnail!.pathSegments.last,
                 type: type,
-              ),
-              name:
-                  attachmentAction.attachment.smallThumbnail!.pathSegments.last,
-              type: type,
-            ).catchError((error) {
-              debugPrint('Could not upload small thumbnail');
-              debugPrint(error);
-              return http.Response('', 200); // coverage:ignore-line
-            }),
-        ],
-      ).catchError((error) {
-        if (mainUpload != null) {
-          return [mainUpload!];
-        } else {
-          throw error;
-        }
-      });
-      return uploads.first;
+              ).catchError((error) {
+                debugPrint('Could not upload large thumbnail');
+                debugPrint(error);
+                return http.Response('', 200); // coverage:ignore-line
+              }),
+            if (attachmentAction.attachment.smallThumbnail != null)
+              _uploadFile(
+                baseUri: baseUploadUri,
+                headers: uploadHeaders,
+                createBytes: () => File(imagePaths[2]).readAsBytes(),
+                name: attachmentAction
+                    .attachment.smallThumbnail!.pathSegments.last,
+                type: type,
+              ).catchError((error) {
+                debugPrint('Could not upload small thumbnail');
+                debugPrint(error);
+                return http.Response('', 200); // coverage:ignore-line
+              }),
+          ],
+        ).catchError((error) {
+          if (mainUpload != null) {
+            return [mainUpload!];
+          } else {
+            throw error;
+          }
+        });
+        return uploads.first;
+      } else {
+        return _uploadFile(
+          baseUri: baseUploadUri,
+          headers: uploadHeaders,
+          createBytes: () async =>
+              attachmentAction.byteData ??
+              await File(attachmentAction.path!).readAsBytes(),
+          name: attachmentAction.attachment.url.pathSegments.last,
+          type: attachmentAction.attachment.type,
+        );
+      }
     } else {
       return _uploadFile(
         baseUri: baseUploadUri,
         headers: uploadHeaders,
-        createBytes: () async => attachmentAction.byteData!,
+        createBytes: () async =>
+            attachmentAction.byteData ??
+            await File(attachmentAction.path!).readAsBytes(),
         name: attachmentAction.attachment.url.pathSegments.last,
         type: attachmentAction.attachment.type,
       );
@@ -232,52 +244,73 @@ class AttachmentProcessor {
 
   /// Scales down [originalImage] so that the largest size will be [size] pixels while keeping the aspect ratio
   /// [type] should be the mime type of the image. It is used to determine the file format when scaling
-  Future<Uint8List> scaleImageToMaxSize({
-    required Uint8List originalImage,
-    required int size,
+  Future<List<String>?> scaleImageToMaxSize({
+    String? path,
+    Uint8List? originalImageBytes,
+    required List<int> sizes,
     required String type,
+    required String id,
   }) async {
     final port = ReceivePort();
-    await Isolate.spawn(_scaleImageWorker, [
-      port.sendPort,
-      originalImage,
-      size,
-      type,
-    ]);
+    await Isolate.spawn(_scaleImageWorker, {
+      'port': port.sendPort,
+      'filePath': path,
+      'bytes': originalImageBytes,
+      'sizes': sizes,
+      'type': type,
+      'id': id,
+    });
 
-    return await port.first as Uint8List;
+    return await port.first as List<String>?;
   }
 
-  static Future<void> _scaleImageWorker(List<dynamic> args) async {
-    final port = args[0] as SendPort;
-    final byteData = args[1] as Uint8List;
-    final size = args[2] as int;
-    final type = args[3] as String;
+  static Future<void> _scaleImageWorker(Map<String, dynamic> args) async {
+    final port = args['port'] as SendPort;
+    final byteData = args['bytes'] as Uint8List? ??
+        await File(args['filePath'] as String).readAsBytes();
+    final sizes = args['sizes'] as List<int>;
+    final type = (args['type'] as String).split('/').last;
+    final id = args['id'] as String;
+    final directory = Directory.systemTemp;
 
-    final resizeData = byteData;
-    final image = img.decodeImage(resizeData);
-    if (image == null || math.max(image.width, image.height) <= size) {
-      Isolate.exit(port, byteData);
-    } else {
-      final isPortrait = image.width < image.height;
-      final widthFactor = isPortrait ? image.width / image.height : 1.0;
-      final heightFactor = isPortrait ? 1.0 : image.height / image.width;
-
-      final resized = img.copyResize(
-        image,
-        width: (size * widthFactor).toInt(),
-        height: (size * heightFactor).toInt(),
-        interpolation: img.Interpolation.average,
-      );
-      Isolate.exit(
-        port,
-        Uint8List.fromList(
-          img.encodeNamedImage(
-            resized,
-            'name.${type.split('/').last}',
-          )!,
-        ),
-      );
+    final image = img.decodeImage(byteData);
+    if (image == null) {
+      Isolate.exit(port, null);
     }
+    final maxSize = math.max(image.width, image.height);
+    final isPortrait = image.width < image.height;
+    final widthFactor = isPortrait ? image.width / image.height : 1.0;
+    final heightFactor = isPortrait ? 1.0 : image.height / image.width;
+
+    final outputs = <String>[];
+    for (final size in sizes) {
+      late final List<int> output;
+      if (size < maxSize) {
+        final resized = img.copyResize(
+          image,
+          width: (size * widthFactor).toInt(),
+          height: (size * heightFactor).toInt(),
+          interpolation: img.Interpolation.average,
+        );
+        output = img.encodeNamedImage(
+          resized,
+          '.$type',
+        )!;
+      } else {
+        output = byteData;
+      }
+      // Save File and add path to outputs
+      final file = File(
+        '${directory.path}/$id/${size}px.$type',
+      );
+      final exists = await file.exists();
+      if (!exists) {
+        await file.create(recursive: true);
+      }
+      await file.writeAsBytes(output);
+      outputs.add(file.path);
+    }
+
+    Isolate.exit(port, outputs);
   }
 }
