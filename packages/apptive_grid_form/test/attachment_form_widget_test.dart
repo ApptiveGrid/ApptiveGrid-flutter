@@ -32,6 +32,7 @@ void main() {
       testWidgets('Add Attachment from file picker', (tester) async {
         const filename = 'Filename.png';
         final bytes = Uint8List(10);
+        const path = 'path';
         final filePicker = MockFilePicker();
         final attachmentUri = Uri.parse('attachmenturl.com');
         when(
@@ -47,6 +48,7 @@ void main() {
               name: filename,
               size: bytes.lengthInBytes,
               bytes: bytes,
+              path: path,
             ),
           ]),
         );
@@ -125,6 +127,7 @@ void main() {
         const filename1 = 'Filename1.png';
         const filename2 = 'Filename2.pdf';
         final bytes = Uint8List(10);
+        const path = 'path';
         final filePicker = MockFilePicker();
         final attachmentUri1 = Uri.parse('$filename1.com');
         final attachmentUri2 = Uri.parse('$filename2.com');
@@ -141,11 +144,13 @@ void main() {
               name: filename1,
               size: bytes.lengthInBytes,
               bytes: bytes,
+              path: path,
             ),
             PlatformFile(
               name: filename2,
               size: bytes.lengthInBytes,
               bytes: bytes,
+              path: path,
             ),
           ]),
         );
@@ -328,6 +333,7 @@ void main() {
         when(() => mockFile.name).thenReturn(filename);
         when(() => mockFile.readAsBytes())
             .thenAnswer((invocation) async => bytes);
+        when(() => mockFile.path).thenReturn('path');
 
         when(
           () => imagePicker.getMultiImage(
@@ -427,10 +433,12 @@ void main() {
         when(() => mockFile1.name).thenReturn(filename1);
         when(() => mockFile1.readAsBytes())
             .thenAnswer((invocation) async => bytes);
+        when(() => mockFile1.path).thenReturn('path1');
 
         when(() => mockFile2.name).thenReturn(filename2);
         when(() => mockFile2.readAsBytes())
             .thenAnswer((invocation) async => bytes);
+        when(() => mockFile2.path).thenReturn('path2');
 
         when(
           () => imagePicker.getMultiImage(
@@ -549,6 +557,7 @@ void main() {
         when(() => mockFile.name).thenReturn(filename);
         when(() => mockFile.readAsBytes())
             .thenAnswer((invocation) async => bytes);
+        when(() => mockFile.path).thenReturn('path');
 
         when(
           () => imagePicker.getImage(
@@ -690,6 +699,7 @@ void main() {
     testWidgets('Added Attachment get removed', (tester) async {
       const filename = 'Filename.png';
       final bytes = Uint8List(10);
+      const path = 'path';
       final filePicker = MockFilePicker();
       final attachmentUri = Uri.parse('attachmenturl.com');
       when(
@@ -705,6 +715,7 @@ void main() {
             name: filename,
             size: bytes.lengthInBytes,
             bytes: bytes,
+            path: path,
           ),
         ]),
       );
@@ -921,6 +932,7 @@ void main() {
         'sends action', (tester) async {
       const filename = 'Filename.png';
       final bytes = Uint8List(10);
+      const path = 'path';
       final filePicker = MockFilePicker();
       final attachmentUri = Uri.parse('attachmenturl.com');
       when(
@@ -936,6 +948,7 @@ void main() {
             name: filename,
             size: bytes.lengthInBytes,
             bytes: bytes,
+            path: path,
           ),
         ]),
       );
