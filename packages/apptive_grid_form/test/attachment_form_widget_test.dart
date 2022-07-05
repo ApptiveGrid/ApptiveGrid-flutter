@@ -9,6 +9,7 @@ import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:mocktail_image_network/mocktail_image_network.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
 
 import 'common.dart';
@@ -787,57 +788,62 @@ void main() {
     });
 
     testWidgets('Existing Attachment gets deleted', (tester) async {
-      const filename = 'Filename.png';
-      final attachmentUri = Uri.parse('attachmenturl.com');
+      await mockNetworkImages(() async {
+        const filename = 'Filename.png';
+        final attachmentUri = Uri.parse('attachmenturl.com');
 
-      final attachment = Attachment(
-        name: filename,
-        url: attachmentUri,
-        type: 'image/png',
-      );
-      final data = AttachmentDataEntity(
-        [],
-      );
-      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
-      final formData = FormData(
-        id: 'formId',
-        title: 'title',
-        components: [
-          FormComponent<AttachmentDataEntity>(
-            property: 'property',
-            data: AttachmentDataEntity([attachment]),
-            field: field,
-          )
-        ],
-        links: {ApptiveLinkType.submit: action},
-        fields: [field],
-      );
-      final client = MockApptiveGridClient();
-      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
-        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
-      );
+        final attachment = Attachment(
+          name: filename,
+          url: attachmentUri,
+          type: 'image/png',
+        );
+        final data = AttachmentDataEntity(
+          [],
+        );
+        final action =
+            ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+        final formData = FormData(
+          id: 'formId',
+          title: 'title',
+          components: [
+            FormComponent<AttachmentDataEntity>(
+              property: 'property',
+              data: AttachmentDataEntity([attachment]),
+              field: field,
+            )
+          ],
+          links: {ApptiveLinkType.submit: action},
+          fields: [field],
+        );
+        final client = MockApptiveGridClient();
+        when(() => client.sendPendingActions())
+            .thenAnswer((_) => Future.value());
+        when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+          (_) =>
+              Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+        );
 
-      final target = TestApp(
-        client: client,
-        child: ApptiveGridFormData(
-          formData: formData,
-        ),
-      );
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridFormData(
+            formData: formData,
+          ),
+        );
 
-      await tester.pumpWidget(target);
-      await tester.tap(find.byIcon(Icons.close));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+        await tester.pumpWidget(target);
+        await tester.tap(find.byIcon(Icons.close));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byType(ActionButton));
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      final captured =
-          verify(() => client.submitFormWithProgress(action, captureAny()))
-              .captured;
-      expect(captured.length, equals(1));
-      final submittedData = captured.first as FormData;
-      expect(submittedData.components!.first.data, equals(data));
+        final captured =
+            verify(() => client.submitFormWithProgress(action, captureAny()))
+                .captured;
+        expect(captured.length, equals(1));
+        final submittedData = captured.first as FormData;
+        expect(submittedData.components!.first.data, equals(data));
+      });
     });
   });
 
@@ -884,46 +890,51 @@ void main() {
     });
 
     testWidgets('Attachment is required but filled sends', (tester) async {
-      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
-      final formData = FormData(
-        id: 'formId',
-        title: 'title',
-        components: [
-          FormComponent<AttachmentDataEntity>(
-            property: 'Property',
-            data: AttachmentDataEntity(
-              [Attachment(name: 'name', url: Uri(), type: 'image/png')],
-            ),
-            field: field,
-            required: true,
-          )
-        ],
-        links: {ApptiveLinkType.submit: action},
-        fields: [field],
-      );
-      final client = MockApptiveGridClient();
-      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
-        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
-      );
+      await mockNetworkImages(() async {
+        final action =
+            ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+        final formData = FormData(
+          id: 'formId',
+          title: 'title',
+          components: [
+            FormComponent<AttachmentDataEntity>(
+              property: 'Property',
+              data: AttachmentDataEntity(
+                [Attachment(name: 'name', url: Uri(), type: 'image/png')],
+              ),
+              field: field,
+              required: true,
+            )
+          ],
+          links: {ApptiveLinkType.submit: action},
+          fields: [field],
+        );
+        final client = MockApptiveGridClient();
+        when(() => client.sendPendingActions())
+            .thenAnswer((_) => Future.value());
+        when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+          (_) =>
+              Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+        );
 
-      final target = TestApp(
-        client: client,
-        child: ApptiveGridFormData(
-          formData: formData,
-        ),
-      );
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridFormData(
+            formData: formData,
+          ),
+        );
 
-      await tester.pumpWidget(target);
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byType(ActionButton));
+        await tester.pumpAndSettle();
 
-      expect(
-        find.text('Property must not be empty', skipOffstage: true),
-        findsNothing,
-      );
+        expect(
+          find.text('Property must not be empty', skipOffstage: true),
+          findsNothing,
+        );
+      });
     });
 
     testWidgets(

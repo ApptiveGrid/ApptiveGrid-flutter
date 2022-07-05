@@ -203,15 +203,17 @@ class _FileIconPainter extends CustomPainter {
       canvas,
       Offset(
         size.width / 2 - textPainter.width / 2,
-        size.height - textPainter.height - 4,
+        size.height - textPainter.height * 1.5,
       ),
     );
   }
 
+  // coverage:ignore-start
   @override
   bool shouldRepaint(covariant _FileIconPainter oldDelegate) {
     return color != oldDelegate.color || type != oldDelegate.type;
   }
+  // coverage:ignore-end
 
   String get _fileAbbreviation => _typeMap[type] ?? type.split('/').last;
 
