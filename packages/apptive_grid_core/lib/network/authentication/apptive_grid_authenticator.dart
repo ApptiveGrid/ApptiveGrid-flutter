@@ -262,7 +262,7 @@ class ApptiveGridAuthenticator {
               ? LaunchMode.externalApplication
               : LaunchMode.inAppWebView,
         );
-      } on PlatformException {
+      } on PlatformException catch (_) {
         // Could not launch Url
       }
     }

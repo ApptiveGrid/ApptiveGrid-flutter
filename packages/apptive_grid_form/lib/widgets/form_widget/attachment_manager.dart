@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 
 /// Manages Attachment Actions for a [ApptiveGridFormData] Widget
@@ -11,9 +9,9 @@ class AttachmentManager {
   final FormData? formData;
 
   /// Adds an Attachment
-  void addAttachment(Attachment attachment, Uint8List? data) {
+  void addAttachment(Attachment attachment, String? path) {
     formData?.attachmentActions[attachment] =
-        AddAttachmentAction(byteData: data, attachment: attachment);
+        AddAttachmentAction(path: path, attachment: attachment);
   }
 
   /// Removes an Attachment. Used for deleting Attachments

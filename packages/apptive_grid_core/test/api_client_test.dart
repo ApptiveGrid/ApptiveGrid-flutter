@@ -1062,7 +1062,9 @@ void main() {
               );
               final action =
                   ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
-              final bytes = Uint8List(10);
+              final bytes = base64Decode(
+                'iVBORw0KGgoAAAANSUhEUgAAAAIAAAAECAYAAACk7+45AAAAEklEQVR42mP8z/C/ngEIGHEzAMiQCfmnp5u6AAAAAElFTkSuQmCC',
+              );
               final attachmentAction =
                   AddAttachmentAction(byteData: bytes, attachment: attachment);
               const field = GridField(

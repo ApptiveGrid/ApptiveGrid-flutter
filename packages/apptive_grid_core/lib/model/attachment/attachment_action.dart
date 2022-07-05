@@ -39,6 +39,7 @@ abstract class AttachmentAction {
           byteData: json['byteData'] != null
               ? Uint8List.fromList(json['byteData'].cast<int>())
               : null,
+          path: json['path'],
           attachment: attachment,
         );
       case AttachmentActionType.delete:
@@ -58,28 +59,34 @@ abstract class AttachmentAction {
 /// Implementation of an [AttachmentAction] for [AttachmentActionType.add]
 class AddAttachmentAction extends AttachmentAction {
   /// Creates an Add Action to upload [byteData] for [attachment]
-  AddAttachmentAction({required this.byteData, required attachment})
-      : super(attachment, AttachmentActionType.add);
+  AddAttachmentAction({this.byteData, this.path, required attachment})
+      : assert(byteData != null || path != null),
+        super(attachment, AttachmentActionType.add);
 
   /// Data for new Attachment
   final Uint8List? byteData;
+
+  /// The Path to a File for this Attachment
+  final String? path;
 
   @override
   Map<String, dynamic> toJson() => {
         'type': type.toString(),
         'attachment': attachment.toJson(),
         'byteData': byteData?.toList(growable: false),
+        'path': path,
       };
 
   @override
   String toString() {
-    return 'AddAttachmentAction(byteData(byteSize): ${byteData?.lengthInBytes}, attachment: $attachment)';
+    return 'AddAttachmentAction(path: $path, byteData(byteSize): ${byteData?.lengthInBytes}, attachment: $attachment)';
   }
 
   @override
   bool operator ==(Object other) {
     return other is AddAttachmentAction &&
         other.attachment == attachment &&
+        other.path == path &&
         f.listEquals(other.byteData?.toList(), byteData?.toList());
   }
 

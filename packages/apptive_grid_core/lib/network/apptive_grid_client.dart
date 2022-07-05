@@ -9,11 +9,14 @@ import 'dart:typed_data';
 import 'package:apptive_grid_core/apptive_grid_model.dart';
 import 'package:apptive_grid_core/apptive_grid_network.dart';
 import 'package:apptive_grid_core/apptive_grid_options.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:mime/mime.dart';
 import 'package:openid_client/openid_client.dart';
+import 'package:universal_file/universal_file.dart';
 import 'package:uuid/uuid.dart';
 
 part 'attachment_processor.dart';
@@ -290,49 +293,51 @@ class ApptiveGridClient {
     StreamController<SubmitFormProgressEvent>? statusController,
   }) async {
     try {
-      await Future.wait(
-        actions.values.map((action) {
-          switch (action.type) {
-            case AttachmentActionType.add:
-              return _attachmentProcessor
-                  .uploadAttachment(
-                action as AddAttachmentAction,
-              )
-                  .then((response) {
-                statusController?.add(
-                  ProcessedAttachmentProgressEvent(
-                    action.attachment,
-                  ),
+      for (final chunkedActions in actions.values.slices(2)) {
+        await Future.wait(
+          chunkedActions.map((action) {
+            switch (action.type) {
+              case AttachmentActionType.add:
+                return _attachmentProcessor
+                    .uploadAttachment(
+                  action as AddAttachmentAction,
+                )
+                    .then((response) {
+                  statusController?.add(
+                    ProcessedAttachmentProgressEvent(
+                      action.attachment,
+                    ),
+                  );
+                  return response;
+                }).catchError((error) {
+                  throw error;
+                });
+              case AttachmentActionType.delete:
+                debugPrint('Delete Attachment ${action.attachment}');
+                return Future.value().then((response) {
+                  statusController?.add(
+                    ProcessedAttachmentProgressEvent(
+                      action.attachment,
+                    ),
+                  );
+                  return response;
+                });
+              case AttachmentActionType.rename:
+                debugPrint(
+                  'Rename Attachment ${action.attachment} to "${action.attachment.name}"',
                 );
-                return response;
-              }).catchError((error) {
-                throw error;
-              });
-            case AttachmentActionType.delete:
-              debugPrint('Delete Attachment ${action.attachment}');
-              return Future.value().then((response) {
-                statusController?.add(
-                  ProcessedAttachmentProgressEvent(
-                    action.attachment,
-                  ),
-                );
-                return response;
-              });
-            case AttachmentActionType.rename:
-              debugPrint(
-                'Rename Attachment ${action.attachment} to "${action.attachment.name}"',
-              );
-              return Future.value().then((response) {
-                statusController?.add(
-                  ProcessedAttachmentProgressEvent(
-                    action.attachment,
-                  ),
-                );
-                return response;
-              });
-          }
-        }),
-      );
+                return Future.value().then((response) {
+                  statusController?.add(
+                    ProcessedAttachmentProgressEvent(
+                      action.attachment,
+                    ),
+                  );
+                  return response;
+                });
+            }
+          }),
+        );
+      }
       final response = http.Response('AttachmentActionSuccess', 200);
       statusController?.add(AttachmentCompleteProgressEvent(response));
       statusController?.close();
@@ -675,7 +680,8 @@ class ApptiveGridClient {
 
     options = options.copyWith(environment: environment);
     _authenticator.options = options;
-    _attachmentProcessor = AttachmentProcessor(options, _authenticator);
+    _attachmentProcessor =
+        AttachmentProcessor(options, _authenticator, httpClient: _client);
   }
 
   /// Tries to send pending [ActionItem]s that are stored in [options.cache]

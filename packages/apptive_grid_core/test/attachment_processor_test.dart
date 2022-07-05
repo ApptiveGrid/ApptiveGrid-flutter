@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:image/image.dart' as img;
 import 'package:mocktail/mocktail.dart';
 
@@ -26,10 +28,26 @@ void main() {
     httpClient = MockHttpClient();
     authenticator = MockApptiveGridAuthenticator();
     processor = AttachmentProcessor(
-      const ApptiveGridOptions(),
+      const ApptiveGridOptions(
+        attachmentConfigurations: {
+          ApptiveGridEnvironment.production: AttachmentConfiguration(
+            attachmentApiEndpoint: 'attachmentEndpoint.com/',
+            signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
+          )
+        },
+      ),
       authenticator,
       httpClient: httpClient,
     );
+
+    when(() => authenticator.isAuthenticated)
+        .thenAnswer((invocation) async => false);
+    when(
+      () => authenticator.checkAuthentication(
+        requestNewToken: any(named: 'requestNewToken'),
+      ),
+    ).thenAnswer((_) async {});
+    when(() => authenticator.header).thenReturn('');
 
     when(
       () => httpClient.get(
@@ -125,16 +143,19 @@ void main() {
   });
 
   group('Scale Image', () {
-    test('No Image, Returns original bytes', () async {
+    test('No Image, Returns null', () async {
       final bytes = Uint8List(10);
 
+      final scaledImage = await processor.scaleImageToMaxSize(
+        originalImageBytes: bytes,
+        sizes: [2],
+        type: 'image/png',
+        id: 'id',
+      );
+
       expect(
-        await processor.scaleImageToMaxSize(
-          originalImage: bytes,
-          size: 10,
-          type: 'image/png',
-        ),
-        equals(bytes),
+        scaledImage,
+        isNull,
       );
     });
 
@@ -144,13 +165,17 @@ void main() {
         'iVBORw0KGgoAAAANSUhEUgAAAAIAAAAECAYAAACk7+45AAAAEklEQVR42mP8z/C/ngEIGHEzAMiQCfmnp5u6AAAAAElFTkSuQmCC',
       );
 
+      final scaledImage = await processor.scaleImageToMaxSize(
+        originalImageBytes: originalImage,
+        sizes: [4],
+        type: 'image/png',
+        id: 'id',
+      );
+      final file = await File(scaledImage!.first).readAsBytes();
+
       expect(
-        await processor.scaleImageToMaxSize(
-          originalImage: originalImage,
-          size: 4,
-          type: 'image/png',
-        ),
-        equals(originalImage),
+        originalImage,
+        equals(file),
       );
     });
 
@@ -161,11 +186,13 @@ void main() {
       );
 
       final scaledImage = await processor.scaleImageToMaxSize(
-        originalImage: originalImage,
-        size: 2,
+        originalImageBytes: originalImage,
+        sizes: [2],
         type: 'image/png',
+        id: 'id',
       );
-      final image = img.decodeImage(scaledImage)!;
+      final file = await File(scaledImage!.first).readAsBytes();
+      final image = img.decodeImage(file)!;
 
       expect(image.width, equals(1));
       expect(image.height, equals(2));
@@ -178,14 +205,142 @@ void main() {
       );
 
       final scaledImage = await processor.scaleImageToMaxSize(
-        originalImage: originalImage,
-        size: 2,
+        originalImageBytes: originalImage,
+        sizes: [2],
         type: 'image/png',
+        id: 'id',
       );
-      final image = img.decodeImage(scaledImage)!;
+      final file = await File(scaledImage!.first).readAsBytes();
+      final image = img.decodeImage(file)!;
 
       expect(image.width, equals(2));
       expect(image.height, equals(1));
+    });
+  });
+
+  group('From File Path', () {
+    setUp(() {
+      final getResponse =
+          Response('{"uploadURL":"${attachmentUrl.toString()}"}', 200);
+      final putResponse = Response('Success', 200);
+
+      when(
+        () => httpClient.get(
+          any(),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async => getResponse);
+      when(
+        () => httpClient.put(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).thenAnswer((_) async => putResponse);
+    });
+
+    final directory = Directory.systemTemp;
+
+    test('Image from File', () async {
+      final attachment = Attachment(
+        name: 'name',
+        url: Uri(path: 'attachment/url'),
+        type: 'image/png',
+        smallThumbnail: Uri(path: 'attachment/small/url'),
+        largeThumbnail: Uri(path: 'attachment/large/url'),
+      );
+
+      final file = File('${directory.path}/attachment.png');
+      await file.writeAsBytes(
+        base64Decode(
+          'iVBORw0KGgoAAAANSUhEUgAAAAIAAAAECAYAAACk7+45AAAAEklEQVR42mP8z/C/ngEIGHEzAMiQCfmnp5u6AAAAAElFTkSuQmCC',
+        ),
+      );
+
+      final action =
+          AddAttachmentAction(attachment: attachment, path: file.path);
+
+      await processor.uploadAttachment(action);
+
+      verify(
+        () => httpClient.get(
+          any(that: predicate<Uri>((uri) => !uri.path.endsWith('config.json'))),
+          headers: any(named: 'headers'),
+        ),
+      ).called(3);
+      verify(
+        () => httpClient.put(
+          attachmentUrl,
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).called(3);
+    });
+
+    test('Unsizable Image from File', () async {
+      final attachment = Attachment(
+        name: 'name',
+        url: Uri(path: 'attachment/url'),
+        type: 'image/png',
+        smallThumbnail: Uri(path: 'attachment/small/url'),
+        largeThumbnail: Uri(path: 'attachment/large/url'),
+      );
+
+      final file = File('${directory.path}/attachment.png');
+      await file.writeAsBytes(Uint8List(10));
+
+      final action =
+          AddAttachmentAction(attachment: attachment, path: file.path);
+
+      await processor.uploadAttachment(action);
+
+      verify(
+        () => httpClient.get(
+          any(that: predicate<Uri>((uri) => !uri.path.endsWith('config.json'))),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
+      verify(
+        () => httpClient.put(
+          attachmentUrl,
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).called(1);
+    });
+
+    test('Non Image from File', () async {
+      final attachment = Attachment(
+        name: 'name',
+        url: Uri(path: 'attachment/url'),
+        type: 'application/text',
+      );
+
+      final file = File('${directory.path}/attachment.txt');
+      await file.writeAsBytes(utf8.encode('attachmentTest'));
+
+      final action =
+          AddAttachmentAction(attachment: attachment, path: file.path);
+
+      await processor.uploadAttachment(action);
+
+      verify(
+        () => httpClient.get(
+          any(that: predicate<Uri>((uri) => !uri.path.endsWith('config.json'))),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
+      verify(
+        () => httpClient.put(
+          attachmentUrl,
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).called(1);
     });
   });
 }
