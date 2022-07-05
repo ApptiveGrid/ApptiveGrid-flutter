@@ -1,3 +1,6 @@
+## 0.12.3
+* Attachments are now using their path when being added
+
 ## 0.12.2
 * Use new `submitFormWithProgress` and display the progress when submitting
 
