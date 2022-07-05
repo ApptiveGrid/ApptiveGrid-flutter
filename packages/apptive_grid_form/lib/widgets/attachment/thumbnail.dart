@@ -3,15 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:universal_file/universal_file.dart';
 
-/// A Thumbnail
+/// A Thumbnail for an Attachment
 class Thumbnail extends StatelessWidget {
+  /// Creates a Thumbnail Widget for a given [attachment]
+  /// If [addAttachmentAction] is not null it will be used to create Image Thumbnails from [AddAttachmentAction.path] or [AddAttachmentAction.byteData]
+  ///
+  /// If an image Thumbnail can not be loaded or the [Attachment.type] does not indicate that this is an image a File Icon with a file ending will be used to display
   const Thumbnail({
     super.key,
     required this.attachment,
     this.addAttachmentAction,
   });
 
+  /// The Attachment to display a Thumbnail for
   final Attachment attachment;
+
+  /// An AddAttachmentAction to allow to display a thumbnail from [AddAttachmentAction.path] or [AddAttachmentAction.byteData]
   final AddAttachmentAction? addAttachmentAction;
 
   @override
