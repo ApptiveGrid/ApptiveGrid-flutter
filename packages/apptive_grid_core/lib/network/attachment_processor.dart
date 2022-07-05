@@ -32,9 +32,9 @@ class AttachmentProcessor {
   /// if that is also `null` for the current environment an [Exception] is thrown
   Future<AttachmentConfiguration> get configuration async {
     if (_config == null) {
-      final serverResponse = (await _client
+      final serverResponse = await _client
           .get(Uri.parse('${options.environment.url}/config.json'))
-          .catchError((error) => http.Response('{}', 400)));
+          .catchError((error) => http.Response('{}', 400));
       final serverAttachments = jsonDecode(serverResponse.body)['attachments'];
 
       final newConfiguration = serverAttachments != null
