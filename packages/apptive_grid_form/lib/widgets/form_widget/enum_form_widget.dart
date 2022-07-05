@@ -33,7 +33,7 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
             ),
           )
           .toList(),
-      selectedItemBuilder: ((_) => widget.component.data.options
+      selectedItemBuilder: (_) => widget.component.data.options
           .map(
             (e) => Text(
               e,
@@ -41,7 +41,7 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
               overflow: TextOverflow.ellipsis,
             ),
           )
-          .toList()),
+          .toList(),
       onChanged: (newValue) {
         setState(() {
           widget.component.data.value = newValue;
