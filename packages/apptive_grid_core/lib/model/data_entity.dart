@@ -23,7 +23,7 @@ abstract class DataEntity<T, S> with FilterableMixin {
   bool operator ==(Object other) {
     return other is DataEntity<T, S> &&
         runtimeType == other.runtimeType &&
-        value == (other).value;
+        value == other.value;
   }
 
   @override
@@ -198,8 +198,8 @@ class EnumDataEntity extends DataEntity<String, String> {
   @override
   bool operator ==(Object other) {
     return other is EnumDataEntity &&
-        value == (other).value &&
-        f.setEquals(options, (other).options);
+        value == other.value &&
+        f.setEquals(options, other.options);
   }
 
   @override

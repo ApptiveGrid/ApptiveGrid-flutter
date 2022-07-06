@@ -54,7 +54,7 @@ class AttachmentConfiguration {
 Map<ApptiveGridEnvironment, AttachmentConfiguration?>
     attachmentConfigurationMapFromConfigString(String configString) {
   final json =
-      jsonDecode((const Utf8Decoder()).convert(base64Decode(configString)));
+      jsonDecode(const Utf8Decoder().convert(base64Decode(configString)));
 
   final map = <ApptiveGridEnvironment, AttachmentConfiguration?>{};
   map[ApptiveGridEnvironment.alpha] = json['alpha'] != null

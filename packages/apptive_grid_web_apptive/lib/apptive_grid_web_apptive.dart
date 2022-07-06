@@ -42,7 +42,7 @@ class _ApptiveGridWebApptiveState extends State<ApptiveGridWebApptive> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       html.window.addEventListener('message', (event) {
-        final message = (event as html.MessageEvent);
+        final message = event as html.MessageEvent;
         try {
           try {
             // Checking if this is a message

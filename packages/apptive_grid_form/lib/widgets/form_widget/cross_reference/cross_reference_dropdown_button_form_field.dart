@@ -303,7 +303,7 @@ class _CrossReferenceSelectionGridState
           if (query.isNotEmpty) 'matching': query,
         },
         parseResponse: (response) async {
-          final entities = (jsonDecode(response.body)['entities']) as List;
+          final entities = jsonDecode(response.body)['entities'] as List;
           final newRows = <GridRow>[];
           for (final entity in entities) {
             final entries = <GridEntry>[];

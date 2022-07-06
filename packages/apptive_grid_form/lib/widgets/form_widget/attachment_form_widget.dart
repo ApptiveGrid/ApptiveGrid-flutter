@@ -23,6 +23,9 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final attachmentManager = Provider.of<AttachmentManager>(
+      context,
+    );
     return Provider(
       create: (_) => const PermissionManager(),
       child: FormField<AttachmentDataEntity>(
@@ -53,25 +56,36 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
               children: [
                 if (widget.component.data.value != null)
                   ...(widget.component.data.value!.map(
-                    (attachment) => Row(
-                      children: [
-                        Expanded(
-                          child: Text(attachment.name),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Provider.of<AttachmentManager>(
-                              context,
-                              listen: false,
-                            ).removeAttachment(attachment);
-                            widget.component.data.value?.remove(attachment);
-                            formState.didChange(widget.component.data);
-                            setState(() {});
-                          },
-                          icon: const Icon(Icons.close),
-                        ),
-                      ],
-                    ),
+                    (attachment) {
+                      final action = attachmentManager
+                          .formData?.attachmentActions[attachment];
+                      final isAddAction = action is AddAttachmentAction;
+                      return Row(
+                        children: [
+                          SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: Thumbnail(
+                              attachment: attachment,
+                              addAttachmentAction: isAddAction ? action : null,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(attachment.name),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              attachmentManager.removeAttachment(attachment);
+                              widget.component.data.value?.remove(attachment);
+                              formState.didChange(widget.component.data);
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.close),
+                          ),
+                        ],
+                      );
+                    },
                   )).toList(),
                 AddAttachmentButton(
                   onAttachmentsAdded: (newAttachments) =>

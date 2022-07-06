@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/managers/location_manager.dart';
 import 'package:apptive_grid_form/managers/permission_manager.dart';
+import 'package:apptive_grid_form/widgets/attachment/thumbnail.dart';
 import 'package:apptive_grid_form/widgets/form_widget/attachment/add_attachment_button.dart';
 import 'package:apptive_grid_form/widgets/form_widget/attachment_manager.dart';
 import 'package:apptive_grid_form/widgets/form_widget/form_widget_helpers.dart';

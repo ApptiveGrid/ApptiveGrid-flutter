@@ -16,3 +16,5 @@ linter:
     require_trailing_commas: true
     always_use_package_imports: true
     use_super_parameters: true
+    unnecessary_brace_in_string_interps: true
+    unnecessary_parenthesis: true

@@ -1,4 +1,5 @@
 ## 0.12.3
+* Thumbnails for Attachments
 * Attachments are now using their path when being added
 
 ## 0.12.2

@@ -13,6 +13,7 @@ dependencies:
   file_picker: ^4.6.0
   flutter:
     sdk: flutter
+  flutter_svg: ^1.1.1
   flutter_typeahead: ^4.0.0
   geolocator: ^8.2.1
   google_maps_flutter: ^2.1.8
@@ -25,6 +26,7 @@ dependencies:
   permission_handler: ^9.2.0
   permission_handler_platform_interface: ^3.7.0
   provider: ^6.0.3
+  universal_file: ^1.0.0
   universal_platform: ^1.0.0+1
 
 dev_dependencies:
@@ -34,6 +36,7 @@ dev_dependencies:
   image_picker_platform_interface: ^2.5.0
   pedantic: ^1.11.1
   mocktail: ^0.3.0
+  mocktail_image_network: ^0.3.1
   plugin_platform_interface: ^2.1.2
   flutter_test:
     sdk: flutter
