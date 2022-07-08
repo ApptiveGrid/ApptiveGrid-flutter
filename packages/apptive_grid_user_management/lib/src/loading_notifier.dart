@@ -43,13 +43,19 @@ class LoadingStateWidgetState extends State<LoadingStateWidget> {
   @override
   Widget build(BuildContext context) {
     return _InheritedLoadingState(
-        loading: _loading, error: _error, child: widget.child);
+      loading: _loading,
+      error: _error,
+      child: widget.child,
+    );
   }
 }
 
 class _InheritedLoadingState extends InheritedWidget {
-  const _InheritedLoadingState(
-      {required this.loading, required this.error, required super.child});
+  const _InheritedLoadingState({
+    required this.loading,
+    required this.error,
+    required super.child,
+  });
 
   final bool loading;
   final dynamic error;

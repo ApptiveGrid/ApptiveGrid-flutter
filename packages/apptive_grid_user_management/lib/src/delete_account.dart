@@ -19,6 +19,7 @@ class DeleteAccount extends StatefulWidget {
   }) {
     final key = GlobalKey<DeleteAccountState>();
     return DeleteAccount._(
+      key: key,
       onAccountDeleted: onAccountDeleted,
       child: Builder(
         builder: (context) {
@@ -26,9 +27,7 @@ class DeleteAccount extends StatefulWidget {
             onTap: () {
               key.currentState?.showConfirmationDialog(context);
             },
-            child: IgnorePointer(
-              child: child,
-            ),
+            child: AbsorbPointer(child: child),
           );
         },
       ),
@@ -114,9 +113,7 @@ class DeleteAccountState extends State<DeleteAccount> {
                       Text(
                         LoadingStateWidget.error(context) is http.Response
                             ? '${LoadingStateWidget.error(context).statusCode}: ${LoadingStateWidget.error(context).body}'
-                            : LoadingStateWidget.error(context)?.toString() ??
-                                localization?.errorUnknown ??
-                                '',
+                            : '${localization?.errorUnknown}\n${LoadingStateWidget.error(context)!}',
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.error,
                         ),
