@@ -181,4 +181,11 @@ class ApptiveGridUserManagementClient {
       return response;
     }
   }
+
+  /// Perform a call to delete the user's account
+  /// This will return `true` if the account deletion was successful
+  Future<bool> deleteAccount() async {
+    await Future.delayed(const Duration(seconds: 4));
+    return apptiveGridClient.deleteAccount();
+  }
 }

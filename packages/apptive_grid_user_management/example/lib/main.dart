@@ -117,6 +117,15 @@ class LoginRegistrationPage extends StatelessWidget {
               ),
             ),
           ),
+          DeleteAccount.textButton(
+            onAccountDeleted: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Account Deleted'),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

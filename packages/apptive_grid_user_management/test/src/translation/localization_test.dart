@@ -498,4 +498,13 @@ class CustomTestTranslation extends ApptiveGridUserManagementTranslation {
 
   @override
   String get actionJoinGroup => 'actionJoinGroup';
+
+  @override
+  String get actionDelete => 'actionDelete';
+
+  @override
+  String get deleteAccount => 'deleteAccount';
+
+  @override
+  String get deleteAccountConfirmation => 'deleteAccountConfirmation';
 }

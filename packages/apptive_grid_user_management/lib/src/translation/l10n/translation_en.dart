@@ -82,4 +82,11 @@ class ApptiveGridUserManagementLocalizedTranslation
       'Your account is not yet activated for $app.\nDo you want to activate it now?';
   @override
   String get actionJoinGroup => 'Activate';
+  @override
+  String get deleteAccount => 'Delete Account';
+  @override
+  String get deleteAccountConfirmation =>
+      'Are you sure you want to delete your account?\nThis can not be undone.';
+  @override
+  String get actionDelete => 'Delete';
 }

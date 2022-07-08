@@ -806,4 +806,14 @@ class ApptiveGridClient {
 
     return parseResponse(response);
   }
+
+  /// Perform a call to delete the user's account
+  /// This will return `true` if the account deletion was successful
+  Future<bool> deleteAccount() async {
+    // TODO: Do call to delete the account
+
+    await _authenticator.logout();
+
+    return true;
+  }
 }

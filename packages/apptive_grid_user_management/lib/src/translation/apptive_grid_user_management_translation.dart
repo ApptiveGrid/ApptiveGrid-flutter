@@ -107,4 +107,10 @@ abstract class ApptiveGridUserManagementTranslation {
 
   /// Action to join this group
   String get actionJoinGroup;
+
+  String get deleteAccount;
+
+  String get deleteAccountConfirmation;
+
+  String get actionDelete;
 }
