@@ -186,6 +186,8 @@ class ApptiveGridUserManagementClient {
   /// This will return `true` if the account deletion was successful
   Future<bool> deleteAccount() async {
     await Future.delayed(const Duration(seconds: 4));
+    // TODO: Perform call or return false if the call failed
+    // Clarify if the call is made against /auth/ then do it directly here otherwise call a function in the client
     return apptiveGridClient.deleteAccount();
   }
 }

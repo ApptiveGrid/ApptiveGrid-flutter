@@ -89,3 +89,35 @@ Card(
       ),
 )
 ```
+
+## Delete Account
+To comply with the Apple Review Guidelines Apps that offer Account Creation also require to provide an option to delete the account. [More Information](https://developer.apple.com/support/offering-account-deletion-in-your-app)
+
+This package provides widgets to show the delete account option.
+
+```dart
+// As a ListTile
+DeleteAccount.listTile(
+  onAccountDeleted: () {
+      // Go to Login Screen, etc...
+  },
+),
+
+// As a TextButton
+DeleteAccount.textButton(
+    onAccountDeleted: () {
+      // Go to Login Screen, etc...
+    },
+),
+
+// As a Custom Widget
+// Note that gesture detectors on your custom widget will be ignored
+DeleteAccount(
+    onAccountDeleted: () {
+      // Go to Login Screen, etc...
+    },
+    child: CustomWidget(),
+),
+```
+
+Clicking on one of these Widgets will show users a dialog where they can confirm that they want to delete their account.
