@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+part of 'package:apptive_grid_user_management/src/delete_account.dart';
 
-class LoadingStateWidget extends StatefulWidget {
-  const LoadingStateWidget({super.key, required this.child});
+class _LoadingStateWidget extends StatefulWidget {
+  const _LoadingStateWidget({super.key, required this.child});
 
   final Widget child;
 
   @override
-  State<LoadingStateWidget> createState() => LoadingStateWidgetState();
+  State<_LoadingStateWidget> createState() => _LoadingStateWidgetState();
 
   static bool isLoading(BuildContext context) {
     final state =
@@ -21,7 +21,7 @@ class LoadingStateWidget extends StatefulWidget {
   }
 }
 
-class LoadingStateWidgetState extends State<LoadingStateWidget> {
+class _LoadingStateWidgetState extends State<_LoadingStateWidget> {
   bool _loading = false;
   dynamic _error;
 

@@ -108,9 +108,12 @@ abstract class ApptiveGridUserManagementTranslation {
   /// Action to join this group
   String get actionJoinGroup;
 
+  /// Message to delete an Account
   String get deleteAccount;
 
+  /// Message shown to users to ask to confirm the deletion of their account. Moting, that this can not be undone
   String get deleteAccountConfirmation;
 
+  /// Action to delete something
   String get actionDelete;
 }
