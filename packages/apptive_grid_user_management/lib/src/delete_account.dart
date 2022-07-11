@@ -47,6 +47,7 @@ class DeleteAccount extends StatefulWidget {
             onTap: () => key.currentState?.showConfirmationDialog(context),
             title: Text(
               ApptiveGridUserManagementLocalization.of(context)!.deleteAccount,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           );
         },
@@ -67,6 +68,9 @@ class DeleteAccount extends StatefulWidget {
             onPressed: () => key.currentState?.showConfirmationDialog(context),
             child: Text(
               ApptiveGridUserManagementLocalization.of(context)!.deleteAccount,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.error,
+              ),
             ),
           );
         },
@@ -90,13 +94,13 @@ class DeleteAccountState extends State<DeleteAccount> {
   void showConfirmationDialog(BuildContext context) {
     final localization = ApptiveGridUserManagementLocalization.of(context);
     final client = ApptiveGridUserManagement.maybeOf(context)?.client;
-    final loadingey = GlobalKey<LoadingStateWidgetState>();
+    final loadingKey = GlobalKey<LoadingStateWidgetState>();
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext dialogContext) {
         return LoadingStateWidget(
-          key: loadingey,
+          key: loadingKey,
           child: Builder(
             builder: (context) {
               return AlertDialog(
@@ -129,13 +133,13 @@ class DeleteAccountState extends State<DeleteAccount> {
                       },
                     ),
                   _LoadingTextButton(
-                    loadingKey: loadingey,
+                    loadingKey: loadingKey,
                     onPressed: () async {
                       final deleted = await client
                           ?.deleteAccount()
                           .onError((error, stackTrace) {
-                        loadingey.currentState?.error = error;
-                        loadingey.currentState?.loading = false;
+                        loadingKey.currentState?.error = error;
+                        loadingKey.currentState?.loading = false;
                         return false;
                       });
                       if (deleted == true) {
