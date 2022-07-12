@@ -187,13 +187,15 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 DeleteAccount.textButton(
                   onAccountDeleted: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) {
-                          return const LoginRegistrationPage();
-                        },
-                      ),
-                    );
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) {
+                            return const LoginRegistrationPage();
+                          },
+                        ),
+                      );
+                    });
                   },
                 ),
               ],
