@@ -116,6 +116,7 @@ class DeleteAccountState extends State<DeleteAccount> {
           key: loadingKey,
           child: Builder(
             builder: (context) {
+              final error = _LoadingStateWidget.error(context);
               return AlertDialog(
                 title: Text(localization?.deleteAccount ?? 'Delete Account'),
                 content: Column(
@@ -126,11 +127,11 @@ class DeleteAccountState extends State<DeleteAccount> {
                       localization?.deleteAccountConfirmation ??
                           'Are you sure you want to delete your account?\n This can not be undone.',
                     ),
-                    if (_LoadingStateWidget.error(context) != null)
+                    if (error != null)
                       Text(
-                        _LoadingStateWidget.error(context) is http.Response
-                            ? '${_LoadingStateWidget.error(context).statusCode}: ${_LoadingStateWidget.error(context).body}'
-                            : '${localization?.errorUnknown}\n${_LoadingStateWidget.error(context)!}',
+                        error is http.Response
+                            ? '${error.statusCode}: ${error.body}'
+                            : '${localization?.errorUnknown}\n${error!}',
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.error,
                         ),
