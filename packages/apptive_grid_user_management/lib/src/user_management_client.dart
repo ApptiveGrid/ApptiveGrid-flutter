@@ -193,7 +193,7 @@ class ApptiveGridUserManagementClient {
     await apptiveGridClient.authenticator.checkAuthentication();
     final deleteResponse = await _client.delete(
       Uri.parse(
-        '${apptiveGridClient.options.environment.url}/auth/$group/users/me?clientId=$clientId',
+        '${apptiveGridClient.options.environment.url}/auth/$group/users/me',
       ),
       headers: apptiveGridClient.defaultHeaders,
     );

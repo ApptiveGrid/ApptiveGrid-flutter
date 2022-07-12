@@ -707,8 +707,8 @@ void main() {
   group('Delete Account', () {
     const clientId = 'clientId';
     const group = 'group';
-    final deleteUri = Uri.parse(
-        'https://app.apptivegrid.de/auth/$group/users/me?clientId=$clientId');
+    final deleteUri =
+        Uri.parse('https://app.apptivegrid.de/auth/$group/users/me');
 
     test('Delete Account successfully', () async {
       const group = 'group';
