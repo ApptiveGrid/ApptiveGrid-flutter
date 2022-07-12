@@ -705,6 +705,11 @@ void main() {
   });
 
   group('Delete Account', () {
+    const clientId = 'clientId';
+    const group = 'group';
+    final deleteUri = Uri.parse(
+        'https://app.apptivegrid.de/auth/$group/users/me?clientId=$clientId');
+
     test('Delete Account successfully', () async {
       const group = 'group';
       final authenticator = MockAuthenticator();
@@ -721,26 +726,22 @@ void main() {
       when(() => apptiveGridClient.authenticator).thenReturn(authenticator);
 
       final httpClient = MockHttpClient();
-      when(() => httpClient.delete(
-              Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
-              headers: any(named: 'headers')))
+      when(() => httpClient.delete(deleteUri, headers: any(named: 'headers')))
           .thenAnswer((_) async => Response('', 200));
 
       final userManagementClient = ApptiveGridUserManagementClient(
         group: group,
-        clientId: 'app',
+        clientId: clientId,
         apptiveGridClient: apptiveGridClient,
         client: httpClient,
       );
 
       expect(await userManagementClient.deleteAccount(), true);
-      verify(() => httpClient.delete(
-          Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
-          headers: any(named: 'headers'))).called(1);
+      verify(() => httpClient.delete(deleteUri, headers: any(named: 'headers')))
+          .called(1);
     });
 
     test('Delete Account Throws Error', () async {
-      const group = 'group';
       final authenticator = MockAuthenticator();
       when(() => authenticator.checkAuthentication()).thenAnswer((_) async {});
 
@@ -755,14 +756,12 @@ void main() {
       when(() => apptiveGridClient.authenticator).thenReturn(authenticator);
 
       final httpClient = MockHttpClient();
-      when(() => httpClient.delete(
-              Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
-              headers: any(named: 'headers')))
+      when(() => httpClient.delete(deleteUri, headers: any(named: 'headers')))
           .thenAnswer((_) async => Future.error(Exception('Error')));
 
       final userManagementClient = ApptiveGridUserManagementClient(
         group: group,
-        clientId: 'app',
+        clientId: clientId,
         apptiveGridClient: apptiveGridClient,
         client: httpClient,
       );
@@ -786,14 +785,12 @@ void main() {
       when(() => apptiveGridClient.authenticator).thenReturn(authenticator);
 
       final httpClient = MockHttpClient();
-      when(() => httpClient.delete(
-              Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
-              headers: any(named: 'headers')))
+      when(() => httpClient.delete(deleteUri, headers: any(named: 'headers')))
           .thenAnswer((_) async => Response('body', 400));
 
       final userManagementClient = ApptiveGridUserManagementClient(
         group: group,
-        clientId: 'app',
+        clientId: clientId,
         apptiveGridClient: apptiveGridClient,
         client: httpClient,
       );
@@ -819,22 +816,19 @@ void main() {
       when(() => apptiveGridClient.authenticator).thenReturn(authenticator);
 
       final httpClient = MockHttpClient();
-      when(() => httpClient.delete(
-              Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
-              headers: any(named: 'headers')))
+      when(() => httpClient.delete(deleteUri, headers: any(named: 'headers')))
           .thenAnswer((_) async => Future.error(Exception('Error')));
 
       final userManagementClient = ApptiveGridUserManagementClient(
         group: group,
-        clientId: 'app',
+        clientId: clientId,
         apptiveGridClient: apptiveGridClient,
         client: httpClient,
       );
 
       expect(await userManagementClient.deleteAccount(), false);
-      verifyNever(() => httpClient.delete(
-          Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
-          headers: any(named: 'headers')));
+      verifyNever(
+          () => httpClient.delete(deleteUri, headers: any(named: 'headers')));
     });
   });
 }
