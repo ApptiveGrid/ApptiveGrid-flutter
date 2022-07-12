@@ -29,16 +29,17 @@ class ApptiveGridClient {
     http.Client? httpClient,
     ApptiveGridAuthenticator? authenticator,
   }) : _client = httpClient ?? http.Client() {
-    _authenticator = authenticator ??
+    this.authenticator = authenticator ??
         ApptiveGridAuthenticator(options: options, httpClient: _client);
     _attachmentProcessor =
-        AttachmentProcessor(options, _authenticator, httpClient: _client);
+        AttachmentProcessor(options, this.authenticator, httpClient: _client);
   }
 
   /// Configurations
   ApptiveGridOptions options;
 
-  late final ApptiveGridAuthenticator _authenticator;
+  /// The authenticator used to authenticate requests
+  late final ApptiveGridAuthenticator authenticator;
 
   final http.Client _client;
 
@@ -51,13 +52,12 @@ class ApptiveGridClient {
   /// Close the connection on the httpClient
   void dispose() {
     _client.close();
-    _authenticator.dispose();
+    authenticator.dispose();
   }
 
   /// Headers that are used for multiple Calls
-  @visibleForTesting
   Map<String, String> get defaultHeaders => (<String, String?>{
-        HttpHeaders.authorizationHeader: _authenticator.header,
+        HttpHeaders.authorizationHeader: authenticator.header,
         HttpHeaders.contentTypeHeader: ContentType.json,
       }..removeWhere((key, value) => value == null))
           .map((key, value) => MapEntry(key, value!));
@@ -100,7 +100,7 @@ class ApptiveGridClient {
     );
     if (response.statusCode >= 400) {
       if (response.statusCode == 401 && !isRetry) {
-        await _authenticator.checkAuthentication();
+        await authenticator.checkAuthentication();
         return loadForm(
           formUri: formUri,
           uri: uri,
@@ -378,7 +378,7 @@ class ApptiveGridClient {
         await _client.get(gridViewUrl, headers: gridHeaders);
     if (gridViewResponse.statusCode >= 400) {
       if (gridViewResponse.statusCode == 401 && !isRetry) {
-        await _authenticator.checkAuthentication();
+        await authenticator.checkAuthentication();
         return loadGrid(
           uri: uri,
           gridUri: gridUri,
@@ -444,7 +444,7 @@ class ApptiveGridClient {
 
     if (response.statusCode >= 400) {
       if (response.statusCode == 401 && !isRetry) {
-        await _authenticator.checkAuthentication();
+        await authenticator.checkAuthentication();
         return loadEntities<T>(
           uri: uri,
           layout: layout,
@@ -474,7 +474,7 @@ class ApptiveGridClient {
   Future<User> getMe({
     Map<String, String> headers = const {},
   }) async {
-    await _authenticator.checkAuthentication();
+    await authenticator.checkAuthentication();
 
     final url = Uri.parse('${options.environment.url}/api/users/me');
     final response =
@@ -498,7 +498,7 @@ class ApptiveGridClient {
     Map<String, String> headers = const {},
   }) async {
     assert(uri != null || spaceUri != null);
-    await _authenticator.checkAuthentication();
+    await authenticator.checkAuthentication();
 
     final url = _generateApptiveGridUri(uri ?? spaceUri!.uri);
     final response =
@@ -522,7 +522,7 @@ class ApptiveGridClient {
     required GridUri gridUri,
     Map<String, String> headers = const {},
   }) async {
-    await _authenticator.checkAuthentication();
+    await authenticator.checkAuthentication();
 
     final baseUrl = _generateApptiveGridUri(gridUri.uri);
     final url = baseUrl.replace(
@@ -552,7 +552,7 @@ class ApptiveGridClient {
     required GridUri gridUri,
     Map<String, String> headers = const {},
   }) async {
-    await _authenticator.checkAuthentication();
+    await authenticator.checkAuthentication();
 
     final baseUrl = _generateApptiveGridUri(gridUri.uri);
     final url = baseUrl.replace(
@@ -584,7 +584,7 @@ class ApptiveGridClient {
     Map<String, String> headers = const {},
   }) async {
     assert(uri != null || entityUri != null);
-    await _authenticator.checkAuthentication();
+    await authenticator.checkAuthentication();
 
     final url = _generateApptiveGridUri(uri ?? entityUri!.uri);
 
@@ -623,7 +623,7 @@ class ApptiveGridClient {
     ApptiveGridLayout layout = ApptiveGridLayout.field,
   }) async {
     assert(uri != null || entityUri != null);
-    await _authenticator.checkAuthentication();
+    await authenticator.checkAuthentication();
 
     final url = _generateApptiveGridUri(uri ?? entityUri!.uri);
 
@@ -647,27 +647,27 @@ class ApptiveGridClient {
   ///
   /// This will open a Webpage for the User Auth
   Future<Credential?> authenticate() {
-    return _authenticator.authenticate();
+    return authenticator.authenticate();
   }
 
   /// Logs out the user
   Future<void> logout() {
-    return _authenticator.logout();
+    return authenticator.logout();
   }
 
   /// Checks if the User is currently authenticated
-  Future<bool> get isAuthenticated => _authenticator.isAuthenticated;
+  Future<bool> get isAuthenticated => authenticator.isAuthenticated;
 
   /// Checks if the User is currently authenticated with a Token.
   /// Returns true if the user is logged in as a user.
   /// Will return false if there is no authentication set or if the authentication is done using a [ApptiveGridApiKey]
   Future<bool> get isAuthenticatedWithToken =>
-      _authenticator.isAuthenticatedWithToken;
+      authenticator.isAuthenticatedWithToken;
 
   /// Authenticates by setting a token
   /// [tokenResponse] needs to be a JWT
   Future<void> setUserToken(Map<String, dynamic> tokenResponse) async {
-    return _authenticator.setUserToken(tokenResponse);
+    return authenticator.setUserToken(tokenResponse);
   }
 
   /// Updates the Environment for the client and handle necessary changes in the Authenticator
@@ -675,13 +675,13 @@ class ApptiveGridClient {
     final currentRealm = options.environment.authRealm;
 
     if (currentRealm != environment.authRealm) {
-      await _authenticator.logout();
+      await authenticator.logout();
     }
 
     options = options.copyWith(environment: environment);
-    _authenticator.options = options;
+    authenticator.options = options;
     _attachmentProcessor =
-        AttachmentProcessor(options, _authenticator, httpClient: _client);
+        AttachmentProcessor(options, authenticator, httpClient: _client);
   }
 
   /// Tries to send pending [ActionItem]s that are stored in [options.cache]
@@ -790,7 +790,7 @@ class ApptiveGridClient {
 
     if (response.statusCode >= 400) {
       if (response.statusCode == 401 && !isRetry) {
-        await _authenticator.checkAuthentication();
+        await authenticator.checkAuthentication();
         return performApptiveLink(
           link: link,
           body: body,

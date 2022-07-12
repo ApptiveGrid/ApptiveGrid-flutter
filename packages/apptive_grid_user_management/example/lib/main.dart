@@ -48,7 +48,13 @@ class MyApp extends StatelessWidget {
                   content: Text('Account Confirmed. LoggedIn: $loggedIn'),
                 ),
               );
-              _navigatorKey.currentState?.pop();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) {
+                    return const AccountPage();
+                  },
+                ),
+              );
             },
             resetPasswordPrompt: (resetPasswordWidget) {
               // Show [resetPasswordWidget] to allow Users to set a new password
@@ -109,8 +115,12 @@ class LoginRegistrationPage extends StatelessWidget {
                 child: ApptiveGridUserManagementContent(
                   appName: 'ApptiveGridUserManagement Example',
                   onLogin: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('User logged in')),
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) {
+                          return const AccountPage();
+                        },
+                      ),
                     );
                   },
                 ),
@@ -118,6 +128,80 @@ class LoginRegistrationPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AccountPage extends StatefulWidget {
+  const AccountPage({super.key});
+
+  @override
+  State<AccountPage> createState() => _AccountPageState();
+}
+
+class _AccountPageState extends State<AccountPage> {
+  User? _user;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    ApptiveGrid.getClient(context).getMe().then((user) {
+      setState(() {
+        _user = user;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Account'),
+      ),
+      body: Builder(
+        builder: (_) {
+          if (_user == null) {
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          } else {
+            return Column(
+              children: [
+                Text('Logged in as ${_user!.firstName} ${_user!.lastName}'),
+                TextButton(
+                  onPressed: () {
+                    ApptiveGrid.getClient(context, listen: false)
+                        .logout()
+                        .then((_) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) {
+                            return const LoginRegistrationPage();
+                          },
+                        ),
+                      );
+                    });
+                  },
+                  child: const Text('Logout'),
+                ),
+                DeleteAccount.textButton(
+                  onAccountDeleted: () {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) {
+                            return const LoginRegistrationPage();
+                          },
+                        ),
+                      );
+                    });
+                  },
+                ),
+              ],
+            );
+          }
+        },
       ),
     );
   }

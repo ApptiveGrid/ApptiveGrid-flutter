@@ -32,5 +32,8 @@
     "registerConfirmAddToGroup": "Es existiert bereits ein Account mit der Adresse $email.\\nWir haben dir einen Link geschickt, mit dem du bestätigen kannst, dass du den Account für \"$app\" freischalten möchtest.\\nDein Passwort wurde nicht geändert.",
     "actionBack": "Zurück",
     "joinGroup": "Dein Account ist noch nicht für $app freigeschaltet.\\nWillst du deinen Account jetzt freischalten?",
-    "actionJoinGroup": "Freischalten"
+    "actionJoinGroup": "Freischalten",
+    "deleteAccount": "Account löschen",
+    "deleteAccountConfirmation": "Bist du sicher, dass du deinen Account löschen möchtest?\\nDies kann nicht rückgängig gemacht werden.",
+    "actionDelete": "Löschen"
 }

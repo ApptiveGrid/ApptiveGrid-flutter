@@ -89,4 +89,11 @@ class ApptiveGridUserManagementLocalizedTranslation
       'Dein Account ist noch nicht für $app freigeschaltet.\nWillst du deinen Account jetzt freischalten?';
   @override
   String get actionJoinGroup => 'Freischalten';
+  @override
+  String get deleteAccount => 'Account löschen';
+  @override
+  String get deleteAccountConfirmation =>
+      'Bist du sicher, dass du deinen Account löschen möchtest?\nDies kann nicht rückgängig gemacht werden.';
+  @override
+  String get actionDelete => 'Löschen';
 }

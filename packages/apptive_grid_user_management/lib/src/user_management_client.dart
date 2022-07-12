@@ -181,4 +181,27 @@ class ApptiveGridUserManagementClient {
       return response;
     }
   }
+
+  /// Perform a call to delete the user's account
+  /// This will return `true` if the account deletion was successful
+  Future<bool> deleteAccount() async {
+    final isAuthenticated = await apptiveGridClient.isAuthenticatedWithToken;
+
+    if (!isAuthenticated) {
+      return false;
+    }
+    await apptiveGridClient.authenticator.checkAuthentication();
+    final deleteResponse = await _client.delete(
+      Uri.parse(
+        '${apptiveGridClient.options.environment.url}/auth/$group/users/me',
+      ),
+      headers: apptiveGridClient.defaultHeaders,
+    );
+
+    if (deleteResponse.statusCode >= 400) {
+      throw deleteResponse;
+    } else {
+      return true;
+    }
+  }
 }
