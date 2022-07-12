@@ -796,7 +796,9 @@ void main() {
       );
 
       expect(
-          () => userManagementClient.deleteAccount(), throwsA(isA<Response>()));
+        () => userManagementClient.deleteAccount(),
+        throwsA(isA<Response>()),
+      );
     });
 
     test('Delete Account returns false if not authenticated', () async {
@@ -828,7 +830,8 @@ void main() {
 
       expect(await userManagementClient.deleteAccount(), false);
       verifyNever(
-          () => httpClient.delete(deleteUri, headers: any(named: 'headers')));
+        () => httpClient.delete(deleteUri, headers: any(named: 'headers')),
+      );
     });
   });
 }
