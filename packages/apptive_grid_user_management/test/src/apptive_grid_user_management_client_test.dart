@@ -703,4 +703,138 @@ void main() {
       );
     });
   });
+
+  group('Delete Account', () {
+    test('Delete Account successfully', () async {
+      const group = 'group';
+      final authenticator = MockAuthenticator();
+      when(() => authenticator.checkAuthentication()).thenAnswer((_) async {});
+
+      final apptiveGridClient = MockApptiveGridClient();
+      when(() => apptiveGridClient.options)
+          .thenReturn(const ApptiveGridOptions());
+      when(() => apptiveGridClient.isAuthenticatedWithToken)
+          .thenAnswer((_) async => true);
+      when(() => apptiveGridClient.defaultHeaders).thenReturn({
+        'Authentication': 'Bearer token',
+      });
+      when(() => apptiveGridClient.authenticator).thenReturn(authenticator);
+
+      final httpClient = MockHttpClient();
+      when(() => httpClient.delete(
+              Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
+              headers: any(named: 'headers')))
+          .thenAnswer((_) async => Response('', 200));
+
+      final userManagementClient = ApptiveGridUserManagementClient(
+        group: group,
+        clientId: 'app',
+        apptiveGridClient: apptiveGridClient,
+        client: httpClient,
+      );
+
+      expect(await userManagementClient.deleteAccount(), true);
+      verify(() => httpClient.delete(
+          Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
+          headers: any(named: 'headers'))).called(1);
+    });
+
+    test('Delete Account Throws Error', () async {
+      const group = 'group';
+      final authenticator = MockAuthenticator();
+      when(() => authenticator.checkAuthentication()).thenAnswer((_) async {});
+
+      final apptiveGridClient = MockApptiveGridClient();
+      when(() => apptiveGridClient.options)
+          .thenReturn(const ApptiveGridOptions());
+      when(() => apptiveGridClient.isAuthenticatedWithToken)
+          .thenAnswer((_) async => true);
+      when(() => apptiveGridClient.defaultHeaders).thenReturn({
+        'Authentication': 'Bearer token',
+      });
+      when(() => apptiveGridClient.authenticator).thenReturn(authenticator);
+
+      final httpClient = MockHttpClient();
+      when(() => httpClient.delete(
+              Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
+              headers: any(named: 'headers')))
+          .thenAnswer((_) async => Future.error(Exception('Error')));
+
+      final userManagementClient = ApptiveGridUserManagementClient(
+        group: group,
+        clientId: 'app',
+        apptiveGridClient: apptiveGridClient,
+        client: httpClient,
+      );
+
+      expect(() => userManagementClient.deleteAccount(), throwsException);
+    });
+
+    test('Delete Account Throws Response if StatusCode >= 400', () async {
+      const group = 'group';
+      final authenticator = MockAuthenticator();
+      when(() => authenticator.checkAuthentication()).thenAnswer((_) async {});
+
+      final apptiveGridClient = MockApptiveGridClient();
+      when(() => apptiveGridClient.options)
+          .thenReturn(const ApptiveGridOptions());
+      when(() => apptiveGridClient.isAuthenticatedWithToken)
+          .thenAnswer((_) async => true);
+      when(() => apptiveGridClient.defaultHeaders).thenReturn({
+        'Authentication': 'Bearer token',
+      });
+      when(() => apptiveGridClient.authenticator).thenReturn(authenticator);
+
+      final httpClient = MockHttpClient();
+      when(() => httpClient.delete(
+              Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
+              headers: any(named: 'headers')))
+          .thenAnswer((_) async => Response('body', 400));
+
+      final userManagementClient = ApptiveGridUserManagementClient(
+        group: group,
+        clientId: 'app',
+        apptiveGridClient: apptiveGridClient,
+        client: httpClient,
+      );
+
+      expect(
+          () => userManagementClient.deleteAccount(), throwsA(isA<Response>()));
+    });
+
+    test('Delete Account returns false if not authenticated', () async {
+      const group = 'group';
+
+      final authenticator = MockAuthenticator();
+      when(() => authenticator.checkAuthentication()).thenAnswer((_) async {});
+
+      final apptiveGridClient = MockApptiveGridClient();
+      when(() => apptiveGridClient.options)
+          .thenReturn(const ApptiveGridOptions());
+      when(() => apptiveGridClient.isAuthenticatedWithToken)
+          .thenAnswer((_) async => false);
+      when(() => apptiveGridClient.defaultHeaders).thenReturn({
+        'Authentication': 'Bearer token',
+      });
+      when(() => apptiveGridClient.authenticator).thenReturn(authenticator);
+
+      final httpClient = MockHttpClient();
+      when(() => httpClient.delete(
+              Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
+              headers: any(named: 'headers')))
+          .thenAnswer((_) async => Future.error(Exception('Error')));
+
+      final userManagementClient = ApptiveGridUserManagementClient(
+        group: group,
+        clientId: 'app',
+        apptiveGridClient: apptiveGridClient,
+        client: httpClient,
+      );
+
+      expect(await userManagementClient.deleteAccount(), false);
+      verifyNever(() => httpClient.delete(
+          Uri.parse('https://app.apptivegrid.de/auth/$group/users/me'),
+          headers: any(named: 'headers')));
+    });
+  });
 }

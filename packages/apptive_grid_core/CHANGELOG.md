@@ -1,3 +1,7 @@
+## 0.12.1
+* Make `defaultHeaders` in ApptiveGridClient public outside of tests
+* Give access to `authenticator` in ApptiveGridClient
+
 ## 0.12.0
 * Update Attachment Processing
 * Add option to add an attachment with a path to a file instead of only the raw bytes
