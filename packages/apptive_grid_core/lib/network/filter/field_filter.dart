@@ -3,7 +3,7 @@ part of 'package:apptive_grid_core/network/filter/apptive_grid_filter.dart';
 /// Filter Operators for Filters that check on a Field
 enum _FieldOperator {
   substring(operation: 'substring'),
-  equal(operation: '='),
+  equal(operation: 'eq'),
   greaterThan(operation: 'gt'),
   lesserThan(operation: 'lt'),
   empty(operation: 'isEmpty'),
@@ -32,9 +32,6 @@ abstract class _FieldFilter extends ApptiveGridFilter {
 
   @override
   Map<String, dynamic> toJson() {
-    if (operator == _FieldOperator.equal) {
-      return {fieldId: value.filterValue};
-    }
     return {
       fieldId: {'\$${operator.operation}': value.filterValue}
     };

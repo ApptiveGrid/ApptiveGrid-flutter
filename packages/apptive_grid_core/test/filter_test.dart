@@ -27,7 +27,11 @@ void main() {
           EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'))
               .toJson(),
         ),
-        equals(jsonEncode({'fieldId': 'value'})),
+        equals(
+          jsonEncode({
+            "fieldId": {"\$eq": "value"}
+          }),
+        ),
       );
     });
 

@@ -1,3 +1,6 @@
+## 0.12.2
+* Adjust Format for equals Filter
+
 ## 0.12.1
 * Make `defaultHeaders` in ApptiveGridClient public outside of tests
 * Give access to `authenticator` in ApptiveGridClient
