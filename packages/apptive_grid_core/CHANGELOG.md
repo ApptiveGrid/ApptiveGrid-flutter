@@ -1,4 +1,5 @@
 ## 0.12.2
+* Add `hiddenFields` to `Grid`
 * Deprecate `ApptiveLinkType.rename` in favor of `ApptiveLinkType.patch`
 
 ## 0.12.1

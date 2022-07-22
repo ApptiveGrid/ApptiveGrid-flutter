@@ -221,11 +221,6 @@ void main() {
           '_id': '2ozv8sbju97gk1ukfbl3f3fl1'
         },
       ],
-      'fieldIds': [
-        '2ozv8saj00bdp85gr8r9wc5up',
-        '2ozv8scn6q8gnhivpmhn5u875',
-        '2ozv8sai5hc0pzdd2c2ifs64g'
-      ],
       'schema': {
         'type': 'object',
         'properties': {
@@ -1950,11 +1945,6 @@ void main() {
             '_id': '60c9c997f8eeb8636c8140c4'
           }
         ],
-        'fieldIds': [
-          '9fqx8om03flgh8d4m1l953x29',
-          '9fqx8okgtzoafyanblvfg61cl',
-          '9fqx8on7ee2hq5iv20vcu9svw'
-        ],
         'filter': {
           '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
         },
@@ -2119,11 +2109,6 @@ void main() {
             ],
             '_id': '60c9c997f8eeb8636c8140c4'
           }
-        ],
-        'fieldIds': [
-          '9fqx8om03flgh8d4m1l953x29',
-          '9fqx8okgtzoafyanblvfg61cl',
-          '9fqx8on7ee2hq5iv20vcu9svw'
         ],
         'filter': {
           '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
@@ -2296,11 +2281,6 @@ void main() {
             ],
             '_id': '60c9c997f8eeb8636c8140c4'
           }
-        ],
-        'fieldIds': [
-          '9fqx8om03flgh8d4m1l953x29',
-          '9fqx8okgtzoafyanblvfg61cl',
-          '9fqx8on7ee2hq5iv20vcu9svw'
         ],
         'filter': {
           '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}

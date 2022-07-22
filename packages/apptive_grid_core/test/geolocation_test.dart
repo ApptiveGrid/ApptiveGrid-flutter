@@ -24,7 +24,6 @@ void main() {
           },
         }
       ],
-      "fieldIds": ["78lnph2fb2olm9jtc696d66q9"],
       "filter": {},
       'fields': [
         {
@@ -137,7 +136,6 @@ void main() {
           "_id": "61b08a87aa660541e58f58ef"
         }
       ],
-      "fieldIds": ["78lnph2fb2olm9jtc696d66q9"],
       "filter": {},
       'fields': [
         {

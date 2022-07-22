@@ -19,7 +19,6 @@ void main() {
           },
         }
       ],
-      'fieldIds': ['3ftoqhqbct15h5o730uknpvp5'],
       'filter': {},
       'fields': [
         {
