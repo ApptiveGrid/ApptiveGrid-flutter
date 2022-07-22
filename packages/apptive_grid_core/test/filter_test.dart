@@ -279,7 +279,7 @@ void main() {
           jsonEncode({
             '\$and': [
               {
-                'fieldId': 'value',
+                'fieldId': {'\$eq': 'value'},
               },
               {
                 'fieldId1': {
@@ -311,7 +311,7 @@ void main() {
           jsonEncode({
             '\$or': [
               {
-                'fieldId': 'value',
+                'fieldId': {'\$eq': 'value'},
               },
               {
                 'fieldId1': {
@@ -374,7 +374,7 @@ void main() {
         equals(
           jsonEncode({
             '\$not': {
-              'field': 'test',
+              'field': {'\$eq': 'test'},
             }
           }),
         ),
