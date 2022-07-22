@@ -21,7 +21,6 @@ void main() {
           },
         },
       ],
-      'fieldIds': ['8ou8s82tahpyqoowd0izr1nzm'],
       'filter': {},
       'fields': [
         {
