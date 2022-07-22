@@ -107,16 +107,6 @@ void main() {
           },
         },
       ],
-      'fieldIds': [
-        '4zc4l45nmww7ujq7y4axlbtjg',
-        '4zc4l48ffin5v8pa2emyx9s15',
-        '4zc4l4c5coyi7qh6q1ozrg54u',
-        '4zc4l49to77dhfagr844flaey',
-        '4zc4l48ez9l3p0gni56z9obo4',
-        '4zc4l4ale6sfv3y40hly478z9',
-        '4zc4l456pca5ursrt9rxefpsc',
-        '4zc4l456pca5ursrt9rxef123'
-      ],
       'schema': {
         'type': 'object',
         'properties': {
@@ -236,6 +226,19 @@ void main() {
           "_links": <String, dynamic>{}
         },
       ],
+      'hiddenFields': [
+        {
+          "type": {
+            "name": "string",
+            "componentTypes": ["textfield"]
+          },
+          "key": null,
+          "name": "Hidden Field",
+          "schema": {"type": "string"},
+          "id": "hiddenId",
+          "_links": <String, dynamic>{}
+        },
+      ],
       '_embedded': {
         "forms": [
           {
@@ -341,6 +344,7 @@ void main() {
       expect(grid.key, equals('gridKey'));
       expect(grid.fields!.length, equals(8));
       expect(grid.rows!.length, equals(5));
+      expect(grid.hiddenFields!.first.id, equals('hiddenId'));
 
       final firstRow = grid.rows![0];
       expect(firstRow.entries[0].data.value, equals('Hello'));
@@ -360,6 +364,7 @@ void main() {
       expect(restored, equals(initialData));
       expect(restored.hashCode, equals(initialData.hashCode));
       expect(restored.key, equals('gridKey'));
+      expect(restored.hiddenFields!.first.id, equals('hiddenId'));
     });
   });
 }

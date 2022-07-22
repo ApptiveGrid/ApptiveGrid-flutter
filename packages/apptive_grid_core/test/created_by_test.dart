@@ -73,7 +73,6 @@ void main() {
           },
         },
       ],
-      'fieldIds': ['f3k9zj2aaclqnhd2e8cvlwydt'],
       'filter': {},
       'fields': [
         {

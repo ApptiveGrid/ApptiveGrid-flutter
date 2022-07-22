@@ -25,7 +25,6 @@ void main() {
           },
         }
       ],
-      'fieldIds': ['fieldId'],
       'filter': {},
       'fields': [
         {
