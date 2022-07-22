@@ -29,7 +29,6 @@ void main() {
           },
         },
       ],
-      'fieldIds': ['80vw5xpimeeuxmoiftfqepbvc'],
       'filter': {},
       'fields': [
         {
@@ -150,7 +149,6 @@ void main() {
           '_id': '619b63e84a391314968da9a0'
         },
       ],
-      'fieldIds': ['80vw5xpimeeuxmoiftfqepbvc'],
       'filter': {},
       'fields': [
         {

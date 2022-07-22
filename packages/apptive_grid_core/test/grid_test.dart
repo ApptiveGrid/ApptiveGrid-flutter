@@ -107,16 +107,6 @@ void main() {
           },
         },
       ],
-      'fieldIds': [
-        '4zc4l45nmww7ujq7y4axlbtjg',
-        '4zc4l48ffin5v8pa2emyx9s15',
-        '4zc4l4c5coyi7qh6q1ozrg54u',
-        '4zc4l49to77dhfagr844flaey',
-        '4zc4l48ez9l3p0gni56z9obo4',
-        '4zc4l4ale6sfv3y40hly478z9',
-        '4zc4l456pca5ursrt9rxefpsc',
-        '4zc4l456pca5ursrt9rxef123'
-      ],
       'schema': {
         'type': 'object',
         'properties': {
