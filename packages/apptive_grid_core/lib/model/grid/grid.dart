@@ -32,6 +32,7 @@ class Grid {
     required this.id,
     required this.name,
     this.fields,
+    this.hiddenFields,
     this.rows,
     this.key,
     this.filter,
@@ -46,6 +47,9 @@ class Grid {
     final fields = (json['fields'] as List?)
         ?.map((json) => GridField.fromJson(json))
         .toList();
+    final hiddenFields = (json['hiddenFields'] as List?)
+        ?.map((json) => GridField.fromJson(json))
+        .toList();
     final entries = fields != null
         ? (json['entities'] as List?)
             ?.map((e) => GridRow.fromJson(e, fields))
@@ -58,6 +62,7 @@ class Grid {
       name: json['name'],
       key: json['key'],
       fields: fields,
+      hiddenFields: hiddenFields,
       rows: entries,
       filter: filter,
       sorting: sorting,
@@ -86,6 +91,9 @@ class Grid {
   /// List of [GridField] representing the Columns the Grid has
   final List<GridField>? fields;
 
+  /// List of [GridField]s that are hidden in this View
+  final List<GridField>? hiddenFields;
+
   /// Rows of the Grid
   final List<GridRow>? rows;
 
@@ -103,6 +111,8 @@ class Grid {
       if (key != null) 'key': key,
       if (rows != null) 'entities': rows!.map((e) => e.toJson()).toList(),
       if (fields != null) 'fields': fields!.map((e) => e.toJson()).toList(),
+      if (hiddenFields != null)
+        'hiddenFields': hiddenFields!.map((e) => e.toJson()).toList(),
       if (filter != null) 'filter': filter,
       if (sorting != null) 'sorting': sorting,
       '_links': links.toJson(),
@@ -121,7 +131,7 @@ class Grid {
 
   @override
   String toString() {
-    return 'Grid(id: $id, name: $name, key: $key, fields: $fields, rows: $rows, filter: $filter, sorting: $sorting, links: $links)';
+    return 'Grid(id: $id, name: $name, key: $key, fields: $fields, hiddenFields: $hiddenFields, rows: $rows, filter: $filter, sorting: $sorting, links: $links)';
   }
 
   @override
@@ -131,6 +141,7 @@ class Grid {
         name == other.name &&
         key == other.key &&
         f.listEquals(fields, other.fields) &&
+        f.listEquals(hiddenFields, other.hiddenFields) &&
         f.listEquals(rows, other.rows) &&
         filter.toString() == other.filter.toString() &&
         sorting.toString() == other.sorting.toString() &&

@@ -236,6 +236,19 @@ void main() {
           "_links": <String, dynamic>{}
         },
       ],
+      'hiddenFields': [
+        {
+          "type": {
+            "name": "string",
+            "componentTypes": ["textfield"]
+          },
+          "key": null,
+          "name": "Hidden Field",
+          "schema": {"type": "string"},
+          "id": "hiddenId",
+          "_links": <String, dynamic>{}
+        },
+      ],
       '_embedded': {
         "forms": [
           {
@@ -341,6 +354,7 @@ void main() {
       expect(grid.key, equals('gridKey'));
       expect(grid.fields!.length, equals(8));
       expect(grid.rows!.length, equals(5));
+      expect(grid.hiddenFields!.first.id, equals('hiddenId'));
 
       final firstRow = grid.rows![0];
       expect(firstRow.entries[0].data.value, equals('Hello'));
@@ -360,6 +374,7 @@ void main() {
       expect(restored, equals(initialData));
       expect(restored.hashCode, equals(initialData.hashCode));
       expect(restored.key, equals('gridKey'));
+      expect(restored.hiddenFields!.first.id, equals('hiddenId'));
     });
   });
 }
