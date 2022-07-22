@@ -27,7 +27,11 @@ void main() {
           EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'))
               .toJson(),
         ),
-        equals(jsonEncode({'fieldId': 'value'})),
+        equals(
+          jsonEncode({
+            "fieldId": {"\$eq": "value"}
+          }),
+        ),
       );
     });
 
@@ -275,7 +279,7 @@ void main() {
           jsonEncode({
             '\$and': [
               {
-                'fieldId': 'value',
+                'fieldId': {'\$eq': 'value'},
               },
               {
                 'fieldId1': {
@@ -307,7 +311,7 @@ void main() {
           jsonEncode({
             '\$or': [
               {
-                'fieldId': 'value',
+                'fieldId': {'\$eq': 'value'},
               },
               {
                 'fieldId1': {
@@ -370,7 +374,7 @@ void main() {
         equals(
           jsonEncode({
             '\$not': {
-              'field': 'test',
+              'field': {'\$eq': 'test'},
             }
           }),
         ),
