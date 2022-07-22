@@ -48,6 +48,9 @@ mixin ComparableFilterableMixin on FilterableMixin {}
 /// Mixin for DataEntities that support Collection Filters like [AnyOfFilter], [AllOfFilter] and [NoneOfFilter]
 mixin CollectionFilterableMixin on FilterableMixin {}
 
+/// Mixin for Filtering on [DataType.createdBy] to check if they have been created by a specific Actor
+mixin ActorFilterableMixin on FilterableMixin {}
+
 enum _ComposeOperator {
   and,
   or,
