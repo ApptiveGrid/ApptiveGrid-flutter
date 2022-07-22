@@ -1,3 +1,6 @@
+## 0.12.2
+* Deprecate `ApptiveLinkType.rename` in favor of `ApptiveLinkType.patch`
+
 ## 0.12.1
 * Make `defaultHeaders` in ApptiveGridClient public outside of tests
 * Give access to `authenticator` in ApptiveGridClient
