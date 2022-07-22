@@ -2,6 +2,7 @@
 * Add `hiddenFields` to `Grid`
 * Deprecate `ApptiveLinkType.rename` in favor of `ApptiveLinkType.patch`
 * Adjust Format for equals Filter
+* Introduce `ActorFilter` to use with `DataType.createdBy`
 
 ## 0.12.1
 * Make `defaultHeaders` in ApptiveGridClient public outside of tests

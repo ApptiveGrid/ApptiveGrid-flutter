@@ -11,7 +11,10 @@ enum _FieldOperator {
   // Collections
   any(operation: 'hasAnyOf'),
   all(operation: 'hasAllOf'),
-  none(operation: 'hasNoneOf');
+  none(operation: 'hasNoneOf'),
+
+  // Other
+  actor(operation: 'isActor');
 
   const _FieldOperator({required this.operation});
 
@@ -63,6 +66,8 @@ class SubstringFilter extends _FieldFilter {
 }
 
 /// Filter to check if a [GridField]'s value is equal to [value]
+///
+/// Note: previously this was used to check for the value of Fields with [DataType.createdBy]. If you for example used a EqualsFilter with [LoggedInUser] please switch to a [ActorFilter]
 class EqualsFilter extends _FieldFilter {
   /// Creates a Filter that checks if [DataEntity.value] equals the [fieldId] [GridField]
   const EqualsFilter({
@@ -154,4 +159,15 @@ class _EmptyOperatorValue with FilterableMixin {
 
   @override
   get filterValue => true;
+}
+
+/// Filter to use with [DataType.createdBy] to filter for a Specific [ActorFilterableMixin]
+class ActorFilter extends _FieldFilter {
+  /// Creates a Filter that checks if the [value] in the column of [fieldId] is equal
+  const ActorFilter({
+    required super.fieldId,
+    required ActorFilterableMixin super.value,
+  }) : super._(
+          operator: _FieldOperator.actor,
+        );
 }

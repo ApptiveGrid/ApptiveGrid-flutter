@@ -132,6 +132,22 @@ void main() {
           ),
         );
       });
+
+      test('Actor', () async {
+        expect(
+          jsonEncode(
+            const ActorFilter(
+              fieldId: 'fieldId',
+              value: LoggedInUser(),
+            ).toJson(),
+          ),
+          equals(
+            jsonEncode({
+              'fieldId': {'\$isActor': '{{ loggedInUser() }}'}
+            }),
+          ),
+        );
+      });
     });
   });
 
