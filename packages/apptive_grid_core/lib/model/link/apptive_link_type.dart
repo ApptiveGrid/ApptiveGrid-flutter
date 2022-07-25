@@ -43,10 +43,6 @@ enum ApptiveLinkType {
   /// Removes a [Space], [Grid], [Form], [GridRow]
   remove,
 
-  /// Rename a [Space], [Grid], [Form]
-  @Deprecated('Use ApptiveLinkType.patch instead')
-  rename,
-
   /// List Shares
   shares,
 

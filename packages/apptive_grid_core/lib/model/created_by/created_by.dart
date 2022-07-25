@@ -1,9 +1,5 @@
 part of apptive_grid_model;
 
-/// Deprecated Object representing a CreatedBy Field
-@Deprecated('Use CreatedBy instead')
-typedef UserReference = CreatedBy;
-
 /// Object representing a CreatedBy Field
 class CreatedBy {
   /// Creates a new CreatedBy
@@ -68,10 +64,6 @@ class CreatedBy {
   @override
   int get hashCode => toString().hashCode;
 }
-
-/// Deprecated types that have created a specific entity
-@Deprecated('Use CreatedByType instead')
-typedef UserReferenceType = CreatedByType;
 
 /// Different types that have created a specific entity
 enum CreatedByType {

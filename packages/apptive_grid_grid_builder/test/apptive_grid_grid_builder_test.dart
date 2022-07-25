@@ -409,48 +409,6 @@ void main() {
       ).called(2);
     });
   });
-
-  group('GridUri', () {
-    final uri = Uri.parse('uri');
-    // ignore: deprecated_member_use
-    final gridUri = GridUri.fromUri('gridUri');
-
-    test('No GridUri returns Uri as GridUri', () async {
-      final apptiveGridGridBuilder = ApptiveGridGridBuilder(
-        uri: uri,
-        builder: (_, __) => const SizedBox(),
-      );
-
-      // ignore: deprecated_member_use_from_same_package
-      expect(apptiveGridGridBuilder.gridUri.uri, equals(uri));
-      expect(apptiveGridGridBuilder.uri, equals(uri));
-    });
-
-    test('No Uri returns GridUri', () async {
-      final apptiveGridGridBuilder = ApptiveGridGridBuilder(
-        // ignore: deprecated_member_use_from_same_package
-        gridUri: gridUri,
-        builder: (_, __) => const SizedBox(),
-      );
-
-      // ignore: deprecated_member_use_from_same_package
-      expect(apptiveGridGridBuilder.gridUri.uri, equals(gridUri.uri));
-      expect(apptiveGridGridBuilder.uri, equals(gridUri.uri));
-    });
-
-    test('Uri prioritized over gridUri', () async {
-      final apptiveGridGridBuilder = ApptiveGridGridBuilder(
-        uri: uri,
-        // ignore: deprecated_member_use_from_same_package
-        gridUri: gridUri,
-        builder: (_, __) => const SizedBox(),
-      );
-
-      // ignore: deprecated_member_use_from_same_package
-      expect(apptiveGridGridBuilder.gridUri.uri, equals(uri));
-      expect(apptiveGridGridBuilder.uri, equals(uri));
-    });
-  });
 }
 
 class _SortingAndFilterSwitcher extends StatefulWidget {

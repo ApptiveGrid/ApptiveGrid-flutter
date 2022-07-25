@@ -78,9 +78,6 @@ abstract class DataEntity<T, S> with FilterableMixin {
           jsonValue: json,
           gridUri: field.schema['items']['gridUri'],
         );
-      // ignore: deprecated_member_use_from_same_package
-      case DataType.userReference:
-      // ignore: no_duplicate_case_values
       case DataType.createdBy:
         return CreatedByDataEntity.fromJson(json);
       case DataType.user:
@@ -419,10 +416,6 @@ class MultiCrossReferenceDataEntity
   @override
   int get hashCode => toString().hashCode;
 }
-
-/// Deprecated [DataEntity] representing [CreatedBy]s
-@Deprecated('Use CreatedByDataEntity instead')
-typedef UserReferenceDataEntity = CreatedByDataEntity;
 
 /// [DataEntity] representing [CreatedBy]s
 class CreatedByDataEntity extends DataEntity<CreatedBy, dynamic> {

@@ -89,6 +89,17 @@ scripts:
       ignore:
         - "*example*"
 
+  coverage:report:all:
+    run: melos run coverage:report --no-select
+
+  coverage:report:
+    run: |
+      melos exec -c 5 -- \
+        "genhtml coverage/lcov.info -o coverage/html"
+    select-package:
+      file-exists:
+        - coverage/lcov.info
+
   build:android:
     run: |
       melos run build:example_android_pub --no-select && melos bootstrap

@@ -57,8 +57,4 @@ enum DataType {
 
   /// The name that is used in the ApptiveGridBackend for this [DataType]
   final String backendName;
-
-  /// Deprecated Type for UserReferences. Used for createdBy
-  @Deprecated('Use createdBy instead')
-  static const DataType userReference = DataType.createdBy;
 }

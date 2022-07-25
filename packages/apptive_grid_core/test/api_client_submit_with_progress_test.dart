@@ -370,18 +370,6 @@ void main() {
           });
         });
 
-        test('Creates Attachment Uri based on config', () {
-          const name = 'FileName';
-          expect(
-            // ignore: deprecated_member_use_from_same_package
-            client.createAttachmentUrl(name).toString(),
-            predicate<String>(
-              (uriString) =>
-                  uriString.startsWith('attachmentEndpoint.com/$name?'),
-            ),
-          );
-        });
-
         group('Upload Data', () {
           group('Generic Files', () {
             final attachment = Attachment(

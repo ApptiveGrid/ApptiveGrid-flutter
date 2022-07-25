@@ -1,42 +1,5 @@
 part of apptive_grid_model;
 
-/// Model for a Action inside a Form
-@Deprecated('Use ApptiveLinks instead')
-class FormAction {
-  /// Creates a Form Action
-  FormAction(this.uri, this.method);
-
-  /// Deserialize [json] into a [FormAction]
-  FormAction.fromJson(Map<String, dynamic> json)
-      : uri = json['uri'] ?? json['href'],
-        method = json['method'];
-
-  /// Path the Action points to
-  final String uri;
-
-  /// [http.BaseRequest.method] method this Action uses
-  final String method;
-
-  /// Serializes [FormAction] to json
-  Map<String, dynamic> toJson() => {
-        'uri': uri,
-        'method': method,
-      };
-
-  @override
-  String toString() {
-    return 'FormAction(uri: $uri, method: $method)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is FormAction && uri == other.uri && method == other.method;
-  }
-
-  @override
-  int get hashCode => toString().hashCode;
-}
-
 /// Wrapper class to use in [ApptiveGridCache]
 class ActionItem {
   /// Creates a new Action Item
@@ -50,10 +13,6 @@ class ActionItem {
       // ignore: deprecated_member_use_from_same_package
       : link = ApptiveLink.fromJson(json['link'] ?? json['action']),
         data = FormData.fromJson(json['data']);
-
-  /// Returns [link] as a [FormAction] for compatibility
-  @Deprecated('Use link instead')
-  FormAction get action => link.asFormAction;
 
   /// Action to be performed
   // ignore: deprecated_member_use_from_same_package

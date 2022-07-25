@@ -42,14 +42,6 @@ class ApptiveLink {
   int get hashCode => toString().hashCode;
 }
 
-/// Extension for ApptiveLinks
-extension ApptiveLinkX on ApptiveLink {
-  // ignore: deprecated_member_use_from_same_package
-  /// Converts a this to a [FormAction]
-  // ignore: deprecated_member_use_from_same_package
-  FormAction get asFormAction => FormAction(uri.toString(), method);
-}
-
 /// A Map of Links
 typedef LinkMap = Map<ApptiveLinkType, ApptiveLink>;
 

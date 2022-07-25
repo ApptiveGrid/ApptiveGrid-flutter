@@ -1,30 +1,5 @@
 part of apptive_grid_model;
 
-/// A Uri representation used for performing Grid based Api Calls
-@Deprecated('Use a normal `Uri` instead')
-class GridUri extends ApptiveGridUri {
-  /// Creates a new [GridUri] based on known ids for [user], [space] and [grid]
-  GridUri({
-    required String user,
-    required String space,
-    required String grid,
-    String? view,
-  }) : super._(
-          Uri(
-            pathSegments: [
-              ...'/api/users/$user/spaces/$space/grids/$grid'.split('/'),
-              if (view != null) ...['views', view]
-            ],
-          ),
-          UriType.grid,
-        );
-
-  /// Creates a new [GridUri] based on a string [uri]
-  /// Main usage of this is for [GridUri] retrieved through other Api Calls
-  /// If the Uri passed in is a [GridViewUri] it will return that
-  GridUri.fromUri(String uri) : super.fromUri(uri, UriType.grid);
-}
-
 /// Model for GridData
 class Grid {
   /// Creates a GridData Object

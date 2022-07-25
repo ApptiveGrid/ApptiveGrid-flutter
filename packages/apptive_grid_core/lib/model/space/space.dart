@@ -1,24 +1,5 @@
 part of apptive_grid_model;
 
-/// A Uri representation used for performing Space based Api Calls
-@Deprecated('Use a normal `Uri` instead')
-class SpaceUri extends ApptiveGridUri {
-  /// Creates a new [SpaceUri] based on known ids for [user] and [space]
-  SpaceUri({
-    required String user,
-    required String space,
-  }) : super._(
-          Uri(
-            path: '/api/users/$user/spaces/$space',
-          ),
-          UriType.space,
-        );
-
-  /// Creates a new [SpaceUri] based on a string [uri]
-  /// Main usage of this is for [SpaceUri] retrieved through other Api Calls
-  SpaceUri.fromUri(String uri) : super.fromUri(uri, UriType.space);
-}
-
 /// Model for a Space
 class Space {
   /// Creates a new Space Model with a certain [id] and [name]
