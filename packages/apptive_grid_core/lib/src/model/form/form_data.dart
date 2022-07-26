@@ -1,4 +1,7 @@
-part of apptive_grid_model;
+import 'dart:collection';
+
+import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:flutter/foundation.dart' as f;
 
 /// Model for FormData
 class FormData {

@@ -1,4 +1,5 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_core/src/network/authentication/apptive_grid_authenticator.dart';
 import 'package:apptive_grid_core/src/network/authentication/authentication_storage.dart';
 import 'package:apptive_grid_core/src/network/authentication/io_authenticator.dart'
     if (dart.library.html) 'package:apptive_grid_core/network/web_authenticator.dart';

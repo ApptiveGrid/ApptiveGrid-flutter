@@ -1,5 +1,3 @@
-part of apptive_grid_network;
-
 /// Model for authentication options
 class ApptiveGridAuthenticationOptions {
   /// Creates Authentication Object

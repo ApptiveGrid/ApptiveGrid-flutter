@@ -1,5 +1,3 @@
-part of apptive_grid_model;
-
 /// Model for Attachment
 class Attachment {
   /// Creates a FormData Object

@@ -1,4 +1,5 @@
-part of apptive_grid_form_widgets;
+import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:flutter/material.dart';
 
 /// Button for a Form Action used inside a [ApptiveGridForm]
 class ActionButton extends StatelessWidget {

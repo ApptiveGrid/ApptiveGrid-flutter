@@ -1,4 +1,5 @@
-part of apptive_grid_model;
+import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:flutter/foundation.dart' as f;
 
 /// Response when loading entities of a Grid with [ApptiveGridClient.loadEntities]
 class EntitiesResponse<T> {

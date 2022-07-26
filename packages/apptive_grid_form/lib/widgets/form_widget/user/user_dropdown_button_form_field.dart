@@ -1,4 +1,4 @@
-part of apptive_grid_form_widgets;
+part of 'package:apptive_grid_form/widgets/form_widget/user_form_widget.dart';
 
 class _UserDropdownButtonFormField extends StatefulWidget {
   const _UserDropdownButtonFormField({

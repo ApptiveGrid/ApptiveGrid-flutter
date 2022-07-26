@@ -1,4 +1,11 @@
-part of apptive_grid_form_widgets;
+import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/managers/location_manager.dart';
+import 'package:apptive_grid_form/managers/permission_manager.dart';
+import 'package:apptive_grid_form/widgets/form_widget/form_widget_helpers.dart';
+import 'package:apptive_grid_form/widgets/geolocation/geolocation_input.dart';
+import 'package:apptive_grid_form/widgets/geolocation/geolocation_map.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// FormComponent Widget to display a [GeolocationFormComponent]
 class GeolocationFormWidget extends StatefulWidget {

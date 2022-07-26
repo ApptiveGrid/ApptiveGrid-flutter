@@ -1,4 +1,6 @@
-part of apptive_grid_form_widgets;
+import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/widgets/form_widget/cross_reference/cross_reference_dropdown_button_form_field.dart';
+import 'package:flutter/material.dart';
 
 /// FormComponent Widget to display a [FormComponent<MultiCrossReferenceDataEntity>]
 class MultiCrossReferenceFormWidget extends StatefulWidget {
@@ -18,20 +20,19 @@ class MultiCrossReferenceFormWidget extends StatefulWidget {
 
 class _MultiCrossReferenceFormWidgetState
     extends State<MultiCrossReferenceFormWidget> {
-  late final _SelectedRowsNotifier _selectedNotifier;
+  late final SelectedRowsNotifier _selectedNotifier;
 
   @override
   void initState() {
     super.initState();
-    _selectedNotifier = _SelectedRowsNotifier(
+    _selectedNotifier = SelectedRowsNotifier(
       widget.component.data.value?.map((e) => e.entityUri).toList() ?? [],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return _CrossReferenceDropdownButtonFormField<
-        MultiCrossReferenceDataEntity>(
+    return CrossReferenceDropdownButtonFormField<MultiCrossReferenceDataEntity>(
       component: widget.component,
       selectedItemBuilder: (data) => Text(
         data!.value!.map((e) => e.value ?? '').join(', '),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_core/src/network/authentication/apptive_grid_authenticator.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';

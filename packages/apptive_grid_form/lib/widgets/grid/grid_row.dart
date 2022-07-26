@@ -1,4 +1,6 @@
-part of apptive_grid_form_widgets;
+import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:flutter/material.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 
 /// Widget to display a [GridRow]
 /// Multiple of these in a Vertical Layout will display a full Grid

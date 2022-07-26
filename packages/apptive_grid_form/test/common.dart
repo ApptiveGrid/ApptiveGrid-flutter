@@ -1,3 +1,4 @@
+import 'package:apptive_grid_core/src/network/attachment_processor.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';

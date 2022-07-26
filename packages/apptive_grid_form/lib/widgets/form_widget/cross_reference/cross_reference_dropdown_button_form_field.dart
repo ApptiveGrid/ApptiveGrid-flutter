@@ -1,8 +1,18 @@
-part of apptive_grid_form_widgets;
+import 'dart:convert';
+import 'dart:math';
 
-class _CrossReferenceDropdownButtonFormField<T extends DataEntity>
+import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/widgets/form_widget/form_widget_helpers.dart';
+import 'package:apptive_grid_form/widgets/grid/grid_row.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
+
+/// A [DropdownButtonFormField] to select CrossReference Values
+class CrossReferenceDropdownButtonFormField<T extends DataEntity>
     extends StatefulWidget {
-  const _CrossReferenceDropdownButtonFormField({
+  /// Creates a new [CrossReferenceDropdownButtonFormField]
+  const CrossReferenceDropdownButtonFormField({
     super.key,
     required this.component,
     required this.selectedItemBuilder,
@@ -12,25 +22,30 @@ class _CrossReferenceDropdownButtonFormField<T extends DataEntity>
           T == CrossReferenceDataEntity || T == MultiCrossReferenceDataEntity,
         );
 
+  /// The [FormComponent] this Widget should reflect
   final FormComponent<T> component;
 
+  /// The [DropdownMenuItem] builder for the selected item
   final Widget Function(T?) selectedItemBuilder;
 
+  /// A Function called when a entity was selected
   final void Function(
     CrossReferenceDataEntity entity,
     bool selected,
-    _CrossReferenceDropdownButtonFormFieldState<T> state,
+    CrossReferenceDropdownButtonFormFieldState<T> state,
   ) onSelected;
 
-  final _SelectedRowsNotifier selectedNotifier;
+  /// A [Notifier] to notify when the selected entity changed
+  final SelectedRowsNotifier selectedNotifier;
 
   @override
-  _CrossReferenceDropdownButtonFormFieldState<T> createState() =>
-      _CrossReferenceDropdownButtonFormFieldState<T>();
+  CrossReferenceDropdownButtonFormFieldState<T> createState() =>
+      CrossReferenceDropdownButtonFormFieldState<T>();
 }
 
-class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
-    extends State<_CrossReferenceDropdownButtonFormField<T>>
+/// The [State] of a [CrossReferenceDropdownButtonFormField] used to close the overlay after [onSelected] was called
+class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
+    extends State<CrossReferenceDropdownButtonFormField<T>>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
@@ -102,6 +117,7 @@ class _CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
     });
   }
 
+  /// Closes the Dropdown overlay
   void closeOverlay() {
     if (_overlayKey.currentContext != null) {
       Navigator.pop(_overlayKey.currentContext!);
@@ -249,7 +265,7 @@ class _CrossReferenceSelectionGrid extends StatefulWidget {
   final TextEditingController controller;
   final LinkedScrollControllerGroup scrollControllerGroup;
   final Grid grid;
-  final _SelectedRowsNotifier selectedNotifier;
+  final SelectedRowsNotifier selectedNotifier;
   final Function(GridRow, bool) onSelected;
 
   @override
@@ -408,7 +424,7 @@ class _RowMenuItem extends StatefulWidget {
 
   final GridRow row;
   final ScrollController? controller;
-  final _SelectedRowsNotifier selectedNotifier;
+  final SelectedRowsNotifier selectedNotifier;
 
   final void Function(GridRow, bool)? onSelectionChanged;
   final Color? color;
@@ -455,13 +471,17 @@ class _RowMenuItemState extends State<_RowMenuItem> {
   }
 }
 
-class _SelectedRowsNotifier extends ChangeNotifier {
-  _SelectedRowsNotifier(List<Uri?> entities) : _entities = entities;
+/// A Notifier that handles the selection of rows.
+class SelectedRowsNotifier extends ChangeNotifier {
+  /// Creates a new [SelectedRowsNotifier] with the currently selected [entities]
+  SelectedRowsNotifier(List<Uri?> entities) : _entities = entities;
 
   List<Uri?> _entities;
 
+  /// Returns the currently selected [entities].
   List<Uri?> get entities => _entities;
 
+  /// Sets the currently selected [entities].
   set entities(List<Uri?> entities) {
     _entities = entities;
     notifyListeners();

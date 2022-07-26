@@ -1,4 +1,6 @@
-part of apptive_grid_form_widgets;
+import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
+import 'package:flutter/material.dart';
 
 /// Returns a corresponding Widget for a specific [component]
 ///

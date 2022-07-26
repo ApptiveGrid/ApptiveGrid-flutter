@@ -1,4 +1,6 @@
-part of apptive_grid_model;
+import 'dart:convert';
+
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 
 /// Configuration for ApiEndpoints to support Attachments
 ///

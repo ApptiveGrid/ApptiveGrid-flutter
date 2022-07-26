@@ -1,4 +1,11 @@
-part of apptive_grid_form_widgets;
+import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/managers/permission_manager.dart';
+import 'package:apptive_grid_form/widgets/attachment/thumbnail.dart';
+import 'package:apptive_grid_form/widgets/form_widget/attachment/add_attachment_button.dart';
+import 'package:apptive_grid_form/widgets/form_widget/attachment_manager.dart';
+import 'package:apptive_grid_form/widgets/form_widget/form_widget_helpers.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// FormComponent Widget to display a [FormComponent<AttachmentDataEntity>]
 class AttachmentFormWidget extends StatefulWidget {

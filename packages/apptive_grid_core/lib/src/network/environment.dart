@@ -1,5 +1,3 @@
-part of apptive_grid_network;
-
 /// Possible Stages/Environment ApptiveGrid can point to
 enum ApptiveGridEnvironment {
   /// Alpha Environment

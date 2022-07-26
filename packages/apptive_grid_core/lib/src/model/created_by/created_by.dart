@@ -1,5 +1,3 @@
-part of apptive_grid_model;
-
 /// Object representing a CreatedBy Field
 class CreatedBy {
   /// Creates a new CreatedBy

@@ -1,4 +1,4 @@
-part of apptive_grid_model;
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 
 /// A User Object that is held in a [UserDataEntity]
 class DataUser {

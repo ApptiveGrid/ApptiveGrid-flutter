@@ -1,5 +1,3 @@
-part of apptive_grid_model;
-
 /// The Data Types that are available in ApptiveGrid
 enum DataType {
   /// Type to display [String]

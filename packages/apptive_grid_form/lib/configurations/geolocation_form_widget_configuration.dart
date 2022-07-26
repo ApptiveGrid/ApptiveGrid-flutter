@@ -1,4 +1,5 @@
-part of form_widget_configurations;
+import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:http/http.dart' as http;
 
 /// [FormWidgetConfiguration] used for [GeolocationFormWidget]
 class GeolocationFormWidgetConfiguration extends FormWidgetConfiguration {

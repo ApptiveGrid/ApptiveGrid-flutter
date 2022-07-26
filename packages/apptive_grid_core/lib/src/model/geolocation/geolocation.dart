@@ -1,5 +1,3 @@
-part of apptive_grid_model;
-
 /// Object representing a Geolocation by [latitude] and [longitude]
 class Geolocation {
   /// Creates a new [Geolocation] with [latitude] and [longitude]

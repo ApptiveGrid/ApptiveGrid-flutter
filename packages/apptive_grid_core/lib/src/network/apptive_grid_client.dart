@@ -1,24 +1,16 @@
-library apptive_grid_client;
-
 import 'dart:async';
 import 'dart:convert';
-import 'dart:isolate';
-import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_core/src/network/attachment_processor.dart';
+import 'package:apptive_grid_core/src/network/authentication/apptive_grid_authenticator.dart';
 import 'package:apptive_grid_core/src/network/constants.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:image/image.dart' as img;
-import 'package:mime/mime.dart';
 import 'package:openid_client/openid_client.dart';
-import 'package:universal_file/universal_file.dart';
-import 'package:uuid/uuid.dart';
-
-part 'attachment_processor.dart';
 
 /// Api Client to communicate with the ApptiveGrid Backend
 class ApptiveGridClient {

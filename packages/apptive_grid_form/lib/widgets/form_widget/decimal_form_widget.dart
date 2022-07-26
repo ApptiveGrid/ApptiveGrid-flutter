@@ -1,4 +1,9 @@
-part of apptive_grid_form_widgets;
+import 'dart:math';
+
+import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/widgets/form_widget/form_widget_helpers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// FormComponent Widget to display a [FormComponent<DecimalDataEntity>]
 class DecimalFormWidget extends StatefulWidget {

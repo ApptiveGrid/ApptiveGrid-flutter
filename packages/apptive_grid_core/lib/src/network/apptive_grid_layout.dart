@@ -1,5 +1,3 @@
-part of apptive_grid_network;
-
 /// Defines the Layout of an Entity that is returned by ApptiveGrid
 ///
 /// When using this manually for example when calling [ApptiveGridClient.performApptiveLink] add this to `queryParamters` as
