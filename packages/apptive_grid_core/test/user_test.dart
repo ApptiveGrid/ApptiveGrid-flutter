@@ -87,7 +87,6 @@ void main() {
       });
 
       expect(plain, equals(jsonUser));
-      expect(plain.hashCode, equals(jsonUser.hashCode));
     });
 
     test('Plain and From json not equal with different values', () {
@@ -117,5 +116,49 @@ void main() {
       expect(plain, isNot(jsonUser));
       expect(plain.hashCode, isNot(jsonUser.hashCode));
     });
+  });
+
+  test('Hashcode is correct', () {
+    final user = User.fromJson({
+      'id': 'id',
+      'firstName': 'Jane',
+      'lastName': 'Doe',
+      'email': 'jane.doe@zweidenker.de',
+      'spaceUris': [
+        '/api/users/id/spaces/spaceId',
+      ],
+      '_links': {
+        'self': {'href': '/api/users/id', 'method': 'get'},
+      },
+    });
+
+    expect(
+      user.hashCode,
+      equals(
+        Object.hash(
+          user.id,
+          user.email,
+          user.lastName,
+          user.firstName,
+          user.links,
+          user.embeddedSpaces,
+        ),
+      ),
+    );
+  });
+
+  test('toString()', () {
+    final user = User.fromJson({
+      'id': 'id',
+      'firstName': 'Jane',
+      'lastName': 'Doe',
+      'email': 'jane.doe@zweidenker.de',
+      '_links': <String, dynamic>{},
+    });
+
+    expect(
+        user.toString(),
+        equals(
+            'User(Jane Doe, email: jane.doe@zweidenker.de, id: id, links: {}, embeddedSpaces: null)'));
   });
 }

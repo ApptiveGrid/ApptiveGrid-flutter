@@ -185,7 +185,7 @@ void main() {
       expect(grid.rows!.length, equals(4));
     });
 
-    group('UserReference Type', () {
+    group('CreatedBy Type', () {
       final grid = Grid.fromJson(rawResponse);
 
       test('Null', () {
@@ -268,12 +268,11 @@ void main() {
       expect(a, equals(b));
       expect(a, isNot(c));
 
-      expect(a.hashCode, equals(b.hashCode));
       expect(a.hashCode, isNot(c.hashCode));
     });
   });
 
-  group('UserReference', () {
+  group('CreatedBy', () {
     test('Equality', () {
       const one = CreatedBy(
         id: 'userId',
@@ -293,6 +292,20 @@ void main() {
 
       expect(one, equals(two));
       expect(one.hashCode, equals(two.hashCode));
+    });
+
+    test('toString()', () {
+      const createdBy = CreatedBy(
+        id: 'userId',
+        type: CreatedByType.user,
+        displayValue: 'Jane Doe',
+        name: 'jane.doe@2denker.de',
+      );
+
+      expect(
+          createdBy.toString(),
+          equals(
+              'CreatedBy(displayValue: Jane Doe, id: userId, name: jane.doe@2denker.de, type: user)'));
     });
   });
 }

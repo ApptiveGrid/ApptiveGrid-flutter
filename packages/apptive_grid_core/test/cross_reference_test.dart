@@ -189,7 +189,6 @@ void main() {
         expect(a, equals(b));
         expect(a, isNot(c));
 
-        expect(a.hashCode, equals(b.hashCode));
         expect(a.hashCode, isNot(c.hashCode));
       });
     });
@@ -235,6 +234,19 @@ void main() {
         );
 
         expect(entity.schemaValue, isNull);
+      });
+
+      test('toString() produces correct output', () {
+        final entity = CrossReferenceDataEntity(
+          gridUri: Uri.parse('uri'),
+          value: null,
+          entityUri: Uri.parse('entityUri'),
+        );
+
+        expect(
+          entity.toString(),
+          'CrossReferenceDataEntity(displayValue: null, entityUri: entityUri, gridUri: uri)',
+        );
       });
     });
   });
@@ -331,7 +343,29 @@ void main() {
       );
 
       expect(fromJson, equals(direct));
-      expect(fromJson.hashCode, equals(direct.hashCode));
+    });
+
+    test('Hashcode is Correct', () {
+      final component = FormComponent<CrossReferenceDataEntity>(
+        property: 'name',
+        data: CrossReferenceDataEntity(gridUri: Uri(path: '/grid')),
+        field: const GridField(
+          id: '3ftoqhqbct15h5o730uknpvp5',
+          name: 'name',
+          type: DataType.crossReference,
+        ),
+      );
+
+      expect(
+        component.hashCode,
+        Object.hash(
+          component.field,
+          component.property,
+          component.data,
+          component.options,
+          component.required,
+        ),
+      );
     });
   });
 }

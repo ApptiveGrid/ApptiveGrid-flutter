@@ -318,12 +318,10 @@ void main() {
 
     test('a == b', () {
       expect(a, equals(b));
-      expect(a.hashCode, equals(b.hashCode));
     });
 
     test('a != c', () {
       expect(a, isNot(c));
-      expect(a.hashCode, isNot(c.hashCode));
     });
   });
 

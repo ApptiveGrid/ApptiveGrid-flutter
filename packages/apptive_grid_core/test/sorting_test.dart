@@ -56,6 +56,14 @@ void main() {
       expect(sort1, isNot(sort3));
       expect(sort1.hashCode, isNot(sort3.hashCode));
     });
+
+    test('toString()', () {
+      const sorting =
+          ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc);
+
+      expect(sorting.toString(),
+          equals('ApptiveGridSorting({fieldId: ascending})'));
+    });
   });
 
   group('DistanceApptiveGridSorting', () {

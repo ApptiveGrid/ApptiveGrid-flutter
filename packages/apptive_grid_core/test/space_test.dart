@@ -116,7 +116,6 @@ void main() {
         });
 
         expect(plain, equals(jsonSpace));
-        expect(plain.hashCode, equals(jsonSpace.hashCode));
       });
 
       test('Plain and From json not equal with different values', () {
@@ -141,8 +140,23 @@ void main() {
         });
 
         expect(plain, isNot(jsonSpace));
-        expect(plain.hashCode, isNot(jsonSpace.hashCode));
       });
+    });
+
+    test('Hashcode', () {
+      final space = Space(id: 'id', name: 'name', links: {});
+
+      expect(space.hashCode,
+          equals(Object.hash('id', 'name', null, null, space.links, null)));
+    });
+
+    test('toString()', () {
+      final space = Space(id: 'id', name: 'name', links: {});
+
+      expect(
+          space.toString(),
+          equals(
+              'Space(name: name, id: id, key: null, category: null, links: {}, embeddedGrids: null)'));
     });
   });
 
@@ -238,7 +252,6 @@ void main() {
         });
 
         expect(plain, equals(jsonSharedSpace));
-        expect(plain.hashCode, equals(jsonSharedSpace.hashCode));
       });
 
       test('Plain and From json not equal with different values', () {
@@ -292,8 +305,26 @@ void main() {
         });
 
         expect(plain, isNot(jsonSharedSpace));
-        expect(plain.hashCode, isNot(jsonSharedSpace.hashCode));
       });
+    });
+    test('Hashcode', () {
+      final space = SharedSpace(
+          realSpace: Uri(path: 'realSpace'), id: 'id', name: 'name', links: {});
+
+      expect(
+          space.hashCode,
+          equals(Object.hash('id', 'name', Uri(path: 'realSpace'), null, null,
+              space.links, null)));
+    });
+
+    test('toString()', () {
+      final space = SharedSpace(
+          realSpace: Uri(path: 'realSpace'), id: 'id', name: 'name', links: {});
+
+      expect(
+          space.toString(),
+          equals(
+              'SharedSpace(name: name, id: id, key: null, category: null, realSpace: realSpace, links: {}, embeddedGrids: null)'));
     });
   });
 }

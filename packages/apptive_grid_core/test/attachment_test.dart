@@ -397,7 +397,37 @@ void main() {
       );
 
       expect(fromJson, equals(direct));
-      expect(fromJson.hashCode, equals(direct.hashCode));
+    });
+
+    test('Hashcode', () {
+      const field =
+          GridField(id: 'id', name: 'property', type: DataType.attachment);
+
+      final directEntity = AttachmentDataEntity.fromJson([
+        {
+          'smallThumbnail': null,
+          'url': 'https://attachment.com/id',
+          'largeThumbnail': null,
+          'name': 'anakin_cyrille.PNG',
+          'type': 'image/png'
+        }
+      ]);
+      final component = FormComponent<AttachmentDataEntity>(
+        property: 'New field',
+        data: directEntity,
+        field: field,
+      );
+
+      expect(
+        component.hashCode,
+        Object.hash(
+          component.field,
+          component.property,
+          component.data,
+          component.options,
+          component.required,
+        ),
+      );
     });
   });
 
@@ -449,7 +479,6 @@ void main() {
       );
 
       expect(fromJson, equals(direct));
-      expect(fromJson.hashCode, equals(direct.hashCode));
     });
   });
 }

@@ -25,7 +25,6 @@ void main() {
       expect(a, equals(b));
       expect(a, isNot(c));
 
-      expect(a.hashCode, equals(b.hashCode));
       expect(a.hashCode, isNot(c.hashCode));
     });
   });

@@ -200,9 +200,42 @@ void main() {
       );
       expect(a, equals(b));
       expect(a, isNot(c));
+    });
 
-      expect(a.hashCode, equals(b.hashCode));
-      expect(a.hashCode, isNot(c.hashCode));
+    test('Hashcode', () {
+      final entity = MultiCrossReferenceDataEntity.fromJson(
+        jsonValue: [
+          {
+            'displayValue': 'Yeah!',
+            'uri':
+                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
+          }
+        ],
+        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
+      );
+
+      expect(
+          entity.hashCode,
+          equals(Object.hash(entity.value,
+              '/api/users/userId/spaces/spaceId/grids/referencedGridId')));
+    });
+
+    test('toString()', () {
+      final entity = MultiCrossReferenceDataEntity.fromJson(
+        jsonValue: [
+          {
+            'displayValue': 'Yeah!',
+            'uri':
+                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
+          }
+        ],
+        gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGridId',
+      );
+
+      expect(
+          entity.toString(),
+          equals(
+              'MultiCrossReferenceDataEntity(references: [CrossReferenceDataEntity(displayValue: Yeah!, entityUri: /api/users/userId/spaces/spaceId/grids/gridId/entities/entityId, gridUri: /api/users/userId/spaces/spaceId/grids/referencedGridId)], gridUri: /api/users/userId/spaces/spaceId/grids/referencedGridId)'));
     });
   });
 
@@ -306,7 +339,30 @@ void main() {
       );
 
       expect(fromJson, equals(direct));
-      expect(fromJson.hashCode, equals(direct.hashCode));
+    });
+
+    test('Hashcode', () {
+      const field =
+          GridField(id: 'id', name: 'property', type: DataType.attachment);
+
+      final directEntity =
+          MultiCrossReferenceDataEntity(gridUri: Uri(path: 'gridUri'));
+      final component = FormComponent<MultiCrossReferenceDataEntity>(
+        property: 'New field',
+        data: directEntity,
+        field: field,
+      );
+
+      expect(
+        component.hashCode,
+        Object.hash(
+          component.field,
+          component.property,
+          component.data,
+          component.options,
+          component.required,
+        ),
+      );
     });
   });
 }

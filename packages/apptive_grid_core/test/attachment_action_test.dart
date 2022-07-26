@@ -19,7 +19,6 @@ void main() {
           AttachmentAction.fromJson(jsonDecode(jsonEncode(action.toJson())));
 
       expect(action, equals(restored));
-      expect(action.hashCode, equals(restored.hashCode));
     });
 
     test('Delete Action parses and restores', () {
@@ -28,7 +27,6 @@ void main() {
           AttachmentAction.fromJson(jsonDecode(jsonEncode(action.toJson())));
 
       expect(action, equals(restored));
-      expect(action.hashCode, equals(restored.hashCode));
     });
 
     test('Rename Action parses and restores', () {
@@ -38,7 +36,6 @@ void main() {
           AttachmentAction.fromJson(jsonDecode(jsonEncode(action.toJson())));
 
       expect(action, equals(restored));
-      expect(action.hashCode, equals(restored.hashCode));
     });
 
     test('Unknown ActionType throws Error', () {
@@ -49,6 +46,60 @@ void main() {
         }),
         throwsA(isInstanceOf<ArgumentError>()),
       );
+    });
+  });
+
+  group('Hashcode', () {
+    final attachment = Attachment(
+        name: 'name', url: Uri(path: 'attachment'), type: 'image/png');
+    test('AddAttachmentAction', () {
+      final action =
+          AddAttachmentAction(attachment: attachment, path: '/path/toFile');
+
+      expect(action.hashCode,
+          equals(Object.hash(attachment, action.path, action.byteData)));
+    });
+
+    test('DeleteAttachmentAction', () {
+      final action = DeleteAttachmentAction(attachment: attachment);
+
+      expect(action.hashCode, equals(attachment.hashCode));
+    });
+    test('RenameAttachmentAction', () {
+      final action = RenameAttachmentAction(
+          attachment: attachment, newName: '/path/toFile');
+
+      expect(action.hashCode, equals(Object.hash(attachment, action.newName)));
+    });
+  });
+
+  group('toString()', () {
+    final attachment = Attachment(
+        name: 'name', url: Uri(path: 'attachment'), type: 'image/png');
+    test('AddAttachmentAction', () {
+      final action =
+          AddAttachmentAction(attachment: attachment, path: '/path/toFile');
+
+      expect(
+          action.toString(),
+          equals(
+              'AddAttachmentAction(attachment: $attachment, path: /path/toFile, byteData(byteSize): null)'));
+    });
+
+    test('DeleteAttachmentAction', () {
+      final action = DeleteAttachmentAction(attachment: attachment);
+
+      expect(action.toString(),
+          equals('DeleteAttachmentAction(attachment: $attachment)'));
+    });
+    test('RenameAttachmentAction', () {
+      final action = RenameAttachmentAction(
+          attachment: attachment, newName: '/path/toFile');
+
+      expect(
+          action.toString(),
+          equals(
+              'RenameAttachmentAction(newName: /path/toFile, attachment: $attachment)'));
     });
   });
 }
