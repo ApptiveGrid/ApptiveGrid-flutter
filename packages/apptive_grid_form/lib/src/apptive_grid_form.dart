@@ -10,7 +10,6 @@ import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-
 /// A Widget to display a ApptiveGrid Form
 ///
 /// In order to use this there needs to be a [ApptiveGrid] Widget in the Widget tree
@@ -453,9 +452,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                             if (_progress != null)
                               Padding(
                                 padding:
-                                widget.contentPadding ?? _defaultPadding,
+                                    widget.contentPadding ?? _defaultPadding,
                                 child:
-                                SubmitProgressWidget(progress: _progress!),
+                                    SubmitProgressWidget(progress: _progress!),
                               ),
                           ],
                         );
@@ -613,58 +612,58 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       });
       _submitProgressSubscription =
           _client.submitFormWithProgress(link, _formData!).listen(
-                (event) async {
-              if (event is ProcessedAttachmentProgressEvent) {
+        (event) async {
+          if (event is ProcessedAttachmentProgressEvent) {
+            setState(() {
+              _progress = SubmitProgress(
+                message: l10n.progressProcessAttachment(
+                  processed: ++attachmentCount,
+                  total: attachmentsToUpload,
+                ),
+                progress: startPercentage +
+                    (attachmentCount *
+                        (doneAttachmentPercentage - startPercentage) /
+                        attachmentsToUpload),
+              );
+            });
+          } else if (event is AttachmentCompleteProgressEvent) {
+            final response = event.response;
+            if (response != null && response.statusCode >= 400) {
+              _onSavedOffline();
+            }
+          } else if (event is UploadFormProgressEvent) {
+            setState(() {
+              _progress = SubmitProgress(
+                message: l10n.progressSubmitForm,
+                progress: uploadFormPercentage,
+              );
+            });
+          } else if (event is SubmitCompleteProgressEvent) {
+            final response = event.response;
+            if (response != null && response.statusCode < 400) {
+              if (await widget.onActionSuccess?.call(link, _formData!) ??
+                  true) {
                 setState(() {
-                  _progress = SubmitProgress(
-                    message: l10n.progressProcessAttachment(
-                      processed: ++attachmentCount,
-                      total: attachmentsToUpload,
-                    ),
-                    progress: startPercentage +
-                        (attachmentCount *
-                            (doneAttachmentPercentage - startPercentage) /
-                            attachmentsToUpload),
-                  );
+                  _success = true;
                 });
-              } else if (event is AttachmentCompleteProgressEvent) {
-                final response = event.response;
-                if (response != null && response.statusCode >= 400) {
-                  _onSavedOffline();
-                }
-              } else if (event is UploadFormProgressEvent) {
-                setState(() {
-                  _progress = SubmitProgress(
-                    message: l10n.progressSubmitForm,
-                    progress: uploadFormPercentage,
-                  );
-                });
-              } else if (event is SubmitCompleteProgressEvent) {
-                final response = event.response;
-                if (response != null && response.statusCode < 400) {
-                  if (await widget.onActionSuccess?.call(link, _formData!) ??
-                      true) {
-                    setState(() {
-                      _success = true;
-                    });
-                  }
-                } else {
-                  // FormData was saved to [ApptiveGridCache]
-                  _onSavedOffline();
-                }
-              } else if (event is ErrorProgressEvent) {
-                _onError(event.error);
               }
-            },
-            onError: (error) {
-              _onError(error);
-            },
-            onDone: () {
-              setState(() {
-                _submitting = false;
-              });
-            },
-          );
+            } else {
+              // FormData was saved to [ApptiveGridCache]
+              _onSavedOffline();
+            }
+          } else if (event is ErrorProgressEvent) {
+            _onError(event.error);
+          }
+        },
+        onError: (error) {
+          _onError(error);
+        },
+        onDone: () {
+          setState(() {
+            _submitting = false;
+          });
+        },
+      );
     }
   }
 

@@ -1,6 +1,8 @@
 import 'package:apptive_grid_form/src/translation/apptive_grid_translation.dart';
-import 'package:apptive_grid_form/src/translation/l10n/translation_de.dart' as de;
-import 'package:apptive_grid_form/src/translation/l10n/translation_en.dart' as en;
+import 'package:apptive_grid_form/src/translation/l10n/translation_de.dart'
+    as de;
+import 'package:apptive_grid_form/src/translation/l10n/translation_en.dart'
+    as en;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
