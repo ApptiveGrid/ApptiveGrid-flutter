@@ -74,7 +74,7 @@ class Space {
 
   @override
   String toString() {
-    return 'Space(name: $name, id: $id, key: $key, category: $category, links: $links)';
+    return 'Space(name: $name, id: $id, key: $key, category: $category, links: $links, embeddedGrids: $embeddedGrids)';
   }
 
   @override
@@ -89,7 +89,14 @@ class Space {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(
+        id,
+        name,
+        key,
+        category,
+        links,
+        embeddedGrids,
+      );
 }
 
 /// A [Space] shared with a [User]
@@ -135,7 +142,7 @@ class SharedSpace extends Space {
 
   @override
   String toString() {
-    return 'SharedSpace(name: $name, id: $id, key: $key, category: $category, realSpace: ${realSpace.toString()}, links: $links)';
+    return 'SharedSpace(name: $name, id: $id, key: $key, category: $category, realSpace: ${realSpace.toString()}, links: $links, embeddedGrids: $embeddedGrids)';
   }
 
   @override
@@ -151,5 +158,13 @@ class SharedSpace extends Space {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(
+        id,
+        name,
+        realSpace,
+        key,
+        category,
+        links,
+        embeddedGrids,
+      );
 }

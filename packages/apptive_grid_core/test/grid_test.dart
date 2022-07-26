@@ -362,9 +362,41 @@ void main() {
       final restored = Grid.fromJson(saved);
 
       expect(restored, equals(initialData));
-      expect(restored.hashCode, equals(initialData.hashCode));
       expect(restored.key, equals('gridKey'));
       expect(restored.hiddenFields!.first.id, equals('hiddenId'));
+    });
+
+    test('Hashcode', () {
+      final grid = Grid.fromJson(json);
+
+      expect(
+        grid.hashCode,
+        equals(
+          Object.hash(
+            grid.id,
+            grid.name,
+            grid.key,
+            grid.fields,
+            grid.hiddenFields,
+            grid.rows,
+            grid.filter,
+            grid.sorting,
+            grid.links,
+            grid.embeddedForms,
+          ),
+        ),
+      );
+    });
+
+    test('toString()', () {
+      final grid = Grid.fromJson(json);
+
+      expect(
+        grid.toString(),
+        equals(
+          'Grid(id: ${grid.id}, name: ${grid.name}, key: ${grid.key}, fields: ${grid.fields}, hiddenFields: ${grid.hiddenFields}, rows: ${grid.rows}, filter: ${grid.filter}, sorting: ${grid.sorting}, links: ${grid.links}, embeddedForms: ${grid.embeddedForms})',
+        ),
+      );
     });
   });
 }

@@ -38,5 +38,5 @@ class Geolocation {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(latitude, longitude);
 }

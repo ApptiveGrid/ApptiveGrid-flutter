@@ -106,7 +106,7 @@ class Grid {
 
   @override
   String toString() {
-    return 'Grid(id: $id, name: $name, key: $key, fields: $fields, hiddenFields: $hiddenFields, rows: $rows, filter: $filter, sorting: $sorting, links: $links)';
+    return 'Grid(id: $id, name: $name, key: $key, fields: $fields, hiddenFields: $hiddenFields, rows: $rows, filter: $filter, sorting: $sorting, links: $links, embeddedForms: $embeddedForms)';
   }
 
   @override
@@ -125,5 +125,16 @@ class Grid {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(
+        id,
+        name,
+        key,
+        fields,
+        hiddenFields,
+        rows,
+        filter,
+        sorting,
+        links,
+        embeddedForms,
+      );
 }

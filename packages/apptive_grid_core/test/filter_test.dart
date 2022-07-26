@@ -175,7 +175,6 @@ void main() {
         );
 
         expect(a, equals(b));
-        expect(a.hashCode, equals(b.hashCode));
       });
 
       test('Different Type', () {
@@ -200,7 +199,6 @@ void main() {
         );
 
         expect(a, isNot(b));
-        expect(a.hashCode, isNot(b.hashCode));
       });
 
       test('Different Conditions', () {
@@ -225,7 +223,6 @@ void main() {
         );
 
         expect(a, isNot(b));
-        expect(a.hashCode, isNot(b.hashCode));
       });
     });
 
@@ -237,7 +234,6 @@ void main() {
             EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'));
 
         expect(a, equals(b));
-        expect(a.hashCode, equals(b.hashCode));
       });
 
       test('Different Operator', () {
@@ -249,7 +245,6 @@ void main() {
         );
 
         expect(a, isNot(b));
-        expect(a.hashCode, isNot(b.hashCode));
       });
 
       test('Different Value', () {
@@ -259,7 +254,6 @@ void main() {
             EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value1'));
 
         expect(a, isNot(b));
-        expect(a.hashCode, isNot(b.hashCode));
       });
 
       test('Different Field', () {
@@ -269,12 +263,11 @@ void main() {
             EqualsFilter(fieldId: 'fieldId1', value: StringDataEntity('value'));
 
         expect(a, isNot(b));
-        expect(a.hashCode, isNot(b.hashCode));
       });
     });
   });
 
-  group('Combination produces correct json', () {
+  group('Combination', () {
     test('And', () async {
       expect(
         jsonEncode(
@@ -339,6 +332,25 @@ void main() {
         ),
       );
     });
+
+    test('Hashcode', () {
+      final composition = OrFilterComposition(
+        conditions: [
+          EqualsFilter(
+            fieldId: 'fieldId',
+            value: StringDataEntity('value'),
+          ),
+          AnyOfFilter(
+            fieldId: 'fieldId1',
+            value: EnumCollectionDataEntity(value: {'2', '3'}),
+          ),
+        ],
+      );
+      expect(
+        composition.hashCode,
+        equals(Object.hash(composition.operator, composition.conditions)),
+      );
+    });
   });
 
   group('Not Filter', () {
@@ -361,7 +373,7 @@ void main() {
         expect(filter1.hashCode, equals(filter2.hashCode));
       });
 
-      test('Different su filters are not equal', () async {
+      test('Different sub filters are not equal', () async {
         final filter1 = NotFilter(
           filter: EqualsFilter(
             fieldId: 'field',
@@ -396,34 +408,44 @@ void main() {
         ),
       );
     });
+  });
+  group('Filter Expression', () {
+    test('Equality', () {
+      const todayExpression = Today();
+      const loggedInExpression = LoggedInUser();
 
-    group('Filter Expression', () {
-      test('Equality', () {
-        const todayExpression = Today();
-        const loggedInExpression = LoggedInUser();
+      expect(todayExpression, isNot(equals(loggedInExpression)));
+      expect(
+        todayExpression.hashCode,
+        isNot(equals(loggedInExpression.hashCode)),
+      );
+      expect(
+        todayExpression.filterValue,
+        isNot(equals(loggedInExpression.filterValue)),
+      );
+    });
 
-        expect(todayExpression, isNot(equals(loggedInExpression)));
-        expect(
-          todayExpression.hashCode,
-          isNot(equals(loggedInExpression.hashCode)),
-        );
-        expect(
-          todayExpression.filterValue,
-          isNot(equals(loggedInExpression.filterValue)),
-        );
-      });
+    test('Today', () {
+      const todayExpression = Today();
 
-      test('Today', () {
-        const todayExpression = Today();
+      expect(todayExpression.filterValue, equals('{{ today() }}'));
+    });
 
-        expect(todayExpression.filterValue, equals('{{ today() }}'));
-      });
+    test('LoggedIn User', () {
+      const loggedInExpression = LoggedInUser();
 
-      test('LoggedIn User', () {
-        const loggedInExpression = LoggedInUser();
+      expect(loggedInExpression.filterValue, equals('{{ loggedInUser() }}'));
+    });
+  });
 
-        expect(loggedInExpression.filterValue, equals('{{ loggedInUser() }}'));
-      });
+  group('toString()', () {
+    test('Produces correct String Output', () {
+      final filter = EqualsFilter(
+        fieldId: 'field',
+        value: StringDataEntity('test'),
+      );
+
+      expect(filter.toString(), equals('EqualsFilter({field: {\$eq: test}})'));
     });
   });
 }

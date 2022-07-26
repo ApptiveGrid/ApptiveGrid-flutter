@@ -312,6 +312,61 @@ void main() {
       ).called(1);
     });
 
+    test('Main Upload succeeds, thumbnails fail, returns mainUpload', () async {
+      final attachment = Attachment(
+        name: 'name',
+        url: Uri(path: 'attachment/url'),
+        type: 'image/png',
+        smallThumbnail: Uri(path: 'attachment/small/url'),
+        largeThumbnail: Uri(path: 'attachment/large/url'),
+      );
+
+      final successResponse = Response('Success', 200);
+      when(
+        () => httpClient.put(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).thenAnswer((invocation) async {
+        final url = invocation.positionalArguments.first as Uri;
+
+        if (url.path.contains('small') || url.path.contains('large')) {
+          return Response('Error', 500);
+        } else {
+          return successResponse;
+        }
+      });
+
+      final file = File('${directory.path}/attachment.png');
+      await file.writeAsBytes(
+        base64Decode(
+          'iVBORw0KGgoAAAANSUhEUgAAAAIAAAAECAYAAACk7+45AAAAEklEQVR42mP8z/C/ngEIGHEzAMiQCfmnp5u6AAAAAElFTkSuQmCC',
+        ),
+      );
+
+      final action =
+          AddAttachmentAction(attachment: attachment, path: file.path);
+
+      expect(await processor.uploadAttachment(action), successResponse);
+
+      verify(
+        () => httpClient.get(
+          any(that: predicate<Uri>((uri) => !uri.path.endsWith('config.json'))),
+          headers: any(named: 'headers'),
+        ),
+      ).called(3);
+      verify(
+        () => httpClient.put(
+          attachmentUrl,
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).called(3);
+    });
+
     test('Non Image from File', () async {
       final attachment = Attachment(
         name: 'name',

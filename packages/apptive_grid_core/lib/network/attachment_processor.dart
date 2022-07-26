@@ -92,33 +92,32 @@ class AttachmentProcessor {
   /// [headers] will be added in addition to the default headers
   ///
   /// If the attachment is an image (see createAttachment) it will upload a scaled version of the original (max Side 1000px) and tries to upload thumbnails (256px and 64px)
-  /// If uploading one or more of the thumnbnails fails the upload will still be handled as success as long as the main file did upload successfully
+  /// If uploading one or more of the thumbnails fails the upload will still be handled as success as long as the main file did upload successfully
   ///
-  /// If the attachment is not an imge the file will be uploaded without any alterations
+  /// If the attachment is not an image the file will be uploaded without any alterations
   Future<http.Response> uploadAttachment(
     AddAttachmentAction attachmentAction,
   ) async {
     final config = await configuration;
-    final authenticated = (await authenticator.isAuthenticated) ||
+    final useAuthenticatedApiEndpoint = (await authenticator.isAuthenticated) ||
         config.signedUrlFormApiEndpoint == null;
 
-    if (authenticated) {
+    if (useAuthenticatedApiEndpoint) {
       await authenticator.checkAuthentication();
     }
 
     final baseUploadUri = Uri.parse(
-      authenticated
+      useAuthenticatedApiEndpoint
           ? config.signedUrlApiEndpoint
           : config.signedUrlFormApiEndpoint!,
     );
     var uploadHeaders = <String, String>{};
-    if (authenticated) {
+    if (useAuthenticatedApiEndpoint) {
       uploadHeaders[HttpHeaders.authorizationHeader] = authenticator.header!;
     }
 
     if (attachmentAction.attachment.type.startsWith('image')) {
       final type = attachmentAction.attachment.type;
-      http.Response? mainUpload;
 
       final resizeId = _uuid.v4();
       final imagePaths = await scaleImageToMaxSize(
@@ -138,10 +137,7 @@ class AttachmentProcessor {
               createBytes: () => File(imagePaths[0]).readAsBytes(),
               name: attachmentAction.attachment.url.pathSegments.last,
               type: type,
-            ).then((response) {
-              mainUpload = response;
-              return response;
-            }),
+            ),
             if (attachmentAction.attachment.largeThumbnail != null)
               _uploadFile(
                 baseUri: baseUploadUri,
@@ -152,7 +148,7 @@ class AttachmentProcessor {
                 type: type,
               ).catchError((error) {
                 debugPrint('Could not upload large thumbnail');
-                debugPrint(error);
+                debugPrint(error.toString());
                 return http.Response('', 200); // coverage:ignore-line
               }),
             if (attachmentAction.attachment.smallThumbnail != null)
@@ -165,17 +161,11 @@ class AttachmentProcessor {
                 type: type,
               ).catchError((error) {
                 debugPrint('Could not upload small thumbnail');
-                debugPrint(error);
+                debugPrint(error.toString());
                 return http.Response('', 200); // coverage:ignore-line
               }),
           ],
-        ).catchError((error) {
-          if (mainUpload != null) {
-            return [mainUpload!];
-          } else {
-            throw error;
-          }
-        });
+        );
         return uploads.first;
       } else {
         return _uploadFile(

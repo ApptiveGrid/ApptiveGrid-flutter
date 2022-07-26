@@ -60,5 +60,5 @@ class FormComponentOptions {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(multi, placeholder, description, label);
 }

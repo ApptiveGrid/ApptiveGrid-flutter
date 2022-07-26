@@ -136,6 +136,25 @@ void main() {
       expect(entity.value, equals(null));
       expect(entity.options, equals([]));
     });
+
+    test('Hashcode', () {
+      const value = 'value';
+      final values = {'value', 'otherValue'};
+      final entity = EnumDataEntity(value: value, options: values);
+
+      expect(entity.hashCode, equals(Object.hash(value, values)));
+    });
+
+    test('toString()', () {
+      const value = 'value';
+      final values = {'value', 'otherValue'};
+      final entity = EnumDataEntity(value: value, options: values);
+
+      expect(
+        entity.toString(),
+        equals('EnumDataEntity(value: $value, options: $values)'),
+      );
+    });
   });
 
   group('EnumCollection', () {
@@ -165,7 +184,6 @@ void main() {
             EnumCollectionDataEntity(value: {'A', 'B'}, options: {'A', 'B'});
 
         expect(a, equals(b));
-        expect(a.hashCode, equals(b.hashCode));
       });
 
       test(
@@ -177,7 +195,6 @@ void main() {
             EnumCollectionDataEntity(value: {'B', 'A'}, options: {'A', 'B'});
 
         expect(a, equals(b));
-        expect(a.hashCode, isNot(b.hashCode));
       });
 
       test('Unequals', () {
@@ -191,7 +208,27 @@ void main() {
         );
 
         expect(a, isNot(b));
-        expect(a.hashCode, isNot(b.hashCode));
+      });
+
+      test('Hashcode', () {
+        const value = {'value'};
+        final values = {'value', 'otherValue'};
+        final entity = EnumCollectionDataEntity(value: value, options: values);
+
+        expect(entity.hashCode, equals(Object.hash(value, values)));
+      });
+
+      test('toString()', () {
+        const value = {'value'};
+        final values = {'value', 'otherValue'};
+        final entity = EnumCollectionDataEntity(value: value, options: values);
+
+        expect(
+          entity.toString(),
+          equals(
+            'EnumCollectionDataEntity(value: $value, options: $values)',
+          ),
+        );
       });
     });
   });
@@ -213,19 +250,15 @@ void main() {
 
     test('equals', () {
       expect(string, equals(stringEquals));
-      expect(string.hashCode, equals(stringEquals.hashCode));
       expect(selection, equals(equalSelection));
-      expect(selection.hashCode, equals(equalSelection.hashCode));
     });
     test('not equals', () {
       expect(string, isNot(stringUnequals));
-      expect(string.hashCode, isNot(stringUnequals.hashCode));
-      expect(string.hashCode, isNot(integer.hashCode));
-      expect(string.hashCode, isNot(date.hashCode));
-      expect(string.hashCode, isNot(dateTime.hashCode));
-      expect(string.hashCode, isNot(boolean.hashCode));
+      expect(string, isNot(integer));
+      expect(string, isNot(date));
+      expect(string, isNot(dateTime));
+      expect(string, isNot(boolean));
       expect(selection, isNot(unEqualSelection));
-      expect(selection.hashCode, isNot(unEqualSelection.hashCode));
     });
   });
 
@@ -256,7 +289,6 @@ void main() {
       );
 
       expect(direct, equals(fromJson));
-      expect(direct.hashCode, equals(fromJson.hashCode));
     });
 
     test('Null json is Empty List', () {

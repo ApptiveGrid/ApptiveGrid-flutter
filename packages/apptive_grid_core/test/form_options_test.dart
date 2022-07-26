@@ -18,7 +18,6 @@ void main() {
 
       test('a == b', () {
         expect(a, equals(b));
-        expect(a.hashCode, equals(b.hashCode));
       });
 
       test('a != c', () {
@@ -43,7 +42,6 @@ void main() {
 
       test('a == b', () {
         expect(a, equals(b));
-        expect(a.hashCode, equals(b.hashCode));
       });
 
       test('a != c', () {

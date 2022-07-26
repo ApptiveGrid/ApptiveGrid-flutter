@@ -62,5 +62,5 @@ class GridRow {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(id, entries, links);
 }

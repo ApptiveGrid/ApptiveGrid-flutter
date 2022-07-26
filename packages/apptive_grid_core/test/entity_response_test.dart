@@ -22,7 +22,6 @@ void main() {
       );
 
       expect(response, equals(response2));
-      expect(response.hashCode, equals(response2.hashCode));
     });
 
     test('UnEqual', () {
@@ -44,7 +43,6 @@ void main() {
       );
 
       expect(response, isNot(response2));
-      expect(response.hashCode, isNot(response2.hashCode));
     });
   });
 
@@ -70,11 +68,37 @@ void main() {
       final response4 = response.copyWith();
 
       expect(response2, isNot(response));
-      expect(response2.hashCode, isNot(response.hashCode));
       expect(response3, equals(response));
-      expect(response3.hashCode, equals(response.hashCode));
       expect(response4, equals(response));
-      expect(response4.hashCode, equals(response.hashCode));
     });
+  });
+
+  test('Hashcode', () {
+    const response = EntitiesResponse(
+      items: [
+        {
+          '1': 'A',
+        },
+        {'1': 'B'},
+      ],
+    );
+
+    expect(response.hashCode, equals(response.items.hashCode));
+  });
+
+  test('toString()', () {
+    const response = EntitiesResponse(
+      items: [
+        {
+          '1': 'A',
+        },
+        {'1': 'B'},
+      ],
+    );
+
+    expect(
+      response.toString(),
+      equals('EntitiesResponse(items: [{1: A}, {1: B}])'),
+    );
   });
 }

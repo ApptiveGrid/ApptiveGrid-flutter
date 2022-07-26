@@ -11,7 +11,6 @@ void main() {
       const b = GridField(id: id, name: name, type: type);
 
       expect(a, equals(b));
-      expect(a.hashCode, equals(b.hashCode));
     });
 
     test('is not equal', () {
@@ -22,7 +21,6 @@ void main() {
       const b = GridField(id: name, name: id, type: type);
 
       expect(a, isNot(b));
-      expect(a.hashCode, isNot(b.hashCode));
     });
   });
 

@@ -14,7 +14,7 @@ abstract class _FilterExpression with FilterableMixin {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => expression.hashCode;
 }
 
 /// Filter Columns with Type [DataType.date] to today.

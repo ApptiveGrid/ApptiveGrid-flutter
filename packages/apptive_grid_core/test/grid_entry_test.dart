@@ -23,7 +23,6 @@ void main() {
       );
 
       expect(fromJson, equals(direct));
-      expect(fromJson.hashCode, equals(direct.hashCode));
     });
 
     test('UnEqual', () {
@@ -34,7 +33,27 @@ void main() {
       final double = GridEntry(field, StringDataEntity(value + value));
 
       expect(single, isNot(double));
-      expect(single.hashCode, isNot(double.hashCode));
     });
+  });
+
+  test('Hashcode', () {
+    const field = GridField(id: 'id', name: 'name', type: DataType.text);
+    const value = 'value';
+
+    final single = GridEntry(field, StringDataEntity(value));
+
+    expect(single.hashCode, equals(Object.hash(field, value)));
+  });
+
+  test('toString()', () {
+    const field = GridField(id: 'id', name: 'name', type: DataType.text);
+    const value = 'value';
+
+    final single = GridEntry(field, StringDataEntity(value));
+
+    expect(
+      single.toString(),
+      equals('GridEntry(field: $field, data: ${StringDataEntity(value)})'),
+    );
   });
 }

@@ -136,7 +136,6 @@ void main() {
       expect(a, equals(b));
       expect(a, isNot(c));
 
-      expect(a.hashCode, equals(b.hashCode));
       expect(a.hashCode, isNot(c.hashCode));
     });
   });
@@ -213,7 +212,29 @@ void main() {
       );
 
       expect(fromJson, equals(direct));
-      expect(fromJson.hashCode, equals(direct.hashCode));
+    });
+
+    test('Hashcode', () {
+      const field =
+          GridField(id: 'id', name: 'property', type: DataType.attachment);
+
+      final directEntity = DecimalDataEntity(47.11);
+      final component = FormComponent<DecimalDataEntity>(
+        property: 'New field',
+        data: directEntity,
+        field: field,
+      );
+
+      expect(
+        component.hashCode,
+        Object.hash(
+          component.field,
+          component.property,
+          component.data,
+          component.options,
+          component.required,
+        ),
+      );
     });
   });
 }

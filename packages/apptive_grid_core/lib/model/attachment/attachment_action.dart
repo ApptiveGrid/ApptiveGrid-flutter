@@ -79,7 +79,7 @@ class AddAttachmentAction extends AttachmentAction {
 
   @override
   String toString() {
-    return 'AddAttachmentAction(path: $path, byteData(byteSize): ${byteData?.lengthInBytes}, attachment: $attachment)';
+    return 'AddAttachmentAction(attachment: $attachment, path: $path, byteData(byteSize): ${byteData?.lengthInBytes})';
   }
 
   @override
@@ -91,7 +91,7 @@ class AddAttachmentAction extends AttachmentAction {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(attachment, path, byteData);
 }
 
 /// Implementation of an [AttachmentAction] for [AttachmentActionType.delete]
@@ -117,7 +117,7 @@ class DeleteAttachmentAction extends AttachmentAction {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => attachment.hashCode;
 }
 
 /// Implementation of an [AttachmentAction] for [AttachmentActionType.delete]
@@ -149,5 +149,5 @@ class RenameAttachmentAction extends AttachmentAction {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(attachment, newName);
 }

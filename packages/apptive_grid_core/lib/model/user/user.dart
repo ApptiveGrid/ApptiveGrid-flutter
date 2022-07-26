@@ -67,7 +67,7 @@ class User {
 
   @override
   String toString() {
-    return 'User(email: $email, lastName: $lastName, firstName: $firstName, id: $id, links: $links)';
+    return 'User($firstName $lastName, email: $email, id: $id, links: $links, embeddedSpaces: $embeddedSpaces)';
   }
 
   @override
@@ -82,5 +82,12 @@ class User {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(
+        id,
+        email,
+        lastName,
+        firstName,
+        links,
+        embeddedSpaces,
+      );
 }

@@ -34,5 +34,5 @@ class GridEntry {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(field, data);
 }

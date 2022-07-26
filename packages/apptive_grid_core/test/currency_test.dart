@@ -171,6 +171,33 @@ void main() {
         'CurrencyGridField(id: id, name: Currency, key: key, currency: USD)',
       );
     });
+
+    test('Hashcode', () {
+      const field = CurrencyGridField(
+        id: 'id',
+        name: 'Currency',
+        key: 'key',
+        links: {},
+        currency: 'USD',
+      );
+
+      expect(
+        field.hashCode,
+        equals(
+          Object.hash(
+            GridField(
+              id: field.id,
+              name: field.name,
+              type: field.type,
+              key: field.key,
+              links: field.links,
+              schema: field.schema,
+            ),
+            'USD',
+          ),
+        ),
+      );
+    });
   });
 
   group('DataEntity', () {
@@ -180,9 +207,18 @@ void main() {
       final c = CurrencyDataEntity(currency: 'EUR', value: 12345.12);
       expect(a, equals(b));
       expect(a, isNot(c));
+    });
 
-      expect(a.hashCode, equals(b.hashCode));
-      expect(a.hashCode, isNot(c.hashCode));
+    test('Hashcode', () {
+      final currency = CurrencyDataEntity(currency: 'USD', value: 12345.12);
+
+      expect(currency.hashCode, Object.hash(12345.12, 'USD'));
+    });
+
+    test('toString()', () {
+      final currency = CurrencyDataEntity(currency: 'USD', value: 12345.12);
+
+      expect(currency.toString(), equals('CurrencyDataEntity(12345.12 USD)'));
     });
   });
 
@@ -308,7 +344,29 @@ void main() {
       );
 
       expect(fromJson.cast<CurrencyDataEntity>(), equals(direct));
-      expect(fromJson.hashCode, equals(direct.hashCode));
+    });
+
+    test('Hashcode', () {
+      const field =
+          GridField(id: 'id', name: 'property', type: DataType.attachment);
+
+      final directEntity = CurrencyDataEntity(currency: 'EUR', value: 12345.12);
+      final component = FormComponent<CurrencyDataEntity>(
+        property: 'New field',
+        data: directEntity,
+        field: field,
+      );
+
+      expect(
+        component.hashCode,
+        Object.hash(
+          component.field,
+          component.property,
+          component.data,
+          component.options,
+          component.required,
+        ),
+      );
     });
   });
 }
