@@ -1,5 +1,4 @@
-import 'package:apptive_grid_core/apptive_grid_network.dart';
-import 'package:apptive_grid_core/apptive_grid_options.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 

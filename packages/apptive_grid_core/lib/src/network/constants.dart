@@ -1,5 +1,3 @@
-part of apptive_grid_network;
-
 // ignore_for_file: public_member_api_docs
 
 /// HttpHeaders Used in ApptiveGrid Requests

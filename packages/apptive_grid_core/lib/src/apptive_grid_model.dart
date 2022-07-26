@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/apptive_grid_network.dart';
+
 import 'package:flutter/foundation.dart' as f;
 import 'package:intl/intl.dart';
 

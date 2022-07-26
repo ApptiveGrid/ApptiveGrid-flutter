@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:apptive_grid_core/apptive_grid_model.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_form/managers/permission_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';

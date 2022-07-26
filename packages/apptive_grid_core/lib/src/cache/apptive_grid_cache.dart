@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:apptive_grid_core/apptive_grid_model.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 
 /// Cache for saving Actions to a cache to enable sending them later
 abstract class ApptiveGridCache {

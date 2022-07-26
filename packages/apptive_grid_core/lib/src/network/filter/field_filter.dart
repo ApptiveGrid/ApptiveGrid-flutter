@@ -1,4 +1,4 @@
-part of 'package:apptive_grid_core/network/filter/apptive_grid_filter.dart';
+part of 'package:apptive_grid_core/src/network/filter/apptive_grid_filter.dart';
 
 /// Filter Operators for Filters that check on a Field
 enum _FieldOperator {

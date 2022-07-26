@@ -1,6 +1,6 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/network/authentication/web_auth_enabler/configure_nonweb.dart'
-    if (dart.library.html) 'package:apptive_grid_core/network/authentication/web_auth_enabler/configure_web.dart'
+import 'package:apptive_grid_core/src/network/authentication/web_auth_enabler/configure_nonweb.dart'
+    if (dart.library.html) 'package:apptive_grid_core/src/network/authentication/web_auth_enabler/configure_web.dart'
     as implementation;
 
 /// Enable Authentication on the Web

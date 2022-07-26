@@ -6,9 +6,8 @@ import 'dart:isolate';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:apptive_grid_core/apptive_grid_model.dart';
-import 'package:apptive_grid_core/apptive_grid_network.dart';
-import 'package:apptive_grid_core/apptive_grid_options.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_core/src/network/constants.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';

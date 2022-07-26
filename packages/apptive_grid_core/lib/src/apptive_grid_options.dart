@@ -1,6 +1,4 @@
-import 'package:apptive_grid_core/apptive_grid_model.dart';
-import 'package:apptive_grid_core/apptive_grid_network.dart';
-import 'package:apptive_grid_core/cache/apptive_grid_cache.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter/foundation.dart';
 
 /// Configuration options for [ApptiveGrid]

@@ -1,8 +1,8 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter/foundation.dart';
 
-part 'package:apptive_grid_core/network/filter/field_filter.dart';
-part 'package:apptive_grid_core/network/filter/filter_expressions.dart';
+part 'package:apptive_grid_core/src/network/filter/field_filter.dart';
+part 'package:apptive_grid_core/src/network/filter/filter_expressions.dart';
 
 /// Filter to load a Grid with a specific Filter
 ///
