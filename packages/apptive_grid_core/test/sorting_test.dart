@@ -61,8 +61,10 @@ void main() {
       const sorting =
           ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc);
 
-      expect(sorting.toString(),
-          equals('ApptiveGridSorting({fieldId: ascending})'));
+      expect(
+        sorting.toString(),
+        equals('ApptiveGridSorting({fieldId: ascending})'),
+      );
     });
   });
 

@@ -215,9 +215,14 @@ void main() {
       );
 
       expect(
-          entity.hashCode,
-          equals(Object.hash(entity.value,
-              '/api/users/userId/spaces/spaceId/grids/referencedGridId')));
+        entity.hashCode,
+        equals(
+          Object.hash(
+            entity.value,
+            '/api/users/userId/spaces/spaceId/grids/referencedGridId',
+          ),
+        ),
+      );
     });
 
     test('toString()', () {
@@ -233,9 +238,11 @@ void main() {
       );
 
       expect(
-          entity.toString(),
-          equals(
-              'MultiCrossReferenceDataEntity(references: [CrossReferenceDataEntity(displayValue: Yeah!, entityUri: /api/users/userId/spaces/spaceId/grids/gridId/entities/entityId, gridUri: /api/users/userId/spaces/spaceId/grids/referencedGridId)], gridUri: /api/users/userId/spaces/spaceId/grids/referencedGridId)'));
+        entity.toString(),
+        equals(
+          'MultiCrossReferenceDataEntity(references: [CrossReferenceDataEntity(displayValue: Yeah!, entityUri: /api/users/userId/spaces/spaceId/grids/gridId/entities/entityId, gridUri: /api/users/userId/spaces/spaceId/grids/referencedGridId)], gridUri: /api/users/userId/spaces/spaceId/grids/referencedGridId)',
+        ),
+      );
     });
   });
 

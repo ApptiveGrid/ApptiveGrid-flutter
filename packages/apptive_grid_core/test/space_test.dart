@@ -146,17 +146,21 @@ void main() {
     test('Hashcode', () {
       final space = Space(id: 'id', name: 'name', links: {});
 
-      expect(space.hashCode,
-          equals(Object.hash('id', 'name', null, null, space.links, null)));
+      expect(
+        space.hashCode,
+        equals(Object.hash('id', 'name', null, null, space.links, null)),
+      );
     });
 
     test('toString()', () {
       final space = Space(id: 'id', name: 'name', links: {});
 
       expect(
-          space.toString(),
-          equals(
-              'Space(name: name, id: id, key: null, category: null, links: {}, embeddedGrids: null)'));
+        space.toString(),
+        equals(
+          'Space(name: name, id: id, key: null, category: null, links: {}, embeddedGrids: null)',
+        ),
+      );
     });
   });
 
@@ -309,22 +313,42 @@ void main() {
     });
     test('Hashcode', () {
       final space = SharedSpace(
-          realSpace: Uri(path: 'realSpace'), id: 'id', name: 'name', links: {});
+        realSpace: Uri(path: 'realSpace'),
+        id: 'id',
+        name: 'name',
+        links: {},
+      );
 
       expect(
-          space.hashCode,
-          equals(Object.hash('id', 'name', Uri(path: 'realSpace'), null, null,
-              space.links, null)));
+        space.hashCode,
+        equals(
+          Object.hash(
+            'id',
+            'name',
+            Uri(path: 'realSpace'),
+            null,
+            null,
+            space.links,
+            null,
+          ),
+        ),
+      );
     });
 
     test('toString()', () {
       final space = SharedSpace(
-          realSpace: Uri(path: 'realSpace'), id: 'id', name: 'name', links: {});
+        realSpace: Uri(path: 'realSpace'),
+        id: 'id',
+        name: 'name',
+        links: {},
+      );
 
       expect(
-          space.toString(),
-          equals(
-              'SharedSpace(name: name, id: id, key: null, category: null, realSpace: realSpace, links: {}, embeddedGrids: null)'));
+        space.toString(),
+        equals(
+          'SharedSpace(name: name, id: id, key: null, category: null, realSpace: realSpace, links: {}, embeddedGrids: null)',
+        ),
+      );
     });
   });
 }

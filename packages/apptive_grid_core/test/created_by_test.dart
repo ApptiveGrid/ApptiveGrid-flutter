@@ -303,9 +303,11 @@ void main() {
       );
 
       expect(
-          createdBy.toString(),
-          equals(
-              'CreatedBy(displayValue: Jane Doe, id: userId, name: jane.doe@2denker.de, type: user)'));
+        createdBy.toString(),
+        equals(
+          'CreatedBy(displayValue: Jane Doe, id: userId, name: jane.doe@2denker.de, type: user)',
+        ),
+      );
     });
   });
 }

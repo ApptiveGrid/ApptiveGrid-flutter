@@ -64,8 +64,10 @@ void main() {
     test('toString()', () {
       const key = ApptiveGridApiKey(authKey: 'authKey', password: 'password');
 
-      expect(key.toString(),
-          equals('ApptiveGridApiKey(authKey: authKey, password: password)'));
+      expect(
+        key.toString(),
+        equals('ApptiveGridApiKey(authKey: authKey, password: password)'),
+      );
     });
   });
 }

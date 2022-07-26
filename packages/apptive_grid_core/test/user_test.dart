@@ -157,8 +157,10 @@ void main() {
     });
 
     expect(
-        user.toString(),
-        equals(
-            'User(Jane Doe, email: jane.doe@zweidenker.de, id: id, links: {}, embeddedSpaces: null)'));
+      user.toString(),
+      equals(
+        'User(Jane Doe, email: jane.doe@zweidenker.de, id: id, links: {}, embeddedSpaces: null)',
+      ),
+    );
   });
 }

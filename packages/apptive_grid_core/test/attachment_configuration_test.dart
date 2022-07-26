@@ -24,11 +24,15 @@ void main() {
       signedUrlFormApiEndpoint: 'https://attachmentApiEndpoint.com',
     );
     expect(
-        configuration.hashCode,
-        equals(Object.hash(
-            configuration.signedUrlApiEndpoint,
-            configuration.attachmentApiEndpoint,
-            configuration.signedUrlFormApiEndpoint)));
+      configuration.hashCode,
+      equals(
+        Object.hash(
+          configuration.signedUrlApiEndpoint,
+          configuration.attachmentApiEndpoint,
+          configuration.signedUrlFormApiEndpoint,
+        ),
+      ),
+    );
   });
 
   test('toString()', () {
@@ -38,9 +42,11 @@ void main() {
       signedUrlFormApiEndpoint: 'https://attachmentApiEndpoint.com',
     );
     expect(
-        configuration.toString(),
-        equals(
-            'AttachmentConfiguration(signedUrlApiEndpoint: https://signedUrlEndpoint.com, signedUrlFormApiEndpoint: https://attachmentApiEndpoint.com, attachmentApiEndpoint: https://attachmentApiEndpoint.com)'));
+      configuration.toString(),
+      equals(
+        'AttachmentConfiguration(signedUrlApiEndpoint: https://signedUrlEndpoint.com, signedUrlFormApiEndpoint: https://attachmentApiEndpoint.com, attachmentApiEndpoint: https://attachmentApiEndpoint.com)',
+      ),
+    );
   });
 
   group('From Configuration String', () {

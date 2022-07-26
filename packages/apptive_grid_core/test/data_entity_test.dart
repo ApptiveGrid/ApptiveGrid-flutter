@@ -150,8 +150,10 @@ void main() {
       final values = {'value', 'otherValue'};
       final entity = EnumDataEntity(value: value, options: values);
 
-      expect(entity.toString(),
-          equals('EnumDataEntity(value: $value, options: $values)'));
+      expect(
+        entity.toString(),
+        equals('EnumDataEntity(value: $value, options: $values)'),
+      );
     });
   });
 
@@ -222,9 +224,11 @@ void main() {
         final entity = EnumCollectionDataEntity(value: value, options: values);
 
         expect(
-            entity.toString(),
-            equals(
-                'EnumCollectionDataEntity(value: $value, options: $values)'));
+          entity.toString(),
+          equals(
+            'EnumCollectionDataEntity(value: $value, options: $values)',
+          ),
+        );
       });
     });
   });
