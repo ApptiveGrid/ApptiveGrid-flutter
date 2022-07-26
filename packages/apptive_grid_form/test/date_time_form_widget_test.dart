@@ -1,5 +1,6 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
-import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
+import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
+import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
