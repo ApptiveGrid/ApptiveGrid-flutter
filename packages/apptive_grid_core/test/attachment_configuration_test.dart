@@ -14,8 +14,39 @@ void main() {
       });
 
       expect(direct, equals(fromJson));
-      expect(direct.hashCode, equals(fromJson.hashCode));
     });
+  });
+
+  test('Hashcode', () {
+    const configuration = AttachmentConfiguration(
+      signedUrlApiEndpoint: 'https://signedUrlEndpoint.com',
+      attachmentApiEndpoint: 'https://attachmentApiEndpoint.com',
+      signedUrlFormApiEndpoint: 'https://attachmentApiEndpoint.com',
+    );
+    expect(
+      configuration.hashCode,
+      equals(
+        Object.hash(
+          configuration.signedUrlApiEndpoint,
+          configuration.attachmentApiEndpoint,
+          configuration.signedUrlFormApiEndpoint,
+        ),
+      ),
+    );
+  });
+
+  test('toString()', () {
+    const configuration = AttachmentConfiguration(
+      signedUrlApiEndpoint: 'https://signedUrlEndpoint.com',
+      attachmentApiEndpoint: 'https://attachmentApiEndpoint.com',
+      signedUrlFormApiEndpoint: 'https://attachmentApiEndpoint.com',
+    );
+    expect(
+      configuration.toString(),
+      equals(
+        'AttachmentConfiguration(signedUrlApiEndpoint: https://signedUrlEndpoint.com, signedUrlFormApiEndpoint: https://attachmentApiEndpoint.com, attachmentApiEndpoint: https://attachmentApiEndpoint.com)',
+      ),
+    );
   });
 
   group('From Configuration String', () {

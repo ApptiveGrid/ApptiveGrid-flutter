@@ -84,14 +84,11 @@ class ApptiveGridClient {
   /// Based on [formUri] this might require Authentication
   /// throws [Response] if the request fails
   Future<FormData> loadForm({
-    Uri? uri,
-    // ignore: deprecated_member_use_from_same_package
-    @Deprecated('Use `uri` instead') FormUri? formUri,
+    required Uri uri,
     Map<String, String> headers = const {},
     bool isRetry = false,
   }) async {
-    assert(uri != null || formUri != null);
-    final url = _generateApptiveGridUri(uri ?? formUri!.uri);
+    final url = _generateApptiveGridUri(uri);
     final sanitizedUrl =
         url.replace(path: url.path.replaceAll(RegExp('/r/'), '/a/'));
     final response = await _client.get(
@@ -102,7 +99,6 @@ class ApptiveGridClient {
       if (response.statusCode == 401 && !isRetry) {
         await authenticator.checkAuthentication();
         return loadForm(
-          formUri: formUri,
           uri: uri,
           headers: headers,
           isRetry: true,
@@ -113,22 +109,6 @@ class ApptiveGridClient {
     }
     return FormData.fromJson(json.decode(response.body));
   }
-
-  /// Calls [submitForm] here for compatibility
-  /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
-  @Deprecated('Use submitForm with ApptiveLink instead')
-  Future<http.Response?> performAction(
-    FormAction action,
-    FormData formData, {
-    bool saveToPendingItems = true,
-    Map<String, String> headers = const {},
-  }) =>
-      submitForm(
-        ApptiveLink(uri: Uri.parse(action.uri), method: action.method),
-        formData,
-        saveToPendingItems: saveToPendingItems,
-        headers: headers,
-      );
 
   /// Submits [formData] against [link]
   ///
@@ -360,17 +340,14 @@ class ApptiveGridClient {
   /// Requires Authorization
   /// throws [Response] if the request fails
   Future<Grid> loadGrid({
-    // ignore: deprecated_member_use_from_same_package
-    @Deprecated('Use `uri` instead') GridUri? gridUri,
-    Uri? uri,
+    required Uri uri,
     List<ApptiveGridSorting>? sorting,
     ApptiveGridFilter? filter,
     bool isRetry = false,
     Map<String, String> headers = const {},
     bool loadEntities = true,
   }) async {
-    assert(uri != null || gridUri != null);
-    final gridViewUrl = _generateApptiveGridUri(uri ?? gridUri!.uri);
+    final gridViewUrl = _generateApptiveGridUri(uri);
 
     final gridHeaders = _createHeadersWithDefaults(headers);
     gridHeaders['Accept'] = 'application/vnd.apptivegrid.hal;version=2';
@@ -381,7 +358,6 @@ class ApptiveGridClient {
         await authenticator.checkAuthentication();
         return loadGrid(
           uri: uri,
-          gridUri: gridUri,
           sorting: sorting,
           filter: filter,
           isRetry: true,
@@ -492,81 +468,18 @@ class ApptiveGridClient {
   /// Requires Authorization
   /// throws [Response] if the request fails
   Future<Space> getSpace({
-    // ignore: deprecated_member_use_from_same_package
-    @Deprecated('Use `uri` instead') SpaceUri? spaceUri,
-    Uri? uri,
+    required Uri uri,
     Map<String, String> headers = const {},
   }) async {
-    assert(uri != null || spaceUri != null);
     await authenticator.checkAuthentication();
 
-    final url = _generateApptiveGridUri(uri ?? spaceUri!.uri);
+    final url = _generateApptiveGridUri(uri);
     final response =
         await _client.get(url, headers: _createHeadersWithDefaults(headers));
     if (response.statusCode >= 400) {
       throw response;
     }
     return Space.fromJson(json.decode(response.body));
-  }
-
-  /// Get all [FormUri]s that are contained in a [Grid] represented by [gridUri]
-  ///
-  /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
-  ///
-  /// Requires Authorization
-  /// throws [Response] if the request fails
-  @Deprecated(
-    'Consider using the `ApptiveLinkType.forms` link of a `Grid` and call `performApptiveLink` instead. This function will be removed in the future',
-  )
-  Future<List<FormUri>> getForms({
-    required GridUri gridUri,
-    Map<String, String> headers = const {},
-  }) async {
-    await authenticator.checkAuthentication();
-
-    final baseUrl = _generateApptiveGridUri(gridUri.uri);
-    final url = baseUrl.replace(
-      pathSegments: [...baseUrl.pathSegments, 'forms'],
-    );
-
-    final response =
-        await _client.get(url, headers: _createHeadersWithDefaults(headers));
-    if (response.statusCode >= 400) {
-      throw response;
-    }
-    return (json.decode(response.body) as List)
-        .map((e) => FormUri.fromUri(e))
-        .toList();
-  }
-
-  /// Get all [GridViewUri]s that are contained in a [Grid] represented by [gridUri]
-  ///
-  /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
-  ///
-  /// Requires Authorization
-  /// throws [Response] if the request fails
-  @Deprecated(
-    'Consider using the `ApptiveLinkType.views` link of a `Grid` and call `performApptiveLink` instead. This function will be removed in the future',
-  )
-  Future<List<GridViewUri>> getGridViews({
-    required GridUri gridUri,
-    Map<String, String> headers = const {},
-  }) async {
-    await authenticator.checkAuthentication();
-
-    final baseUrl = _generateApptiveGridUri(gridUri.uri);
-    final url = baseUrl.replace(
-      pathSegments: [...baseUrl.pathSegments, 'views'],
-    );
-
-    final response =
-        await _client.get(url, headers: _createHeadersWithDefaults(headers));
-    if (response.statusCode >= 400) {
-      throw response;
-    }
-    return (json.decode(response.body) as List)
-        .map((e) => GridViewUri.fromUri(e))
-        .toList();
   }
 
   /// Creates and returns a [Uri] pointing to a Form filled with the Data represented for a given entitiy
@@ -576,17 +489,13 @@ class ApptiveGridClient {
   /// Requires Authorization
   /// throws [Response] if the request fails
   Future<Uri> getEditLink({
-    @Deprecated('Use `uri` instead. This Uri should be taken from the `ApptiveLinkType.addEditionLink`')
-        // ignore: deprecated_member_use_from_same_package
-        EntityUri? entityUri,
-    Uri? uri,
+    required Uri uri,
     required String formId,
     Map<String, String> headers = const {},
   }) async {
-    assert(uri != null || entityUri != null);
     await authenticator.checkAuthentication();
 
-    final url = _generateApptiveGridUri(uri ?? entityUri!.uri);
+    final url = _generateApptiveGridUri(uri);
 
     final response = await _client.post(
       url,
@@ -616,16 +525,13 @@ class ApptiveGridClient {
   /// The entity will be layed out according to [layout]
   /// The id of the entity can be accessed via `['_id']`
   Future<dynamic> getEntity({
-    // ignore: deprecated_member_use_from_same_package
-    @Deprecated('Use `uri` instead') EntityUri? entityUri,
-    Uri? uri,
+    required Uri uri,
     Map<String, String> headers = const {},
     ApptiveGridLayout layout = ApptiveGridLayout.field,
   }) async {
-    assert(uri != null || entityUri != null);
     await authenticator.checkAuthentication();
 
-    final url = _generateApptiveGridUri(uri ?? entityUri!.uri);
+    final url = _generateApptiveGridUri(uri);
 
     final response = await _client.get(
       url.replace(
@@ -699,27 +605,6 @@ class ApptiveGridClient {
         // Was not able to submit this action
       }
     }
-  }
-
-  String get _attachmentApiEndpoint {
-    final endpoint = options
-        .attachmentConfigurations[options.environment]?.attachmentApiEndpoint;
-    if (endpoint != null) {
-      return endpoint;
-    } else {
-      throw ArgumentError(
-        'In order to use Attachments you need to specify AttachmentConfigurations in ApptiveGridOptions',
-      );
-    }
-  }
-
-  /// Creates an url where an attachment should be saved
-  /// Deprecated: use [ApptiveGridClient.attachmentProcessor.createAttachment]
-  @Deprecated('Use attachmentProcessor.createAttachment')
-  Uri createAttachmentUrl(String name) {
-    return Uri.parse(
-      '$_attachmentApiEndpoint$name?${DateTime.now().millisecondsSinceEpoch}',
-    );
   }
 
   /// Uploads [bytes] as the Profile Picture for the logged in user

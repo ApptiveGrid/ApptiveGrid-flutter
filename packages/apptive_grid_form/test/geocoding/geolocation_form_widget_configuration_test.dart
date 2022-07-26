@@ -16,6 +16,36 @@ void main() {
     );
 
     expect(a, equals(b));
-    expect(a.hashCode, equals(b.hashCode));
+  });
+
+  test('Hashcode', () {
+    const config = GeolocationFormWidgetConfiguration(
+      placesApiKey: 'placesApiKey',
+      geocodingApiKey: 'geocodingApiKey',
+    );
+
+    expect(
+      config.hashCode,
+      equals(
+        Object.hash(
+          config.placesApiKey,
+          config.geocodingApiKey,
+        ),
+      ),
+    );
+  });
+
+  test('toString()', () {
+    const config = GeolocationFormWidgetConfiguration(
+      placesApiKey: 'placesApiKey',
+      geocodingApiKey: 'geocodingApiKey',
+    );
+
+    expect(
+      config.toString(),
+      equals(
+        'GeolocationFormWidgetConfiguration(placesApiKey: placesApiKey, geocodingApiKey: geocodingApiKey)',
+      ),
+    );
   });
 }

@@ -43,7 +43,6 @@ void main() {
             ApptiveGridApiKey(authKey: 'authKey', password: 'password');
 
         expect(keyA, equals(keyB));
-        expect(keyA.hashCode, equals(keyB.hashCode));
       });
 
       test('Objects are not equal', () {
@@ -53,8 +52,22 @@ void main() {
             ApptiveGridApiKey(authKey: 'authKey', password: 'passwortWithT');
 
         expect(keyA, isNot(keyB));
-        expect(keyA.hashCode, isNot(keyB.hashCode));
       });
+    });
+
+    test('Hashcode', () {
+      const key = ApptiveGridApiKey(authKey: 'authKey', password: 'password');
+
+      expect(key.hashCode, equals(Object.hash('authKey', 'password')));
+    });
+
+    test('toString()', () {
+      const key = ApptiveGridApiKey(authKey: 'authKey', password: 'password');
+
+      expect(
+        key.toString(),
+        equals('ApptiveGridApiKey(authKey: authKey, password: password)'),
+      );
     });
   });
 }

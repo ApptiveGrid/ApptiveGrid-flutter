@@ -361,7 +361,34 @@ void main() {
       );
 
       expect(fromJson, equals(direct));
-      expect(fromJson.hashCode, equals(direct.hashCode));
+    });
+
+    test('Hashcode', () {
+      const field =
+          GridField(id: 'id', name: 'property', type: DataType.attachment);
+
+      final entity = GeolocationDataEntity(
+        const Geolocation(
+          longitude: 6.944374229580692,
+          latitude: 50.90713366617792,
+        ),
+      );
+      final component = FormComponent<GeolocationDataEntity>(
+        property: 'New field',
+        data: entity,
+        field: field,
+      );
+
+      expect(
+        component.hashCode,
+        Object.hash(
+          component.field,
+          component.property,
+          component.data,
+          component.options,
+          component.required,
+        ),
+      );
     });
   });
 
@@ -380,7 +407,27 @@ void main() {
       );
 
       expect(one, equals(two));
-      expect(one.hashCode, equals(two.hashCode));
+    });
+
+    test('Hashcode', () {
+      const location = Geolocation(
+        latitude: 47,
+        longitude: 11,
+      );
+
+      expect(location.hashCode, equals(Object.hash(47, 11)));
+    });
+
+    test('toString()', () {
+      const location = Geolocation(
+        latitude: 47,
+        longitude: 11,
+      );
+
+      expect(
+        location.toString(),
+        equals('Geolocation(latitude: 47.0, longitude: 11.0)'),
+      );
     });
   });
 }

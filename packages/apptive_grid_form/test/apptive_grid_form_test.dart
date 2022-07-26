@@ -1135,45 +1135,6 @@ void main() {
     });
   });
 
-  group('FormUri', () {
-    final uri = Uri.parse('uri');
-    // ignore: deprecated_member_use
-    final formUri = FormUri.fromUri('formUri');
-
-    test('No FormUri returns Uri as FormUri', () async {
-      final apptiveGridForm = ApptiveGridForm(
-        uri: uri,
-      );
-
-      // ignore: deprecated_member_use_from_same_package
-      expect(apptiveGridForm.formUri.uri, equals(uri));
-      expect(apptiveGridForm.uri, equals(uri));
-    });
-
-    test('No Uri returns FormUri', () async {
-      final apptiveGridForm = ApptiveGridForm(
-        // ignore: deprecated_member_use_from_same_package
-        formUri: formUri,
-      );
-
-      // ignore: deprecated_member_use_from_same_package
-      expect(apptiveGridForm.formUri.uri, equals(formUri.uri));
-      expect(apptiveGridForm.uri, equals(formUri.uri));
-    });
-
-    test('Uri prioritized over formUri', () async {
-      final apptiveGridForm = ApptiveGridForm(
-        uri: uri,
-        // ignore: deprecated_member_use_from_same_package
-        formUri: formUri,
-      );
-
-      // ignore: deprecated_member_use_from_same_package
-      expect(apptiveGridForm.formUri.uri, equals(uri));
-      expect(apptiveGridForm.uri, equals(uri));
-    });
-  });
-
   group('Progress', () {
     testWidgets('Shows Progress', (tester) async {
       final controller = StreamController<SubmitFormProgressEvent>();

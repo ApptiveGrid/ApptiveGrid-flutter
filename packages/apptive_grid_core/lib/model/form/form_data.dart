@@ -68,12 +68,6 @@ class FormData {
   /// List of [GridField]s represented in the Form
   final List<GridField>? fields;
 
-  /// List of [FormActions] available for this Form
-  @Deprecated('Use submitAction instead which is based on HAL links')
-  List<FormAction>? get actions => links[ApptiveLinkType.submit] != null
-      ? [links[ApptiveLinkType.submit]!.asFormAction]
-      : null;
-
   /// Links to actions that are used
   final LinkMap links;
 
@@ -125,5 +119,14 @@ class FormData {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(
+        id,
+        name,
+        description,
+        title,
+        fields,
+        components,
+        attachmentActions,
+        links,
+      );
 }

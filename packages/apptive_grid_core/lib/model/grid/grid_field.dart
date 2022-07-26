@@ -87,7 +87,7 @@ class GridField {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(id, name, key, type, links);
 }
 
 /// A [GridField] for [DataType.currency]

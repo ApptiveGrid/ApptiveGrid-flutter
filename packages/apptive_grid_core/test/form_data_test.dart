@@ -157,8 +157,7 @@ void main() {
       expect(formData.title, equals(title));
       expect(formData.description, equals(description));
 
-      // ignore: deprecated_member_use_from_same_package
-      expect(formData.actions!.length, equals(1));
+      expect(formData.links[ApptiveLinkType.submit], isNotNull);
 
       expect(formData.components!.length, equals(5));
 
@@ -319,12 +318,10 @@ void main() {
 
     test('a == b', () {
       expect(a, equals(b));
-      expect(a.hashCode, equals(b.hashCode));
     });
 
     test('a != c', () {
       expect(a, isNot(c));
-      expect(a.hashCode, isNot(c.hashCode));
     });
   });
 
@@ -382,8 +379,7 @@ void main() {
     test('Form Without Actions parses correctly', () {
       final formData = FormData.fromJson(responseWithoutSubmitLink);
 
-      // ignore: deprecated_member_use_from_same_package
-      expect(formData.actions, isNull);
+      expect(formData.links[ApptiveLinkType.submit], isNull);
     });
   });
 

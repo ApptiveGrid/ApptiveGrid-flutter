@@ -31,7 +31,7 @@ class ApptiveGridAuthenticationOptions {
 
   @override
   String toString() {
-    return 'ApptiveGridAuthenticationOptions(autoAuthenticate: $autoAuthenticate, redirectScheme: $redirectScheme, apiKey: $apiKey, authenticationStorage: $persistCredentials)';
+    return 'ApptiveGridAuthenticationOptions(autoAuthenticate: $autoAuthenticate, redirectScheme: $redirectScheme, apiKey: $apiKey, persistCredentials: $persistCredentials)';
   }
 
   @override
@@ -44,7 +44,12 @@ class ApptiveGridAuthenticationOptions {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(
+        autoAuthenticate,
+        redirectScheme,
+        apiKey,
+        persistCredentials,
+      );
 }
 
 /// Model to Handle Api Key Authentication
@@ -76,5 +81,5 @@ class ApptiveGridApiKey {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(authKey, password);
 }

@@ -45,7 +45,11 @@ class AttachmentConfiguration {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(
+        signedUrlApiEndpoint,
+        attachmentApiEndpoint,
+        signedUrlFormApiEndpoint,
+      );
 }
 
 /// Converts a [configString] to an actual map of [ApptiveGridEnvironment] and [ApptiveGridConfiguration]

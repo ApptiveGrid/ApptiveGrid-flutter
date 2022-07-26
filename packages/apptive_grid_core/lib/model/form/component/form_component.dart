@@ -69,12 +69,7 @@ class FormComponent<T extends DataEntity> {
   }
 
   @override
-  int get hashCode =>
-      field.hashCode +
-      property.hashCode +
-      data.hashCode +
-      options.hashCode +
-      required.hashCode;
+  int get hashCode => Object.hash(field, property, data, options, required);
 
   /// Mapping to a concrete implementation based on [json] and [schema]
   ///

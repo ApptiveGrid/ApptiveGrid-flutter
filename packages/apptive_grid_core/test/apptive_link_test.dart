@@ -8,7 +8,6 @@ void main() {
       final b = ApptiveLink(uri: Uri.parse('uri.toParse'), method: 'get');
 
       expect(a, equals(b));
-      expect(a.hashCode, equals(b.hashCode));
     });
 
     test('In Equality', () {

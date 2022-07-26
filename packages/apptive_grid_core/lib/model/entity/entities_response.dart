@@ -17,7 +17,7 @@ class EntitiesResponse<T> {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => items.hashCode;
 
   /// Copies this Object with provided arguments
   EntitiesResponse copyWith({List<T>? items}) {

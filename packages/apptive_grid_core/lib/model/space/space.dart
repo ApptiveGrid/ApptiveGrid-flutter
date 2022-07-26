@@ -1,24 +1,5 @@
 part of apptive_grid_model;
 
-/// A Uri representation used for performing Space based Api Calls
-@Deprecated('Use a normal `Uri` instead')
-class SpaceUri extends ApptiveGridUri {
-  /// Creates a new [SpaceUri] based on known ids for [user] and [space]
-  SpaceUri({
-    required String user,
-    required String space,
-  }) : super._(
-          Uri(
-            path: '/api/users/$user/spaces/$space',
-          ),
-          UriType.space,
-        );
-
-  /// Creates a new [SpaceUri] based on a string [uri]
-  /// Main usage of this is for [SpaceUri] retrieved through other Api Calls
-  SpaceUri.fromUri(String uri) : super.fromUri(uri, UriType.space);
-}
-
 /// Model for a Space
 class Space {
   /// Creates a new Space Model with a certain [id] and [name]
@@ -93,7 +74,7 @@ class Space {
 
   @override
   String toString() {
-    return 'Space(name: $name, id: $id, key: $key, category: $category, links: $links)';
+    return 'Space(name: $name, id: $id, key: $key, category: $category, links: $links, embeddedGrids: $embeddedGrids)';
   }
 
   @override
@@ -108,7 +89,14 @@ class Space {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(
+        id,
+        name,
+        key,
+        category,
+        links,
+        embeddedGrids,
+      );
 }
 
 /// A [Space] shared with a [User]
@@ -154,7 +142,7 @@ class SharedSpace extends Space {
 
   @override
   String toString() {
-    return 'SharedSpace(name: $name, id: $id, key: $key, category: $category, realSpace: ${realSpace.toString()}, links: $links)';
+    return 'SharedSpace(name: $name, id: $id, key: $key, category: $category, realSpace: ${realSpace.toString()}, links: $links, embeddedGrids: $embeddedGrids)';
   }
 
   @override
@@ -170,5 +158,13 @@ class SharedSpace extends Space {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(
+        id,
+        name,
+        realSpace,
+        key,
+        category,
+        links,
+        embeddedGrids,
+      );
 }

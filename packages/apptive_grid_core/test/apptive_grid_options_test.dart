@@ -60,7 +60,6 @@ void main() {
           ApptiveGridOptions(environment: ApptiveGridEnvironment.beta);
 
       expect(optionsA, equals(optionsB));
-      expect(optionsA.hashCode, equals(optionsB.hashCode));
     });
 
     test('Objects are not equal', () {
@@ -74,7 +73,42 @@ void main() {
       );
 
       expect(optionsA, isNot(optionsB));
-      expect(optionsA.hashCode, isNot(optionsB.hashCode));
     });
+  });
+
+  test('Hashcode', () {
+    const options = ApptiveGridOptions(
+      environment: ApptiveGridEnvironment.alpha,
+      authenticationOptions:
+          ApptiveGridAuthenticationOptions(autoAuthenticate: true),
+    );
+
+    expect(
+      options.hashCode,
+      equals(
+        Object.hash(
+          options.environment,
+          options.authenticationOptions,
+          options.cache,
+          options.attachmentConfigurations,
+          options.formWidgetConfigurations,
+        ),
+      ),
+    );
+  });
+
+  test('toString()', () {
+    const options = ApptiveGridOptions(
+      environment: ApptiveGridEnvironment.alpha,
+      authenticationOptions:
+          ApptiveGridAuthenticationOptions(autoAuthenticate: true),
+    );
+
+    expect(
+      options.toString(),
+      equals(
+        'ApptiveGridOptions(environment: ApptiveGridEnvironment.alpha, authenticationOptions: ApptiveGridAuthenticationOptions(autoAuthenticate: true, redirectScheme: null, apiKey: null, persistCredentials: false), cache: null, attachmentConfigurations: {}, formWidgetConfigurations: [])',
+      ),
+    );
   });
 }

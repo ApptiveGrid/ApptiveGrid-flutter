@@ -31,7 +31,7 @@ abstract class ApptiveGridFilter {
 
   @override
   String toString() {
-    return toJson().toString();
+    return '$runtimeType(${toJson().toString()})';
   }
 }
 
@@ -80,7 +80,7 @@ abstract class _FilterComposition extends ApptiveGridFilter {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(operator, conditions);
 }
 
 /// Creates a Filter that checks that all [conditions] are true
@@ -116,5 +116,5 @@ class NotFilter extends ApptiveGridFilter {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => filter.hashCode;
 }

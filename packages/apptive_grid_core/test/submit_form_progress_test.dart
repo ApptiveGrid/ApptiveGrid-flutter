@@ -98,7 +98,20 @@ void main() {
       );
 
       expect(event1, equals(event2));
-      expect(event1.hashCode, equals(event2.hashCode));
+    });
+
+    test('Hashcode', () {
+      final event1 = UploadFormProgressEvent(
+        FormData(
+          id: 'id',
+          name: 'form',
+          components: [],
+          fields: [],
+          links: {},
+        ),
+      );
+
+      expect(event1.hashCode, equals(event1.form.hashCode));
     });
   });
 

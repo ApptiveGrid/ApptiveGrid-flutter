@@ -130,8 +130,7 @@ void main() {
         formData.components![0].data.runtimeType,
         equals(StringDataEntity),
       );
-      // ignore: deprecated_member_use_from_same_package
-      expect(formData.actions!.length, equals(1));
+      expect(formData.links[ApptiveLinkType.submit], isNotNull);
     });
 
     test('DirectUri checks authentication if call throws 401', () async {
@@ -473,68 +472,6 @@ void main() {
   });
 
   group('submitForm', () {
-    test('Deprecated performAction still works', () async {
-      final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
-      const property = 'Checkbox';
-      const id = 'id';
-      final schema = {
-        'type': 'object',
-        'properties': {
-          id: {'type': 'boolean'},
-        },
-        'required': []
-      };
-      final component = FormComponent<BooleanDataEntity>(
-        property: property,
-        data: BooleanDataEntity(true),
-        options: FormComponentOptions.fromJson({}),
-        required: false,
-        field: GridField(
-          id: id,
-          name: property,
-          type: DataType.checkbox,
-          schema: schema,
-        ),
-      );
-
-      final formData = FormData(
-        id: 'formId',
-        name: 'Name',
-        title: 'Title',
-        components: [component],
-        links: {ApptiveLinkType.submit: action},
-        fields: [component.field],
-      );
-
-      final request = Request(
-        'POST',
-        Uri.parse('${ApptiveGridEnvironment.production.url}/uri}'),
-      );
-      request.body = jsonEncode(jsonEncode(formData.toRequestObject()));
-
-      late BaseRequest calledRequest;
-
-      when(() => httpClient.send(any())).thenAnswer((realInvocation) async {
-        calledRequest = realInvocation.positionalArguments[0];
-        return StreamedResponse(Stream.value([]), 200);
-      });
-
-      final response =
-          // ignore: deprecated_member_use_from_same_package
-          await apptiveGridClient.performAction(action.asFormAction, formData);
-
-      expect(response?.statusCode, equals(200));
-      expect(calledRequest.method, equals(action.method));
-      expect(
-        calledRequest.url.path,
-        Uri.parse('${ApptiveGridEnvironment.production.url}${action.uri}').path,
-      );
-      expect(
-        calledRequest.headers[HttpHeaders.contentTypeHeader],
-        ContentType.json,
-      );
-    });
-
     test('Successful', () async {
       final action = ApptiveLink(uri: Uri.parse('/uri'), method: 'POST');
       const property = 'Checkbox';
@@ -677,14 +614,6 @@ void main() {
           ).thenAnswer((invocation) async {
             return Response('{}', 200);
           });
-        });
-
-        test('Create Attachment Uri, throws Error', () {
-          expect(
-            // ignore: deprecated_member_use_from_same_package
-            () => client.createAttachmentUrl('Name'),
-            throwsA(isInstanceOf<ArgumentError>()),
-          );
         });
 
         test('Upload Attachment, throws Error', () {
@@ -834,18 +763,6 @@ void main() {
           ).thenAnswer((invocation) async {
             return Response('{}', 200);
           });
-        });
-
-        test('Creates Attachment Uri based on config', () {
-          const name = 'FileName';
-          expect(
-            // ignore: deprecated_member_use_from_same_package
-            client.createAttachmentUrl(name).toString(),
-            predicate<String>(
-              (uriString) =>
-                  uriString.startsWith('attachmentEndpoint.com/$name?'),
-            ),
-          );
         });
 
         group('Upload Data', () {
@@ -1817,631 +1734,6 @@ void main() {
     });
   });
 
-  group('get Forms', () {
-    const userId = 'userId';
-    const spaceId = 'spaceId';
-    const gridId = 'gridId';
-    const form0 = 'formId0';
-    const form1 = 'formId1';
-    // ignore: deprecated_member_use_from_same_package
-    final gridUri = GridUri(user: userId, space: spaceId, grid: gridId);
-    final rawResponse = [
-      '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
-      '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1',
-    ];
-    test('Success', () async {
-      final response = Response(json.encode(rawResponse), 200);
-
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => response);
-
-      // ignore: deprecated_member_use_from_same_package
-      final forms = await apptiveGridClient.getForms(gridUri: gridUri);
-
-      expect(forms.length, equals(2));
-      expect(
-        forms[0].uri.toString(),
-        '/api/users/id/spaces/spaceId/grids/gridId/forms/$form0',
-      );
-      expect(
-        forms[1].uri.toString(),
-        '/api/users/id/spaces/spaceId/grids/gridId/forms/$form1',
-      );
-    });
-
-    test('400 Status throws Response', () async {
-      final response = Response(json.encode(rawResponse), 400);
-
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/forms',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => response);
-
-      expect(
-        // ignore: deprecated_member_use_from_same_package
-        () => apptiveGridClient.getForms(gridUri: gridUri),
-        throwsA(isInstanceOf<Response>()),
-      );
-    });
-  });
-
-  group('GridViews', () {
-    const userId = 'userId';
-    const spaceId = 'spaceId';
-    const gridId = 'gridId';
-    const view0 = 'viewId0';
-    const view1 = 'viewId1';
-    // ignore: deprecated_member_use_from_same_package
-    final gridUri = GridUri(user: userId, space: spaceId, grid: gridId);
-    final rawResponse = [
-      '/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view0',
-      '/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view1',
-    ];
-    test('Success', () async {
-      final response = Response(json.encode(rawResponse), 200);
-
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => response);
-
-      // ignore: deprecated_member_use_from_same_package
-      final views = await apptiveGridClient.getGridViews(gridUri: gridUri);
-
-      expect(views.length, equals(2));
-      expect(
-        views[0].uri.toString(),
-        '/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view0',
-      );
-      expect(
-        views[1].uri.toString(),
-        '/api/users/$userId/spaces/$spaceId/grids/$gridId/views/$view1',
-      );
-    });
-
-    test('400 Status throws Response', () async {
-      final response = Response(json.encode(rawResponse), 400);
-
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/views',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => response);
-
-      expect(
-        // ignore: deprecated_member_use_from_same_package
-        () => apptiveGridClient.getGridViews(gridUri: gridUri),
-        throwsA(isInstanceOf<Response>()),
-      );
-    });
-
-    test('GridView parses Filters', () async {
-      final gridViewResponse = {
-        'fieldNames': ['First Name', 'Last Name', 'imgUrl'],
-        'entities': [
-          {
-            'fields': [
-              'Adam',
-              'Riese',
-              'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
-            ],
-            '_id': '60c9c997f8eeb8636c8140c4'
-          }
-        ],
-        'filter': {
-          '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
-        },
-        'fields': [
-          {
-            "type": {
-              "name": "string",
-              "componentTypes": ["textfield"]
-            },
-            "key": null,
-            "name": "String",
-            "schema": {"type": "string"},
-            "id": "6282104004bd30efc49b7f17",
-            "_links": <String, dynamic>{}
-          },
-          {
-            "type": {
-              "name": "string",
-              "componentTypes": ["textfield"]
-            },
-            "key": null,
-            "name": "String",
-            "schema": {"type": "string"},
-            "id": "6282104004bd30efc49b7f17",
-            "_links": <String, dynamic>{}
-          },
-          {
-            "type": {
-              "name": "string",
-              "componentTypes": ["textfield"]
-            },
-            "key": null,
-            "name": "String",
-            "schema": {"type": "string"},
-            "id": "6282104004bd30efc49b7f17",
-            "_links": <String, dynamic>{}
-          },
-        ],
-        'name': 'New grid view',
-        'id': 'gridId',
-        '_links': {
-          "addLink": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/AddLink",
-            "method": "post"
-          },
-          "forms": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
-            "method": "get"
-          },
-          "updateFieldType": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnTypeChange",
-            "method": "post"
-          },
-          "removeField": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRemove",
-            "method": "post"
-          },
-          "addEntity": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
-            "method": "post"
-          },
-          "views": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
-            "method": "get"
-          },
-          "addView": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
-            "method": "post"
-          },
-          "self": {
-            "href":
-                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-            "method": "get"
-          },
-          "updateFieldKey": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnKeyChange",
-            "method": "post"
-          },
-          "query": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/query",
-            "method": "get"
-          },
-          "entities": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
-            "method": "get"
-          },
-          "updates": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/updates",
-            "method": "get"
-          },
-          "schema": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/schema",
-            "method": "get"
-          },
-          "updateFieldName": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRename",
-            "method": "post"
-          },
-          "addForm": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
-            "method": "post"
-          },
-          "addField": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnAdd",
-            "method": "post"
-          },
-          "rename": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/Rename",
-            "method": "post"
-          },
-          "remove": {
-            "href":
-                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-            "method": "delete"
-          }
-        },
-      };
-
-      final response = Response(json.encode(gridViewResponse), 200);
-
-      when(
-        () => httpClient.get(
-          any(),
-          headers: any(
-            named: 'headers',
-          ),
-        ),
-      ).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments.first as Uri;
-        if (uri.path.endsWith('/grids/$gridId')) {
-          return response;
-        } else if (uri.path.endsWith('entities')) {
-          return Response(json.encode(gridViewResponse['entities']), 200);
-        } else {
-          throw Exception();
-        }
-      });
-
-      final gridView = await apptiveGridClient.loadGrid(
-        uri: Uri.parse('/api/users/$userId/spaces/$spaceId/grids/$gridId'),
-      );
-
-      expect(gridView.filter, isNot(null));
-      expect(gridView.fields!.length, equals(3));
-      expect(gridView.rows!.length, equals(1));
-    });
-
-    test('GridView sorting gets applied in request', () async {
-      final rawGridViewResponse = {
-        'fieldNames': ['First Name', 'Last Name', 'imgUrl'],
-        'entities': [
-          {
-            'fields': [
-              'Adam',
-              'Riese',
-              'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
-            ],
-            '_id': '60c9c997f8eeb8636c8140c4'
-          }
-        ],
-        'filter': {
-          '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
-        },
-        'schema': {
-          'type': 'object',
-          'properties': {
-            'fields': {
-              'type': 'array',
-              'items': [
-                {'type': 'string'},
-                {'type': 'string'},
-                {'type': 'string'}
-              ]
-            },
-            '_id': {'type': 'string'}
-          }
-        },
-        'name': 'New grid view',
-        'id': 'gridId',
-        '_links': {
-          "addLink": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/AddLink",
-            "method": "post"
-          },
-          "forms": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
-            "method": "get"
-          },
-          "updateFieldType": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnTypeChange",
-            "method": "post"
-          },
-          "removeField": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRemove",
-            "method": "post"
-          },
-          "addEntity": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
-            "method": "post"
-          },
-          "views": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
-            "method": "get"
-          },
-          "addView": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
-            "method": "post"
-          },
-          "self": {
-            "href":
-                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-            "method": "get"
-          },
-          "updateFieldKey": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnKeyChange",
-            "method": "post"
-          },
-          "query": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/query",
-            "method": "get"
-          },
-          "entities": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
-            "method": "get"
-          },
-          "updates": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/updates",
-            "method": "get"
-          },
-          "schema": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/schema",
-            "method": "get"
-          },
-          "updateFieldName": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRename",
-            "method": "post"
-          },
-          "addForm": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
-            "method": "post"
-          },
-          "addField": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnAdd",
-            "method": "post"
-          },
-          "rename": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/Rename",
-            "method": "post"
-          },
-          "remove": {
-            "href":
-                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-            "method": "delete"
-          }
-        },
-      };
-
-      final rawGridViewEntitiesResponse = [
-        {
-          'fields': [
-            'Adam',
-            'Riese',
-            'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
-          ],
-          '_id': '60c9c997f8eeb8636c8140c4'
-        }
-      ];
-
-      final gridViewResponse = Response(json.encode(rawGridViewResponse), 200);
-      final gridViewEntitiesResponse =
-          Response(json.encode(rawGridViewEntitiesResponse), 200);
-
-      when(
-        () => httpClient.get(
-          any(),
-          headers: any(
-            named: 'headers',
-          ),
-        ),
-      ).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments.first as Uri;
-        if (uri.path.endsWith('/grids/$gridId')) {
-          return gridViewResponse;
-        } else if (uri.path.endsWith('entities')) {
-          return gridViewEntitiesResponse;
-        } else {
-          throw Exception();
-        }
-      });
-
-      await apptiveGridClient.loadGrid(
-        sorting: [
-          const ApptiveGridSorting(
-            fieldId: '9fqx8om03flgh8d4m1l953x29',
-            order: SortOrder.desc,
-          )
-        ],
-        uri: Uri.parse('/api/users/$userId/spaces/$spaceId/grids/$gridId'),
-      );
-
-      verify(
-        () => httpClient.get(
-          any(
-            that: predicate<Uri>(
-              (uri) =>
-                  uri.path.endsWith('/entities') &&
-                  uri.queryParameters.containsKey('sorting'),
-            ),
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).called(1);
-    });
-
-    test('GridView filters get applied in request', () async {
-      final rawGridViewResponse = {
-        'fieldNames': ['First Name', 'Last Name', 'imgUrl'],
-        'entities': [
-          {
-            'fields': [
-              'Adam',
-              'Riese',
-              'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
-            ],
-            '_id': '60c9c997f8eeb8636c8140c4'
-          }
-        ],
-        'filter': {
-          '9fqx8om03flgh8d4m1l953x29': {'\$substring': 'a'}
-        },
-        'schema': {
-          'type': 'object',
-          'properties': {
-            'fields': {
-              'type': 'array',
-              'items': [
-                {'type': 'string'},
-                {'type': 'string'},
-                {'type': 'string'}
-              ]
-            },
-            '_id': {'type': 'string'}
-          }
-        },
-        'name': 'New grid view',
-        'id': 'gridId',
-        '_links': {
-          "addLink": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/AddLink",
-            "method": "post"
-          },
-          "forms": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
-            "method": "get"
-          },
-          "updateFieldType": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnTypeChange",
-            "method": "post"
-          },
-          "removeField": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRemove",
-            "method": "post"
-          },
-          "addEntity": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
-            "method": "post"
-          },
-          "views": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
-            "method": "get"
-          },
-          "addView": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
-            "method": "post"
-          },
-          "self": {
-            "href":
-                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-            "method": "get"
-          },
-          "updateFieldKey": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnKeyChange",
-            "method": "post"
-          },
-          "query": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/query",
-            "method": "get"
-          },
-          "entities": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
-            "method": "get"
-          },
-          "updates": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/updates",
-            "method": "get"
-          },
-          "schema": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/schema",
-            "method": "get"
-          },
-          "updateFieldName": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRename",
-            "method": "post"
-          },
-          "addForm": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
-            "method": "post"
-          },
-          "addField": {
-            "href":
-                "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnAdd",
-            "method": "post"
-          },
-          "rename": {
-            "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/Rename",
-            "method": "post"
-          },
-          "remove": {
-            "href":
-                "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-            "method": "delete"
-          }
-        },
-      };
-
-      final rawGridViewEntitiesResponse = [
-        {
-          'fields': [
-            'Adam',
-            'Riese',
-            'https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg/600px-W._S._Gilbert_-_Alice_B._Woodward_-_The_Pinafore_Picture_Book_-_Frontispiece.jpg'
-          ],
-          '_id': '60c9c997f8eeb8636c8140c4'
-        }
-      ];
-
-      final gridViewResponse = Response(json.encode(rawGridViewResponse), 200);
-      final gridViewEntitiesResponse =
-          Response(json.encode(rawGridViewEntitiesResponse), 200);
-
-      when(
-        () => httpClient.get(
-          any(),
-          headers: any(
-            named: 'headers',
-          ),
-        ),
-      ).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments.first as Uri;
-        if (uri.path.endsWith('/grids/$gridId')) {
-          return gridViewResponse;
-        } else if (uri.path.endsWith('entities')) {
-          return gridViewEntitiesResponse;
-        } else {
-          throw Exception();
-        }
-      });
-
-      await apptiveGridClient.loadGrid(
-        filter: SubstringFilter(
-          fieldId: '9fqx8om03flgh8d4m1l953x29',
-          value: StringDataEntity('a'),
-        ),
-        uri: Uri.parse('/api/users/$userId/spaces/$spaceId/grids/$gridId'),
-      );
-
-      verify(
-        () => httpClient.get(
-          any(
-            that: predicate<Uri>(
-              (uri) =>
-                  uri.path ==
-                      '/api/users/$userId/spaces/$spaceId/grids/$gridId/entities' &&
-                  //uri.queryParameters['viewId'] == view0 &&
-                  uri.queryParameters.containsKey('filter'),
-            ),
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).called(1);
-    });
-  });
-
   group('Caching Form Actions', () {
     final httpClient = MockHttpClient();
 
@@ -2940,6 +2232,55 @@ void main() {
               (testUri) =>
                   testUri.path == uri.path &&
                   testUri.queryParameters['layout'] == layout.queryParameter,
+            ),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
+    });
+
+    test('Filter and Sorting', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
+
+      final response = Response(
+        '{'
+        '"items": []}',
+        200,
+      );
+      final filter =
+          EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'));
+      const sorting =
+          ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc);
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        return response;
+      });
+
+      await apptiveGridClient.loadEntities(
+        uri: uri,
+        sorting: [sorting],
+        filter: filter,
+      );
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters.containsKey('filter') &&
+                  testUri.queryParameters.containsKey('sorting'),
             ),
           ),
           headers: any(named: 'headers'),

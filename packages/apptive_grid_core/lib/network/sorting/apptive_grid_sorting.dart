@@ -38,7 +38,7 @@ class ApptiveGridSorting {
 
   @override
   String toString() {
-    return toRequestObject().toString();
+    return '$runtimeType(${toRequestObject().toString()})';
   }
 
   @override
@@ -49,7 +49,7 @@ class ApptiveGridSorting {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(fieldId, order);
 
   /// Creates a new Version of [ApptiveGridSorting] changing the values of this with [fieldId] and [order] if they are not null
   ApptiveGridSorting copyWith({String? fieldId, SortOrder? order}) {
@@ -98,7 +98,7 @@ class DistanceApptiveGridSorting extends ApptiveGridSorting {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(fieldId, order, location);
 
   @override
   DistanceApptiveGridSorting copyWith({
