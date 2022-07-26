@@ -16,6 +16,5 @@ void main() {
     );
 
     expect(a, equals(b));
-    expect(a.hashCode, equals(b.hashCode));
   });
 }

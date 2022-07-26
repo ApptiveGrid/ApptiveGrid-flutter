@@ -39,7 +39,7 @@ class ApptiveLink {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(uri, method);
 }
 
 /// A Map of Links

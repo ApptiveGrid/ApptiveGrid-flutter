@@ -67,7 +67,7 @@ class ApptiveGridOptions {
 
   @override
   String toString() {
-    return 'ApptiveGridOptions(environment: $environment, authenticationOptions: $authenticationOptions, cache: $cache, attachmentConfigurations: $attachmentConfigurations)';
+    return 'ApptiveGridOptions(environment: $environment, authenticationOptions: $authenticationOptions, cache: $cache, attachmentConfigurations: $attachmentConfigurations, formWidgetConfigurations: $formWidgetConfigurations)';
   }
 
   @override
@@ -76,11 +76,18 @@ class ApptiveGridOptions {
         other.environment == environment &&
         other.authenticationOptions == authenticationOptions &&
         other.cache == other.cache &&
-        mapEquals(other.attachmentConfigurations, attachmentConfigurations);
+        mapEquals(other.attachmentConfigurations, attachmentConfigurations) &&
+        listEquals(other.formWidgetConfigurations, formWidgetConfigurations);
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(
+        environment,
+        authenticationOptions,
+        cache,
+        attachmentConfigurations,
+        formWidgetConfigurations,
+      );
 }
 
 /// A Configuration for FormWidgets needed for certain [DataType]s with [apptive_grid_form](https://pub.dev/packages/apptive_grid_form)

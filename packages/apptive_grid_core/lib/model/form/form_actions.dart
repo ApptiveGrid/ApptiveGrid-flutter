@@ -38,5 +38,5 @@ class ActionItem {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(link, data);
 }

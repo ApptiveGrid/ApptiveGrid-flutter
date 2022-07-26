@@ -32,5 +32,5 @@ class GeolocationFormWidgetConfiguration extends FormWidgetConfiguration {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(placesApiKey, geocodingApiKey);
 }

@@ -63,5 +63,6 @@ class Attachment {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode =>
+      Object.hash(name, url, type, smallThumbnail, largeThumbnail);
 }

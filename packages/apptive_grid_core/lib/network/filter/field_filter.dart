@@ -49,7 +49,7 @@ abstract class _FieldFilter extends ApptiveGridFilter {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(operator, fieldId, value);
 }
 
 /// Filter to check for a Substring

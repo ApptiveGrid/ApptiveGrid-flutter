@@ -119,5 +119,14 @@ class FormData {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(
+        id,
+        name,
+        description,
+        title,
+        fields,
+        components,
+        attachmentActions,
+        links,
+      );
 }

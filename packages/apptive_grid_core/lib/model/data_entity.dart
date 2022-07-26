@@ -27,7 +27,7 @@ abstract class DataEntity<T, S> with FilterableMixin {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => value?.hashCode ?? null.hashCode;
 
   @override
   dynamic get filterValue => schemaValue;
@@ -189,7 +189,7 @@ class EnumDataEntity extends DataEntity<String, String> {
 
   @override
   String toString() {
-    return '$runtimeType(value: $value, values: $options)}';
+    return 'EnumDataEntity(value: $value, options: $options)';
   }
 
   @override
@@ -200,7 +200,7 @@ class EnumDataEntity extends DataEntity<String, String> {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(value, options);
 }
 
 /// [DataEntity] representing an enum like Object
@@ -229,7 +229,7 @@ class EnumCollectionDataEntity extends DataEntity<Set<String>, List<String>>
 
   @override
   String toString() {
-    return '$runtimeType(value: $value, values: $options)}';
+    return 'EnumCollectionDataEntity(value: $value, options: $options)';
   }
 
   @override
@@ -240,7 +240,7 @@ class EnumCollectionDataEntity extends DataEntity<Set<String>, List<String>>
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(value, options);
 }
 
 /// [DataEntity] representing an Object CrossReferencing to a different Grid
@@ -293,7 +293,7 @@ class CrossReferenceDataEntity extends DataEntity<String, dynamic> {
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(value, entityUri, gridUri);
 }
 
 /// [DataEntity] representing an array of Attachments
@@ -335,7 +335,7 @@ class AttachmentDataEntity extends DataEntity<List<Attachment>, dynamic>
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => value?.hashCode ?? null.hashCode;
 }
 
 /// [DataEntity] representing [Geolocation]s
@@ -414,7 +414,7 @@ class MultiCrossReferenceDataEntity
   }
 
   @override
-  int get hashCode => toString().hashCode;
+  int get hashCode => Object.hash(value, gridUri);
 }
 
 /// [DataEntity] representing [CreatedBy]s
@@ -470,7 +470,7 @@ class CurrencyDataEntity extends DataEntity<double, double> {
   final String currency;
 
   @override
-  String toString() => 'CurrencyDataEntity($value, currency: $currency)';
+  String toString() => 'CurrencyDataEntity($value $currency)';
 
   @override
   bool operator ==(Object other) {
@@ -480,7 +480,7 @@ class CurrencyDataEntity extends DataEntity<double, double> {
   }
 
   @override
-  int get hashCode => super.hashCode + currency.hashCode;
+  int get hashCode => Object.hash(value, currency);
 }
 
 /// [DataEntity] to representing a [Uri]
