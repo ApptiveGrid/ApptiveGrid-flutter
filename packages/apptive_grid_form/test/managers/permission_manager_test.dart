@@ -1,4 +1,4 @@
-import 'package:apptive_grid_form/managers/permission_manager.dart';
+import 'package:apptive_grid_form/src/managers/permission_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';

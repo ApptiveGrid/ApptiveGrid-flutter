@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_form/widgets/attachment/thumbnail.dart';
+import 'package:apptive_grid_form/src/widgets/attachment/thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';

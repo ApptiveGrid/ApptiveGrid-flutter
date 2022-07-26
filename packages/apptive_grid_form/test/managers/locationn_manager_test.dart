@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
-import 'package:apptive_grid_form/google_maps_webservice/google_maps_webservice.dart';
-import 'package:apptive_grid_form/managers/location_manager.dart';
+import 'package:apptive_grid_form/src/google_maps_webservice/google_maps_webservice.dart';
+import 'package:apptive_grid_form/src/managers/location_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';

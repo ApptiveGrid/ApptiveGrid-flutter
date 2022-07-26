@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:alchemist/alchemist.dart';
-import 'package:apptive_grid_theme/apptive_grid_theme.dart';
+import 'package:apptive_grid_theme/src/apptive_grid_theme.dart';
 import 'package:flutter/services.dart';
 
 import 'font_util.dart';

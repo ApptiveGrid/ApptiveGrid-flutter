@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
-import 'package:apptive_grid_form/widgets/apptive_grid_form_widgets.dart';
+import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
