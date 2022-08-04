@@ -67,8 +67,10 @@ class DeleteAccount extends StatefulWidget {
 
   /// A [TextButton] that on tap will show a confirmation dialog to delete the user's account
   /// [onAccountDeleted] will be called if the user's account was deleted successfully
+  /// [style] merges with the default text style with the error color. This will override the color if inherit is set to false
   factory DeleteAccount.textButton({
     required void Function() onAccountDeleted,
+    TextStyle? style,
   }) {
     final key = GlobalKey<DeleteAccountState>();
     return DeleteAccount._(
@@ -82,7 +84,7 @@ class DeleteAccount extends StatefulWidget {
               ApptiveGridUserManagementLocalization.of(context)!.deleteAccount,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.error,
-              ),
+              ).merge(style),
             ),
           );
         },
