@@ -12,21 +12,38 @@ import '../infrastructure/test_app.dart';
 void main() {
   final client = MockApptiveGridUserManagementClient();
 
+  const errorColor = Color(0xffd32f2f);
+
   setUp(() {
     when(() => client.deleteAccount()).thenAnswer((_) async => true);
   });
 
   testWidgets('Delete Account', (tester) async {
     final completer = Completer<bool>();
+    const style = TextStyle(fontSize: 24);
     final target = StubUserManagement(
       client: client,
       child: DeleteAccount.textButton(
         onAccountDeleted: () => completer.complete(true),
+        style: style,
       ),
     );
 
     await tester.pumpWidget(target);
     await tester.pumpAndSettle();
+
+    expect(find.byType(TextButton), findsOneWidget);
+    final button =
+        find.byType(TextButton).evaluate().first.widget as TextButton;
+    final buttonLabel = button.child as Text;
+    expect(
+      buttonLabel.style?.fontSize,
+      style.fontSize,
+    );
+    expect(
+      buttonLabel.style?.color,
+      errorColor,
+    );
 
     await tester.tap(find.byType(DeleteAccount));
     await tester.pumpAndSettle();
@@ -43,15 +60,29 @@ void main() {
 
   testWidgets('Delete Account List Tile', (tester) async {
     final completer = Completer<bool>();
+    const style = TextStyle(fontSize: 24);
     final target = StubUserManagement(
       client: client,
       child: DeleteAccount.listTile(
         onAccountDeleted: () => completer.complete(true),
+        style: style,
       ),
     );
 
     await tester.pumpWidget(target);
     await tester.pumpAndSettle();
+
+    expect(find.byType(ListTile), findsOneWidget);
+    final listTile = find.byType(ListTile).evaluate().first.widget as ListTile;
+    final listTileTitle = listTile.title as Text;
+    expect(
+      listTileTitle.style?.fontSize,
+      style.fontSize,
+    );
+    expect(
+      listTileTitle.style?.color,
+      errorColor,
+    );
 
     await tester.tap(find.byType(DeleteAccount));
     await tester.pumpAndSettle();
@@ -72,12 +103,14 @@ void main() {
       client: client,
       child: DeleteAccount(
         onAccountDeleted: () => completer.complete(true),
-        child: const Text('Custom Widget'),
+        child: const Center(child: Text('Custom Widget')),
       ),
     );
 
     await tester.pumpWidget(target);
     await tester.pumpAndSettle();
+
+    expect(find.byType(Center), findsOneWidget);
 
     await tester.tap(
       find.descendant(
