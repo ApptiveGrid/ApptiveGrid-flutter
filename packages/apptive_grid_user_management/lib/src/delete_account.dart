@@ -21,6 +21,18 @@ class DeleteAccount extends StatefulWidget {
   factory DeleteAccount({
     required Widget child,
     required void Function() onAccountDeleted,
+  }) =>
+      DeleteAccount.withLabelAndColor(
+        builder: (_, __) => child,
+        onAccountDeleted: onAccountDeleted,
+      );
+
+  /// Wrap the widget returned by the [builder] in a Gesture Detector that on tap will show a confirmation dialog to delete the user's account
+  /// Note that any Pointer Events will be absorbed by this widget and custom gestures are not possible with child
+  /// [onAccountDeleted] will be called if the user's account was deleted successfully
+  factory DeleteAccount.withLabelAndColor({
+    required Widget Function(String deleteLabel, Color deleteColor) builder,
+    required void Function() onAccountDeleted,
   }) {
     final key = GlobalKey<DeleteAccountState>();
     return DeleteAccount._(
@@ -32,7 +44,13 @@ class DeleteAccount extends StatefulWidget {
             onTap: () {
               key.currentState?.showConfirmationDialog(context);
             },
-            child: AbsorbPointer(child: child),
+            child: AbsorbPointer(
+              child: builder(
+                ApptiveGridUserManagementLocalization.of(context)!
+                    .deleteAccount,
+                Theme.of(context).colorScheme.error,
+              ),
+            ),
           );
         },
       ),

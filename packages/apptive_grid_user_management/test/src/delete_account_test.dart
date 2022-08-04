@@ -131,6 +131,48 @@ void main() {
     expect(await completer.future, true);
   });
 
+  testWidgets('Delete Account with builder', (tester) async {
+    final completer = Completer<bool>();
+    final target = StubUserManagement(
+      client: client,
+      child: DeleteAccount.withLabelAndColor(
+        onAccountDeleted: () => completer.complete(true),
+        builder: (label, color) => Container(
+          color: color,
+          child: Text(label),
+        ),
+      ),
+    );
+
+    await tester.pumpWidget(target);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(Container), findsOneWidget);
+    expect(find.text('Delete Account'), findsOneWidget);
+    expect(
+      (find.byType(Container).evaluate().first.widget as Container).color,
+      errorColor,
+    );
+
+    await tester.tap(
+      find.descendant(
+        of: find.byType(DeleteAccount),
+        matching: find.byType(GestureDetector),
+      ),
+      warnIfMissed: false,
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsOneWidget);
+
+    await tester.tap(find.text('Delete'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsNothing);
+    verify(() => client.deleteAccount()).called(1);
+    expect(await completer.future, true);
+  });
+
   testWidgets('Delete Account shows Error', (tester) async {
     when(client.deleteAccount).thenAnswer((_) => Future.error('Error'));
     final target = StubUserManagement(
