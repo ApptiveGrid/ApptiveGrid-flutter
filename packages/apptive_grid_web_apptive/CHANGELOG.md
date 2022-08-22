@@ -1,11 +1,14 @@
-## 0.4.0
+## 0.1.0
+* Deprecate `ApptiveCall.gridViewUpdate` in favor of `ApptiveCall.virtualGridUpdate`
+
+## 0.0.4
 * Update apptive_grid_core to [0.12.0](https://pub.dev/packages/apptive_grid_core/changelog#0120)
 
-## 0.3.0
+## 0.0.3
 * Update apptive_grid_core Package to include breaking [Model Changes from Version 0.10.0](https://pub.dev/packages/apptive_grid_core/changelog#0100)
 * Updated example to use [apptive_grid_theme](https://pub.dev/packages/apptive_grid_theme)
 
-## 0.3.0-alpha.4
+## 0.0.3-alpha.4
 * Upgraded to dart 2.17
 
 ## 0.0.3-alpha.3

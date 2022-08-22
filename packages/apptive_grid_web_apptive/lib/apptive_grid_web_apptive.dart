@@ -54,7 +54,7 @@ class _ApptiveGridWebApptiveState extends State<ApptiveGridWebApptive> {
 
           try {
             final gridEvent = ApptiveGridEvent.fromJson(message.data);
-            if (gridEvent.call == ApptiveCall.gridViewUpdate) {
+            if (gridEvent.call == ApptiveCall.virtualGridUpdate) {
               setState(() {
                 _gridEvent = gridEvent;
               });

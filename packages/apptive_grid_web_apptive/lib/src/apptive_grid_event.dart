@@ -1,19 +1,20 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:collection/collection.dart';
 
 /// Calls that happen between ApptiveGrid and Apptives
 enum ApptiveCall {
-  /// Call when the visible GridView updated
-  gridViewUpdate,
-}
+  /// Call when the displayed virtualGrid updated
+  virtualGridUpdate(call: 'virtualGridUpdate');
 
-/// Parses [value] into the respective [ApptiveCall]
-ApptiveCall apptiveCallFromJson(String value) {
-  switch (value) {
-    case 'gridViewUpdate':
-      return ApptiveCall.gridViewUpdate;
-    default:
-      throw ArgumentError('Unknown ApptiveCall $value');
-  }
+  /// Creates a new ApptiveCall
+  const ApptiveCall({required this.call});
+
+  /// The Call event send by the Web App
+  final String call;
+
+  /// Call when the displayed virtualGrid updated
+  @Deprecated('Use ApptiveCall.virtualGridUpdate instead')
+  static const gridViewUpdate = ApptiveCall.virtualGridUpdate;
 }
 
 /// Events happening in the communication between ApptiveGrid and Apptives
@@ -26,9 +27,15 @@ class ApptiveGridEvent {
 
   /// Creates a [ApptiveGridEvent] from a [json] object
   factory ApptiveGridEvent.fromJson(dynamic json) {
-    if (json is Map && json.containsKey('call') && json.containsKey('grid')) {
+    if (json is Map &&
+        json.containsKey('call') &&
+        json.containsKey('grid') &&
+        ApptiveCall.values
+                .firstWhereOrNull((call) => call.call == json['call']) !=
+            null) {
       return ApptiveGridEvent(
-        call: apptiveCallFromJson(json['call']),
+        call:
+            ApptiveCall.values.firstWhere((call) => call.call == json['call']),
         grid: Grid.fromJson(json['grid']),
       );
     } else {
