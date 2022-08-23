@@ -1,3 +1,6 @@
+## 0.2.1
+* Fix AppBar Title Color
+
 ## 0.2.0
 * Migrate TextStyles to Material 3 Specification (Large, Medium and Small variants Display, Headline, Title, Body and Label)
 * Use default Styles for AppBar and Dialog instead of overriding

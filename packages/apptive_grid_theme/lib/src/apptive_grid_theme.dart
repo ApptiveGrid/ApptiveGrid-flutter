@@ -143,11 +143,9 @@ class ApptiveGridTheme {
         actionsIconTheme: const IconThemeData(
           color: ApptiveGridColors.apptiveGridBlue,
         ),
-        iconTheme: IconThemeData(
-          color: _withBrightness(
-            light: ApptiveGridColors.darkGrey,
-            dark: Colors.white,
-          ),
+        foregroundColor: _withBrightness(
+          light: ApptiveGridColors.darkGrey,
+          dark: Colors.white,
         ),
         systemOverlayStyle: _withBrightness(
           light: SystemUiOverlayStyle.dark,
