@@ -9,16 +9,18 @@ import 'package:universal_platform/universal_platform.dart';
 class ApptiveGridTheme {
   ApptiveGridTheme._({required this.brightness});
 
-  /// Initializes the theme with a given brightness
+  /// Initializes the theme with a given [brightness]
   static ThemeData create({Brightness brightness = Brightness.light}) {
     final theme = ApptiveGridTheme._(brightness: brightness);
     return theme._theme;
   }
 
+  /// Creates a light [ApptiveGridTheme]
   static ThemeData light() {
     return ApptiveGridTheme.create(brightness: Brightness.light);
   }
 
+  /// Creates a dark [ApptiveGridTheme]
   static ThemeData dark() {
     return ApptiveGridTheme.create(brightness: Brightness.dark);
   }
@@ -174,7 +176,9 @@ class ApptiveGridTheme {
         labelStyle:
             textTheme.labelMedium!.copyWith(fontWeight: FontWeight.bold),
         secondaryLabelStyle: textTheme.labelMedium!.copyWith(
-            color: colorScheme.onPrimary, fontWeight: FontWeight.bold),
+          color: colorScheme.onPrimary,
+          fontWeight: FontWeight.bold,
+        ),
         secondarySelectedColor: colorScheme.primary,
       ),
     );
