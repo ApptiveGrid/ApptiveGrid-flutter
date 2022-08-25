@@ -178,7 +178,6 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
             decoration: InputDecoration(
               icon: const Icon(Icons.search),
               hintText: localization.crossRefSearch,
-              border: InputBorder.none,
             ),
           ),
         ),

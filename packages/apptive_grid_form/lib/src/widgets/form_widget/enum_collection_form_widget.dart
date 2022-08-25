@@ -44,8 +44,6 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
           decoration: widget.component.baseDecoration.copyWith(
             errorText: formState.errorText,
             contentPadding: EdgeInsets.zero,
-            border: InputBorder.none,
-            errorBorder: InputBorder.none,
             isDense: true,
             filled: false,
           ),

@@ -76,7 +76,6 @@ class _UserDropdownButtonFormFieldState
               },
             ),
             hintText: localization.crossRefSearch,
-            border: InputBorder.none,
           ),
         ),
       ),

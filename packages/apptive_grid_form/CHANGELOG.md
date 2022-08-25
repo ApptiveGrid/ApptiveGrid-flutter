@@ -1,3 +1,6 @@
+## 0.12.4
+* Use Border of Theme for Input Textfields for Geolocation and References
+
 ## 0.12.3
 * Thumbnails for Attachments
 * Attachments are now using their path when being added
