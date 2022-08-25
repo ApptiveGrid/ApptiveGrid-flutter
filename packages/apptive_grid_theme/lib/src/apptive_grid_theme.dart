@@ -172,9 +172,9 @@ class ApptiveGridTheme {
       chipTheme: baseTheme.chipTheme.copyWith(
         selectedColor: colorScheme.primary,
         labelStyle:
-            textTheme.labelMedium!.copyWith(color: colorScheme.onPrimary),
-        secondaryLabelStyle:
-            textTheme.labelMedium!.copyWith(color: colorScheme.onPrimary),
+            textTheme.labelMedium!.copyWith(fontWeight: FontWeight.bold),
+        secondaryLabelStyle: textTheme.labelMedium!.copyWith(
+            color: colorScheme.onPrimary, fontWeight: FontWeight.bold),
         secondarySelectedColor: colorScheme.primary,
       ),
     );
