@@ -1,3 +1,8 @@
+## 0.3.0
+* Update Input Appearance
+### Breaking Changes
+* `ThemeData` is now accessed through `ApptiveGridTheme.create(brightness: Brightness)`, `ApptiveGridTheme.light()` or `ApptiveGridTheme.dark()`
+
 ## 0.2.1
 * Fix AppBar Title Color
 

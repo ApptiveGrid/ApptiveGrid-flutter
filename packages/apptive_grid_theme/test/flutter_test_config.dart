@@ -13,9 +13,8 @@ import 'font_util.dart';
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   final isRunningInCi = Platform.environment['CI'] == 'true';
 
-  final theme = ApptiveGridTheme(brightness: Brightness.light)
-      .theme()
-      .stripFontPackages();
+  final theme =
+      ApptiveGridTheme.create(brightness: Brightness.light).stripFontPackages();
 
   return AlchemistConfig.runWithConfig(
     config: AlchemistConfig(
