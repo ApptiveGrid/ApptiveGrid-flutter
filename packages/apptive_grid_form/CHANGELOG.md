@@ -1,5 +1,6 @@
 ## 0.12.4
 * Use Border of Theme for Input Textfields for Geolocation and References
+* Fix Hint Placement in User and (Multi)CrossReference Widget if no Item is selected
 
 ## 0.12.3
 * Thumbnails for Attachments

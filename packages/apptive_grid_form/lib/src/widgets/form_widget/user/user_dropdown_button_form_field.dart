@@ -62,7 +62,7 @@ class _UserDropdownButtonFormFieldState
     final localization = ApptiveGridLocalization.of(context)!;
     final searchBox = DropdownMenuItem<DataUser>(
       enabled: false,
-      value: null,
+      value: DataUser(displayValue: 'SEARCH', uri: Uri()),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: TextField(
@@ -100,6 +100,9 @@ class _UserDropdownButtonFormFieldState
   }
 
   List<Widget> _selectedItems(BuildContext context) {
+    if (widget.component.data.value == null) {
+      return [];
+    }
     final localization = ApptiveGridLocalization.of(context)!;
 
     final pleaseSelect = Text(localization.selectEntry);
