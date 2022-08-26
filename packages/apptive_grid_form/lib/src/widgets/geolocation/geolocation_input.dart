@@ -94,6 +94,7 @@ class _GeolocationInputState extends State<GeolocationInput> {
             textFieldConfiguration: TextFieldConfiguration(
               controller: _locationBoxController,
               decoration: InputDecoration(
+                isDense: true,
                 prefixIcon: Icon(
                   Icons.search,
                   color: Theme.of(context).textTheme.headline1!.color,

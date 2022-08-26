@@ -182,12 +182,16 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
         enabled: false,
         value: 'SEARCH',
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.only(bottom: 8),
           child: TextField(
             controller: _filterController,
             decoration: InputDecoration(
-              icon: const Icon(Icons.search),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Theme.of(context).textTheme.headline1?.color,
+              ),
               hintText: localization.crossRefSearch,
+              isDense: true,
             ),
           ),
         ),
