@@ -120,23 +120,23 @@ class ApptiveGridTheme {
       inputDecorationTheme: baseTheme.inputDecorationTheme.copyWith(
         filled: true,
         fillColor: colorScheme.surface,
-        border: UnderlineInputBorder(
+        border: OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(8),
         ),
-        focusedBorder: UnderlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: colorScheme.primary,
           ),
           borderRadius: BorderRadius.circular(8),
         ),
-        errorBorder: UnderlineInputBorder(
+        errorBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: colorScheme.error,
           ),
           borderRadius: BorderRadius.circular(8),
         ),
-        focusedErrorBorder: UnderlineInputBorder(
+        focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: colorScheme.error,
           ),
