@@ -7,14 +7,29 @@ import 'package:universal_platform/universal_platform.dart';
 ///
 /// A theme for all colors and fonts used in ApptiveGrid apps
 class ApptiveGridTheme {
-  /// Initializes the theme with a give brightness
-  ApptiveGridTheme({required this.brightness});
+  ApptiveGridTheme._({required this.brightness});
+
+  /// Initializes the theme with a given [brightness]
+  static ThemeData create({Brightness brightness = Brightness.light}) {
+    final theme = ApptiveGridTheme._(brightness: brightness);
+    return theme._theme;
+  }
+
+  /// Creates a light [ApptiveGridTheme]
+  static ThemeData light() {
+    return ApptiveGridTheme.create(brightness: Brightness.light);
+  }
+
+  /// Creates a dark [ApptiveGridTheme]
+  static ThemeData dark() {
+    return ApptiveGridTheme.create(brightness: Brightness.dark);
+  }
 
   /// The brightness of the theme
   final Brightness brightness;
 
   /// Creates the theme
-  ThemeData theme() {
+  ThemeData get _theme {
     late final Color darkWindowBackground;
     if (UniversalPlatform.isIOS) {
       darkWindowBackground = Colors.black;
@@ -35,24 +50,29 @@ class ApptiveGridTheme {
       shape: MaterialStateProperty.all(buttonShape),
     );
 
+    final colorScheme = baseTheme.colorScheme.copyWith(
+      primary: ApptiveGridColors.apptiveGridBlue,
+      secondary: ApptiveGridColors.apptiveGridBlue,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
+      background: windowBackground,
+    );
     return baseTheme.copyWith(
-      primaryColor: ApptiveGridColors.apptiveGridBlue,
-      indicatorColor: ApptiveGridColors.apptiveGridBlue,
-      colorScheme: baseTheme.colorScheme.copyWith(
-        primary: ApptiveGridColors.apptiveGridBlue,
-        secondary: ApptiveGridColors.apptiveGridBlue,
-      ),
-      toggleableActiveColor: ApptiveGridColors.apptiveGridBlue,
+      primaryColor: colorScheme.primary,
+      indicatorColor: colorScheme.primary,
+      colorScheme: colorScheme,
+      toggleableActiveColor: colorScheme.primary,
       textSelectionTheme: baseTheme.textSelectionTheme.copyWith(
-        selectionHandleColor: ApptiveGridColors.apptiveGridBlue,
-        selectionColor: ApptiveGridColors.apptiveGridBlue.withOpacity(0.4),
+        selectionHandleColor: colorScheme.primary,
+        selectionColor: colorScheme.primary.withOpacity(0.4),
       ),
       buttonTheme: baseTheme.buttonTheme.copyWith(
-        buttonColor: ApptiveGridColors.apptiveGridBlue,
+        buttonColor: colorScheme.primary,
         textTheme: ButtonTextTheme.primary,
       ),
       floatingActionButtonTheme: baseTheme.floatingActionButtonTheme.copyWith(
-        foregroundColor: Colors.white,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: baseButtonStyle.copyWith(
@@ -60,7 +80,7 @@ class ApptiveGridTheme {
             if (states.contains(MaterialState.disabled)) {
               return ApptiveGridColors.lightGrey;
             } else {
-              return Colors.white;
+              return colorScheme.onPrimary;
             }
           }),
           backgroundColor:
@@ -73,7 +93,7 @@ class ApptiveGridTheme {
             if (states.contains(MaterialState.disabled)) {
               return ApptiveGridColors.lightGrey;
             } else {
-              return ApptiveGridColors.apptiveGridBlue;
+              return colorScheme.primary;
             }
           }),
           side: MaterialStateProperty.resolveWith((states) {
@@ -91,7 +111,7 @@ class ApptiveGridTheme {
       ),
       hintColor: ApptiveGridColors.lightGrey.withOpacity(0.8),
       tabBarTheme: baseTheme.tabBarTheme.copyWith(
-        labelColor: ApptiveGridColors.apptiveGridBlue,
+        labelColor: colorScheme.primary,
         unselectedLabelColor: _withBrightness(
           light: ApptiveGridColors.lightGrey,
           dark: Colors.white54,
@@ -99,27 +119,26 @@ class ApptiveGridTheme {
       ),
       inputDecorationTheme: baseTheme.inputDecorationTheme.copyWith(
         filled: true,
+        fillColor: colorScheme.surface,
         border: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: ApptiveGridColors.apptiveGridBlue,
-          ),
+          borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(8),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: ApptiveGridColors.apptiveGridBlue,
+          borderSide: BorderSide(
+            color: colorScheme.primary,
           ),
           borderRadius: BorderRadius.circular(8),
         ),
         errorBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: baseTheme.errorColor,
+            color: colorScheme.error,
           ),
           borderRadius: BorderRadius.circular(8),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: baseTheme.errorColor,
+            color: colorScheme.error,
           ),
           borderRadius: BorderRadius.circular(8),
         ),
@@ -140,8 +159,8 @@ class ApptiveGridTheme {
         color: Colors.transparent,
         elevation: 0,
         centerTitle: false,
-        actionsIconTheme: const IconThemeData(
-          color: ApptiveGridColors.apptiveGridBlue,
+        actionsIconTheme: IconThemeData(
+          color: colorScheme.primary,
         ),
         foregroundColor: _withBrightness(
           light: ApptiveGridColors.darkGrey,
@@ -153,10 +172,14 @@ class ApptiveGridTheme {
         ),
       ),
       chipTheme: baseTheme.chipTheme.copyWith(
-        selectedColor: ApptiveGridColors.apptiveGridBlue,
-        secondaryLabelStyle: baseTheme.chipTheme.secondaryLabelStyle
-            ?.copyWith(color: Colors.white),
-        secondarySelectedColor: ApptiveGridColors.apptiveGridBlue,
+        selectedColor: colorScheme.primary,
+        labelStyle:
+            textTheme.labelMedium!.copyWith(fontWeight: FontWeight.bold),
+        secondaryLabelStyle: textTheme.labelMedium!.copyWith(
+          color: colorScheme.onPrimary,
+          fontWeight: FontWeight.bold,
+        ),
+        secondarySelectedColor: colorScheme.primary,
       ),
     );
   }

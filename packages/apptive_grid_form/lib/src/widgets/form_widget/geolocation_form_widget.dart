@@ -86,13 +86,15 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
               contentPadding: EdgeInsets.zero,
               border: InputBorder.none,
               errorBorder: InputBorder.none,
-              isDense: true,
               filled: false,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const SizedBox(
+                  height: 4,
+                ),
                 GeolocationInput(
                   location: widget.component.data.value,
                   onLocationChanged: (newLocation) {
@@ -102,17 +104,20 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
                     );
                   },
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 AspectRatio(
                   aspectRatio: 3 / 2,
-                  child: GeolocationMap(
-                    location: widget.component.data.value,
-                    onLocationChanged: (newLocation) {
-                      _updateLocation(
-                        formState: formState,
-                        location: newLocation,
-                      );
-                    },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: GeolocationMap(
+                      location: widget.component.data.value,
+                      onLocationChanged: (newLocation) {
+                        _updateLocation(
+                          formState: formState,
+                          location: newLocation,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],

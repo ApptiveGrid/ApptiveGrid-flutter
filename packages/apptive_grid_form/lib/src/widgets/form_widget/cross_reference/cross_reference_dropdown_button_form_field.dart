@@ -156,7 +156,17 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       },
       selectedItemBuilder: _selectedItems,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      value: widget.component.data.value,
+      value: () {
+        if (widget.component.data.value == null ||
+            (widget.component.data.value is Iterable &&
+                widget.component.data.value.isEmpty) ||
+            (widget.component.data.value is String &&
+                widget.component.data.value.isEmpty)) {
+          return null;
+        } else {
+          return widget.component.data.value;
+        }
+      }.call(),
       decoration: widget.component.baseDecoration.copyWith(
         errorText: _error?.toString(),
       ),
@@ -170,15 +180,18 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       final localization = ApptiveGridLocalization.of(context)!;
       final searchBox = DropdownMenuItem(
         enabled: false,
-        value: null,
+        value: 'SEARCH',
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.only(bottom: 8),
           child: TextField(
             controller: _filterController,
             decoration: InputDecoration(
-              icon: const Icon(Icons.search),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Theme.of(context).textTheme.headline1?.color,
+              ),
               hintText: localization.crossRefSearch,
-              border: InputBorder.none,
+              isDense: true,
             ),
           ),
         ),
@@ -186,7 +199,7 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
 
       final headerRow = DropdownMenuItem(
         enabled: false,
-        value: null,
+        value: 'HEADER',
         child: HeaderRowWidget(
           grid: _grid,
           controller: _headerController,
@@ -196,7 +209,7 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       late final DropdownMenuItem list;
       if (_grid != null) {
         list = DropdownMenuItem<dynamic>(
-          value: widget.component.data.value,
+          value: widget.component.data.value ?? '',
           enabled: false,
           child: _CrossReferenceSelectionGrid(
             controller: _filterController,
@@ -232,25 +245,19 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
 
   List<Widget> _selectedItems(BuildContext context) {
     final localization = ApptiveGridLocalization.of(context)!;
-    if (_error != null) {
-      return [
-        const Center(
-          child: Text('ERROR'),
-        )
-      ];
-    } else if (_grid == null) {
-      return [
-        Center(
-          child: Text(localization.loadingGrid),
-        )
-      ];
-    } else {
-      final pleaseSelect = Text(localization.selectEntry);
-      return [
-        ...[pleaseSelect, pleaseSelect],
-        widget.selectedItemBuilder(widget.component.data),
-      ];
+
+    if (widget.component.data.value == null ||
+        (widget.component.data.value is Iterable &&
+            widget.component.data.value.isEmpty) ||
+        (widget.component.data.value is String &&
+            widget.component.data.value.isEmpty)) {
+      return [];
     }
+    final pleaseSelect = Text(localization.selectEntry);
+    return [
+      ...[pleaseSelect, pleaseSelect],
+      widget.selectedItemBuilder(widget.component.data),
+    ];
   }
 }
 

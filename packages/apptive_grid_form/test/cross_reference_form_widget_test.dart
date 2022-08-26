@@ -179,7 +179,6 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.text('ERROR'), findsOneWidget);
       expect(find.text('Error loading Grid'), findsOneWidget);
 
       // Does not open Popup
@@ -195,8 +194,6 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-
-      expect(find.text('Loading Grid'), findsOneWidget);
 
       // Does not open Popup
       await tester.tap(find.byIcon(Icons.arrow_drop_down));
@@ -433,7 +430,6 @@ void main() {
 
         expect(find.text('A'), findsNothing);
         expect(find.text('B'), findsNothing);
-        expect(find.text(''), findsOneWidget);
       });
     });
   });

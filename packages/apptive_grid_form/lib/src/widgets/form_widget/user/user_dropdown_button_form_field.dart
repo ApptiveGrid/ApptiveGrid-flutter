@@ -62,21 +62,27 @@ class _UserDropdownButtonFormFieldState
     final localization = ApptiveGridLocalization.of(context)!;
     final searchBox = DropdownMenuItem<DataUser>(
       enabled: false,
-      value: null,
+      value: DataUser(displayValue: 'SEARCH', uri: Uri()),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.only(bottom: 8.0),
         child: TextField(
           controller: _filterController,
           decoration: InputDecoration(
-            icon: const Icon(Icons.search),
+            isDense: true,
+            prefixIcon: Icon(
+              Icons.search,
+              color: Theme.of(context).textTheme.headline1?.color,
+            ),
             suffixIcon: IconButton(
-              icon: const Icon(Icons.close),
+              icon: Icon(
+                Icons.close,
+                color: Theme.of(context).textTheme.headline1?.color,
+              ),
               onPressed: () {
                 _filterController.clear();
               },
             ),
             hintText: localization.crossRefSearch,
-            border: InputBorder.none,
           ),
         ),
       ),
@@ -101,6 +107,9 @@ class _UserDropdownButtonFormFieldState
   }
 
   List<Widget> _selectedItems(BuildContext context) {
+    if (widget.component.data.value == null) {
+      return [];
+    }
     final localization = ApptiveGridLocalization.of(context)!;
 
     final pleaseSelect = Text(localization.selectEntry);

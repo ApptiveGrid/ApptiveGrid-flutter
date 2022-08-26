@@ -44,29 +44,30 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
           decoration: widget.component.baseDecoration.copyWith(
             errorText: formState.errorText,
             contentPadding: EdgeInsets.zero,
-            border: InputBorder.none,
-            errorBorder: InputBorder.none,
-            isDense: true,
             filled: false,
           ),
-          child: Wrap(
-            spacing: 4,
-            children: widget.component.data.options
-                .map(
-                  (e) => ChoiceChip(
-                    label: Text(e),
-                    selected: widget.component.data.value?.contains(e) ?? false,
-                    onSelected: (isSelected) {
-                      if (isSelected) {
-                        widget.component.data.value?.add(e);
-                      } else {
-                        widget.component.data.value?.remove(e);
-                      }
-                      formState.didChange(widget.component.data);
-                    },
-                  ),
-                )
-                .toList(),
+          child: Padding(
+            padding: const EdgeInsets.only(top: .0),
+            child: Wrap(
+              spacing: 4,
+              children: widget.component.data.options
+                  .map(
+                    (e) => ChoiceChip(
+                      label: Text(e),
+                      selected:
+                          widget.component.data.value?.contains(e) ?? false,
+                      onSelected: (isSelected) {
+                        if (isSelected) {
+                          widget.component.data.value?.add(e);
+                        } else {
+                          widget.component.data.value?.remove(e);
+                        }
+                        formState.didChange(widget.component.data);
+                      },
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
         );
       },

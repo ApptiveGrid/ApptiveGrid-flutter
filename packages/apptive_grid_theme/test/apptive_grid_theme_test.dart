@@ -19,8 +19,8 @@ void main() {
     int columns = 1,
   }) {
     final themes = {
-      'Light': ApptiveGridTheme(brightness: Brightness.light).theme(),
-      'Dark': ApptiveGridTheme(brightness: Brightness.dark).theme(),
+      'Light': ApptiveGridTheme.create(brightness: Brightness.light),
+      'Dark': ApptiveGridTheme.create(brightness: Brightness.dark),
     };
     return goldenTest(
       description,
