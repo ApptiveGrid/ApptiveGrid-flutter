@@ -378,6 +378,52 @@ void main() {
           () => client.loadForm(uri: Uri.parse('/api/a/form')),
         ).called(2);
       });
+
+      testWidgets('Multiline text in single line form field', (tester) async {
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridForm(
+            uri: Uri.parse('/api/a/form'),
+          ),
+        );
+        const field = GridField(
+          id: 'id',
+          name: 'name',
+          type: DataType.text,
+        );
+        final form = FormData(
+          id: 'formId',
+          name: 'Form Name',
+          title: 'Form Title',
+          components: [
+            FormComponent<StringDataEntity>(
+              property: 'property',
+              data: StringDataEntity('test\ntest'),
+              field: field,
+              options: const FormComponentOptions(multi: false),
+            ),
+          ],
+          fields: [
+            field,
+          ],
+          links: {},
+        );
+
+        when(
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
+        ).thenAnswer((_) async => form);
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        expect(
+          find.text(
+            'A multi-line text was added to a non-multi-line text field. Please change the form.',
+            skipOffstage: false,
+          ),
+          findsOneWidget,
+        );
+      });
     });
 
     group('Action Error', () {
