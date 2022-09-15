@@ -13,7 +13,7 @@
 # https://stedolan.github.io/jq/download/
 source poeditor.properties
 
-l10nPath="../lib/translation/l10n"
+l10nPath="../lib/src/translation/l10n"
 
 declare -a defaultTranslations
 
