@@ -358,7 +358,10 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             _error = localization.multilineTextOverflowError;
           }
           if (_error != null) {
-            return _buildError(buildContext);
+            return _buildError(
+              buildContext,
+              showBackButton: !hasInvalidTextFields,
+            );
           } else if (_saved) {
             return _buildSaved(buildContext);
           } else if (_success) {
@@ -556,7 +559,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     );
   }
 
-  Widget _buildError(BuildContext context) {
+  Widget _buildError(BuildContext context, {bool showBackButton = true}) {
     final localization = ApptiveGridLocalization.of(context)!;
     final theme = Theme.of(context);
     return ListView(
@@ -586,17 +589,18 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 ?.copyWith(color: theme.colorScheme.error),
           ),
         ),
-        Center(
-          child: TextButton(
-            onPressed: () {
-              if (_formData == null) {
-                widget.triggerReload?.call();
-              }
-              _updateView(resetFormData: false);
-            },
-            child: Text(localization.backToForm),
-          ),
-        )
+        if (showBackButton)
+          Center(
+            child: TextButton(
+              onPressed: () {
+                if (_formData == null) {
+                  widget.triggerReload?.call();
+                }
+                _updateView(resetFormData: false);
+              },
+              child: Text(localization.backToForm),
+            ),
+          )
       ],
     );
   }
