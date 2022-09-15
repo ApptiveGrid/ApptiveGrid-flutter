@@ -20,5 +20,6 @@
     "attachmentSourceFiles": "Dateien auswählen",
     "searchUserNoResult": "Kein Nutzer mit \"$query\" gefunden",
     "progressProcessAttachment": "Anhänge werden verarbeitet [$processed/$total]",
-    "progressSubmitForm": "Formular einsenden"
+    "progressSubmitForm": "Formular einsenden",
+    "multilineTextOverflowError": "Ein mehrzeiliger Text wurde einem nicht mehrzeiligem Textfeld zugewiesen. Bitte passen sie das Formular an."
 }

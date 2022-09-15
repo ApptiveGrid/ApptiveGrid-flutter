@@ -55,4 +55,7 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
       'Anhänge werden verarbeitet [$processed/$total]';
   @override
   String get progressSubmitForm => "Formular einsenden";
+  @override
+  String get multilineTextOverflowError =>
+      "Ein mehrzeiliger Text wurde einem nicht mehrzeiligem Textfeld zugewiesen. Bitte passen sie das Formular an.";
 }

@@ -20,5 +20,6 @@
     "attachmentSourceFiles": "Select files",
     "searchUserNoResult": "No Users found that match \"$query\"",
     "progressProcessAttachment": "Processing Attachments [$processed/$total]",
-    "progressSubmitForm": "Submitting Form"
+    "progressSubmitForm": "Submitting Form",
+    "multilineTextOverflowError": "A multi-line text was added to a non-multi-line text field. Please change the form."
 }
