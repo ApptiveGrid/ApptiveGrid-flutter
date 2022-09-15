@@ -343,6 +343,20 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     return ApptiveGridLocalization(
       child: Builder(
         builder: (buildContext) {
+          final hasInvalidTextFields = _formData?.components
+                  ?.where(
+                    (element) =>
+                        element.field.type == DataType.text &&
+                        !element.options.multi &&
+                        element.data.value?.contains('\n') == true,
+                  )
+                  .isNotEmpty ==
+              true;
+          ;
+          if (_error == null && hasInvalidTextFields) {
+            final localization = ApptiveGridLocalization.of(buildContext)!;
+            _error = localization.multilineTextOverflowError;
+          }
           if (_error != null) {
             return _buildError(buildContext);
           } else if (_saved) {
