@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ApptiveGrid',
-      theme: ApptiveGridTheme.create(brightness: Brightness.light),
+      theme: ApptiveGridTheme.light(),
       home: Scaffold(
         body: ApptiveGridWebApptive(
           builder: (context, event) {

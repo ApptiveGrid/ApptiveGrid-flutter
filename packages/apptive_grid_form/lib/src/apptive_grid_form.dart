@@ -352,7 +352,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                   )
                   .isNotEmpty ==
               true;
-          ;
           if (_error == null && hasInvalidTextFields) {
             final localization = ApptiveGridLocalization.of(buildContext)!;
             _error = localization.multilineTextOverflowError;

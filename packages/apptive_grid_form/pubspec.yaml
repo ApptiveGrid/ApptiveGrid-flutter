@@ -8,8 +8,15 @@ environment:
   sdk: '>=2.17.0 <3.0.0'
   flutter: ">=1.17.0"
 
+dependency_overrides:
+  apptive_grid_core:
+    git:
+      url: https://github.com/ApptiveGrid/ApptiveGrid-flutter
+      path: packages/apptive_grid_core
+      ref: 70b87e5
+
 dependencies:
-  apptive_grid_core: ^0.12.0
+  apptive_grid_core: ^0.12.2
   file_picker: ^4.6.0
   flutter:
     sdk: flutter

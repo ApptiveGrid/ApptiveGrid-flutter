@@ -1,5 +1,4 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/src/network/authentication/apptive_grid_authenticator.dart';
 import 'package:apptive_grid_user_management/src/user_management_client.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
