@@ -1,3 +1,6 @@
+## 0.2.0
+* Upgrade apptive_grid_core to 0.13.0
+
 ## 0.1.0
 * Deprecate `ApptiveCall.gridViewUpdate` in favor of `ApptiveCall.virtualGridUpdate`
 
