@@ -1,3 +1,6 @@
+## 0.13.1
+* Prase multiline text to single line for single line form fields
+
 ## 0.13.0
 * Remove Deprecated Members
 * Adjust File Structure
