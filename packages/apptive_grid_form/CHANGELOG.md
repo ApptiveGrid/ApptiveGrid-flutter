@@ -1,3 +1,7 @@
+## 0.13.0
+* Remove deprecated members
+* Adjust File Structure
+
 ## 0.12.4
 * Use Border of Theme for Input Textfields for Geolocation and References
 * Fix Hint Placement in User and (Multi)CrossReference Widget if no Item is selected
