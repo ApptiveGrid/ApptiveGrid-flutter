@@ -343,24 +343,8 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     return ApptiveGridLocalization(
       child: Builder(
         builder: (buildContext) {
-          final hasInvalidTextFields = _formData?.components
-                  ?.where(
-                    (element) =>
-                        element.field.type == DataType.text &&
-                        !element.options.multi &&
-                        element.data.value?.contains('\n') == true,
-                  )
-                  .isNotEmpty ==
-              true;
-          if (_error == null && hasInvalidTextFields) {
-            final localization = ApptiveGridLocalization.of(buildContext)!;
-            _error = localization.multilineTextOverflowError;
-          }
           if (_error != null) {
-            return _buildError(
-              buildContext,
-              showBackButton: !hasInvalidTextFields,
-            );
+            return _buildError(buildContext);
           } else if (_saved) {
             return _buildSaved(buildContext);
           } else if (_success) {
@@ -558,7 +542,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     );
   }
 
-  Widget _buildError(BuildContext context, {bool showBackButton = true}) {
+  Widget _buildError(BuildContext context) {
     final localization = ApptiveGridLocalization.of(context)!;
     final theme = Theme.of(context);
     return ListView(
@@ -588,18 +572,17 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 ?.copyWith(color: theme.colorScheme.error),
           ),
         ),
-        if (showBackButton)
-          Center(
-            child: TextButton(
-              onPressed: () {
-                if (_formData == null) {
-                  widget.triggerReload?.call();
-                }
-                _updateView(resetFormData: false);
-              },
-              child: Text(localization.backToForm),
-            ),
-          )
+        Center(
+          child: TextButton(
+            onPressed: () {
+              if (_formData == null) {
+                widget.triggerReload?.call();
+              }
+              _updateView(resetFormData: false);
+            },
+            child: Text(localization.backToForm),
+          ),
+        )
       ],
     );
   }

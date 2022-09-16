@@ -55,7 +55,4 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
       'Processing Attachments [$processed/$total]';
   @override
   String get progressSubmitForm => "Submitting Form";
-  @override
-  String get multilineTextOverflowError =>
-      "A multi-line text was added to a non-multi-line text field. Please change the form.";
 }

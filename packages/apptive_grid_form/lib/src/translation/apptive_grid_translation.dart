@@ -71,7 +71,4 @@ abstract class ApptiveGridTranslation {
 
   /// Message that the form is being submitted
   String get progressSubmitForm;
-
-  /// Error-Message for trying to display multiline text in a non-multiline form field.
-  String get multilineTextOverflowError;
 }
