@@ -87,6 +87,12 @@ class FormComponent<T extends DataEntity> {
     final required = json['required'] ?? false;
     final data = DataEntity.fromJson(json: json['value'], field: field);
 
+    if (field.type == DataType.text &&
+        options.multi == false &&
+        data.value?.contains('\n') == true) {
+      data.value = data.value?.replaceAll('\n', ' ');
+    }
+
     return FormComponent(
       property: property,
       data: data,
