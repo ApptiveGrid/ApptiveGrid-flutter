@@ -1,3 +1,6 @@
+## 0.2.0
+* Remove deprecated members
+
 ## 0.1.1
 * Add option to delete a user's account
 

@@ -1,3 +1,7 @@
+# 0.12.0
+* Remove deprecated members
+* Adjust file structure
+
 ## 0.11.0
 * Update apptive_grid_core to [0.12.0](https://pub.dev/packages/apptive_grid_core/changelog#0120)
 
