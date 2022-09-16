@@ -2,13 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
 import 'dart:math' as math;
-import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_core/src/network/authentication/apptive_grid_authenticator.dart';
 import 'package:apptive_grid_core/src/network/constants.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:mime/mime.dart';

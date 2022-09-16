@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_core/src/network/authentication/apptive_grid_authenticator.dart';
