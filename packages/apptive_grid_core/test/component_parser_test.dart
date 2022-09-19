@@ -53,6 +53,108 @@ void main() {
       expect(parsedOptions.label, equals(label));
     });
 
+    test('Multiline Text', () {
+      const property = 'property';
+      const id = 'id';
+      const value = 'value\nvalue';
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'string',
+          }
+        }
+      };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.text,
+        schema: schema,
+      );
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': value,
+        'required': true,
+        'options': {
+          'multi': true,
+          'placeholder': placeholder,
+          'description': description,
+          'label': label
+        },
+        'type': 'textfield'
+      };
+
+      final parsedComponent = FormComponent.fromJson(json, [field]);
+
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(value));
+      expect(parsedComponent.required, equals(true));
+      expect(parsedComponent.data.runtimeType, equals(StringDataEntity));
+      expect(parsedComponent.data.schemaValue, equals(value));
+
+      final parsedOptions = parsedComponent.options;
+      expect(parsedOptions.multi, equals(true));
+      expect(parsedOptions.placeholder, equals(placeholder));
+      expect(parsedOptions.description, equals(description));
+      expect(parsedOptions.label, equals(label));
+    });
+
+    test('Multiline Text in single line form field', () {
+      const property = 'property';
+      const id = 'id';
+      const value = 'value\nvalue';
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'string',
+          }
+        }
+      };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.text,
+        schema: schema,
+      );
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': value,
+        'required': true,
+        'options': {
+          'multi': false,
+          'placeholder': placeholder,
+          'description': description,
+          'label': label
+        },
+        'type': 'textfield'
+      };
+
+      final parsedComponent = FormComponent.fromJson(json, [field]);
+
+      final cleanValue = value.replaceAll('\n', ' ');
+
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(cleanValue));
+      expect(parsedComponent.required, equals(true));
+      expect(parsedComponent.data.runtimeType, equals(StringDataEntity));
+      expect(parsedComponent.data.schemaValue, equals(cleanValue));
+
+      final parsedOptions = parsedComponent.options;
+      expect(parsedOptions.multi, equals(false));
+      expect(parsedOptions.placeholder, equals(placeholder));
+      expect(parsedOptions.description, equals(description));
+      expect(parsedOptions.label, equals(label));
+    });
+
     test('DateTime', () {
       const property = 'property';
       final value = DateTime(2020, 12, 7, 12, 0, 0);
