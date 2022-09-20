@@ -5,6 +5,10 @@ void main() {
   const title = 'title';
   const name = 'name';
   const description = 'description';
+  const buttonTitle = 'button';
+  const reloadAfterSubmit = true;
+  const successTitle = 'successTitle';
+  const successMessage = 'successMessage';
   final response = {
     'fields': [
       {
@@ -125,6 +129,12 @@ void main() {
     'title': title,
     'description': description,
     'id': 'formId',
+    'properties': {
+      'buttonTitle': buttonTitle,
+      'reloadAfterSubmit': reloadAfterSubmit,
+      'successTitle': successTitle,
+      'successMessage': successMessage,
+    },
     '_links': {
       "submit": {
         "href":
@@ -168,6 +178,8 @@ void main() {
         DateDataEntity,
         BooleanDataEntity,
       ]);
+
+      expect(formData.buttonTitle, buttonTitle);
     });
   });
 
@@ -195,6 +207,10 @@ void main() {
         components: [component],
         links: {ApptiveLinkType.submit: action},
         fields: [component.field],
+        buttonTitle: buttonTitle,
+        reloadAfterSubmit: reloadAfterSubmit,
+        successTitle: successTitle,
+        successMessage: successMessage,
       );
 
       expect(FormData.fromJson(formData.toJson()), equals(formData));
