@@ -15,6 +15,10 @@ class FormData {
     required this.fields,
     required this.links,
     Map<Attachment, AttachmentAction>? attachmentActions,
+    this.buttonTitle,
+    this.reloadAfterSubmit,
+    this.successTitle,
+    this.successMessage,
   }) : attachmentActions = attachmentActions ?? HashMap();
 
   /// Deserializes [json] into a FormData Object
@@ -41,6 +45,10 @@ class FormData {
             }).toList(),
           )
         : <Attachment, AttachmentAction>{};
+    final buttonTitle = json['properties']?['buttonTitle'];
+    final reloadAfterSubmit = json['properties']?['reloadAfterSubmit'] == true;
+    final successTitle = json['properties']?['successTitle'];
+    final successMessage = json['properties']?['successMessage'];
     return FormData(
       id: id,
       name: name,
@@ -50,6 +58,10 @@ class FormData {
       fields: fields,
       links: links,
       attachmentActions: attachmentActions,
+      buttonTitle: buttonTitle,
+      reloadAfterSubmit: reloadAfterSubmit,
+      successTitle: successTitle,
+      successMessage: successMessage,
     );
   }
 
@@ -77,21 +89,42 @@ class FormData {
   /// Actions related to Attachments that need to b performed before submitting a form
   final Map<Attachment, AttachmentAction> attachmentActions;
 
+  /// Custom title for a successfull submission
+  final String? successTitle;
+
+  /// Custom message for a successfull submission
+  final String? successMessage;
+
+  /// Custom title for the submit button
+  final String? buttonTitle;
+
+  /// Flag for reloading and keeping the form open after submission
+  final bool? reloadAfterSubmit;
+
   /// Serializes [FormData] to json
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        if (name != null) 'name': name,
-        if (title != null) 'title': title,
-        if (description != null) 'description': description,
-        if (components != null)
-          'components': components!.map((e) => e.toJson()).toList(),
-        if (fields != null)
-          'fields': fields!.map((field) => field.toJson()).toList(),
-        '_links': links.toJson(),
-        if (attachmentActions.isNotEmpty)
-          'attachmentActions':
-              attachmentActions.values.map((e) => e.toJson()).toList(),
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> properties = {
+      if (successTitle != null) 'successTitle': successTitle,
+      if (successMessage != null) 'successMessage': successMessage,
+      if (buttonTitle != null) 'buttonTitle': buttonTitle,
+      if (reloadAfterSubmit != null) 'reloadAfterSubmit': reloadAfterSubmit,
+    };
+    return {
+      'id': id,
+      if (name != null) 'name': name,
+      if (title != null) 'title': title,
+      if (description != null) 'description': description,
+      if (components != null)
+        'components': components!.map((e) => e.toJson()).toList(),
+      if (fields != null)
+        'fields': fields!.map((field) => field.toJson()).toList(),
+      '_links': links.toJson(),
+      if (attachmentActions.isNotEmpty)
+        'attachmentActions':
+            attachmentActions.values.map((e) => e.toJson()).toList(),
+      if (properties.isNotEmpty) 'properties': properties,
+    };
+  }
 
   @override
   String toString() {
