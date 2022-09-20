@@ -1,5 +1,10 @@
 ## 0.13.1
 * Parse multiline text to single line for single line form fields
+* Add new properties to forms
+  * successTitle
+  * successMessage
+  * buttonTitle
+  * reloadAfterSubmit
 
 ## 0.13.0
 * Remove Deprecated Members

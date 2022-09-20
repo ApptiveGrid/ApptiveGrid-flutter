@@ -1,3 +1,10 @@
+## 0.13.1
+* Add support for new properties in forms
+  * successTitle
+  * successMessage
+  * buttonTitle
+  * reloadAfterSubmit
+
 ## 0.13.0
 * Remove deprecated members
 * Adjust File Structure
