@@ -180,6 +180,9 @@ void main() {
       ]);
 
       expect(formData.buttonTitle, buttonTitle);
+      expect(formData.reloadAfterSubmit, reloadAfterSubmit);
+      expect(formData.successTitle, successTitle);
+      expect(formData.successMessage, successMessage);
     });
   });
 
