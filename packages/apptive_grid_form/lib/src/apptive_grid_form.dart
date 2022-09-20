@@ -463,7 +463,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                           action: submitLink!,
                           onPressed: (link) => _submitForm(link, context),
                           child: Text(
-                            widget.buttonLabel ?? localization.actionSend,
+                            widget.buttonLabel ??
+                                _formData?.buttonTitle ??
+                                localization.actionSend,
                           ),
                         );
                       }
@@ -492,10 +494,18 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           ),
         ),
         Text(
-          localization.sendSuccess,
+          _formData?.successTitle ?? localization.sendSuccess,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline4,
         ),
+        if (_formData?.successMessage != null) ...[
+          const SizedBox(height: 4),
+          Text(
+            _formData!.successMessage!,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
         Center(
           child: TextButton(
             onPressed: () {
@@ -642,7 +652,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             final response = event.response;
             if (response != null && response.statusCode < 400) {
               if (await widget.onActionSuccess?.call(link, _formData!) ??
-                  true) {
+                  _formData?.reloadAfterSubmit != true) {
                 setState(() {
                   _success = true;
                 });
