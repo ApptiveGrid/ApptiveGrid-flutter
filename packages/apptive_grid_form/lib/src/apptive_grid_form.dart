@@ -651,11 +651,16 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           } else if (event is SubmitCompleteProgressEvent) {
             final response = event.response;
             if (response != null && response.statusCode < 400) {
-              if (await widget.onActionSuccess?.call(link, _formData!) ??
-                  _formData?.reloadAfterSubmit != true) {
-                setState(() {
-                  _success = true;
-                });
+              if (await widget.onActionSuccess?.call(link, _formData!) !=
+                  false) {
+                if (_formData?.reloadAfterSubmit == true) {
+                  widget.triggerReload?.call();
+                  _updateView();
+                } else {
+                  setState(() {
+                    _success = true;
+                  });
+                }
               }
             } else {
               // FormData was saved to [ApptiveGridCache]
