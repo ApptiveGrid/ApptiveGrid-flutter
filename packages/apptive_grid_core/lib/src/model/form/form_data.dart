@@ -6,17 +6,17 @@ import 'package:flutter/foundation.dart' as f;
 /// Model for FormData
 class FormData {
   /// Creates a FormData Object
-  FormData(
-      {required this.id,
-      this.name,
-      this.title,
-      this.description,
-      required this.components,
-      required this.fields,
-      required this.links,
-      Map<Attachment, AttachmentAction>? attachmentActions,
-      this.properties})
-      : attachmentActions = attachmentActions ?? HashMap();
+  FormData({
+    required this.id,
+    this.name,
+    this.title,
+    this.description,
+    required this.components,
+    required this.fields,
+    required this.links,
+    Map<Attachment, AttachmentAction>? attachmentActions,
+    this.properties,
+  }) : attachmentActions = attachmentActions ?? HashMap();
 
   /// Deserializes [json] into a FormData Object
   factory FormData.fromJson(Map<String, dynamic> json) {

@@ -390,7 +390,9 @@ void main() {
         links: {ApptiveLinkType.submit: action},
         fields: [],
         properties: FormDataProperties(
-            reloadAfterSubmit: true, successTitle: 'Success test'),
+          reloadAfterSubmit: true,
+          successTitle: 'Success test',
+        ),
       );
 
       when(
