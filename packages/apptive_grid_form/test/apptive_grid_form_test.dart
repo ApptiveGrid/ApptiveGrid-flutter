@@ -390,8 +390,7 @@ void main() {
         links: {ApptiveLinkType.submit: action},
         fields: [],
         properties: FormDataProperties(
-          reloadAfterSubmit: true,
-        ),
+            reloadAfterSubmit: true, successTitle: 'Success test'),
       );
 
       when(
@@ -407,6 +406,8 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
+
+      expect(find.text('Success test'), findsNothing);
 
       verify(
         () => client.loadForm(uri: Uri.parse('/api/a/form')),
