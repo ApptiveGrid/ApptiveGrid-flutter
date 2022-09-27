@@ -126,6 +126,7 @@ class FormData {
         name == other.name &&
         description == other.description &&
         title == other.title &&
+        properties == other.properties &&
         f.listEquals(fields, other.fields) &&
         f.listEquals(components, other.components) &&
         f.mapEquals(attachmentActions, other.attachmentActions) &&
