@@ -1,6 +1,6 @@
 ## 0.13.1
 * Parse multiline text to single line for single line form fields
-* Add new properties to forms
+* Add a new `FormDataProperties` object to forms with these properties
   * successTitle
   * successMessage
   * buttonTitle

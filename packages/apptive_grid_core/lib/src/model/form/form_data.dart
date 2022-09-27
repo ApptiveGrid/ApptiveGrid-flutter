@@ -6,20 +6,17 @@ import 'package:flutter/foundation.dart' as f;
 /// Model for FormData
 class FormData {
   /// Creates a FormData Object
-  FormData({
-    required this.id,
-    this.name,
-    this.title,
-    this.description,
-    required this.components,
-    required this.fields,
-    required this.links,
-    Map<Attachment, AttachmentAction>? attachmentActions,
-    this.buttonTitle,
-    this.reloadAfterSubmit,
-    this.successTitle,
-    this.successMessage,
-  }) : attachmentActions = attachmentActions ?? HashMap();
+  FormData(
+      {required this.id,
+      this.name,
+      this.title,
+      this.description,
+      required this.components,
+      required this.fields,
+      required this.links,
+      Map<Attachment, AttachmentAction>? attachmentActions,
+      this.properties})
+      : attachmentActions = attachmentActions ?? HashMap();
 
   /// Deserializes [json] into a FormData Object
   factory FormData.fromJson(Map<String, dynamic> json) {
@@ -45,10 +42,9 @@ class FormData {
             }).toList(),
           )
         : <Attachment, AttachmentAction>{};
-    final buttonTitle = json['properties']?['buttonTitle'];
-    final reloadAfterSubmit = json['properties']?['reloadAfterSubmit'] == true;
-    final successTitle = json['properties']?['successTitle'];
-    final successMessage = json['properties']?['successMessage'];
+    final properties = json['properties'] != null
+        ? FormDataProperties.fromJson(json['properties'])
+        : null;
     return FormData(
       id: id,
       name: name,
@@ -58,10 +54,7 @@ class FormData {
       fields: fields,
       links: links,
       attachmentActions: attachmentActions,
-      buttonTitle: buttonTitle,
-      reloadAfterSubmit: reloadAfterSubmit,
-      successTitle: successTitle,
-      successMessage: successMessage,
+      properties: properties,
     );
   }
 
@@ -90,25 +83,10 @@ class FormData {
   final Map<Attachment, AttachmentAction> attachmentActions;
 
   /// Custom title for a successfull submission
-  final String? successTitle;
-
-  /// Custom message for a successfull submission
-  final String? successMessage;
-
-  /// Custom title for the submit button
-  final String? buttonTitle;
-
-  /// Flag for reloading and keeping the form open after submission
-  final bool? reloadAfterSubmit;
+  final FormDataProperties? properties;
 
   /// Serializes [FormData] to json
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> properties = {
-      if (successTitle != null) 'successTitle': successTitle,
-      if (successMessage != null) 'successMessage': successMessage,
-      if (buttonTitle != null) 'buttonTitle': buttonTitle,
-      if (reloadAfterSubmit != null) 'reloadAfterSubmit': reloadAfterSubmit,
-    };
     return {
       'id': id,
       if (name != null) 'name': name,
@@ -122,7 +100,7 @@ class FormData {
       if (attachmentActions.isNotEmpty)
         'attachmentActions':
             attachmentActions.values.map((e) => e.toJson()).toList(),
-      if (properties.isNotEmpty) 'properties': properties,
+      if (properties != null) 'properties': properties!.toJson(),
     };
   }
 
@@ -164,5 +142,72 @@ class FormData {
         components,
         attachmentActions,
         links,
+      );
+}
+
+/// Additional properties for the [FormData]
+class FormDataProperties {
+  /// Creates a FormDataProperties Object
+  FormDataProperties({
+    this.successTitle,
+    this.successMessage,
+    this.buttonTitle,
+    this.reloadAfterSubmit,
+  });
+
+  /// Deserializes [json] into a FormDataProperties Object
+  factory FormDataProperties.fromJson(Map<String, dynamic> json) {
+    final successTitle = json['successTitle'];
+    final successMessage = json['successMessage'];
+    final buttonTitle = json['buttonTitle'];
+    final reloadAfterSubmit = json['reloadAfterSubmit'];
+    return FormDataProperties(
+      successTitle: successTitle,
+      successMessage: successMessage,
+      buttonTitle: buttonTitle,
+      reloadAfterSubmit: reloadAfterSubmit,
+    );
+  }
+
+  /// Custom title for a successfull submission
+  final String? successTitle;
+
+  /// Custom message for a successfull submission
+  final String? successMessage;
+
+  /// Custom title for the submit button
+  final String? buttonTitle;
+
+  /// Flag for reloading and keeping the form open after submission
+  final bool? reloadAfterSubmit;
+
+  /// Serializes [FormDataProperties] to json
+  Map<String, dynamic> toJson() => {
+        if (successTitle != null) 'successTitle': successTitle,
+        if (successMessage != null) 'successMessage': successMessage,
+        if (buttonTitle != null) 'buttonTitle': buttonTitle,
+        if (reloadAfterSubmit != null) 'reloadAfterSubmit': reloadAfterSubmit,
+      };
+
+  @override
+  String toString() {
+    return 'FormDataProperties(successTitle: $successTitle, successMessage: $successMessage, buttonTitle: $buttonTitle, reloadAfterSubmit: $reloadAfterSubmit)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FormDataProperties &&
+        successTitle == other.successTitle &&
+        successMessage == other.successMessage &&
+        buttonTitle == other.buttonTitle &&
+        reloadAfterSubmit == other.reloadAfterSubmit;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        successTitle,
+        successMessage,
+        buttonTitle,
+        reloadAfterSubmit,
       );
 }

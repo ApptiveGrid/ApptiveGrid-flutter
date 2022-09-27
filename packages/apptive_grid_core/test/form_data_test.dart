@@ -179,10 +179,10 @@ void main() {
         BooleanDataEntity,
       ]);
 
-      expect(formData.buttonTitle, buttonTitle);
-      expect(formData.reloadAfterSubmit, reloadAfterSubmit);
-      expect(formData.successTitle, successTitle);
-      expect(formData.successMessage, successMessage);
+      expect(formData.properties?.buttonTitle, buttonTitle);
+      expect(formData.properties?.reloadAfterSubmit, reloadAfterSubmit);
+      expect(formData.properties?.successTitle, successTitle);
+      expect(formData.properties?.successMessage, successMessage);
     });
   });
 
@@ -210,10 +210,12 @@ void main() {
         components: [component],
         links: {ApptiveLinkType.submit: action},
         fields: [component.field],
-        buttonTitle: buttonTitle,
-        reloadAfterSubmit: reloadAfterSubmit,
-        successTitle: successTitle,
-        successMessage: successMessage,
+        properties: FormDataProperties(
+          buttonTitle: buttonTitle,
+          reloadAfterSubmit: reloadAfterSubmit,
+          successTitle: successTitle,
+          successMessage: successMessage,
+        ),
       );
 
       expect(FormData.fromJson(formData.toJson()), equals(formData));

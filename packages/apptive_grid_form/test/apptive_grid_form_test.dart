@@ -310,8 +310,10 @@ void main() {
         components: [],
         links: {ApptiveLinkType.submit: action},
         fields: [],
-        successTitle: customTitle,
-        successMessage: customMessage,
+        properties: FormDataProperties(
+          successTitle: customTitle,
+          successMessage: customMessage,
+        ),
       );
 
       when(
@@ -387,7 +389,9 @@ void main() {
         components: [],
         links: {ApptiveLinkType.submit: action},
         fields: [],
-        reloadAfterSubmit: true,
+        properties: FormDataProperties(
+          reloadAfterSubmit: true,
+        ),
       );
 
       when(
@@ -1090,7 +1094,9 @@ void main() {
         components: [],
         links: {ApptiveLinkType.submit: action},
         fields: [],
-        buttonTitle: label,
+        properties: FormDataProperties(
+          buttonTitle: label,
+        ),
       );
 
       final actionCompleter = Completer<http.Response>();
