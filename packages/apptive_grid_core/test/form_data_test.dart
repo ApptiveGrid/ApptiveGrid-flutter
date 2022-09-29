@@ -355,6 +355,10 @@ void main() {
     test('a != c', () {
       expect(a, isNot(c));
     });
+
+    test('properties hash', () {
+      expect(a.properties.hashCode, b.properties.hashCode);
+    });
   });
 
   group('Without Submit Link', () {
