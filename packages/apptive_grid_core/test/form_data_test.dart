@@ -355,10 +355,6 @@ void main() {
     test('a != c', () {
       expect(a, isNot(c));
     });
-
-    test('properties hash', () {
-      expect(a.properties.hashCode, b.properties.hashCode);
-    });
   });
 
   group('Without Submit Link', () {
@@ -586,6 +582,65 @@ void main() {
         (formData.components![0].data as CrossReferenceDataEntity).gridUri,
         Uri.parse(
           '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        ),
+      );
+    });
+  });
+  group('FormDataProperties', () {
+    test('Equality', () {
+      final a = FormDataProperties(
+        successTitle: 'successTitle',
+        successMessage: 'successMessage',
+        buttonTitle: 'buttonTitle',
+        reloadAfterSubmit: true,
+      );
+      final b = FormDataProperties(
+        successTitle: 'successTitle',
+        successMessage: 'successMessage',
+        buttonTitle: 'buttonTitle',
+        reloadAfterSubmit: true,
+      );
+      final c = FormDataProperties(
+        successTitle: 'successTitle',
+        successMessage: 'successMessage',
+        buttonTitle: 'buttonTitle2',
+        reloadAfterSubmit: true,
+      );
+      expect(a, equals(b));
+      expect(a, isNot(c));
+    });
+
+    test('Hashcode', () {
+      final properties = FormDataProperties(
+        successTitle: 'successTitle',
+        successMessage: 'successMessage',
+        buttonTitle: 'buttonTitle',
+        reloadAfterSubmit: true,
+      );
+
+      expect(
+        properties.hashCode,
+        Object.hash(
+          'successTitle',
+          'successMessage',
+          'buttonTitle',
+          true,
+        ),
+      );
+    });
+
+    test('toString()', () {
+      final properties = FormDataProperties(
+        successTitle: 'successTitle',
+        successMessage: 'successMessage',
+        buttonTitle: 'buttonTitle',
+        reloadAfterSubmit: true,
+      );
+
+      expect(
+        properties.toString(),
+        equals(
+          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true)',
         ),
       );
     });
