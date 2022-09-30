@@ -293,6 +293,47 @@ void main() {
       expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
     });
 
+    testWidgets('Shows custom Success', (tester) async {
+      const customTitle = 'customTitle';
+      const customMessage = 'customMessage';
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      final formData = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        links: {ApptiveLinkType.submit: action},
+        fields: [],
+        properties: FormDataProperties(
+          successTitle: customTitle,
+          successMessage: customMessage,
+        ),
+      );
+
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+        (_) => Stream.value(
+          SubmitCompleteProgressEvent(http.Response('', 200)),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(find.text(customTitle, skipOffstage: false), findsOneWidget);
+      expect(find.text(customMessage, skipOffstage: false), findsOneWidget);
+    });
+
     testWidgets('Send Additional Click reloads Form', (tester) async {
       final target = TestApp(
         client: client,
@@ -327,6 +368,48 @@ void main() {
       await tester.scrollUntilVisible(find.byType(TextButton), 100);
       await tester.tap(find.byType(TextButton, skipOffstage: false));
       await tester.pumpAndSettle();
+
+      verify(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).called(2);
+    });
+
+    testWidgets('Reload flag', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      final formData = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        links: {ApptiveLinkType.submit: action},
+        fields: [],
+        properties: FormDataProperties(
+          reloadAfterSubmit: true,
+          successTitle: 'Success test',
+        ),
+      );
+
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+        (_) => Stream.value(
+          SubmitCompleteProgressEvent(http.Response('', 200)),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Success test'), findsNothing);
 
       verify(
         () => client.loadForm(uri: Uri.parse('/api/a/form')),
@@ -998,7 +1081,51 @@ void main() {
       expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
     });
 
-    testWidgets('Custom Button Label', (tester) async {
+    testWidgets('Custom Button Label from backend', (tester) async {
+      const label = 'Custom Label';
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      final formData = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        links: {ApptiveLinkType.submit: action},
+        fields: [],
+        properties: FormDataProperties(
+          buttonTitle: label,
+        ),
+      );
+
+      final actionCompleter = Completer<http.Response>();
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.submitFormWithProgress(action, formData))
+          .thenAnswer((_) {
+        return actionCompleter.future
+            .asStream()
+            .map((event) => SubmitCompleteProgressEvent(event));
+      });
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(
+          of: find.byType(ActionButton),
+          matching: find.text(label),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Custom Button Label from flag', (tester) async {
       const label = 'Custom Label';
       final target = TestApp(
         client: client,

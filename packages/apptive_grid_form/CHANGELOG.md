@@ -1,3 +1,6 @@
+## 0.13.1
+* Add support for new `FormDataProperties` in forms
+
 ## 0.13.0
 * Remove deprecated members
 * Adjust File Structure

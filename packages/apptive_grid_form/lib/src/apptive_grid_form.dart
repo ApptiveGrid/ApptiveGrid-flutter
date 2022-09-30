@@ -463,7 +463,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                           action: submitLink!,
                           onPressed: (link) => _submitForm(link, context),
                           child: Text(
-                            widget.buttonLabel ?? localization.actionSend,
+                            widget.buttonLabel ??
+                                _formData?.properties?.buttonTitle ??
+                                localization.actionSend,
                           ),
                         );
                       }
@@ -492,10 +494,18 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           ),
         ),
         Text(
-          localization.sendSuccess,
+          _formData?.properties?.successTitle ?? localization.sendSuccess,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline4,
         ),
+        if (_formData?.properties?.successMessage != null) ...[
+          const SizedBox(height: 4),
+          Text(
+            _formData!.properties!.successMessage!,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
         Center(
           child: TextButton(
             onPressed: () {
@@ -641,11 +651,16 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           } else if (event is SubmitCompleteProgressEvent) {
             final response = event.response;
             if (response != null && response.statusCode < 400) {
-              if (await widget.onActionSuccess?.call(link, _formData!) ??
-                  true) {
-                setState(() {
-                  _success = true;
-                });
+              if (await widget.onActionSuccess?.call(link, _formData!) !=
+                  false) {
+                if (_formData?.properties?.reloadAfterSubmit == true) {
+                  widget.triggerReload?.call();
+                  _updateView();
+                } else {
+                  setState(() {
+                    _success = true;
+                  });
+                }
               }
             } else {
               // FormData was saved to [ApptiveGridCache]

@@ -5,6 +5,10 @@ void main() {
   const title = 'title';
   const name = 'name';
   const description = 'description';
+  const buttonTitle = 'button';
+  const reloadAfterSubmit = true;
+  const successTitle = 'successTitle';
+  const successMessage = 'successMessage';
   final response = {
     'fields': [
       {
@@ -125,6 +129,12 @@ void main() {
     'title': title,
     'description': description,
     'id': 'formId',
+    'properties': {
+      'buttonTitle': buttonTitle,
+      'reloadAfterSubmit': reloadAfterSubmit,
+      'successTitle': successTitle,
+      'successMessage': successMessage,
+    },
     '_links': {
       "submit": {
         "href":
@@ -168,6 +178,16 @@ void main() {
         DateDataEntity,
         BooleanDataEntity,
       ]);
+
+      expect(
+        formData.properties,
+        FormDataProperties(
+          successTitle: successTitle,
+          successMessage: successMessage,
+          buttonTitle: buttonTitle,
+          reloadAfterSubmit: reloadAfterSubmit,
+        ),
+      );
     });
   });
 
@@ -195,6 +215,12 @@ void main() {
         components: [component],
         links: {ApptiveLinkType.submit: action},
         fields: [component.field],
+        properties: FormDataProperties(
+          buttonTitle: buttonTitle,
+          reloadAfterSubmit: reloadAfterSubmit,
+          successTitle: successTitle,
+          successMessage: successMessage,
+        ),
       );
 
       expect(FormData.fromJson(formData.toJson()), equals(formData));
@@ -305,6 +331,9 @@ void main() {
       components: [component],
       links: {ApptiveLinkType.submit: action},
       fields: [component.field],
+      properties: FormDataProperties(
+        successTitle: 'success',
+      ),
     );
     final b = FormData(
       id: 'formId',
@@ -313,6 +342,9 @@ void main() {
       components: [component],
       links: {ApptiveLinkType.submit: action},
       fields: [component.field],
+      properties: FormDataProperties(
+        successTitle: 'success',
+      ),
     );
     final c = FormData.fromJson(response);
 
@@ -550,6 +582,65 @@ void main() {
         (formData.components![0].data as CrossReferenceDataEntity).gridUri,
         Uri.parse(
           '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06',
+        ),
+      );
+    });
+  });
+  group('FormDataProperties', () {
+    test('Equality', () {
+      final a = FormDataProperties(
+        successTitle: 'successTitle',
+        successMessage: 'successMessage',
+        buttonTitle: 'buttonTitle',
+        reloadAfterSubmit: true,
+      );
+      final b = FormDataProperties(
+        successTitle: 'successTitle',
+        successMessage: 'successMessage',
+        buttonTitle: 'buttonTitle',
+        reloadAfterSubmit: true,
+      );
+      final c = FormDataProperties(
+        successTitle: 'successTitle',
+        successMessage: 'successMessage',
+        buttonTitle: 'buttonTitle2',
+        reloadAfterSubmit: true,
+      );
+      expect(a, equals(b));
+      expect(a, isNot(c));
+    });
+
+    test('Hashcode', () {
+      final properties = FormDataProperties(
+        successTitle: 'successTitle',
+        successMessage: 'successMessage',
+        buttonTitle: 'buttonTitle',
+        reloadAfterSubmit: true,
+      );
+
+      expect(
+        properties.hashCode,
+        Object.hash(
+          'successTitle',
+          'successMessage',
+          'buttonTitle',
+          true,
+        ),
+      );
+    });
+
+    test('toString()', () {
+      final properties = FormDataProperties(
+        successTitle: 'successTitle',
+        successMessage: 'successMessage',
+        buttonTitle: 'buttonTitle',
+        reloadAfterSubmit: true,
+      );
+
+      expect(
+        properties.toString(),
+        equals(
+          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true)',
         ),
       );
     });

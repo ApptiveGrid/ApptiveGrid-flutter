@@ -15,6 +15,7 @@ class FormData {
     required this.fields,
     required this.links,
     Map<Attachment, AttachmentAction>? attachmentActions,
+    this.properties,
   }) : attachmentActions = attachmentActions ?? HashMap();
 
   /// Deserializes [json] into a FormData Object
@@ -41,6 +42,9 @@ class FormData {
             }).toList(),
           )
         : <Attachment, AttachmentAction>{};
+    final properties = json['properties'] != null
+        ? FormDataProperties.fromJson(json['properties'])
+        : null;
     return FormData(
       id: id,
       name: name,
@@ -50,6 +54,7 @@ class FormData {
       fields: fields,
       links: links,
       attachmentActions: attachmentActions,
+      properties: properties,
     );
   }
 
@@ -77,21 +82,27 @@ class FormData {
   /// Actions related to Attachments that need to b performed before submitting a form
   final Map<Attachment, AttachmentAction> attachmentActions;
 
+  /// Custom title for a successfull submission
+  final FormDataProperties? properties;
+
   /// Serializes [FormData] to json
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        if (name != null) 'name': name,
-        if (title != null) 'title': title,
-        if (description != null) 'description': description,
-        if (components != null)
-          'components': components!.map((e) => e.toJson()).toList(),
-        if (fields != null)
-          'fields': fields!.map((field) => field.toJson()).toList(),
-        '_links': links.toJson(),
-        if (attachmentActions.isNotEmpty)
-          'attachmentActions':
-              attachmentActions.values.map((e) => e.toJson()).toList(),
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      if (name != null) 'name': name,
+      if (title != null) 'title': title,
+      if (description != null) 'description': description,
+      if (components != null)
+        'components': components!.map((e) => e.toJson()).toList(),
+      if (fields != null)
+        'fields': fields!.map((field) => field.toJson()).toList(),
+      '_links': links.toJson(),
+      if (attachmentActions.isNotEmpty)
+        'attachmentActions':
+            attachmentActions.values.map((e) => e.toJson()).toList(),
+      if (properties != null) 'properties': properties!.toJson(),
+    };
+  }
 
   @override
   String toString() {
@@ -115,6 +126,7 @@ class FormData {
         name == other.name &&
         description == other.description &&
         title == other.title &&
+        properties == other.properties &&
         f.listEquals(fields, other.fields) &&
         f.listEquals(components, other.components) &&
         f.mapEquals(attachmentActions, other.attachmentActions) &&
@@ -131,5 +143,72 @@ class FormData {
         components,
         attachmentActions,
         links,
+      );
+}
+
+/// Additional properties for the [FormData]
+class FormDataProperties {
+  /// Creates a FormDataProperties Object
+  FormDataProperties({
+    this.successTitle,
+    this.successMessage,
+    this.buttonTitle,
+    this.reloadAfterSubmit,
+  });
+
+  /// Deserializes [json] into a FormDataProperties Object
+  factory FormDataProperties.fromJson(Map<String, dynamic> json) {
+    final successTitle = json['successTitle'];
+    final successMessage = json['successMessage'];
+    final buttonTitle = json['buttonTitle'];
+    final reloadAfterSubmit = json['reloadAfterSubmit'];
+    return FormDataProperties(
+      successTitle: successTitle,
+      successMessage: successMessage,
+      buttonTitle: buttonTitle,
+      reloadAfterSubmit: reloadAfterSubmit,
+    );
+  }
+
+  /// Custom title for a successfull submission
+  final String? successTitle;
+
+  /// Custom message for a successfull submission
+  final String? successMessage;
+
+  /// Custom title for the submit button
+  final String? buttonTitle;
+
+  /// Flag for reloading and keeping the form open after submission
+  final bool? reloadAfterSubmit;
+
+  /// Serializes [FormDataProperties] to json
+  Map<String, dynamic> toJson() => {
+        if (successTitle != null) 'successTitle': successTitle,
+        if (successMessage != null) 'successMessage': successMessage,
+        if (buttonTitle != null) 'buttonTitle': buttonTitle,
+        if (reloadAfterSubmit != null) 'reloadAfterSubmit': reloadAfterSubmit,
+      };
+
+  @override
+  String toString() {
+    return 'FormDataProperties(successTitle: $successTitle, successMessage: $successMessage, buttonTitle: $buttonTitle, reloadAfterSubmit: $reloadAfterSubmit)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FormDataProperties &&
+        successTitle == other.successTitle &&
+        successMessage == other.successMessage &&
+        buttonTitle == other.buttonTitle &&
+        reloadAfterSubmit == other.reloadAfterSubmit;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        successTitle,
+        successMessage,
+        buttonTitle,
+        reloadAfterSubmit,
       );
 }
