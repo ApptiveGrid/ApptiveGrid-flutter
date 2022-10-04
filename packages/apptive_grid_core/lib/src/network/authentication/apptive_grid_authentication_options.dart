@@ -7,6 +7,7 @@ class ApptiveGridAuthenticationOptions {
     this.redirectScheme,
     this.apiKey,
     this.persistCredentials = false,
+    this.authGroup = 'apptivegrid',
   });
 
   /// Determines whether or not the authentication process should be started automatically or not
@@ -17,6 +18,8 @@ class ApptiveGridAuthenticationOptions {
   /// Remember that you might need to add some native configurations so your app knows how to handle the redirect.
   /// For more Info check out https://pub.dev/packages/uni_links
   final String? redirectScheme;
+
+  final String authGroup;
 
   /// [ApptiveGridApiKey] for authentication with an Api Key
   ///
@@ -37,6 +40,7 @@ class ApptiveGridAuthenticationOptions {
     return other is ApptiveGridAuthenticationOptions &&
         autoAuthenticate == other.autoAuthenticate &&
         redirectScheme == other.redirectScheme &&
+        authGroup == other.authGroup &&
         apiKey == other.apiKey &&
         persistCredentials == other.persistCredentials;
   }
@@ -45,6 +49,7 @@ class ApptiveGridAuthenticationOptions {
   int get hashCode => Object.hash(
         autoAuthenticate,
         redirectScheme,
+        authGroup,
         apiKey,
         persistCredentials,
       );
