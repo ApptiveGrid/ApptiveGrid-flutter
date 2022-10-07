@@ -1,3 +1,6 @@
+## 0.13.2
+* Fixed login via webview in the core package
+
 ## 0.13.1
 * Parse multiline text to single line for single line form fields
 * Add a new `FormDataProperties` object to forms with these properties

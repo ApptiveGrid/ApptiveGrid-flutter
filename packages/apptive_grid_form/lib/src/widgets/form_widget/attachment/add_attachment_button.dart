@@ -138,7 +138,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
   Future<List<Attachment>?> _pickFromImageLibrary() async {
     final result = await _imagePicker.pickMultiImage();
 
-    if (result != null && result.isNotEmpty && mounted) {
+    if (result.isNotEmpty && mounted) {
       final newAttachments = <Attachment>[];
       final client = ApptiveGrid.getClient(context, listen: false);
       final attachmentManager =

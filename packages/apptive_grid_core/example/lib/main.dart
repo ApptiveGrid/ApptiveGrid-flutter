@@ -7,8 +7,9 @@ void main() async {
     environment: ApptiveGridEnvironment.alpha,
     authenticationOptions: ApptiveGridAuthenticationOptions(
       autoAuthenticate: true,
+      authGroup: 'apptivegrid',
       redirectScheme: 'apptivegrid',
-      persistCredentials: true,
+      persistCredentials: false,
     ),
   );
   await enableWebAuth(options);

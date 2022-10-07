@@ -1494,18 +1494,6 @@ void main() {
         'https://app.apptivegrid.de',
       );
     });
-
-    test('Check Auth Realm', () {
-      expect(
-        ApptiveGridEnvironment.alpha.authRealm,
-        equals('apptivegrid-test'),
-      );
-      expect(ApptiveGridEnvironment.beta.authRealm, equals('apptivegrid-test'));
-      expect(
-        ApptiveGridEnvironment.production.authRealm,
-        equals('apptivegrid'),
-      );
-    });
   });
 
   group('Headers', () {

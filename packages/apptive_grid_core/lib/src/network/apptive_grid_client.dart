@@ -567,16 +567,14 @@ class ApptiveGridClient {
 
   /// Updates the Environment for the client and handle necessary changes in the Authenticator
   Future<void> updateEnvironment(ApptiveGridEnvironment environment) async {
-    final currentRealm = options.environment.authRealm;
-
-    if (currentRealm != environment.authRealm) {
+    if (environment != options.environment) {
       await authenticator.logout();
-    }
 
-    options = options.copyWith(environment: environment);
-    authenticator.options = options;
-    _attachmentProcessor =
-        AttachmentProcessor(options, authenticator, httpClient: _client);
+      options = options.copyWith(environment: environment);
+      authenticator.options = options;
+      _attachmentProcessor =
+          AttachmentProcessor(options, authenticator, httpClient: _client);
+    }
   }
 
   /// Tries to send pending [ActionItem]s that are stored in [options.cache]
