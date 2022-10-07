@@ -22,10 +22,6 @@ void main() {
   late StreamController<String?> streamController;
   late ApptiveGridAuthenticator authenticator;
 
-  final discoveryUri = Uri.parse(
-    'https://iam.zweidenker.de/auth/realms/apptivegrid/.well-known/openid-configuration',
-  );
-
   setUpAll(() {
     registerFallbackValue(Uri());
     registerFallbackValue(const LaunchOptions());
@@ -262,21 +258,6 @@ void main() {
 
     setUp(() {
       httpClient = MockHttpClient();
-
-      when(() => httpClient.get(any())).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments.first as Uri;
-
-        if (uri == discoveryUri) {
-          return Response(
-            jsonEncode(_zweidenkerIssuer.metadata.toJson()),
-            200,
-            request: Request('GET', uri),
-            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
-          );
-        }
-
-        throw 'No Response defined for $uri';
-      });
     });
 
     test('Has Token returns Token', () {
@@ -306,21 +287,6 @@ void main() {
 
     setUp(() {
       httpClient = MockHttpClient();
-
-      when(() => httpClient.get(any())).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments.first as Uri;
-
-        if (uri == discoveryUri) {
-          return Response(
-            jsonEncode(_zweidenkerIssuer.metadata.toJson()),
-            200,
-            request: Request('GET', uri),
-            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
-          );
-        }
-
-        throw 'No Response defined for $uri';
-      });
     });
 
     test('No Token, Auto Authenticate, authenticates', () async {
@@ -451,8 +417,7 @@ void main() {
       await authenticator.authenticate();
       final launchedUrl = await completer.future;
       expect(
-        launchedUrl
-            .startsWith('https://iam.zweidenker.de/auth/realms/apptiveGrid/'),
+        launchedUrl.startsWith('https://app.apptivegrid.de/auth/apptivegrid'),
         true,
       );
     });
@@ -549,16 +514,6 @@ void main() {
       final httpClient = MockHttpClient();
       authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
 
-      when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
-          .thenAnswer(
-        (invocation) async => Response(
-          jsonEncode(_zweidenkerIssuer.metadata.toJson()),
-          200,
-          request: Request('GET', discoveryUri),
-          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
-        ),
-      );
-
       final client = await authenticator.authClient;
       expect(
         client.issuer.metadata.toJson(),
@@ -588,9 +543,6 @@ void main() {
       final isAuthenticated = await authenticator.isAuthenticated;
 
       expect(isAuthenticated, equals(false));
-      verifyNever(
-        () => httpClient.get(discoveryUri, headers: any(named: 'headers')),
-      );
 
       UniLinksPlatform.instance = originalUniLinks;
     });
@@ -674,21 +626,6 @@ void main() {
 
     setUp(() {
       httpClient = MockHttpClient();
-
-      when(() => httpClient.get(any())).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments.first as Uri;
-
-        if (uri == discoveryUri) {
-          return Response(
-            jsonEncode(_zweidenkerIssuer.metadata.toJson()),
-            200,
-            request: Request('GET', uri),
-            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
-          );
-        }
-
-        throw 'No Response defined for $uri';
-      });
     });
 
     group('isAuthenticated', () {
@@ -806,15 +743,7 @@ void main() {
       when(() => credential.getTokenResponse(any()))
           .thenAnswer((invocation) async => token);
       when(() => credential.toJson()).thenReturn(jsonCredential);
-      when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
-          .thenAnswer(
-        (invocation) async => Response(
-          jsonEncode(_zweidenkerIssuer.metadata.toJson()),
-          200,
-          request: Request('GET', discoveryUri),
-          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
-        ),
-      );
+
       authenticator = ApptiveGridAuthenticator(
         httpClient: httpClient,
         options: const ApptiveGridOptions(
@@ -1083,15 +1012,6 @@ void main() {
       final storage = MockAuthenticationStorage();
 
       final httpClient = MockHttpClient();
-      when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
-          .thenAnswer(
-        (invocation) async => Response(
-          jsonEncode(_zweidenkerIssuer.metadata.toJson()),
-          200,
-          request: Request('GET', discoveryUri),
-          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
-        ),
-      );
 
       authenticator = ApptiveGridAuthenticator(
         httpClient: httpClient,
@@ -1148,15 +1068,7 @@ void main() {
       final testAuthenticator = MockAuthenticator();
 
       final httpClient = MockHttpClient();
-      when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
-          .thenAnswer(
-        (invocation) async => Response(
-          jsonEncode(_zweidenkerIssuer.metadata.toJson()),
-          200,
-          request: Request('GET', discoveryUri),
-          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
-        ),
-      );
+
       authenticator = ApptiveGridAuthenticator(
         httpClient: httpClient,
         options: const ApptiveGridOptions(
@@ -1206,16 +1118,6 @@ void main() {
     test('Set Token authenticates User', () async {
       final httpClient = MockHttpClient();
       authenticator = ApptiveGridAuthenticator(httpClient: httpClient);
-
-      when(() => httpClient.get(discoveryUri, headers: any(named: 'headers')))
-          .thenAnswer(
-        (invocation) async => Response(
-          jsonEncode(_zweidenkerIssuer.metadata.toJson()),
-          200,
-          request: Request('GET', discoveryUri),
-          headers: {HttpHeaders.contentTypeHeader: ContentType.json},
-        ),
-      );
 
       final tokenTime = DateTime.now();
       final tokenResponse = {
@@ -1290,21 +1192,6 @@ void main() {
         return true;
       });
 
-      when(() => httpClient.get(any())).thenAnswer((invocation) async {
-        final uri = invocation.positionalArguments.first as Uri;
-
-        if (uri == discoveryUri) {
-          return Response(
-            jsonEncode(_zweidenkerIssuer.metadata.toJson()),
-            200,
-            request: Request('GET', uri),
-            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
-          );
-        }
-
-        throw 'No Response defined for $uri';
-      });
-
       final authResult = await authenticator.authenticate();
 
       expect(authResult!.toJson(), credential.toJson());
@@ -1314,21 +1201,20 @@ void main() {
 
 Issuer get _zweidenkerIssuer => Issuer(
       OpenIdProviderMetadata.fromJson({
-        'issuer': 'https://iam.zweidenker.de/auth/realms/apptiveGrid',
+        'issuer': 'https://app.apptivegrid.de/auth/apptivegrid',
         'authorization_endpoint':
-            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/auth',
-        'token_endpoint':
-            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/token',
+            'https://app.apptivegrid.de/auth/apptivegrid/authorize',
+        'token_endpoint': 'https://app.apptivegrid.de/auth/apptivegrid/token',
         'introspection_endpoint':
-            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/token/introspect',
+            'https://app.apptivegrid.de/auth/apptivegrid/protocol/openid-connect/token/introspect',
         'userinfo_endpoint':
-            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/userinfo',
+            'https://app.apptivegrid.de/auth/apptivegrid/protocol/openid-connect/userinfo',
         'end_session_endpoint':
-            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/logout',
+            'https://app.apptivegrid.de/auth/apptivegrid/logout',
         'jwks_uri':
-            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/certs',
+            'https://app.apptivegrid.de/auth/apptivegrid/protocol/openid-connect/certs',
         'check_session_iframe':
-            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/login-status-iframe.html',
+            'https://app.apptivegrid.de/auth/apptivegrid/protocol/openid-connect/login-status-iframe.html',
         'grant_types_supported':
             '[authorization_code, implicit, refresh_token, password, client_credentials]',
         'response_types_supported':
@@ -1346,7 +1232,7 @@ Issuer get _zweidenkerIssuer => Issuer(
             '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512, none]',
         'response_modes_supported': '[query, fragment, form_post]',
         'registration_endpoint':
-            'https://iam.zweidenker.de/auth/realms/apptiveGrid/clients-registrations/openid-connect',
+            'https://app.apptivegrid.de/auth/apptivegrid/clients-registrations/openid-connect',
         'token_endpoint_auth_methods_supported': [
           'private_key_jwt',
           'client_secret_basic',
@@ -1368,7 +1254,7 @@ Issuer get _zweidenkerIssuer => Issuer(
         'code_challenge_methods_supported': '[plain, S256]',
         'tls_client_certificate_bound_access_tokens': 'true',
         'revocation_endpoint':
-            'https://iam.zweidenker.de/auth/realms/apptiveGrid/protocol/openid-connect/revoke',
+            'https://app.apptivegrid.de/auth/apptivegrid/protocol/openid-connect/revoke',
         'revocation_endpoint_auth_methods_supported':
             '[private_key_jwt, client_secret_basic, client_secret_post, tls_client_auth, client_secret_jwt]',
         'revocation_endpoint_auth_signing_alg_values_supported':
