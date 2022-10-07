@@ -111,71 +111,70 @@ class ApptiveGridAuthenticator {
 
   Future<Client> get _client async {
     Future<Client> createClient() async {
-      final issuer = Issuer(OpenIdProviderMetadata.fromJson({
-        'issuer':
-            '${options.environment.url}/auth/${options.authenticationOptions.authGroup}',
-        'authorization_endpoint':
-            '${options.environment.url}/auth/${options.authenticationOptions.authGroup}/authorize',
-        'token_endpoint':
-            '${options.environment.url}/auth/${options.authenticationOptions.authGroup}/token',
-        'introspection_endpoint':
-            '${options.environment.url}/auth/${options.authenticationOptions.authGroup}/protocol/openid-connect/token/introspect',
-        'userinfo_endpoint':
-            '${options.environment.url}/auth/${options.authenticationOptions.authGroup}/protocol/openid-connect/userinfo',
-        'end_session_endpoint':
-            '${options.environment.url}/auth/${options.authenticationOptions.authGroup}/protocol/openid-connect/logout',
-        'jwks_uri':
-            '${options.environment.url}/auth/${options.authenticationOptions.authGroup}/protocol/openid-connect/certs',
-        'check_session_iframe':
-            '${options.environment.url}/auth/${options.authenticationOptions.authGroup}/protocol/openid-connect/login-status-iframe.html',
-        'grant_types_supported':
-            '[authorization_code, implicit, refresh_token, password, client_credentials]',
-        'response_types_supported':
-            '[code, none, id_token, token, id_token token, code id_token, code token, code id_token token]',
-        'subject_types_supported': '[public, pairwise]',
-        'id_token_signing_alg_values_supported':
-            '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',
-        'id_token_encryption_alg_values_supported':
-            '[RSA-OAEP, RSA-OAEP-256, RSA1_5]',
-        'id_token_encryption_enc_values_supported':
-            '[A256GCM, A192GCM, A128GCM, A128CBC-HS256, A192CBC-HS384, A256CBC-HS512]',
-        'userinfo_signing_alg_values_supported':
-            '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512, none]',
-        'request_object_signing_alg_values_supported':
-            '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512, none]',
-        'response_modes_supported': '[query, fragment, form_post]',
-        'registration_endpoint':
-            '${options.environment.url}/auth/${options.authenticationOptions.authGroup}/clients-registrations/openid-connect',
-        'token_endpoint_auth_methods_supported': [
-          'private_key_jwt',
-          'client_secret_basic',
-          'client_secret_post',
-          'tls_client_auth',
-          'client_secret_jwt'
-        ],
-        'token_endpoint_auth_signing_alg_values_supported':
-            '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',
-        'claims_supported':
-            '[aud, sub, iss, auth_time, name, given_name, family_name, preferred_username, email, acr]',
-        'claim_types_supported': '[normal]',
-        'claims_parameter_supported': 'true',
-        'scopes_supported':
-            '[openid, offline_access, profile, email, address, phone, roles, web-origins, microprofile-jwt]',
-        'request_parameter_supported': 'true',
-        'request_uri_parameter_supported': 'true',
-        'require_request_uri_registration': 'true',
-        'code_challenge_methods_supported': '[plain, S256]',
-        'tls_client_certificate_bound_access_tokens': 'true',
-        'revocation_endpoint':
-            '${options.environment.url}/auth/${options.authenticationOptions.authGroup}/protocol/openid-connect/revoke',
-        'revocation_endpoint_auth_methods_supported':
-            '[private_key_jwt, client_secret_basic, client_secret_post, tls_client_auth, client_secret_jwt]',
-        'revocation_endpoint_auth_signing_alg_values_supported':
-            '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',
-        'backchannel_logout_supported': 'true',
-        'backchannel_logout_session_supported': 'true',
-      }));
-      return Client(issuer, 'app', httpClient: httpClient, clientSecret: '');
+      final baseUriString = _uri.toString();
+      final issuer = Issuer(
+        OpenIdProviderMetadata.fromJson({
+          'issuer': baseUriString,
+          'authorization_endpoint': '$baseUriString/authorize',
+          'token_endpoint': '$baseUriString/token',
+          'introspection_endpoint':
+              '$baseUriString/protocol/openid-connect/token/introspect',
+          'userinfo_endpoint':
+              '$baseUriString/protocol/openid-connect/userinfo',
+          'end_session_endpoint':
+              '$baseUriString/protocol/openid-connect/logout',
+          'jwks_uri': '$baseUriString/protocol/openid-connect/certs',
+          'check_session_iframe':
+              '$baseUriString/protocol/openid-connect/login-status-iframe.html',
+          'grant_types_supported':
+              '[authorization_code, implicit, refresh_token, password, client_credentials]',
+          'response_types_supported':
+              '[code, none, id_token, token, id_token token, code id_token, code token, code id_token token]',
+          'subject_types_supported': '[public, pairwise]',
+          'id_token_signing_alg_values_supported':
+              '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',
+          'id_token_encryption_alg_values_supported':
+              '[RSA-OAEP, RSA-OAEP-256, RSA1_5]',
+          'id_token_encryption_enc_values_supported':
+              '[A256GCM, A192GCM, A128GCM, A128CBC-HS256, A192CBC-HS384, A256CBC-HS512]',
+          'userinfo_signing_alg_values_supported':
+              '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512, none]',
+          'request_object_signing_alg_values_supported':
+              '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512, none]',
+          'response_modes_supported': '[query, fragment, form_post]',
+          'registration_endpoint':
+              '$baseUriString/clients-registrations/openid-connect',
+          'token_endpoint_auth_methods_supported': [
+            'private_key_jwt',
+            'client_secret_basic',
+            'client_secret_post',
+            'tls_client_auth',
+            'client_secret_jwt'
+          ],
+          'token_endpoint_auth_signing_alg_values_supported':
+              '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',
+          'claims_supported':
+              '[aud, sub, iss, auth_time, name, given_name, family_name, preferred_username, email, acr]',
+          'claim_types_supported': '[normal]',
+          'claims_parameter_supported': 'true',
+          'scopes_supported':
+              '[openid, offline_access, profile, email, address, phone, roles, web-origins, microprofile-jwt]',
+          'request_parameter_supported': 'true',
+          'request_uri_parameter_supported': 'true',
+          'require_request_uri_registration': 'true',
+          'code_challenge_methods_supported': '[plain, S256]',
+          'tls_client_certificate_bound_access_tokens': 'true',
+          'revocation_endpoint':
+              '$baseUriString/protocol/openid-connect/revoke',
+          'revocation_endpoint_auth_methods_supported':
+              '[private_key_jwt, client_secret_basic, client_secret_post, tls_client_auth, client_secret_jwt]',
+          'revocation_endpoint_auth_signing_alg_values_supported':
+              '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',
+          'backchannel_logout_supported': 'true',
+          'backchannel_logout_session_supported': 'true',
+        }),
+      );
+      return Client(issuer, 'app', httpClient: httpClient);
     }
 
     return _authClient ??= await createClient();
