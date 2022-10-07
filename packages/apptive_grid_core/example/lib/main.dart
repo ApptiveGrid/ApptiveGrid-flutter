@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 /// Add A ApptiveGrid Widget to your Widget Tree to enable ApptiveGrid Functionality
 void main() async {
   const options = ApptiveGridOptions(
-    environment: ApptiveGridEnvironment.beta,
+    environment: ApptiveGridEnvironment.alpha,
     authenticationOptions: ApptiveGridAuthenticationOptions(
       autoAuthenticate: true,
-      redirectScheme: 'zweidenkerforms',
       authGroup: 'apptivegrid',
-      persistCredentials: true,
+      persistCredentials: false,
     ),
   );
   await enableWebAuth(options);
