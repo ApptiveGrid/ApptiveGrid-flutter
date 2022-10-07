@@ -417,8 +417,8 @@ void main() {
       await authenticator.authenticate();
       final launchedUrl = await completer.future;
       expect(
-        launchedUrl.startsWith('https://app.apptivegrid.de/auth/apptivegrid'),
-        true,
+        launchedUrl,
+        'https://app.apptivegrid.de/auth/apptivegrid/token',
       );
     });
 
