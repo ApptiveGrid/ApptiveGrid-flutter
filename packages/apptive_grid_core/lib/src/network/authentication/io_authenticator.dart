@@ -10,14 +10,18 @@ class Authenticator {
     required Function(String) urlLauncher,
     Iterable<String> scopes = const [],
     Uri? redirectUri,
-  }) : _authenticator = openid.Authenticator(
-          client,
-          scopes: scopes,
-          redirectUri: redirectUri,
-          urlLancher: urlLauncher,
-        );
+  }) {
+    final flow = openid.Flow.authorizationCodeWithPKCE(client);
+    if (redirectUri != null) {
+      flow.redirectUri = redirectUri;
+    }
+    _authenticator = openid.Authenticator.fromFlow(
+      flow,
+      urlLancher: urlLauncher,
+    );
+  }
 
-  final openid.Authenticator _authenticator;
+  late final openid.Authenticator _authenticator;
 
   /// Authorizes the client
   Future<openid.Credential?> authorize() {
