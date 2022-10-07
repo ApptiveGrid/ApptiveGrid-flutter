@@ -174,7 +174,7 @@ class ApptiveGridAuthenticator {
           'backchannel_logout_session_supported': 'true',
         }),
       );
-      return Client(issuer, 'app', httpClient: httpClient);
+      return Client(issuer, 'app', httpClient: httpClient, clientSecret: '');
     }
 
     return _authClient ??= await createClient();

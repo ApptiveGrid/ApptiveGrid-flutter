@@ -8,6 +8,7 @@ void main() async {
     authenticationOptions: ApptiveGridAuthenticationOptions(
       autoAuthenticate: true,
       authGroup: 'apptivegrid',
+      redirectScheme: 'apptivegrid',
       persistCredentials: false,
     ),
   );
