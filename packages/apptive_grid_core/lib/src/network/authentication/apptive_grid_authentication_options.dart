@@ -19,6 +19,7 @@ class ApptiveGridAuthenticationOptions {
   /// For more Info check out https://pub.dev/packages/uni_links
   final String? redirectScheme;
 
+  /// User Group of the users
   final String authGroup;
 
   /// [ApptiveGridApiKey] for authentication with an Api Key
