@@ -121,8 +121,7 @@ class ApptiveGridAuthenticator {
               '$baseUriString/protocol/openid-connect/token/introspect',
           'userinfo_endpoint':
               '$baseUriString/protocol/openid-connect/userinfo',
-          'end_session_endpoint':
-              '$baseUriString/protocol/openid-connect/logout',
+          'end_session_endpoint': '$baseUriString/logout',
           'jwks_uri': '$baseUriString/protocol/openid-connect/certs',
           'check_session_iframe':
               '$baseUriString/protocol/openid-connect/login-status-iframe.html',
