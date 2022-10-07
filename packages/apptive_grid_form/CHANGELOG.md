@@ -1,3 +1,6 @@
+## 0.13.1+1
+* Update `image_picker`
+
 ## 0.13.1
 * Add support for new `FormDataProperties` in forms
 

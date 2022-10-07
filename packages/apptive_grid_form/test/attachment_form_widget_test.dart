@@ -25,6 +25,8 @@ void main() {
         links: {},
       ),
     );
+    registerFallbackValue(const MultiImagePickerOptions());
+    registerFallbackValue(const ImagePickerOptions());
   });
   const field =
       GridField(id: 'fieldId', name: 'name', type: DataType.attachment);
@@ -337,10 +339,8 @@ void main() {
         when(() => mockFile.path).thenReturn('path');
 
         when(
-          () => imagePicker.getMultiImage(
-            maxHeight: any(named: 'maxHeight'),
-            maxWidth: any(named: 'maxWidth'),
-            imageQuality: any(named: 'imageQuality'),
+          () => imagePicker.getMultiImageWithOptions(
+            options: any(named: 'options'),
           ),
         ).thenAnswer(
           (invocation) async => [
@@ -442,10 +442,8 @@ void main() {
         when(() => mockFile2.path).thenReturn('path2');
 
         when(
-          () => imagePicker.getMultiImage(
-            maxHeight: any(named: 'maxHeight'),
-            maxWidth: any(named: 'maxWidth'),
-            imageQuality: any(named: 'imageQuality'),
+          () => imagePicker.getMultiImageWithOptions(
+            options: any(named: 'options'),
           ),
         ).thenAnswer(
           (invocation) async => [mockFile1, mockFile2],
@@ -561,11 +559,9 @@ void main() {
         when(() => mockFile.path).thenReturn('path');
 
         when(
-          () => imagePicker.getImage(
+          () => imagePicker.getImageFromSource(
             source: ImageSource.camera,
-            maxHeight: any(named: 'maxHeight'),
-            maxWidth: any(named: 'maxWidth'),
-            imageQuality: any(named: 'imageQuality'),
+            options: any(named: 'options'),
           ),
         ).thenAnswer(
           (invocation) async => mockFile,
