@@ -262,16 +262,21 @@ class ApptiveGridAuthenticator {
             jsonCredential,
             httpClient: httpClient,
           );
-          setCredential(credential);
-          try {
-            final token = await credential.getTokenResponse(true);
-            setToken(token);
-            return;
-          } on OpenIdException catch (_) {
+          if (credential.client.issuer.metadata.tokenEndpoint ==
+              (await _client).issuer.metadata.tokenEndpoint) {
+            setCredential(credential);
+            try {
+              final token = await credential.getTokenResponse(true);
+              setToken(token);
+              return;
+            } on OpenIdException catch (openIdError) {
+              setCredential(null);
+              debugPrint('Could not refresh saved token: $openIdError');
+            } catch (error) {
+              debugPrint('Error refreshing token: $error');
+            }
+          } else {
             setCredential(null);
-            debugPrint('Could not refresh saved token');
-          } catch (error) {
-            debugPrint('Error refreshing token: $error');
           }
         }
         if (options.authenticationOptions.apiKey != null) {
