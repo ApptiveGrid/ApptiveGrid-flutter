@@ -1,3 +1,6 @@
+## 0.13.3
+* Fixed invalid cached credentials
+ 
 ## 0.13.2
 * Fixed login via webview in the core package
 
