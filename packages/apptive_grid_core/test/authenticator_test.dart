@@ -927,6 +927,60 @@ void main() {
 
     test(
         'Storage Provided '
+        'Saved Credential from invalid issuer '
+        'Deletes token', () async {
+      final tokenTime = DateTime.now();
+      final httpClient = MockHttpClient();
+      final authClient = MockAuthClient();
+      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.clientSecret).thenReturn('');
+      when(() => authClient.clientId).thenReturn('test');
+      when(() => authClient.httpClient).thenReturn(httpClient);
+
+      final tokenResponse = TokenResponse.fromJson({
+        'token_type': 'Bearer',
+        'access_token': '12345',
+        'expires_at': tokenTime.millisecondsSinceEpoch,
+        'expires_in': tokenTime.microsecondsSinceEpoch
+      });
+      final credential = Credential.fromJson({
+        'issuer': _invalidIssuer.metadata.toJson(),
+        'client_id': authClient.clientId,
+        'client_secret': authClient.clientSecret,
+        'token': tokenResponse.toJson(),
+        'nonce': null
+      });
+
+      final storage = MockAuthenticationStorage();
+
+      when(() => storage.credential)
+          .thenAnswer((invocation) => jsonEncode(credential.toJson()));
+
+      final testAuthenticator = MockAuthenticator();
+      when(() => testAuthenticator.authorize()).thenAnswer((_) async => null);
+
+      authenticator = ApptiveGridAuthenticator(
+        options: const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+            persistCredentials: true,
+          ),
+        ),
+        authenticationStorage: storage,
+        httpClient: httpClient,
+      );
+      authenticator.setAuthClient(authClient);
+      authenticator.testAuthenticator = testAuthenticator;
+
+      await authenticator.checkAuthentication();
+
+      verify(
+        () => storage.saveCredential(null),
+      ).called(greaterThanOrEqualTo(1));
+    });
+
+    test(
+        'Storage Provided '
         'Error '
         'Calls authenticate', () async {
       final tokenTime = DateTime.now();
@@ -1255,6 +1309,71 @@ Issuer get _zweidenkerIssuer => Issuer(
         'tls_client_certificate_bound_access_tokens': 'true',
         'revocation_endpoint':
             'https://app.apptivegrid.de/auth/apptivegrid/protocol/openid-connect/revoke',
+        'revocation_endpoint_auth_methods_supported':
+            '[private_key_jwt, client_secret_basic, client_secret_post, tls_client_auth, client_secret_jwt]',
+        'revocation_endpoint_auth_signing_alg_values_supported':
+            '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',
+        'backchannel_logout_supported': 'true',
+        'backchannel_logout_session_supported': 'true',
+      }),
+    );
+
+Issuer get _invalidIssuer => Issuer(
+      OpenIdProviderMetadata.fromJson({
+        'issuer': 'https://iam.zweidenker.de/auth/apptivegrid',
+        'authorization_endpoint':
+            'https://iam.zweidenkerde/auth/apptivegrid/authorize',
+        'token_endpoint': 'https://iam.zweidenkerde/auth/apptivegrid/token',
+        'introspection_endpoint':
+            'https://iam.zweidenkerde/auth/apptivegrid/protocol/openid-connect/token/introspect',
+        'userinfo_endpoint':
+            'https://iam.zweidenkerde/auth/apptivegrid/protocol/openid-connect/userinfo',
+        'end_session_endpoint':
+            'https://iam.zweidenkerde/auth/apptivegrid/logout',
+        'jwks_uri':
+            'https://iam.zweidenkerde/auth/apptivegrid/protocol/openid-connect/certs',
+        'check_session_iframe':
+            'https://iam.zweidenkerde/auth/apptivegrid/protocol/openid-connect/login-status-iframe.html',
+        'grant_types_supported':
+            '[authorization_code, implicit, refresh_token, password, client_credentials]',
+        'response_types_supported':
+            '[code, none, id_token, token, id_token token, code id_token, code token, code id_token token]',
+        'subject_types_supported': '[public, pairwise]',
+        'id_token_signing_alg_values_supported':
+            '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',
+        'id_token_encryption_alg_values_supported':
+            '[RSA-OAEP, RSA-OAEP-256, RSA1_5]',
+        'id_token_encryption_enc_values_supported':
+            '[A256GCM, A192GCM, A128GCM, A128CBC-HS256, A192CBC-HS384, A256CBC-HS512]',
+        'userinfo_signing_alg_values_supported':
+            '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512, none]',
+        'request_object_signing_alg_values_supported':
+            '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512, none]',
+        'response_modes_supported': '[query, fragment, form_post]',
+        'registration_endpoint':
+            'https://iam.zweidenkerde/auth/apptivegrid/clients-registrations/openid-connect',
+        'token_endpoint_auth_methods_supported': [
+          'private_key_jwt',
+          'client_secret_basic',
+          'client_secret_post',
+          'tls_client_auth',
+          'client_secret_jwt'
+        ],
+        'token_endpoint_auth_signing_alg_values_supported':
+            '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',
+        'claims_supported':
+            '[aud, sub, iss, auth_time, name, given_name, family_name, preferred_username, email, acr]',
+        'claim_types_supported': '[normal]',
+        'claims_parameter_supported': 'true',
+        'scopes_supported':
+            '[openid, offline_access, profile, email, address, phone, roles, web-origins, microprofile-jwt]',
+        'request_parameter_supported': 'true',
+        'request_uri_parameter_supported': 'true',
+        'require_request_uri_registration': 'true',
+        'code_challenge_methods_supported': '[plain, S256]',
+        'tls_client_certificate_bound_access_tokens': 'true',
+        'revocation_endpoint':
+            'https://iam.zweidenkerde/auth/apptivegrid/protocol/openid-connect/revoke',
         'revocation_endpoint_auth_methods_supported':
             '[private_key_jwt, client_secret_basic, client_secret_post, tls_client_auth, client_secret_jwt]',
         'revocation_endpoint_auth_signing_alg_values_supported':
