@@ -50,7 +50,7 @@ Thumbs.db
 
 
 **/coverage
-*/.vscode/
+**/.vscode/
 */.dart_tool
 packages/*/pubspec.lock
 melos_*.iml

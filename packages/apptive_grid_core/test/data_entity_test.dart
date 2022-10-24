@@ -305,4 +305,19 @@ void main() {
       expect(entity.schemaValue, isNull);
     });
   });
+
+  group('Email', () {
+    test('Value is set', () {
+      final entity = EmailDataEntity('Value');
+
+      expect(entity.value, equals('Value'));
+      expect(entity.schemaValue, equals('Value'));
+    });
+
+    test('Default is null', () {
+      final entity = EmailDataEntity();
+
+      expect(entity.value, equals(null));
+    });
+  });
 }
