@@ -46,7 +46,10 @@ enum DataType {
   currency(backendName: 'currency'),
 
   /// Type for Uris
-  uri(backendName: 'uri');
+  uri(backendName: 'uri'),
+
+  /// Type for email
+  email(backendName: 'email');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({

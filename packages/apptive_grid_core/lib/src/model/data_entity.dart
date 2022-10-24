@@ -91,6 +91,8 @@ abstract class DataEntity<T, S> with FilterableMixin {
         );
       case DataType.uri:
         return UriDataEntity.fromJson(json);
+      case DataType.email:
+        return EmailDataEntity(json);
     }
   }
 }
@@ -497,4 +499,13 @@ class UriDataEntity extends DataEntity<Uri, String> {
   /// Returns [value] as a json object map
   @override
   String? get schemaValue => value?.toString();
+}
+
+/// [DataEntity] representing an email
+class EmailDataEntity extends DataEntity<String, String> {
+  /// Creates a new StringDataEntity Object with value [value]
+  EmailDataEntity([super.value]);
+
+  @override
+  String? get schemaValue => value;
 }
