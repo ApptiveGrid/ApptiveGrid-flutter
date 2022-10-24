@@ -320,4 +320,19 @@ void main() {
       expect(entity.value, equals(null));
     });
   });
+
+  group('Phone Number', () {
+    test('Value is set', () {
+      final entity = PhoneNumberDataEntity('Value');
+
+      expect(entity.value, equals('Value'));
+      expect(entity.schemaValue, equals('Value'));
+    });
+
+    test('Default is null', () {
+      final entity = PhoneNumberDataEntity();
+
+      expect(entity.value, equals(null));
+    });
+  });
 }

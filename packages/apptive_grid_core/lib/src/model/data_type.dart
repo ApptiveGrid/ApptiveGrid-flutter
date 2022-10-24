@@ -48,8 +48,11 @@ enum DataType {
   /// Type for Uris
   uri(backendName: 'uri'),
 
-  /// Type for email
-  email(backendName: 'email');
+  /// Type for an email
+  email(backendName: 'email'),
+
+  /// Type for a phonenumber
+  phoneNumber(backendName: 'phoneNumber');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({

@@ -1,5 +1,5 @@
 ## 0.14.0
-* Added `DataType.email`
+* Added `DataType.email`, `DataType.phoneNumber` 
 
 ## 0.13.3
 * Fixed invalid cached credentials
