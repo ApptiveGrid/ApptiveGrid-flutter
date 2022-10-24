@@ -1,6 +1,7 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:apptive_grid_form/src/widgets/form_widget/email_form_widget.dart';
+import 'package:apptive_grid_form/src/widgets/form_widget/phone_number_form_widget.dart';
 import 'package:flutter/material.dart';
 
 /// Returns a corresponding Widget for a specific [component]
@@ -73,6 +74,10 @@ Widget fromModel(FormComponent component) {
     case DataType.email:
       return EmailFormWidget(
         component: component.cast<EmailDataEntity>(),
+      );
+    case DataType.phoneNumber:
+      return PhoneNumberFormWidget(
+        component: component.cast<PhoneNumberDataEntity>(),
       );
   }
 }

@@ -1,5 +1,5 @@
 ## 0.14.0
-* Add support for `DataType.email`
+* Add support for `DataType.email`, `DataType.phoneNumber`
 
 * ## 0.13.1+1
 * Update `image_picker`
