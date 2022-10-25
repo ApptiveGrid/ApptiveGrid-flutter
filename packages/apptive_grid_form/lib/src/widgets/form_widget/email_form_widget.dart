@@ -23,6 +23,8 @@ class _EmailFormWidgetState extends State<EmailFormWidget>
     with AutomaticKeepAliveClientMixin {
   final TextEditingController _controller = TextEditingController();
 
+  static final _regex = RegExp(r'^\S+@\S+\.\S+$');
+
   @override
   bool get wantKeepAlive => true;
 
@@ -47,17 +49,16 @@ class _EmailFormWidgetState extends State<EmailFormWidget>
     return TextFormField(
       controller: _controller,
       validator: (input) {
+        final translations = ApptiveGridLocalization.of(context)!;
         if (widget.component.required && (input == null || input.isEmpty)) {
-          return ApptiveGridLocalization.of(context)!
-              .fieldIsRequired(widget.component.property);
+          return translations.fieldIsRequired(widget.component.property);
+        } else if (input != null && !_regex.hasMatch(input)) {
+          return translations.invalidEmail;
         } else {
           return null;
         }
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'^\S+@\S+\.\S+$')),
-      ],
       minLines: 1,
       maxLines: 1,
       decoration: widget.component.baseDecoration,
