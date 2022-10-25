@@ -55,4 +55,6 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
       'Anhänge werden verarbeitet [$processed/$total]';
   @override
   String get progressSubmitForm => "Formular einsenden";
+  @override
+  String get invalidEmail => "Ungültige E-Mail";
 }

@@ -56,7 +56,7 @@ class _PhoneNumberFormWidgetState extends State<PhoneNumberFormWidget>
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'\+[\d]+')),
+        FilteringTextInputFormatter.allow(RegExp(r'^\+*[\d]*')),
       ],
       minLines: 1,
       maxLines: 1,
