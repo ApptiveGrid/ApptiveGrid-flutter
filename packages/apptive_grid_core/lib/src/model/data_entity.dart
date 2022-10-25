@@ -95,6 +95,8 @@ abstract class DataEntity<T, S> with FilterableMixin {
         return EmailDataEntity(json);
       case DataType.phoneNumber:
         return PhoneNumberDataEntity(json);
+      case DataType.signature:
+        return SignatureDataEntity.fromJson(json);
     }
   }
 }
@@ -504,19 +506,26 @@ class UriDataEntity extends DataEntity<Uri, String> {
 }
 
 /// [DataEntity] representing an email
-class EmailDataEntity extends DataEntity<String, String> {
-  /// Creates a new StringDataEntity Object with value [value]
+class EmailDataEntity extends StringDataEntity {
+  /// Creates a new EmailDataEntity Object with value [value]
   EmailDataEntity([super.value]);
-
-  @override
-  String? get schemaValue => value;
 }
 
 /// [DataEntity] representing an email
-class PhoneNumberDataEntity extends DataEntity<String, String> {
-  /// Creates a new StringDataEntity Object with value [value]
+class PhoneNumberDataEntity extends StringDataEntity {
+  /// Creates a new PhoneNumberDataEntity Object with value [value]
   PhoneNumberDataEntity([super.value]);
+}
+
+/// [DataEntity] representing a signature
+class SignatureDataEntity extends DataEntity<Attachment, dynamic> {
+  /// Create a new SignatureDataEntity
+  SignatureDataEntity([super.value]);
+
+  /// Creates a new SignatureDataEntity from a Json Response
+  factory SignatureDataEntity.fromJson(dynamic jsonValue) =>
+      SignatureDataEntity(Attachment.fromJson(jsonValue));
 
   @override
-  String? get schemaValue => value;
+  dynamic get schemaValue => value != null ? value!.toJson() : null;
 }

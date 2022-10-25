@@ -52,7 +52,10 @@ enum DataType {
   email(backendName: 'email'),
 
   /// Type for a phonenumber
-  phoneNumber(backendName: 'phoneNumber');
+  phoneNumber(backendName: 'phoneNumber'),
+
+  /// Type for a phonenumber
+  signature(backendName: 'signature');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({
