@@ -2,7 +2,6 @@ import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/src/widgets/form_widget/form_widget_helpers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 /// FormComponent Widget to display a [FormComponent<EmailDataEntity>]
 class EmailFormWidget extends StatefulWidget {
