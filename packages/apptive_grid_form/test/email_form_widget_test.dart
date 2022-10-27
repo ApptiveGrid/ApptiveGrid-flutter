@@ -56,6 +56,26 @@ void main() {
   });
 
   group('Validation', () {
+    testWidgets('is required', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Property must not be empty', skipOffstage: true),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('is required but filled sends', (tester) async {
       final target = TestApp(
         client: client,
