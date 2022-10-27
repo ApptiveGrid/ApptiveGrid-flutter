@@ -77,7 +77,7 @@ class AttachmentProcessor {
     Uri? smallThumbnail;
     Uri? largeThumbnail;
 
-    if (type.startsWith('image/')) {
+    if (img.getDecoderForNamedImage(name) != null) {
       smallThumbnail = _generateUri(config);
       largeThumbnail = _generateUri(config);
     }
