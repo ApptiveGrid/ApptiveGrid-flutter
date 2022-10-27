@@ -7,6 +7,39 @@ import 'package:mocktail/mocktail.dart';
 import 'common.dart';
 
 void main() {
+  final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+  const field =
+      GridField(id: 'fieldId', name: 'name', type: DataType.phoneNumber);
+  final formData = FormData(
+    id: 'formId',
+    title: 'title',
+    components: [
+      FormComponent<PhoneNumberDataEntity>(
+        property: 'Property',
+        data: PhoneNumberDataEntity(),
+        field: field,
+        required: true,
+      )
+    ],
+    links: {ApptiveLinkType.submit: action},
+    fields: [field],
+  );
+  final formDataFilled = FormData(
+    id: 'formId',
+    title: 'title',
+    components: [
+      FormComponent<PhoneNumberDataEntity>(
+        property: 'Property',
+        data: PhoneNumberDataEntity('+123455'),
+        field: field,
+        required: true,
+      )
+    ],
+    links: {ApptiveLinkType.submit: action},
+    fields: [field],
+  );
+  final client = MockApptiveGridClient();
+
   setUpAll(() {
     registerFallbackValue(
       FormData(
@@ -17,37 +50,18 @@ void main() {
         fields: [],
       ),
     );
+    when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+    when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+      (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+    );
   });
 
   group('Validation', () {
     testWidgets('is required but filled sends', (tester) async {
-      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
-      const field =
-          GridField(id: 'fieldId', name: 'name', type: DataType.phoneNumber);
-      final formData = FormData(
-        id: 'formId',
-        title: 'title',
-        components: [
-          FormComponent<PhoneNumberDataEntity>(
-            property: 'Property',
-            data: PhoneNumberDataEntity('+123455'),
-            field: field,
-            required: true,
-          )
-        ],
-        links: {ApptiveLinkType.submit: action},
-        fields: [field],
-      );
-      final client = MockApptiveGridClient();
-      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
-        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
-      );
-
       final target = TestApp(
         client: client,
         child: ApptiveGridFormData(
-          formData: formData,
+          formData: formDataFilled,
         ),
       );
 
@@ -64,29 +78,6 @@ void main() {
     });
 
     testWidgets('input validation', (tester) async {
-      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
-      const field =
-          GridField(id: 'fieldId', name: 'name', type: DataType.phoneNumber);
-      final formData = FormData(
-        id: 'formId',
-        title: 'title',
-        components: [
-          FormComponent<PhoneNumberDataEntity>(
-            property: 'Property',
-            data: PhoneNumberDataEntity(),
-            field: field,
-            required: true,
-          )
-        ],
-        links: {ApptiveLinkType.submit: action},
-        fields: [field],
-      );
-      final client = MockApptiveGridClient();
-      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
-      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
-        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
-      );
-
       final target = TestApp(
         client: client,
         child: ApptiveGridFormData(
@@ -118,6 +109,48 @@ void main() {
         find.text(validPhoneNumber, skipOffstage: true),
         findsOneWidget,
       );
+    });
+  });
+
+  group('submit', () {
+    testWidgets('sumit sends correct data', (tester) async {
+      const phoneNumberInput = '+12345';
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      final phoneNumberField = find.byType(PhoneNumberFormWidget).first;
+      await tester.tap(phoneNumberField);
+      await tester.pumpAndSettle();
+
+      await tester.enterText(phoneNumberField, phoneNumberInput);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => client.submitFormWithProgress(
+          action,
+          any(
+            that: predicate((formData) {
+              if (formData is FormData) {
+                return (formData.components!.first.data.value as String?) ==
+                    phoneNumberInput;
+              } else {
+                return false;
+              }
+            }),
+          ),
+        ),
+      ).called(1);
     });
   });
 }
