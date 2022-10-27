@@ -426,6 +426,104 @@ void main() {
       expect(parsedOptions.description, equals(description));
       expect(parsedOptions.label, equals(label));
     });
+    test('Email', () {
+      const property = 'property';
+      const id = 'id';
+      const value = 'value';
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'email',
+          }
+        }
+      };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.email,
+        schema: schema,
+      );
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': value,
+        'required': true,
+        'options': {
+          'multi': true,
+          'placeholder': placeholder,
+          'description': description,
+          'label': label
+        },
+        'type': 'textfield'
+      };
+
+      final parsedComponent = FormComponent.fromJson(json, [field]);
+
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(value));
+      expect(parsedComponent.required, equals(true));
+      expect(parsedComponent.data.runtimeType, equals(EmailDataEntity));
+      expect(parsedComponent.data.schemaValue, equals(value));
+
+      final parsedOptions = parsedComponent.options;
+      expect(parsedOptions.multi, equals(true));
+      expect(parsedOptions.placeholder, equals(placeholder));
+      expect(parsedOptions.description, equals(description));
+      expect(parsedOptions.label, equals(label));
+    });
+    test('Phone number', () {
+      const property = 'property';
+      const id = 'id';
+      const value = 'value';
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'phoneNumber',
+          }
+        }
+      };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.phoneNumber,
+        schema: schema,
+      );
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': value,
+        'required': true,
+        'options': {
+          'multi': true,
+          'placeholder': placeholder,
+          'description': description,
+          'label': label
+        },
+        'type': 'textfield'
+      };
+
+      final parsedComponent = FormComponent.fromJson(json, [field]);
+
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(value));
+      expect(parsedComponent.required, equals(true));
+      expect(parsedComponent.data.runtimeType, equals(PhoneNumberDataEntity));
+      expect(parsedComponent.data.schemaValue, equals(value));
+
+      final parsedOptions = parsedComponent.options;
+      expect(parsedOptions.multi, equals(true));
+      expect(parsedOptions.placeholder, equals(placeholder));
+      expect(parsedOptions.description, equals(description));
+      expect(parsedOptions.label, equals(label));
+    });
   });
 
   group('Null values (Empty Form)', () {
@@ -679,6 +777,86 @@ void main() {
         {'GmbH', 'AG', 'Freiberuflich'},
       );
       expect(parsedComponent.data.schemaValue, equals('AG'));
+    });
+    test('Email', () {
+      const property = 'property';
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+      const id = 'id';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'email',
+          }
+        }
+      };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.email,
+        schema: schema,
+      );
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': null,
+        'required': true,
+        'options': {
+          'multi': true,
+          'placeholder': placeholder,
+          'description': description,
+          'label': label
+        },
+        'type': 'textfield'
+      };
+
+      final parsedComponent = FormComponent.fromJson(json, [field]);
+
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(null));
+      expect(parsedComponent.data.schemaValue, equals(null));
+    });
+    test('Phone number', () {
+      const property = 'property';
+      const placeholder = 'placeholder';
+      const description = 'description';
+      const label = 'label';
+      const id = 'id';
+
+      final schema = {
+        'properties': {
+          id: {
+            'type': 'phoneNumber',
+          }
+        }
+      };
+      final field = GridField(
+        id: id,
+        name: property,
+        type: DataType.phoneNumber,
+        schema: schema,
+      );
+      final json = {
+        'property': property,
+        'fieldId': id,
+        'value': null,
+        'required': true,
+        'options': {
+          'multi': true,
+          'placeholder': placeholder,
+          'description': description,
+          'label': label
+        },
+        'type': 'textfield'
+      };
+
+      final parsedComponent = FormComponent.fromJson(json, [field]);
+
+      expect(parsedComponent.property, equals(property));
+      expect(parsedComponent.data.value, equals(null));
+      expect(parsedComponent.data.schemaValue, equals(null));
     });
   });
 
