@@ -323,10 +323,10 @@ void main() {
 
   group('Phone Number', () {
     test('Value is set', () {
-      final entity = PhoneNumberDataEntity('Value');
+      final entity = PhoneNumberDataEntity('123456789');
 
-      expect(entity.value, equals('Value'));
-      expect(entity.schemaValue, equals('Value'));
+      expect(entity.value, equals('123456789'));
+      expect(entity.schemaValue, equals('123456789'));
     });
 
     test('Default is null', () {
