@@ -62,5 +62,62 @@ void main() {
         findsNothing,
       );
     });
+
+    testWidgets('input validation', (tester) async {
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+      const field =
+          GridField(id: 'fieldId', name: 'name', type: DataType.phoneNumber);
+      final formData = FormData(
+        id: 'formId',
+        title: 'title',
+        components: [
+          FormComponent<PhoneNumberDataEntity>(
+            property: 'Property',
+            data: PhoneNumberDataEntity(),
+            field: field,
+            required: true,
+          )
+        ],
+        links: {ApptiveLinkType.submit: action},
+        fields: [field],
+      );
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      final phonenumberField = find.byType(PhoneNumberFormWidget).first;
+      await tester.tap(phonenumberField);
+      await tester.pumpAndSettle();
+
+      const invalidPhoneNumber = 'h12345';
+      await tester.enterText(phonenumberField, invalidPhoneNumber);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(invalidPhoneNumber, skipOffstage: true),
+        findsNothing,
+      );
+
+      const validPhoneNumber = '+12345';
+      await tester.enterText(phonenumberField, validPhoneNumber);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(validPhoneNumber, skipOffstage: true),
+        findsOneWidget,
+      );
+    });
   });
 }
