@@ -125,7 +125,7 @@ void main() {
   });
 
   group('submit', () {
-    testWidgets('sumit sends correct data', (tester) async {
+    testWidgets('submit sends correct data', (tester) async {
       const emailInput = 'text.text@text.text';
 
       final target = TestApp(

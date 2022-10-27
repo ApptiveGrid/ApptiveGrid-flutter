@@ -132,7 +132,7 @@ void main() {
   });
 
   group('submit', () {
-    testWidgets('sumit sends correct data', (tester) async {
+    testWidgets('submit sends correct data', (tester) async {
       const phoneNumberInput = '+12345';
 
       final target = TestApp(
