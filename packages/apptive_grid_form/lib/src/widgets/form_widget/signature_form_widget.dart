@@ -149,5 +149,29 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
     if (paths != null) {
       _signatureController.importPath(paths);
     }
+
+    final attachmentManager =
+        Provider.of<AttachmentManager>(context, listen: false);
+
+    if (widget.component.data.value != null) {
+      attachmentManager.removeAttachment(widget.component.data.value!);
+    }
+
+    final svgString = _signatureController.toSvg(wrapSignature: true);
+    if (svgString != null) {
+      final client = ApptiveGrid.getClient(context, listen: false);
+
+      final time = DateTime.now().toIso8601String();
+      final timeString = Uri.encodeQueryComponent(time);
+      final attachment = await client.attachmentProcessor
+          .createAttachment('signature$timeString.svg');
+      attachmentManager.addAttachmentFromMemory(
+        attachment,
+        Uint8List.fromList(svgString.codeUnits),
+      );
+      widget.component.data.value = attachment;
+
+      setState(() {});
+    }
   }
 }

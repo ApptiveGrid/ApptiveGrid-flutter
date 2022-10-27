@@ -180,28 +180,18 @@ class AttachmentProcessor {
           ],
         );
         return uploads.first;
-      } else {
-        return _uploadFile(
-          baseUri: baseUploadUri,
-          headers: uploadHeaders,
-          createBytes: () async =>
-              attachmentAction.byteData ??
-              await File(attachmentAction.path!).readAsBytes(),
-          name: attachmentAction.attachment.url.pathSegments.last,
-          type: attachmentAction.attachment.type,
-        );
       }
-    } else {
-      return _uploadFile(
-        baseUri: baseUploadUri,
-        headers: uploadHeaders,
-        createBytes: () async =>
-            attachmentAction.byteData ??
-            await File(attachmentAction.path!).readAsBytes(),
-        name: attachmentAction.attachment.url.pathSegments.last,
-        type: attachmentAction.attachment.type,
-      );
     }
+
+    return _uploadFile(
+      baseUri: baseUploadUri,
+      headers: uploadHeaders,
+      createBytes: () async =>
+          attachmentAction.byteData ??
+          await File(attachmentAction.path!).readAsBytes(),
+      name: attachmentAction.attachment.url.pathSegments.last,
+      type: attachmentAction.attachment.type,
+    );
   }
 
   Future<http.Response> _uploadFile({
