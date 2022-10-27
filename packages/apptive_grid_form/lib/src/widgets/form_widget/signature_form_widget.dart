@@ -96,12 +96,13 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
       context: context,
       builder: (dialogContext) {
         final theme = Theme.of(context);
+        final translations = ApptiveGridLocalization.of(context)!;
         return AlertDialog(
           insetPadding: const EdgeInsets.all(8),
           titlePadding: const EdgeInsets.all(16),
           contentPadding: const EdgeInsets.all(8),
           actionsPadding: const EdgeInsets.all(16),
-          title: Text('Sign here'),
+          title: Text(translations.signHere),
           content: AspectRatio(
             aspectRatio: 2,
             child: DecoratedBox(
@@ -124,14 +125,14 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
           actions: [
             TextButton(
               onPressed: () => tmpSignatureControl.clear(),
-              child: Text('clear'),
+              child: Text(translations.clear),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(
                 dialogContext,
                 true,
               ),
-              child: Text('confirm'),
+              child: Text(translations.save),
             ),
           ],
         );

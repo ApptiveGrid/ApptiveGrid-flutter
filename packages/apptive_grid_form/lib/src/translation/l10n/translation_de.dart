@@ -57,4 +57,10 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get progressSubmitForm => "Formular einsenden";
   @override
   String get invalidEmail => "Ungültige E-Mail";
+  @override
+  String get clear => "Korrigieren";
+  @override
+  String get save => "Speichern";
+  @override
+  String get signHere => "Hier unterschreiben";
 }

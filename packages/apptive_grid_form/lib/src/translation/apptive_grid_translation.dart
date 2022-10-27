@@ -74,4 +74,13 @@ abstract class ApptiveGridTranslation {
 
   /// Hint that the provided email is not valid
   String get invalidEmail;
+
+  /// Label to clear an input
+  String get clear;
+
+  /// Label to save changes
+  String get save;
+
+  /// Prompt to sign in the field
+  String get signHere;
 }
