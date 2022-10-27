@@ -1,10 +1,10 @@
 /// Possible Stages/Environment ApptiveGrid can point to
 enum ApptiveGridEnvironment {
   /// Alpha Environment
-  alpha(url: 'http://alpha.apptivegrid.de'),
+  alpha(url: 'https://alpha.apptivegrid.de'),
 
   /// Beta Environment
-  beta(url: 'http://beta.apptivegrid.de'),
+  beta(url: 'https://beta.apptivegrid.de'),
 
   /// Production Environment
   production(url: 'https://app.apptivegrid.de');
