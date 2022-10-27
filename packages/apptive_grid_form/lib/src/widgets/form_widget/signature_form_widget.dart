@@ -4,6 +4,7 @@ import 'package:apptive_grid_form/src/widgets/form_widget/attachment_manager.dar
 import 'package:apptive_grid_form/src/widgets/form_widget/form_widget_helpers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/parser.dart';
 import 'package:hand_signature/signature.dart';
 import 'package:provider/provider.dart';
 
@@ -27,11 +28,19 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
   @override
   bool get wantKeepAlive => true;
 
+  bool _isLoadingPreviousValue = true;
+  String? _loadedSvg;
   final _signatureController = HandSignatureControl();
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.component.data.value != null) {
+      _loadSignature(widget.component.data.value!);
+    } else {
+      _isLoadingPreviousValue = false;
+    }
 
     _signatureController.addListener(() => setState(() {}));
   }
@@ -58,7 +67,7 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
       initialValue: widget.component.data,
       builder: (formState) {
         return GestureDetector(
-          onTap: _openSignatureSheet,
+          onTap: !_isLoadingPreviousValue ? _openSignatureSheet : null,
           child: InputDecorator(
             decoration: widget.component.baseDecoration.copyWith(
               errorText: formState.errorText,
@@ -70,17 +79,20 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
             ),
             child: AspectRatio(
               aspectRatio: 2,
-              child: _signatureController.isFilled
+              child: _signatureController.isFilled || _loadedSvg != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: HandSignatureView.svg(
                         data: _signatureController.toSvg(
-                          wrapSignature: true,
-                        )!,
+                              wrapSignature: true,
+                            ) ??
+                            _loadedSvg,
                       ),
                     )
-                  : const Center(
-                      child: Icon(Icons.draw_outlined),
+                  : Center(
+                      child: _isLoadingPreviousValue
+                          ? const CircularProgressIndicator()
+                          : const Icon(Icons.draw_outlined),
                     ),
             ),
           ),
@@ -173,6 +185,24 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
       widget.component.data.value = attachment;
 
       setState(() {});
+    }
+  }
+
+  void _loadSignature(Attachment signature) async {
+    final client = ApptiveGrid.getClient(context, listen: false).httpClient;
+    try {
+      final response = await client.get(signature.url);
+      final svgString = String.fromCharCodes(response.bodyBytes);
+      await SvgParser().parse(svgString);
+      setState(() {
+        _loadedSvg = svgString;
+      });
+    } catch (_) {
+      widget.component.data.value = null;
+    } finally {
+      setState(() {
+        _isLoadingPreviousValue = false;
+      });
     }
   }
 }

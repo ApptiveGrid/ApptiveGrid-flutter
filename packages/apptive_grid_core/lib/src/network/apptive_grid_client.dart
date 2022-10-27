@@ -32,6 +32,9 @@ class ApptiveGridClient {
 
   final http.Client _client;
 
+  /// The underlying http client
+  http.Client get httpClient => _client;
+
   late AttachmentProcessor _attachmentProcessor;
 
   /// Processor for Attachments.
