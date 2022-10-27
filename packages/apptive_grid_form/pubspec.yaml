@@ -18,6 +18,7 @@ dependencies:
   geolocator: ^8.2.1
   google_maps_flutter: ^2.1.8
   google_maps_flutter_platform_interface: ^2.1.7
+  hand_signature: ^2.3.0+1
   http: ^0.13.4
   image_picker: ^0.8.6
   intl: ^0.17.0

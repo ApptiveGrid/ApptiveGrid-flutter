@@ -524,7 +524,9 @@ class SignatureDataEntity extends DataEntity<Attachment, dynamic> {
 
   /// Creates a new SignatureDataEntity from a Json Response
   factory SignatureDataEntity.fromJson(dynamic jsonValue) =>
-      SignatureDataEntity(Attachment.fromJson(jsonValue));
+      SignatureDataEntity(
+        jsonValue != null ? Attachment.fromJson(jsonValue) : null,
+      );
 
   @override
   dynamic get schemaValue => value != null ? value!.toJson() : null;
