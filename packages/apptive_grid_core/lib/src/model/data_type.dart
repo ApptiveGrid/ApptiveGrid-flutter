@@ -51,7 +51,7 @@ enum DataType {
   /// Type for an email
   email(backendName: 'email'),
 
-  /// Type for a phonenumber
+  /// Type for a phone number
   phoneNumber(backendName: 'phoneNumber');
 
   /// Define a Datatype with a corresponding [backendName]
