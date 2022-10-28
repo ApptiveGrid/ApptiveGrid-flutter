@@ -221,5 +221,53 @@ void main() {
         component,
       );
     });
+    test('Email', () {
+      const options = FormComponentOptions(
+        multi: false,
+        placeholder: 'Placeholder',
+        label: 'Label',
+        description: 'Description',
+      );
+      final component = FormComponent<EmailDataEntity>(
+        field: const GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.email,
+        ),
+        property: 'Property',
+        data: EmailDataEntity('test@test.test'),
+        options: options,
+        required: true,
+      );
+
+      expect(
+        FormComponent.fromJson(component.toJson(), [component.field]),
+        equals(component),
+      );
+    });
+    test('Phone number', () {
+      const options = FormComponentOptions(
+        multi: false,
+        placeholder: 'Placeholder',
+        label: 'Label',
+        description: 'Description',
+      );
+      final component = FormComponent<PhoneNumberDataEntity>(
+        field: const GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.phoneNumber,
+        ),
+        property: 'Property',
+        data: PhoneNumberDataEntity('+123456'),
+        options: options,
+        required: true,
+      );
+
+      expect(
+        FormComponent.fromJson(component.toJson(), [component.field]),
+        equals(component),
+      );
+    });
   });
 }
