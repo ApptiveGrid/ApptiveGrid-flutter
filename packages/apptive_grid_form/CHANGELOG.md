@@ -1,4 +1,4 @@
-## 0.14.0
+## 0.13.2
 * Add support for `DataType.email`, `DataType.phoneNumber` and `DataType.signature`
 
 * ## 0.13.1+1

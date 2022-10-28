@@ -506,15 +506,21 @@ class UriDataEntity extends DataEntity<Uri, String> {
 }
 
 /// [DataEntity] representing an email
-class EmailDataEntity extends StringDataEntity {
-  /// Creates a new EmailDataEntity Object with value [value]
+class EmailDataEntity extends DataEntity<String, String> {
+  /// Creates a new StringDataEntity Object with value [value]
   EmailDataEntity([super.value]);
+
+  @override
+  String? get schemaValue => value;
 }
 
 /// [DataEntity] representing an email
-class PhoneNumberDataEntity extends StringDataEntity {
-  /// Creates a new PhoneNumberDataEntity Object with value [value]
+class PhoneNumberDataEntity extends DataEntity<String, String> {
+  /// Creates a new StringDataEntity Object with value [value]
   PhoneNumberDataEntity([super.value]);
+
+  @override
+  String? get schemaValue => value;
 }
 
 /// [DataEntity] representing a signature
