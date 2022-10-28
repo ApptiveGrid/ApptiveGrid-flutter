@@ -269,5 +269,35 @@ void main() {
         equals(component),
       );
     });
+    test('Signature', () {
+      const options = FormComponentOptions(
+        multi: false,
+        placeholder: 'Placeholder',
+        label: 'Label',
+        description: 'Description',
+      );
+      final component = FormComponent<SignatureDataEntity>(
+        field: const GridField(
+          id: 'id',
+          name: 'name',
+          type: DataType.signature,
+        ),
+        property: 'property',
+        data: SignatureDataEntity(
+          Attachment(
+            name: 'name',
+            type: 'image/svg+xml',
+            url: Uri.parse('https://test.com'),
+          ),
+        ),
+        options: options,
+        required: true,
+      );
+
+      expect(
+        FormComponent.fromJson(component.toJson(), [component.field]),
+        equals(component),
+      );
+    });
   });
 }

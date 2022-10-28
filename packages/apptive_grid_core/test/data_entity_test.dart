@@ -341,7 +341,7 @@ void main() {
       final attachment = Attachment(
         name: 'attachment',
         url: Uri.parse('attachment'),
-        type: 'image/png',
+        type: 'image/svg+xml',
       );
       final entity = SignatureDataEntity(attachment);
 
@@ -356,7 +356,7 @@ void main() {
       final attachment = Attachment(
         name: 'attachment',
         url: Uri.parse('attachment'),
-        type: 'image/png',
+        type: 'image/svg+xml',
       );
       final direct = SignatureDataEntity(attachment);
 
