@@ -158,6 +158,7 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
   }
 
   void setSignature(List<CubicPath>? paths) async {
+    _loadedSvg = null;
     _signatureController.clear();
     if (paths != null) {
       _signatureController.importPath(paths);
