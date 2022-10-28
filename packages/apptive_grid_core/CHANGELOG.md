@@ -1,4 +1,4 @@
-## 0.14.0
+## 0.13.4
 * Added `DataType.email`, `DataType.phoneNumber` and `DataType.signature`
 
 ## 0.13.3
