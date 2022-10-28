@@ -71,4 +71,7 @@ abstract class ApptiveGridTranslation {
 
   /// Message that the form is being submitted
   String get progressSubmitForm;
+
+  /// Hint that the provided email is not valid
+  String get invalidEmail;
 }
