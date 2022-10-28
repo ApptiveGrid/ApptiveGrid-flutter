@@ -9,7 +9,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  apptive_grid_core: ^0.14.0
+  apptive_grid_core: ^0.13.4
   file_picker: ^4.6.0
   flutter:
     sdk: flutter
