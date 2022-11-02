@@ -47,8 +47,8 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
 
   @override
   void dispose() {
-    super.dispose();
     _signatureController.dispose();
+    super.dispose();
   }
 
   @override
@@ -151,13 +151,13 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
       },
     ).then(
       (didConfirm) {
-        setSignature(didConfirm == true ? tmpSignatureControl.paths : null);
+        _setSignature(didConfirm == true ? tmpSignatureControl.paths : null);
         tmpSignatureControl.dispose();
       },
     );
   }
 
-  void setSignature(List<CubicPath>? paths) async {
+  void _setSignature(List<CubicPath>? paths) async {
     _loadedSvg = null;
     _signatureController.clear();
     if (paths != null) {

@@ -535,5 +535,5 @@ class SignatureDataEntity extends DataEntity<Attachment, dynamic> {
       );
 
   @override
-  dynamic get schemaValue => value != null ? value!.toJson() : null;
+  dynamic get schemaValue => value?.toJson();
 }
