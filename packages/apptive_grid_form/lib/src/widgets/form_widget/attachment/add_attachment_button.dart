@@ -126,7 +126,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
           in result.files.where((element) => element.path != null)) {
         final attachment =
             await client.attachmentProcessor.createAttachment(file.name);
-        attachmentManager.addAttachment(attachment, file.path);
+        attachmentManager.addAttachmentFromFile(attachment, file.path);
         newAttachments.add(attachment);
       }
       return newAttachments;
@@ -147,7 +147,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
         final attachment =
             await client.attachmentProcessor.createAttachment(file.name);
 
-        attachmentManager.addAttachment(attachment, file.path);
+        attachmentManager.addAttachmentFromFile(attachment, file.path);
         newAttachments.add(attachment);
       }
       return newAttachments;
@@ -166,7 +166,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
       final newAttachment =
           await client.attachmentProcessor.createAttachment(file.name);
 
-      attachmentManager.addAttachment(newAttachment, file.path);
+      attachmentManager.addAttachmentFromFile(newAttachment, file.path);
       return [newAttachment];
     } else {
       return null;

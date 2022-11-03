@@ -1,4 +1,5 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:flutter/foundation.dart';
 
 /// Manages Attachment Actions for a [ApptiveGridFormData] Widget
 class AttachmentManager {
@@ -8,10 +9,16 @@ class AttachmentManager {
   /// FormData that should receive Attachment Actions
   final FormData? formData;
 
-  /// Adds an Attachment
-  void addAttachment(Attachment attachment, String? path) {
+  /// Adds an Attachment via file path
+  void addAttachmentFromFile(Attachment attachment, String? path) {
     formData?.attachmentActions[attachment] =
         AddAttachmentAction(path: path, attachment: attachment);
+  }
+
+  /// Adds an Attachment from memory
+  void addAttachmentFromMemory(Attachment attachment, Uint8List? byteData) {
+    formData?.attachmentActions[attachment] =
+        AddAttachmentAction(byteData: byteData, attachment: attachment);
   }
 
   /// Removes an Attachment. Used for deleting Attachments

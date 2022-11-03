@@ -77,5 +77,9 @@ Widget fromModel(FormComponent component) {
       return PhoneNumberFormWidget(
         component: component.cast<PhoneNumberDataEntity>(),
       );
+    case DataType.signature:
+      return SignatureFormWidget(
+        component: component.cast<SignatureDataEntity>(),
+      );
   }
 }

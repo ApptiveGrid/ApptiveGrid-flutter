@@ -335,4 +335,40 @@ void main() {
       expect(entity.value, equals(null));
     });
   });
+
+  group('Signature', () {
+    test('Value is set', () {
+      final attachment = Attachment(
+        name: 'attachment',
+        url: Uri.parse('attachment'),
+        type: 'image/svg+xml',
+      );
+      final entity = SignatureDataEntity(attachment);
+
+      expect(entity.value, equals(attachment));
+      expect(
+        entity.schemaValue,
+        attachment.toJson(),
+      );
+    });
+
+    test('From Json', () {
+      final attachment = Attachment(
+        name: 'attachment',
+        url: Uri.parse('attachment'),
+        type: 'image/svg+xml',
+      );
+      final direct = SignatureDataEntity(attachment);
+
+      final fromJson = SignatureDataEntity.fromJson(attachment.toJson());
+
+      expect(direct, equals(fromJson));
+    });
+
+    test('Default is null', () {
+      final entity = SignatureDataEntity();
+
+      expect(entity.value, equals(null));
+    });
+  });
 }
