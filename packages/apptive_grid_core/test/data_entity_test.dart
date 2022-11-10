@@ -305,4 +305,70 @@ void main() {
       expect(entity.schemaValue, isNull);
     });
   });
+
+  group('Email', () {
+    test('Value is set', () {
+      final entity = EmailDataEntity('Value');
+
+      expect(entity.value, equals('Value'));
+      expect(entity.schemaValue, equals('Value'));
+    });
+
+    test('Default is null', () {
+      final entity = EmailDataEntity();
+
+      expect(entity.value, equals(null));
+    });
+  });
+
+  group('Phone Number', () {
+    test('Value is set', () {
+      final entity = PhoneNumberDataEntity('123456789');
+
+      expect(entity.value, equals('123456789'));
+      expect(entity.schemaValue, equals('123456789'));
+    });
+
+    test('Default is null', () {
+      final entity = PhoneNumberDataEntity();
+
+      expect(entity.value, equals(null));
+    });
+  });
+
+  group('Signature', () {
+    test('Value is set', () {
+      final attachment = Attachment(
+        name: 'attachment',
+        url: Uri.parse('attachment'),
+        type: 'image/svg+xml',
+      );
+      final entity = SignatureDataEntity(attachment);
+
+      expect(entity.value, equals(attachment));
+      expect(
+        entity.schemaValue,
+        attachment.toJson(),
+      );
+    });
+
+    test('From Json', () {
+      final attachment = Attachment(
+        name: 'attachment',
+        url: Uri.parse('attachment'),
+        type: 'image/svg+xml',
+      );
+      final direct = SignatureDataEntity(attachment);
+
+      final fromJson = SignatureDataEntity.fromJson(attachment.toJson());
+
+      expect(direct, equals(fromJson));
+    });
+
+    test('Default is null', () {
+      final entity = SignatureDataEntity();
+
+      expect(entity.value, equals(null));
+    });
+  });
 }

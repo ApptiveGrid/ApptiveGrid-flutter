@@ -69,5 +69,17 @@ Widget fromModel(FormComponent component) {
       return UriFormWidget(
         component: component.cast<UriDataEntity>(),
       );
+    case DataType.email:
+      return EmailFormWidget(
+        component: component.cast<EmailDataEntity>(),
+      );
+    case DataType.phoneNumber:
+      return PhoneNumberFormWidget(
+        component: component.cast<PhoneNumberDataEntity>(),
+      );
+    case DataType.signature:
+      return SignatureFormWidget(
+        component: component.cast<SignatureDataEntity>(),
+      );
   }
 }

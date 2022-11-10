@@ -20,5 +20,9 @@
     "attachmentSourceFiles": "Dateien auswählen",
     "searchUserNoResult": "Kein Nutzer mit \"$query\" gefunden",
     "progressProcessAttachment": "Anhänge werden verarbeitet [$processed/$total]",
-    "progressSubmitForm": "Formular einsenden"
+    "progressSubmitForm": "Formular einsenden",
+    "invalidEmail": "Ungültige E-Mail",
+    "clear": "Korrigieren",
+    "save": "Speichern",
+    "signHere": "Hier unterschreiben"
 }

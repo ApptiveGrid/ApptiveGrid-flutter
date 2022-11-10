@@ -9,12 +9,15 @@ export 'package:apptive_grid_form/src/widgets/form_widget/currency_form_widget.d
 export 'package:apptive_grid_form/src/widgets/form_widget/date_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/date_time_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/decimal_form_widget.dart';
+export 'package:apptive_grid_form/src/widgets/form_widget/email_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/enum_collection_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/enum_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/geolocation_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/integer_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/multi_cross_reference_form_widget.dart';
+export 'package:apptive_grid_form/src/widgets/form_widget/phone_number_form_widget.dart';
+export 'package:apptive_grid_form/src/widgets/form_widget/signature_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/text_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/uri_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/user_form_widget.dart';

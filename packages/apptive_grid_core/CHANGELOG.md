@@ -1,3 +1,9 @@
+## 0.13.4
+* Added `DataType.email`, `DataType.phoneNumber` and `DataType.signature`
+
+## 0.13.3
+* Fixed invalid cached credentials
+ 
 ## 0.13.2
 * Fixed login via webview in the core package
 
