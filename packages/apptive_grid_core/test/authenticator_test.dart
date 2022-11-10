@@ -1031,13 +1031,18 @@ void main() {
       final testAuthenticator = MockAuthenticator();
       when(() => testAuthenticator.authorize()).thenAnswer((_) async => null);
 
-      authenticator = ApptiveGridAuthenticator(
-        options: const ApptiveGridOptions(
+      final agClient = MockApptiveGridClient();
+      when(() => agClient.options).thenReturn(
+        const ApptiveGridOptions(
           authenticationOptions: ApptiveGridAuthenticationOptions(
             autoAuthenticate: true,
             persistCredentials: true,
           ),
         ),
+      );
+
+      authenticator = ApptiveGridAuthenticator(
+        client: agClient,
         authenticationStorage: storage,
         httpClient: httpClient,
       );
