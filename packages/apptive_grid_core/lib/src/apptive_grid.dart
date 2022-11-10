@@ -74,7 +74,6 @@ class _ApptiveGridState extends State<ApptiveGrid> {
     if (oldWidget.options != widget.options) {
       setState(() {
         _client.options = widget.options;
-        _client.updateEnvironment(widget.options.environment);
       });
     }
   }

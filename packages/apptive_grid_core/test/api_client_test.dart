@@ -1955,7 +1955,7 @@ void main() {
       initialOptions =
           const ApptiveGridOptions(environment: ApptiveGridEnvironment.alpha);
       authenticator = ApptiveGridAuthenticator(
-        options: initialOptions,
+        client: client,
         httpClient: httpClient,
       );
       client = ApptiveGridClient(
@@ -1986,14 +1986,14 @@ void main() {
 
     test('switch authenticator environment', () async {
       expect(
-        authenticator.options.environment,
+        authenticator.client.options.environment,
         equals(ApptiveGridEnvironment.alpha),
       );
 
       await client.updateEnvironment(ApptiveGridEnvironment.production);
 
       expect(
-        authenticator.options.environment,
+        authenticator.client.options.environment,
         ApptiveGridEnvironment.production,
       );
     });

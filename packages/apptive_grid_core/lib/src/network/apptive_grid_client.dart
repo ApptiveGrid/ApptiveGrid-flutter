@@ -14,18 +14,27 @@ import 'package:openid_client/openid_client.dart';
 class ApptiveGridClient {
   /// Creates an ApiClient
   ApptiveGridClient({
-    this.options = const ApptiveGridOptions(),
+    ApptiveGridOptions options = const ApptiveGridOptions(),
     http.Client? httpClient,
     ApptiveGridAuthenticator? authenticator,
-  }) : _client = httpClient ?? http.Client() {
+  })  : _options = options,
+        _client = httpClient ?? http.Client() {
     this.authenticator = authenticator ??
-        ApptiveGridAuthenticator(options: options, httpClient: _client);
+        ApptiveGridAuthenticator(client: this, httpClient: _client);
     _attachmentProcessor =
         AttachmentProcessor(options, this.authenticator, httpClient: _client);
   }
 
   /// Configurations
-  ApptiveGridOptions options;
+  ApptiveGridOptions _options;
+
+  ApptiveGridOptions get options => _options;
+
+  set options(ApptiveGridOptions options) {
+    // Keep old environment as change is handled in [updateEnvironment]
+    _options = options.copyWith(environment: _options.environment);
+    updateEnvironment(options.environment);
+  }
 
   /// The authenticator used to authenticate requests
   late final ApptiveGridAuthenticator authenticator;
@@ -570,8 +579,8 @@ class ApptiveGridClient {
     if (environment != options.environment) {
       await authenticator.logout();
 
-      options = options.copyWith(environment: environment);
-      authenticator.options = options;
+      _options = options.copyWith(environment: environment);
+      authenticator.performSetup();
       _attachmentProcessor =
           AttachmentProcessor(options, authenticator, httpClient: _client);
     }
