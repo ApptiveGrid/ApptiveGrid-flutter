@@ -555,7 +555,6 @@ void main() {
       final logoutUri = Uri.parse('https://log.me/out');
 
       final credential = MockCredential();
-      await authenticator.setCredential(credential);
       final token = TokenResponse.fromJson(
         {'token_type': 'Bearer', 'access_token': '12345'},
       );
@@ -566,6 +565,7 @@ void main() {
       when(() => client.clientId).thenReturn('clientId');
 
       await authenticator.setToken(token);
+      await authenticator.setCredential(credential);
 
       when(() => credential.generateLogoutUrl())
           .thenAnswer((invocation) => logoutUri);
