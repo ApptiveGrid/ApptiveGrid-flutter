@@ -84,137 +84,139 @@ class _RegisterContentState extends State<RegisterContent> {
         absorbing: _step == _RegisterContentStep.loading,
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: _firstNameController,
-                autofillHints: const [AutofillHints.givenName],
-                decoration:
-                    InputDecoration(hintText: localization.hintFirstName),
-                validator: (input) {
-                  if (input == null || input.isEmpty) {
-                    return localization.validateErrorFirstNameEmpty;
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: spacing,
-              ),
-              TextFormField(
-                controller: _lastNameController,
-                autofillHints: const [AutofillHints.familyName],
-                decoration:
-                    InputDecoration(hintText: localization.hintLastName),
-                validator: (input) {
-                  if (input == null || input.isEmpty) {
-                    return localization.validateErrorLastNameEmpty;
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: spacing,
-              ),
-              EmailFormField(
-                controller: _emailController,
-                autofillHints: const [AutofillHints.newUsername],
-                validator: (input) {
-                  if (input == null || input.isEmpty) {
-                    return localization.validateErrorEmailEmpty;
-                  } else if (RegExp(
-                        r'(?!.*\.\.)(^[^\.][^@\s]+@[^@\s]+\.[^@\s\.]+$)',
-                      ).firstMatch(input) ==
-                      null) {
-                    return localization.validateErrorEmailFormat;
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: spacing,
-              ),
-              PasswordFormField(
-                key: _passwordFormKey,
-                controller: _passwordController,
-                autofillHints: const [AutofillHints.newPassword],
-                decoration: InputDecoration(
-                  hintText: localization.hintPassword,
-                  errorStyle: const TextStyle(fontSize: 0),
+          child: AutofillGroup(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _firstNameController,
+                  autofillHints: const [AutofillHints.givenName],
+                  decoration:
+                      InputDecoration(hintText: localization.hintFirstName),
+                  validator: (input) {
+                    if (input == null || input.isEmpty) {
+                      return localization.validateErrorFirstNameEmpty;
+                    }
+                    return null;
+                  },
                 ),
-                validator: (_) {
-                  if (_ruleCheckKey.currentState?.validate() == false) {
-                    return '';
-                  }
-                  return null;
-                },
-              ),
-              PasswordCheck(
-                controller: _passwordController,
-                validationKey: _ruleCheckKey,
-              ),
-              SizedBox(
-                height: spacing,
-              ),
-              PasswordFormField(
-                controller: _confirmPasswordController,
-                autofillHints: const [AutofillHints.password],
-                decoration: InputDecoration(
-                  hintText: localization.hintConfirmPassword,
-                ),
-                validator: (input) {
-                  if (input != _passwordController.text) {
-                    return localization.validateErrorPasswordsNotMatching;
-                  }
-                  return null;
-                },
-              ),
-              if (_error != null) ...[
                 SizedBox(
                   height: spacing,
                 ),
-                Text(
-                  localization.errorRegister,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).errorColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+                TextFormField(
+                  controller: _lastNameController,
+                  autofillHints: const [AutofillHints.familyName],
+                  decoration:
+                      InputDecoration(hintText: localization.hintLastName),
+                  validator: (input) {
+                    if (input == null || input.isEmpty) {
+                      return localization.validateErrorLastNameEmpty;
+                    }
+                    return null;
+                  },
                 ),
-                if (_error is Response)
+                SizedBox(
+                  height: spacing,
+                ),
+                EmailFormField(
+                  controller: _emailController,
+                  autofillHints: const [AutofillHints.newUsername],
+                  validator: (input) {
+                    if (input == null || input.isEmpty) {
+                      return localization.validateErrorEmailEmpty;
+                    } else if (RegExp(
+                          r'(?!.*\.\.)(^[^\.][^@\s]+@[^@\s]+\.[^@\s\.]+$)',
+                        ).firstMatch(input) ==
+                        null) {
+                      return localization.validateErrorEmailFormat;
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: spacing,
+                ),
+                PasswordFormField(
+                  key: _passwordFormKey,
+                  controller: _passwordController,
+                  autofillHints: const [AutofillHints.newPassword],
+                  decoration: InputDecoration(
+                    hintText: localization.hintPassword,
+                    errorStyle: const TextStyle(fontSize: 0),
+                  ),
+                  validator: (_) {
+                    if (_ruleCheckKey.currentState?.validate() == false) {
+                      return '';
+                    }
+                    return null;
+                  },
+                ),
+                PasswordCheck(
+                  controller: _passwordController,
+                  validationKey: _ruleCheckKey,
+                ),
+                SizedBox(
+                  height: spacing,
+                ),
+                PasswordFormField(
+                  controller: _confirmPasswordController,
+                  autofillHints: const [AutofillHints.password],
+                  decoration: InputDecoration(
+                    hintText: localization.hintConfirmPassword,
+                  ),
+                  validator: (input) {
+                    if (input != _passwordController.text) {
+                      return localization.validateErrorPasswordsNotMatching;
+                    }
+                    return null;
+                  },
+                ),
+                if (_error != null) ...[
+                  SizedBox(
+                    height: spacing,
+                  ),
                   Text(
-                    (_error as Response).body,
+                    localization.errorRegister,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Theme.of(context).errorColor),
-                  ),
-              ],
-              SizedBox(
-                height: _error == null ? spacing : spacing * 0.5,
-              ),
-              _step != _RegisterContentStep.loading
-                  ? Center(
-                      child: ElevatedButton(
-                        onPressed: _register,
-                        child: Text(localization.actionRegister),
-                      ),
-                    )
-                  : const Center(
-                      child: CircularProgressIndicator.adaptive(),
+                    style: TextStyle(
+                      color: Theme.of(context).errorColor,
+                      fontWeight: FontWeight.bold,
                     ),
-              if (widget.requestLogin != null) ...[
-                SizedBox(
-                  height: spacing,
-                ),
-                Center(
-                  child: TextButton(
-                    onPressed: widget.requestLogin,
-                    child: Text(localization.actionLogin),
                   ),
+                  if (_error is Response)
+                    Text(
+                      (_error as Response).body,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Theme.of(context).errorColor),
+                    ),
+                ],
+                SizedBox(
+                  height: _error == null ? spacing : spacing * 0.5,
                 ),
+                _step != _RegisterContentStep.loading
+                    ? Center(
+                        child: ElevatedButton(
+                          onPressed: _register,
+                          child: Text(localization.actionRegister),
+                        ),
+                      )
+                    : const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                if (widget.requestLogin != null) ...[
+                  SizedBox(
+                    height: spacing,
+                  ),
+                  Center(
+                    child: TextButton(
+                      onPressed: widget.requestLogin,
+                      child: Text(localization.actionLogin),
+                    ),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       );
