@@ -120,6 +120,7 @@ class _RegisterContentState extends State<RegisterContent> {
               ),
               EmailFormField(
                 controller: _emailController,
+                autofillHints: const [AutofillHints.newUsername],
                 validator: (input) {
                   if (input == null || input.isEmpty) {
                     return localization.validateErrorEmailEmpty;

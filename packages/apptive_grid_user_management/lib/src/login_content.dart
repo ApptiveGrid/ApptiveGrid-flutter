@@ -87,6 +87,7 @@ class _LoginContentState extends State<LoginContent> {
                 children: [
                   EmailFormField(
                     controller: _emailController,
+                    autofillHints: const [AutofillHints.username],
                   ),
                   SizedBox(
                     height: spacing,
