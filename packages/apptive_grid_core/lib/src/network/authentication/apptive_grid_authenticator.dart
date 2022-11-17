@@ -72,7 +72,7 @@ class ApptiveGridAuthenticator {
         'client_secret': client.clientSecret,
         'token': token.toJson(),
       });
-      setCredential(credential);
+      await setCredential(credential);
     } else {
       _token = null;
       await setCredential(null);
