@@ -1,3 +1,6 @@
+## 0.2.1
+* Improve autofill for login and registration
+
 ## 0.2.0
 * Remove deprecated members
 
