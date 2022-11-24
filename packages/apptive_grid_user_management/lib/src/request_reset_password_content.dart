@@ -102,6 +102,7 @@ class RequestResetPasswordContentState
                     key: _formKey,
                     child: EmailFormField(
                       controller: _textEditingController,
+                      autofillHints: const [AutofillHints.username],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return localization.validateErrorEmailEmpty;

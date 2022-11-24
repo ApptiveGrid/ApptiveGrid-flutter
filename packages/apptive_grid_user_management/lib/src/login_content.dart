@@ -81,84 +81,87 @@ class _LoginContentState extends State<LoginContent> {
         builder: (context) {
           switch (_step) {
             case _LoginContentStep.waitForInput:
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  EmailFormField(
-                    controller: _emailController,
-                  ),
-                  SizedBox(
-                    height: spacing,
-                  ),
-                  PasswordFormField(
-                    controller: _passwordController,
-                    autofillHints: const [AutofillHints.password],
-                    decoration: InputDecoration(
-                      hintText: localization.hintPassword,
+              return AutofillGroup(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    EmailFormField(
+                      controller: _emailController,
+                      autofillHints: const [AutofillHints.username],
                     ),
-                  ),
-                  SizedBox(
-                    height: spacing,
-                  ),
-                  Center(
-                    child: TextButton(
-                      child: Text(
-                        localization.forgotPassword,
-                        style: textTheme.bodyText1?.copyWith(
-                          decoration: TextDecoration.underline,
-                          color: textTheme.bodyText2?.color,
-                        ),
-                      ),
-                      onPressed: () {
-                        _requestResetPassword();
-                      },
-                    ),
-                  ),
-                  if (_error != null) ...[
                     SizedBox(
                       height: spacing,
                     ),
-                    Text(
-                      localization.errorLogin,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Theme.of(context).errorColor,
-                        fontWeight: FontWeight.bold,
+                    PasswordFormField(
+                      controller: _passwordController,
+                      autofillHints: const [AutofillHints.password],
+                      decoration: InputDecoration(
+                        hintText: localization.hintPassword,
                       ),
                     ),
-                    if (_error is Response)
-                      Text(
-                        (_error as Response).body,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Theme.of(context).errorColor),
-                      ),
-                  ],
-                  SizedBox(
-                    height: _error == null ? spacing : spacing * 0.5,
-                  ),
-                  !_loading
-                      ? Center(
-                          child: ElevatedButton(
-                            onPressed: _login,
-                            child: Text(localization.actionLogin),
-                          ),
-                        )
-                      : const Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        ),
-                  if (widget.requestRegistration != null) ...[
                     SizedBox(
                       height: spacing,
                     ),
                     Center(
                       child: TextButton(
-                        onPressed: widget.requestRegistration,
-                        child: Text(localization.actionRegister),
+                        child: Text(
+                          localization.forgotPassword,
+                          style: textTheme.bodyText1?.copyWith(
+                            decoration: TextDecoration.underline,
+                            color: textTheme.bodyText2?.color,
+                          ),
+                        ),
+                        onPressed: () {
+                          _requestResetPassword();
+                        },
                       ),
                     ),
-                  ]
-                ],
+                    if (_error != null) ...[
+                      SizedBox(
+                        height: spacing,
+                      ),
+                      Text(
+                        localization.errorLogin,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).errorColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (_error is Response)
+                        Text(
+                          (_error as Response).body,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Theme.of(context).errorColor),
+                        ),
+                    ],
+                    SizedBox(
+                      height: _error == null ? spacing : spacing * 0.5,
+                    ),
+                    !_loading
+                        ? Center(
+                            child: ElevatedButton(
+                              onPressed: _login,
+                              child: Text(localization.actionLogin),
+                            ),
+                          )
+                        : const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          ),
+                    if (widget.requestRegistration != null) ...[
+                      SizedBox(
+                        height: spacing,
+                      ),
+                      Center(
+                        child: TextButton(
+                          onPressed: widget.requestRegistration,
+                          child: Text(localization.actionRegister),
+                        ),
+                      ),
+                    ]
+                  ],
+                ),
               );
             case _LoginContentStep.joinGroup:
               final appName = widget.appName ?? _client?.group ?? '';

@@ -9,6 +9,7 @@ class EmailFormField extends StatelessWidget {
     super.key,
     this.controller,
     this.validator,
+    this.autofillHints,
   });
 
   /// Controller for the input
@@ -17,12 +18,15 @@ class EmailFormField extends StatelessWidget {
   /// Input Validator
   final String? Function(String?)? validator;
 
+  /// Hints for auto filling
+  final Iterable<String>? autofillHints;
+
   @override
   Widget build(BuildContext context) {
     final localization = ApptiveGridUserManagementLocalization.of(context)!;
     return TextFormField(
       controller: controller,
-      autofillHints: const [AutofillHints.email],
+      autofillHints: autofillHints,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         hintText: localization.hintEmail,
