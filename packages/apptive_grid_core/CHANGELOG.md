@@ -1,3 +1,6 @@
+## 0.13.4+1
+* Fix racecondition when refreshing the access token
+
 ## 0.13.4
 * Added `DataType.email`, `DataType.phoneNumber` and `DataType.signature`
 
