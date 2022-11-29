@@ -27,6 +27,7 @@ class ApptiveGridAuthenticator {
     performSetup();
   }
 
+  /// The [ApptiveGridClient] used to retrieve [ApptiveGridClient.options]
   final ApptiveGridClient client;
 
   /// Http Client that should be used for Auth Requests
@@ -41,6 +42,9 @@ class ApptiveGridAuthenticator {
 
   late Completer _setupCompleter;
 
+  /// Performs general Authenticator Setup tasks
+  /// like checking for saved credentials
+  /// and listening to authentication callbacks
   Future<void> performSetup() async {
     _setupCompleter = Completer();
     if (!kIsWeb) {

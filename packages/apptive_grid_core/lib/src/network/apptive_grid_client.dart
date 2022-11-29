@@ -28,6 +28,7 @@ class ApptiveGridClient {
   /// Configurations
   ApptiveGridOptions _options;
 
+  /// Returns the [ApptiveGridOptions] for the current Client
   ApptiveGridOptions get options => _options;
 
   set options(ApptiveGridOptions options) {
