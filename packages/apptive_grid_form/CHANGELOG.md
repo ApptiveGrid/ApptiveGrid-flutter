@@ -48,7 +48,7 @@
 * Remove dependency on google_maps_webservice for location search and reverse geocoding
 * Deprecate `ApptiveLink`(`GridUri`, `FormUri`, `EntityUri`, etc) in favor of plain `Uri`
 ### Breaking Change
-* Model changes from apptive_grid_core see [here]((https://pub.dev/packages/apptive_grid_core/changelog#0100)) for more details
+* Model changes from apptive_grid_core see [here](https://pub.dev/packages/apptive_grid_core/changelog#0100) for more details
 * Removed `spaceUris` from `User` and `gridUris` from `Space`
 * Remove `actions` from forms
 
