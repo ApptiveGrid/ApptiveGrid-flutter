@@ -2,6 +2,9 @@
 **BREAKING CHANGE**
 - Restructure `ApptiveGridAuthenticator` to handle changes in options correctly by using a specific `ApptiveGridClient` inside the authenticator
 
+## 0.13.4+1
+* Fix race condition when refreshing the access token
+
 ## 0.13.4
 * Added `DataType.email`, `DataType.phoneNumber` and `DataType.signature`
 
