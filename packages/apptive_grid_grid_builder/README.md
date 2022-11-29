@@ -1,6 +1,6 @@
 # ApptiveGrid GridBuilder
 
-[![Pub](https://img.shields.io/pub/v/apptive_grid_grid_builder.svg)](https://pub.dartlang.org/packages/apptive_grid_grid_builder)  [![pub points](https://badges.bar/apptive_grid_grid_builder/pub%20points)](https://pub.dev/packages/apptive_grid_grid_builder/score)  [![popularity](https://badges.bar/apptive_grid_grid_builder/popularity)](https://pub.dev/packages/apptive_grid_grid_builder/score)  [![likes](https://badges.bar/apptive_grid_grid_builder/likes)](https://pub.dev/packages/apptive_grid_grid_builder/score)
+[![Pub](https://img.shields.io/pub/v/apptive_grid_grid_builder.svg)](https://pub.dartlang.org/packages/apptive_grid_grid_builder)  [![pub points](https://img.shields.io/pub/points/apptive_grid_grid_builder?logo=dart)](https://pub.dev/packages/apptive_grid_grid_builder/score)  [![popularity](https://img.shields.io/pub/popularity/apptive_grid_grid_builder?logo=dart)](https://pub.dev/packages/apptive_grid_grid_builder/score)  [![likes](https://img.shields.io/pub/likes/apptive_grid_grid_builder?logo=dart)](https://pub.dev/packages/apptive_grid_grid_builder/score)
 
 A Flutter Package to build Widgets based on Grid Data
 
