@@ -1,3 +1,7 @@
+## 0.13.0
+* Upgrade apptive_grid_core to 0.14.0
+* Update dependencies
+
 # 0.12.0
 * Remove deprecated members
 * Adjust file structure

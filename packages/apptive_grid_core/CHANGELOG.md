@@ -1,6 +1,7 @@
 ## 0.14.0
 **BREAKING CHANGE**
 - Restructure `ApptiveGridAuthenticator` to handle changes in options correctly by using a specific `ApptiveGridClient` inside the authenticator
+- Update dependencies
 
 ## 0.13.4+1
 * Fix race condition when refreshing the access token

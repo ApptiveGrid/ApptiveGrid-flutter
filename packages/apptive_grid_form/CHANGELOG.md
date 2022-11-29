@@ -1,7 +1,11 @@
+## 0.14.0
+* Upgrade apptive_grid_core to 0.14.0
+* Update dependencies
+
 ## 0.13.2
 * Add support for `DataType.email`, `DataType.phoneNumber` and `DataType.signature`
 
-* ## 0.13.1+1
+## 0.13.1+1
 * Update `image_picker`
 
 ## 0.13.1
