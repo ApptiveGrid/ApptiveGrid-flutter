@@ -31,10 +31,11 @@ class ApptiveGridClient {
   /// Returns the [ApptiveGridOptions] for the current Client
   ApptiveGridOptions get options => _options;
 
-  set options(ApptiveGridOptions options) {
+  /// Updates the [options]
+  Future<void> setOptions(ApptiveGridOptions options) async {
     // Keep old environment as change is handled in [updateEnvironment]
     _options = options.copyWith(environment: _options.environment);
-    updateEnvironment(options.environment);
+    await updateEnvironment(options.environment);
   }
 
   /// The authenticator used to authenticate requests
@@ -584,7 +585,7 @@ class ApptiveGridClient {
       await authenticator.logout();
 
       _options = options.copyWith(environment: environment);
-      authenticator.performSetup();
+      await authenticator.performSetup();
       _attachmentProcessor =
           AttachmentProcessor(options, authenticator, httpClient: _client);
     }
