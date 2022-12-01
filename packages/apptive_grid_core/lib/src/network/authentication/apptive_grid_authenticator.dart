@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:apptive_grid_core/src/apptive_grid_options.dart';
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_core/src/network/authentication/authentication_storage.dart';
 import 'package:apptive_grid_core/src/network/authentication/io_authenticator.dart'
     if (dart.library.html) 'package:apptive_grid_core/src/network/authentication/web_authenticator.dart';
@@ -19,34 +19,16 @@ import 'package:url_launcher/url_launcher_string.dart';
 class ApptiveGridAuthenticator {
   /// Create a new [ApptiveGridAuthenticator] for [apptiveGridClient]
   ApptiveGridAuthenticator({
-    this.options = const ApptiveGridOptions(),
+    required this.client,
     this.httpClient,
     AuthenticationStorage? authenticationStorage,
   }) {
-    if (!kIsWeb) {
-      _authCallbackSubscription = uni_links.uriLinkStream
-          .where(
-            (event) =>
-                event != null &&
-                event.scheme ==
-                    options.authenticationOptions.redirectScheme?.toLowerCase(),
-          )
-          .listen((event) => _handleAuthRedirect(event!));
-    }
-
-    if (options.authenticationOptions.persistCredentials) {
-      _authenticationStorage = authenticationStorage ??
-          const FlutterSecureStorageCredentialStorage();
-      checkAuthentication(requestNewToken: false)
-          .then((_) => _setupCompleter.complete());
-    } else {
-      _setupCompleter.complete();
-    }
+    _authenticationStorage = authenticationStorage;
+    performSetup();
   }
 
-  /// [ApptiveGridOptions] used for getting the correct [ApptiveGridEnvironment.authRealm]
-  /// and checking if authentication should automatically be handled
-  ApptiveGridOptions options;
+  /// The [ApptiveGridClient] used to retrieve [ApptiveGridClient.options]
+  final ApptiveGridClient client;
 
   /// Http Client that should be used for Auth Requests
   final http.Client? httpClient;
@@ -58,7 +40,34 @@ class ApptiveGridAuthenticator {
 
   AuthenticationStorage? _authenticationStorage;
 
-  final _setupCompleter = Completer();
+  late Completer _setupCompleter;
+
+  /// Performs general Authenticator Setup tasks
+  /// like checking for saved credentials
+  /// and listening to authentication callbacks
+  Future<void> performSetup() async {
+    _setupCompleter = Completer();
+    if (!kIsWeb) {
+      _authCallbackSubscription?.cancel();
+      _authCallbackSubscription = uni_links.uriLinkStream
+          .where(
+            (event) =>
+                event != null &&
+                event.scheme ==
+                    client.options.authenticationOptions.redirectScheme
+                        ?.toLowerCase(),
+          )
+          .listen((event) => _handleAuthRedirect(event!));
+    }
+
+    if (client.options.authenticationOptions.persistCredentials) {
+      _authenticationStorage ??= const FlutterSecureStorageCredentialStorage();
+      await checkAuthentication(requestNewToken: false)
+          .then((_) => _setupCompleter.complete());
+    } else {
+      _setupCompleter.complete();
+    }
+  }
 
   /// Override the token for testing purposes
   @visibleForTesting
@@ -103,7 +112,7 @@ class ApptiveGridAuthenticator {
   @visibleForTesting
   Authenticator? testAuthenticator;
 
-  late final StreamSubscription<Uri?>? _authCallbackSubscription;
+  StreamSubscription<Uri?>? _authCallbackSubscription;
 
   /// Creates an openid issuer for the provided options
   static Issuer getIssuerWithUri(ApptiveGridOptions options) {
@@ -172,7 +181,7 @@ class ApptiveGridAuthenticator {
 
   Future<Client> get _client async {
     Future<Client> createClient() async {
-      final issuer = getIssuerWithUri(options);
+      final issuer = getIssuerWithUri(client.options);
       return Client(issuer, 'app', httpClient: httpClient, clientSecret: '');
     }
 
@@ -187,17 +196,18 @@ class ApptiveGridAuthenticator {
   ///
   /// Returns [Credential] from the authentication call
   Future<Credential?> authenticate() async {
-    final client = await _client;
+    final authClient = await _client;
 
     final authenticator = testAuthenticator ??
         Authenticator(
-          client,
+          authClient,
           scopes: [],
           urlLauncher: _launchUrl,
-          redirectUri: options.authenticationOptions.redirectScheme != null
+          redirectUri: client.options.authenticationOptions.redirectScheme !=
+                  null
               ? Uri(
-                  scheme: options.authenticationOptions.redirectScheme,
-                  host: Uri.parse(options.environment.url).host,
+                  scheme: client.options.authenticationOptions.redirectScheme,
+                  host: Uri.parse(client.options.environment.url).host,
                 )
               : null,
         );
@@ -217,17 +227,18 @@ class ApptiveGridAuthenticator {
   }
 
   Future<void> _handleAuthRedirect(Uri uri) async {
-    final client = await _client;
-    client.createCredential(
+    final authClient = await _client;
+    authClient.createCredential(
       refreshToken: _token?.refreshToken,
     );
     final authenticator = testAuthenticator ??
         Authenticator(
-          client, // coverage:ignore-line
-          redirectUri: options.authenticationOptions.redirectScheme != null
+          authClient, // coverage:ignore-line
+          redirectUri: client.options.authenticationOptions.redirectScheme !=
+                  null
               ? Uri(
-                  scheme: options.authenticationOptions.redirectScheme,
-                  host: Uri.parse(options.environment.url).host,
+                  scheme: client.options.authenticationOptions.redirectScheme,
+                  host: Uri.parse(client.options.environment.url).host,
                 )
               : null,
           urlLauncher: _launchUrl,
@@ -279,11 +290,11 @@ class ApptiveGridAuthenticator {
             setCredential(null);
           }
         }
-        if (options.authenticationOptions.apiKey != null) {
+        if (client.options.authenticationOptions.apiKey != null) {
           // User has ApiKey provided
           return;
         } else if (requestNewToken &&
-            options.authenticationOptions.autoAuthenticate) {
+            client.options.authenticationOptions.autoAuthenticate) {
           await authenticate();
         }
       });
@@ -327,8 +338,8 @@ class ApptiveGridAuthenticator {
       final token = _token!;
       return '${token.tokenType} ${token.accessToken}';
     }
-    if (options.authenticationOptions.apiKey != null) {
-      final apiKey = options.authenticationOptions.apiKey!;
+    if (client.options.authenticationOptions.apiKey != null) {
+      final apiKey = client.options.authenticationOptions.apiKey!;
       return 'Basic ${base64Encode(utf8.encode('${apiKey.authKey}:${apiKey.password}'))}';
     }
     return null;
@@ -351,14 +362,17 @@ class ApptiveGridAuthenticator {
 
   /// Checks if the User is Authenticated
   Future<bool> get isAuthenticated => _setupCompleter.future.then(
-        (_) => options.authenticationOptions.apiKey != null || _token != null,
+        (_) =>
+            client.options.authenticationOptions.apiKey != null ||
+            _token != null,
       );
 
   /// Checks if the User is Authenticated via a Token
   /// Returns true if the user is logged in as a user.
   /// Will return false if there is no authentication set or if the authentication is done using a [ApptiveGridApiKey]
-  Future<bool> get isAuthenticatedWithToken =>
-      _setupCompleter.future.then((_) => _token != null);
+  Future<bool> get isAuthenticatedWithToken => _setupCompleter.future.then((_) {
+        return _token != null;
+      });
 }
 
 /// Interface to provide common functionality for authorization operations

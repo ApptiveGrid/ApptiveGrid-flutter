@@ -1948,20 +1948,14 @@ void main() {
     late Client httpClient;
     late ApptiveGridClient client;
     late ApptiveGridOptions initialOptions;
-    late ApptiveGridAuthenticator authenticator;
 
     setUp(() {
       httpClient = MockHttpClient();
       initialOptions =
           const ApptiveGridOptions(environment: ApptiveGridEnvironment.alpha);
-      authenticator = ApptiveGridAuthenticator(
-        options: initialOptions,
-        httpClient: httpClient,
-      );
       client = ApptiveGridClient(
         httpClient: httpClient,
         options: initialOptions,
-        authenticator: authenticator,
       );
 
       when(() => httpClient.send(any())).thenAnswer(
@@ -1986,14 +1980,14 @@ void main() {
 
     test('switch authenticator environment', () async {
       expect(
-        authenticator.options.environment,
+        client.authenticator.client.options.environment,
         equals(ApptiveGridEnvironment.alpha),
       );
 
       await client.updateEnvironment(ApptiveGridEnvironment.production);
 
       expect(
-        authenticator.options.environment,
+        client.authenticator.client.options.environment,
         ApptiveGridEnvironment.production,
       );
     });

@@ -1,7 +1,11 @@
+## 0.14.0
+* Upgrade apptive_grid_core to 0.14.0
+* Update dependencies
+
 ## 0.13.2
 * Add support for `DataType.email`, `DataType.phoneNumber` and `DataType.signature`
 
-* ## 0.13.1+1
+## 0.13.1+1
 * Update `image_picker`
 
 ## 0.13.1
@@ -48,7 +52,7 @@
 * Remove dependency on google_maps_webservice for location search and reverse geocoding
 * Deprecate `ApptiveLink`(`GridUri`, `FormUri`, `EntityUri`, etc) in favor of plain `Uri`
 ### Breaking Change
-* Model changes from apptive_grid_core see [here]((https://pub.dev/packages/apptive_grid_core/changelog#0100)) for more details
+* Model changes from apptive_grid_core see [here](https://pub.dev/packages/apptive_grid_core/changelog#0100) for more details
 * Removed `spaceUris` from `User` and `gridUris` from `Space`
 * Remove `actions` from forms
 

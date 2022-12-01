@@ -1,6 +1,6 @@
 # ApptiveGrid Core
 
-[![Pub](https://img.shields.io/pub/v/apptive_grid_core.svg)](https://pub.dartlang.org/packages/apptive_grid_core)  [![pub points](https://badges.bar/apptive_grid_core/pub%20points)](https://pub.dev/packages/apptive_grid_core/score)  [![popularity](https://badges.bar/apptive_grid_core/popularity)](https://pub.dev/packages/apptive_grid_core/score)  [![likes](https://badges.bar/apptive_grid_core/likes)](https://pub.dev/packages/apptive_grid_core/score)
+[![Pub](https://img.shields.io/pub/v/apptive_grid_core.svg)](https://pub.dartlang.org/packages/apptive_grid_core)  [![pub points](https://img.shields.io/pub/points/apptive_grid_core?logo=dart)](https://pub.dev/packages/apptive_grid_core/score)  [![popularity](https://img.shields.io/pub/popularity/apptive_grid_core?logo=dart)](https://pub.dev/packages/apptive_grid_core/score)  [![likes](https://img.shields.io/pub/likes/apptive_grid_core?logo=dart)](https://pub.dev/packages/apptive_grid_core/score)
 
 Core Library for ApptiveGrid. This provides general access to ApptiveGrid functionalities.
 It also contains authentication and general client logic so you can build your own ApptiveGrid experiences using this.

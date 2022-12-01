@@ -1,6 +1,6 @@
 # ApptiveGrid UserManagement
 
-[![Pub](https://img.shields.io/pub/v/apptive_grid_user_management.svg)](https://pub.dartlang.org/packages/apptive_grid_user_management)  [![pub points](https://badges.bar/apptive_grid_user_management/pub%20points)](https://pub.dev/packages/apptive_grid_user_management/score)  [![popularity](https://badges.bar/apptive_grid_user_management/popularity)](https://pub.dev/packages/apptive_grid_user_management/score)  [![likes](https://badges.bar/apptive_grid_user_management/likes)](https://pub.dev/packages/apptive_grid_user_management/score)
+[![Pub](https://img.shields.io/pub/v/apptive_grid_user_management.svg)](https://pub.dartlang.org/packages/apptive_grid_user_management)  [![pub points](https://img.shields.io/pub/points/apptive_grid_user_management?logo=dart)](https://pub.dev/packages/apptive_grid_user_management/score)  [![popularity](https://img.shields.io/pub/popularity/apptive_grid_user_management?logo=dart)](https://pub.dev/packages/apptive_grid_user_management/score)  [![likes](https://img.shields.io/pub/likes/apptive_grid_user_management?logo=dart)](https://pub.dev/packages/apptive_grid_user_management/score)
 
 ## Setup
 Add a `ApptiveGridUserManagment` to your Widget tree. Ideally close to the `ApptiveGrid` Widget

@@ -1,6 +1,6 @@
 # ApptiveGrid Form
 
-[![Pub](https://img.shields.io/pub/v/apptive_grid_form.svg)](https://pub.dartlang.org/packages/apptive_grid_form)  [![pub points](https://badges.bar/apptive_grid_form/pub%20points)](https://pub.dev/packages/apptive_grid_form/score)  [![popularity](https://badges.bar/apptive_grid_form/popularity)](https://pub.dev/packages/apptive_grid_form/score)  [![likes](https://badges.bar/apptive_grid_form/likes)](https://pub.dev/packages/apptive_grid_form/score)
+[![Pub](https://img.shields.io/pub/v/apptive_grid_form.svg)](https://pub.dartlang.org/packages/apptive_grid_form)  [![pub points](https://img.shields.io/pub/points/apptive_grid_form?logo=dart)](https://pub.dev/packages/apptive_grid_form/score)  [![popularity](https://img.shields.io/pub/popularity/apptive_grid_form?logo=dart)](https://pub.dev/packages/apptive_grid_form/score)  [![likes](https://img.shields.io/pub/likes/apptive_grid_form?logo=dart)](https://pub.dev/packages/apptive_grid_form/score)
 
 A Flutter Package to display ApptiveGrid Forms inside a Flutter App
 
