@@ -182,7 +182,7 @@ class ApptiveGridAuthenticator {
   Future<Client> get _client async {
     Future<Client> createClient() async {
       final issuer = getIssuerWithUri(client.options);
-      return Client(issuer, 'app', httpClient: httpClient, clientSecret: '');
+      return Client(issuer, 'web', httpClient: httpClient, clientSecret: '');
     }
 
     return _authClient ??= await createClient();

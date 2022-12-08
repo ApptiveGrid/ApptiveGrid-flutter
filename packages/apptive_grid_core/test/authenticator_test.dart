@@ -1324,7 +1324,7 @@ void main() {
           {
             'state': state,
             'issuer': _zweidenkerIssuer.metadata.toJson(),
-            'client_id': 'app',
+            'client_id': 'web',
             'client_secret': '',
             'token': tokenResponse.toJson(),
           },
