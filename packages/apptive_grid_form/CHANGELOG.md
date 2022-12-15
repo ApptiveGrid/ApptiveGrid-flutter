@@ -1,3 +1,6 @@
+## 0.14.1
+* Keep Time when changing the date in a DateTime Form Field
+
 ## 0.14.0
 * Upgrade apptive_grid_core to 0.14.0
 * Update dependencies
