@@ -26,6 +26,41 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    if (widget.component.type == 'selectList') {
+      return FormField<String>(
+        validator: _validate,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        initialValue: widget.component.data.value,
+        builder: (fieldState) {
+          return InputDecorator(
+            decoration: widget.component.baseDecoration.copyWith(
+              errorText: fieldState.errorText,
+              contentPadding: EdgeInsets.zero,
+              filled: false,
+              border: InputBorder.none,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (final entry in widget.component.data.options)
+                  RadioListTile<String?>(
+                    tileColor: Colors.transparent,
+                    shape: Border.all(color: Colors.transparent),
+                    value: entry,
+                    title: Text(entry),
+                    groupValue: widget.component.data.value,
+                    onChanged: (newValue) {
+                      fieldState.didChange(newValue);
+                      _onChanged(newValue);
+                    },
+                  )
+              ],
+            ),
+          );
+        },
+      );
+    }
     return DropdownButtonFormField<String>(
       isExpanded: true,
       items: widget.component.data.options
@@ -45,22 +80,26 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
             ),
           )
           .toList(),
-      onChanged: (newValue) {
-        setState(() {
-          widget.component.data.value = newValue;
-        });
-      },
-      validator: (value) {
-        if (widget.component.required && value == null) {
-          return ApptiveGridLocalization.of(context)!
-              .fieldIsRequired(widget.component.property);
-        } else {
-          return null;
-        }
-      },
+      onChanged: _onChanged,
+      validator: _validate,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       value: widget.component.data.value,
       decoration: widget.component.baseDecoration,
     );
+  }
+
+  String? _validate(String? value) {
+    if (widget.component.required && value == null) {
+      return ApptiveGridLocalization.of(context)!
+          .fieldIsRequired(widget.component.property);
+    } else {
+      return null;
+    }
+  }
+
+  void _onChanged(String? newValue) {
+    setState(() {
+      widget.component.data.value = newValue;
+    });
   }
 }
