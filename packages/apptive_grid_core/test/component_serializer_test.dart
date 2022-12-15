@@ -161,6 +161,7 @@ void main() {
           options: {'GmbH', 'AG', 'Freiberuflich'},
         ),
         required: true,
+        type: 'selectBox',
       );
 
       expect(
@@ -211,6 +212,7 @@ void main() {
           options: {'GmbH', 'AG', 'Freiberuflich'},
         ),
         required: true,
+        type: 'selectBox',
       );
 
       expect(

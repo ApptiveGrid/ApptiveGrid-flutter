@@ -340,6 +340,7 @@ void main() {
           name: 'name',
           type: DataType.crossReference,
         ),
+        type: 'entitySelect',
       );
 
       expect(fromJson, equals(direct));
@@ -354,6 +355,7 @@ void main() {
           name: 'name',
           type: DataType.crossReference,
         ),
+        type: 'entitySelect',
       );
 
       expect(
@@ -364,6 +366,7 @@ void main() {
           component.data,
           component.options,
           component.required,
+          component.type,
         ),
       );
     });

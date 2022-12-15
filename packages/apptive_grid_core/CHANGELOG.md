@@ -1,3 +1,6 @@
+## 0.14.1
+* Add `type` to FormComponent
+
 ## 0.14.0
 **BREAKING CHANGE**
 * Restructure `ApptiveGridAuthenticator` to handle changes in options correctly by using a specific `ApptiveGridClient` inside the authenticator

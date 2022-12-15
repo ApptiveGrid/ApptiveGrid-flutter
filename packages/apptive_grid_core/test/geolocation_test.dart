@@ -358,6 +358,7 @@ void main() {
           name: 'Property',
           type: DataType.geolocation,
         ),
+        type: 'locationPicker',
       );
 
       expect(fromJson, equals(direct));
@@ -377,6 +378,7 @@ void main() {
         property: 'New field',
         data: entity,
         field: field,
+        type: 'locationPicker',
       );
 
       expect(
@@ -387,6 +389,7 @@ void main() {
           component.data,
           component.options,
           component.required,
+          component.type,
         ),
       );
     });

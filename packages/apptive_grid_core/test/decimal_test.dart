@@ -209,6 +209,7 @@ void main() {
           name: 'name',
           type: DataType.decimal,
         ),
+        type: 'entitySelect',
       );
 
       expect(fromJson, equals(direct));
@@ -223,6 +224,7 @@ void main() {
         property: 'New field',
         data: directEntity,
         field: field,
+        type: 'entitySelect',
       );
 
       expect(
@@ -233,6 +235,7 @@ void main() {
           component.data,
           component.options,
           component.required,
+          component.type,
         ),
       );
     });

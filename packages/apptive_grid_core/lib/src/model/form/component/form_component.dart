@@ -7,13 +7,14 @@ import 'package:apptive_grid_core/apptive_grid_core.dart';
 /// [T] is the [DataEntity] type of [data]
 class FormComponent<T extends DataEntity> {
   /// Creates a new FormComponent
-  const FormComponent({
+  FormComponent({
     required this.property,
     required this.data,
     this.options = const FormComponentOptions(),
     this.required = false,
     required this.field,
-  });
+    String? type,
+  }) : type = type ?? field.type.name;
 
   /// Casts this FormComponent to a FormComponent with a specific DataEntity Type
   FormComponent<U> cast<U extends DataEntity>() {
@@ -23,6 +24,7 @@ class FormComponent<T extends DataEntity> {
       options: options,
       required: required,
       field: field,
+      type: type,
     );
   }
 
@@ -43,6 +45,9 @@ class FormComponent<T extends DataEntity> {
   /// For [DataType.checkbox] this will make only `true` values valid
   final bool required;
 
+  /// Type of the Component
+  final String type;
+
   /// Id of this FormComponent
   String get fieldId => field.id;
 
@@ -53,11 +58,12 @@ class FormComponent<T extends DataEntity> {
         'options': options.toJson(),
         'required': required,
         'fieldId': fieldId,
+        'type': type,
       };
 
   @override
   String toString() {
-    return 'FormComponent(property: $property, field: $field, data: $data, options: $options, required: $required)';
+    return 'FormComponent(property: $property, field: $field, data: $data, options: $options, required: $required, type: $type)';
   }
 
   @override
@@ -67,11 +73,13 @@ class FormComponent<T extends DataEntity> {
         property == other.property &&
         data == other.data &&
         options == other.options &&
-        required == other.required;
+        required == other.required &&
+        type == other.type;
   }
 
   @override
-  int get hashCode => Object.hash(field, property, data, options, required);
+  int get hashCode =>
+      Object.hash(field, property, data, options, required, type);
 
   /// Mapping to a concrete implementation based on [json] and [schema]
   ///
@@ -93,12 +101,15 @@ class FormComponent<T extends DataEntity> {
       data.value = data.value?.replaceAll('\n', ' ');
     }
 
+    final type = json['type'];
+
     return FormComponent(
       property: property,
       data: data,
       options: options,
       required: required,
       field: field,
+      type: type,
     );
   }
 }
