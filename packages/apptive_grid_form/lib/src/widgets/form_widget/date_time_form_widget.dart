@@ -76,9 +76,18 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
                       ),
                     ).then((value) {
                       if (value != null) {
-                        state.didChange(value);
+                        final oldDate = widget.component.data.value ?? value;
+                        final newDate = DateTime(
+                          value.year,
+                          value.month,
+                          value.day,
+                          oldDate.hour,
+                          oldDate.minute,
+                          oldDate.second,
+                        );
+                        state.didChange(newDate);
                         setState(() {
-                          widget.component.data.value = value;
+                          widget.component.data.value = newDate;
                         });
                       }
                     });
