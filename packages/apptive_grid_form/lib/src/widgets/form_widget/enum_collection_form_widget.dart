@@ -39,38 +39,66 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data,
-      builder: (formState) {
+      builder: (fieldState) {
         return InputDecorator(
           decoration: widget.component.baseDecoration.copyWith(
-            errorText: formState.errorText,
+            errorText: fieldState.errorText,
             contentPadding: EdgeInsets.zero,
             filled: false,
+            border: InputBorder.none,
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: .0),
-            child: Wrap(
-              spacing: 4,
-              children: widget.component.data.options
-                  .map(
-                    (e) => ChoiceChip(
-                      label: Text(e),
-                      selected:
-                          widget.component.data.value?.contains(e) ?? false,
-                      onSelected: (isSelected) {
-                        if (isSelected) {
-                          widget.component.data.value?.add(e);
-                        } else {
-                          widget.component.data.value?.remove(e);
-                        }
-                        formState.didChange(widget.component.data);
-                      },
-                    ),
-                  )
-                  .toList(),
+            padding: const EdgeInsets.only(top: 0),
+            child: Builder(
+              builder: (context) {
+                if (widget.component.type == 'multiSelectList') {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (final entry in widget.component.data.options)
+                        CheckboxListTile(
+                          tileColor: Colors.transparent,
+                          shape: Border.all(color: Colors.transparent),
+                          value: widget.component.data.value?.contains(entry),
+                          title: Text(entry),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          onChanged: (isSelected) {
+                            _onSelected(entry, isSelected, fieldState);
+                          },
+                        )
+                    ],
+                  );
+                }
+                return Wrap(
+                  spacing: 4,
+                  children: widget.component.data.options
+                      .map(
+                        (e) => ChoiceChip(
+                          label: Text(e),
+                          selected:
+                              widget.component.data.value?.contains(e) ?? false,
+                          onSelected: (isSelected) {
+                            _onSelected(e, isSelected, fieldState);
+                          },
+                        ),
+                      )
+                      .toList(),
+                );
+              },
             ),
           ),
         );
       },
     );
+  }
+
+  void _onSelected(String value, bool? isSelected, FormFieldState fieldState) {
+    if (isSelected == true) {
+      widget.component.data.value?.add(value);
+    } else {
+      widget.component.data.value?.remove(value);
+    }
+    fieldState.didChange(widget.component.data);
   }
 }

@@ -1,5 +1,7 @@
 ## 0.14.1
+* Update apptive_grid_core to 0.14.1
 * Keep Time when changing the date in a DateTime Form Field
+* Enable Radio/Checkbox Lists for Enum/MultiEnum FormFields
 
 ## 0.14.0
 * Upgrade apptive_grid_core to 0.14.0

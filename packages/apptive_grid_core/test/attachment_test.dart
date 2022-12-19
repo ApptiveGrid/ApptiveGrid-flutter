@@ -343,7 +343,7 @@ void main() {
             'required': false,
             'options': {'label': null, 'description': null},
             'fieldId': 'id',
-            'type': null
+            'type': 'AttachmentUploader',
           }
         ],
         'actions': [
@@ -394,6 +394,7 @@ void main() {
         property: 'New field',
         data: directEntity,
         field: field,
+        type: 'AttachmentUploader',
       );
 
       expect(fromJson, equals(direct));
@@ -416,6 +417,7 @@ void main() {
         property: 'New field',
         data: directEntity,
         field: field,
+        type: 'AttachmentUploader',
       );
 
       expect(
@@ -426,6 +428,7 @@ void main() {
           component.data,
           component.options,
           component.required,
+          component.type,
         ),
       );
     });

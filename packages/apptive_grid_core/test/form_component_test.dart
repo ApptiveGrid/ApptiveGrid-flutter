@@ -47,6 +47,7 @@ void main() {
           property: 'Property',
           required: false,
           options: const FormComponentOptions(),
+          type: 'FormField',
         ).toString(),
         equals(
           'FormComponent('
@@ -54,7 +55,8 @@ void main() {
           'field: GridField(id: id, name: Property, type: DataType.text), '
           'data: StringDataEntity(value: null)}, '
           'options: FormComponentOptions(multi: false, placeholder: null, description: null, label: null), '
-          'required: false)',
+          'required: false, '
+          'type: FormField)',
         ),
       );
     });

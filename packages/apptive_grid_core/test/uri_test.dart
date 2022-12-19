@@ -160,6 +160,7 @@ void main() {
             'required': false,
             'options': {'label': null, 'description': null},
             'fieldId': '62bab0b25e92ba8e899edeea',
+            'type': 'text'
           }
         ],
         'name': 'New Name',
@@ -203,6 +204,7 @@ void main() {
           name: 'name',
           type: DataType.uri,
         ),
+        type: 'text',
       );
 
       expect(fromJson.cast<UriDataEntity>(), equals(direct));
@@ -217,6 +219,7 @@ void main() {
         property: 'New field',
         data: directEntity,
         field: field,
+        type: 'text',
       );
 
       expect(
@@ -227,6 +230,7 @@ void main() {
           component.data,
           component.options,
           component.required,
+          component.type,
         ),
       );
     });

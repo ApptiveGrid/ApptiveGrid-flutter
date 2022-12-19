@@ -343,6 +343,7 @@ void main() {
           name: 'name',
           type: DataType.multiCrossReference,
         ),
+        type: 'multiSelectDropdown',
       );
 
       expect(fromJson, equals(direct));
@@ -358,6 +359,7 @@ void main() {
         property: 'New field',
         data: directEntity,
         field: field,
+        type: 'multiSelectDropdown',
       );
 
       expect(
@@ -368,6 +370,7 @@ void main() {
           component.data,
           component.options,
           component.required,
+          component.type,
         ),
       );
     });
