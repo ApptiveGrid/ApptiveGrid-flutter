@@ -130,4 +130,136 @@ void main() {
       );
     });
   });
+
+  testWidgets('Changing Date keeps Time', (tester) async {
+    const locale = Locale('de');
+    final date = DateTime(2021, 11, 5, 16, 32);
+    final newDate = DateTime(2021, 11, 6, 16, 32);
+
+    final target = MaterialApp(
+      locale: locale,
+      supportedLocales: const [locale],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      home: Material(
+        child: ApptiveGridLocalization(
+          child: DateTimeFormWidget(
+            component: FormComponent<DateTimeDataEntity>(
+              property: 'property',
+              data: DateTimeDataEntity(date),
+              field: field,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpWidget(target);
+    await tester.pumpAndSettle();
+
+    final dateFinder = find.text('5.11.2021');
+    final newDateFinder = find.text('6.11.2021');
+    final timeFinder = find.text('16:32');
+
+    expect(dateFinder, findsOneWidget);
+    expect(timeFinder, findsOneWidget);
+
+    await tester
+        .tap(find.ancestor(of: dateFinder, matching: find.byType(InkWell)));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('6'));
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.text('OK'),
+    );
+    await tester.pumpAndSettle();
+
+    expect(dateFinder, findsNothing);
+    expect(newDateFinder, findsOneWidget);
+    expect(timeFinder, findsOneWidget);
+    expect(
+      (find.byType(DateTimeFormWidget).evaluate().first.widget
+              as DateTimeFormWidget)
+          .component
+          .data
+          .value,
+      equals(newDate),
+    );
+  });
+
+  testWidgets('Changing Time keeps Date', (tester) async {
+    const locale = Locale('de');
+    final date = DateTime(2021, 11, 5, 16, 32);
+    final newDate = DateTime(2021, 11, 5, 23, 32);
+
+    final target = MaterialApp(
+      locale: locale,
+      supportedLocales: const [locale],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      home: Material(
+        child: ApptiveGridLocalization(
+          child: DateTimeFormWidget(
+            component: FormComponent<DateTimeDataEntity>(
+              property: 'property',
+              data: DateTimeDataEntity(date),
+              field: field,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpWidget(target);
+    await tester.pumpAndSettle();
+
+    final dateFinder = find.text('5.11.2021');
+    final timeFinder = find.text('16:32');
+    final newTimeFinder = find.text('23:32');
+
+    expect(dateFinder, findsOneWidget);
+    expect(timeFinder, findsOneWidget);
+
+    await tester
+        .tap(find.ancestor(of: timeFinder, matching: find.byType(InkWell)));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.keyboard));
+    await tester.pumpAndSettle();
+    final hourTextFieldFinder = find
+        .descendant(
+          of: find.byType(TimePickerDialog),
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is TextFormField &&
+                widget.restorationId == 'hour_minute_text_form_field',
+          ),
+        )
+        .first;
+    await tester.enterText(hourTextFieldFinder, '11');
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.text('OK'),
+    );
+    await tester.pumpAndSettle();
+
+    expect(dateFinder, findsOneWidget);
+    expect(timeFinder, findsNothing);
+    expect(newTimeFinder, findsOneWidget);
+    expect(
+      (find.byType(DateTimeFormWidget).evaluate().first.widget
+              as DateTimeFormWidget)
+          .component
+          .data
+          .value,
+      equals(newDate),
+    );
+  });
 }
