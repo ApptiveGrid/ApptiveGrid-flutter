@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_form/src/util/submit_progress.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
+import 'package:apptive_grid_form/src/util/submit_progress.dart';
 import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:apptive_grid_form/src/widgets/form_widget/attachment_manager.dart';
 import 'package:flutter/material.dart';
@@ -414,7 +414,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             } else if (index < (data.components?.length ?? 0) + indexOffset) {
               final componentIndex = index - indexOffset;
               final component = fromModel(data.components![componentIndex]);
-              if (component is CreatedByFormWidget) {
+              if (component is EmptyFormWidget) {
                 // UserReference Widget should be invisible in the Form
                 // So returning without any Padding
                 return component;

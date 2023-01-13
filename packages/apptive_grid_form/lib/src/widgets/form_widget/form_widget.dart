@@ -56,7 +56,7 @@ Widget fromModel(FormComponent component) {
         component: component.cast<MultiCrossReferenceDataEntity>(),
       );
     case DataType.createdBy:
-      return const CreatedByFormWidget();
+      return const EmptyFormWidget();
     case DataType.user:
       return UserFormWidget(
         component: component.cast<UserDataEntity>(),
@@ -81,5 +81,7 @@ Widget fromModel(FormComponent component) {
       return SignatureFormWidget(
         component: component.cast<SignatureDataEntity>(),
       );
+    case DataType.createdAt:
+      return const EmptyFormWidget();
   }
 }

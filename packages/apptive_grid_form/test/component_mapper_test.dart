@@ -210,7 +210,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, equals(CreatedByFormWidget));
+      expect(widget.runtimeType, equals(EmptyFormWidget));
     });
 
     test('UserComponent', () {

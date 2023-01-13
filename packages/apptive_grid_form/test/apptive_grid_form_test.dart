@@ -1215,7 +1215,7 @@ void main() {
 
       expect(
         find.ancestor(
-          of: find.byType(CreatedByFormWidget),
+          of: find.byType(EmptyFormWidget),
           matching: find.byType(Padding),
         ),
         findsNothing,
