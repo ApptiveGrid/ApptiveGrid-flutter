@@ -1,3 +1,6 @@
+## 0.14.2
+* Add `createdAt` DataType
+
 ## 0.14.1
 * Add `type` to FormComponent
 
