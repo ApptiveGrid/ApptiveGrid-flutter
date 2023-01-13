@@ -1,6 +1,6 @@
 name: apptive_grid_grid_builder
 description: A Flutter Package to build Widgets based on Data from an ApptiveGrid Grid.
-version: 0.13.0
+version: 0.13.1
 homepage: https://www.apptivegrid.de
 repository: https://github.com/ApptiveGrid/apptive_grid_flutter/tree/main/packages/apptive_grid_grid_builder
 
@@ -9,7 +9,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  apptive_grid_core: ^0.14.0
+  apptive_grid_core: ^0.14.2
   flutter:
     sdk: flutter
 

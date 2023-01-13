@@ -210,7 +210,7 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, equals(CreatedByFormWidget));
+      expect(widget.runtimeType, equals(EmptyFormWidget));
     });
 
     test('UserComponent', () {
@@ -250,6 +250,24 @@ void main() {
 
       expect(widget.runtimeType, equals(CurrencyFormWidget));
       expect((widget as CurrencyFormWidget).component, equals(component));
+    });
+
+    test('CreatedBy', () {
+      final component = FormComponent<DateTimeDataEntity>(
+        field: const GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.createdAt,
+        ),
+        data: DateTimeDataEntity(),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, equals(EmptyFormWidget));
     });
   });
 }

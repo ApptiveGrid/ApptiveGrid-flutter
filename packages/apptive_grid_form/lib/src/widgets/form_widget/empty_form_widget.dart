@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// FormWidget for a UserReference
+/// FormWidget for Fields that should not be visible to users in Forms
+/// Like [DataType.createdBy] and [DataType.createdAt]
 /// This is just a SizedBox as it should not be visible to users
-class CreatedByFormWidget extends StatelessWidget {
+class EmptyFormWidget extends StatelessWidget {
   /// Creates the FormWidget
-  const CreatedByFormWidget({super.key});
+  const EmptyFormWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

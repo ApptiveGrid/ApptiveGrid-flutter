@@ -97,6 +97,8 @@ abstract class DataEntity<T, S> with FilterableMixin {
         return PhoneNumberDataEntity(json);
       case DataType.signature:
         return SignatureDataEntity.fromJson(json);
+      case DataType.createdAt:
+        return DateTimeDataEntity.fromJson(json);
     }
   }
 }

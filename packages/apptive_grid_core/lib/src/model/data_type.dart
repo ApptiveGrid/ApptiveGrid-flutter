@@ -55,7 +55,10 @@ enum DataType {
   phoneNumber(backendName: 'phoneNumber'),
 
   /// Type for a phonenumber
-  signature(backendName: 'signature');
+  signature(backendName: 'signature'),
+
+  /// Type for CreatedAt
+  createdAt(backendName: 'createdat');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({

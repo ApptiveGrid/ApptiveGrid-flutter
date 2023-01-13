@@ -1,3 +1,6 @@
+## 0.13.1
+* Upgrade apptive_grid_core to 0.14.2
+
 ## 0.13.0
 * Upgrade apptive_grid_core to 0.14.0
 * Update dependencies
