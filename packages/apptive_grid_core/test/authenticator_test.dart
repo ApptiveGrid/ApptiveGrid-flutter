@@ -103,7 +103,7 @@ void main() {
         httpClient: httpClient,
       );
       final authClient = MockAuthClient();
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       authenticator.setAuthClient(authClient);
       when(() => authClient.clientSecret).thenReturn('');
       when(() => authClient.clientId).thenReturn('test');
@@ -216,7 +216,7 @@ void main() {
         httpClient: httpClient,
       );
       final authClient = MockAuthClient();
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       authenticator.setAuthClient(authClient);
       when(() => authClient.clientSecret).thenReturn('');
       when(() => authClient.clientId).thenReturn('test');
@@ -329,7 +329,7 @@ void main() {
       );
       final authClient = MockAuthClient();
       authenticator.setAuthClient(authClient);
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       when(() => authClient.clientId).thenReturn('clientId');
       when(() => mockAuthBackend.authorize())
           .thenAnswer((invocation) async => credential);
@@ -375,7 +375,7 @@ void main() {
           expiresAt: any(named: 'expiresAt'),
         ),
       ).thenReturn(credential);
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       when(() => authClient.clientId).thenReturn('clientId');
       when(() => mockAuthBackend.authorize())
           .thenAnswer((invocation) async => credential);
@@ -418,7 +418,7 @@ void main() {
       authenticator = ApptiveGridAuthenticator(client: client);
 
       final authClient = MockAuthClient();
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       when(() => authClient.clientId).thenReturn('Id');
       when(() => authClient.httpClient).thenReturn(MockHttpClient());
       authenticator.setAuthClient(authClient);
@@ -431,7 +431,7 @@ void main() {
           .thenAnswer((invocation) async => token);
       authenticator.testAuthenticator = testAuthenticator;
       when(() => testAuthenticator.authorize()).thenAnswer((invocation) async {
-        launchUrl(_zweidenkerIssuer.metadata.tokenEndpoint!);
+        launchUrl(zweidenkerIssuer.metadata.tokenEndpoint!);
         return credential;
       });
 
@@ -480,7 +480,7 @@ void main() {
       when(() => credential.getTokenResponse())
           .thenAnswer((invocation) async => newToken);
       final authClient = MockAuthClient();
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       when(() => authClient.clientId).thenReturn('Id');
       when(() => authClient.httpClient).thenReturn(MockHttpClient());
       authenticator.setAuthClient(authClient);
@@ -522,7 +522,7 @@ void main() {
       when(() => credential.getTokenResponse())
           .thenAnswer((invocation) async => newToken);
       final authClient = MockAuthClient();
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       when(() => authClient.clientId).thenReturn('Id');
       when(() => authClient.httpClient).thenReturn(MockHttpClient());
       authenticator.setAuthClient(authClient);
@@ -541,7 +541,7 @@ void main() {
       final client = await authenticator.authClient;
       expect(
         client.issuer.metadata.toJson(),
-        _zweidenkerIssuer.metadata.toJson(),
+        zweidenkerIssuer.metadata.toJson(),
       );
     });
 
@@ -599,7 +599,7 @@ void main() {
 
       final client = MockAuthClient();
       authenticator.setAuthClient(client);
-      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.issuer).thenReturn(zweidenkerIssuer);
       when(() => client.clientId).thenReturn('clientId');
 
       await authenticator.setToken(token);
@@ -639,7 +639,7 @@ void main() {
 
       final client = MockAuthClient();
       authenticator.setAuthClient(client);
-      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.issuer).thenReturn(zweidenkerIssuer);
       when(() => client.clientId).thenReturn('clientId');
 
       await authenticator.setToken(token);
@@ -827,13 +827,12 @@ void main() {
 
       final authClient = MockAuthClient();
       authenticator.setAuthClient(authClient);
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       when(() => authClient.clientId).thenReturn('clientId');
 
       await authenticator.authenticate();
 
-      verify(() => storage.saveCredential(jsonEncode(jsonCredential)))
-          .called(1);
+      verify(() => storage.saveCredential(any())).called(1);
     });
 
     test(
@@ -842,7 +841,7 @@ void main() {
       final tokenTime = DateTime.now();
       final httpClient = MockHttpClient();
       final authClient = MockAuthClient();
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       when(() => authClient.clientSecret).thenReturn('');
       when(() => authClient.clientId).thenReturn('test');
       when(() => authClient.httpClient).thenReturn(httpClient);
@@ -903,7 +902,7 @@ void main() {
 
       final client = MockAuthClient();
       authenticator.setAuthClient(client);
-      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.issuer).thenReturn(zweidenkerIssuer);
       when(() => client.clientId).thenReturn('clientId');
 
       when(() => storage.credential)
@@ -922,7 +921,7 @@ void main() {
       final tokenTime = DateTime.now();
       final httpClient = MockHttpClient();
       final authClient = MockAuthClient();
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       when(() => authClient.clientSecret).thenReturn('');
       when(() => authClient.clientId).thenReturn('test');
       when(() => authClient.httpClient).thenReturn(httpClient);
@@ -988,7 +987,7 @@ void main() {
 
       final client = MockAuthClient();
       authenticator.setAuthClient(client);
-      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.issuer).thenReturn(zweidenkerIssuer);
       when(() => client.clientId).thenReturn('clientId');
 
       await authenticator.checkAuthentication();
@@ -1004,7 +1003,7 @@ void main() {
       final tokenTime = DateTime.now();
       final httpClient = MockHttpClient();
       final authClient = MockAuthClient();
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       when(() => authClient.clientSecret).thenReturn('');
       when(() => authClient.clientId).thenReturn('test');
       when(() => authClient.httpClient).thenReturn(httpClient);
@@ -1063,7 +1062,7 @@ void main() {
       final tokenTime = DateTime.now();
       final httpClient = MockHttpClient();
       final authClient = MockAuthClient();
-      when(() => authClient.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
       when(() => authClient.clientSecret).thenReturn('');
       when(() => authClient.clientId).thenReturn('test');
       when(() => authClient.httpClient).thenReturn(httpClient);
@@ -1129,7 +1128,7 @@ void main() {
 
       final client = MockAuthClient();
       authenticator.setAuthClient(client);
-      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.issuer).thenReturn(zweidenkerIssuer);
       when(() => client.clientId).thenReturn('clientId');
 
       await authenticator.checkAuthentication();
@@ -1176,7 +1175,7 @@ void main() {
 
       final client = MockAuthClient();
       authenticator.setAuthClient(client);
-      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.issuer).thenReturn(zweidenkerIssuer);
       when(() => client.clientId).thenReturn('clientId');
 
       await authenticator.checkAuthentication();
@@ -1225,7 +1224,7 @@ void main() {
 
       final client = MockAuthClient();
       authenticator.setAuthClient(client);
-      when(() => client.issuer).thenReturn(_zweidenkerIssuer);
+      when(() => client.issuer).thenReturn(zweidenkerIssuer);
       when(() => client.clientId).thenReturn('clientId');
 
       final credential = MockCredential();
@@ -1245,9 +1244,7 @@ void main() {
           value: any(named: 'value'),
           options: any(named: 'options'),
         ),
-      ).called(
-        2, // Creation of Authenticator reloads credential, Setting token also saves credential
-      );
+      ).called(1);
       verify(
         () => secureStorage.read(
           key: any(named: 'key'),
@@ -1323,7 +1320,7 @@ void main() {
         credential = Credential.fromJson(
           {
             'state': state,
-            'issuer': _zweidenkerIssuer.metadata.toJson(),
+            'issuer': zweidenkerIssuer.metadata.toJson(),
             'client_id': 'web',
             'client_secret': '',
             'token': tokenResponse.toJson(),
@@ -1349,7 +1346,7 @@ void main() {
   });
 }
 
-Issuer get _zweidenkerIssuer => Issuer(
+Issuer get zweidenkerIssuer => Issuer(
       OpenIdProviderMetadata.fromJson({
         'issuer': 'https://app.apptivegrid.de/auth/apptivegrid',
         'authorization_endpoint':

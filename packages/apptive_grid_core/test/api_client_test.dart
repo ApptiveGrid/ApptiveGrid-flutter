@@ -6,11 +6,15 @@ import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_core/src/network/authentication/apptive_grid_authenticator.dart';
 import 'package:apptive_grid_core/src/network/constants.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage_platform_interface/flutter_secure_storage_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:openid_client/openid_client.dart' show TokenResponse;
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
+import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
+import 'authenticator_test.dart';
 import 'mocks.dart';
 
 void main() {
@@ -19,9 +23,11 @@ void main() {
   late ApptiveGridClient apptiveGridClient;
 
   setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
     registerFallbackValue(Request('GET', Uri()));
     registerFallbackValue(Uri());
     registerFallbackValue(<String, String>{});
+    registerFallbackValue(const LaunchOptions());
 
     registerFallbackValue(
       ActionItem(
@@ -1630,6 +1636,139 @@ void main() {
       client.setUserToken(tokenResponse);
 
       verify(() => authenticator.setUserToken(tokenResponse)).called(1);
+    });
+
+    group('Authentication Changed Callbacks', () {
+      final httpClient = MockHttpClient();
+      late MockAuthenticator authenticator;
+      late MockCredential credential;
+      late MockToken token;
+
+      setUp(() {
+        authenticator = MockAuthenticator();
+        credential = MockCredential();
+        token = MockToken();
+
+        when(() => authenticator.authorize())
+            .thenAnswer((_) async => credential);
+        when(() => token.toJson()).thenReturn(<String, dynamic>{});
+        when(() => credential.getTokenResponse(any()))
+            .thenAnswer((invocation) async => token);
+        when(() => credential.toJson()).thenAnswer(
+          (_) {
+            final tokenResponse = TokenResponse.fromJson({
+              'state': 'state',
+              'token_type': 'Bearer',
+              'access_token': '12345',
+            });
+            return {
+              'state': 'state',
+              'issuer': zweidenkerIssuer.metadata.toJson(),
+              'client_id': 'web',
+              'client_secret': '',
+              'token': tokenResponse.toJson(),
+            };
+          },
+        );
+
+        final secureStorage = MockSecureStorage();
+        FlutterSecureStoragePlatform.instance = secureStorage;
+        when(
+          () => secureStorage.write(
+            key: any(named: 'key'),
+            value: any(named: 'value'),
+            options: any(named: 'options'),
+          ),
+        ).thenAnswer((_) async {});
+        when(
+          () => secureStorage.read(
+            key: any(named: 'key'),
+            options: any(named: 'options'),
+          ),
+        ).thenAnswer((_) async => jsonEncode(credential.toJson()));
+
+        final tokenTime = DateTime.now();
+        final tokenResponse = TokenResponse.fromJson({
+          'token_type': 'Bearer',
+          'access_token': '12345',
+          'expires_at': tokenTime.millisecondsSinceEpoch,
+          'expires_in': tokenTime.microsecondsSinceEpoch
+        });
+
+        when(
+          () => httpClient.post(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+            encoding: any(named: 'encoding'),
+          ),
+        ).thenAnswer(
+          (invocation) async => Response(
+            jsonEncode(tokenResponse.toJson()),
+            200,
+            request: Request('POST', invocation.positionalArguments[0]),
+            headers: {HttpHeaders.contentTypeHeader: ContentType.json},
+          ),
+        );
+      });
+
+      test('Saved token, gets token and notifies client', () async {
+        int notifierCount = 0;
+        final client = ApptiveGridClient(
+          httpClient: httpClient,
+          options: const ApptiveGridOptions(
+            authenticationOptions: ApptiveGridAuthenticationOptions(
+              persistCredentials: true,
+            ),
+          ),
+        );
+        client.authenticator.testAuthenticator = authenticator;
+
+        client.addListener(() {
+          notifierCount++;
+        });
+
+        final isAuthenticatedWithToken = await client.isAuthenticatedWithToken;
+
+        expect(isAuthenticatedWithToken, true);
+        expect(notifierCount, 1);
+      });
+
+      test('Authenticate, notifies client', () async {
+        int notifierCount = 0;
+        final client = ApptiveGridClient(
+          httpClient: httpClient,
+        );
+        client.authenticator.testAuthenticator = authenticator;
+
+        client.addListener(() {
+          notifierCount++;
+        });
+
+        await client.authenticate();
+
+        expect(notifierCount, 1);
+      });
+
+      test('Logout, notifies client', () async {
+        int notifierCount = 0;
+        final client = ApptiveGridClient(
+          httpClient: httpClient,
+        );
+        client.authenticator.testAuthenticator = authenticator;
+
+        client.addListener(() {
+          notifierCount++;
+        });
+
+        await client.authenticate();
+
+        expect(notifierCount, 1);
+        notifierCount = 0;
+
+        await client.logout();
+        expect(notifierCount, 1);
+      });
     });
   });
 
