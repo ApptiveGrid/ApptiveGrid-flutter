@@ -82,7 +82,7 @@ class _ApptiveGridState extends State<ApptiveGrid> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<ApptiveGridClient>.value(
+        ChangeNotifierProvider<ApptiveGridClient>.value(
           value: _client,
         ),
         Provider.value(value: widget.options),

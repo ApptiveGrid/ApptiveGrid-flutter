@@ -22,7 +22,9 @@ class ApptiveGridAuthenticator {
     required this.client,
     this.httpClient,
     AuthenticationStorage? authenticationStorage,
+    VoidCallback? onAuthenticationChanged,
   }) {
+    _onAuthenticationChanged = onAuthenticationChanged;
     _authenticationStorage = authenticationStorage;
     performSetup();
   }
@@ -39,6 +41,8 @@ class ApptiveGridAuthenticator {
   Credential? _credential;
 
   AuthenticationStorage? _authenticationStorage;
+
+  late final VoidCallback? _onAuthenticationChanged;
 
   late Completer _setupCompleter;
 
@@ -86,6 +90,7 @@ class ApptiveGridAuthenticator {
       _token = null;
       await setCredential(null);
     }
+    _onAuthenticationChanged?.call();
   }
 
   /// Authenticates by setting a token
@@ -326,7 +331,6 @@ class ApptiveGridAuthenticator {
       await setCredential(null);
       _authClient = null;
     }
-
     return response;
   }
 
