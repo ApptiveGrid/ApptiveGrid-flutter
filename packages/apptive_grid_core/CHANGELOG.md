@@ -1,3 +1,6 @@
+## 0.14.3
+* Make ApptiveGridClient a ChangeNotifier notifying listeners when the authorization changed
+
 ## 0.14.2
 * Add `createdAt` DataType
 

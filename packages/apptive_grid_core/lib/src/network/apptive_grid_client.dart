@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:openid_client/openid_client.dart';
 
 /// Api Client to communicate with the ApptiveGrid Backend
-class ApptiveGridClient {
+class ApptiveGridClient extends ChangeNotifier {
   /// Creates an ApiClient
   ApptiveGridClient({
     ApptiveGridOptions options = const ApptiveGridOptions(),
@@ -20,7 +20,11 @@ class ApptiveGridClient {
   })  : _options = options,
         _client = httpClient ?? http.Client() {
     this.authenticator = authenticator ??
-        ApptiveGridAuthenticator(client: this, httpClient: _client);
+        ApptiveGridAuthenticator(
+          client: this,
+          httpClient: _client,
+          onAuthenticationChanged: _authenticationChanged,
+        );
     _attachmentProcessor =
         AttachmentProcessor(options, this.authenticator, httpClient: _client);
   }
@@ -53,9 +57,11 @@ class ApptiveGridClient {
   AttachmentProcessor get attachmentProcessor => _attachmentProcessor;
 
   /// Close the connection on the httpClient
+  @override
   void dispose() {
     _client.close();
     authenticator.dispose();
+    super.dispose();
   }
 
   /// Headers that are used for multiple Calls
@@ -691,5 +697,9 @@ class ApptiveGridClient {
     }
 
     return parseResponse(response);
+  }
+
+  void _authenticationChanged() {
+    notifyListeners();
   }
 }
