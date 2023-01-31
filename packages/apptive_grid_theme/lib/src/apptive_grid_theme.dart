@@ -61,7 +61,6 @@ class ApptiveGridTheme {
       primaryColor: colorScheme.primary,
       indicatorColor: colorScheme.primary,
       colorScheme: colorScheme,
-      toggleableActiveColor: colorScheme.primary,
       textSelectionTheme: baseTheme.textSelectionTheme.copyWith(
         selectionHandleColor: colorScheme.primary,
         selectionColor: colorScheme.primary.withOpacity(0.4),
@@ -180,6 +179,52 @@ class ApptiveGridTheme {
           fontWeight: FontWeight.bold,
         ),
         secondarySelectedColor: colorScheme.primary,
+      ),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return colorScheme.primary;
+          }
+          return null;
+        }),
+      ),
+      radioTheme: RadioThemeData(
+        fillColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return colorScheme.primary;
+          }
+          return null;
+        }),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return colorScheme.primary;
+          }
+          return null;
+        }),
+        trackColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return colorScheme.primary;
+          }
+          return null;
+        }),
       ),
     );
   }
