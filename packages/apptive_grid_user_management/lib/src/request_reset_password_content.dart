@@ -120,7 +120,7 @@ class RequestResetPasswordContentState
                       localization.errorUnknown,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Theme.of(context).errorColor,
+                        color: Theme.of(context).colorScheme.error,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -128,7 +128,9 @@ class RequestResetPasswordContentState
                       Text(
                         (_error as http.Response).body,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Theme.of(context).errorColor),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                       ),
                   ],
                 ],

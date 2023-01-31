@@ -165,7 +165,8 @@ class DeleteAccountState extends State<DeleteAccount> {
                     },
                     child: Text(
                       localization?.actionDelete ?? 'Delete',
-                      style: TextStyle(color: Theme.of(context).errorColor),
+                      style:
+                          TextStyle(color: Theme.of(context).colorScheme.error),
                     ),
                   ),
                 ],
