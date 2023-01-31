@@ -1,3 +1,7 @@
+## 0.3.1
+* Upgrade apptive_grid_core to 0.14.4
+* Fix Lints for Flutter 3.7.0
+
 ## 0.3.0
 * Upgrade apptive_grid_core to 0.14.0
 * Update dependencies
