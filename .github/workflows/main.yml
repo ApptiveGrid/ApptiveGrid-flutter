@@ -24,7 +24,7 @@ jobs:
       - name: Format, Lint, Publishability
         run: melos run lint:all
       - name: Run Tests
-        run: melos run test:all_coverage
+        run: melos run test:coverage:all
       - name: Core Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1
         with:

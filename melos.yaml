@@ -54,7 +54,7 @@ scripts:
       ignore:
         - "*example*"
 
-  test:all_coverage:
+  test:coverage:all:
     run: melos run test:coverage --no-select
 
   test:goldens:
@@ -77,7 +77,7 @@ scripts:
         - "*web*"
         - "*_theme*"
 
-  test:coverage_web:
+  test:coverage:web:
     run: |
       melos exec -c 1 -- \
         "mkdir -p coverage && flutter test --no-pub --platform=chrome --coverage && genhtml coverage/lcov.info -o coverage/html"
