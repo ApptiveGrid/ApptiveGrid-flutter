@@ -120,7 +120,7 @@ class HeaderRowWidget extends StatelessWidget {
       textStyle: textStyle ??
           TextStyle(
             fontWeight: FontWeight.bold,
-            color: theme.primaryTextTheme.headline1!.color,
+            color: theme.primaryTextTheme.displayLarge!.color,
           ),
       color: color ?? theme.primaryColor,
       padding: padding,
