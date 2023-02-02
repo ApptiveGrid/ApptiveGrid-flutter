@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart' show loadAppFonts;
 
-import 'font_util.dart';
+import '../font_util.dart';
 
 void main() {
   setUpAll(() async {
