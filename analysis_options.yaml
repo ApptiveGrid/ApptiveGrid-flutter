@@ -3,7 +3,6 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - '**/grid_row_dropdown.dart'
-    - '**/apptive_grid_icons_icons.dart'
     - '**/generated_plugin_registrant.dart'
     - '**/*.g.dart'
 
