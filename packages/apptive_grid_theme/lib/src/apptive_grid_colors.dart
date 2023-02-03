@@ -25,4 +25,7 @@ abstract class ApptiveGridColors {
 
   /// This is a color used to identify Calendar Views with the hex code: fc9f02
   static const Color calendar = Color(0xfffc9f02);
+
+  /// This is a color used to identify Map Views with the hex code: 399de9
+  static const Color map = Color(0xff399de9);
 }

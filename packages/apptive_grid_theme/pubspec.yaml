@@ -11,10 +11,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  material_design_icons_flutter: ^6.0.7096
   universal_platform: ^1.0.0+1
 
+
 dev_dependencies:
-  alchemist: ^0.3.3
+  alchemist: ^0.6.0
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.1
@@ -33,6 +35,3 @@ flutter:
           weight: 700
         - asset: fonts/DMSans-Regular.ttf
           weight: 400
-    - family: ApptiveGridIcons
-      fonts:
-        - asset: fonts/ApptiveGridIcons.ttf
