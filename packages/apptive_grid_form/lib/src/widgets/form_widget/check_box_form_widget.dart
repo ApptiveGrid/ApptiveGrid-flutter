@@ -49,7 +49,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget>
           ),
           child: ColorFiltered(
             colorFilter: ColorFilter.mode(
-              Theme.of(context).errorColor,
+              Theme.of(context).colorScheme.error,
               state.hasError ? BlendMode.srcATop : BlendMode.dstIn,
             ),
             child: Row(

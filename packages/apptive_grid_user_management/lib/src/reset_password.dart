@@ -108,7 +108,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       localization.errorReset,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Theme.of(context).errorColor,
+                        color: Theme.of(context).colorScheme.error,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -116,7 +116,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                       Text(
                         (_error as http.Response).body,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Theme.of(context).errorColor),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                       ),
                   ],
                   SizedBox(

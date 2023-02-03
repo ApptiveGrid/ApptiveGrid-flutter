@@ -71,12 +71,12 @@ class _UserDropdownButtonFormFieldState
             isDense: true,
             prefixIcon: Icon(
               Icons.search,
-              color: Theme.of(context).textTheme.headline1?.color,
+              color: Theme.of(context).textTheme.displayLarge?.color,
             ),
             suffixIcon: IconButton(
               icon: Icon(
                 Icons.close,
-                color: Theme.of(context).textTheme.headline1?.color,
+                color: Theme.of(context).textTheme.displayLarge?.color,
               ),
               onPressed: () {
                 _filterController.clear();
@@ -188,6 +188,7 @@ class _UserMenuSelectionListState extends State<_UserMenuSelectionList> {
           _error = error;
           _users = null;
         });
+        return null;
       });
       setState(() {
         _users = users;

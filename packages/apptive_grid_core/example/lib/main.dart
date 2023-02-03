@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
               children: [
                 Text(
                   'User',
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 _UserSection(
                   onUserLoaded: (user) => setState(() => _user = user),
@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
                 if (_user != null)
                   Text(
                     'Spaces',
-                    style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ...((_user?.embeddedSpaces) ?? []).map(
                   (e) => _SpaceSection(

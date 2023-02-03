@@ -1,3 +1,6 @@
+## 0.14.4
+* Fix Lints for Flutter 3.7.0
+
 ## 0.14.3
 * Make ApptiveGridClient a ChangeNotifier notifying listeners when the authorization changed
 

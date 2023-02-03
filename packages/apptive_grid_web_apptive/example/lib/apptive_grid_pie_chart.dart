@@ -93,7 +93,7 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
                 children: [
                   Text(
                     _field!.name,
-                    style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(
                     height: 16,

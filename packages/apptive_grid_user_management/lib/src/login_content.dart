@@ -107,9 +107,9 @@ class _LoginContentState extends State<LoginContent> {
                       child: TextButton(
                         child: Text(
                           localization.forgotPassword,
-                          style: textTheme.bodyText1?.copyWith(
+                          style: textTheme.bodyLarge?.copyWith(
                             decoration: TextDecoration.underline,
-                            color: textTheme.bodyText2?.color,
+                            color: textTheme.bodyMedium?.color,
                           ),
                         ),
                         onPressed: () {
@@ -125,7 +125,7 @@ class _LoginContentState extends State<LoginContent> {
                         localization.errorLogin,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Theme.of(context).errorColor,
+                          color: Theme.of(context).colorScheme.error,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -133,7 +133,9 @@ class _LoginContentState extends State<LoginContent> {
                         Text(
                           (_error as Response).body,
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Theme.of(context).errorColor),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
+                          ),
                         ),
                     ],
                     SizedBox(
@@ -178,7 +180,7 @@ class _LoginContentState extends State<LoginContent> {
                       localization.errorUnknown,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Theme.of(context).errorColor,
+                        color: Theme.of(context).colorScheme.error,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -186,7 +188,9 @@ class _LoginContentState extends State<LoginContent> {
                       Text(
                         (_error as Response).body,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Theme.of(context).errorColor),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                       ),
                   ],
                   Center(

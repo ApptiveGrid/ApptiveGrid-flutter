@@ -97,7 +97,7 @@ class _GeolocationInputState extends State<GeolocationInput> {
                 isDense: true,
                 prefixIcon: Icon(
                   Icons.search,
-                  color: Theme.of(context).textTheme.headline1!.color,
+                  color: Theme.of(context).textTheme.displayLarge!.color,
                 ),
                 suffixIcon: _locationBoxController.text.isEmpty
                     ? null

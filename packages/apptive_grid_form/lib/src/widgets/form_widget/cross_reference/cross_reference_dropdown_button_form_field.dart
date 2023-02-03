@@ -188,7 +188,7 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.search,
-                color: Theme.of(context).textTheme.headline1?.color,
+                color: Theme.of(context).textTheme.displayLarge?.color,
               ),
               hintText: localization.crossRefSearch,
               isDense: true,
@@ -372,6 +372,7 @@ class _CrossReferenceSelectionGridState
             _rows = null;
           });
         }
+        return null;
       });
       if (mounted) {
         setState(() {

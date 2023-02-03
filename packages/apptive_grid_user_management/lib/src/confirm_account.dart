@@ -46,7 +46,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
               localization.errorConfirm,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Theme.of(context).errorColor,
+                color: Theme.of(context).colorScheme.error,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -54,7 +54,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
               Text(
                 (_error as Response).body,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Theme.of(context).errorColor),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
           ],
           SizedBox(

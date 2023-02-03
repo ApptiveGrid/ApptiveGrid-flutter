@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           uri: Uri.parse(
             'YOUR_FORM_URI',
           ),
-          titleStyle: Theme.of(context).textTheme.headline6,
+          titleStyle: Theme.of(context).textTheme.titleLarge,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
           titlePadding: const EdgeInsets.all(16),

@@ -392,7 +392,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                   child: Text(
                     data.title!,
                     style: widget.titleStyle ??
-                        Theme.of(context).textTheme.headline5,
+                        Theme.of(context).textTheme.headlineSmall,
                   ),
                 );
               }
@@ -407,7 +407,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                   child: Text(
                     data.description!,
                     style: widget.descriptionStyle ??
-                        Theme.of(context).textTheme.bodyText1,
+                        Theme.of(context).textTheme.bodyLarge,
                   ),
                 );
               }
@@ -496,7 +496,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         Text(
           _formData?.properties?.successTitle ?? localization.sendSuccess,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
         if (_formData?.properties?.successMessage != null) ...[
           const SizedBox(height: 4),
@@ -537,7 +537,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         Text(
           localization.savedForLater,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
         Center(
           child: TextButton(
@@ -569,7 +569,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         Text(
           localization.errorTitle,
           textAlign: TextAlign.center,
-          style: theme.textTheme.headline4,
+          style: theme.textTheme.headlineMedium,
         ),
         Padding(
           padding: widget.contentPadding ?? _defaultPadding,
