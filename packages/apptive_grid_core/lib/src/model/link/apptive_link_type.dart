@@ -5,7 +5,7 @@ enum ApptiveLinkType {
   /// A link to the ApptiveObject itself
   self,
 
-  /// Updates a [Space], [Grid], [Form], [GridRow] or [GridField]
+  /// Updates a ApptiveObject
   patch,
 
   // User Related
@@ -27,6 +27,12 @@ enum ApptiveLinkType {
   /// List of [Space]s
   spaces,
 
+  /// Add a Flow
+  addFlow,
+
+  /// List Flows
+  flows,
+
   // Space Related
   /// Adds a new Grid
   addGrid,
@@ -40,7 +46,7 @@ enum ApptiveLinkType {
   /// Lists [Grid]s
   grids,
 
-  /// Removes a [Space], [Grid], [Form], [GridRow]
+  /// Removes an ApptiveObject
   remove,
 
   /// List Shares
@@ -102,7 +108,7 @@ enum ApptiveLinkType {
   /// Submit [FormData]
   submit,
 
-  /// Update a [FormData], [GrdiRow]
+  /// Update an ApptiveObject
   update,
 
   // Row/Entity Related Link Types
@@ -115,4 +121,78 @@ enum ApptiveLinkType {
   //Field Related Links
   /// Query for Collaborators in a [DataType.user] Field
   collaborators,
+
+  // AGExternalLinkPresenter
+  /// Processes an External ApptiveGridLink
+  process,
+
+  /// Write an external Link
+  write,
+
+  /// Read an external Link
+  read,
+
+  // AGVirtualGridPresenter
+  /// List Stateful Views of a Grid
+  sviews,
+
+  /// Rename an ApptiveGridObject
+  rename,
+
+  /// Add a new Stateful View
+  addSView,
+
+  /// Update a Filter
+  updateFilter,
+
+  /// Export View/Grid as a CSV
+  exportAsCsv,
+
+  // AGCommonFieldPresenter
+  /// Extract Fields with a Filter to a new Grid
+  extractToGrid,
+
+  // AGHookPresenter
+  /// Test an ApptiveGridHook
+  test,
+
+  // AGGridPresenterHAL
+  /// Add a Virtual Grid
+  addVirtualGrid,
+
+  // AGActivationPresenter
+  /// List Events of a Hook Activation
+  events,
+
+  // AGFlowPresenter
+  /// Remove a transition in a Flow
+  removeTransition,
+
+  /// List nodes in a flow
+  nodes,
+
+  /// Add a transition in a Flow between nodes
+  addTransition,
+
+  /// Add a Node to a flow
+  addNode,
+
+  /// List instances of a flow
+  instances,
+
+  /// List transitions in a flow
+  transitions,
+
+  // AGFlowInstanceEventPresenter
+
+  // AGNodePresenter
+  /// List outgoing connections of a Node
+  outgoing,
+
+  /// List incoming connections of a Node
+  incoming,
+
+  // AGSpacePresenter
+  /// Create a new Grid from a CSV
+  uploadCSV,
 }
