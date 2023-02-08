@@ -1,3 +1,5 @@
+## 0.3.1+1
+* Use `const` where possible
 ## 0.3.1
 * Fix Lints for Flutter 3.7.0
 * Add Colors and Icons for Kanban, Calendar and Maps

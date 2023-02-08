@@ -6,9 +6,9 @@ import 'package:mocktail/mocktail.dart';
 import 'common.dart';
 
 void main() {
-  final user = 'user';
-  final space = 'space';
-  final gridId = 'grid';
+  const user = 'user';
+  const space = 'space';
+  const gridId = 'grid';
 
   late ApptiveGridClient client;
 
@@ -17,7 +17,7 @@ void main() {
       Uri.parse('/api/users/user/spaces/space/grids/grid'),
     );
     registerFallbackValue(
-      [ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)],
+      [const ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)],
     );
   });
 
@@ -36,13 +36,13 @@ void main() {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         },
       ),
     );
 
-    final title = 'Title';
+    const title = 'Title';
     when(
       () => client.loadGrid(
         uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
@@ -79,13 +79,13 @@ void main() {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         },
       ),
     );
 
-    final title = 'Title';
+    const title = 'Title';
     when(
       () => client.loadGrid(
         uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
@@ -115,9 +115,9 @@ void main() {
         uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('Error');
+            return const Text('Error');
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         },
       ),
@@ -146,13 +146,13 @@ void main() {
           if (snapshot.hasData) {
             return Text(snapshot.data!.name);
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         },
       ),
     );
 
-    final title = 'Title';
+    const title = 'Title';
     when(
       () => client.loadGrid(
         uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
@@ -191,7 +191,7 @@ void main() {
         ),
       );
 
-      final title = 'Title';
+      const title = 'Title';
       when(
         () => client.loadGrid(
           uri: any(named: 'uri'),
@@ -231,7 +231,7 @@ void main() {
   group('Sorting', () {
     testWidgets('Sorting is applied', (tester) async {
       final sorting = [
-        ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)
+        const ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)
       ];
       final target = TestApp(
         client: client,
@@ -242,13 +242,13 @@ void main() {
             if (snapshot.hasData) {
               return Text(snapshot.data!.name);
             } else {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
           },
         ),
       );
 
-      final title = 'Title';
+      const title = 'Title';
       when(
         () => client.loadGrid(
           uri: Uri.parse('/api/users/user/spaces/space/grids/gridId'),
@@ -277,20 +277,20 @@ void main() {
 
     testWidgets('Switching Sorting triggers reload', (tester) async {
       final sorting = [
-        ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)
+        const ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)
       ];
       final target = TestApp(
         client: client,
         child: _SortingAndFilterSwitcher(
           gridUri1: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           sorting1: sorting,
-          sorting2: [
+          sorting2: const [
             ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.desc)
           ],
         ),
       );
 
-      final title = 'Title';
+      const title = 'Title';
       when(
         () => client.loadGrid(
           uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
@@ -333,13 +333,13 @@ void main() {
             if (snapshot.hasData) {
               return Text(snapshot.data!.name);
             } else {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
           },
         ),
       );
 
-      final title = 'Title';
+      const title = 'Title';
       when(
         () => client.loadGrid(
           uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
@@ -380,7 +380,7 @@ void main() {
         ),
       );
 
-      final title = 'Title';
+      const title = 'Title';
       when(
         () => client.loadGrid(
           uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
@@ -462,7 +462,7 @@ class _SortingAndFilterSwitcherState extends State<_SortingAndFilterSwitcher> {
               }
             });
           },
-          child: Text('Switch Sorting'),
+          child: const Text('Switch Sorting'),
         ),
         ApptiveGridGridBuilder(
           sorting: _sorting,
