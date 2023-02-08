@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 /// Set Up your Grid in ApptiveGrid using Text Columns
 /// | First Name | Last Name | imgUrl
 void main() async {
-  await enableWebAuth(ApptiveGridOptions());
+  await enableWebAuth(const ApptiveGridOptions());
   runApp(
     ApptiveGrid(
-      options: ApptiveGridOptions(
+      options: const ApptiveGridOptions(
         environment: ApptiveGridEnvironment.alpha,
         authenticationOptions: ApptiveGridAuthenticationOptions(
           autoAuthenticate: true,
@@ -34,13 +34,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: _MyHomePage(),
+      home: const _MyHomePage(),
     );
   }
 }
 
 class _MyHomePage extends StatefulWidget {
-  _MyHomePage();
+  const _MyHomePage();
 
   @override
   State<_MyHomePage> createState() => _MyHomePageState();
@@ -53,7 +53,7 @@ class _MyHomePageState extends State<_MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Grid Builder'),
+        title: const Text('Grid Builder'),
       ),
       // Add the ApptiveGridGridBuilder to your Widget Tree
       body: ApptiveGridGridBuilder(
@@ -65,7 +65,7 @@ class _MyHomePageState extends State<_MyHomePage> {
               child: Text('Error: ${snapshot.error}'),
             );
           } else if (!snapshot.hasData) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else {
@@ -76,7 +76,7 @@ class _MyHomePageState extends State<_MyHomePage> {
               child: ListView.separated(
                 itemCount: snapshot.data!.rows?.length ?? 0,
                 separatorBuilder: (context, index) {
-                  return Divider();
+                  return const Divider();
                 },
                 itemBuilder: (context, index) {
                   final row = snapshot.data!.rows![index];
@@ -111,7 +111,7 @@ class _MyHomePageState extends State<_MyHomePage> {
                               .data
                               .value,
                         ),
-                        Text(' '),
+                        const Text(' '),
                         Text(
                           row.entries
                               .firstWhere(
@@ -119,7 +119,7 @@ class _MyHomePageState extends State<_MyHomePage> {
                               )
                               .data
                               .value,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),

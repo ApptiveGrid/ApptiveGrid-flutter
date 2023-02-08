@@ -1,3 +1,6 @@
+## 0.13.1+1
+* Use `const` where possible
+
 ## 0.13.1
 * Upgrade apptive_grid_core to 0.14.2
 

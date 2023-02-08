@@ -109,7 +109,7 @@ class _UserSectionState extends State<_UserSection> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          child: Text('Logout'),
+                          child: const Text('Logout'),
                           onPressed: () {
                             ApptiveGrid.getClient(context, listen: false)
                                 .logout();
@@ -117,7 +117,7 @@ class _UserSectionState extends State<_UserSection> {
                         ),
                         IconButton(
                           onPressed: _reload,
-                          icon: Icon(Icons.refresh),
+                          icon: const Icon(Icons.refresh),
                         )
                       ],
                     ),
@@ -130,13 +130,13 @@ class _UserSectionState extends State<_UserSection> {
                   child: Text(snapshot.error.toString()),
                 );
               } else {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
             },
           )
-        : Center(
+        : const Center(
             child: CircularProgressIndicator(),
           );
   }
@@ -188,7 +188,7 @@ class _SpaceSectionState extends State<_SpaceSection> {
                                 ),
                               )
                               .toList() ??
-                          [SizedBox()],
+                          [const SizedBox()],
                     )
                   ],
                 );
@@ -197,13 +197,13 @@ class _SpaceSectionState extends State<_SpaceSection> {
                   child: Text(snapshot.error.toString()),
                 );
               } else {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
             },
           )
-        : Center(
+        : const Center(
             child: CircularProgressIndicator(),
           );
   }
@@ -251,7 +251,7 @@ class _GridSectionState extends State<_GridSection> {
                                     Text(e.entries.first.data.value.toString()),
                               )
                               .toList() ??
-                          [SizedBox()],
+                          [const SizedBox()],
                     )
                   ],
                 );
@@ -260,13 +260,13 @@ class _GridSectionState extends State<_GridSection> {
                   child: Text(snapshot.error.toString()),
                 );
               } else {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
             },
           )
-        : Center(
+        : const Center(
             child: CircularProgressIndicator(),
           );
   }

@@ -1,3 +1,6 @@
+## 0.14.5+1
+* Use `const` where possible
+
 ## 0.14.5
 * Add missing Links
 

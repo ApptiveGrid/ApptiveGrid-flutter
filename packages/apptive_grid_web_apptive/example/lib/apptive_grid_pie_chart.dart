@@ -62,7 +62,7 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
   @override
   Widget build(BuildContext context) {
     if (!_isValid) {
-      return Center(
+      return const Center(
         child: Text('You need a Column with a SingleSelect'),
       );
     } else {
@@ -100,11 +100,11 @@ class _ApptiveGridPieChartState extends State<ApptiveGridPieChart> {
                   ),
                   PieChart(
                     dataMap: _calculateDataMap(),
-                    legendOptions: LegendOptions(
+                    legendOptions: const LegendOptions(
                       showLegendsInRow: true,
                       legendPosition: LegendPosition.bottom,
                     ),
-                    colorList: [
+                    colorList: const [
                       ApptiveGridColors.grid,
                       ApptiveGridColors.form,
                       ApptiveGridColors.kanban,
@@ -190,7 +190,7 @@ class _FieldSelectorState extends State<FieldSelector> {
               }
               return null;
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               errorMaxLines: 3,
             ),
             autovalidateMode: AutovalidateMode.always,
