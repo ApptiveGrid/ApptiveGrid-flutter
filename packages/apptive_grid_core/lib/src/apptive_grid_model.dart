@@ -18,6 +18,7 @@ export 'package:apptive_grid_core/src/model/grid/grid_field.dart';
 export 'package:apptive_grid_core/src/model/grid/grid_row.dart';
 export 'package:apptive_grid_core/src/model/link/apptive_link.dart';
 export 'package:apptive_grid_core/src/model/link/apptive_link_type.dart';
+export 'package:apptive_grid_core/src/model/s_view/s_view.dart';
 export 'package:apptive_grid_core/src/model/space/space.dart';
 export 'package:apptive_grid_core/src/model/user/data_user.dart';
 export 'package:apptive_grid_core/src/model/user/user.dart';
