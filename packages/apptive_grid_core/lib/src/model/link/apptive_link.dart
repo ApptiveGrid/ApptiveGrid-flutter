@@ -35,7 +35,9 @@ class ApptiveLink {
 
   @override
   bool operator ==(Object other) {
-    return other is ApptiveLink && other.uri == uri && other.method == method;
+    return other is ApptiveLink &&
+        other.uri == uri &&
+        other.method.toLowerCase() == method.toLowerCase();
   }
 
   @override
