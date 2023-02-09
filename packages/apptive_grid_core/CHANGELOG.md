@@ -1,3 +1,6 @@
+## 0.14.6
+* Add Model for `SView` and `SViewType`
+
 ## 0.14.5+1
 * Use `const` where possible
 
