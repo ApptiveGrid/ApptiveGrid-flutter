@@ -1,3 +1,6 @@
+## 0.14.6+1
+* Add missing link type `grid`
+
 ## 0.14.6
 * Add Model for `SView` and `SViewType`
 

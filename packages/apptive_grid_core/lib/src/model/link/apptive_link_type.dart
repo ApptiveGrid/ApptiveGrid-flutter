@@ -195,4 +195,8 @@ enum ApptiveLinkType {
   // AGSpacePresenter
   /// Create a new Grid from a CSV
   uploadCSV,
+
+  // SView
+  /// Link to the respective Grid of a SView
+  grid,
 }
