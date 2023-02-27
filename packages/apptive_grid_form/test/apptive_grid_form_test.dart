@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide FormField;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
@@ -1316,6 +1316,48 @@ void main() {
       expect(find.byType(Lottie), findsOneWidget);
       expect(find.text('Thank You!', skipOffstage: false), findsOneWidget);
       expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
+    });
+  });
+
+  group('Component Builder', () {
+    testWidgets('Build Custom Widget for Component', (tester) async {
+      final completer = Completer<FormComponent>();
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+          componentBuilder: (_, component) {
+            completer.complete(component);
+            return const SizedBox();
+          },
+        ),
+      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      const field = GridField(id: 'id', name: 'name', type: DataType.text);
+      final formComponent = FormComponent(
+        property: 'property',
+        data: StringDataEntity(),
+        field: field,
+      );
+      final formData = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [formComponent],
+        links: {ApptiveLinkType.submit: action},
+        fields: [field],
+      );
+
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer((realInvocation) async => formData);
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+      final customComponent = await completer.future;
+
+      expect(customComponent, equals(formComponent));
+      expect(find.byType(TextFormField), findsNothing);
     });
   });
 }

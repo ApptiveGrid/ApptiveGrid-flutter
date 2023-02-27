@@ -96,6 +96,7 @@ class ApptiveGridForm extends StatefulWidget {
   /// Defaults to a localized version of `Send`
   final String? buttonLabel;
 
+  /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
 
   @override
@@ -266,6 +267,7 @@ class ApptiveGridFormData extends StatefulWidget {
   /// Defaults to a localized version of `Send`
   final String? buttonLabel;
 
+  /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
 
   @override
@@ -432,7 +434,8 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                     padding: widget.contentPadding ?? _defaultPadding,
                     child: Builder(
                       builder: (context) {
-                        final customBuilder = widget.componentBuilder?.call(context, component);
+                        final customBuilder =
+                            widget.componentBuilder?.call(context, component);
                         if (customBuilder != null) {
                           return customBuilder;
                         } else {
