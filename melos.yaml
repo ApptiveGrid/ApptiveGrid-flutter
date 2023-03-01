@@ -7,7 +7,7 @@ scripts:
 
   lint:all:
     run: |
-      melos run lint:analyze && melos publish -y && melos run lint:format
+      melos bootstrap && melos run lint:analyze && melos publish -y && melos run lint:format
 
   lint:analyze:
     run: |
