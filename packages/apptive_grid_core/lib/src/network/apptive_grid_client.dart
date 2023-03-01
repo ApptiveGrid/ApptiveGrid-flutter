@@ -598,20 +598,26 @@ class ApptiveGridClient extends ChangeNotifier {
   }
 
   /// Tries to send pending [ActionItem]s that are stored in [options.cache]
-  Future sendPendingActions() async {
+  Future<List<ActionItem>> sendPendingActions() async {
     final pendingActions = await options.cache?.getPendingActionItems() ?? [];
-
-    for (final action in pendingActions) {
-      try {
-        await submitForm(
-          action.link,
-          action.data,
-          saveToPendingItems: false, // don't resubmit this to pending items
-        );
-      } on http.Response catch (_) {
-        // Was not able to submit this action
-      }
-    }
+    final successfulActions = <ActionItem>[];
+    await Future.wait(
+      pendingActions.map((action) async {
+        try {
+          await submitForm(
+            action.link,
+            action.data,
+            saveToPendingItems: false, // don't resubmit this to pending items
+          ).then((value) {
+            successfulActions.add(action);
+            return value;
+          });
+        } on http.Response catch (_) {
+          // Was not able to submit this action
+        }
+      }),
+    );
+    return successfulActions;
   }
 
   /// Uploads [bytes] as the Profile Picture for the logged in user
