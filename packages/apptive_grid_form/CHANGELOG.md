@@ -1,3 +1,6 @@
+## 0.15.0
+* Update apptive_grid_core to 0.15.0
+
 ## 0.14.4
 * Add `componentBuilder` for building custom form components
 
