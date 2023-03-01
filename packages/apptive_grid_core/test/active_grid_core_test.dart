@@ -205,7 +205,7 @@ void main() {
     testWidgets('withClient Uses Provided Client', (tester) async {
       late BuildContext context;
       final client = MockApptiveGridClient();
-      when(() => client.sendPendingActions()).thenAnswer((_) async {});
+      when(() => client.sendPendingActions()).thenAnswer((_) async => []);
       final target = ApptiveGrid.withClient(
         client: client,
         child: Builder(

@@ -27,7 +27,8 @@ void main() {
   setUp(() {
     client = MockApptiveGridClient();
 
-    when(() => client.sendPendingActions()).thenAnswer((invocation) async {});
+    when(() => client.sendPendingActions())
+        .thenAnswer((invocation) async => []);
   });
 
   Map<String, dynamic> getSchema(

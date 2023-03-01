@@ -82,7 +82,7 @@ void main() {
         fields: [],
       ),
     );
-    when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+    when(() => client.sendPendingActions()).thenAnswer((_) => Future.value([]));
     when(() => client.submitFormWithProgress(action, any())).thenAnswer(
       (_) =>
           Stream.value(SubmitCompleteProgressEvent(http.Response('body', 200))),

@@ -33,7 +33,7 @@ void main() {
 
   setUp(() {
     client = MockApptiveGridClient();
-    when(() => client.sendPendingActions()).thenAnswer((_) async {});
+    when(() => client.sendPendingActions()).thenAnswer((_) async => []);
   });
 
   group('Title', () {
@@ -887,7 +887,8 @@ void main() {
       when(() => client.loadForm(uri: formUri)).thenAnswer(
         (invocation) => Future.value(data),
       );
-      when(() => client.sendPendingActions()).thenAnswer((invocation) async {});
+      when(() => client.sendPendingActions())
+          .thenAnswer((invocation) async => []);
       when(() => client.submitFormWithProgress(action, data)).thenAnswer(
         (invocation) => Stream.value(
           AttachmentCompleteProgressEvent(http.Response('', 400)),
@@ -1231,7 +1232,7 @@ void main() {
       final globalKey = GlobalKey<_ChangingFormWidgetState>();
       final client = MockApptiveGridClient();
 
-      when(client.sendPendingActions).thenAnswer((_) async {});
+      when(client.sendPendingActions).thenAnswer((_) async => []);
       when(() => client.loadForm(uri: any(named: 'uri'))).thenAnswer(
         (_) async => FormData(
           id: 'formId',

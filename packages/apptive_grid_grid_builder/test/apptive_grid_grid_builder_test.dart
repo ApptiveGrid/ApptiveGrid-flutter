@@ -24,7 +24,7 @@ void main() {
   setUp(() {
     client = MockApptiveGridClient();
 
-    when(() => client.sendPendingActions()).thenAnswer((_) async {});
+    when(() => client.sendPendingActions()).thenAnswer((_) async => []);
   });
 
   testWidgets('Builder is called with data', (tester) async {

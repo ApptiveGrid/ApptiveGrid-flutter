@@ -390,7 +390,8 @@ void main() {
         ),
       );
 
-      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.sendPendingActions())
+          .thenAnswer((_) => Future.value([]));
       when(() => client.submitFormWithProgress(action, any())).thenAnswer(
         (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
       );
