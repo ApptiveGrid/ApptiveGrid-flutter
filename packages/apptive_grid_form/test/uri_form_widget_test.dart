@@ -23,7 +23,7 @@ void main() {
 
   setUp(() {
     client = MockApptiveGridClient();
-    when(() => client.sendPendingActions()).thenAnswer((_) async {});
+    when(() => client.sendPendingActions()).thenAnswer((_) async => []);
     when(() => client.submitFormWithProgress(submitLink, any())).thenAnswer(
       (invocation) =>
           Stream.value(SubmitCompleteProgressEvent(Response('', 200))),

@@ -106,7 +106,7 @@ void main() {
         required: true,
       );
 
-      when(() => client.sendPendingActions()).thenAnswer((_) async {});
+      when(() => client.sendPendingActions()).thenAnswer((_) async => []);
       when(() => client.loadGrid(uri: gridUri, loadEntities: false))
           .thenAnswer((_) async => grid);
 

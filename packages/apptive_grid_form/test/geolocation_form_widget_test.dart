@@ -1549,7 +1549,7 @@ void main() {
 
       when(() => apptiveGridClient.options).thenReturn(options);
       when(() => apptiveGridClient.sendPendingActions())
-          .thenAnswer((_) async {});
+          .thenAnswer((_) async => []);
       when(
         () => apptiveGridClient.submitFormWithProgress(
           action,
