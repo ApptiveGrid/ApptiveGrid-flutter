@@ -1,3 +1,6 @@
+## 0.14.4+1
+* Fix Bug where `ApptiveGridFormData` would rebuild when in an "end" state
+
 ## 0.14.4
 * Add `componentBuilder` for building custom form components
 
