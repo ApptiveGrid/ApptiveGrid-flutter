@@ -33,6 +33,7 @@ class ApptiveGridForm extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
+    this.componentBuilder,
   });
 
   /// [Uri] of the Form to display
@@ -64,7 +65,6 @@ class ApptiveGridForm extends StatefulWidget {
   /// Use this to modify the UI Displaying the Form
   /// ```dart
   /// ApptiveGridForm(
-  ///   id: [YOUR_FORM_ID],
   ///   onFormLoaded: (data) {
   ///     setState(() {
   ///       title = data.title;
@@ -95,6 +95,9 @@ class ApptiveGridForm extends StatefulWidget {
   /// Label of the Button to submit a form.
   /// Defaults to a localized version of `Send`
   final String? buttonLabel;
+
+  /// A custom Builder for Building custom Widgets for FormComponents
+  final Widget? Function(BuildContext, FormComponent)? componentBuilder;
 
   @override
   ApptiveGridFormState createState() => ApptiveGridFormState();
@@ -146,6 +149,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       scrollController: widget.scrollController,
       buttonAlignment: widget.buttonAlignment,
       buttonLabel: widget.buttonLabel,
+      componentBuilder: widget.componentBuilder,
     );
   }
 
@@ -208,6 +212,7 @@ class ApptiveGridFormData extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
+    this.componentBuilder,
   });
 
   /// [FormData] that should be displayed
@@ -261,6 +266,9 @@ class ApptiveGridFormData extends StatefulWidget {
   /// Label of the Button to submit a form.
   /// Defaults to a localized version of `Send`
   final String? buttonLabel;
+
+  /// A custom Builder for Building custom Widgets for FormComponents
+  final Widget? Function(BuildContext, FormComponent)? componentBuilder;
 
   @override
   ApptiveGridFormDataState createState() => ApptiveGridFormDataState();
@@ -413,11 +421,12 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               }
             } else if (index < (data.components?.length ?? 0) + indexOffset) {
               final componentIndex = index - indexOffset;
-              final component = fromModel(data.components![componentIndex]);
-              if (component is EmptyFormWidget) {
+              final component = data.components![componentIndex];
+              final componentWidget = fromModel(component);
+              if (componentWidget is EmptyFormWidget) {
                 // UserReference Widget should be invisible in the Form
                 // So returning without any Padding
-                return component;
+                return componentWidget;
               } else {
                 return IgnorePointer(
                   ignoring: _submitting,
@@ -425,7 +434,13 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                     padding: widget.contentPadding ?? _defaultPadding,
                     child: Builder(
                       builder: (context) {
-                        return fromModel(data.components![componentIndex]);
+                        final customBuilder =
+                            widget.componentBuilder?.call(context, component);
+                        if (customBuilder != null) {
+                          return customBuilder;
+                        } else {
+                          return componentWidget;
+                        }
                       },
                     ),
                   ),

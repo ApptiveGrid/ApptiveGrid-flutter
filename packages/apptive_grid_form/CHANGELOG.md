@@ -1,3 +1,6 @@
+## 0.14.4
+* Add `componentBuilder` for building custom form components
+
 ## 0.14.3
 * Upgrade apptive_grid_core to 0.14.4
 * Fix Lints for Flutter 3.7.0
