@@ -870,6 +870,109 @@ void main() {
       );
     });
 
+    testWidgets('Cache, Callback specified and return true, Shows Saved Screen',
+        (tester) async {
+      final callbackCompleter = Completer<ApptiveLink>();
+      final cacheMap = <ActionItem>{};
+      final cache = MockApptiveGridCache();
+      when(() => cache.addPendingActionItem(any())).thenAnswer(
+        (invocation) => cacheMap.add(invocation.positionalArguments[0]),
+      );
+      when(() => cache.removePendingActionItem(any())).thenAnswer(
+        (invocation) => cacheMap.remove(invocation.positionalArguments[0]),
+      );
+      when(() => cache.getPendingActionItems())
+          .thenAnswer((invocation) => cacheMap.toList());
+
+      final client = ApptiveGridClient(
+        httpClient: httpClient,
+        options: ApptiveGridOptions(
+          cache: cache,
+        ),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: formUri,
+          onSavedToPending: (link, __) async {
+            callbackCompleter.complete(link);
+            return true;
+          },
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      verify(() => httpClient.send(any())).called(1);
+
+      expect(
+        find.text(
+          'The form was saved and will be sent at the next opportunity',
+          skipOffstage: false,
+        ),
+        findsOneWidget,
+      );
+
+      expect(await callbackCompleter.future, cacheMap.first.link);
+    });
+
+    testWidgets(
+        'Cache, Callback specified and return false, Does not show Saved Screen',
+        (tester) async {
+      final callbackCompleter = Completer<ApptiveLink>();
+      final cacheMap = <ActionItem>{};
+      final cache = MockApptiveGridCache();
+      when(() => cache.addPendingActionItem(any())).thenAnswer(
+        (invocation) => cacheMap.add(invocation.positionalArguments[0]),
+      );
+      when(() => cache.removePendingActionItem(any())).thenAnswer(
+        (invocation) => cacheMap.remove(invocation.positionalArguments[0]),
+      );
+      when(() => cache.getPendingActionItems())
+          .thenAnswer((invocation) => cacheMap.toList());
+
+      final client = ApptiveGridClient(
+        httpClient: httpClient,
+        options: ApptiveGridOptions(
+          cache: cache,
+        ),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: formUri,
+          onSavedToPending: (link, __) async {
+            callbackCompleter.complete(link);
+            return false;
+          },
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      verify(() => httpClient.send(any())).called(1);
+
+      expect(
+        find.text(
+          'The form was saved and will be sent at the next opportunity',
+          skipOffstage: false,
+        ),
+        findsNothing,
+      );
+
+      expect(await callbackCompleter.future, cacheMap.first.link);
+    });
+
     testWidgets('Cache, Error in Attachment, Shows Saved Screen',
         (tester) async {
       final cacheMap = <ActionItem>{};
