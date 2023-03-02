@@ -1,3 +1,6 @@
+## 0.15.0+1
+* Catch all errors when trying to submit pending forms
+
 ## 0.15.0
 * `sendPendingActions` now returns the list of successfully send actions
 * `ApptiveGridCache` has now a variable to turn automatically sending pending actions on/off

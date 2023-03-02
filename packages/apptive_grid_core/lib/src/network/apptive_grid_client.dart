@@ -612,7 +612,7 @@ class ApptiveGridClient extends ChangeNotifier {
             successfulActions.add(action);
             return value;
           });
-        } on http.Response catch (_) {
+        } catch (_) {
           // Was not able to submit this action
         }
       }),
