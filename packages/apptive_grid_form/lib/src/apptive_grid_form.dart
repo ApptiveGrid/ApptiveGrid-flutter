@@ -315,7 +315,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   @override
   void didUpdateWidget(covariant ApptiveGridFormData oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _updateView(resetFormData: widget.formData != oldWidget.formData);
+    if (!_success && !_saved && _error == null) {
+      _updateView(resetFormData: widget.formData != oldWidget.formData);
+    }
   }
 
   @override
