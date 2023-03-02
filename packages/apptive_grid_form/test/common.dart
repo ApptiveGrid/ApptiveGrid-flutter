@@ -87,7 +87,8 @@ class TestApp extends StatelessWidget {
 
   ApptiveGridClient get _fallbackClient {
     final client = MockApptiveGridClient();
-    when(() => client.sendPendingActions()).thenAnswer((invocation) async {});
+    when(() => client.sendPendingActions())
+        .thenAnswer((invocation) async => []);
     when(() => client.options).thenReturn(options);
     return client;
   }

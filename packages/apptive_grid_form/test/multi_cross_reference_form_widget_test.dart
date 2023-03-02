@@ -106,7 +106,7 @@ void main() {
         required: true,
       );
 
-      when(() => client.sendPendingActions()).thenAnswer((_) async {});
+      when(() => client.sendPendingActions()).thenAnswer((_) async => []);
       when(() => client.loadGrid(uri: gridUri, loadEntities: false))
           .thenAnswer((_) async => grid);
 
@@ -390,7 +390,8 @@ void main() {
         ),
       );
 
-      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.sendPendingActions())
+          .thenAnswer((_) => Future.value([]));
       when(() => client.submitFormWithProgress(action, any())).thenAnswer(
         (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
       );

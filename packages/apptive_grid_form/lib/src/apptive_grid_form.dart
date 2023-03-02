@@ -29,6 +29,7 @@ class ApptiveGridForm extends StatefulWidget {
     this.hideDescription = false,
     this.onFormLoaded,
     this.onActionSuccess,
+    this.onSavedToPending,
     this.onError,
     this.scrollController,
     this.buttonAlignment = Alignment.center,
@@ -79,6 +80,13 @@ class ApptiveGridForm extends StatefulWidget {
   /// If this returns false the default success screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
   final Future<bool> Function(ApptiveLink, FormData)? onActionSuccess;
+
+  /// Callback after Form is saved to pending Items
+  /// Note: This will only be triggerd if an [ApptiveGridCache] is specified in the [ApptiveGridOptions]
+  ///
+  /// If this returns false the default saved for later screen is not shown.
+  /// This functionality can be used to do a custom Widget or Transition
+  final Future<bool> Function(ApptiveLink, FormData)? onSavedToPending;
 
   /// Callback if an Error occurs
   ///
@@ -144,6 +152,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       hideTitle: widget.hideTitle,
       hideDescription: widget.hideDescription,
       onActionSuccess: widget.onActionSuccess,
+      onSavedToPending: widget.onSavedToPending,
       onError: widget.onError,
       triggerReload: () => loadForm(resetData: false),
       scrollController: widget.scrollController,
@@ -207,6 +216,7 @@ class ApptiveGridFormData extends StatefulWidget {
     this.hideTitle = false,
     this.hideDescription = false,
     this.onActionSuccess,
+    this.onSavedToPending,
     this.onError,
     this.triggerReload,
     this.scrollController,
@@ -247,6 +257,13 @@ class ApptiveGridFormData extends StatefulWidget {
   /// If this returns false the default success screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
   final Future<bool> Function(ApptiveLink, FormData)? onActionSuccess;
+
+  /// Callback after Form is saved to pending Items
+  /// Note: This will only be triggerd if an [ApptiveGridCache] is specified in the [ApptiveGridOptions]
+  ///
+  /// If this returns false the default saved for later screen is not shown.
+  /// This functionality can be used to do a custom Widget or Transition
+  final Future<bool> Function(ApptiveLink, FormData)? onSavedToPending;
 
   /// Callback if an Error occurs
   ///
@@ -656,7 +673,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           } else if (event is AttachmentCompleteProgressEvent) {
             final response = event.response;
             if (response != null && response.statusCode >= 400) {
-              _onSavedOffline();
+              _onSavedOffline(link);
             }
           } else if (event is UploadFormProgressEvent) {
             setState(() {
@@ -681,7 +698,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               }
             } else {
               // FormData was saved to [ApptiveGridCache]
-              _onSavedOffline();
+              _onSavedOffline(link);
             }
           } else if (event is ErrorProgressEvent) {
             _onError(event.error);
@@ -699,12 +716,17 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     }
   }
 
-  void _onSavedOffline() {
-    if (mounted) {
-      setState(() {
-        _saved =
-            ApptiveGrid.getClient(context, listen: false).options.cache != null;
-      });
+  Future<void> _onSavedOffline(ApptiveLink link) async {
+    final hasCache =
+        ApptiveGrid.getClient(context, listen: false).options.cache != null;
+    if (hasCache) {
+      if (await widget.onSavedToPending?.call(link, _formData!) != false) {
+        if (mounted) {
+          setState(() {
+            _saved = true;
+          });
+        }
+      }
     }
   }
 

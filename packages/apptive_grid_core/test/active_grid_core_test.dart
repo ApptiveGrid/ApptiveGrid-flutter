@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -205,7 +207,7 @@ void main() {
     testWidgets('withClient Uses Provided Client', (tester) async {
       late BuildContext context;
       final client = MockApptiveGridClient();
-      when(() => client.sendPendingActions()).thenAnswer((_) async {});
+      when(() => client.sendPendingActions()).thenAnswer((_) async => []);
       final target = ApptiveGrid.withClient(
         client: client,
         child: Builder(
@@ -254,6 +256,87 @@ void main() {
       );
     });
   });
+
+  group('Cached Actions', () {
+    testWidgets('Default Cache sends pending Actions', (tester) async {
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions()).thenAnswer((_) async => []);
+      final cache = ActionCache();
+      final options = ApptiveGridOptions(
+        cache: cache,
+      );
+      when(() => client.options).thenReturn(options);
+      final target = ApptiveGrid.withClient(
+        client: client,
+        options: options,
+        child: Container(),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      verify(() => client.sendPendingActions()).called(1);
+    });
+
+    testWidgets('Cache sends pending Actions', (tester) async {
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions()).thenAnswer((_) async => []);
+      final cache = ActionCache(true);
+      final options = ApptiveGridOptions(
+        cache: cache,
+      );
+      when(() => client.options).thenReturn(options);
+      final target = ApptiveGrid.withClient(
+        client: client,
+        options: options,
+        child: Container(),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      verify(() => client.sendPendingActions()).called(1);
+    });
+
+    testWidgets('Cache without AutoSend does not send Actions', (tester) async {
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions()).thenAnswer((_) async => []);
+      final cache = ActionCache(false);
+      final options = ApptiveGridOptions(
+        cache: cache,
+      );
+      when(() => client.options).thenReturn(options);
+      final target = ApptiveGrid.withClient(
+        client: client,
+        options: options,
+        child: Container(),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      verifyNever(() => client.sendPendingActions());
+    });
+  });
+}
+
+class ActionCache extends ApptiveGridCache {
+  ActionCache([this.send]);
+
+  final bool? send;
+
+  @override
+  bool get shouldAutomaticallySendPendingActions =>
+      send ?? super.shouldAutomaticallySendPendingActions;
+
+  @override
+  FutureOr<void> addPendingActionItem(ActionItem actionItem) {}
+
+  @override
+  FutureOr<List<ActionItem>> getPendingActionItems() => [];
+
+  @override
+  FutureOr<void> removePendingActionItem(ActionItem actionItem) {}
 }
 
 class _StubFormWidgetConfiguration extends FormWidgetConfiguration {

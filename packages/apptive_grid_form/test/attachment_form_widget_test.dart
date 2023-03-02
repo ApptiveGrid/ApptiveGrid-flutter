@@ -77,7 +77,7 @@ void main() {
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
-            .thenAnswer((_) => Future.value());
+            .thenAnswer((_) => Future.value([]));
         when(() => client.submitFormWithProgress(action, any())).thenAnswer(
           (_) => Stream.value(
             SubmitCompleteProgressEvent(Response('body', 200)),
@@ -183,7 +183,7 @@ void main() {
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
-            .thenAnswer((_) => Future.value());
+            .thenAnswer((_) => Future.value([]));
         when(() => client.submitFormWithProgress(action, any())).thenAnswer(
           (_) => Stream.value(
             SubmitCompleteProgressEvent(Response('body', 200)),
@@ -271,7 +271,7 @@ void main() {
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
-            .thenAnswer((_) => Future.value());
+            .thenAnswer((_) => Future.value([]));
         when(() => client.submitFormWithProgress(action, any())).thenAnswer(
           (_) => Stream.value(
             SubmitCompleteProgressEvent(Response('body', 200)),
@@ -370,7 +370,7 @@ void main() {
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
-            .thenAnswer((_) => Future.value());
+            .thenAnswer((_) => Future.value([]));
         when(() => client.submitFormWithProgress(action, any())).thenAnswer(
           (_) => Stream.value(
             SubmitCompleteProgressEvent(Response('body', 200)),
@@ -475,7 +475,7 @@ void main() {
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
-            .thenAnswer((_) => Future.value());
+            .thenAnswer((_) => Future.value([]));
         when(() => client.submitFormWithProgress(action, any())).thenAnswer(
           (_) => Stream.value(
             SubmitCompleteProgressEvent(Response('body', 200)),
@@ -595,7 +595,7 @@ void main() {
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
-            .thenAnswer((_) => Future.value());
+            .thenAnswer((_) => Future.value([]));
         when(() => client.submitFormWithProgress(action, any())).thenAnswer(
           (_) => Stream.value(
             SubmitCompleteProgressEvent(Response('body', 200)),
@@ -670,7 +670,7 @@ void main() {
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
-            .thenAnswer((_) => Future.value());
+            .thenAnswer((_) => Future.value([]));
 
         final target = TestApp(
           client: client,
@@ -736,7 +736,8 @@ void main() {
         fields: [field],
       );
       final client = MockApptiveGridClient();
-      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.sendPendingActions())
+          .thenAnswer((_) => Future.value([]));
       when(() => client.submitFormWithProgress(action, any())).thenAnswer(
         (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
       );
@@ -813,7 +814,7 @@ void main() {
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
-            .thenAnswer((_) => Future.value());
+            .thenAnswer((_) => Future.value([]));
         when(() => client.submitFormWithProgress(action, any())).thenAnswer(
           (_) =>
               Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
@@ -861,7 +862,8 @@ void main() {
         fields: [field],
       );
       final client = MockApptiveGridClient();
-      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.sendPendingActions())
+          .thenAnswer((_) => Future.value([]));
       when(() => client.submitFormWithProgress(action, any())).thenAnswer(
         (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
       );
@@ -907,7 +909,7 @@ void main() {
         );
         final client = MockApptiveGridClient();
         when(() => client.sendPendingActions())
-            .thenAnswer((_) => Future.value());
+            .thenAnswer((_) => Future.value([]));
         when(() => client.submitFormWithProgress(action, any())).thenAnswer(
           (_) =>
               Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
@@ -980,7 +982,8 @@ void main() {
         fields: [field],
       );
       final client = MockApptiveGridClient();
-      when(() => client.sendPendingActions()).thenAnswer((_) => Future.value());
+      when(() => client.sendPendingActions())
+          .thenAnswer((_) => Future.value([]));
       when(() => client.submitFormWithProgress(action, any())).thenAnswer(
         (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
       );

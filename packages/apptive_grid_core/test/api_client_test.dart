@@ -1870,7 +1870,8 @@ void main() {
 
     late ApptiveGridClient client;
 
-    final action = ApptiveLink(uri: Uri.parse('actionUri'), method: 'POST');
+    final action = ApptiveLink(uri: Uri.parse('/actionUri'), method: 'POST');
+    final action1 = ApptiveLink(uri: Uri.parse('/actionUri1'), method: 'POST');
 
     final data = FormData(
       id: 'formId',
@@ -1945,6 +1946,52 @@ void main() {
 
       verifyNever(() => cache.removePendingActionItem(any()));
       verifyNever(() => cache.addPendingActionItem(any()));
+    });
+
+    test('Resubmit returns successful action', () async {
+      final actionItem = ActionItem(link: action, data: data);
+      cacheMap[actionItem.toString()] = actionItem.toJson();
+
+      when(() => httpClient.send(any())).thenAnswer((realInvocation) async {
+        return StreamedResponse(Stream.value([]), 200);
+      });
+
+      final offlineActions = await client.sendPendingActions();
+
+      expect(offlineActions, equals([actionItem]));
+    });
+
+    test('Resubmit fails returns empty list', () async {
+      final actionItem = ActionItem(link: action, data: data);
+      cacheMap[actionItem.toString()] = actionItem.toJson();
+
+      when(() => httpClient.send(any())).thenAnswer((realInvocation) async {
+        return StreamedResponse(Stream.value([]), 400);
+      });
+
+      final offlineActions = await client.sendPendingActions();
+
+      expect(offlineActions, equals([]));
+    });
+
+    test('Resubmit returns only successful actions', () async {
+      final actionItem = ActionItem(link: action, data: data);
+      cacheMap[actionItem.toString()] = actionItem.toJson();
+      final actionItem1 = ActionItem(link: action1, data: data);
+      cacheMap[actionItem1.toString()] = actionItem1.toJson();
+
+      when(() => httpClient.send(any())).thenAnswer((invocation) async {
+        final uri = (invocation.positionalArguments.first as BaseRequest).url;
+        if (uri.path == action.uri.path) {
+          return StreamedResponse(Stream.value([]), 400);
+        } else {
+          return StreamedResponse(Stream.value([]), 200);
+        }
+      });
+
+      final offlineActions = await client.sendPendingActions();
+
+      expect(offlineActions, equals([actionItem1]));
     });
   });
 
@@ -2575,6 +2622,14 @@ void main() {
           ),
         ),
       ).called(1);
+    });
+  });
+
+  group('HttpClient', () {
+    test('Returns provided Client', () {
+      final client = ApptiveGridClient(httpClient: httpClient);
+
+      expect(client.httpClient, httpClient);
     });
   });
 }

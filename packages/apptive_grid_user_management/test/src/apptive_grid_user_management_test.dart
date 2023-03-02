@@ -426,7 +426,7 @@ void main() {
   group('Client', () {
     testWidgets('Creates Client with ApptiveGridClient', (tester) async {
       final apptiveGridClient = MockApptiveGridClient();
-      when(apptiveGridClient.sendPendingActions).thenAnswer((_) async {});
+      when(apptiveGridClient.sendPendingActions).thenAnswer((_) async => []);
 
       final callbackCompleter = Completer<Widget>();
 
