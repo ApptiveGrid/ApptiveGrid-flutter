@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`apptive_grid_theme` - `v1.0.0`](#apptive_grid_theme---v100)
+
+---
+
+#### `apptive_grid_theme` - `v1.0.0`
+
+ - Version 1.0.0
+
+
+## 2023-03-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`apptive_grid_user_management` - `v1.0.0`](#apptive_grid_user_management---v100)
 
 ---
