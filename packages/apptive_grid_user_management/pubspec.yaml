@@ -9,7 +9,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  apptive_grid_core: ^0.15.0
+  apptive_grid_core: ^1.0.0
   flutter:
     sdk: flutter
   http: ^0.13.5
