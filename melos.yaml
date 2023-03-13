@@ -18,9 +18,9 @@ scripts:
     run: |
       melos exec -c 5 -- \
         "dart pub publish --dry-run"
-    select-package:
+    packageFilters:
       ignore: "*example*"
-      no-private: true
+      noPrivate: true
 
   lint:format:
     run: |
@@ -34,11 +34,10 @@ scripts:
     run: |
       melos exec -c 1 -- \
         "mkdir -p test_results && flutter test --machine --no-pub | tojunit -o MELOS_PACKAGE_PATH/test_results/output.xml"
-    select-package:
-      dir-exists:
+    packageFilters:
+      dirExists:
         - test
       ignore:
-        - "*_theme*"
         - "*example*"
         - "*web*"
 
@@ -46,8 +45,8 @@ scripts:
     run: |
       melos exec -c 1 -- \
         "mkdir -p test_results && flutter test --no-pub --platform=chrome --machine | tojunit -o MELOS_PACKAGE_PATH/test_results/output.xml"
-    select-package:
-      dir-exists:
+    packageFilters:
+      dirExists:
         - test
       scope:
         - "*web*"
@@ -61,28 +60,27 @@ scripts:
     run: |
       melos exec -c 1 -- \
         "mkdir -p test_results && flutter test --no-pub"
-    select-package:
-      dir-exists:
+    packageFilters:
+      dirExists:
         - test/goldenFiles
 
   test:coverage:
     run: |
       melos exec -c 1 -- \
         "mkdir -p coverage && flutter test --coverage"
-    select-package:
-      dir-exists:
+    packageFilters:
+      dirExists:
         - test
       ignore:
         - "*example*"
         - "*web*"
-        - "*_theme*"
 
   test:coverage:web:
     run: |
       melos exec -c 1 -- \
         "mkdir -p coverage && flutter test --no-pub --platform=chrome --coverage && genhtml coverage/lcov.info -o coverage/html"
-    select-package:
-      dir-exists:
+    packageFilters:
+      dirExists:
         - test
       scope:
         - "*web*"
@@ -96,8 +94,8 @@ scripts:
     run: |
       melos exec -c 5 -- \
         "genhtml coverage/lcov.info -o coverage/html"
-    select-package:
-      file-exists:
+    packageFilters:
+      fileExists:
         - coverage/lcov.info
 
   build:android:
@@ -109,7 +107,7 @@ scripts:
   # build sometimes without the `--no-pub` switch. Careful: `melos bootstrap` after.
   build:example_android_pub:
     run: |
-      melos exec -c 6 --dir-exists="android" --scope="*example" --fail-fast -- \
+      melos exec -c 6 --dirExists="android" --scope="*example" --fail-fast -- \
         "flutter build apk"
     description: Build a specific example app for Android.
 
@@ -122,6 +120,6 @@ scripts:
   # build sometimes without the `--no-pub` switch. Careful: `melos bootstrap` after.
   build:example_ios_pub:
     run: |
-      melos exec -c 6 --dir-exists="ios" --scope="*example" --fail-fast -- \
+      melos exec -c 6 --dirExists="ios" --scope="*example" --fail-fast -- \
         "flutter build ios --debug --no-codesign"
     description: Build a specific example app for iOS.
