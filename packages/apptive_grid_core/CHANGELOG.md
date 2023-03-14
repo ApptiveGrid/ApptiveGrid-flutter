@@ -1,3 +1,7 @@
+## 1.0.0
+
+ - Version 1.0.0
+
 ## 0.15.0+1
 * Catch all errors when trying to submit pending forms
 

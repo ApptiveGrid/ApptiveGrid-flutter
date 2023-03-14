@@ -56,3 +56,5 @@ packages/*/pubspec.lock
 melos_*.iml
 **/test_results
 packages/**/example/pubspec.lock
+pubspec_overrides.yaml
+.dart_tool
