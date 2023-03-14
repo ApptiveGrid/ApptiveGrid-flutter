@@ -1,8 +1,9 @@
 name: Versioning
 
-push:
-  branches:
-    -main
+on:
+  push:
+    branches:
+      -main
 
   versioning:
     name: Versioning
