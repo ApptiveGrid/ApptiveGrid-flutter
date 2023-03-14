@@ -1,0 +1,9 @@
+name: Publishing
+
+on:
+  push:
+    tags:
+      - apptive_grid_*-v[0-9]+.[0-9]+.[0-9]+*'
+
+concurrency:
+  group: publish-${{ github.event.commits[0].id }}
