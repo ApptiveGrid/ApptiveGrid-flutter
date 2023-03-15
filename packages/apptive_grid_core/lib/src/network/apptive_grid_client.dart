@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/src/model/entity/paged_entities_response.dart';
 import 'package:apptive_grid_core/src/network/attachment_processor.dart';
 import 'package:apptive_grid_core/src/network/authentication/apptive_grid_authenticator.dart';
 import 'package:apptive_grid_core/src/network/constants.dart';

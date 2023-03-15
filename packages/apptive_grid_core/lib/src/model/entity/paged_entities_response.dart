@@ -10,13 +10,14 @@ class PagedEntitiesResponse extends EntitiesResponse {
     required Uri requestUri,
   }) {
     return PagedEntitiesResponse(
-        numberOfItems: json['numberOfItems'],
-        numberOfPages: json['numberOfPages'],
-        size: json['size'],
-        pages: {
-          json['page']: EntitiesResponse(items: json['items']),
-        },
-        requestUri: requestUri);
+      numberOfItems: json['numberOfItems'],
+      numberOfPages: json['numberOfPages'],
+      size: json['size'],
+      pages: {
+        json['page']: EntitiesResponse(items: json['items']),
+      },
+      requestUri: requestUri,
+    );
   }
 
   /// Constructs a new [PagedEntitiesResponse].
@@ -25,7 +26,7 @@ class PagedEntitiesResponse extends EntitiesResponse {
   /// [numberOfPages] is the total number of pages in the response.
   /// [size] is the number of entities in each page.
   /// [pages] is a [Map] of page numbers to [EntitiesResponse] objects.
-  PagedEntitiesResponse({
+  const PagedEntitiesResponse({
     required this.numberOfItems,
     required this.numberOfPages,
     required this.size,
