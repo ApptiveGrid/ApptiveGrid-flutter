@@ -456,6 +456,29 @@ class ApptiveGridClient extends ChangeNotifier {
     }
   }
 
+  /// Load a specific page of Entities of a Grid
+  ///
+  /// The pages in this case start at 1 and can go up to the maximum number of pages of the provided already loaded pages.
+  /// This currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
+  Future<PagedEntitiesResponse> loadEntitiesPage({
+    required int page,
+    required PagedEntitiesResponse loadedPages,
+    Map<String, String> headers = const {},
+  }) async {
+    if (loadedPages.pageIsValid(page)) {
+      final newQuery =
+          Map<String, String>.from(loadedPages.requestUri.queryParameters);
+      newQuery['pageIndex'] = '$page';
+      final newPage = await loadEntities(
+        uri: loadedPages.requestUri.replace(queryParameters: newQuery),
+        headers: headers,
+      ) as PagedEntitiesResponse;
+      return loadedPages.updateWith(newPage);
+    } else {
+      return loadedPages;
+    }
+  }
+
   /// Get the [User] that is authenticated
   ///
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
