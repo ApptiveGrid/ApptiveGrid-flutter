@@ -420,7 +420,10 @@ class ApptiveGridClient extends ChangeNotifier {
           'sorting':
               jsonEncode(sorting.map((e) => e.toRequestObject()).toList()),
         if (filter != null) 'filter': jsonEncode(filter.toJson()),
-        if (pageSize != null) 'pageSize': '$pageSize',
+        if (pageSize != null) ...{
+          'pageIndex': '1',
+          'pageSize': '$pageSize',
+        },
         ...uri.queryParameters,
       },
     );
@@ -492,8 +495,8 @@ class ApptiveGridClient extends ChangeNotifier {
       final newPage = await loadEntities(
         uri: loadedPages.requestUri.replace(queryParameters: newQuery),
         headers: headers,
-      ) as PagedEntitiesResponse;
-      return loadedPages.updateWith(newPage);
+      );
+      return loadedPages.updateWith(newPage as PagedEntitiesResponse);
     } else {
       return loadedPages;
     }
