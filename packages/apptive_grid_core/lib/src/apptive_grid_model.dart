@@ -7,6 +7,7 @@ export 'package:apptive_grid_core/src/model/created_by/created_by.dart';
 export 'package:apptive_grid_core/src/model/data_entity.dart';
 export 'package:apptive_grid_core/src/model/data_type.dart';
 export 'package:apptive_grid_core/src/model/entity/entities_response.dart';
+export 'package:apptive_grid_core/src/model/entity/paged_entities_response.dart';
 export 'package:apptive_grid_core/src/model/form/component/form_component.dart';
 export 'package:apptive_grid_core/src/model/form/component/options.dart';
 export 'package:apptive_grid_core/src/model/form/form_actions.dart';
