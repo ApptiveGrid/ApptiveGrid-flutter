@@ -1,5 +1,6 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart' as f;
 
 /// A class representing a response containing paged entities, extending the [EntitiesResponse] class.
 class PagedEntitiesResponse extends EntitiesResponse {
@@ -61,6 +62,31 @@ class PagedEntitiesResponse extends EntitiesResponse {
   /// Checks if a given page index is valid
   bool pageIsValid(int pageIndex) =>
       pageIndex > 0 && pageIndex <= numberOfPages;
+
+  @override
+  String toString() {
+    return 'PagedEntitiesResponse(numberOfItems: $numberOfItems, numberOfPages: $numberOfPages, size: $size, pages: $pages, requestUri: $requestUri)';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PagedEntitiesResponse &&
+          runtimeType == other.runtimeType &&
+          numberOfItems == other.numberOfItems &&
+          numberOfPages == other.numberOfPages &&
+          size == other.size &&
+          f.mapEquals(pages, other.pages) &&
+          requestUri == other.requestUri;
+
+  @override
+  int get hashCode => Object.hash(
+        pages,
+        requestUri,
+        numberOfItems,
+        numberOfPages,
+        size,
+      );
 
   /// Constructs a new [PagedEntitiesResponse] with the meta data of update and a combination of the pages of both. The pages of the update take priority here.
   /// This also adds the new pages to this [PagedEntitiesResponse].
