@@ -400,7 +400,8 @@ class ApptiveGridClient extends ChangeNotifier {
   /// [sorting] allows to apply custom sorting
   /// [filter] allows to get custom filters
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
-  Future<EntitiesResponse<T>> loadEntities<T>({
+  /// If a [pageSize] is set, the response will be a [PagedEntitiesResponse] by that size. This currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
+  Future<EntitiesResponse> loadEntities({
     required Uri uri,
     ApptiveGridLayout layout = ApptiveGridLayout.field,
     List<ApptiveGridSorting>? sorting,
@@ -430,7 +431,7 @@ class ApptiveGridClient extends ChangeNotifier {
     if (response.statusCode >= 400) {
       if (response.statusCode == 401 && !isRetry) {
         await authenticator.checkAuthentication();
-        return loadEntities<T>(
+        return loadEntities(
           uri: uri,
           layout: layout,
           sorting: sorting,
@@ -443,7 +444,7 @@ class ApptiveGridClient extends ChangeNotifier {
 
     final decodedResponse = jsonDecode(response.body);
     if (decodedResponse is List) {
-      return EntitiesResponse(items: decodedResponse.cast<T>());
+      return EntitiesResponse(items: decodedResponse);
     } else {
       // Preparation for Paging
       return EntitiesResponse(items: decodedResponse['items']);
