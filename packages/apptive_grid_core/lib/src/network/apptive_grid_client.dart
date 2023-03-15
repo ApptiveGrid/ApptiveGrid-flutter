@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_core/src/model/entity/paged_entities_response.dart';
 import 'package:apptive_grid_core/src/network/attachment_processor.dart';
 import 'package:apptive_grid_core/src/network/authentication/apptive_grid_authenticator.dart';
 import 'package:apptive_grid_core/src/network/constants.dart';
@@ -408,18 +409,20 @@ class ApptiveGridClient extends ChangeNotifier {
     ApptiveGridFilter? filter,
     bool isRetry = false,
     Map<String, String> headers = const {},
+    int? pageSize,
   }) async {
     final baseUrl = Uri.parse(options.environment.url);
     final requestUri = uri.replace(
       scheme: baseUrl.scheme,
       host: baseUrl.host,
       queryParameters: {
-        ...uri.queryParameters,
         'layout': layout.queryParameter,
         if (sorting != null)
           'sorting':
               jsonEncode(sorting.map((e) => e.toRequestObject()).toList()),
         if (filter != null) 'filter': jsonEncode(filter.toJson()),
+        if (pageSize != null) 'pageSize': '$pageSize',
+        ...uri.queryParameters,
       },
     );
 
@@ -446,8 +449,10 @@ class ApptiveGridClient extends ChangeNotifier {
     if (decodedResponse is List) {
       return EntitiesResponse(items: decodedResponse);
     } else {
-      // Preparation for Paging
-      return EntitiesResponse(items: decodedResponse['items']);
+      return PagedEntitiesResponse.fromJson(
+        decodedResponse,
+        requestUri: requestUri,
+      );
     }
   }
 
