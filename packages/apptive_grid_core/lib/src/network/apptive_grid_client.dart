@@ -439,6 +439,8 @@ class ApptiveGridClient extends ChangeNotifier {
           sorting: sorting,
           filter: filter,
           isRetry: true,
+          headers: headers,
+          pageSize: pageSize,
         );
       }
       throw response;
