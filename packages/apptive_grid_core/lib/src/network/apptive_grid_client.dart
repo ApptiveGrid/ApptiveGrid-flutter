@@ -456,6 +456,25 @@ class ApptiveGridClient extends ChangeNotifier {
     }
   }
 
+  /// Load the next page of Entities of a Grid
+  ///
+  /// This currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
+  Future<PagedEntitiesResponse> loadNextEntitiesPage({
+    required PagedEntitiesResponse loadedPages,
+    Map<String, String> headers = const {},
+  }) async {
+    final page = loadedPages.nextPage;
+    if (page != null) {
+      return loadEntitiesPage(
+        page: page,
+        loadedPages: loadedPages,
+        headers: headers,
+      );
+    } else {
+      return loadedPages;
+    }
+  }
+
   /// Load a specific page of Entities of a Grid
   ///
   /// The pages in this case start at 1 and can go up to the maximum number of pages of the provided already loaded pages.
