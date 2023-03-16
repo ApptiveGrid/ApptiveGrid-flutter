@@ -154,21 +154,19 @@ class FormDataProperties {
     this.successMessage,
     this.buttonTitle,
     this.reloadAfterSubmit,
+    this.afterSubmitAction,
   });
 
   /// Deserializes [json] into a FormDataProperties Object
-  factory FormDataProperties.fromJson(Map<String, dynamic> json) {
-    final successTitle = json['successTitle'];
-    final successMessage = json['successMessage'];
-    final buttonTitle = json['buttonTitle'];
-    final reloadAfterSubmit = json['reloadAfterSubmit'];
-    return FormDataProperties(
-      successTitle: successTitle,
-      successMessage: successMessage,
-      buttonTitle: buttonTitle,
-      reloadAfterSubmit: reloadAfterSubmit,
-    );
-  }
+  factory FormDataProperties.fromJson(Map<String, dynamic> json) =>
+      FormDataProperties(
+        successTitle: json['successTitle'],
+        successMessage: json['successMessage'],
+        buttonTitle: json['buttonTitle'],
+        reloadAfterSubmit: json['reloadAfterSubmit'],
+        afterSubmitAction:
+            AfterSubmitAction.fromJson(json['afterSubmitAction']),
+      );
 
   /// Custom title for a successfull submission
   final String? successTitle;
@@ -182,17 +180,22 @@ class FormDataProperties {
   /// Flag for reloading and keeping the form open after submission
   final bool? reloadAfterSubmit;
 
+  /// Custom message for a submitting an additional answer
+  final AfterSubmitAction? afterSubmitAction;
+
   /// Serializes [FormDataProperties] to json
   Map<String, dynamic> toJson() => {
         if (successTitle != null) 'successTitle': successTitle,
         if (successMessage != null) 'successMessage': successMessage,
         if (buttonTitle != null) 'buttonTitle': buttonTitle,
         if (reloadAfterSubmit != null) 'reloadAfterSubmit': reloadAfterSubmit,
+        if (afterSubmitAction != null)
+          'afterSubmitAction': afterSubmitAction!.toJson(),
       };
 
   @override
   String toString() {
-    return 'FormDataProperties(successTitle: $successTitle, successMessage: $successMessage, buttonTitle: $buttonTitle, reloadAfterSubmit: $reloadAfterSubmit)';
+    return 'FormDataProperties(successTitle: $successTitle, successMessage: $successMessage, buttonTitle: $buttonTitle, reloadAfterSubmit: $reloadAfterSubmit, afterSubmitAction: $afterSubmitAction)';
   }
 
   @override
@@ -201,7 +204,8 @@ class FormDataProperties {
         successTitle == other.successTitle &&
         successMessage == other.successMessage &&
         buttonTitle == other.buttonTitle &&
-        reloadAfterSubmit == other.reloadAfterSubmit;
+        reloadAfterSubmit == other.reloadAfterSubmit &&
+        afterSubmitAction == other.afterSubmitAction;
   }
 
   @override
@@ -210,5 +214,104 @@ class FormDataProperties {
         successMessage,
         buttonTitle,
         reloadAfterSubmit,
+        afterSubmitAction,
       );
+}
+
+/// The AfterSubmitAction class represents an action to be taken after a form
+/// is submitted.
+class AfterSubmitAction {
+  /// Creates a new instance of the AfterSubmitAction class from the given JSON
+  /// data.
+  factory AfterSubmitAction.fromJson(dynamic json) => AfterSubmitAction(
+        type: AfterSubmitActionType.values.firstWhere(json['type']),
+        buttonTitle: json['buttonTitle'],
+        trigger: json['trigger'] != null
+            ? AfterSubmitActionaTrigger.values.firstWhere(json['trigger'])
+            : null,
+        delay: json['delay'],
+        targetUrl:
+            json['targetUrl'] != null ? Uri.parse(json['targetUrl']) : null,
+      );
+
+  /// Creates a new instance of the AfterSubmitAction class.
+  const AfterSubmitAction({
+    required this.type,
+    this.buttonTitle,
+    this.trigger,
+    this.delay,
+    this.targetUrl,
+  });
+
+  /// The type of the action to be taken after form submission.
+  final AfterSubmitActionType type;
+
+  /// The title of the button that was clicked to trigger the action, if
+  /// applicable.
+  final String? buttonTitle;
+
+  /// The trigger that caused the action to be taken, if applicable.
+  final AfterSubmitActionaTrigger? trigger;
+
+  /// The delay (in seconds) before the action is taken, if applicable.
+  final int? delay;
+
+  /// The URL to redirect to after the action is taken, if applicable.
+  final Uri? targetUrl;
+
+  /// Converts the AfterSubmitAction to a JSON.
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type.toString(),
+      if (buttonTitle != null) 'buttonTitle': buttonTitle,
+      if (trigger != null) 'trigger': trigger?.toString(),
+      if (delay != null) 'delay': delay,
+      if (targetUrl != null) 'targetUrl': targetUrl?.toString(),
+    };
+  }
+
+  @override
+  String toString() {
+    return 'AfterSubmitAction(type: $type, buttonTitle: $buttonTitle, trigger: $trigger, delay: $delay, targetUrl: $targetUrl)';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AfterSubmitAction &&
+          other.type == type &&
+          other.buttonTitle == buttonTitle &&
+          other.trigger == trigger &&
+          other.delay == delay &&
+          other.targetUrl == targetUrl;
+
+  @override
+  int get hashCode => Object.hash(
+        type,
+        buttonTitle,
+        trigger,
+        delay,
+        targetUrl,
+      );
+}
+
+/// The type of an AfterSubmitAction.
+enum AfterSubmitActionType {
+  /// An additional answer will be requested from the user.
+  additionalAnswer,
+
+  /// A redirect will happen after the form is submitted.
+  redirect,
+
+  /// No action will be taken.
+  none,
+}
+
+/// The trigger of an AfterSubmitAction.
+enum AfterSubmitActionaTrigger {
+  /// The action was triggered by a button click.
+  button,
+
+  /// The action was triggered automatically.
+  auto,
 }
