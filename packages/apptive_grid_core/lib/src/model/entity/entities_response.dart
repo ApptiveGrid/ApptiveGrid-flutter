@@ -43,10 +43,10 @@ class EntitiesResponse<T> {
   int get hashCode => items.hashCode;
 
   /// Copies this Object with provided arguments
-  EntitiesResponse copyWith({List<T>? items}) {
+  EntitiesResponse copyWith({List<T>? items, PageMetaData? pageMetaData}) {
     return EntitiesResponse(
       items: items ?? this.items,
-      pageMetaData: pageMetaData,
+      pageMetaData: pageMetaData ?? this.pageMetaData,
     );
   }
 }
