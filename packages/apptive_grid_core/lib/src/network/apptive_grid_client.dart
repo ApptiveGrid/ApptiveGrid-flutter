@@ -408,7 +408,7 @@ class ApptiveGridClient extends ChangeNotifier {
     ApptiveGridFilter? filter,
     bool isRetry = false,
     Map<String, String> headers = const {},
-    int? pageSize,
+    PagingRequest? pagingRequest,
   }) async {
     final baseUrl = Uri.parse(options.environment.url);
     final requestUri = uri.replace(
@@ -420,9 +420,9 @@ class ApptiveGridClient extends ChangeNotifier {
           'sorting':
               jsonEncode(sorting.map((e) => e.toRequestObject()).toList()),
         if (filter != null) 'filter': jsonEncode(filter.toJson()),
-        if (pageSize != null) ...{
-          'pageIndex': '1',
-          'pageSize': '$pageSize',
+        if (pagingRequest != null) ...{
+          'pageIndex': '${pagingRequest.pageIndex}',
+          'pageSize': '${pagingRequest.pageSize}',
         },
         ...uri.queryParameters,
       },
@@ -443,7 +443,7 @@ class ApptiveGridClient extends ChangeNotifier {
           filter: filter,
           isRetry: true,
           headers: headers,
-          pageSize: pageSize,
+          pagingRequest: pagingRequest,
         );
       }
       throw response;
@@ -710,4 +710,36 @@ class ApptiveGridClient extends ChangeNotifier {
   void _authenticationChanged() {
     notifyListeners();
   }
+}
+
+/// Meta data for a paging request
+class PagingRequest {
+  /// Constructs a new [PagingRequest]
+  /// [pageIndex] is the index of the requested page.
+  /// [pageSize] is the requested item count per page.
+  const PagingRequest({
+    this.pageIndex = 1,
+    required this.pageSize,
+  });
+
+  /// The index of the requested page.
+  final int pageIndex;
+
+  /// The requested item count per page
+  final int pageSize;
+
+  @override
+  String toString() {
+    return 'PagingRequest{pageIndex: $pageIndex, pageSize: $pageSize}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PagingRequest &&
+          pageIndex == other.pageIndex &&
+          pageSize == other.pageSize;
+
+  @override
+  int get hashCode => Object.hash(pageIndex, pageSize);
 }

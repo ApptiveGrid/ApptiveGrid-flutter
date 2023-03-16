@@ -2481,7 +2481,7 @@ void main() {
 
       final entities = await apptiveGridClient.loadEntities(
         uri: uri,
-        pageSize: 50,
+        pagingRequest: const PagingRequest(pageSize: 50),
       );
 
       expect(
@@ -2687,6 +2687,31 @@ void main() {
       final client = ApptiveGridClient(httpClient: httpClient);
 
       expect(client.httpClient, httpClient);
+    });
+  });
+
+  group('PagingRequest', () {
+    test('toString', () {
+      const PagingRequest request = PagingRequest(pageIndex: 1, pageSize: 10);
+      expect(
+        request.toString(),
+        equals('PagingRequest{pageIndex: 1, pageSize: 10}'),
+      );
+    });
+
+    test('equals', () {
+      const request1 = PagingRequest(pageIndex: 1, pageSize: 10);
+      const request2 = PagingRequest(pageIndex: 1, pageSize: 10);
+      const request3 = PagingRequest(pageIndex: 2, pageSize: 10);
+
+      expect(request1, equals(request2));
+      expect(request1, isNot(request3));
+    });
+
+    test('hashCode', () {
+      const request = PagingRequest(pageIndex: 1, pageSize: 10);
+
+      expect(request.hashCode, equals(Object.hash(1, 10)));
     });
   });
 }
