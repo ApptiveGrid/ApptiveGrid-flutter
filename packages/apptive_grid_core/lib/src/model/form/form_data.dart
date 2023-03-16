@@ -164,8 +164,9 @@ class FormDataProperties {
         successMessage: json['successMessage'],
         buttonTitle: json['buttonTitle'],
         reloadAfterSubmit: json['reloadAfterSubmit'],
-        afterSubmitAction:
-            AfterSubmitAction.fromJson(json['afterSubmitAction']),
+        afterSubmitAction: json['afterSubmitAction'] != null
+            ? AfterSubmitAction.fromJson(json['afterSubmitAction'])
+            : null,
       );
 
   /// Custom title for a successfull submission
