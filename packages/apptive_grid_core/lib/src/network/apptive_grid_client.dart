@@ -449,59 +449,7 @@ class ApptiveGridClient extends ChangeNotifier {
       throw response;
     }
 
-    final decodedResponse = jsonDecode(response.body);
-    if (decodedResponse is List) {
-      return EntitiesResponse<T>(items: decodedResponse.cast<T>());
-    } else {
-      return PagedEntitiesResponse<T>.fromJson(
-        decodedResponse,
-        requestUri: requestUri,
-      );
-    }
-  }
-
-  /// Load the next page of Entities of a Grid
-  ///
-  /// [loadedPages] provides the meta data for the request and will be merged with the new page data.
-  /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]. This currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
-  Future<PagedEntitiesResponse<T>> loadNextEntitiesPage<T>({
-    required PagedEntitiesResponse<T> loadedPages,
-    Map<String, String> headers = const {},
-  }) async {
-    final page = loadedPages.nextPage;
-    if (page != null) {
-      return loadEntitiesPage<T>(
-        page: page,
-        loadedPages: loadedPages,
-        headers: headers,
-      );
-    } else {
-      return loadedPages;
-    }
-  }
-
-  /// Load a specific page of Entities of a Grid
-  ///
-  /// [page] is the index of the page to be loaded. The pages in this case start at 1 and can go up to the maximum number of pages of loaded previously.
-  /// [loadedPages] provides the meta data for the request and will be merged with the new page data.
-  /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]. This currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
-  Future<PagedEntitiesResponse<T>> loadEntitiesPage<T>({
-    required int page,
-    required PagedEntitiesResponse<T> loadedPages,
-    Map<String, String> headers = const {},
-  }) async {
-    if (loadedPages.pageIsValid(page)) {
-      final newQuery =
-          Map<String, String>.from(loadedPages.requestUri.queryParameters);
-      newQuery['pageIndex'] = '$page';
-      final newPage = await loadEntities<T>(
-        uri: loadedPages.requestUri.replace(queryParameters: newQuery),
-        headers: headers,
-      );
-      return loadedPages.updateWith(newPage as PagedEntitiesResponse<T>);
-    } else {
-      return loadedPages;
-    }
+    return EntitiesResponse<T>.fromJson(jsonDecode(response.body));
   }
 
   /// Get the [User] that is authenticated

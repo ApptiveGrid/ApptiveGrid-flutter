@@ -2318,616 +2318,199 @@ void main() {
   });
 
   group('Load Entities', () {
-    group('Unpaged', () {
-      test('401 -> Authenticates and retries', () async {
-        reset(httpClient);
-        const user = 'user';
-        const space = 'space';
-        const gridId = 'grid';
+    test('401 -> Authenticates and retries', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
 
-        final response = Response('', 401);
-        final retryResponse = Response(
-          '[]',
-          200,
-        );
-        bool isRetry = false;
+      final response = Response('', 401);
+      final retryResponse = Response(
+        '[]',
+        200,
+      );
+      bool isRetry = false;
 
-        final uri = Uri.parse(
-          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-        );
-        when(
-          () => httpClient.get(
-            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((_) async {
-          if (!isRetry) {
-            isRetry = true;
-            return response;
-          } else {
-            return retryResponse;
-          }
-        });
-
-        await apptiveGridClient.loadEntities(uri: uri);
-
-        verify(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters['layout'] ==
-                        ApptiveGridLayout.field.queryParameter,
-              ),
-            ),
-            headers: any(named: 'headers'),
-          ),
-        ).called(2);
-      });
-
-      test('Uses layout', () async {
-        reset(httpClient);
-        const user = 'user';
-        const space = 'space';
-        const gridId = 'grid';
-
-        final response = Response(
-          '[]',
-          200,
-        );
-        const layout = ApptiveGridLayout.keyAndField;
-
-        final uri = Uri.parse(
-          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-        );
-        when(
-          () => httpClient.get(
-            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((_) async {
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        if (!isRetry) {
+          isRetry = true;
           return response;
-        });
-
-        await apptiveGridClient.loadEntities(uri: uri, layout: layout);
-
-        verify(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters['layout'] == layout.queryParameter,
-              ),
-            ),
-            headers: any(named: 'headers'),
-          ),
-        ).called(1);
+        } else {
+          return retryResponse;
+        }
       });
 
-      test('Filter and Sorting', () async {
-        reset(httpClient);
-        const user = 'user';
-        const space = 'space';
-        const gridId = 'grid';
+      await apptiveGridClient.loadEntities(uri: uri);
 
-        final response = Response(
-          '[]',
-          200,
-        );
-        final filter =
-            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'));
-        const sorting =
-            ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc);
-
-        final uri = Uri.parse(
-          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-        );
-        when(
-          () => httpClient.get(
-            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((_) async {
-          return response;
-        });
-
-        await apptiveGridClient.loadEntities(
-          uri: uri,
-          sorting: [sorting],
-          filter: filter,
-        );
-
-        verify(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters.containsKey('filter') &&
-                    testUri.queryParameters.containsKey('sorting'),
-              ),
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters['layout'] ==
+                      ApptiveGridLayout.field.queryParameter,
             ),
-            headers: any(named: 'headers'),
           ),
-        ).called(1);
-      });
+          headers: any(named: 'headers'),
+        ),
+      ).called(2);
     });
-    group('Paged', () {
-      test('401 -> Authenticates and retries', () async {
-        reset(httpClient);
-        const user = 'user';
-        const space = 'space';
-        const gridId = 'grid';
 
-        final response = Response('', 401);
-        final retryResponse = Response(
-          '{'
-          '"items": [],'
-          '"page": 1,'
-          '"numberOfItems": 0,'
-          '"numberOfPages": 1,'
-          '"size": 50'
-          '}',
-          200,
-        );
-        bool isRetry = false;
+    test('Uses layout', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
 
-        final uri = Uri.parse(
-          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-        );
-        when(
-          () => httpClient.get(
-            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((_) async {
-          if (!isRetry) {
-            isRetry = true;
-            return response;
-          } else {
-            return retryResponse;
-          }
-        });
+      final response = Response(
+        '[]',
+        200,
+      );
+      const layout = ApptiveGridLayout.keyAndField;
 
-        await apptiveGridClient.loadEntities(uri: uri, pageSize: 50);
-
-        verify(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters['layout'] ==
-                        ApptiveGridLayout.field.queryParameter &&
-                    testUri.queryParameters['pageSize'] == '50',
-              ),
-            ),
-            headers: any(named: 'headers'),
-          ),
-        ).called(2);
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        return response;
       });
 
-      test('Uses layout', () async {
-        reset(httpClient);
-        const user = 'user';
-        const space = 'space';
-        const gridId = 'grid';
+      await apptiveGridClient.loadEntities(uri: uri, layout: layout);
 
-        final response = Response(
-          '{'
-          '"items": [],'
-          '"page": 1,'
-          '"numberOfItems": 0,'
-          '"numberOfPages": 1,'
-          '"size": 50'
-          '}',
-          200,
-        );
-        const layout = ApptiveGridLayout.keyAndField;
-
-        final uri = Uri.parse(
-          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-        );
-        when(
-          () => httpClient.get(
-            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((_) async {
-          return response;
-        });
-
-        await apptiveGridClient.loadEntities(
-          uri: uri,
-          layout: layout,
-          pageSize: 50,
-        );
-
-        verify(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters['layout'] ==
-                        layout.queryParameter &&
-                    testUri.queryParameters['pageSize'] == '50',
-              ),
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters['layout'] == layout.queryParameter,
             ),
-            headers: any(named: 'headers'),
           ),
-        ).called(1);
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
+    });
+
+    test('Filter and Sorting', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
+
+      final response = Response(
+        '[]',
+        200,
+      );
+      final filter =
+          EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'));
+      const sorting =
+          ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc);
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        return response;
       });
 
-      test('Filter and Sorting', () async {
-        reset(httpClient);
-        const user = 'user';
-        const space = 'space';
-        const gridId = 'grid';
+      await apptiveGridClient.loadEntities(
+        uri: uri,
+        sorting: [sorting],
+        filter: filter,
+      );
 
-        final response = Response(
-          '{'
-          '"items": [],'
-          '"page": 1,'
-          '"numberOfItems": 0,'
-          '"numberOfPages": 1,'
-          '"size": 50'
-          '}',
-          200,
-        );
-        final filter =
-            EqualsFilter(fieldId: 'fieldId', value: StringDataEntity('value'));
-        const sorting =
-            ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc);
-
-        final uri = Uri.parse(
-          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-        );
-        when(
-          () => httpClient.get(
-            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-            headers: any(named: 'headers'),
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters.containsKey('filter') &&
+                  testUri.queryParameters.containsKey('sorting'),
+            ),
           ),
-        ).thenAnswer((_) async {
-          return response;
-        });
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
+    });
+    test('Load page data', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
 
-        await apptiveGridClient.loadEntities(
-          uri: uri,
-          sorting: [sorting],
-          filter: filter,
-          pageSize: 50,
-        );
+      final response = Response(
+        '{'
+        '"items": ["item"],'
+        '"page": 1,'
+        '"numberOfItems": 2,'
+        '"numberOfPages": 2,'
+        '"size": 50'
+        '}',
+        200,
+      );
 
-        verify(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters.containsKey('filter') &&
-                    testUri.queryParameters.containsKey('sorting') &&
-                    testUri.queryParameters['pageSize'] == '50',
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async => response);
+
+      final entities = await apptiveGridClient.loadEntities(
+        uri: uri,
+        pageSize: 50,
+      );
+
+      expect(
+          entities,
+          equals(
+            const EntitiesResponse(
+              items: ["item"],
+              pageMetaData: PageMetaData(
+                numberOfItems: 2,
+                numberOfPages: 2,
+                page: 1,
+                size: 50,
               ),
             ),
-            headers: any(named: 'headers'),
-          ),
-        ).called(1);
-      });
+          ));
 
-      test('Load next page', () async {
-        reset(httpClient);
-        const user = 'user';
-        const space = 'space';
-        const gridId = 'grid';
-
-        final responses = {
-          1: Response(
-            '{'
-            '"items": ["item1"],'
-            '"page": 1,'
-            '"numberOfItems": 2,'
-            '"numberOfPages": 2,'
-            '"size": 50'
-            '}',
-            200,
-          ),
-          2: Response(
-            '{'
-            '"items": ["item2"],'
-            '"page": 2,'
-            '"numberOfItems": 2,'
-            '"numberOfPages": 2,'
-            '"size": 50'
-            '}',
-            200,
-          ),
-        };
-
-        final uri = Uri.parse(
-          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-        );
-        when(
-          () => httpClient.get(
-            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((invocation) async {
-          final requestUri = invocation.positionalArguments.first as Uri;
-          final page = requestUri.queryParameters['pageIndex']!;
-          return responses[int.parse(page)]!;
-        });
-
-        final response = await apptiveGridClient.loadEntities(
-          uri: uri,
-          pageSize: 50,
-        );
-
-        verify(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters['pageIndex'] == '1' &&
-                    testUri.queryParameters['pageSize'] == '50',
-              ),
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters['pageIndex'] == '1' &&
+                  testUri.queryParameters['pageSize'] == '50',
             ),
-            headers: any(named: 'headers'),
           ),
-        ).called(1);
-
-        expect(response, isA<PagedEntitiesResponse>());
-
-        final updatedResponse = await apptiveGridClient.loadNextEntitiesPage(
-          loadedPages: response as PagedEntitiesResponse,
-        );
-
-        expect(updatedResponse.pages.length, equals(2));
-        expect(
-          updatedResponse.pages,
-          equals({
-            1: response.pages[1],
-            2: const EntitiesResponse(items: ['item2'])
-          }),
-        );
-
-        verify(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters['pageIndex'] == '2' &&
-                    testUri.queryParameters['pageSize'] == '50',
-              ),
-            ),
-            headers: any(named: 'headers'),
-          ),
-        ).called(1);
-      });
-
-      test('Update page', () async {
-        reset(httpClient);
-        const user = 'user';
-        const space = 'space';
-        const gridId = 'grid';
-
-        final pageResponse = Response(
-          '{'
-          '"items": ["item1"],'
-          '"page": 1,'
-          '"numberOfItems": 2,'
-          '"numberOfPages": 2,'
-          '"size": 50'
-          '}',
-          200,
-        );
-        final updatedPageResponse = Response(
-          '{'
-          '"items": ["item2"],'
-          '"page": 1,'
-          '"numberOfItems": 2,'
-          '"numberOfPages": 2,'
-          '"size": 50'
-          '}',
-          200,
-        );
-        bool isUpdate = false;
-
-        final uri = Uri.parse(
-          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-        );
-        when(
-          () => httpClient.get(
-            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((invocation) async {
-          if (isUpdate) {
-            return updatedPageResponse;
-          } else {
-            return pageResponse;
-          }
-        });
-
-        final response = await apptiveGridClient.loadEntities(
-          uri: uri,
-          pageSize: 50,
-        );
-
-        expect(response, isA<PagedEntitiesResponse>());
-
-        isUpdate = true;
-
-        final updatedResponse = await apptiveGridClient.loadEntitiesPage(
-          page: 1,
-          loadedPages: response as PagedEntitiesResponse,
-        );
-
-        expect(updatedResponse.pages.length, equals(1));
-        expect(
-          updatedResponse.pages,
-          equals({
-            1: const EntitiesResponse(items: ['item2'])
-          }),
-        );
-
-        verify(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters['pageIndex'] == '1' &&
-                    testUri.queryParameters['pageSize'] == '50',
-              ),
-            ),
-            headers: any(named: 'headers'),
-          ),
-        ).called(2);
-      });
-
-      test('Invalid page doesn\'t call backend', () async {
-        reset(httpClient);
-        const user = 'user';
-        const space = 'space';
-        const gridId = 'grid';
-
-        final pageResponse = Response(
-          '{'
-          '"items": ["item1"],'
-          '"page": 1,'
-          '"numberOfItems": 2,'
-          '"numberOfPages": 2,'
-          '"size": 50'
-          '}',
-          200,
-        );
-
-        final uri = Uri.parse(
-          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-        );
-        when(
-          () => httpClient.get(
-            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((invocation) async => pageResponse);
-
-        final response = await apptiveGridClient.loadEntities(
-          uri: uri,
-          pageSize: 50,
-        );
-
-        expect(response, isA<PagedEntitiesResponse>());
-
-        final updatedResponse = await apptiveGridClient.loadEntitiesPage(
-          page: 0,
-          loadedPages: response as PagedEntitiesResponse,
-        );
-
-        expect(updatedResponse, equals(response));
-
-        verify(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters['pageIndex'] == '1' &&
-                    testUri.queryParameters['pageSize'] == '50',
-              ),
-            ),
-            headers: any(named: 'headers'),
-          ),
-        ).called(1);
-
-        verifyNever(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters['pageIndex'] == '0' &&
-                    testUri.queryParameters['pageSize'] == '50',
-              ),
-            ),
-            headers: any(named: 'headers'),
-          ),
-        );
-      });
-
-      test('Full pages doesn\'t call backend', () async {
-        reset(httpClient);
-        const user = 'user';
-        const space = 'space';
-        const gridId = 'grid';
-
-        final pageResponse = Response(
-          '{'
-          '"items": ["item1"],'
-          '"page": 1,'
-          '"numberOfItems": 1,'
-          '"numberOfPages": 1,'
-          '"size": 50'
-          '}',
-          200,
-        );
-
-        final uri = Uri.parse(
-          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-        );
-        when(
-          () => httpClient.get(
-            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((invocation) async => pageResponse);
-
-        final response = await apptiveGridClient.loadEntities(
-          uri: uri,
-          pageSize: 50,
-        );
-
-        expect(response, isA<PagedEntitiesResponse>());
-
-        final updatedResponse = await apptiveGridClient.loadNextEntitiesPage(
-          loadedPages: response as PagedEntitiesResponse,
-        );
-
-        expect(updatedResponse, equals(response));
-
-        verify(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters['pageIndex'] == '1' &&
-                    testUri.queryParameters['pageSize'] == '50',
-              ),
-            ),
-            headers: any(named: 'headers'),
-          ),
-        ).called(1);
-
-        verifyNever(
-          () => httpClient.get(
-            any(
-              that: predicate<Uri>(
-                (testUri) =>
-                    testUri.path == uri.path &&
-                    testUri.queryParameters['pageIndex'] == '2' &&
-                    testUri.queryParameters['pageSize'] == '50',
-              ),
-            ),
-            headers: any(named: 'headers'),
-          ),
-        );
-      });
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
     });
   });
 
