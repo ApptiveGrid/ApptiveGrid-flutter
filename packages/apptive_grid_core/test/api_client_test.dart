@@ -2485,18 +2485,19 @@ void main() {
       );
 
       expect(
-          entities,
-          equals(
-            const EntitiesResponse(
-              items: ["item"],
-              pageMetaData: PageMetaData(
-                numberOfItems: 2,
-                numberOfPages: 2,
-                page: 1,
-                size: 50,
-              ),
+        entities,
+        equals(
+          const EntitiesResponse(
+            items: ["item"],
+            pageMetaData: PageMetaData(
+              numberOfItems: 2,
+              numberOfPages: 2,
+              page: 1,
+              size: 50,
             ),
-          ));
+          ),
+        ),
+      );
 
       verify(
         () => httpClient.get(
