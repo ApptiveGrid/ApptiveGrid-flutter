@@ -79,6 +79,7 @@ class ApptiveGridForm extends StatefulWidget {
   ///
   /// If this returns false the default success screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
+  /// If this is set, any actions passed by the [AfterSubmitAction] in the [FormDataProperties] of the [FormData] will be ignored
   final Future<bool> Function(ApptiveLink, FormData)? onActionSuccess;
 
   /// Callback after Form is saved to pending Items
