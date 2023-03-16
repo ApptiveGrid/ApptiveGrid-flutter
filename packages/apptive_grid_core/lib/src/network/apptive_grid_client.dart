@@ -401,7 +401,7 @@ class ApptiveGridClient extends ChangeNotifier {
   /// [filter] allows to get custom filters
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
   /// If a [pageSize] is set, the response will be a [PagedEntitiesResponse] by that size. This currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
-  Future<EntitiesResponse> loadEntities({
+  Future<EntitiesResponse<T>> loadEntities<T>({
     required Uri uri,
     ApptiveGridLayout layout = ApptiveGridLayout.field,
     List<ApptiveGridSorting>? sorting,
@@ -451,9 +451,9 @@ class ApptiveGridClient extends ChangeNotifier {
 
     final decodedResponse = jsonDecode(response.body);
     if (decodedResponse is List) {
-      return EntitiesResponse(items: decodedResponse);
+      return EntitiesResponse(items: decodedResponse.cast<T>());
     } else {
-      return PagedEntitiesResponse.fromJson(
+      return PagedEntitiesResponse<T>.fromJson(
         decodedResponse,
         requestUri: requestUri,
       );
@@ -464,13 +464,13 @@ class ApptiveGridClient extends ChangeNotifier {
   ///
   /// [loadedPages] provides the meta data for the request and will be merged with the new page data.
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]. This currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
-  Future<PagedEntitiesResponse> loadNextEntitiesPage({
-    required PagedEntitiesResponse loadedPages,
+  Future<PagedEntitiesResponse<T>> loadNextEntitiesPage<T>({
+    required PagedEntitiesResponse<T> loadedPages,
     Map<String, String> headers = const {},
   }) async {
     final page = loadedPages.nextPage;
     if (page != null) {
-      return loadEntitiesPage(
+      return loadEntitiesPage<T>(
         page: page,
         loadedPages: loadedPages,
         headers: headers,
@@ -485,20 +485,20 @@ class ApptiveGridClient extends ChangeNotifier {
   /// [page] is the index of the page to be loaded. The pages in this case start at 1 and can go up to the maximum number of pages of loaded previously.
   /// [loadedPages] provides the meta data for the request and will be merged with the new page data.
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]. This currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
-  Future<PagedEntitiesResponse> loadEntitiesPage({
+  Future<PagedEntitiesResponse<T>> loadEntitiesPage<T>({
     required int page,
-    required PagedEntitiesResponse loadedPages,
+    required PagedEntitiesResponse<T> loadedPages,
     Map<String, String> headers = const {},
   }) async {
     if (loadedPages.pageIsValid(page)) {
       final newQuery =
           Map<String, String>.from(loadedPages.requestUri.queryParameters);
       newQuery['pageIndex'] = '$page';
-      final newPage = await loadEntities(
+      final newPage = await loadEntities<T>(
         uri: loadedPages.requestUri.replace(queryParameters: newQuery),
         headers: headers,
       );
-      return loadedPages.updateWith(newPage as PagedEntitiesResponse);
+      return loadedPages.updateWith(newPage as PagedEntitiesResponse<T>);
     } else {
       return loadedPages;
     }

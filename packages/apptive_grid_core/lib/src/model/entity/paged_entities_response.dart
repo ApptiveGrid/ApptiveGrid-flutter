@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart' as f;
 
 /// A class representing a response containing paged entities, extending the [EntitiesResponse] class.
-class PagedEntitiesResponse extends EntitiesResponse {
+class PagedEntitiesResponse<T> extends EntitiesResponse<T> {
   /// Constructs a new [PagedEntitiesResponse] instance from a JSON [Map].
   factory PagedEntitiesResponse.fromJson(
     dynamic json, {
@@ -14,7 +14,7 @@ class PagedEntitiesResponse extends EntitiesResponse {
       numberOfPages: json['numberOfPages'],
       size: json['size'],
       pages: {
-        json['page']: EntitiesResponse(items: json['items']),
+        json['page']: EntitiesResponse<T>(items: json['items'].cast<T>()),
       },
       requestUri: requestUri,
     );
@@ -44,14 +44,14 @@ class PagedEntitiesResponse extends EntitiesResponse {
   final int size;
 
   /// A [Map] of page numbers to [EntitiesResponse] objects.
-  final Map<int, EntitiesResponse> pages;
+  final Map<int, EntitiesResponse<T>> pages;
 
   /// The [Uri], with which the last request for pages was made
   final Uri requestUri;
 
   /// Returns a flattened list of all items in all pages.
   @override
-  List<dynamic> get items => pages.values
+  List<T> get items => pages.values
       .fold([], (previousValue, page) => previousValue + page.items);
 
   /// Returns the next page index if available
@@ -91,7 +91,7 @@ class PagedEntitiesResponse extends EntitiesResponse {
 
   /// Constructs a new [PagedEntitiesResponse] with the meta data of update and a combination of the pages of both. The pages of the update take priority here.
   /// This also adds the new pages to this [PagedEntitiesResponse].
-  PagedEntitiesResponse updateWith(PagedEntitiesResponse update) {
+  PagedEntitiesResponse<T> updateWith(PagedEntitiesResponse<T> update) {
     pages.addAll(update.pages);
     return PagedEntitiesResponse(
       numberOfItems: update.numberOfItems,
