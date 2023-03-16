@@ -225,10 +225,12 @@ class AfterSubmitAction {
   /// Creates a new instance of the AfterSubmitAction class from the given JSON
   /// data.
   factory AfterSubmitAction.fromJson(dynamic json) => AfterSubmitAction(
-        type: AfterSubmitActionType.values.firstWhere(json['type']),
+        type: AfterSubmitActionType.values
+            .firstWhere((type) => type.name == json['action']),
         buttonTitle: json['buttonTitle'],
         trigger: json['trigger'] != null
-            ? AfterSubmitActionaTrigger.values.firstWhere(json['trigger'])
+            ? AfterSubmitActionaTrigger.values
+                .firstWhere((trigger) => trigger.name == json['trigger'])
             : null,
         delay: json['delay'],
         targetUrl:
@@ -263,11 +265,11 @@ class AfterSubmitAction {
   /// Converts the AfterSubmitAction to a JSON.
   Map<String, dynamic> toJson() {
     return {
-      'type': type.toString(),
+      'action': type.name,
       if (buttonTitle != null) 'buttonTitle': buttonTitle,
-      if (trigger != null) 'trigger': trigger?.toString(),
+      if (trigger != null) 'trigger': trigger!.name,
       if (delay != null) 'delay': delay,
-      if (targetUrl != null) 'targetUrl': targetUrl?.toString(),
+      if (targetUrl != null) 'targetUrl': targetUrl!.toString(),
     };
   }
 
