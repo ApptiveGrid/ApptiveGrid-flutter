@@ -2789,6 +2789,145 @@ void main() {
           ),
         ).called(2);
       });
+
+      test('Invalid page doesn\'t call backend', () async {
+        reset(httpClient);
+        const user = 'user';
+        const space = 'space';
+        const gridId = 'grid';
+
+        final pageResponse = Response(
+          '{'
+          '"items": ["item1"],'
+          '"page": 1,'
+          '"numberOfItems": 2,'
+          '"numberOfPages": 2,'
+          '"size": 50'
+          '}',
+          200,
+        );
+
+        final uri = Uri.parse(
+          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+        );
+        when(
+          () => httpClient.get(
+            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((invocation) async => pageResponse);
+
+        final response = await apptiveGridClient.loadEntities(
+          uri: uri,
+          pageSize: 50,
+        );
+
+        expect(response, isA<PagedEntitiesResponse>());
+
+        final updatedResponse = await apptiveGridClient.loadEntitiesPage(
+          page: 0,
+          loadedPages: response as PagedEntitiesResponse,
+        );
+
+        expect(updatedResponse, equals(response));
+
+        verify(
+          () => httpClient.get(
+            any(
+              that: predicate<Uri>(
+                (testUri) =>
+                    testUri.path == uri.path &&
+                    testUri.queryParameters['pageIndex'] == '1' &&
+                    testUri.queryParameters['pageSize'] == '50',
+              ),
+            ),
+            headers: any(named: 'headers'),
+          ),
+        ).called(1);
+
+        verifyNever(
+          () => httpClient.get(
+            any(
+              that: predicate<Uri>(
+                (testUri) =>
+                    testUri.path == uri.path &&
+                    testUri.queryParameters['pageIndex'] == '0' &&
+                    testUri.queryParameters['pageSize'] == '50',
+              ),
+            ),
+            headers: any(named: 'headers'),
+          ),
+        );
+      });
+
+      test('Full pages doesn\'t call backend', () async {
+        reset(httpClient);
+        const user = 'user';
+        const space = 'space';
+        const gridId = 'grid';
+
+        final pageResponse = Response(
+          '{'
+          '"items": ["item1"],'
+          '"page": 1,'
+          '"numberOfItems": 1,'
+          '"numberOfPages": 1,'
+          '"size": 50'
+          '}',
+          200,
+        );
+
+        final uri = Uri.parse(
+          '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+        );
+        when(
+          () => httpClient.get(
+            any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((invocation) async => pageResponse);
+
+        final response = await apptiveGridClient.loadEntities(
+          uri: uri,
+          pageSize: 50,
+        );
+
+        expect(response, isA<PagedEntitiesResponse>());
+
+        final updatedResponse = await apptiveGridClient.loadNextEntitiesPage(
+          loadedPages: response as PagedEntitiesResponse,
+        );
+
+        expect(updatedResponse, equals(response));
+
+        verify(
+          () => httpClient.get(
+            any(
+              that: predicate<Uri>(
+                (testUri) =>
+                    testUri.path == uri.path &&
+                    testUri.queryParameters['pageIndex'] == '1' &&
+                    testUri.queryParameters['pageSize'] == '50',
+              ),
+            ),
+            headers: any(named: 'headers'),
+          ),
+        ).called(1);
+
+        verifyNever(
+          () => httpClient.get(
+            any(
+              that: predicate<Uri>(
+                (testUri) =>
+                    testUri.path == uri.path &&
+                    testUri.queryParameters['pageIndex'] == '2' &&
+                    testUri.queryParameters['pageSize'] == '50',
+              ),
+            ),
+            headers: any(named: 'headers'),
+          ),
+        );
+      });
     });
   });
 
