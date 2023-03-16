@@ -194,7 +194,7 @@ void main() {
           reloadAfterSubmit: reloadAfterSubmit,
           afterSubmitAction: const AfterSubmitAction(
             type: AfterSubmitActionType.additionalAnswer,
-            trigger: AfterSubmitActionaTrigger.button,
+            trigger: AfterSubmitActionTrigger.button,
             buttonTitle: additionalAnswerButtonTitle,
           ),
         ),
@@ -661,17 +661,17 @@ void main() {
       test('Equality', () {
         const a = AfterSubmitAction(
           type: AfterSubmitActionType.additionalAnswer,
-          trigger: AfterSubmitActionaTrigger.button,
+          trigger: AfterSubmitActionTrigger.button,
           buttonTitle: additionalAnswerButtonTitle,
         );
         const b = AfterSubmitAction(
           type: AfterSubmitActionType.additionalAnswer,
-          trigger: AfterSubmitActionaTrigger.button,
+          trigger: AfterSubmitActionTrigger.button,
           buttonTitle: additionalAnswerButtonTitle,
         );
         const c = AfterSubmitAction(
           type: AfterSubmitActionType.additionalAnswer,
-          trigger: AfterSubmitActionaTrigger.auto,
+          trigger: AfterSubmitActionTrigger.auto,
           buttonTitle: additionalAnswerButtonTitle,
         );
         expect(a, equals(b));
@@ -681,7 +681,7 @@ void main() {
       test('Hashcode', () {
         const action = AfterSubmitAction(
           type: AfterSubmitActionType.additionalAnswer,
-          trigger: AfterSubmitActionaTrigger.button,
+          trigger: AfterSubmitActionTrigger.button,
           buttonTitle: additionalAnswerButtonTitle,
         );
 
@@ -690,7 +690,7 @@ void main() {
           Object.hash(
             AfterSubmitActionType.additionalAnswer,
             additionalAnswerButtonTitle,
-            AfterSubmitActionaTrigger.button,
+            AfterSubmitActionTrigger.button,
             null,
             null,
           ),
@@ -700,14 +700,14 @@ void main() {
       test('toString()', () {
         const action = AfterSubmitAction(
           type: AfterSubmitActionType.additionalAnswer,
-          trigger: AfterSubmitActionaTrigger.button,
+          trigger: AfterSubmitActionTrigger.button,
           buttonTitle: additionalAnswerButtonTitle,
         );
 
         expect(
           action.toString(),
           equals(
-            'AfterSubmitAction(type: AfterSubmitActionType.additionalAnswer, buttonTitle: $additionalAnswerButtonTitle, trigger: AfterSubmitActionaTrigger.button, delay: null, targetUrl: null)',
+            'AfterSubmitAction(type: AfterSubmitActionType.additionalAnswer, buttonTitle: $additionalAnswerButtonTitle, trigger: AfterSubmitActionTrigger.button, delay: null, targetUrl: null)',
           ),
         );
       });

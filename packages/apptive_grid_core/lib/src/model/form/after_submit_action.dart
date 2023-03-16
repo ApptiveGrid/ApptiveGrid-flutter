@@ -11,7 +11,7 @@ class AfterSubmitAction {
             ? AfterSubmitActionTrigger.values
                 .firstWhere((trigger) => trigger.name == json['trigger'])
             : null,
-        delay: json['delay'],
+        delay: json['delay'] != null ? Duration(seconds: json['delay']) : null,
         targetUrl:
             json['targetUrl'] != null ? Uri.parse(json['targetUrl']) : null,
       );
@@ -36,7 +36,7 @@ class AfterSubmitAction {
   final AfterSubmitActionTrigger? trigger;
 
   /// The delay (in seconds) before the action is taken, if applicable.
-  final int? delay;
+  final Duration? delay;
 
   /// The URL to redirect to after the action is taken, if applicable.
   final Uri? targetUrl;
@@ -47,7 +47,7 @@ class AfterSubmitAction {
       'action': type.name,
       if (buttonTitle != null) 'buttonTitle': buttonTitle,
       if (trigger != null) 'trigger': trigger!.name,
-      if (delay != null) 'delay': delay,
+      if (delay != null) 'delay': delay!.inSeconds,
       if (targetUrl != null) 'targetUrl': targetUrl!.toString(),
     };
   }

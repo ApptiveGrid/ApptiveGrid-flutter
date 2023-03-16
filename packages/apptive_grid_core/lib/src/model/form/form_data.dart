@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/src/model/form/form_data_properties.dart';
 import 'package:flutter/foundation.dart' as f;
 
 /// Model for FormData
