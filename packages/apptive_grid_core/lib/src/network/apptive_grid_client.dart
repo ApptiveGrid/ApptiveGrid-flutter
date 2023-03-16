@@ -436,7 +436,7 @@ class ApptiveGridClient extends ChangeNotifier {
     if (response.statusCode >= 400) {
       if (response.statusCode == 401 && !isRetry) {
         await authenticator.checkAuthentication();
-        return loadEntities(
+        return loadEntities<T>(
           uri: uri,
           layout: layout,
           sorting: sorting,
@@ -451,7 +451,7 @@ class ApptiveGridClient extends ChangeNotifier {
 
     final decodedResponse = jsonDecode(response.body);
     if (decodedResponse is List) {
-      return EntitiesResponse(items: decodedResponse.cast<T>());
+      return EntitiesResponse<T>(items: decodedResponse.cast<T>());
     } else {
       return PagedEntitiesResponse<T>.fromJson(
         decodedResponse,
