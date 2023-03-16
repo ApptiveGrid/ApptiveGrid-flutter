@@ -547,7 +547,8 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               _updateView();
             },
             child: Text(
-              localization.additionalAnswer,
+              _formData?.properties?.afterSubmitAction?.buttonTitle ??
+                  localization.additionalAnswer,
             ),
           ),
         )
@@ -579,7 +580,10 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               widget.triggerReload?.call();
               _updateView();
             },
-            child: Text(localization.additionalAnswer),
+            child: Text(
+              _formData?.properties?.afterSubmitAction?.buttonTitle ??
+                  localization.additionalAnswer,
+            ),
           ),
         )
       ],
