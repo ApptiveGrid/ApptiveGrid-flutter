@@ -311,7 +311,7 @@ enum AfterSubmitActionType {
 }
 
 /// The trigger of an AfterSubmitAction.
-enum AfterSubmitActionaTrigger {
+enum AfterSubmitActionTrigger {
   /// The action was triggered by a button click.
   button,
 
