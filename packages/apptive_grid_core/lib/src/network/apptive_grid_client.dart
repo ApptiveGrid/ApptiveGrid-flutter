@@ -400,7 +400,7 @@ class ApptiveGridClient extends ChangeNotifier {
   /// [sorting] allows to apply custom sorting
   /// [filter] allows to get custom filters
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
-  /// If a [pageSize] is set, the response will be a [PagedEntitiesResponse] by that size. This currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
+  /// If a [pagingRequest] is set, the backend will try to fill the [PageMetaData] of the [PageMetaData]. This currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
   Future<EntitiesResponse<T>> loadEntities<T>({
     required Uri uri,
     ApptiveGridLayout layout = ApptiveGridLayout.field,
