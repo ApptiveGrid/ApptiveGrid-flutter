@@ -2703,7 +2703,7 @@ void main() {
     test('equals', () {
       const request1 = PagingRequest(pageIndex: 1, pageSize: 10);
       const request2 = PagingRequest(pageIndex: 1, pageSize: 10);
-      const request3 = PagingRequest(pageIndex: 2, pageSize: 10);
+      const request3 = PagingRequest(pageIndex: 1, pageSize: 12);
 
       expect(request1, equals(request2));
       expect(request1, isNot(request3));
