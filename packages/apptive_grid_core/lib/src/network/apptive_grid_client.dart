@@ -400,7 +400,9 @@ class ApptiveGridClient extends ChangeNotifier {
   /// [sorting] allows to apply custom sorting
   /// [filter] allows to get custom filters
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
-  /// If a [pagingRequest] is set, the backend will try to fill the [PageMetaData] of the [PageMetaData]. This currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
+  /// [pageIndex] is the index of the page to be loaded.
+  /// [pageSize] is the requested item count in the loaded page.
+  /// Paging currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
   Future<EntitiesResponse<T>> loadEntities<T>({
     required Uri uri,
     ApptiveGridLayout layout = ApptiveGridLayout.field,
@@ -408,7 +410,8 @@ class ApptiveGridClient extends ChangeNotifier {
     ApptiveGridFilter? filter,
     bool isRetry = false,
     Map<String, String> headers = const {},
-    PagingRequest? pagingRequest,
+    int? pageIndex,
+    int? pageSize,
   }) async {
     final baseUrl = Uri.parse(options.environment.url);
     final requestUri = uri.replace(
@@ -420,10 +423,8 @@ class ApptiveGridClient extends ChangeNotifier {
           'sorting':
               jsonEncode(sorting.map((e) => e.toRequestObject()).toList()),
         if (filter != null) 'filter': jsonEncode(filter.toJson()),
-        if (pagingRequest != null) ...{
-          'pageIndex': '${pagingRequest.pageIndex}',
-          'pageSize': '${pagingRequest.pageSize}',
-        },
+        if (pageIndex != null) 'pageIndex': '$pageIndex',
+        if (pageSize != null) 'pageSize': '$pageSize',
         ...uri.queryParameters,
       },
     );
@@ -443,7 +444,8 @@ class ApptiveGridClient extends ChangeNotifier {
           filter: filter,
           isRetry: true,
           headers: headers,
-          pagingRequest: pagingRequest,
+          pageIndex: pageIndex,
+          pageSize: pageSize,
         );
       }
       throw response;
@@ -710,36 +712,4 @@ class ApptiveGridClient extends ChangeNotifier {
   void _authenticationChanged() {
     notifyListeners();
   }
-}
-
-/// Meta data for a paging request
-class PagingRequest {
-  /// Constructs a new [PagingRequest]
-  /// [pageIndex] is the index of the requested page.
-  /// [pageSize] is the requested item count per page.
-  const PagingRequest({
-    this.pageIndex = 1,
-    required this.pageSize,
-  });
-
-  /// The index of the requested page.
-  final int pageIndex;
-
-  /// The requested item count per page
-  final int pageSize;
-
-  @override
-  String toString() {
-    return 'PagingRequest{pageIndex: $pageIndex, pageSize: $pageSize}';
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PagingRequest &&
-          pageIndex == other.pageIndex &&
-          pageSize == other.pageSize;
-
-  @override
-  int get hashCode => Object.hash(pageIndex, pageSize);
 }

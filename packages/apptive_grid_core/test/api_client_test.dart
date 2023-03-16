@@ -2481,7 +2481,7 @@ void main() {
 
       final entities = await apptiveGridClient.loadEntities(
         uri: uri,
-        pagingRequest: const PagingRequest(pageSize: 50),
+        pageSize: 50,
       );
 
       expect(
@@ -2505,7 +2505,68 @@ void main() {
             that: predicate<Uri>(
               (testUri) =>
                   testUri.path == uri.path &&
-                  testUri.queryParameters['pageIndex'] == '1' &&
+                  testUri.queryParameters['pageSize'] == '50',
+            ),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
+    });
+    test('Load specific page data', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
+
+      final response = Response(
+        '{'
+        '"items": ["item"],'
+        '"page": 2,'
+        '"numberOfItems": 2,'
+        '"numberOfPages": 2,'
+        '"size": 50'
+        '}',
+        200,
+      );
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async => response);
+
+      final entities = await apptiveGridClient.loadEntities(
+        uri: uri,
+        pageIndex: 2,
+        pageSize: 50,
+      );
+
+      expect(
+        entities,
+        equals(
+          const EntitiesResponse(
+            items: ["item"],
+            pageMetaData: PageMetaData(
+              numberOfItems: 2,
+              numberOfPages: 2,
+              page: 2,
+              size: 50,
+            ),
+          ),
+        ),
+      );
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters['pageIndex'] == '2' &&
                   testUri.queryParameters['pageSize'] == '50',
             ),
           ),
@@ -2688,31 +2749,6 @@ void main() {
       final client = ApptiveGridClient(httpClient: httpClient);
 
       expect(client.httpClient, httpClient);
-    });
-  });
-
-  group('PagingRequest', () {
-    test('toString', () {
-      const PagingRequest request = PagingRequest(pageIndex: 1, pageSize: 10);
-      expect(
-        request.toString(),
-        equals('PagingRequest{pageIndex: 1, pageSize: 10}'),
-      );
-    });
-
-    test('equals', () {
-      const request1 = PagingRequest(pageIndex: 1, pageSize: 10);
-      const request2 = PagingRequest(pageIndex: 1, pageSize: 10);
-      const request3 = PagingRequest(pageIndex: 1, pageSize: 12);
-
-      expect(request1, equals(request2));
-      expect(request1, isNot(request3));
-    });
-
-    test('hashCode', () {
-      const request = PagingRequest(pageIndex: 1, pageSize: 10);
-
-      expect(request.hashCode, equals(Object.hash(1, 10)));
     });
   });
 }
