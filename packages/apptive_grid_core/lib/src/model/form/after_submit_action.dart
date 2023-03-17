@@ -37,7 +37,7 @@ class AfterSubmitAction {
   /// The trigger that caused the action to be taken, if applicable.
   final AfterSubmitActionTrigger? trigger;
 
-  /// The delay (in seconds) before the action is taken, if applicable.
+  /// The delay before the action is taken, if applicable.
   final Duration? delay;
 
   /// The URL to redirect to after the action is taken, if applicable.
