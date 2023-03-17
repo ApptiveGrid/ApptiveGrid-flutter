@@ -79,6 +79,7 @@ class ApptiveGridForm extends StatefulWidget {
   ///
   /// If this returns false the default success screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
+  /// If this is set, any actions passed by the [AfterSubmitAction] in the [FormDataProperties] of the [FormData] will be ignored
   final Future<bool> Function(ApptiveLink, FormData)? onActionSuccess;
 
   /// Callback after Form is saved to pending Items
@@ -200,6 +201,8 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
 }
 
 /// A Widget to display [FormData]
+///
+/// Of the [AfterSubmitAction] in the [FormDataProperties] only the custom additional answer button label is used in the package.
 class ApptiveGridFormData extends StatefulWidget {
   /// Creates a Widget to display [formData]
   ///
@@ -547,7 +550,8 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               _updateView();
             },
             child: Text(
-              localization.additionalAnswer,
+              _formData?.properties?.afterSubmitAction?.buttonTitle ??
+                  localization.additionalAnswer,
             ),
           ),
         )
@@ -579,7 +583,10 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               widget.triggerReload?.call();
               _updateView();
             },
-            child: Text(localization.additionalAnswer),
+            child: Text(
+              _formData?.properties?.afterSubmitAction?.buttonTitle ??
+                  localization.additionalAnswer,
+            ),
           ),
         )
       ],

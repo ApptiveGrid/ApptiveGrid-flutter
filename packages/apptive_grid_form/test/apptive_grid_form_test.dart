@@ -415,6 +415,48 @@ void main() {
         () => client.loadForm(uri: Uri.parse('/api/a/form')),
       ).called(2);
     });
+
+    testWidgets('Shows custom submit additional button', (tester) async {
+      const customLabel = 'customLabel';
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      final formData = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        links: {ApptiveLinkType.submit: action},
+        fields: [],
+        properties: FormDataProperties(
+          afterSubmitAction: const AfterSubmitAction(
+            type: AfterSubmitActionType.additionalAnswer,
+            buttonTitle: customLabel,
+          ),
+        ),
+      );
+
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+        (_) => Stream.value(
+          SubmitCompleteProgressEvent(http.Response('', 200)),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      await tester.scrollUntilVisible(find.byType(TextButton), 100);
+      expect(find.text(customLabel, skipOffstage: false), findsOneWidget);
+    });
   });
 
   group('Error', () {

@@ -5,7 +5,8 @@ void main() {
   const title = 'title';
   const name = 'name';
   const description = 'description';
-  const buttonTitle = 'button';
+  const submitButtonTitle = 'submitButton';
+  const additionalAnswerButtonTitle = 'additionalAnswerButton';
   const reloadAfterSubmit = true;
   const successTitle = 'successTitle';
   const successMessage = 'successMessage';
@@ -130,10 +131,15 @@ void main() {
     'description': description,
     'id': 'formId',
     'properties': {
-      'buttonTitle': buttonTitle,
+      'buttonTitle': submitButtonTitle,
       'reloadAfterSubmit': reloadAfterSubmit,
       'successTitle': successTitle,
       'successMessage': successMessage,
+      'afterSubmitAction': {
+        'action': 'additionalAnswer',
+        'trigger': 'button',
+        'buttonTitle': additionalAnswerButtonTitle,
+      },
     },
     '_links': {
       "submit": {
@@ -184,8 +190,13 @@ void main() {
         FormDataProperties(
           successTitle: successTitle,
           successMessage: successMessage,
-          buttonTitle: buttonTitle,
+          buttonTitle: submitButtonTitle,
           reloadAfterSubmit: reloadAfterSubmit,
+          afterSubmitAction: const AfterSubmitAction(
+            type: AfterSubmitActionType.additionalAnswer,
+            trigger: AfterSubmitActionTrigger.button,
+            buttonTitle: additionalAnswerButtonTitle,
+          ),
         ),
       );
     });
@@ -216,7 +227,7 @@ void main() {
         links: {ApptiveLinkType.submit: action},
         fields: [component.field],
         properties: FormDataProperties(
-          buttonTitle: buttonTitle,
+          buttonTitle: submitButtonTitle,
           reloadAfterSubmit: reloadAfterSubmit,
           successTitle: successTitle,
           successMessage: successMessage,
@@ -625,6 +636,7 @@ void main() {
           'successMessage',
           'buttonTitle',
           true,
+          null,
         ),
       );
     });
@@ -640,9 +652,65 @@ void main() {
       expect(
         properties.toString(),
         equals(
-          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true)',
+          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true, afterSubmitAction: null)',
         ),
       );
+    });
+
+    group('AfterSubmitAction', () {
+      test('Equality', () {
+        const a = AfterSubmitAction(
+          type: AfterSubmitActionType.additionalAnswer,
+          trigger: AfterSubmitActionTrigger.button,
+          buttonTitle: additionalAnswerButtonTitle,
+        );
+        const b = AfterSubmitAction(
+          type: AfterSubmitActionType.additionalAnswer,
+          trigger: AfterSubmitActionTrigger.button,
+          buttonTitle: additionalAnswerButtonTitle,
+        );
+        const c = AfterSubmitAction(
+          type: AfterSubmitActionType.additionalAnswer,
+          trigger: AfterSubmitActionTrigger.auto,
+          buttonTitle: additionalAnswerButtonTitle,
+        );
+        expect(a, equals(b));
+        expect(a, isNot(c));
+      });
+
+      test('Hashcode', () {
+        const action = AfterSubmitAction(
+          type: AfterSubmitActionType.additionalAnswer,
+          trigger: AfterSubmitActionTrigger.button,
+          buttonTitle: additionalAnswerButtonTitle,
+        );
+
+        expect(
+          action.hashCode,
+          Object.hash(
+            AfterSubmitActionType.additionalAnswer,
+            additionalAnswerButtonTitle,
+            AfterSubmitActionTrigger.button,
+            null,
+            null,
+          ),
+        );
+      });
+
+      test('toString()', () {
+        const action = AfterSubmitAction(
+          type: AfterSubmitActionType.additionalAnswer,
+          trigger: AfterSubmitActionTrigger.button,
+          buttonTitle: additionalAnswerButtonTitle,
+        );
+
+        expect(
+          action.toString(),
+          equals(
+            'AfterSubmitAction(type: AfterSubmitActionType.additionalAnswer, buttonTitle: $additionalAnswerButtonTitle, trigger: AfterSubmitActionTrigger.button, delay: null, targetUrl: null)',
+          ),
+        );
+      });
     });
   });
 }
