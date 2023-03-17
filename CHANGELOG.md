@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-03-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_core` - `v1.1.0`](#apptive_grid_core---v110)
+ - [`apptive_grid_form` - `v1.1.0`](#apptive_grid_form---v110)
+ - [`apptive_grid_grid_builder` - `v1.1.0`](#apptive_grid_grid_builder---v110)
+ - [`apptive_grid_user_management` - `v1.1.0`](#apptive_grid_user_management---v110)
+
+---
+
+#### `apptive_grid_core` - `v1.1.0`
+
+ - **FEAT**: Add support for custom additional answer button label through web app.
+ - **FEAT**: Add support for paged calls for entities.
+
+#### `apptive_grid_form` - `v1.1.0`
+
+ - **FEAT**: Add support for custom additional answer button label through web app.
+
+#### `apptive_grid_grid_builder` - `v1.1.0`
+
+ - **FEAT**: Add support for custom additional answer button label through web app.
+
+#### `apptive_grid_user_management` - `v1.1.0`
+
+ - **FEAT**: Add support for custom additional answer button label through web app.
+
+
 ## 2023-03-13
 
 ### Changes

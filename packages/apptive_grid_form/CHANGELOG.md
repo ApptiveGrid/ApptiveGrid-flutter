@@ -1,3 +1,7 @@
+## 1.1.0
+
+ - **FEAT**: Add support for custom additional answer button label through web app.
+
 ## 1.0.0
 
  - Version 1.0.0
