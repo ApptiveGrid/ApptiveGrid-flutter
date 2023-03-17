@@ -2326,8 +2326,7 @@ void main() {
 
       final response = Response('', 401);
       final retryResponse = Response(
-        '{'
-        '"items": []}',
+        '[]',
         200,
       );
       bool isRetry = false;
@@ -2373,8 +2372,7 @@ void main() {
       const gridId = 'grid';
 
       final response = Response(
-        '{'
-        '"items": []}',
+        '[]',
         200,
       );
       const layout = ApptiveGridLayout.keyAndField;
@@ -2414,8 +2412,7 @@ void main() {
       const gridId = 'grid';
 
       final response = Response(
-        '{'
-        '"items": []}',
+        '[]',
         200,
       );
       final filter =
@@ -2449,6 +2446,128 @@ void main() {
                   testUri.path == uri.path &&
                   testUri.queryParameters.containsKey('filter') &&
                   testUri.queryParameters.containsKey('sorting'),
+            ),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
+    });
+    test('Load page data', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
+
+      final response = Response(
+        '{'
+        '"items": ["item"],'
+        '"page": 1,'
+        '"numberOfItems": 2,'
+        '"numberOfPages": 2,'
+        '"size": 50'
+        '}',
+        200,
+      );
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async => response);
+
+      final entities = await apptiveGridClient.loadEntities(
+        uri: uri,
+        pageSize: 50,
+      );
+
+      expect(
+        entities,
+        equals(
+          const EntitiesResponse(
+            items: ["item"],
+            pageMetaData: PageMetaData(
+              numberOfItems: 2,
+              numberOfPages: 2,
+              page: 1,
+              size: 50,
+            ),
+          ),
+        ),
+      );
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters['pageSize'] == '50',
+            ),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(1);
+    });
+    test('Load specific page data', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
+
+      final response = Response(
+        '{'
+        '"items": ["item"],'
+        '"page": 2,'
+        '"numberOfItems": 2,'
+        '"numberOfPages": 2,'
+        '"size": 50'
+        '}',
+        200,
+      );
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async => response);
+
+      final entities = await apptiveGridClient.loadEntities(
+        uri: uri,
+        pageIndex: 2,
+        pageSize: 50,
+      );
+
+      expect(
+        entities,
+        equals(
+          const EntitiesResponse(
+            items: ["item"],
+            pageMetaData: PageMetaData(
+              numberOfItems: 2,
+              numberOfPages: 2,
+              page: 2,
+              size: 50,
+            ),
+          ),
+        ),
+      );
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) =>
+                  testUri.path == uri.path &&
+                  testUri.queryParameters['pageIndex'] == '2' &&
+                  testUri.queryParameters['pageSize'] == '50',
             ),
           ),
           headers: any(named: 'headers'),
