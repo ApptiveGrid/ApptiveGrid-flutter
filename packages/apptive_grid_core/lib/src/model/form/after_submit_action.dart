@@ -1,7 +1,5 @@
 /// The AfterSubmitAction class represents an action to be taken after a form
 /// is submitted.
-///
-/// Currently only the custom button title is used in the app.
 class AfterSubmitAction {
   /// Creates a new instance of the AfterSubmitAction class from the given JSON
   /// data.
