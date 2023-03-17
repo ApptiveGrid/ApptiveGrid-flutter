@@ -202,7 +202,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
 
 /// A Widget to display [FormData]
 ///
-/// Of the [AfterSubmitAction] in the [FormDataProperties] only the custom additional answer button label is used in the app.
+/// Of the [AfterSubmitAction] in the [FormDataProperties] only the custom additional answer button label is used in the package.
 class ApptiveGridFormData extends StatefulWidget {
   /// Creates a Widget to display [formData]
   ///
