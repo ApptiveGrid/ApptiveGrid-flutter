@@ -98,7 +98,7 @@ void main() {
 
     expect(
       response.toString(),
-      equals('EntitiesResponse(items: [{1: A}, {1: B}])'),
+      equals('EntitiesResponse(items: [{1: A}, {1: B}], pageMetaData: null)'),
     );
   });
 }

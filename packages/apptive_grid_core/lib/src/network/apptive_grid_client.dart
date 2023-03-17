@@ -400,6 +400,9 @@ class ApptiveGridClient extends ChangeNotifier {
   /// [sorting] allows to apply custom sorting
   /// [filter] allows to get custom filters
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
+  /// [pageIndex] is the index of the page to be loaded.
+  /// [pageSize] is the requested item count in the loaded page.
+  /// Paging currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
   Future<EntitiesResponse<T>> loadEntities<T>({
     required Uri uri,
     ApptiveGridLayout layout = ApptiveGridLayout.field,
@@ -407,18 +410,22 @@ class ApptiveGridClient extends ChangeNotifier {
     ApptiveGridFilter? filter,
     bool isRetry = false,
     Map<String, String> headers = const {},
+    int? pageIndex,
+    int? pageSize,
   }) async {
     final baseUrl = Uri.parse(options.environment.url);
     final requestUri = uri.replace(
       scheme: baseUrl.scheme,
       host: baseUrl.host,
       queryParameters: {
-        ...uri.queryParameters,
         'layout': layout.queryParameter,
         if (sorting != null)
           'sorting':
               jsonEncode(sorting.map((e) => e.toRequestObject()).toList()),
         if (filter != null) 'filter': jsonEncode(filter.toJson()),
+        if (pageIndex != null) 'pageIndex': '$pageIndex',
+        if (pageSize != null) 'pageSize': '$pageSize',
+        ...uri.queryParameters,
       },
     );
 
@@ -436,18 +443,15 @@ class ApptiveGridClient extends ChangeNotifier {
           sorting: sorting,
           filter: filter,
           isRetry: true,
+          headers: headers,
+          pageIndex: pageIndex,
+          pageSize: pageSize,
         );
       }
       throw response;
     }
 
-    final decodedResponse = jsonDecode(response.body);
-    if (decodedResponse is List) {
-      return EntitiesResponse(items: decodedResponse.cast<T>());
-    } else {
-      // Preparation for Paging
-      return EntitiesResponse(items: decodedResponse['items']);
-    }
+    return EntitiesResponse<T>.fromJson(jsonDecode(response.body));
   }
 
   /// Get the [User] that is authenticated
