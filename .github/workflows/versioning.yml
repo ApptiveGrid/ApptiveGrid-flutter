@@ -1,9 +1,7 @@
 name: Versioning
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:    
 
 jobs:
   versioning:
@@ -16,11 +14,13 @@ jobs:
           # Make sure that VERSION_PAT is a valid PAT with Read/Write Access to the Repository's content
           # Also make sure that the Token is allowed to bypass Branch Protection Rules
           token: ${{ secrets.VERSION_PAT }}
+          # Always use main branch even if different branch was selected
+          ref: main
       - uses: subosito/flutter-action@v2
       - uses: bluefireteam/melos-action@v1
 
       - name: Versioning
-        run: melos version
+        run: melos version --yes
 
       - name: Commit and Push Changes
         uses: stefanzweifel/git-auto-commit-action@v4
