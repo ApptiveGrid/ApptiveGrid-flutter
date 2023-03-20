@@ -539,6 +539,7 @@ class ApptiveGridClient extends ChangeNotifier {
   /// Get a specific entity via a [uri]
   ///
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
+  /// [halVersion] describes what Hal Version of ApptiveGrid should be used.
   ///
   /// This will return a Map of fieldIds and the respective values
   /// To know what [DataType] they are you need to Load a Grid via [loadGrid] and compare [Grid.fields] with the ids
