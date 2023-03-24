@@ -108,7 +108,10 @@ enum SViewType {
   calendar(backendName: 'calendar'),
 
   /// A View that displays entries on a map
-  map(backendName: 'map');
+  map(backendName: 'map'),
+
+  /// A View that displays entries in a Gallery Card View
+  gallery(backendName: 'gallery');
 
   /// Constructor for enum fields
   const SViewType({required this.backendName});
