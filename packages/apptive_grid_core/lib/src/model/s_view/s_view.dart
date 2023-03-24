@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 /// A class for a Statefull View
 class SView {
   /// Creates a SView
-  SView({
+  const SView({
     required this.name,
     required this.id,
     required this.type,
