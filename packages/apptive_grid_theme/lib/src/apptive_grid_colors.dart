@@ -28,4 +28,7 @@ abstract class ApptiveGridColors {
 
   /// This is a color used to identify Map Views with the hex code: 399de9
   static const Color map = Color(0xff399de9);
+
+  /// This is a color used to identify Gallery Views with the hex code: 893fb7
+  static const Color gallery = Color(0xff893FB7);
 }

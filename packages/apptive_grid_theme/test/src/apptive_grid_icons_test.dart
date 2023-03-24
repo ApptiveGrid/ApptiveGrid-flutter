@@ -19,6 +19,7 @@ void main() {
         'Kanban': ApptiveGridIcons.kanban,
         'Calendar': ApptiveGridIcons.calendar,
         'Map': ApptiveGridIcons.map,
+        'Gallery': ApptiveGridIcons.gallery,
       };
       return GoldenTestGroup(
         columns: 2,

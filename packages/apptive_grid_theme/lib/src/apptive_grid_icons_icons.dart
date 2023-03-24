@@ -23,4 +23,7 @@ abstract class ApptiveGridIcons {
 
   /// Icon for Map Views
   static const IconData map = MdiIcons.googleMaps;
+
+  /// Icon for Gallery Views
+  static const IconData gallery = MdiIcons.viewGrid;
 }

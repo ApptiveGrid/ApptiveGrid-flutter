@@ -13,6 +13,7 @@ void main() {
         'Kanban': ApptiveGridColors.kanban,
         'Calendar': ApptiveGridColors.calendar,
         'Map': ApptiveGridColors.map,
+        'Gallery': ApptiveGridColors.gallery,
       };
       return GoldenTestGroup(
         columns: 2,
