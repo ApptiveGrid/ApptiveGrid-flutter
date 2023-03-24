@@ -48,7 +48,8 @@ void main() {
         "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63e4a68693cf495e5ab08f25/sviews/63e4a68893cf4966e0b08f28",
         "method": "get"
       }
-    },
+    }
+  },
   {
     "type": "gallery",
     "id": "63e4a68893cf4966e0b08f15",
@@ -71,7 +72,7 @@ void main() {
     expect(decoded[1].type, SViewType.kanban);
     expect(decoded[2].type, SViewType.calendar);
     expect(decoded[3].type, SViewType.map);
-    expect(decoded[3].type, SViewType.gallery);
+    expect(decoded[4].type, SViewType.gallery);
   });
 
   group('Full Views', () {
