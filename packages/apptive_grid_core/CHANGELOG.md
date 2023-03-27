@@ -1,3 +1,8 @@
+## 1.2.0
+
+ - **FEAT**: Add support for Gallery SView (#98).
+ - **FEAT**: Better Hal Version Support (#97).
+
 ## 1.1.0
 
  - **FEAT**: Add support for custom additional answer button label through web app.

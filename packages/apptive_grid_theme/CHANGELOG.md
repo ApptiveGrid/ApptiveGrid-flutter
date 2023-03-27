@@ -1,3 +1,7 @@
+## 1.1.0
+
+ - **FEAT**: Add support for Gallery SView (#98).
+
 ## 1.0.0
 
  - Version 1.0.0

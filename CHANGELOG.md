@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-03-27
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_core` - `v1.2.0`](#apptive_grid_core---v120)
+ - [`apptive_grid_theme` - `v1.1.0`](#apptive_grid_theme---v110)
+ - [`apptive_grid_form` - `v1.1.1`](#apptive_grid_form---v111)
+ - [`apptive_grid_user_management` - `v1.1.1`](#apptive_grid_user_management---v111)
+ - [`apptive_grid_grid_builder` - `v1.1.1`](#apptive_grid_grid_builder---v111)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `apptive_grid_form` - `v1.1.1`
+ - `apptive_grid_user_management` - `v1.1.1`
+ - `apptive_grid_grid_builder` - `v1.1.1`
+
+---
+
+#### `apptive_grid_core` - `v1.2.0`
+
+ - **FEAT**: Add support for Gallery SView (#98).
+ - **FEAT**: Better Hal Version Support (#97).
+
+#### `apptive_grid_theme` - `v1.1.0`
+
+ - **FEAT**: Add support for Gallery SView (#98).
+
+
 ## 2023-03-17
 
 ### Changes
