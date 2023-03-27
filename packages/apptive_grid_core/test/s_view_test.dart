@@ -49,6 +49,17 @@ void main() {
         "method": "get"
       }
     }
+  },
+  {
+    "type": "gallery",
+    "id": "63e4a68893cf4966e0b08f15",
+    "name": "Grid Ansicht 6",
+    "_links": {
+      "self": {
+        "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63e4a68693cf495e5ab08f25/sviews/63e4a68893cf4966e0b08f15",
+        "method": "get"
+      }
+    }
   }
 ]''';
 
@@ -56,11 +67,12 @@ void main() {
         .map((sview) => SView.fromJson(sview))
         .toList();
 
-    expect(decoded.length, 4);
+    expect(decoded.length, 5);
     expect(decoded[0].type, SViewType.spreadsheet);
     expect(decoded[1].type, SViewType.kanban);
     expect(decoded[2].type, SViewType.calendar);
     expect(decoded[3].type, SViewType.map);
+    expect(decoded[4].type, SViewType.gallery);
   });
 
   group('Full Views', () {
@@ -124,6 +136,19 @@ void main() {
       expect(fromJson.name, equals('Grid Ansicht'));
       expect(fromJson.id, equals('63d28a8a78d9ca55c2af8b45'));
       expect(fromJson.type, equals(SViewType.spreadsheet));
+      expect(fromJson.fields!.length, 1);
+
+      expect(SView.fromJson(fromJson.toJson()), equals(fromJson));
+    });
+
+    test('Parses Full GalleryView', () {
+      const galleryView =
+          '''{"fields":[{"name":"Default","id":"639b05e0d8165f7cb0ac2e9b","key":null,"schema":{"type":"string","enum":["A","B","C"]},"type":{"options":["A","B","C"],"componentTypes":["selectBox","selectList"],"name":"enum","typeName":"enum","extended":false},"_links":{"patch":{"href":"/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/639b05e0d8165f7cb0ac2e9a/fields/639b05e0d8165f7cb0ac2e9b","method":"patch"},"query":{"href":"/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/639b05e0d8165f7cb0ac2e9a/fields/639b05e0d8165f7cb0ac2e9b/query","method":"get"},"self":{"href":"/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/639b05e0d8165f7cb0ac2e9a/fields/639b05e0d8165f7cb0ac2e9b","method":"get"},"extractToGrid":{"href":"/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/639b05e0d8165f7cb0ac2e9a/fields/639b05e0d8165f7cb0ac2e9b/extractToGrid","method":"post"}}}],"name":"Radio Test Ansicht 2","id":"64197559dbe97e4cf0b3c4db","fieldProperties":{"639b061fd8165f7cb0ac2eac":{},"639b05e0d8165f7cb0ac2e9b":{},"639b0d42d8165f7301ac2eb7":{},"639b0614d8165f7cb0ac2ea9":{},"639b05fed8165f7cb0ac2ea4":{}},"type":"gallery","properties":{"version":1},"_links":{"addShare":{"href":"/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/64197559dbe97e4cf0b3c4d9/sviews/64197559dbe97e4cf0b3c4db/shares","method":"post"},"entities":{"href":"/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/64197559dbe97e4cf0b3c4d9/entities","method":"get"},"shares":{"href":"/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/64197559dbe97e4cf0b3c4d9/sviews/64197559dbe97e4cf0b3c4db/shares","method":"get"},"self":{"href":"/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/64197559dbe97e4cf0b3c4d9/sviews/64197559dbe97e4cf0b3c4db","method":"get"},"grid":{"href":"/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/64197559dbe97e4cf0b3c4d9","method":"get"},"remove":{"href":"/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/64197559dbe97e4cf0b3c4d9/sviews/64197559dbe97e4cf0b3c4db","method":"delete"},"patch":{"href":"/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/64197559dbe97e4cf0b3c4d9/sviews/64197559dbe97e4cf0b3c4db","method":"patch"}},"_embedded":{"shares":[]}}''';
+      final fromJson = SView.fromJson(jsonDecode(galleryView));
+
+      expect(fromJson.name, equals('Radio Test Ansicht 2'));
+      expect(fromJson.id, equals('64197559dbe97e4cf0b3c4db'));
+      expect(fromJson.type, equals(SViewType.gallery));
       expect(fromJson.fields!.length, 1);
 
       expect(SView.fromJson(fromJson.toJson()), equals(fromJson));
