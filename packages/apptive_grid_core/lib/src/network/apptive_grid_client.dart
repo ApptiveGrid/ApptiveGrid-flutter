@@ -72,11 +72,14 @@ class ApptiveGridClient extends ChangeNotifier {
           .map((key, value) => MapEntry(key, value!));
 
   Map<String, String> _createHeadersWithDefaults(
-    Map<String, String> customHeader,
-  ) {
-    final newHeader = defaultHeaders;
-    newHeader.addAll(customHeader);
-    return newHeader;
+    Map<String, String> customHeader, [
+    ApptiveGridHalVersion? halVersion,
+  ]) {
+    return {
+      ...defaultHeaders,
+      if (halVersion != null) ...Map.fromEntries([halVersion.header]),
+      ...customHeader,
+    };
   }
 
   Uri _generateApptiveGridUri(Uri baseUri) {
@@ -359,7 +362,7 @@ class ApptiveGridClient extends ChangeNotifier {
     final gridViewUrl = _generateApptiveGridUri(uri);
 
     final gridHeaders = _createHeadersWithDefaults(headers);
-    gridHeaders['Accept'] = 'application/vnd.apptivegrid.hal;version=2';
+    gridHeaders.addEntries([ApptiveGridHalVersion.v2.header]);
     final gridViewResponse =
         await _client.get(gridViewUrl, headers: gridHeaders);
     if (gridViewResponse.statusCode >= 400) {
@@ -400,6 +403,7 @@ class ApptiveGridClient extends ChangeNotifier {
   /// [sorting] allows to apply custom sorting
   /// [filter] allows to get custom filters
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
+  /// [halVersion] describes what Hal Version of ApptiveGrid should be used. This can effect the format and features of the response and might break parsing.
   /// [pageIndex] is the index of the page to be loaded.
   /// [pageSize] is the requested item count in the loaded page.
   /// Paging currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
@@ -410,6 +414,7 @@ class ApptiveGridClient extends ChangeNotifier {
     ApptiveGridFilter? filter,
     bool isRetry = false,
     Map<String, String> headers = const {},
+    ApptiveGridHalVersion? halVersion,
     int? pageIndex,
     int? pageSize,
   }) async {
@@ -431,7 +436,7 @@ class ApptiveGridClient extends ChangeNotifier {
 
     final response = await _client.get(
       requestUri,
-      headers: _createHeadersWithDefaults(headers),
+      headers: _createHeadersWithDefaults(headers, halVersion),
     );
 
     if (response.statusCode >= 400) {
@@ -446,6 +451,7 @@ class ApptiveGridClient extends ChangeNotifier {
           headers: headers,
           pageIndex: pageIndex,
           pageSize: pageSize,
+          halVersion: halVersion,
         );
       }
       throw response;
@@ -487,8 +493,10 @@ class ApptiveGridClient extends ChangeNotifier {
     await authenticator.checkAuthentication();
 
     final url = _generateApptiveGridUri(uri);
-    final response =
-        await _client.get(url, headers: _createHeadersWithDefaults(headers));
+    final response = await _client.get(
+      url,
+      headers: _createHeadersWithDefaults(headers),
+    );
     if (response.statusCode >= 400) {
       throw response;
     }
@@ -531,6 +539,7 @@ class ApptiveGridClient extends ChangeNotifier {
   /// Get a specific entity via a [uri]
   ///
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
+  /// [halVersion] describes what Hal Version of ApptiveGrid should be used.
   ///
   /// This will return a Map of fieldIds and the respective values
   /// To know what [DataType] they are you need to Load a Grid via [loadGrid] and compare [Grid.fields] with the ids
@@ -540,6 +549,7 @@ class ApptiveGridClient extends ChangeNotifier {
   Future<dynamic> getEntity({
     required Uri uri,
     Map<String, String> headers = const {},
+    ApptiveGridHalVersion? halVersion,
     ApptiveGridLayout layout = ApptiveGridLayout.field,
   }) async {
     await authenticator.checkAuthentication();
@@ -552,7 +562,7 @@ class ApptiveGridClient extends ChangeNotifier {
           'layout': layout.queryParameter,
         },
       ),
-      headers: _createHeadersWithDefaults(headers),
+      headers: _createHeadersWithDefaults(headers, halVersion),
     );
 
     if (response.statusCode >= 400) {
@@ -664,6 +674,7 @@ class ApptiveGridClient extends ChangeNotifier {
   /// Perform a action represented by [link]
   /// [body] is the body of the request
   /// [headers] will be added in addition to [ApptiveGridClient.defaultHeaders]
+  /// [halVersion] describes what Hal Version of ApptiveGrid should be used
   /// [queryParameters] will override any [queryParameters] in [ApptiveLink.uri]
   /// [parseResponse] will be called with [http.Response] if the request has been successful
   Future<T?> performApptiveLink<T>({
@@ -671,6 +682,7 @@ class ApptiveGridClient extends ChangeNotifier {
     bool isRetry = false,
     dynamic body,
     Map<String, String> headers = const {},
+    ApptiveGridHalVersion? halVersion,
     Map<String, String>? queryParameters,
     required Future<T?> Function(http.Response response) parseResponse,
   }) async {
@@ -685,7 +697,7 @@ class ApptiveGridClient extends ChangeNotifier {
       request.body = json.encode(body);
     }
 
-    request.headers.addAll(_createHeadersWithDefaults(headers));
+    request.headers.addAll(_createHeadersWithDefaults(headers, halVersion));
 
     final streamResponse = await _client.send(request);
     final response = await http.Response.fromStream(streamResponse);

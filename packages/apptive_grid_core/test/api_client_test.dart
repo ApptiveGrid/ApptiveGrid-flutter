@@ -2128,6 +2128,31 @@ void main() {
 
       expect(entity, equals(rawResponse));
     });
+
+    test('Use ApptiveGridHalVersion', () async {
+      final response = Response(json.encode(rawResponse), 200);
+      const version = ApptiveGridHalVersion.v1;
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
+          ),
+          headers: any(
+            named: 'headers',
+            that: predicate<Map<String, String>>(
+              (headers) => headers[version.header.key] == version.header.value,
+            ),
+          ),
+        ),
+      ).thenAnswer((_) async => response);
+
+      final entity = await apptiveGridClient.getEntity(
+        uri: entityUri,
+        halVersion: version,
+      );
+
+      expect(entity, equals(rawResponse));
+    });
   });
 
   group('Switch Stage', () {
@@ -2574,6 +2599,49 @@ void main() {
         ),
       ).called(1);
     });
+
+    test('Uses Hal Version', () async {
+      reset(httpClient);
+      const user = 'user';
+      const space = 'space';
+      const gridId = 'grid';
+
+      final response = Response(
+        '[]',
+        200,
+      );
+      const version = ApptiveGridHalVersion.v2;
+
+      final uri = Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
+      );
+      when(
+        () => httpClient.get(
+          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        return response;
+      });
+
+      await apptiveGridClient.loadEntities(uri: uri, halVersion: version);
+
+      verify(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>(
+              (testUri) => testUri.path == uri.path,
+            ),
+          ),
+          headers: any(
+            named: 'headers',
+            that: predicate<Map<String, String>>(
+              (headers) => headers[version.header.key] == version.header.value,
+            ),
+          ),
+        ),
+      ).called(1);
+    });
   });
 
   group('Perform ApptiveLink', () {
@@ -2604,6 +2672,42 @@ void main() {
 
       await apptiveGridClient.performApptiveLink(
         link: link,
+        parseResponse: (response) async =>
+            linkCompleter.complete(response.body),
+      );
+
+      expect(await linkCompleter.future, equals(actionResponse));
+    });
+
+    test('Uses Hal Version', () async {
+      final link = ApptiveLink(uri: Uri.parse('/apptive/link'), method: 'get');
+
+      final response =
+          StreamedResponse(Stream.value(utf8.encode(actionResponse)), 200);
+      final linkCompleter = Completer();
+
+      const version = ApptiveGridHalVersion.v2;
+
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method &&
+                  request.headers[version.header.key] == version.header.value,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+
+      await apptiveGridClient.performApptiveLink(
+        link: link,
+        halVersion: version,
         parseResponse: (response) async =>
             linkCompleter.complete(response.body),
       );

@@ -8,3 +8,4 @@ export 'package:apptive_grid_core/src/network/authentication/web_auth_enabler/we
 export 'package:apptive_grid_core/src/network/environment.dart';
 export 'package:apptive_grid_core/src/network/filter/apptive_grid_filter.dart';
 export 'package:apptive_grid_core/src/network/sorting/apptive_grid_sorting.dart';
+export 'package:apptive_grid_core/src/network/version/apptive_grid_hal_version.dart';
