@@ -142,7 +142,7 @@ void main() {
             // ignore: prefer_const_constructors
             ActorFilter(
               fieldId: 'fieldId',
-              value: LoggedInUser(),
+              value: const LoggedInUser(),
             ).toJson(),
           ),
           equals(
