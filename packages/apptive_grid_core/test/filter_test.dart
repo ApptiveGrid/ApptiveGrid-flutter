@@ -38,7 +38,9 @@ void main() {
     test('isEmpty', () async {
       expect(
         jsonEncode(
-          const IsEmptyFilter(
+          // Ignore const to enable coverage
+          // ignore: prefer_const_constructors
+          IsEmptyFilter(
             fieldId: 'fieldId',
           ).toJson(),
         ),
@@ -136,7 +138,9 @@ void main() {
       test('Actor', () async {
         expect(
           jsonEncode(
-            const ActorFilter(
+            // Ignore const to enable coverage
+            // ignore: prefer_const_constructors
+            ActorFilter(
               fieldId: 'fieldId',
               value: LoggedInUser(),
             ).toJson(),
