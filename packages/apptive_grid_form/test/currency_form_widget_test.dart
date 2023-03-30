@@ -271,7 +271,7 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      final capturedForm = verify(
+      verify(
         () => client.submitFormWithProgress(
           submitLink,
           any(
