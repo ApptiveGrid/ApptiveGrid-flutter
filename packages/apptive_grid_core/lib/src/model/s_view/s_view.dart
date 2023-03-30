@@ -67,7 +67,7 @@ class SView {
   /// The fields in this SView
   final List<GridField>? fields;
 
-  /// Field Poroperties
+  /// Field Properties
   /// For example this can indicate which field to use for Kanban state
   final Map<String, dynamic>? fieldProperties;
 

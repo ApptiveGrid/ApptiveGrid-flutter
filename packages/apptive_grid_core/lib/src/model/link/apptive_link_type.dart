@@ -52,6 +52,12 @@ enum ApptiveLinkType {
   /// List Shares
   shares,
 
+  /// Add an Invitation
+  invite,
+
+  /// Lists Invitations
+  invitations,
+
   // Grid Related
   /// Adds a new [GridRow]
   addEntity,
