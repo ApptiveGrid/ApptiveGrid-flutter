@@ -71,19 +71,35 @@ class _CurrencyFormWidgetState extends State<CurrencyFormWidget>
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'\d')),
         TextInputFormatter.withFunction((oldValue, newValue) {
-          final cleanedInput = newValue.text.replaceAll(RegExp('[^0-9]'), '');
-          double value = double.parse(cleanedInput) / 100;
-          widget.component.data.value = value;
+          final oldValueClean = oldValue.text.replaceAll(RegExp('[^0-9]'), '');
+          final newValueClean = newValue.text.replaceAll(RegExp('[^0-9]'), '');
 
-          String newText = _formatCurrency(value);
+          final oldValueParsed = oldValueClean.isNotEmpty
+              ? double.parse(oldValueClean) / 100
+              : null;
+          final newValueParsed = newValueClean.isNotEmpty
+              ? double.parse(newValueClean) / 100
+              : null;
 
-          return newValue.copyWith(
+          double? finalValue;
+          if (oldValueParsed == 0 &&
+              newValueParsed == 0 &&
+              oldValueClean.length > newValueClean.length) {
+            finalValue = null;
+          } else {
+            finalValue = newValueParsed;
+          }
+
+          widget.component.data.value = finalValue;
+
+          final newText = finalValue != null ? _formatCurrency(finalValue) : '';
+          final curserPosition = newText.lastIndexOf(RegExp('[0-9]')) + 1;
+
+          return TextEditingValue(
             text: newText,
-            selection: oldValue.selection.copyWith(
-              baseOffset: oldValue.selection.baseOffset +
-                  (newText.length - oldValue.text.length),
-              extentOffset: oldValue.selection.extentOffset +
-                  (newText.length - oldValue.text.length),
+            selection: TextSelection.collapsed(
+              offset: curserPosition,
+              affinity: TextAffinity.downstream,
             ),
           );
         })
