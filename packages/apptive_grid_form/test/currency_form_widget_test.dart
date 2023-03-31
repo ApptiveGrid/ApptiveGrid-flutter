@@ -1,6 +1,7 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
@@ -67,7 +68,16 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      verify(() => client.submitFormWithProgress(submitLink, any())).called(1);
+      verify(
+        () => client.submitFormWithProgress(
+          submitLink,
+          any(
+            that: predicate<FormData>(
+              (formData) => formData.components!.first.data.value == 10,
+            ),
+          ),
+        ),
+      ).called(1);
     });
 
     testWidgets('No Value but required, shows error', (tester) async {
@@ -154,12 +164,72 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      final capturedForm =
-          verify(() => client.submitFormWithProgress(submitLink, captureAny()))
-              .captured
-              .first as FormData;
-      // Unfortunately Flutters Test Engine only allows to easily replace text
-      expect(capturedForm.components!.first.data.value, equals(0.09));
+      verify(
+        () => client.submitFormWithProgress(
+          submitLink,
+          any(
+            that: predicate<FormData>(
+              (formData) => formData.components!.first.data.value == 0.09,
+            ),
+          ),
+        ),
+      ).called(1);
+    });
+
+    testWidgets('Clearing field submits empty value', (tester) async {
+      final formUri = Uri.parse('form');
+      when(() => client.loadForm(uri: formUri)).thenAnswer(
+        (_) async => FormData(
+          id: 'id',
+          title: 'title',
+          components: [
+            FormComponent(
+              property: 'name',
+              required: false,
+              data: CurrencyDataEntity(
+                value: 10,
+                currency: 'EUR',
+              ),
+              field: field,
+            )
+          ],
+          fields: [field],
+          links: {
+            ApptiveLinkType.submit: submitLink,
+          },
+        ),
+      );
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: formUri,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(TextFormField));
+      await tester.pumpAndSettle();
+
+      for (var i = 0; i < 5; i++) {
+        await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+        await tester.pumpAndSettle();
+      }
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => client.submitFormWithProgress(
+          submitLink,
+          any(
+            that: predicate<FormData>(
+              (formData) => formData.components!.first.data.value == null,
+            ),
+          ),
+        ),
+      ).called(1);
     });
 
     testWidgets('Sets Value can submit', (tester) async {
@@ -201,11 +271,16 @@ void main() {
       await tester.tap(find.byType(ActionButton));
       await tester.pumpAndSettle();
 
-      final capturedForm =
-          verify(() => client.submitFormWithProgress(submitLink, captureAny()))
-              .captured
-              .first as FormData;
-      expect(capturedForm.components!.first.data.value, equals(0.09));
+      verify(
+        () => client.submitFormWithProgress(
+          submitLink,
+          any(
+            that: predicate<FormData>(
+              (formData) => formData.components!.first.data.value == 0.09,
+            ),
+          ),
+        ),
+      ).called(1);
     });
   });
 
