@@ -1,3 +1,8 @@
+## 1.3.0
+
+ - **FEAT**: Add Model for Invitation (#101).
+ - **FEAT**: Add Support for Invitations and Shares (#99).
+
 ## 1.2.0
 
  - **FEAT**: Add support for Gallery SView (#98).

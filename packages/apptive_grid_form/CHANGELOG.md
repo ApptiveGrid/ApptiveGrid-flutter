@@ -1,3 +1,7 @@
+## 1.1.2
+
+ - **FIX**: Adjust input parsing for the currency form field.
+
 ## 1.1.1
 
  - Update a dependency to the latest release.
