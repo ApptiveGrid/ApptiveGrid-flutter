@@ -1,10 +1,11 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_core/src/model/apptive_grid_object.dart';
 import 'package:flutter/foundation.dart' as f;
 
 /// Model for GridData
-class Grid {
+class Grid extends ApptiveGridObject {
   /// Creates a GridData Object
-  Grid({
+  const Grid({
     required this.id,
     required this.name,
     this.fields,

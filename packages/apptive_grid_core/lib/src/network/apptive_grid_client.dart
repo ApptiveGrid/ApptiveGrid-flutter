@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_core/src/model/apptive_grid_object.dart';
 import 'package:apptive_grid_core/src/network/attachment_processor.dart';
 import 'package:apptive_grid_core/src/network/authentication/apptive_grid_authenticator.dart';
 import 'package:apptive_grid_core/src/network/constants.dart';
@@ -684,7 +685,7 @@ class ApptiveGridClient extends ChangeNotifier {
     Map<String, String> headers = const {},
     ApptiveGridHalVersion? halVersion,
     Map<String, String>? queryParameters,
-    required Future<T?> Function(http.Response response) parseResponse,
+    Future<T?> Function(http.Response response)? parseResponse,
   }) async {
     final request = http.Request(
       link.method,
@@ -717,8 +718,26 @@ class ApptiveGridClient extends ChangeNotifier {
         throw response;
       }
     }
-
-    return parseResponse(response);
+    assert(parseResponse != null || ApptiveGridObject.isParsable(T));
+    if (parseResponse != null) {
+      return parseResponse(response);
+    } else {
+      if (<T>[] is List<ApptiveGridObject>) {
+        return ApptiveGridObject.fromJson(T, jsonDecode(response.body)) as T;
+      } else {
+        late List jsonList;
+        final parsedBody = jsonDecode(response.body);
+        if (parsedBody is List) {
+          jsonList = parsedBody;
+        } else if (parsedBody is Map && parsedBody.containsKey('items')) {
+          jsonList = parsedBody['items'];
+        } else {
+          throw Exception(
+              'Items could not be parsed. Please provide a custom Response handler');
+        }
+        return ApptiveGridObject.fromJsonList(T, jsonList) as T;
+      }
+    }
   }
 
   void _authenticationChanged() {
