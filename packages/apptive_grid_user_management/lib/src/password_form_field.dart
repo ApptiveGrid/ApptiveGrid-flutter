@@ -50,15 +50,17 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       textInputAction:
           widget.isLastInput ? TextInputAction.done : TextInputAction.next,
       decoration: widget.decoration.copyWith(
-        suffixIcon: IconButton(
-          onPressed: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-          icon: _obscureText
-              ? const Icon(Icons.visibility)
-              : const Icon(Icons.visibility_off),
+        suffixIcon: ExcludeFocus(
+          child: IconButton(
+            onPressed: () {
+              setState(() {
+                _obscureText = !_obscureText;
+              });
+            },
+            icon: _obscureText
+                ? const Icon(Icons.visibility)
+                : const Icon(Icons.visibility_off),
+          ),
         ),
       ),
       validator: widget.validator,
