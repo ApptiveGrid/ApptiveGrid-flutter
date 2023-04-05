@@ -63,4 +63,6 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get save => "Save";
   @override
   String get signHere => "Sign here";
+  @override
+  String get missingCountryCode => "International code is required (e.g. +49)";
 }

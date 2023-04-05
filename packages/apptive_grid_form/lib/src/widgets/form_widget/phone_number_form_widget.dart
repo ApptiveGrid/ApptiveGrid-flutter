@@ -56,7 +56,7 @@ class _PhoneNumberFormWidgetState extends State<PhoneNumberFormWidget>
         } else if (input != null &&
             input.isNotEmpty &&
             !_strictRegex.hasMatch(input)) {
-          return 'must start with a country code';
+          return ApptiveGridLocalization.of(context)!.missingCountryCode;
         } else {
           return null;
         }

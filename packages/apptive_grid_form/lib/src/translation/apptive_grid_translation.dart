@@ -83,4 +83,7 @@ abstract class ApptiveGridTranslation {
 
   /// Prompt to sign in the field
   String get signHere;
+
+  /// Hint that a phonenumber need to start with a country code
+  String get missingCountryCode;
 }

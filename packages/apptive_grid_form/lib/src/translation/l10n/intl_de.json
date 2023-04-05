@@ -24,5 +24,6 @@
     "invalidEmail": "Ungültige E-Mail",
     "clear": "Korrigieren",
     "save": "Speichern",
-    "signHere": "Hier unterschreiben"
+    "signHere": "Hier unterschreiben",
+    "missingCountryCode": "Eine Ländervorwahl wird erwartet (z.B. +49)"
 }
