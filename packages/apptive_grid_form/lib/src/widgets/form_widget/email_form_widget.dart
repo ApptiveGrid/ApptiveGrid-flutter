@@ -51,7 +51,9 @@ class _EmailFormWidgetState extends State<EmailFormWidget>
         final translations = ApptiveGridLocalization.of(context)!;
         if (widget.component.required && (input == null || input.isEmpty)) {
           return translations.fieldIsRequired(widget.component.property);
-        } else if (input != null && !_regex.hasMatch(input)) {
+        } else if (input != null &&
+            input.isNotEmpty &&
+            !_regex.hasMatch(input)) {
           return translations.invalidEmail;
         } else {
           return null;
