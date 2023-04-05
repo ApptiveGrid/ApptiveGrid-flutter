@@ -120,6 +120,18 @@ void main() {
         findsNothing,
       );
 
+      const incompletePhoneNumber = '12345';
+      await tester.enterText(phonenumberField, incompletePhoneNumber);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(
+          'International code is required (e.g. +49)',
+          skipOffstage: true,
+        ),
+        findsOneWidget,
+      );
+
       const validPhoneNumber = '+12345';
       await tester.enterText(phonenumberField, validPhoneNumber);
       await tester.pumpAndSettle();
