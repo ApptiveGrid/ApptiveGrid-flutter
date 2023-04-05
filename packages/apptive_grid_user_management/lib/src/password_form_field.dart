@@ -28,6 +28,7 @@ class PasswordFormField extends StatefulWidget {
   /// Hints for auto filling
   final Iterable<String> autofillHints;
 
+  /// Defines if this is the last field in the form and selects the [TextInputAction] with that in mind
   final bool isLastInput;
 
   @override
