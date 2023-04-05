@@ -160,6 +160,57 @@ void main() {
       expect(find.text('Error Message'), findsOneWidget);
     });
 
+    testWidgets('Keyboard actions', (tester) async {
+      final client = MockApptiveGridUserManagementClient();
+
+      final target = MaterialApp(
+        home: Material(
+          child: StubUserManagement(
+            client: client,
+            child: const LoginContent(),
+          ),
+        ),
+      );
+
+      const email = 'email@2denker.de';
+      const password = 'Sup3rStrongPassword!';
+
+      when(
+        () => client.login(
+          email: email,
+          password: password,
+        ),
+      ).thenAnswer((_) async => Response('body', 200));
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(
+        find.ancestor(
+          of: find.text('Email Address'),
+          matching: find.byType(TextFormField),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      tester.testTextInput.enterText(email);
+      await tester.pumpAndSettle();
+
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      await tester.pumpAndSettle();
+
+      tester.testTextInput.enterText(password);
+      await tester.pumpAndSettle();
+
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+
+      verify(() => client.login(email: email, password: password)).called(1);
+    });
+
     group('Join Group', () {
       late MockApptiveGridUserManagementClient client;
       const app = 'Testing App';

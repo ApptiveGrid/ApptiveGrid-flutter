@@ -164,7 +164,7 @@ class _RegisterContentState extends State<RegisterContent> {
                 ),
                 PasswordFormField(
                   controller: _confirmPasswordController,
-                  autofillHints: const [AutofillHints.password],
+                  autofillHints: const [AutofillHints.newPassword],
                   decoration: InputDecoration(
                     hintText: localization.hintConfirmPassword,
                   ),
