@@ -92,6 +92,7 @@ class _RegisterContentState extends State<RegisterContent> {
                 TextFormField(
                   controller: _firstNameController,
                   autofillHints: const [AutofillHints.givenName],
+                  textInputAction: TextInputAction.next,
                   decoration:
                       InputDecoration(hintText: localization.hintFirstName),
                   validator: (input) {
@@ -107,6 +108,7 @@ class _RegisterContentState extends State<RegisterContent> {
                 TextFormField(
                   controller: _lastNameController,
                   autofillHints: const [AutofillHints.familyName],
+                  textInputAction: TextInputAction.next,
                   decoration:
                       InputDecoration(hintText: localization.hintLastName),
                   validator: (input) {
@@ -141,6 +143,7 @@ class _RegisterContentState extends State<RegisterContent> {
                   key: _passwordFormKey,
                   controller: _passwordController,
                   autofillHints: const [AutofillHints.newPassword],
+                  isLastInput: false,
                   decoration: InputDecoration(
                     hintText: localization.hintPassword,
                     errorStyle: const TextStyle(fontSize: 0),

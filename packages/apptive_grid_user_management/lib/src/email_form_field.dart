@@ -28,6 +28,7 @@ class EmailFormField extends StatelessWidget {
       controller: controller,
       autofillHints: autofillHints,
       keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         hintText: localization.hintEmail,
       ),
