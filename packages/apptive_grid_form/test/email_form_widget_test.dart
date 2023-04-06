@@ -9,20 +9,20 @@ import 'common.dart';
 void main() {
   final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
   const field = GridField(id: 'fieldId', name: 'name', type: DataType.email);
-  final formData = FormData(
-    id: 'formId',
-    title: 'title',
-    components: [
-      FormComponent<EmailDataEntity>(
-        property: 'Property',
-        data: EmailDataEntity(),
-        field: field,
-        required: true,
-      )
-    ],
-    links: {ApptiveLinkType.submit: action},
-    fields: [field],
-  );
+  FormData formData({bool required = true}) => FormData(
+        id: 'formId',
+        title: 'title',
+        components: [
+          FormComponent<EmailDataEntity>(
+            property: 'Property',
+            data: EmailDataEntity(),
+            field: field,
+            required: required,
+          )
+        ],
+        links: {ApptiveLinkType.submit: action},
+        fields: [field],
+      );
   final formDataPrefilled = FormData(
     id: 'formId',
     title: 'title',
@@ -60,7 +60,7 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridFormData(
-          formData: formData,
+          formData: formData(),
         ),
       );
 
@@ -100,7 +100,7 @@ void main() {
       final target = TestApp(
         client: client,
         child: ApptiveGridFormData(
-          formData: formData,
+          formData: formData(),
         ),
       );
 
@@ -125,13 +125,13 @@ void main() {
   });
 
   group('submit', () {
-    testWidgets('submit sends correct data', (tester) async {
+    testWidgets('submit sends filled data', (tester) async {
       const emailInput = 'text.text@text.text';
 
       final target = TestApp(
         client: client,
         child: ApptiveGridFormData(
-          formData: formData,
+          formData: formData(),
         ),
       );
 
@@ -156,6 +156,36 @@ void main() {
               if (formData is FormData) {
                 return (formData.components!.first.data.value as String?) ==
                     emailInput;
+              } else {
+                return false;
+              }
+            }),
+          ),
+        ),
+      ).called(1);
+    });
+    testWidgets('submit sends empty data', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData(required: false),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ActionButton));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => client.submitFormWithProgress(
+          action,
+          any(
+            that: predicate((formData) {
+              if (formData is FormData) {
+                return (formData.components!.first.data.value as String?) ==
+                    null;
               } else {
                 return false;
               }
