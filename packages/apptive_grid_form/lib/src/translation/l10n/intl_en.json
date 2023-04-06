@@ -24,5 +24,6 @@
     "invalidEmail": "Invalid email",
     "clear": "Clear",
     "save": "Save",
-    "signHere": "Sign here"
+    "signHere": "Sign here",
+    "missingCountryCode": "International code is required (e.g. +49)"
 }

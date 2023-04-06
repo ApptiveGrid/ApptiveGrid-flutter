@@ -41,6 +41,9 @@ class _PhoneNumberFormWidgetState extends State<PhoneNumberFormWidget>
     super.dispose();
   }
 
+  final _strictRegex = RegExp(r'^\+[\d]+$');
+  final _inputRegex = RegExp(r'^\+*[\d]*$');
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -50,13 +53,17 @@ class _PhoneNumberFormWidgetState extends State<PhoneNumberFormWidget>
         if (widget.component.required && (input == null || input.isEmpty)) {
           return ApptiveGridLocalization.of(context)!
               .fieldIsRequired(widget.component.property);
+        } else if (input != null &&
+            input.isNotEmpty &&
+            !_strictRegex.hasMatch(input)) {
+          return ApptiveGridLocalization.of(context)!.missingCountryCode;
         } else {
           return null;
         }
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'^\+*[\d]*')),
+        FilteringTextInputFormatter.allow(_inputRegex),
       ],
       minLines: 1,
       maxLines: 1,

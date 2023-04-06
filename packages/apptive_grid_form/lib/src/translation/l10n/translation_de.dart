@@ -63,4 +63,7 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get save => "Speichern";
   @override
   String get signHere => "Hier unterschreiben";
+  @override
+  String get missingCountryCode =>
+      "Eine Ländervorwahl wird erwartet (z.B. +49)";
 }
