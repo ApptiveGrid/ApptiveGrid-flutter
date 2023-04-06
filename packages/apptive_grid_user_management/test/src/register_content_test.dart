@@ -107,6 +107,89 @@ void main() {
       ).called(1);
     });
 
+    testWidgets('Keyboard actions', (tester) async {
+      final client = MockApptiveGridUserManagementClient();
+
+      const firstName = 'Amelie';
+      const lastName = 'Testing';
+      const email = 'email@2denker.de';
+      const password = 'Sup3rStrongPassword!';
+
+      when(
+        () => client.register(
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+        ),
+      ).thenAnswer((_) async => Response('body', 200));
+      when(() => client.group).thenReturn('Test Group');
+
+      final target = MaterialApp(
+        home: Material(
+          child: StubUserManagement(
+            client: client,
+            child: const SingleChildScrollView(child: RegisterContent()),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      await tester.scrollUntilVisible(
+        find.textFormFieldWithLabel('First Name'),
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.textFormFieldWithLabel('First Name'));
+      await tester.pumpAndSettle();
+
+      tester.testTextInput.enterText(firstName);
+      await tester.pumpAndSettle();
+
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      await tester.pumpAndSettle();
+
+      tester.testTextInput.enterText(lastName);
+      await tester.pumpAndSettle();
+
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      await tester.pumpAndSettle();
+
+      tester.testTextInput.enterText(email);
+      await tester.pumpAndSettle();
+
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      await tester.pumpAndSettle();
+
+      tester.testTextInput.enterText(password);
+      await tester.pumpAndSettle();
+
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      await tester.pumpAndSettle();
+
+      tester.testTextInput.enterText(password);
+      await tester.pumpAndSettle();
+
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+
+      verify(
+        () => client.register(
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+        ),
+      ).called(1);
+    });
+
     group('Validate Inputs', () {
       testWidgets('Empty Values', (tester) async {
         final client = MockApptiveGridUserManagementClient();
