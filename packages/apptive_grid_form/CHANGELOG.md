@@ -1,3 +1,8 @@
+## 1.1.4
+
+ - **FIX**: Enforce country codes for phone numbers in forms (#105).
+ - **FIX**: Empty non-required email fields accept empty inputs (#104).
+
 ## 1.1.2
 
  - **FIX**: Adjust input parsing for the currency form field.

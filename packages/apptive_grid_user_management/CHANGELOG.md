@@ -1,3 +1,7 @@
+## 1.3.0
+
+ - **FEAT**: Add keyboard actions to user component (#103).
+
 ## 1.1.2
 
  - Update a dependency to the latest release.

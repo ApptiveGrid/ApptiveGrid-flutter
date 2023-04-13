@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-04-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_form` - `v1.1.4`](#apptive_grid_form---v114)
+ - [`apptive_grid_user_management` - `v1.3.0`](#apptive_grid_user_management---v130)
+
+---
+
+#### `apptive_grid_form` - `v1.1.4`
+
+ - **FIX**: Enforce country codes for phone numbers in forms (#105).
+ - **FIX**: Empty non-required email fields accept empty inputs (#104).
+
+#### `apptive_grid_user_management` - `v1.3.0`
+
+ - **FEAT**: Add keyboard actions to user component (#103).
+
+
 ## 2023-03-31
 
 ### Changes
