@@ -92,7 +92,9 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
       return error;
     });
 
-    if (confirmResponse != null && confirmResponse.statusCode < 400) {
+    if (confirmResponse != null &&
+        (confirmResponse.statusCode < 400 ||
+            (confirmResponse.body.startsWith('No registration found')))) {
       final loggedIn = await client?.loginAfterConfirmation() ?? false;
       widget.confirmAccount.call(loggedIn);
     }
