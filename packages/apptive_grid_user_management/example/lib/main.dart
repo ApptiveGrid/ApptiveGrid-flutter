@@ -43,18 +43,22 @@ class MyApp extends StatelessWidget {
             onAccountConfirmed: (loggedIn) {
               // Account was confirmed
               // go to login screen if [loggedIn] is false
-              ScaffoldMessenger.of(context).showSnackBar(
+              ScaffoldMessenger.of(_navigatorKey.currentContext!).showSnackBar(
                 SnackBar(
                   content: Text('Account Confirmed. LoggedIn: $loggedIn'),
                 ),
               );
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (_) {
-                    return const AccountPage();
-                  },
-                ),
-              );
+              if (loggedIn) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return const AccountPage();
+                    },
+                  ),
+                );
+              } else {
+                _navigatorKey.currentState?.pop();
+              }
             },
             resetPasswordPrompt: (resetPasswordWidget) {
               // Show [resetPasswordWidget] to allow Users to set a new password
