@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-04-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_user_management` - `v1.3.1`](#apptive_grid_user_management---v131)
+
+---
+
+#### `apptive_grid_user_management` - `v1.3.1`
+
+ - **FIX**: Handle Confirming already confirmed registration (#106).
+
+
 ## 2023-04-13
 
 ### Changes

@@ -1,3 +1,7 @@
+## 1.3.1
+
+ - **FIX**: Handle Confirming already confirmed registration (#106).
+
 ## 1.3.0
 
  - **FEAT**: Add keyboard actions to user component (#103).
