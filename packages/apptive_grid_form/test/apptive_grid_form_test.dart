@@ -180,6 +180,48 @@ void main() {
     expect(result, equals(form));
   });
 
+  testWidgets('OnCreated gets called', (tester) async {
+    final completer = Completer<Uri>();
+    final target = TestApp(
+      client: client,
+      child: ApptiveGridForm(
+        uri: Uri.parse('/api/a/form'),
+        onCreated: (uri) => completer.complete(uri),
+      ),
+    );
+    final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+    final formData = FormData(
+      id: 'formId',
+      name: 'Form Name',
+      title: 'Form Title',
+      components: [],
+      links: {ApptiveLinkType.submit: action},
+      fields: [],
+    );
+
+    final createdUri = Uri.parse('/api/a/created');
+
+    when(
+      () => client.loadForm(uri: Uri.parse('/api/a/form')),
+    ).thenAnswer((realInvocation) async => formData);
+    when(() => client.submitFormWithProgress(action, formData)).thenAnswer(
+      (_) => Stream.value(
+        SubmitCompleteProgressEvent(
+          http.Response('Created ${createdUri.toString()}', 200),
+        ),
+      ),
+    );
+
+    await tester.pumpWidget(target);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ActionButton));
+    await tester.pumpAndSettle();
+
+    final parsedUri = await completer.future;
+
+    expect(parsedUri, equals(createdUri));
+  });
+
   group('Loading', () {
     testWidgets('Initial shows Loading', (tester) async {
       final target = TestApp(
