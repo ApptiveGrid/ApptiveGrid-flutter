@@ -90,6 +90,9 @@ class ApptiveGridForm extends StatefulWidget {
   /// This functionality can be used to do a custom Widget or Transition
   final Future<bool> Function(ApptiveLink, FormData)? onSavedToPending;
 
+  /// Callback after Form submission returns a link to a newly created entity, if available
+  ///
+  /// This can be used to access the newly created entity via the uri.
   final void Function(Uri)? onCreated;
 
   /// Callback if an Error occurs
@@ -273,6 +276,9 @@ class ApptiveGridFormData extends StatefulWidget {
   /// This functionality can be used to do a custom Widget or Transition
   final Future<bool> Function(ApptiveLink, FormData)? onSavedToPending;
 
+  /// Callback after Form submission returns a link to a newly created entity, if available
+  ///
+  /// This can be used to access the newly created entity via the uri.
   final void Function(Uri)? onCreated;
 
   /// Callback if an Error occurs
