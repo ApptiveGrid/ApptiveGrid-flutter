@@ -30,6 +30,7 @@ class ApptiveGridForm extends StatefulWidget {
     this.onFormLoaded,
     this.onActionSuccess,
     this.onSavedToPending,
+    this.onCreated,
     this.onError,
     this.scrollController,
     this.buttonAlignment = Alignment.center,
@@ -88,6 +89,11 @@ class ApptiveGridForm extends StatefulWidget {
   /// If this returns false the default saved for later screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
   final Future<bool> Function(ApptiveLink, FormData)? onSavedToPending;
+
+  /// Callback after Form submission returns a link to a newly created entity, if available
+  ///
+  /// This can be used to access the newly created entity via the uri.
+  final void Function(Uri)? onCreated;
 
   /// Callback if an Error occurs
   ///
@@ -154,6 +160,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       hideDescription: widget.hideDescription,
       onActionSuccess: widget.onActionSuccess,
       onSavedToPending: widget.onSavedToPending,
+      onCreated: widget.onCreated,
       onError: widget.onError,
       triggerReload: () => loadForm(resetData: false),
       scrollController: widget.scrollController,
@@ -220,6 +227,7 @@ class ApptiveGridFormData extends StatefulWidget {
     this.hideDescription = false,
     this.onActionSuccess,
     this.onSavedToPending,
+    this.onCreated,
     this.onError,
     this.triggerReload,
     this.scrollController,
@@ -267,6 +275,11 @@ class ApptiveGridFormData extends StatefulWidget {
   /// If this returns false the default saved for later screen is not shown.
   /// This functionality can be used to do a custom Widget or Transition
   final Future<bool> Function(ApptiveLink, FormData)? onSavedToPending;
+
+  /// Callback after Form submission returns a link to a newly created entity, if available
+  ///
+  /// This can be used to access the newly created entity via the uri.
+  final void Function(Uri)? onCreated;
 
   /// Callback if an Error occurs
   ///
@@ -692,6 +705,10 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           } else if (event is SubmitCompleteProgressEvent) {
             final response = event.response;
             if (response != null && response.statusCode < 400) {
+              final createdUri = _parseCreatedBody(response: response);
+              if (createdUri != null) {
+                widget.onCreated?.call(createdUri);
+              }
               if (await widget.onActionSuccess?.call(link, _formData!) !=
                   false) {
                 if (_formData?.properties?.reloadAfterSubmit == true) {
@@ -742,6 +759,16 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       setState(() {
         _error = error;
       });
+    }
+  }
+
+  Uri? _parseCreatedBody({required http.Response response}) {
+    try {
+      return Uri.parse(
+        response.body.replaceFirstMapped('Created ', (match) => '').trim(),
+      );
+    } catch (e) {
+      return null;
     }
   }
 }
