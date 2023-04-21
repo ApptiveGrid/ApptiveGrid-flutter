@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-04-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_form` - `v1.2.0`](#apptive_grid_form---v120)
+
+---
+
+#### `apptive_grid_form` - `v1.2.0`
+
+ - **FEAT**: Add callback for a newly created entity via form.
+
+
 ## 2023-04-17
 
 ### Changes

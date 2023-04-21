@@ -1,3 +1,7 @@
+## 1.2.0
+
+ - **FEAT**: Add callback for a newly created entity via form.
+
 ## 1.1.4
 
  - **FIX**: Enforce country codes for phone numbers in forms (#105).
