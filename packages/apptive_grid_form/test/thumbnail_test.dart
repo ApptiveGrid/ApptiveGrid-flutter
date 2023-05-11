@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_form/src/widgets/attachment/thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
+import 'common.dart';
 import 'util/mocktail_custom_image_network.dart';
 
 void main() {
@@ -200,7 +203,7 @@ void main() {
 
         final imageUrl =
             ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
-                    .pictureProvider as NetworkPicture)
+                    .bytesLoader as SvgNetworkLoader)
                 .url;
         expect(imageUrl, '/uri');
       });
@@ -230,7 +233,7 @@ void main() {
 
         final imageUrl =
             ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
-                    .pictureProvider as NetworkPicture)
+                    .bytesLoader as SvgNetworkLoader)
                 .url;
         expect(imageUrl, '/largeThumbnailUri');
       });
@@ -261,13 +264,16 @@ void main() {
 
         final imageUrl =
             ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
-                    .pictureProvider as NetworkPicture)
+                    .bytesLoader as SvgNetworkLoader)
                 .url;
         expect(imageUrl, '/smallThumbnailUri');
       });
     });
 
     group('Add Attachment', () {
+      final bytes = base64Decode(
+        '''PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNyIgaGVpZ2h0PSIxNyI+CjxwYXRoIGZpbGw9IiMwRkZGMDAiIHN0cm9rZT0iIzBGMEYwMCIgc3Ryb2tlLXdpZHRoPSIwIiBkPSJtNCw0djloOVY0eiIvPgo8L3N2Zz4=''',
+      );
       final attachment = Attachment(
         name: 'svg',
         url: Uri(path: '/uri'),
@@ -276,33 +282,37 @@ void main() {
         type: 'image/svg',
       );
       testWidgets('Shows image from file', (tester) async {
-        final target = MaterialApp(
-          home: SizedBox(
-            width: 70,
-            height: 70,
-            child: Thumbnail(
-              attachment: attachment,
-              addAttachmentAction: AddAttachmentAction(
+        final mockFile = MockFile();
+        when(() => mockFile.readAsBytesSync()).thenReturn(bytes);
+        await IOOverrides.runZoned(() async {
+          final target = MaterialApp(
+            home: SizedBox(
+              width: 70,
+              height: 70,
+              child: Thumbnail(
                 attachment: attachment,
-                path: '/attachmentPath',
+                addAttachmentAction: AddAttachmentAction(
+                  attachment: attachment,
+                  path: '/attachmentPath',
+                ),
               ),
             ),
-          ),
-        );
+          );
 
-        await tester.pumpWidget(target);
+          await tester.pumpWidget(target);
 
-        final file =
-            ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
-                    .pictureProvider as FilePicture)
-                .file;
-        expect(file.path, '/attachmentPath');
+          final file =
+              ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
+                      .bytesLoader as SvgFileLoader)
+                  .file;
+          expect(file.path, '/attachmentPath');
+        }, createFile: (dir) {
+          when(() => mockFile.path).thenReturn(dir);
+          return mockFile;
+        });
       });
 
       testWidgets('Shows image from memory', (tester) async {
-        final bytes = base64Decode(
-          '''PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNyI+CjxwYXRoIGZpbGw9IiMwRkZGMDAiIHN0cm9rZT0iIzBGMEYwMCIgc3Ryb2tlLXdpZHRoPSIwIiBkPSJtNCw0djloOVY0eiIvPgo8L3N2Zz4=''',
-        );
         final target = MaterialApp(
           home: SizedBox(
             width: 70,
@@ -321,7 +331,7 @@ void main() {
 
         final imageBytes =
             ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
-                    .pictureProvider as MemoryPicture)
+                    .bytesLoader as SvgBytesLoader)
                 .bytes;
         expect(imageBytes, bytes);
       });

@@ -4,6 +4,7 @@ import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -192,7 +193,9 @@ void main() {
     );
   });
 
-  testWidgets('Changing Time keeps Date', (tester) async {
+  testGoldens('Changing Time keeps Date', (tester) async {
+    // Without loading the AppFonts the Time Select Dialog overflows
+    await loadAppFonts();
     const locale = Locale('de');
     final date = DateTime(2021, 11, 5, 16, 32);
     final newDate = DateTime(2021, 11, 5, 23, 32);
@@ -232,7 +235,7 @@ void main() {
         .tap(find.ancestor(of: timeFinder, matching: find.byType(InkWell)));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(Icons.keyboard));
+    await tester.tap(find.byIcon(Icons.keyboard_outlined));
     await tester.pumpAndSettle();
     final hourTextFieldFinder = find
         .descendant(
@@ -246,6 +249,7 @@ void main() {
         .first;
     await tester.enterText(hourTextFieldFinder, '11');
     await tester.pumpAndSettle();
+
     await tester.tap(
       find.text('OK'),
     );
