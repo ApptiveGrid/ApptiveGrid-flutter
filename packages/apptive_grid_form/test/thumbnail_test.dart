@@ -284,32 +284,35 @@ void main() {
       testWidgets('Shows image from file', (tester) async {
         final mockFile = MockFile();
         when(() => mockFile.readAsBytesSync()).thenReturn(bytes);
-        await IOOverrides.runZoned(() async {
-          final target = MaterialApp(
-            home: SizedBox(
-              width: 70,
-              height: 70,
-              child: Thumbnail(
-                attachment: attachment,
-                addAttachmentAction: AddAttachmentAction(
+        await IOOverrides.runZoned(
+          () async {
+            final target = MaterialApp(
+              home: SizedBox(
+                width: 70,
+                height: 70,
+                child: Thumbnail(
                   attachment: attachment,
-                  path: '/attachmentPath',
+                  addAttachmentAction: AddAttachmentAction(
+                    attachment: attachment,
+                    path: '/attachmentPath',
+                  ),
                 ),
               ),
-            ),
-          );
+            );
 
-          await tester.pumpWidget(target);
+            await tester.pumpWidget(target);
 
-          final file =
-              ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
-                      .bytesLoader as SvgFileLoader)
-                  .file;
-          expect(file.path, '/attachmentPath');
-        }, createFile: (dir) {
-          when(() => mockFile.path).thenReturn(dir);
-          return mockFile;
-        });
+            final file =
+                ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
+                        .bytesLoader as SvgFileLoader)
+                    .file;
+            expect(file.path, '/attachmentPath');
+          },
+          createFile: (dir) {
+            when(() => mockFile.path).thenReturn(dir);
+            return mockFile;
+          },
+        );
       });
 
       testWidgets('Shows image from memory', (tester) async {

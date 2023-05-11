@@ -82,15 +82,17 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
               child: _signatureController.isFilled || _loadedSvg != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Builder(builder: (_) {
-                        late String svg;
-                        if (_signatureController.isFilled) {
-                          svg = _signatureController.toSvg(fit: true)!;
-                        } else {
-                          svg = _loadedSvg!;
-                        }
-                        return SvgPicture.string(svg);
-                      }),
+                      child: Builder(
+                        builder: (_) {
+                          late String svg;
+                          if (_signatureController.isFilled) {
+                            svg = _signatureController.toSvg(fit: true)!;
+                          } else {
+                            svg = _loadedSvg!;
+                          }
+                          return SvgPicture.string(svg);
+                        },
+                      ),
                     )
                   : Center(
                       child: _isLoadingPreviousValue
