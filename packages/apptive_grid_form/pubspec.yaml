@@ -10,23 +10,23 @@ environment:
 
 dependencies:
   apptive_grid_core: ^1.3.0
-  file_picker: ^5.2.2
+  file_picker: ^5.2.11
   flutter:
     sdk: flutter
-  flutter_svg: ^1.1.6
-  flutter_typeahead: ^4.1.1
+  flutter_svg: ^2.0.5
+  flutter_typeahead: ^4.3.8
   geolocator: ^9.0.2
-  google_maps_flutter: ^2.2.1
-  google_maps_flutter_platform_interface: ^2.2.4
-  hand_signature: ^2.3.0+1
-  http: ^0.13.5
-  image_picker: ^0.8.6
-  intl: ^0.17.0
+  google_maps_flutter: ^2.2.6
+  google_maps_flutter_platform_interface: ^2.2.6
+  hand_signature: ^3.0.1
+  http: ^0.13.6
+  image_picker: ^0.8.7+4
+  intl: ^0.18.0
   linked_scroll_controller: ^0.2.0
-  lottie: ^2.0.0
+  lottie: ^2.3.2
   permission_handler: ^10.2.0
   permission_handler_platform_interface: ^3.9.0
-  provider: ^6.0.4
+  provider: ^6.0.5
   universal_file: ^1.0.0
   universal_platform: ^1.0.0+1
 
@@ -34,13 +34,14 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   flutter_localizations:
     sdk: flutter
-  image_picker_platform_interface: ^2.6.2
+  image_picker_platform_interface: ^2.6.3
   pedantic: ^1.11.1
   mocktail: ^0.3.0
   mocktail_image_network: ^0.3.1
-  plugin_platform_interface: ^2.1.3
+  plugin_platform_interface: ^2.1.4
   flutter_test:
     sdk: flutter
+  golden_toolkit:
 
 flutter:
   assets:

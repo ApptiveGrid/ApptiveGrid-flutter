@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
                     'Spaces',
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
-                ...((_user?.embeddedSpaces) ?? []).map(
+                ...(_user?.embeddedSpaces ?? []).map(
                   (e) => _SpaceSection(
                     uri: Uri.parse(
                       e.links[ApptiveLinkType.self]!.uri.toString(),
