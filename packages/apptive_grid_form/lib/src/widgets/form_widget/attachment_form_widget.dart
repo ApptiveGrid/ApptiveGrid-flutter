@@ -63,7 +63,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (widget.component.data.value != null)
-                  ...(widget.component.data.value!.map(
+                  ...widget.component.data.value!.map(
                     (attachment) {
                       final action = attachmentManager
                           .formData?.attachmentActions[attachment];
@@ -94,7 +94,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
                         ],
                       );
                     },
-                  )).toList(),
+                  ).toList(),
                 AddAttachmentButton(
                   onAttachmentsAdded: (newAttachments) =>
                       _attachmentsAdded(newAttachments, formState),

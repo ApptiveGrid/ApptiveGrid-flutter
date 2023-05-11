@@ -4,7 +4,7 @@ import 'package:apptive_grid_form/src/widgets/form_widget/attachment_manager.dar
 import 'package:apptive_grid_form/src/widgets/form_widget/form_widget_helpers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/parser.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hand_signature/signature.dart';
 import 'package:provider/provider.dart';
 
@@ -82,11 +82,16 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
               child: _signatureController.isFilled || _loadedSvg != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: HandSignatureView.svg(
-                        data: _signatureController.toSvg(
-                              wrapSignature: true,
-                            ) ??
-                            _loadedSvg,
+                      child: Builder(
+                        builder: (_) {
+                          late String svg;
+                          if (_signatureController.isFilled) {
+                            svg = _signatureController.toSvg(fit: true)!;
+                          } else {
+                            svg = _loadedSvg!;
+                          }
+                          return SvgPicture.string(svg);
+                        },
                       ),
                     )
                   : Center(
@@ -171,7 +176,7 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
       attachmentManager.removeAttachment(widget.component.data.value!);
     }
 
-    final svgString = _signatureController.toSvg(wrapSignature: true);
+    final svgString = _signatureController.toSvg(fit: true);
     if (svgString != null) {
       final client = ApptiveGrid.getClient(context, listen: false);
 
@@ -193,10 +198,13 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
     final client = ApptiveGrid.getClient(context, listen: false).httpClient;
     try {
       final response = await client.get(signature.url);
-      final svgString = String.fromCharCodes(response.bodyBytes);
-      await SvgParser().parse(svgString);
+      if (response.statusCode >= 400) {
+        throw response;
+      }
+      final rawString = String.fromCharCodes(response.bodyBytes);
+      final parsedSvg = SvgStringLoader(rawString).provideSvg(null);
       setState(() {
-        _loadedSvg = svgString;
+        _loadedSvg = parsedSvg;
       });
     } catch (_) {
       widget.component.data.value = null;

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:apptive_grid_core/src/network/attachment_processor.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
@@ -41,6 +43,8 @@ class MockPermissionHandler extends Mock
 class MockMapPlatform extends Mock
     with MockPlatformInterfaceMixin
     implements GoogleMapsFlutterPlatform {}
+
+class MockFile extends Mock implements File {}
 
 class TestApp extends StatelessWidget {
   const TestApp({

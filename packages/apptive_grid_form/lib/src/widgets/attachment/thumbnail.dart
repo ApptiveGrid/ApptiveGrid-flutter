@@ -27,22 +27,19 @@ class Thumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     // svg Pictures
     if (attachment.type.contains('svg')) {
-      late final PictureProvider pictureProvider;
+      late final BytesLoader pictureProvider;
       if (addAttachmentAction != null) {
         if (addAttachmentAction!.path != null) {
-          pictureProvider = FilePicture(
-            SvgPicture.svgByteDecoderBuilder,
+          pictureProvider = SvgFileLoader(
             File(addAttachmentAction!.path!),
           );
         } else {
-          pictureProvider = MemoryPicture(
-            SvgPicture.svgByteDecoderBuilder,
+          pictureProvider = SvgBytesLoader(
             addAttachmentAction!.byteData!,
           );
         }
       } else {
-        pictureProvider = NetworkPicture(
-          SvgPicture.svgByteDecoderBuilder,
+        pictureProvider = SvgNetworkLoader(
           (attachment.smallThumbnail ??
                   attachment.largeThumbnail ??
                   attachment.url)

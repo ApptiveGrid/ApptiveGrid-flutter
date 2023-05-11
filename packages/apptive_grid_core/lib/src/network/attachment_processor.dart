@@ -77,7 +77,7 @@ class AttachmentProcessor {
     Uri? smallThumbnail;
     Uri? largeThumbnail;
 
-    if (img.getDecoderForNamedImage(name) != null) {
+    if (img.findDecoderForNamedImage(name) != null) {
       smallThumbnail = _generateUri(config);
       largeThumbnail = _generateUri(config);
     }
@@ -286,8 +286,8 @@ class AttachmentProcessor {
           interpolation: img.Interpolation.average,
         );
         output = img.encodeNamedImage(
-          resized,
           '.$type',
+          resized,
         )!;
       } else {
         output = byteData;
