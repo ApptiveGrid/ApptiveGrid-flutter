@@ -1,3 +1,7 @@
+## 1.2.0
+
+ - **FEAT**: Upgrade Dependencies for Flutter 3.10 (#108).
+
 ## 1.1.0
 
  - **FEAT**: Add support for Gallery SView (#98).

@@ -1,6 +1,6 @@
 name: apptive_grid_user_management
 description: Package to add UserManagement through ApptiveGrid to a Flutter App. This provides Login/Register Widgets and options to confirm accounts
-version: 1.3.1
+version: 1.4.0
 homepage: https://www.apptivegrid.de
 repository: https://github.com/ApptiveGrid/apptive_grid_flutter/tree/main/packages/apptive_grid_user_management
 
@@ -9,7 +9,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  apptive_grid_core: ^1.3.0
+  apptive_grid_core: ^1.4.0
   flutter:
     sdk: flutter
   http: ^0.13.6

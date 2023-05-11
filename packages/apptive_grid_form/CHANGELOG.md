@@ -1,3 +1,8 @@
+## 1.3.0
+
+ - **FEAT**: Upgrade Dependencies for Flutter 3.10 (#108).
+ - **FEAT**: Add callback for a newly created entity via form.
+
 ## 1.2.0
 
  - **FEAT**: Add callback for a newly created entity via form.

@@ -1,3 +1,7 @@
+## 1.2.0
+
+ - **FEAT**: Upgrade Dependencies for Flutter 3.10 (#108).
+
 ## 1.1.2
 
  - Update a dependency to the latest release.

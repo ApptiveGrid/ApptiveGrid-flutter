@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-05-11
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_core` - `v1.4.0`](#apptive_grid_core---v140)
+ - [`apptive_grid_form` - `v1.3.0`](#apptive_grid_form---v130)
+ - [`apptive_grid_grid_builder` - `v1.2.0`](#apptive_grid_grid_builder---v120)
+ - [`apptive_grid_theme` - `v1.2.0`](#apptive_grid_theme---v120)
+ - [`apptive_grid_user_management` - `v1.4.0`](#apptive_grid_user_management---v140)
+
+---
+
+#### `apptive_grid_core` - `v1.4.0`
+
+ - **FEAT**: Upgrade Dependencies for Flutter 3.10 (#108).
+
+#### `apptive_grid_form` - `v1.3.0`
+
+ - **FEAT**: Upgrade Dependencies for Flutter 3.10 (#108).
+ - **FEAT**: Add callback for a newly created entity via form.
+
+#### `apptive_grid_grid_builder` - `v1.2.0`
+
+ - **FEAT**: Upgrade Dependencies for Flutter 3.10 (#108).
+
+#### `apptive_grid_theme` - `v1.2.0`
+
+ - **FEAT**: Upgrade Dependencies for Flutter 3.10 (#108).
+
+#### `apptive_grid_user_management` - `v1.4.0`
+
+ - **FEAT**: Upgrade Dependencies for Flutter 3.10 (#108).
+
+
 ## 2023-04-21
 
 ### Changes

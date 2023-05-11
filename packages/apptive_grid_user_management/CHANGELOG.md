@@ -1,3 +1,7 @@
+## 1.4.0
+
+ - **FEAT**: Upgrade Dependencies for Flutter 3.10 (#108).
+
 ## 1.3.1
 
  - **FIX**: Handle Confirming already confirmed registration (#106).
