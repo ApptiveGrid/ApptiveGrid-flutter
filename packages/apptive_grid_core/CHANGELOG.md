@@ -1,3 +1,7 @@
+## 1.5.0
+
+ - **FEAT**: Support Space Color and Icon (#109).
+
 ## 1.4.0
 
  - **FEAT**: Upgrade Dependencies for Flutter 3.10 (#108).
