@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter/foundation.dart' as f;
 
@@ -12,6 +14,9 @@ class Space {
     this.embeddedGrids,
     this.key,
     this.category,
+    this.color,
+    this.icon,
+    this.iconSet,
   });
 
   /// Deserializes [json] into a [Space] Object
@@ -29,6 +34,14 @@ class Space {
             .toList(),
         key: json['key'],
         category: json['belongsTo'],
+        color: json['color'] != null
+            ? Color(
+                int.parse(json['color'].substring(1, 7), radix: 16) +
+                    0xFF000000,
+              )
+            : null,
+        icon: json['icon'],
+        iconSet: json['iconset'],
       );
     }
   }
@@ -51,6 +64,15 @@ class Space {
   /// A List of [Grid]s that are embedded in this Space
   final List<Grid>? embeddedGrids;
 
+  /// Color of this space
+  final Color? color;
+
+  /// Icon name of this space. This should also take into account [iconSet] in order to find the correct Icon to display
+  final String? icon;
+
+  /// IconSet that [icon] is from
+  final String? iconSet;
+
   /// Serializes this [Space] into a json Map
   Map<String, dynamic> toJson() {
     final jsonMap = {
@@ -60,6 +82,11 @@ class Space {
       '_links': links.toJson(),
       if (key != null) 'key': key,
       if (category != null) 'belongsTo': category,
+      if (color != null)
+        'color':
+            '#${color!.red.toRadixString(16)}${color!.green.toRadixString(16)}${color!.blue.toRadixString(16)}',
+      if (icon != null) 'icon': icon,
+      if (iconSet != null) 'iconset': iconSet,
     };
 
     if (embeddedGrids != null) {
@@ -75,7 +102,7 @@ class Space {
 
   @override
   String toString() {
-    return 'Space(name: $name, id: $id, key: $key, category: $category, links: $links, embeddedGrids: $embeddedGrids)';
+    return 'Space(name: $name, id: $id, key: $key, category: $category, color: $color, icon: $icon, iconSet: $iconSet, links: $links, embeddedGrids: $embeddedGrids)';
   }
 
   @override
@@ -86,7 +113,10 @@ class Space {
         key == other.key &&
         category == other.category &&
         f.mapEquals(links, other.links) &&
-        f.listEquals(embeddedGrids, other.embeddedGrids);
+        f.listEquals(embeddedGrids, other.embeddedGrids) &&
+        color == other.color &&
+        iconSet == other.iconSet &&
+        icon == other.icon;
   }
 
   @override
@@ -97,6 +127,9 @@ class Space {
         category,
         links,
         embeddedGrids,
+        color,
+        iconSet,
+        icon,
       );
 }
 
@@ -113,6 +146,9 @@ class SharedSpace extends Space {
     super.embeddedGrids,
     super.key,
     super.category,
+    super.color,
+    super.icon,
+    super.iconSet,
   });
 
   /// Deserializes [json] into a [Space] Object
@@ -127,6 +163,13 @@ class SharedSpace extends Space {
           .toList(),
       key: json['key'],
       category: json['belongsTo'],
+      color: json['color'] != null
+          ? Color(
+              int.parse(json['color'].substring(1, 7), radix: 16) + 0xFF000000,
+            )
+          : null,
+      icon: json['icon'],
+      iconSet: json['iconset'],
     );
   }
 
@@ -143,29 +186,17 @@ class SharedSpace extends Space {
 
   @override
   String toString() {
-    return 'SharedSpace(name: $name, id: $id, key: $key, category: $category, realSpace: ${realSpace.toString()}, links: $links, embeddedGrids: $embeddedGrids)';
+    return 'SharedSpace(name: $name, id: $id, key: $key, category: $category, realSpace: ${realSpace.toString()}, color: $color, icon: $icon, iconSet: $iconSet, links: $links, embeddedGrids: $embeddedGrids)';
   }
 
   @override
   bool operator ==(Object other) {
-    return other is SharedSpace &&
-        id == other.id &&
-        name == other.name &&
-        realSpace == other.realSpace &&
-        key == other.key &&
-        category == other.category &&
-        f.mapEquals(links, other.links) &&
-        f.listEquals(embeddedGrids, other.embeddedGrids);
+    return other is SharedSpace && super == other;
   }
 
   @override
   int get hashCode => Object.hash(
-        id,
-        name,
         realSpace,
-        key,
-        category,
-        links,
-        embeddedGrids,
+        super.hashCode,
       );
 }
