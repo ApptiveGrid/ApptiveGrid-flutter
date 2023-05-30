@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -58,6 +60,73 @@ void main() {
         expect(doubleParse, equals(jsonSpace));
         expect(jsonSpace.key, equals('key'));
         expect(jsonSpace.category, equals('belongsTo'));
+      });
+
+      group('Color and Icon', () {
+        test('Own Space', () {
+          final json = {
+            "type": "space",
+            "iconset": "mdi",
+            "icon": "airplane",
+            "name": "Checking",
+            "id": "spaceId",
+            "key": null,
+            "color": "#6D16C0",
+            "belongsTo": null,
+            "_links": <String, dynamic>{}
+          };
+
+          final space = Space.fromJson(json);
+
+          final directSpace = Space(
+            id: 'spaceId',
+            name: 'Checking',
+            links: {},
+            iconSet: 'mdi',
+            icon: 'airplane',
+            color: const Color(0xFF6d16c0),
+          );
+
+          expect(space, equals(directSpace));
+          expect(space.color, equals(directSpace.color));
+          expect(space.icon, equals(directSpace.icon));
+          expect(space.iconSet, equals(directSpace.iconSet));
+
+          expect(Space.fromJson(space.toJson()), equals(directSpace));
+        });
+        test('Shared Space', () {
+          final json = {
+            "realSpace": "/api/users/user/spaces/space",
+            "type": "sharedSpace",
+            "iconset": "mdi",
+            "icon": "airplane",
+            "name": "Checking",
+            "id": "spaceId",
+            "key": null,
+            "color": "#6D16C0",
+            "belongsTo": null,
+            "_links": <String, dynamic>{}
+          };
+
+          final space = Space.fromJson(json);
+
+          final directSpace = SharedSpace(
+            realSpace: Uri.parse('/api/users/user/spaces/space'),
+            id: 'spaceId',
+            name: 'Checking',
+            links: {},
+            iconSet: 'mdi',
+            icon: 'airplane',
+            color: const Color(0xFF6d16c0),
+          );
+
+          expect(space, equals(directSpace));
+          expect(space.color, equals(directSpace.color));
+          expect(space.icon, equals(directSpace.icon));
+          expect(space.iconSet, equals(directSpace.iconSet));
+
+          expect(Space.fromJson(space.toJson()), equals(directSpace));
+        });
       });
     });
 
@@ -148,7 +217,19 @@ void main() {
 
       expect(
         space.hashCode,
-        equals(Object.hash('id', 'name', null, null, space.links, null)),
+        equals(
+          Object.hash(
+            'id',
+            'name',
+            null,
+            null,
+            space.links,
+            null,
+            null,
+            null,
+            null,
+          ),
+        ),
       );
     });
 
@@ -158,7 +239,7 @@ void main() {
       expect(
         space.toString(),
         equals(
-          'Space(name: name, id: id, key: null, category: null, links: {}, embeddedGrids: null)',
+          'Space(name: name, id: id, key: null, category: null, color: null, icon: null, iconSet: null, links: {}, embeddedGrids: null)',
         ),
       );
     });
@@ -312,24 +393,25 @@ void main() {
       });
     });
     test('Hashcode', () {
-      final space = SharedSpace(
+      final sharedSpace = SharedSpace(
         realSpace: Uri(path: 'realSpace'),
         id: 'id',
         name: 'name',
         links: {},
       );
 
+      final space = Space(
+        id: sharedSpace.id,
+        name: sharedSpace.name,
+        links: sharedSpace.links,
+      );
+
       expect(
-        space.hashCode,
+        sharedSpace.hashCode,
         equals(
           Object.hash(
-            'id',
-            'name',
             Uri(path: 'realSpace'),
-            null,
-            null,
-            space.links,
-            null,
+            space.hashCode,
           ),
         ),
       );
@@ -346,7 +428,7 @@ void main() {
       expect(
         space.toString(),
         equals(
-          'SharedSpace(name: name, id: id, key: null, category: null, realSpace: realSpace, links: {}, embeddedGrids: null)',
+          'SharedSpace(name: name, id: id, key: null, category: null, realSpace: realSpace, color: null, icon: null, iconSet: null, links: {}, embeddedGrids: null)',
         ),
       );
     });
