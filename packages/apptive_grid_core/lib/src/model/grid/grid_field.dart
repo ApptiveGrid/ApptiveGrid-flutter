@@ -32,6 +32,20 @@ class GridField {
         links: links,
         currency: json['type']['currency'],
       );
+    }
+    if (type == DataType.lookUp) {
+      return LookUpGridField(
+        id: id,
+        name: name,
+        key: key,
+        schema: schema,
+        links: links,
+        referenceField: Uri.parse(json['type']['referenceField']),
+        lookUpField: Uri.parse(json['type']['lookupField']),
+        lookUpType: DataType.values.firstWhere(
+          (type) => type.backendName == json['type']['lookupType'],
+        ),
+      );
     } else {
       return GridField(
         id: id,
@@ -142,5 +156,73 @@ class CurrencyGridField extends GridField {
           schema: schema,
         ),
         currency,
+      );
+}
+
+/// A [GridField] for [DataType.lookUp]
+class LookUpGridField extends GridField {
+  /// Creates a new [GridField] for [DataType.lookUp]
+  const LookUpGridField({
+    required super.id,
+    super.key,
+    required super.name,
+    super.links = const {},
+    super.schema,
+    required this.referenceField,
+    required this.lookUpField,
+    required this.lookUpType,
+  }) : super(
+          type: DataType.lookUp,
+        );
+
+  /// An uri pointing to the field that is used to look up
+  final Uri referenceField;
+
+  /// The field that is looked up
+  final Uri lookUpField;
+
+  /// The type of the looked up field
+  final DataType lookUpType;
+
+  @override
+  Map<String, dynamic> toJson() {
+    final json = super.toJson();
+    json['type'] = {
+      ...json['type'],
+      'referenceField': referenceField.toString(),
+      'lookupField': lookUpField.toString(),
+      'lookupType': lookUpType.backendName,
+    };
+    return json;
+  }
+
+  @override
+  String toString() =>
+      'LookUpGridField(id: $id, name: $name, key: $key, referenceField: ${referenceField.toString()}, lookupField: ${lookUpField.toString()}, lookupType: ${lookUpType.name})';
+
+  @override
+  bool operator ==(Object other) {
+    return other is LookUpGridField &&
+        referenceField == other.referenceField &&
+        lookUpField == other.lookUpField &&
+        lookUpType == other.lookUpType &&
+        id == other.id &&
+        name == other.name &&
+        f.mapEquals(links, other.links);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        GridField(
+          id: id,
+          name: name,
+          type: type,
+          key: key,
+          links: links,
+          schema: schema,
+        ),
+        referenceField,
+        lookUpField,
+        lookUpType,
       );
 }

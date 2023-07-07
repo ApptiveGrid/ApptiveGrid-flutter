@@ -99,6 +99,11 @@ abstract class DataEntity<T, S> with FilterableMixin {
         return SignatureDataEntity.fromJson(json);
       case DataType.createdAt:
         return DateTimeDataEntity.fromJson(json);
+      case DataType.lookUp:
+        return LookUpDataEntity.fromJson(
+          json,
+          lookedUpType: (field as LookUpGridField).lookUpType,
+        );
     }
   }
 }
@@ -538,4 +543,38 @@ class SignatureDataEntity extends DataEntity<Attachment, dynamic> {
 
   @override
   dynamic get schemaValue => value?.toJson();
+}
+
+/// [DataEntity] representing a LookUp
+class LookUpDataEntity extends DataEntity<DataEntity, dynamic> {
+  /// Create a new LookUpDataEntity
+  LookUpDataEntity([super.value]);
+
+  /// Creates a new LookUpDataEntity from a Json Response
+  factory LookUpDataEntity.fromJson(
+    dynamic jsonValue, {
+    required DataType lookedUpType,
+  }) {
+    // Create a Dummy Field to use to get the correct sub Entity
+    // Adding empty schema values for complex data types to not break parsing
+    final dummyField = GridField(
+      id: '',
+      name: '',
+      type: lookedUpType,
+      schema: {
+        'enum': <String>[],
+        'gridUri': '',
+        'items': {
+          'enum': <String>[],
+          'gridUri': '',
+        },
+      },
+    );
+    final lookedUpEntity =
+        DataEntity.fromJson(json: jsonValue, field: dummyField);
+    return LookUpDataEntity(lookedUpEntity);
+  }
+
+  @override
+  dynamic get schemaValue => value?.schemaValue;
 }
