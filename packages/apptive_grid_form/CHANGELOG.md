@@ -1,3 +1,7 @@
+## 1.4.0
+
+ - **FEAT**: Lookup DataType (#111).
+
 ## 1.3.1
 
  - Update a dependency to the latest release.

@@ -1,3 +1,7 @@
+## 1.6.0
+
+ - **FEAT**: Lookup DataType (#111).
+
 ## 1.5.0
 
  - **FEAT**: Support Space Color and Icon (#109).

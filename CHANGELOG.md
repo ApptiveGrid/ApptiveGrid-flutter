@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-07-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_core` - `v1.6.0`](#apptive_grid_core---v160)
+ - [`apptive_grid_form` - `v1.4.0`](#apptive_grid_form---v140)
+ - [`apptive_grid_user_management` - `v1.4.2`](#apptive_grid_user_management---v142)
+ - [`apptive_grid_grid_builder` - `v1.2.2`](#apptive_grid_grid_builder---v122)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `apptive_grid_user_management` - `v1.4.2`
+ - `apptive_grid_grid_builder` - `v1.2.2`
+
+---
+
+#### `apptive_grid_core` - `v1.6.0`
+
+ - **FEAT**: Lookup DataType (#111).
+
+#### `apptive_grid_form` - `v1.4.0`
+
+ - **FEAT**: Lookup DataType (#111).
+
+
 ## 2023-05-30
 
 ### Changes
