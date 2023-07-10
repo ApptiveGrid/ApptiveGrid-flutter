@@ -102,7 +102,7 @@ abstract class DataEntity<T, S> with FilterableMixin {
       case DataType.lookUp:
         return LookUpDataEntity.fromJson(
           json,
-          lookedUpType: (field as LookUpGridField).lookUpType,
+          lookedUpField: (field as LookUpGridField).lookedUpField,
         );
     }
   }
@@ -553,25 +553,10 @@ class LookUpDataEntity extends DataEntity<DataEntity, dynamic> {
   /// Creates a new LookUpDataEntity from a Json Response
   factory LookUpDataEntity.fromJson(
     dynamic jsonValue, {
-    required DataType lookedUpType,
+    required GridField lookedUpField,
   }) {
-    // Create a Dummy Field to use to get the correct sub Entity
-    // Adding empty schema values for complex data types to not break parsing
-    final dummyField = GridField(
-      id: '',
-      name: '',
-      type: lookedUpType,
-      schema: {
-        'enum': <String>[],
-        'gridUri': '',
-        'items': {
-          'enum': <String>[],
-          'gridUri': '',
-        },
-      },
-    );
     final lookedUpEntity =
-        DataEntity.fromJson(json: jsonValue, field: dummyField);
+        DataEntity.fromJson(json: jsonValue, field: lookedUpField);
     return LookUpDataEntity(lookedUpEntity);
   }
 

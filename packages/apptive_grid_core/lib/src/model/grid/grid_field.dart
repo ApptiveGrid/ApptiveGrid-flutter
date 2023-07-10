@@ -42,9 +42,12 @@ class GridField {
         links: links,
         referenceField: Uri.parse(json['type']['referenceField']),
         lookUpField: Uri.parse(json['type']['lookupField']),
-        lookUpType: DataType.values.firstWhere(
-          (type) => type.backendName == json['type']['lookupType'],
-        ),
+        lookedUpField: GridField.fromJson({
+          'id': 'lookedUpId',
+          'name': 'lookedUp',
+          'schema': {},
+          'type': json['type']['lookupType'],
+        }),
       );
     } else {
       return GridField(
@@ -170,7 +173,7 @@ class LookUpGridField extends GridField {
     super.schema,
     required this.referenceField,
     required this.lookUpField,
-    required this.lookUpType,
+    required this.lookedUpField,
   }) : super(
           type: DataType.lookUp,
         );
@@ -181,8 +184,8 @@ class LookUpGridField extends GridField {
   /// The field that is looked up
   final Uri lookUpField;
 
-  /// The type of the looked up field
-  final DataType lookUpType;
+  /// A rough version of the lookedUp Field. This is not necessaryly the full field
+  final GridField lookedUpField;
 
   @override
   Map<String, dynamic> toJson() {
@@ -191,21 +194,21 @@ class LookUpGridField extends GridField {
       ...json['type'],
       'referenceField': referenceField.toString(),
       'lookupField': lookUpField.toString(),
-      'lookupType': lookUpType.backendName,
+      'lookupType': lookedUpField.toJson()['type'],
     };
     return json;
   }
 
   @override
   String toString() =>
-      'LookUpGridField(id: $id, name: $name, key: $key, referenceField: ${referenceField.toString()}, lookupField: ${lookUpField.toString()}, lookupType: ${lookUpType.name})';
+      'LookUpGridField(id: $id, name: $name, key: $key, referenceField: ${referenceField.toString()}, lookupField: ${lookUpField.toString()}, lookupType: ${lookedUpField.type.name})';
 
   @override
   bool operator ==(Object other) {
     return other is LookUpGridField &&
         referenceField == other.referenceField &&
         lookUpField == other.lookUpField &&
-        lookUpType == other.lookUpType &&
+        lookedUpField == other.lookedUpField &&
         id == other.id &&
         name == other.name &&
         f.mapEquals(links, other.links);
@@ -223,6 +226,6 @@ class LookUpGridField extends GridField {
         ),
         referenceField,
         lookUpField,
-        lookUpType,
+        lookedUpField,
       );
 }
