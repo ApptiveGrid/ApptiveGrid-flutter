@@ -82,6 +82,7 @@ Widget fromModel(FormComponent component) {
         component: component.cast<SignatureDataEntity>(),
       );
     case DataType.createdAt:
+    case DataType.lookUp:
       return const EmptyFormWidget();
   }
 }

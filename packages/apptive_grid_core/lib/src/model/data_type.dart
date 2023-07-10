@@ -58,7 +58,10 @@ enum DataType {
   signature(backendName: 'signature'),
 
   /// Type for CreatedAt
-  createdAt(backendName: 'createdat');
+  createdAt(backendName: 'createdat'),
+
+  /// Type for LookUp. Used to look up a value of a cross referenced field
+  lookUp(backendName: 'lookup');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({

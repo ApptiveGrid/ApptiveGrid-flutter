@@ -54,13 +54,14 @@ abstract class DataEntity<T, S> with FilterableMixin {
       case DataType.singleSelect:
         return EnumDataEntity(
           value: json,
-          options:
-              (field.schema['enum'].cast<String>() as List<String>).toSet(),
+          options: (field.schema['enum']?.cast<String>() as List<String>?)
+                  ?.toSet() ??
+              {},
         );
       case DataType.crossReference:
         return CrossReferenceDataEntity.fromJson(
           jsonValue: json,
-          gridUri: field.schema['gridUri'],
+          gridUri: field.schema['gridUri'] ?? '',
         );
       case DataType.decimal:
         return DecimalDataEntity(json);
@@ -70,15 +71,16 @@ abstract class DataEntity<T, S> with FilterableMixin {
         return EnumCollectionDataEntity(
           value: ((json ?? <String>[]).cast<String>() as List<String>).toSet(),
           options:
-              (field.schema['items']['enum'].cast<String>() as List<String>)
-                  .toSet(),
+              (field.schema['items']?['enum']?.cast<String>() as List<String>?)
+                      ?.toSet() ??
+                  {},
         );
       case DataType.geolocation:
         return GeolocationDataEntity.fromJson(json);
       case DataType.multiCrossReference:
         return MultiCrossReferenceDataEntity.fromJson(
           jsonValue: json,
-          gridUri: field.schema['items']['gridUri'],
+          gridUri: field.schema['items']?['gridUri'] ?? '',
         );
       case DataType.createdBy:
         return CreatedByDataEntity.fromJson(json);
@@ -99,6 +101,11 @@ abstract class DataEntity<T, S> with FilterableMixin {
         return SignatureDataEntity.fromJson(json);
       case DataType.createdAt:
         return DateTimeDataEntity.fromJson(json);
+      case DataType.lookUp:
+        return LookUpDataEntity.fromJson(
+          json,
+          lookedUpField: (field as LookUpGridField).lookedUpField,
+        );
     }
   }
 }
@@ -538,4 +545,23 @@ class SignatureDataEntity extends DataEntity<Attachment, dynamic> {
 
   @override
   dynamic get schemaValue => value?.toJson();
+}
+
+/// [DataEntity] representing a LookUp
+class LookUpDataEntity extends DataEntity<DataEntity, dynamic> {
+  /// Create a new LookUpDataEntity
+  LookUpDataEntity([super.value]);
+
+  /// Creates a new LookUpDataEntity from a Json Response
+  factory LookUpDataEntity.fromJson(
+    dynamic jsonValue, {
+    required GridField lookedUpField,
+  }) {
+    final lookedUpEntity =
+        DataEntity.fromJson(json: jsonValue, field: lookedUpField);
+    return LookUpDataEntity(lookedUpEntity);
+  }
+
+  @override
+  dynamic get schemaValue => value?.schemaValue;
 }
