@@ -54,13 +54,14 @@ abstract class DataEntity<T, S> with FilterableMixin {
       case DataType.singleSelect:
         return EnumDataEntity(
           value: json,
-          options:
-              (field.schema['enum'].cast<String>() as List<String>).toSet(),
+          options: (field.schema['enum']?.cast<String>() as List<String>?)
+                  ?.toSet() ??
+              {},
         );
       case DataType.crossReference:
         return CrossReferenceDataEntity.fromJson(
           jsonValue: json,
-          gridUri: field.schema['gridUri'],
+          gridUri: field.schema['gridUri'] ?? '',
         );
       case DataType.decimal:
         return DecimalDataEntity(json);
@@ -70,15 +71,16 @@ abstract class DataEntity<T, S> with FilterableMixin {
         return EnumCollectionDataEntity(
           value: ((json ?? <String>[]).cast<String>() as List<String>).toSet(),
           options:
-              (field.schema['items']['enum'].cast<String>() as List<String>)
-                  .toSet(),
+              (field.schema['items']?['enum']?.cast<String>() as List<String>?)
+                      ?.toSet() ??
+                  {},
         );
       case DataType.geolocation:
         return GeolocationDataEntity.fromJson(json);
       case DataType.multiCrossReference:
         return MultiCrossReferenceDataEntity.fromJson(
           jsonValue: json,
-          gridUri: field.schema['items']['gridUri'],
+          gridUri: field.schema['items']?['gridUri'] ?? '',
         );
       case DataType.createdBy:
         return CreatedByDataEntity.fromJson(json);
