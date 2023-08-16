@@ -63,8 +63,8 @@ enum DataType {
   /// Type for LookUp. Used to look up a value of a cross referenced field
   lookUp(backendName: 'lookup'),
 
-  /// Type for SumUp. This reduced a lookedUp number field and sums their values
-  sumUp(backendName: 'reducedLookupCollectionType');
+  /// Type for Reducing Lookup. This reduced lookedUp field for[DataType.multiCrossReference]. For example to Sum Values
+  reducedLookUp(backendName: 'reducedLookupCollectionType');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({

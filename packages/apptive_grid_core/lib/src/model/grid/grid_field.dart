@@ -50,8 +50,8 @@ class GridField {
         }),
       );
     }
-    if (type == DataType.sumUp) {
-      return SumUpGridField(
+    if (type == DataType.reducedLookUp) {
+      return ReducedLookUpField(
         id: id,
         name: name,
         key: key,
@@ -59,6 +59,7 @@ class GridField {
         links: links,
         referencesField: Uri.parse(json['type']['referencesField']),
         lookUpField: Uri.parse(json['type']['lookupField']),
+        reduceFunction: json['type']['reduceFunction'],
         reducedField: GridField.fromJson({
           'id': 'reducedId',
           'name': 'reduced',
@@ -246,10 +247,10 @@ class LookUpGridField extends GridField {
       );
 }
 
-/// A [GridField] for [DataType.sumUp]
-class SumUpGridField extends GridField {
-  /// Creates a new [GridField] for [DataType.sumUp]
-  const SumUpGridField({
+/// A [GridField] for [DataType.reducedLookUp]
+class ReducedLookUpField extends GridField {
+  /// Creates a new [GridField] for [DataType.reducedLookUp]
+  const ReducedLookUpField({
     required super.id,
     super.key,
     required super.name,
@@ -258,8 +259,9 @@ class SumUpGridField extends GridField {
     required this.referencesField,
     required this.lookUpField,
     required this.reducedField,
+    required this.reduceFunction,
   }) : super(
-          type: DataType.sumUp,
+          type: DataType.reducedLookUp,
         );
 
   /// An uri pointing to the field that is used to look up
@@ -271,6 +273,9 @@ class SumUpGridField extends GridField {
   /// A rough version of the reduced Field. This is not necessarily the full field
   final GridField reducedField;
 
+  /// The function that is used to reduce the fields. E.g `sum` for summing numeric values
+  final String reduceFunction;
+
   @override
   Map<String, dynamic> toJson() {
     final json = super.toJson();
@@ -279,22 +284,24 @@ class SumUpGridField extends GridField {
       'referencesField': referencesField.toString(),
       'lookupField': lookUpField.toString(),
       'reducedType': reducedField.toJson()['type'],
+      'reduceFunction': reduceFunction,
     };
     return json;
   }
 
   @override
   String toString() =>
-      'SumUpGridField(id: $id, name: $name, key: $key, referencesField: ${referencesField.toString()}, lookUpField: ${lookUpField.toString()}, reducedType: ${reducedField.type.name})';
+      'ReducedLookUpGridField(id: $id, name: $name, key: $key, referencesField: ${referencesField.toString()}, lookUpField: ${lookUpField.toString()}, reducedType: ${reducedField.type.name}, reduceFunction: $reduceFunction)';
 
   @override
   bool operator ==(Object other) {
-    return other is SumUpGridField &&
+    return other is ReducedLookUpField &&
         referencesField == other.referencesField &&
         lookUpField == other.lookUpField &&
         reducedField == other.reducedField &&
         id == other.id &&
         name == other.name &&
+        reduceFunction == other.reduceFunction &&
         f.mapEquals(links, other.links);
   }
 
@@ -311,5 +318,6 @@ class SumUpGridField extends GridField {
         referencesField,
         lookUpField,
         reducedField,
+        reduceFunction,
       );
 }

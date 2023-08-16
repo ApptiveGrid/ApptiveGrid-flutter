@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('GridField', () {
-    Map<String, dynamic> fieldJson(DataType sumupType) => {
-          "name": "SumUp Field",
+    Map<String, dynamic> fieldJson(DataType reducedLookUpType) => {
+          "name": "ReducedLookUp Field",
           "schema": {"type": "any"},
           "id": "fieldId",
           "key": null,
@@ -12,15 +12,17 @@ void main() {
             "referencesField":
                 "/api/users/userId/spaces/spaceId/grids/gridId/fields/referencedFieldId",
             "lookupField":
-                "/api/users/userId/spaces/spaceId/grids/referenceGridId/fields/sumUpFieldId",
+                "/api/users/userId/spaces/spaceId/grids/referenceGridId/fields/reducedLookUpFieldId",
             "componentTypes": [],
             "name": "reducedLookupCollectionType",
             "typeName": "reducedLookupCollectionType",
+            'reduceFunction': 'sum',
             "reducedType": {
-              'name': sumupType.backendName,
+              'name': reducedLookUpType.backendName,
               'referencesField': '',
               'referenceField': '',
               'lookupField': '',
+              'reduceFunction': 'sum',
               'currency': 'EUR',
               'reducedType': {
                 'name': DataType.integer.backendName,
@@ -42,14 +44,14 @@ void main() {
     test('Field is parsed', () {
       final fieldFromJson = GridField.fromJson(fieldJson(DataType.text));
 
-      final directField = SumUpGridField(
+      final directField = ReducedLookUpField(
         id: 'fieldId',
-        name: 'SumUp Field',
+        name: 'ReducedLookUp Field',
         referencesField: Uri.parse(
           '/api/users/userId/spaces/spaceId/grids/gridId/fields/referencedFieldId',
         ),
         lookUpField: Uri.parse(
-          '/api/users/userId/spaces/spaceId/grids/referenceGridId/fields/sumUpFieldId',
+          '/api/users/userId/spaces/spaceId/grids/referenceGridId/fields/reducedLookUpFieldId',
         ),
         reducedField: const GridField(
           id: 'reducedId',
@@ -64,20 +66,21 @@ void main() {
             method: 'get',
           ),
         },
+        reduceFunction: 'sum',
       );
 
       expect(fieldFromJson, equals(directField));
     });
 
     test('To and From Json', () {
-      final directField = SumUpGridField(
+      final directField = ReducedLookUpField(
         id: 'fieldId',
-        name: 'SumUp Field',
+        name: 'ReducedLookUp Field',
         referencesField: Uri.parse(
           '/api/users/userId/spaces/spaceId/grids/gridId/fields/referencedFieldId',
         ),
         lookUpField: Uri.parse(
-          '/api/users/userId/spaces/spaceId/grids/referenceGridId/fields/sumUpFieldId',
+          '/api/users/userId/spaces/spaceId/grids/referenceGridId/fields/reducedLookUpFieldId',
         ),
         reducedField: const GridField(
           id: 'reducedId',
@@ -92,20 +95,21 @@ void main() {
             method: 'get',
           ),
         },
+        reduceFunction: 'sum',
       );
 
       expect(GridField.fromJson(directField.toJson()), equals(directField));
     });
 
     test('HashCode', () {
-      final field = SumUpGridField(
+      final field = ReducedLookUpField(
         id: 'fieldId',
-        name: 'SumUp Field',
+        name: 'ReducedLookUp Field',
         referencesField: Uri.parse(
           '/api/users/userId/spaces/spaceId/grids/gridId/fields/referencedFieldId',
         ),
         lookUpField: Uri.parse(
-          '/api/users/userId/spaces/spaceId/grids/referenceGridId/fields/sumUpFieldId',
+          '/api/users/userId/spaces/spaceId/grids/referenceGridId/fields/reducedLookUpFieldId',
         ),
         reducedField: const GridField(
           id: 'reducedId',
@@ -120,6 +124,7 @@ void main() {
             method: 'get',
           ),
         },
+        reduceFunction: 'sum',
       );
 
       expect(
@@ -135,20 +140,21 @@ void main() {
             field.referencesField,
             field.lookUpField,
             field.reducedField,
+            field.reduceFunction,
           ),
         ),
       );
     });
 
     test('To String', () {
-      final field = SumUpGridField(
+      final field = ReducedLookUpField(
         id: 'fieldId',
-        name: 'SumUp Field',
+        name: 'ReducedLookUp Field',
         referencesField: Uri.parse(
           '/api/users/userId/spaces/spaceId/grids/gridId/fields/referencedFieldId',
         ),
         lookUpField: Uri.parse(
-          '/api/users/userId/spaces/spaceId/grids/referenceGridId/fields/sumUpFieldId',
+          '/api/users/userId/spaces/spaceId/grids/referenceGridId/fields/reducedLookUpFieldId',
         ),
         reducedField: const GridField(
           id: 'reducedId',
@@ -163,22 +169,23 @@ void main() {
             method: 'get',
           ),
         },
+        reduceFunction: 'sum',
       );
 
       expect(
         field.toString(),
         equals(
-          'SumUpGridField(id: fieldId, name: SumUp Field, key: null, referencesField: /api/users/userId/spaces/spaceId/grids/gridId/fields/referencedFieldId, lookUpField: /api/users/userId/spaces/spaceId/grids/referenceGridId/fields/sumUpFieldId, reducedType: text)',
+          'ReducedLookUpGridField(id: fieldId, name: ReducedLookUp Field, key: null, referencesField: /api/users/userId/spaces/spaceId/grids/gridId/fields/referencedFieldId, lookUpField: /api/users/userId/spaces/spaceId/grids/referenceGridId/fields/reducedLookUpFieldId, reducedType: text, reduceFunction: sum)',
         ),
       );
     });
 
     group('SumedUpTypes', () {
       for (final type in DataType.values) {
-        test('Parse with $type as SumUpType', () {
+        test('Parse with $type as ReducedLookUpType', () {
           final field = GridField.fromJson(fieldJson(type));
 
-          expect((field as SumUpGridField).reducedField.type, type);
+          expect((field as ReducedLookUpField).reducedField.type, type);
         });
       }
     });
@@ -189,16 +196,18 @@ void main() {
           'id': 'fieldId',
           'name': 'field',
           'type': {
-            'name': DataType.sumUp.backendName,
+            'name': DataType.reducedLookUp.backendName,
             'referencesField':
                 '/api/users/userId/spaces/spaceId/grids/gridId/fields/referencedFieldId',
             'lookupField':
                 '/api/users/userId/spaces/spaceId/grids/referencedGridId/fields/sumedupFieldId',
+            'reduceFunction': 'sum',
             'reducedType': {
               'name': type.backendName,
               'referencesField': '',
               'referenceField': '',
               'lookupField': '',
+              'reduceFunction': 'sum',
               'currency': 'EUR',
               'reducedType': {
                 'name': DataType.integer.backendName,
@@ -306,13 +315,13 @@ void main() {
         case DataType.lookUp:
           return LookUpDataEntity(StringDataEntity('Chaining'));
 
-        case DataType.sumUp:
-          return SumUpDataEntity(IntegerDataEntity(3));
+        case DataType.reducedLookUp:
+          return ReducedLookUpDataEntity(IntegerDataEntity(3));
       }
     }
 
     for (final type in DataType.values) {
-      test('Parses Sumup Type with Sumed Up $type', () {
+      test('Parses ReducedLookUp Type with Sumed Up $type', () {
         final expectedEntity = subEntity(type);
 
         final entity = DataEntity.fromJson(
@@ -320,11 +329,11 @@ void main() {
           field: field(type),
         );
 
-        expect(entity, isInstanceOf<SumUpDataEntity>());
+        expect(entity, isInstanceOf<ReducedLookUpDataEntity>());
 
         expect(entity.value.runtimeType, expectedEntity.runtimeType);
         expect(
-          (entity as SumUpDataEntity).value!.value,
+          (entity as ReducedLookUpDataEntity).value!.value,
           expectedEntity.value,
         );
       });

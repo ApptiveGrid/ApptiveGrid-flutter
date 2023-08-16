@@ -288,14 +288,14 @@ void main() {
       expect(widget.runtimeType, equals(EmptyFormWidget));
     });
 
-    test('SumUp', () {
-      final component = FormComponent<SumUpDataEntity>(
+    test('ReducedLookUp', () {
+      final component = FormComponent<ReducedLookUpDataEntity>(
         field: const GridField(
           id: 'id',
           name: 'Property',
-          type: DataType.sumUp,
+          type: DataType.reducedLookUp,
         ),
-        data: SumUpDataEntity(IntegerDataEntity()),
+        data: ReducedLookUpDataEntity(IntegerDataEntity()),
         property: 'Property',
         required: false,
         options: const FormComponentOptions(),

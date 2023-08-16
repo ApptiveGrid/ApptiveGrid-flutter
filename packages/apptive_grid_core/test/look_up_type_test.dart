@@ -22,6 +22,7 @@ void main() {
               'referencesField': '',
               'lookupField': '',
               'currency': 'EUR',
+              'reduceFunction': 'sum',
               'lookupType': {
                 'name': DataType.text.backendName,
               },
@@ -200,6 +201,7 @@ void main() {
               'referencesField': '',
               'lookupField': '',
               'currency': 'EUR',
+              'reduceFunction': 'sum',
               'lookupType': {
                 'name': DataType.text.backendName,
               },
@@ -306,8 +308,8 @@ void main() {
         case DataType.lookUp:
           return LookUpDataEntity(StringDataEntity('Chaining'));
 
-        case DataType.sumUp:
-          return SumUpDataEntity(IntegerDataEntity(3));
+        case DataType.reducedLookUp:
+          return ReducedLookUpDataEntity(IntegerDataEntity(3));
       }
     }
 
