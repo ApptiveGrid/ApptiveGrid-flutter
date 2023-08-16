@@ -106,9 +106,17 @@ abstract class DataEntity<T, S> with FilterableMixin {
           json,
           lookedUpField: (field as LookUpGridField).lookedUpField,
         );
+      case DataType.sumUp:
+        return SumUpDataEntity.fromJson(
+          json,
+          reducedField: (field as SumUpGridField).reducedField,
+        );
     }
   }
 }
+
+/// Mixing for Number DataEntities usable for [DataType.sumUp]
+mixin NumberMixin<T extends num, O extends Object> on DataEntity<T, O> {}
 
 /// [DataEntity] representing [String] Objects
 class StringDataEntity extends DataEntity<String, String> {
@@ -175,7 +183,7 @@ class BooleanDataEntity extends DataEntity<bool, bool> {
 
 /// [DataEntity] representing [int] Objects
 class IntegerDataEntity extends DataEntity<int, int>
-    with ComparableFilterableMixin {
+    with ComparableFilterableMixin, NumberMixin {
   /// Creates a new IntegerDataEntity Object
   IntegerDataEntity([super.value]);
 
@@ -185,7 +193,7 @@ class IntegerDataEntity extends DataEntity<int, int>
 
 /// [DataEntity] representing [double] Objects
 class DecimalDataEntity extends DataEntity<double, double>
-    with ComparableFilterableMixin {
+    with ComparableFilterableMixin, NumberMixin {
   /// Creates a new DecimalDataEntity Object
   DecimalDataEntity([num? value]) : super(value?.toDouble());
 
@@ -560,6 +568,25 @@ class LookUpDataEntity extends DataEntity<DataEntity, dynamic> {
     final lookedUpEntity =
         DataEntity.fromJson(json: jsonValue, field: lookedUpField);
     return LookUpDataEntity(lookedUpEntity);
+  }
+
+  @override
+  dynamic get schemaValue => value?.schemaValue;
+}
+
+/// [DataEntity] representing a SumUp
+class SumUpDataEntity extends DataEntity<NumberMixin, dynamic> {
+  /// Create a new SumUpDataEntity
+  SumUpDataEntity([super.value]);
+
+  /// Creates a new SumUpDataEntity from a Json Response
+  factory SumUpDataEntity.fromJson(
+    dynamic jsonValue, {
+    required GridField reducedField,
+  }) {
+    final sumUpEntity =
+        DataEntity.fromJson(json: jsonValue, field: reducedField);
+    return SumUpDataEntity(sumUpEntity as NumberMixin);
   }
 
   @override

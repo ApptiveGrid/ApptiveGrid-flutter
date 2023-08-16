@@ -297,6 +297,9 @@ void main() {
 
         case DataType.lookUp:
           return LookUpDataEntity(StringDataEntity('Chaining'));
+
+        case DataType.sumUp:
+          return SumUpDataEntity(IntegerDataEntity(3));
       }
     }
 

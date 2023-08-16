@@ -61,7 +61,10 @@ enum DataType {
   createdAt(backendName: 'createdat'),
 
   /// Type for LookUp. Used to look up a value of a cross referenced field
-  lookUp(backendName: 'lookup');
+  lookUp(backendName: 'lookup'),
+
+  /// Type for SumUp. This reduced a lookedUp number field and sums their values
+  sumUp(backendName: 'reducedLookupCollectionType');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({
