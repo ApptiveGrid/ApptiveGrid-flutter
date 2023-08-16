@@ -287,5 +287,23 @@ void main() {
 
       expect(widget.runtimeType, equals(EmptyFormWidget));
     });
+
+    test('SumUp', () {
+      final component = FormComponent<SumUpDataEntity>(
+        field: const GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.sumUp,
+        ),
+        data: SumUpDataEntity(IntegerDataEntity()),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, equals(EmptyFormWidget));
+    });
   });
 }

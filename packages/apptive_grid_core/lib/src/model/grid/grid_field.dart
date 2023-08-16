@@ -285,7 +285,7 @@ class SumUpGridField extends GridField {
 
   @override
   String toString() =>
-      'LookUpGridField(id: $id, name: $name, key: $key, referencesField: ${referencesField.toString()}, lookupField: ${lookUpField.toString()}, reducedType: ${reducedField.type.name})';
+      'SumUpGridField(id: $id, name: $name, key: $key, referencesField: ${referencesField.toString()}, lookUpField: ${lookUpField.toString()}, reducedType: ${reducedField.type.name})';
 
   @override
   bool operator ==(Object other) {

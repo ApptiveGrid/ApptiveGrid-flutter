@@ -115,9 +115,6 @@ abstract class DataEntity<T, S> with FilterableMixin {
   }
 }
 
-/// Mixing for Number DataEntities usable for [DataType.sumUp]
-mixin NumberMixin<T extends num, O extends Object> on DataEntity<T, O> {}
-
 /// [DataEntity] representing [String] Objects
 class StringDataEntity extends DataEntity<String, String> {
   /// Creates a new StringDataEntity Object with value [value]
@@ -183,7 +180,7 @@ class BooleanDataEntity extends DataEntity<bool, bool> {
 
 /// [DataEntity] representing [int] Objects
 class IntegerDataEntity extends DataEntity<int, int>
-    with ComparableFilterableMixin, NumberMixin {
+    with ComparableFilterableMixin {
   /// Creates a new IntegerDataEntity Object
   IntegerDataEntity([super.value]);
 
@@ -193,7 +190,7 @@ class IntegerDataEntity extends DataEntity<int, int>
 
 /// [DataEntity] representing [double] Objects
 class DecimalDataEntity extends DataEntity<double, double>
-    with ComparableFilterableMixin, NumberMixin {
+    with ComparableFilterableMixin {
   /// Creates a new DecimalDataEntity Object
   DecimalDataEntity([num? value]) : super(value?.toDouble());
 
@@ -575,7 +572,7 @@ class LookUpDataEntity extends DataEntity<DataEntity, dynamic> {
 }
 
 /// [DataEntity] representing a SumUp
-class SumUpDataEntity extends DataEntity<NumberMixin, dynamic> {
+class SumUpDataEntity extends DataEntity<DataEntity, dynamic> {
   /// Create a new SumUpDataEntity
   SumUpDataEntity([super.value]);
 
@@ -586,7 +583,7 @@ class SumUpDataEntity extends DataEntity<NumberMixin, dynamic> {
   }) {
     final sumUpEntity =
         DataEntity.fromJson(json: jsonValue, field: reducedField);
-    return SumUpDataEntity(sumUpEntity as NumberMixin);
+    return SumUpDataEntity(sumUpEntity);
   }
 
   @override
