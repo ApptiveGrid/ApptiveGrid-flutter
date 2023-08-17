@@ -13,7 +13,7 @@ void main() {
             "self": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
-              "method": "get"
+              "method": "get",
             },
           },
         }
@@ -28,25 +28,25 @@ void main() {
           "type": {
             "name": "createdat",
             "typeName": "createdat",
-            "componentTypes": ["textfield"]
+            "componentTypes": ["textfield"],
           },
           "_links": {
             "patch": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
-              "method": "patch"
+              "method": "patch",
             },
             "query": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query",
-              "method": "get"
+              "method": "get",
             },
             "self": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
-              "method": "get"
-            }
-          }
+              "method": "get",
+            },
+          },
         }
       ],
       'name': 'New grid view',
@@ -54,80 +54,80 @@ void main() {
       '_links': {
         "addLink": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
-          "method": "post"
+          "method": "post",
         },
         "forms": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldType": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange",
-          "method": "post"
+          "method": "post",
         },
         "removeField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove",
-          "method": "post"
+          "method": "post",
         },
         "addEntity": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "post"
+          "method": "post",
         },
         "views": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "get"
+          "method": "get",
         },
         "addView": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "post"
+          "method": "post",
         },
         "self": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldKey": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange",
-          "method": "post"
+          "method": "post",
         },
         "query": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/query",
-          "method": "get"
+          "method": "get",
         },
         "entities": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "get"
+          "method": "get",
         },
         "updates": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/updates",
-          "method": "get"
+          "method": "get",
         },
         "schema": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/schema",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldName": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename",
-          "method": "post"
+          "method": "post",
         },
         "addForm": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "post"
+          "method": "post",
         },
         "addField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd",
-          "method": "post"
+          "method": "post",
         },
         "rename": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/Rename",
-          "method": "post"
+          "method": "post",
         },
         "remove": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "delete"
-        }
+          "method": "delete",
+        },
       },
     };
 

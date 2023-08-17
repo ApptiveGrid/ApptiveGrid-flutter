@@ -70,7 +70,7 @@ void main() {
               property: 'property',
               data: AttachmentDataEntity(),
               field: field,
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -176,7 +176,7 @@ void main() {
               property: 'property',
               data: AttachmentDataEntity(),
               field: field,
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -264,7 +264,7 @@ void main() {
               property: 'property',
               data: AttachmentDataEntity(),
               field: field,
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -363,7 +363,7 @@ void main() {
               property: 'property',
               data: AttachmentDataEntity(),
               field: field,
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -468,7 +468,7 @@ void main() {
               property: 'property',
               data: AttachmentDataEntity(),
               field: field,
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -588,7 +588,7 @@ void main() {
               property: 'property',
               data: AttachmentDataEntity(),
               field: field,
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -663,7 +663,7 @@ void main() {
               property: 'property',
               data: AttachmentDataEntity(),
               field: field,
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -730,7 +730,7 @@ void main() {
             property: 'property',
             data: AttachmentDataEntity(),
             field: field,
-          )
+          ),
         ],
         links: {ApptiveLinkType.submit: action},
         fields: [field],
@@ -807,7 +807,7 @@ void main() {
               property: 'property',
               data: AttachmentDataEntity([attachment]),
               field: field,
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -856,7 +856,7 @@ void main() {
             data: AttachmentDataEntity(),
             field: field,
             required: true,
-          )
+          ),
         ],
         links: {ApptiveLinkType.submit: action},
         fields: [field],
@@ -902,7 +902,7 @@ void main() {
               ),
               field: field,
               required: true,
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -976,7 +976,7 @@ void main() {
             data: AttachmentDataEntity(),
             field: field,
             required: true,
-          )
+          ),
         ],
         links: {ApptiveLinkType.submit: action},
         fields: [field],

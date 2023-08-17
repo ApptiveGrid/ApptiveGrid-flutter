@@ -89,7 +89,7 @@ class _GeolocationMapState extends State<GeolocationMap> {
           : {},
       onTap: _locationSelected,
       gestureRecognizers: {
-        Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())
+        Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer()),
       },
     );
   }

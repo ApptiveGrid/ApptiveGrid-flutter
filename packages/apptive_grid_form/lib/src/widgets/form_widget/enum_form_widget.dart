@@ -54,7 +54,7 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
                       fieldState.didChange(newValue);
                       _onChanged(newValue);
                     },
-                  )
+                  ),
               ],
             ),
           );

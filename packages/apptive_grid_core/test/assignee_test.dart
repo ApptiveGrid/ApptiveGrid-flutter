@@ -16,29 +16,29 @@ void main() {
             "partialUpdate": {
               "href":
                   "/api/users/614c5440b50f51e3ea8a2a50/spaces/62a848431c2fa741e99dc625/grids/62a848701c2fa741e99dc62c/entities/62a848a51c2fa741e99dc63d/update",
-              "method": "post"
+              "method": "post",
             },
             "self": {
               "href":
                   "/api/users/614c5440b50f51e3ea8a2a50/spaces/62a848431c2fa741e99dc625/grids/62a848701c2fa741e99dc62c/entities/62a848a51c2fa741e99dc63d",
-              "method": "get"
+              "method": "get",
             },
             "update": {
               "href":
                   "/api/users/614c5440b50f51e3ea8a2a50/spaces/62a848431c2fa741e99dc625/grids/62a848701c2fa741e99dc62c/entities/62a848a51c2fa741e99dc63d",
-              "method": "put"
+              "method": "put",
             },
             "remove": {
               "href":
                   "/api/users/614c5440b50f51e3ea8a2a50/spaces/62a848431c2fa741e99dc625/grids/62a848701c2fa741e99dc62c/entities/62a848a51c2fa741e99dc63d",
-              "method": "delete"
+              "method": "delete",
             },
             "addEditionLink": {
               "href":
                   "/api/users/614c5440b50f51e3ea8a2a50/spaces/62a848431c2fa741e99dc625/grids/62a848701c2fa741e99dc62c/entities/62a848a51c2fa741e99dc63d/EditLink",
-              "method": "post"
-            }
-          }
+              "method": "post",
+            },
+          },
         }
       ],
       'filter': {},
@@ -46,15 +46,15 @@ void main() {
         {
           "type": {
             "name": "user",
-            "componentTypes": ["userSelect"]
+            "componentTypes": ["userSelect"],
           },
           "schema": {
             "type": "object",
             "properties": {
               "displayValue": {"type": "string"},
-              "uri": {"type": "string"}
+              "uri": {"type": "string"},
             },
-            "required": ["uri"]
+            "required": ["uri"],
           },
           "id": "62a8486f1c2fa741e99dc628",
           "name": "name",
@@ -63,24 +63,24 @@ void main() {
             "patch": {
               "href":
                   "/api/users/614c5440b50f51e3ea8a2a50/spaces/62a848431c2fa741e99dc625/grids/62a8486f1c2fa741e99dc629/fields/62a8486f1c2fa741e99dc628",
-              "method": "patch"
+              "method": "patch",
             },
             "query": {
               "href":
                   "/api/users/614c5440b50f51e3ea8a2a50/spaces/62a848431c2fa741e99dc625/grids/62a8486f1c2fa741e99dc629/fields/62a8486f1c2fa741e99dc628/query",
-              "method": "get"
+              "method": "get",
             },
             "collaborators": {
               "href":
                   "/api/users/614c5440b50f51e3ea8a2a50/spaces/62a848431c2fa741e99dc625/grids/62a8486f1c2fa741e99dc629/fields/62a8486f1c2fa741e99dc628/collaborators",
-              "method": "get"
+              "method": "get",
             },
             "self": {
               "href":
                   "/api/users/614c5440b50f51e3ea8a2a50/spaces/62a848431c2fa741e99dc625/grids/62a8486f1c2fa741e99dc629/fields/62a8486f1c2fa741e99dc628",
-              "method": "get"
-            }
-          }
+              "method": "get",
+            },
+          },
         },
       ],
       'name': 'Yeah Ansicht',
@@ -88,80 +88,80 @@ void main() {
       '_links': {
         "addLink": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
-          "method": "post"
+          "method": "post",
         },
         "forms": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldType": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange",
-          "method": "post"
+          "method": "post",
         },
         "removeField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove",
-          "method": "post"
+          "method": "post",
         },
         "addEntity": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "post"
+          "method": "post",
         },
         "views": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "get"
+          "method": "get",
         },
         "addView": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "post"
+          "method": "post",
         },
         "self": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldKey": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange",
-          "method": "post"
+          "method": "post",
         },
         "query": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/query",
-          "method": "get"
+          "method": "get",
         },
         "entities": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "get"
+          "method": "get",
         },
         "updates": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/updates",
-          "method": "get"
+          "method": "get",
         },
         "schema": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/schema",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldName": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename",
-          "method": "post"
+          "method": "post",
         },
         "addForm": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "post"
+          "method": "post",
         },
         "addField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd",
-          "method": "post"
+          "method": "post",
         },
         "rename": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/Rename",
-          "method": "post"
+          "method": "post",
         },
         "remove": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "delete"
-        }
+          "method": "delete",
+        },
       },
     };
 

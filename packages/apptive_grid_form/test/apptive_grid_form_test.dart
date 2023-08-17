@@ -1369,9 +1369,9 @@ void main() {
             'displayValue': {'type': 'string'},
             'id': {'type': 'string'},
             'type': {'type': 'string'},
-            'name': {'type': 'string'}
+            'name': {'type': 'string'},
           },
-          'objectType': 'userReference'
+          'objectType': 'userReference',
         },
       );
       final formData = FormData(
@@ -1472,7 +1472,7 @@ void main() {
         title: 'Form Title',
         components: [],
         attachmentActions: {
-          attachment: AddAttachmentAction(path: '', attachment: attachment)
+          attachment: AddAttachmentAction(path: '', attachment: attachment),
         },
         links: {ApptiveLinkType.submit: action},
         fields: [],

@@ -17,7 +17,7 @@ void main() {
         '_links': {
           "accessCredentials": {
             "href": "/api/users/id/accessKeys",
-            "method": "get"
+            "method": "get",
           },
           "spaces": {"href": "/api/users/id/spaces", "method": "get"},
           "hooks": {"href": "/api/users/id/hooks", "method": "get"},
@@ -25,7 +25,7 @@ void main() {
           "self": {"href": "/api/users/id", "method": "get"},
           "addAccessCredentials": {
             "href": "/api/users/id/accessKeys",
-            "method": "post"
+            "method": "post",
           },
           "addSpace": {"href": "/api/users/id/spaces", "method": "post"},
         },

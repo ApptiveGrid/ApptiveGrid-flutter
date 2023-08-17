@@ -35,7 +35,7 @@ void main() {
           ApptiveGridEnvironment.production: AttachmentConfiguration(
             attachmentApiEndpoint: 'attachmentEndpoint.com/',
             signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
-          )
+          ),
         },
       ),
       authenticator,
@@ -67,7 +67,7 @@ void main() {
             "unauthenticatedSignedUrlEndpoint": signedFormUrl,
             "signedUrlEndpoint": signedUrl,
             "apiEndpoint": attachmentUrl.toString(),
-          }
+          },
         }),
         200,
       );

@@ -29,15 +29,15 @@ void main() {
               'reducedType': {
                 'name': DataType.integer.backendName,
               },
-            }
+            },
           },
           "_links": {
             "self": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
-              "method": "get"
+              "method": "get",
             },
-          }
+          },
         };
 
     test('Field is parsed', () {
@@ -208,8 +208,8 @@ void main() {
               'reducedType': {
                 'name': DataType.integer.backendName,
               },
-            }
-          }
+            },
+          },
         });
 
     DataEntity subEntity(DataType type) {

@@ -45,7 +45,7 @@ void main() {
                 Uri.parse('https://apptivegrid.de'),
               ),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -81,7 +81,7 @@ void main() {
               property: 'name',
               data: UriDataEntity(),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -123,7 +123,7 @@ void main() {
                 Uri.parse('https://something.else'),
               ),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -174,7 +174,7 @@ void main() {
               property: 'name',
               data: UriDataEntity(),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -224,7 +224,7 @@ void main() {
               property: 'name',
               data: UriDataEntity(),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -274,7 +274,7 @@ void main() {
                 Uri.parse('https://apptivegrid.de'),
               ),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {

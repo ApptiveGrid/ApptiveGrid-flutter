@@ -78,7 +78,7 @@ void main() {
             data: DecimalDataEntity(47.11),
             field: field,
             required: true,
-          )
+          ),
         ],
         links: {ApptiveLinkType.submit: action},
         fields: [field],

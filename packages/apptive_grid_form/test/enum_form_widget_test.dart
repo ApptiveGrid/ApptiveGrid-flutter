@@ -36,7 +36,7 @@ void main() {
               data: EnumDataEntity(value: 'A', options: {'A', 'B', 'C'}),
               field: field,
               required: true,
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -87,7 +87,7 @@ void main() {
               field: field,
               required: true,
               type: 'selectList',
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -134,7 +134,7 @@ void main() {
               field: field,
               required: true,
               type: 'selectList',
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -181,7 +181,7 @@ void main() {
               field: field,
               required: true,
               type: 'selectList',
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -236,7 +236,7 @@ void main() {
               field: field,
               required: true,
               type: 'selectList',
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],

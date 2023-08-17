@@ -69,13 +69,13 @@ void main() {
         {
           "type": {
             "name": "string",
-            "componentTypes": ["textfield"]
+            "componentTypes": ["textfield"],
           },
           "schema": {"type": "string"},
           "id": "4zc4l48ffin5v8pa2emyx9s15",
           "name": "Text",
           "key": null,
-          "_links": <String, dynamic>{}
+          "_links": <String, dynamic>{},
         }
       ],
       'components': [
@@ -87,10 +87,10 @@ void main() {
             'multi': false,
             'placeholder': '',
             'description': '',
-            'label': null
+            'label': null,
           },
           'type': 'textfield',
-          'fieldId': '4zc4l48ffin5v8pa2emyx9s15'
+          'fieldId': '4zc4l48ffin5v8pa2emyx9s15',
         },
       ],
       'name': 'Name',
@@ -100,23 +100,23 @@ void main() {
         "submit": {
           "href":
               "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-          "method": "post"
+          "method": "post",
         },
         "remove": {
           "href":
               "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-          "method": "delete"
+          "method": "delete",
         },
         "self": {
           "href":
               "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-          "method": "get"
+          "method": "get",
         },
         "update": {
           "href":
               "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-          "method": "put"
-        }
+          "method": "put",
+        },
       },
     };
 
@@ -221,9 +221,9 @@ void main() {
           'fields': [
             'Julia',
             'Arnold',
-            'https://ca.slack-edge.com/T02TE01SG-U9AJEEH7Z-19c78728dca3-512'
+            'https://ca.slack-edge.com/T02TE01SG-U9AJEEH7Z-19c78728dca3-512',
           ],
-          '_id': '2ozv8sbju97gk1ukfbl3f3fl1'
+          '_id': '2ozv8sbju97gk1ukfbl3f3fl1',
         },
       ],
       'schema': {
@@ -234,93 +234,93 @@ void main() {
             'items': [
               {'type': 'string'},
               {'type': 'string'},
-              {'type': 'string'}
-            ]
+              {'type': 'string'},
+            ],
           },
-          '_id': {'type': 'string'}
-        }
+          '_id': {'type': 'string'},
+        },
       },
       'name': 'Contacts',
       'id': 'gridId',
       '_links': {
         "addLink": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/AddLink",
-          "method": "post"
+          "method": "post",
         },
         "forms": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldType": {
           "href":
               "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnTypeChange",
-          "method": "post"
+          "method": "post",
         },
         "removeField": {
           "href":
               "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRemove",
-          "method": "post"
+          "method": "post",
         },
         "addEntity": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
-          "method": "post"
+          "method": "post",
         },
         "views": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
-          "method": "get"
+          "method": "get",
         },
         "addView": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/views",
-          "method": "post"
+          "method": "post",
         },
         "self": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldKey": {
           "href":
               "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnKeyChange",
-          "method": "post"
+          "method": "post",
         },
         "query": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/query",
-          "method": "get"
+          "method": "get",
         },
         "entities": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/entities",
-          "method": "get"
+          "method": "get",
         },
         "updates": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/updates",
-          "method": "get"
+          "method": "get",
         },
         "schema": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/schema",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldName": {
           "href":
               "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnRename",
-          "method": "post"
+          "method": "post",
         },
         "addForm": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/forms",
-          "method": "post"
+          "method": "post",
         },
         "addField": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/ColumnAdd",
-          "method": "post"
+          "method": "post",
         },
         "rename": {
           "href": "/api/users/$userId/spaces/$spaceId/grids/$gridId/Rename",
-          "method": "post"
+          "method": "post",
         },
         "remove": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "delete"
-        }
+          "method": "delete",
+        },
       },
     };
     test('Success', () async {
@@ -487,7 +487,7 @@ void main() {
         'properties': {
           id: {'type': 'boolean'},
         },
-        'required': []
+        'required': [],
       };
       final component = FormComponent<BooleanDataEntity>(
         property: property,
@@ -546,7 +546,7 @@ void main() {
         'properties': {
           id: {'type': 'boolean'},
         },
-        'required': []
+        'required': [],
       };
       final component = FormComponent<BooleanDataEntity>(
         property: property,
@@ -643,7 +643,7 @@ void main() {
             links: {ApptiveLinkType.submit: action},
             attachmentActions: {
               attachment:
-                  AddAttachmentAction(byteData: bytes, attachment: attachment)
+                  AddAttachmentAction(byteData: bytes, attachment: attachment),
             },
           );
 
@@ -663,7 +663,7 @@ void main() {
           ApptiveGridEnvironment.production: AttachmentConfiguration(
             attachmentApiEndpoint: 'attachmentEndpoint.com/',
             signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
-          )
+          ),
         };
 
         const signedUrl = 'https://signed.url';
@@ -705,7 +705,7 @@ void main() {
                   "unauthenticatedSignedUrlEndpoint": signedFormUrl,
                   "signedUrlEndpoint": signedUrl,
                   "apiEndpoint": attachmentUrl,
-                }
+                },
               }),
               200,
             );
@@ -735,7 +735,7 @@ void main() {
           ApptiveGridEnvironment.production: AttachmentConfiguration(
             attachmentApiEndpoint: 'attachmentEndpoint.com/',
             signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
-          )
+          ),
         };
 
         setUp(() {
@@ -1097,7 +1097,7 @@ void main() {
                   final requestUri = uploadUri.replace(
                     pathSegments: [
                       (invocation.positionalArguments.first as Uri)
-                          .queryParameters['fileName']!
+                          .queryParameters['fileName']!,
                     ],
                   );
                   // Use filename in upload uri to match error responses
@@ -1189,7 +1189,7 @@ void main() {
                   final requestUri = uploadUri.replace(
                     pathSegments: [
                       (invocation.positionalArguments.first as Uri)
-                          .queryParameters['fileName']!
+                          .queryParameters['fileName']!,
                     ],
                   );
                   // Use filename in upload uri to match error responses
@@ -1243,7 +1243,7 @@ void main() {
             ApptiveGridEnvironment.production: AttachmentConfiguration(
               attachmentApiEndpoint: 'attachmentEndpoint.com/',
               signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
-            )
+            ),
           };
 
           setUp(() {
@@ -1351,7 +1351,7 @@ void main() {
             attachmentApiEndpoint: 'attachmentEndpoint.com/',
             signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
             signedUrlFormApiEndpoint: 'signedUrlFormApiEndpoint.com/',
-          )
+          ),
         };
 
         setUp(() {
@@ -1520,7 +1520,7 @@ void main() {
       );
       expect(client.defaultHeaders, {
         HttpHeaders.authorizationHeader: 'Bearer dXNlcm5hbWU6cGFzc3dvcmQ=',
-        HttpHeaders.contentTypeHeader: ContentType.json
+        HttpHeaders.contentTypeHeader: ContentType.json,
       });
     });
 
@@ -1631,7 +1631,7 @@ void main() {
         'token_type': 'Bearer',
         'access_token': '12345',
         'expires_at': tokenTime.millisecondsSinceEpoch,
-        'expires_in': tokenTime.microsecondsSinceEpoch
+        'expires_in': tokenTime.microsecondsSinceEpoch,
       };
       client.setUserToken(tokenResponse);
 
@@ -1692,7 +1692,7 @@ void main() {
           'token_type': 'Bearer',
           'access_token': '12345',
           'expires_at': tokenTime.millisecondsSinceEpoch,
-          'expires_in': tokenTime.microsecondsSinceEpoch
+          'expires_in': tokenTime.microsecondsSinceEpoch,
         });
 
         when(
@@ -1780,7 +1780,7 @@ void main() {
       'email': 'jane.doe@zweidenker.de',
       'spaceUris': [
         '/api/users/id/spaces/spaceId',
-      ]
+      ],
     };
     test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);
@@ -1823,7 +1823,7 @@ void main() {
       'name': 'TestSpace',
       'gridUris': [
         '/api/users/id/spaces/spaceId/grids/gridId',
-      ]
+      ],
     };
     test('Success', () async {
       final response = Response(json.encode(rawResponse), 200);

@@ -118,7 +118,7 @@ class _UserSectionState extends State<_UserSection> {
                         IconButton(
                           onPressed: _reload,
                           icon: const Icon(Icons.refresh),
-                        )
+                        ),
                       ],
                     ),
                     Text('${user.firstName} ${user.lastName}'),
@@ -189,7 +189,7 @@ class _SpaceSectionState extends State<_SpaceSection> {
                               )
                               .toList() ??
                           [const SizedBox()],
-                    )
+                    ),
                   ],
                 );
               } else if (snapshot.hasError) {
@@ -252,7 +252,7 @@ class _GridSectionState extends State<_GridSection> {
                               )
                               .toList() ??
                           [const SizedBox()],
-                    )
+                    ),
                   ],
                 );
               } else if (snapshot.hasError) {

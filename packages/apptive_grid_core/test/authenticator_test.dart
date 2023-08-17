@@ -46,7 +46,7 @@ void main() {
         'token_type': 'Bearer',
         'access_token': '12345',
         'expires_at': tokenTime.millisecondsSinceEpoch,
-        'expires_in': tokenTime.microsecondsSinceEpoch
+        'expires_in': tokenTime.microsecondsSinceEpoch,
       });
       final httpClient = MockHttpClient();
       when(
@@ -114,7 +114,7 @@ void main() {
         'client_id': authClient.clientId,
         'client_secret': authClient.clientSecret,
         'token': tokenResponse.toJson(),
-        'nonce': null
+        'nonce': null,
       });
       when(
         () => authClient.createCredential(
@@ -164,7 +164,7 @@ void main() {
         'token_type': 'Bearer',
         'access_token': '12345',
         'expires_at': tokenTime.millisecondsSinceEpoch,
-        'expires_in': tokenTime.microsecondsSinceEpoch
+        'expires_in': tokenTime.microsecondsSinceEpoch,
       });
       final httpClient = MockHttpClient();
       when(
@@ -227,7 +227,7 @@ void main() {
         'client_id': authClient.clientId,
         'client_secret': authClient.clientSecret,
         'token': tokenResponse.toJson(),
-        'nonce': null
+        'nonce': null,
       });
       when(
         () => authClient.createCredential(
@@ -593,7 +593,7 @@ void main() {
           'token_type': 'Bearer',
           'access_token': '12345',
           'id_token':
-              '''eyJraWQiOiIxZTlnZGs3IiwiYWxnIjoiUlMyNTYifQ.ewogImlzcyI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4Mjg5NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAibi0wUzZfV3pBMk1qIiwKICJleHAiOiAxMzExMjgxOTcwLAogImlhdCI6IDEzMTEyODA5NzAsCiAibmFtZSI6ICJKYW5lIERvZSIsCiAiZ2l2ZW5fbmFtZSI6ICJKYW5lIiwKICJmYW1pbHlfbmFtZSI6ICJEb2UiLAogImdlbmRlciI6ICJmZW1hbGUiLAogImJpcnRoZGF0ZSI6ICIwMDAwLTEwLTMxIiwKICJlbWFpbCI6ICJqYW5lZG9lQGV4YW1wbGUuY29tIiwKICJwaWN0dXJlIjogImh0dHA6Ly9leGFtcGxlLmNvbS9qYW5lZG9lL21lLmpwZyIKfQ.rHQjEmBqn9Jre0OLykYNnspA10Qql2rvx4FsD00jwlB0Sym4NzpgvPKsDjn_wMkHxcp6CilPcoKrWHcipR2iAjzLvDNAReF97zoJqq880ZD1bwY82JDauCXELVR9O6_B0w3K-E7yM2macAAgNCUwtik6SjoSUZRcf-O5lygIyLENx882p6MtmwaL1hd6qn5RZOQ0TLrOYu0532g9Exxcm-ChymrB4xLykpDj3lUivJt63eEGGN6DH5K6o33TcxkIjNrCD4XB1CKKumZvCedgHHF3IAK4dVEDSUoGlH9z4pP_eWYNXvqQOjGs-rDaQzUHl6cQQWNiDpWOl_lxXjQEvQ'''
+              '''eyJraWQiOiIxZTlnZGs3IiwiYWxnIjoiUlMyNTYifQ.ewogImlzcyI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4Mjg5NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAibi0wUzZfV3pBMk1qIiwKICJleHAiOiAxMzExMjgxOTcwLAogImlhdCI6IDEzMTEyODA5NzAsCiAibmFtZSI6ICJKYW5lIERvZSIsCiAiZ2l2ZW5fbmFtZSI6ICJKYW5lIiwKICJmYW1pbHlfbmFtZSI6ICJEb2UiLAogImdlbmRlciI6ICJmZW1hbGUiLAogImJpcnRoZGF0ZSI6ICIwMDAwLTEwLTMxIiwKICJlbWFpbCI6ICJqYW5lZG9lQGV4YW1wbGUuY29tIiwKICJwaWN0dXJlIjogImh0dHA6Ly9leGFtcGxlLmNvbS9qYW5lZG9lL21lLmpwZyIKfQ.rHQjEmBqn9Jre0OLykYNnspA10Qql2rvx4FsD00jwlB0Sym4NzpgvPKsDjn_wMkHxcp6CilPcoKrWHcipR2iAjzLvDNAReF97zoJqq880ZD1bwY82JDauCXELVR9O6_B0w3K-E7yM2macAAgNCUwtik6SjoSUZRcf-O5lygIyLENx882p6MtmwaL1hd6qn5RZOQ0TLrOYu0532g9Exxcm-ChymrB4xLykpDj3lUivJt63eEGGN6DH5K6o33TcxkIjNrCD4XB1CKKumZvCedgHHF3IAK4dVEDSUoGlH9z4pP_eWYNXvqQOjGs-rDaQzUHl6cQQWNiDpWOl_lxXjQEvQ''',
         },
       );
 
@@ -850,14 +850,14 @@ void main() {
         'token_type': 'Bearer',
         'access_token': '12345',
         'expires_at': tokenTime.millisecondsSinceEpoch,
-        'expires_in': tokenTime.microsecondsSinceEpoch
+        'expires_in': tokenTime.microsecondsSinceEpoch,
       });
       final credential = Credential.fromJson({
         'issuer': authClient.issuer.metadata.toJson(),
         'client_id': authClient.clientId,
         'client_secret': authClient.clientSecret,
         'token': tokenResponse.toJson(),
-        'nonce': null
+        'nonce': null,
       });
       when(
         () => authClient.createCredential(
@@ -930,14 +930,14 @@ void main() {
         'token_type': 'Bearer',
         'access_token': '12345',
         'expires_at': tokenTime.millisecondsSinceEpoch,
-        'expires_in': tokenTime.microsecondsSinceEpoch
+        'expires_in': tokenTime.microsecondsSinceEpoch,
       });
       final credential = Credential.fromJson({
         'issuer': authClient.issuer.metadata.toJson(),
         'client_id': authClient.clientId,
         'client_secret': authClient.clientSecret,
         'token': tokenResponse.toJson(),
-        'nonce': null
+        'nonce': null,
       });
       when(
         () => authClient.createCredential(
@@ -1012,14 +1012,14 @@ void main() {
         'token_type': 'Bearer',
         'access_token': '12345',
         'expires_at': tokenTime.millisecondsSinceEpoch,
-        'expires_in': tokenTime.microsecondsSinceEpoch
+        'expires_in': tokenTime.microsecondsSinceEpoch,
       });
       final credential = Credential.fromJson({
         'issuer': _invalidIssuer.metadata.toJson(),
         'client_id': authClient.clientId,
         'client_secret': authClient.clientSecret,
         'token': tokenResponse.toJson(),
-        'nonce': null
+        'nonce': null,
       });
 
       final storage = MockAuthenticationStorage();
@@ -1071,14 +1071,14 @@ void main() {
         'token_type': 'Bearer',
         'access_token': '12345',
         'expires_at': tokenTime.millisecondsSinceEpoch,
-        'expires_in': tokenTime.microsecondsSinceEpoch
+        'expires_in': tokenTime.microsecondsSinceEpoch,
       });
       final credential = Credential.fromJson({
         'issuer': authClient.issuer.metadata.toJson(),
         'client_id': authClient.clientId,
         'client_secret': authClient.clientSecret,
         'token': tokenResponse.toJson(),
-        'nonce': null
+        'nonce': null,
       });
       when(
         () => authClient.createCredential(
@@ -1267,7 +1267,7 @@ void main() {
         'token_type': 'Bearer',
         'access_token': '12345',
         'expires_at': tokenTime.millisecondsSinceEpoch,
-        'expires_in': tokenTime.microsecondsSinceEpoch
+        'expires_in': tokenTime.microsecondsSinceEpoch,
       };
 
       await authenticator.setUserToken(tokenResponse);
@@ -1385,7 +1385,7 @@ Issuer get zweidenkerIssuer => Issuer(
           'client_secret_basic',
           'client_secret_post',
           'tls_client_auth',
-          'client_secret_jwt'
+          'client_secret_jwt',
         ],
         'token_endpoint_auth_signing_alg_values_supported':
             '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',
@@ -1450,7 +1450,7 @@ Issuer get _invalidIssuer => Issuer(
           'client_secret_basic',
           'client_secret_post',
           'tls_client_auth',
-          'client_secret_jwt'
+          'client_secret_jwt',
         ],
         'token_endpoint_auth_signing_alg_values_supported':
             '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',

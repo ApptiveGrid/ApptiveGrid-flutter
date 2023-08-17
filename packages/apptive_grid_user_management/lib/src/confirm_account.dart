@@ -67,7 +67,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
               : ElevatedButton(
                   onPressed: _confirmAccount,
                   child: Text(localization.actionConfirm),
-                )
+                ),
         ],
       ),
     );

@@ -100,7 +100,7 @@ void main() {
               ),
               field: field,
               required: true,
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],
@@ -294,7 +294,7 @@ void main() {
               field: field,
               required: true,
               type: 'multiSelectList',
-            )
+            ),
           ],
           links: {ApptiveLinkType.submit: action},
           fields: [field],

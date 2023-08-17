@@ -36,7 +36,7 @@ abstract class _FieldFilter extends ApptiveGridFilter {
   @override
   Map<String, dynamic> toJson() {
     return {
-      fieldId: {'\$${operator.operation}': value.filterValue}
+      fieldId: {'\$${operator.operation}': value.filterValue},
     };
   }
 

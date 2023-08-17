@@ -13,7 +13,7 @@ void main() {
         users: ['userId'],
         links: {
           ApptiveLinkType.self:
-              ApptiveLink(uri: Uri.parse('/share'), method: 'get')
+              ApptiveLink(uri: Uri.parse('/share'), method: 'get'),
         },
       );
       final response2 = Share(
@@ -22,7 +22,7 @@ void main() {
         users: ['userId'],
         links: {
           ApptiveLinkType.self:
-              ApptiveLink(uri: Uri.parse('/share'), method: 'get')
+              ApptiveLink(uri: Uri.parse('/share'), method: 'get'),
         },
       );
 
@@ -39,7 +39,7 @@ void main() {
         users: ['userId'],
         links: {
           ApptiveLinkType.self:
-              ApptiveLink(uri: Uri.parse('/share'), method: 'get')
+              ApptiveLink(uri: Uri.parse('/share'), method: 'get'),
         },
       );
 
@@ -57,7 +57,7 @@ void main() {
         users: ['userId'],
         links: {
           ApptiveLinkType.self:
-              ApptiveLink(uri: Uri.parse('/share'), method: 'get')
+              ApptiveLink(uri: Uri.parse('/share'), method: 'get'),
         },
       );
       final response2 = Share(
@@ -66,7 +66,7 @@ void main() {
         users: ['differentUser'],
         links: {
           ApptiveLinkType.self:
-              ApptiveLink(uri: Uri.parse('/share'), method: 'get')
+              ApptiveLink(uri: Uri.parse('/share'), method: 'get'),
         },
       );
 
@@ -81,7 +81,7 @@ void main() {
       users: ['userId'],
       links: {
         ApptiveLinkType.self:
-            ApptiveLink(uri: Uri.parse('/share'), method: 'get')
+            ApptiveLink(uri: Uri.parse('/share'), method: 'get'),
       },
     );
 
@@ -103,7 +103,7 @@ void main() {
       users: ['userId'],
       links: {
         ApptiveLinkType.self:
-            ApptiveLink(uri: Uri.parse('/share'), method: 'get')
+            ApptiveLink(uri: Uri.parse('/share'), method: 'get'),
       },
     );
 

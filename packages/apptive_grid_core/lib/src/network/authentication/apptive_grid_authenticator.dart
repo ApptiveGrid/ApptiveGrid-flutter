@@ -158,7 +158,7 @@ class ApptiveGridAuthenticator {
           'client_secret_basic',
           'client_secret_post',
           'tls_client_auth',
-          'client_secret_jwt'
+          'client_secret_jwt',
         ],
         'token_endpoint_auth_signing_alg_values_supported':
             '[PS384, ES384, RS384, HS256, HS512, ES256, RS256, HS384, ES512, PS256, PS512, RS512]',

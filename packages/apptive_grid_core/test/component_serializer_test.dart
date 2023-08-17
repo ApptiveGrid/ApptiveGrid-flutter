@@ -130,7 +130,7 @@ void main() {
 
       final schema = {
         'type': 'string',
-        'enum': ['GmbH', 'AG', 'Freiberuflich']
+        'enum': ['GmbH', 'AG', 'Freiberuflich'],
       };
 
       final field = GridField(
@@ -145,7 +145,7 @@ void main() {
         'value': 'AG',
         'required': true,
         'options': <String, dynamic>{},
-        'type': 'selectBox'
+        'type': 'selectBox',
       };
 
       final jsonComponent = FormComponent.fromJson(json, [field]);
@@ -180,8 +180,8 @@ void main() {
         "type": "array",
         "items": {
           "type": "string",
-          "enum": ['GmbH', 'AG', 'Freiberuflich']
-        }
+          "enum": ['GmbH', 'AG', 'Freiberuflich'],
+        },
       };
 
       final field = GridField(
@@ -196,7 +196,7 @@ void main() {
         'value': ['AG'],
         'required': true,
         'options': <String, dynamic>{},
-        'type': 'selectBox'
+        'type': 'selectBox',
       };
 
       final jsonComponent = FormComponent.fromJson(json, [field]);

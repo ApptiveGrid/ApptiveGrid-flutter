@@ -27,7 +27,7 @@ class Invitation {
       'role': role.backendName,
       'email': email,
       'id': id,
-      '_links': links.toJson()
+      '_links': links.toJson(),
     };
   }
 

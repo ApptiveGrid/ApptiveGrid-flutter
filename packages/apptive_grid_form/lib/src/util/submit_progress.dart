@@ -36,7 +36,7 @@ class SubmitProgressWidget extends StatelessWidget {
           progress.message,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelSmall,
-        )
+        ),
       ],
     );
   }

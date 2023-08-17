@@ -83,9 +83,9 @@ class DistanceApptiveGridSorting extends ApptiveGridSorting {
           'location': {
             'lat': location.latitude,
             'lon': location.longitude,
-          }
-        }
-      }
+          },
+        },
+      },
     };
   }
 
