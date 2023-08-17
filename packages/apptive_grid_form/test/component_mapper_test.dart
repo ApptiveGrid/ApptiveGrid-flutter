@@ -287,5 +287,23 @@ void main() {
 
       expect(widget.runtimeType, equals(EmptyFormWidget));
     });
+
+    test('ReducedLookUp', () {
+      final component = FormComponent<ReducedLookUpDataEntity>(
+        field: const GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.reducedLookUp,
+        ),
+        data: ReducedLookUpDataEntity(IntegerDataEntity()),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, equals(EmptyFormWidget));
+    });
   });
 }

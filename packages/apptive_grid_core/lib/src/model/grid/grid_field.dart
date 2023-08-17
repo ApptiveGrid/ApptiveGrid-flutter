@@ -49,16 +49,33 @@ class GridField {
           'type': json['type']['lookupType'],
         }),
       );
-    } else {
-      return GridField(
+    }
+    if (type == DataType.reducedLookUp) {
+      return ReducedLookUpField(
         id: id,
         name: name,
         key: key,
         schema: schema,
         links: links,
-        type: type,
+        referencesField: Uri.parse(json['type']['referencesField']),
+        lookUpField: Uri.parse(json['type']['lookupField']),
+        reduceFunction: json['type']['reduceFunction'],
+        reducedField: GridField.fromJson({
+          'id': 'reducedId',
+          'name': 'reduced',
+          'schema': {},
+          'type': json['type']['reducedType'],
+        }),
       );
     }
+    return GridField(
+      id: id,
+      name: name,
+      key: key,
+      schema: schema,
+      links: links,
+      type: type,
+    );
   }
 
   /// id of the field
@@ -184,7 +201,7 @@ class LookUpGridField extends GridField {
   /// The field that is looked up
   final Uri lookUpField;
 
-  /// A rough version of the lookedUp Field. This is not necessaryly the full field
+  /// A rough version of the lookedUp Field. This is not necessarily the full field
   final GridField lookedUpField;
 
   @override
@@ -227,5 +244,80 @@ class LookUpGridField extends GridField {
         referenceField,
         lookUpField,
         lookedUpField,
+      );
+}
+
+/// A [GridField] for [DataType.reducedLookUp]
+class ReducedLookUpField extends GridField {
+  /// Creates a new [GridField] for [DataType.reducedLookUp]
+  const ReducedLookUpField({
+    required super.id,
+    super.key,
+    required super.name,
+    super.links = const {},
+    super.schema,
+    required this.referencesField,
+    required this.lookUpField,
+    required this.reducedField,
+    required this.reduceFunction,
+  }) : super(
+          type: DataType.reducedLookUp,
+        );
+
+  /// An uri pointing to the field that is used to look up
+  final Uri referencesField;
+
+  /// The field that is looked up
+  final Uri lookUpField;
+
+  /// A rough version of the reduced Field. This is not necessarily the full field
+  final GridField reducedField;
+
+  /// The function that is used to reduce the fields. E.g `sum` for summing numeric values
+  final String reduceFunction;
+
+  @override
+  Map<String, dynamic> toJson() {
+    final json = super.toJson();
+    json['type'] = {
+      ...json['type'],
+      'referencesField': referencesField.toString(),
+      'lookupField': lookUpField.toString(),
+      'reducedType': reducedField.toJson()['type'],
+      'reduceFunction': reduceFunction,
+    };
+    return json;
+  }
+
+  @override
+  String toString() =>
+      'ReducedLookUpGridField(id: $id, name: $name, key: $key, referencesField: ${referencesField.toString()}, lookUpField: ${lookUpField.toString()}, reducedType: ${reducedField.type.name}, reduceFunction: $reduceFunction)';
+
+  @override
+  bool operator ==(Object other) {
+    return other is ReducedLookUpField &&
+        referencesField == other.referencesField &&
+        lookUpField == other.lookUpField &&
+        reducedField == other.reducedField &&
+        id == other.id &&
+        name == other.name &&
+        reduceFunction == other.reduceFunction &&
+        f.mapEquals(links, other.links);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        GridField(
+          id: id,
+          name: name,
+          type: type,
+          key: key,
+          links: links,
+          schema: schema,
+        ),
+        referencesField,
+        lookUpField,
+        reducedField,
+        reduceFunction,
       );
 }

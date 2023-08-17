@@ -83,6 +83,7 @@ Widget fromModel(FormComponent component) {
       );
     case DataType.createdAt:
     case DataType.lookUp:
+    case DataType.reducedLookUp:
       return const EmptyFormWidget();
   }
 }

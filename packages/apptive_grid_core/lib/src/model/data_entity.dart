@@ -106,6 +106,11 @@ abstract class DataEntity<T, S> with FilterableMixin {
           json,
           lookedUpField: (field as LookUpGridField).lookedUpField,
         );
+      case DataType.reducedLookUp:
+        return ReducedLookUpDataEntity.fromJson(
+          json,
+          reducedField: (field as ReducedLookUpField).reducedField,
+        );
     }
   }
 }
@@ -560,6 +565,25 @@ class LookUpDataEntity extends DataEntity<DataEntity, dynamic> {
     final lookedUpEntity =
         DataEntity.fromJson(json: jsonValue, field: lookedUpField);
     return LookUpDataEntity(lookedUpEntity);
+  }
+
+  @override
+  dynamic get schemaValue => value?.schemaValue;
+}
+
+/// [DataEntity] representing a SumUp
+class ReducedLookUpDataEntity extends DataEntity<DataEntity, dynamic> {
+  /// Create a new SumUpDataEntity
+  ReducedLookUpDataEntity([super.value]);
+
+  /// Creates a new SumUpDataEntity from a Json Response
+  factory ReducedLookUpDataEntity.fromJson(
+    dynamic jsonValue, {
+    required GridField reducedField,
+  }) {
+    final sumUpEntity =
+        DataEntity.fromJson(json: jsonValue, field: reducedField);
+    return ReducedLookUpDataEntity(sumUpEntity);
   }
 
   @override
