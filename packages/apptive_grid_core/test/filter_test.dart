@@ -15,7 +15,7 @@ void main() {
         ),
         equals(
           jsonEncode({
-            'fieldId': {'\$substring': 'value'}
+            'fieldId': {'\$substring': 'value'},
           }),
         ),
       );
@@ -29,7 +29,7 @@ void main() {
         ),
         equals(
           jsonEncode({
-            "fieldId": {"\$eq": "value"}
+            "fieldId": {"\$eq": "value"},
           }),
         ),
       );
@@ -46,7 +46,7 @@ void main() {
         ),
         equals(
           jsonEncode({
-            'fieldId': {'\$isEmpty': true}
+            'fieldId': {'\$isEmpty': true},
           }),
         ),
       );
@@ -60,7 +60,7 @@ void main() {
         ),
         equals(
           jsonEncode({
-            'fieldId': {'\$gt': 2}
+            'fieldId': {'\$gt': 2},
           }),
         ),
       );
@@ -74,7 +74,7 @@ void main() {
         ),
         equals(
           jsonEncode({
-            'fieldId': {'\$lt': 2}
+            'fieldId': {'\$lt': 2},
           }),
         ),
       );
@@ -92,8 +92,8 @@ void main() {
           equals(
             jsonEncode({
               'fieldId': {
-                '\$hasAnyOf': ['2', '3']
-              }
+                '\$hasAnyOf': ['2', '3'],
+              },
             }),
           ),
         );
@@ -110,8 +110,8 @@ void main() {
           equals(
             jsonEncode({
               'fieldId': {
-                '\$hasAllOf': ['2', '3']
-              }
+                '\$hasAllOf': ['2', '3'],
+              },
             }),
           ),
         );
@@ -128,8 +128,8 @@ void main() {
           equals(
             jsonEncode({
               'fieldId': {
-                '\$hasNoneOf': ['2', '3']
-              }
+                '\$hasNoneOf': ['2', '3'],
+              },
             }),
           ),
         );
@@ -147,7 +147,7 @@ void main() {
           ),
           equals(
             jsonEncode({
-              'fieldId': {'\$isActor': '{{ loggedInUser() }}'}
+              'fieldId': {'\$isActor': '{{ loggedInUser() }}'},
             }),
           ),
         );
@@ -296,10 +296,10 @@ void main() {
               },
               {
                 'fieldId1': {
-                  '\$hasAnyOf': ['2', '3']
-                }
+                  '\$hasAnyOf': ['2', '3'],
+                },
               },
-            ]
+            ],
           }),
         ),
       );
@@ -328,10 +328,10 @@ void main() {
               },
               {
                 'fieldId1': {
-                  '\$hasAnyOf': ['2', '3']
-                }
+                  '\$hasAnyOf': ['2', '3'],
+                },
               },
-            ]
+            ],
           }),
         ),
       );
@@ -407,7 +407,7 @@ void main() {
           jsonEncode({
             '\$not': {
               'field': {'\$eq': 'test'},
-            }
+            },
           }),
         ),
       );

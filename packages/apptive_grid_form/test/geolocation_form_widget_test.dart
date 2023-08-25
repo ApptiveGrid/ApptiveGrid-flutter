@@ -87,7 +87,7 @@ void main() {
                 geometry: Geometry(location: Location(lat: 47, lng: 11)),
                 placeId: 'placeId',
                 formattedAddress: 'ZWEIDENKER',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -148,7 +148,7 @@ void main() {
               Prediction(
                 description: 'ZWEIDENKER',
                 placeId: 'placeId',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -175,7 +175,7 @@ void main() {
                 geometry: Geometry(location: Location(lat: 47, lng: 11)),
                 placeId: 'placeId',
                 formattedAddress: 'ZWEIDENKER',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -251,7 +251,7 @@ void main() {
               Prediction(
                 description: 'ZWEIDENKER',
                 placeId: 'placeId',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -278,7 +278,7 @@ void main() {
                 geometry: Geometry(location: Location(lat: 47, lng: 11)),
                 placeId: 'placeId',
                 formattedAddress: 'ZWEIDENKER',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -350,7 +350,7 @@ void main() {
               Prediction(
                 description: 'ZWEIDENKER',
                 placeId: 'placeId',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -532,7 +532,7 @@ void main() {
               Prediction(
                 description: 'ZWEIDENKER',
                 placeId: 'placeId',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -559,7 +559,7 @@ void main() {
                 geometry: Geometry(location: Location(lat: 47, lng: 11)),
                 placeId: 'placeId',
                 formattedAddress: 'ZWEIDENKER',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -662,7 +662,7 @@ void main() {
               Prediction(
                 description: 'ZWEIDENKER',
                 placeId: 'placeId',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -782,7 +782,7 @@ void main() {
               Prediction(
                 description: 'ZWEIDENKER',
                 placeId: 'placeId',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -809,7 +809,7 @@ void main() {
                 geometry: Geometry(location: Location(lat: 47, lng: 11)),
                 placeId: 'placeId',
                 formattedAddress: 'ZWEIDENKER',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -1002,7 +1002,7 @@ void main() {
               Prediction(
                 description: 'ZWEIDENKER',
                 placeId: 'placeId',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -1029,7 +1029,7 @@ void main() {
                 geometry: Geometry(location: Location(lat: 47, lng: 11)),
                 placeId: 'placeId',
                 formattedAddress: 'ZWEIDENKER',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -1096,7 +1096,7 @@ void main() {
               Prediction(
                 description: 'ZWEIDENKER',
                 placeId: 'placeId',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -1125,7 +1125,7 @@ void main() {
                   geometry: Geometry(location: Location(lat: 47, lng: 11)),
                   placeId: 'placeId',
                   formattedAddress: 'ZWEIDENKER',
-                )
+                ),
               ],
             );
           } else {
@@ -1136,7 +1136,7 @@ void main() {
                   geometry: Geometry(location: Location(lat: 11, lng: 47)),
                   placeId: 'placeId',
                   formattedAddress: 'PharoPro',
-                )
+                ),
               ],
             );
           }
@@ -1232,7 +1232,7 @@ void main() {
               Prediction(
                 description: 'ZWEIDENKER',
                 placeId: 'placeId',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -1259,7 +1259,7 @@ void main() {
                 geometry: Geometry(location: Location(lat: 47, lng: 11)),
                 placeId: 'placeId',
                 formattedAddress: 'ZWEIDENKER',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -1360,7 +1360,7 @@ void main() {
               Prediction(
                 description: 'ZWEIDENKER',
                 placeId: 'placeId',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -1387,7 +1387,7 @@ void main() {
                 geometry: Geometry(location: Location(lat: 47, lng: 11)),
                 placeId: 'placeId',
                 formattedAddress: 'ZWEIDENKER',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -1511,7 +1511,7 @@ void main() {
               Prediction(
                 description: 'ZWEIDENKER',
                 placeId: 'placeId',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);
@@ -1538,7 +1538,7 @@ void main() {
                 geometry: Geometry(location: Location(lat: 47, lng: 11)),
                 placeId: 'placeId',
                 formattedAddress: 'ZWEIDENKER',
-              )
+              ),
             ],
           );
           return Response(jsonEncode(response.toJson()), 200);

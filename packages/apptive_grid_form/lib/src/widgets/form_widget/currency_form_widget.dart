@@ -102,7 +102,7 @@ class _CurrencyFormWidgetState extends State<CurrencyFormWidget>
               affinity: TextAffinity.downstream,
             ),
           );
-        })
+        }),
       ],
       keyboardType:
           const TextInputType.numberWithOptions(signed: true, decimal: false),

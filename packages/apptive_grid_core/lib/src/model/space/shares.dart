@@ -45,7 +45,7 @@ class Share {
       'role': role.backendName,
       'emails': emails,
       'users': users,
-      '_links': links.toJson()
+      '_links': links.toJson(),
     };
   }
 

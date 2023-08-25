@@ -631,5 +631,5 @@ const _typeMap = {
   'application/vnd.zzazz.deck+xml': 'zaz',
   'application/zip': 'zip',
   'application/vnd.zul': 'zirz',
-  'application/vnd.handheld-entertainment+xml': 'zmm'
+  'application/vnd.handheld-entertainment+xml': 'zmm',
 };

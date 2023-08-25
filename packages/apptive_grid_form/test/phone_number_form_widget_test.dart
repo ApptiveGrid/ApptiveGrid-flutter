@@ -19,7 +19,7 @@ void main() {
         data: PhoneNumberDataEntity(),
         field: field,
         required: true,
-      )
+      ),
     ],
     links: {ApptiveLinkType.submit: action},
     fields: [field],
@@ -33,7 +33,7 @@ void main() {
         data: PhoneNumberDataEntity('+123455'),
         field: field,
         required: true,
-      )
+      ),
     ],
     links: {ApptiveLinkType.submit: action},
     fields: [field],

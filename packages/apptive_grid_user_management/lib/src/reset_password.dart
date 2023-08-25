@@ -60,7 +60,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                             onPressed: _confirmReset,
                             child: Text(localization.actionLogin),
                           ),
-                        )
+                        ),
                 ]
               : [
                   PasswordFormField(
@@ -133,7 +133,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                             onPressed: _resetPassword,
                             child: Text(localization.actionResetPassword),
                           ),
-                        )
+                        ),
                 ],
         ),
       ),

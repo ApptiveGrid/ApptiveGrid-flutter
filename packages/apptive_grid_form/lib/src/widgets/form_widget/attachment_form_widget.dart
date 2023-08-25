@@ -98,7 +98,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
                 AddAttachmentButton(
                   onAttachmentsAdded: (newAttachments) =>
                       _attachmentsAdded(newAttachments, formState),
-                )
+                ),
               ],
             ),
           );

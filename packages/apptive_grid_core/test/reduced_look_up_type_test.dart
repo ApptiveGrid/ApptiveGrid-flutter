@@ -29,16 +29,16 @@ void main() {
               },
               'lookupType': {
                 'name': DataType.text.backendName,
-              }
-            }
+              },
+            },
           },
           "_links": {
             "self": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
-              "method": "get"
+              "method": "get",
             },
-          }
+          },
         };
 
     test('Field is parsed', () {
@@ -214,9 +214,9 @@ void main() {
               },
               'lookupType': {
                 'name': DataType.text.backendName,
-              }
-            }
-          }
+              },
+            },
+          },
         });
 
     DataEntity subEntity(DataType type) {

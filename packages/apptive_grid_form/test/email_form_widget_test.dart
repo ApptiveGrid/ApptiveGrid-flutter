@@ -18,7 +18,7 @@ void main() {
             data: EmailDataEntity(),
             field: field,
             required: required,
-          )
+          ),
         ],
         links: {ApptiveLinkType.submit: action},
         fields: [field],
@@ -32,7 +32,7 @@ void main() {
         data: EmailDataEntity('test@test.test'),
         field: field,
         required: true,
-      )
+      ),
     ],
     links: {ApptiveLinkType.submit: action},
     fields: [field],

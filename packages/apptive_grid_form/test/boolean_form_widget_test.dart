@@ -31,7 +31,7 @@ void main() {
             data: BooleanDataEntity(true),
             field: field,
             required: true,
-          )
+          ),
         ],
         links: {ApptiveLinkType.submit: action},
         fields: [field],

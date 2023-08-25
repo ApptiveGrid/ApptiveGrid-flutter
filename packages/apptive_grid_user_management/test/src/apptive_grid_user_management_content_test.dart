@@ -169,7 +169,7 @@ void main() {
                     callbackResult.key.currentState?.requestResetPassword();
                   },
                   child: const Text('Testing Callback'),
-                )
+                ),
               ],
             ),
           ),

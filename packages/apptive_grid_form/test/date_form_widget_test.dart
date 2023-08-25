@@ -33,7 +33,7 @@ void main() {
         supportedLocales: const [locale],
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate
+          GlobalWidgetsLocalizations.delegate,
         ],
         home: Material(
           child: ApptiveGridLocalization(
@@ -97,7 +97,7 @@ void main() {
             data: DateDataEntity(DateTime.now()),
             field: field,
             required: true,
-          )
+          ),
         ],
         links: {ApptiveLinkType.submit: action},
         fields: [field],

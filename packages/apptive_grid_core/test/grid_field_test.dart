@@ -30,16 +30,16 @@ void main() {
         "type": {
           "name": "enum",
           "options": ["a", "b"],
-          "componentTypes": ["selectBox"]
+          "componentTypes": ["selectBox"],
         },
         "key": "keyTest",
         "name": "name",
         "schema": {
           "type": "string",
-          "enum": ["a", "b"]
+          "enum": ["a", "b"],
         },
         "id": "ep8m43a1i4v1lgj4q8r31ba2f",
-        "_links": <String, dynamic>{}
+        "_links": <String, dynamic>{},
       };
 
       final fromJson = GridField.fromJson(json);
@@ -62,33 +62,33 @@ void main() {
             "displayValue": {"type": "string", "format": "string"},
             "id": {"type": "string", "format": "string"},
             "type": {"type": "string", "format": "string"},
-            "name": {"type": "string", "format": "string"}
+            "name": {"type": "string", "format": "string"},
           },
-          "objectType": "userReference"
+          "objectType": "userReference",
         },
         "name": "Created by",
         "type": {
           "name": "createdby",
           "typeName": "createdby",
-          "componentTypes": ["textfield"]
+          "componentTypes": ["textfield"],
         },
         "_links": {
           "patch": {
             "href":
                 "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
-            "method": "patch"
+            "method": "patch",
           },
           "query": {
             "href":
                 "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query",
-            "method": "get"
+            "method": "get",
           },
           "self": {
             "href":
                 "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
-            "method": "get"
-          }
-        }
+            "method": "get",
+          },
+        },
       };
 
       final fromJson = GridField.fromJson(json);

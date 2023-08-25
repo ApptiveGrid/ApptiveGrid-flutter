@@ -82,9 +82,9 @@ void main() {
           'fieldId': {
             '\$order': 'ascending',
             '\$distanceTo': {
-              'location': {'lat': 47.0, 'lon': 11.0}
+              'location': {'lat': 47.0, 'lon': 11.0},
             },
-          }
+          },
         }),
       );
 
@@ -100,9 +100,9 @@ void main() {
           'fieldId': {
             '\$order': 'descending',
             '\$distanceTo': {
-              'location': {'lat': 47.0, 'lon': 11.0}
+              'location': {'lat': 47.0, 'lon': 11.0},
             },
-          }
+          },
         }),
       );
     });

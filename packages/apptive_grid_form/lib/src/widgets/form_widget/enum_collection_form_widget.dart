@@ -66,7 +66,7 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
                           onChanged: (isSelected) {
                             _onSelected(entry, isSelected, fieldState);
                           },
-                        )
+                        ),
                     ],
                   );
                 }

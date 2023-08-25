@@ -116,7 +116,7 @@ class _UserDropdownButtonFormFieldState
     return [
       ...[pleaseSelect],
       if (widget.component.data.value != null)
-        DataUserWidget(user: widget.component.data.value!)
+        DataUserWidget(user: widget.component.data.value!),
     ];
   }
 }

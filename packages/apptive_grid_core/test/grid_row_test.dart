@@ -14,7 +14,7 @@ void main() {
             'type': 'array',
             'items': [
               {'type': 'string'},
-            ]
+            ],
           },
         },
       );
@@ -26,7 +26,7 @@ void main() {
       final fromJson = GridRow.fromJson(
         {
           '_id': id,
-          'fields': [value]
+          'fields': [value],
         },
         [field],
       );
@@ -47,7 +47,7 @@ void main() {
             'type': 'array',
             'items': [
               {'type': 'string'},
-            ]
+            ],
           },
         },
       );
@@ -74,7 +74,7 @@ void main() {
             'type': 'array',
             'items': [
               {'type': 'string'},
-            ]
+            ],
           },
         },
       );

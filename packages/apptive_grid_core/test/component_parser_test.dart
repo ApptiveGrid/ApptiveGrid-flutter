@@ -15,8 +15,8 @@ void main() {
         'properties': {
           id: {
             'type': 'string',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -33,9 +33,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -65,8 +65,8 @@ void main() {
         'properties': {
           id: {
             'type': 'string',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -83,9 +83,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -115,8 +115,8 @@ void main() {
         'properties': {
           id: {
             'type': 'string',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -133,9 +133,9 @@ void main() {
           'multi': false,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -162,8 +162,8 @@ void main() {
 
       final schema = {
         'properties': {
-          id: {'type': 'string', 'format': 'date-time'}
-        }
+          id: {'type': 'string', 'format': 'date-time'},
+        },
       };
       final field = GridField(
         id: id,
@@ -177,7 +177,7 @@ void main() {
         'value': value.toUtc().toIso8601String(),
         'required': true,
         'options': <String, dynamic>{},
-        'type': 'datePicker'
+        'type': 'datePicker',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -202,8 +202,8 @@ void main() {
 
       final schema = {
         'properties': {
-          id: {'type': 'string', 'format': 'date'}
-        }
+          id: {'type': 'string', 'format': 'date'},
+        },
       };
       final field = GridField(
         id: id,
@@ -217,7 +217,7 @@ void main() {
         'value': '2020-12-07',
         'required': true,
         'options': <String, dynamic>{},
-        'type': 'datePicker'
+        'type': 'datePicker',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -244,8 +244,8 @@ void main() {
         'properties': {
           id: {
             'type': 'integer',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -262,9 +262,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -294,8 +294,8 @@ void main() {
         'properties': {
           id: {
             'type': 'number',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -312,9 +312,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -344,8 +344,8 @@ void main() {
         'properties': {
           id: {
             'type': 'number',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -362,9 +362,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -393,8 +393,8 @@ void main() {
         'properties': {
           id: {
             'type': 'boolean',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -409,9 +409,9 @@ void main() {
         'required': true,
         'options': <String, dynamic>{
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'checkbox'
+        'type': 'checkbox',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -438,8 +438,8 @@ void main() {
         'properties': {
           id: {
             'type': 'email',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -456,9 +456,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -487,8 +487,8 @@ void main() {
         'properties': {
           id: {
             'type': 'phoneNumber',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -505,9 +505,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -538,8 +538,8 @@ void main() {
         'properties': {
           id: {
             'type': 'string',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -556,9 +556,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -574,8 +574,8 @@ void main() {
 
       final schema = {
         'properties': {
-          id: {'type': 'string', 'format': 'date-time'}
-        }
+          id: {'type': 'string', 'format': 'date-time'},
+        },
       };
       final field = GridField(
         id: id,
@@ -589,7 +589,7 @@ void main() {
         'value': null,
         'required': true,
         'options': <String, dynamic>{},
-        'type': 'datePicker'
+        'type': 'datePicker',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -605,8 +605,8 @@ void main() {
 
       final schema = {
         'properties': {
-          id: {'type': 'string', 'format': 'date'}
-        }
+          id: {'type': 'string', 'format': 'date'},
+        },
       };
       final field = GridField(
         id: id,
@@ -620,7 +620,7 @@ void main() {
         'value': null,
         'required': true,
         'options': <String, dynamic>{},
-        'type': 'datePicker'
+        'type': 'datePicker',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -641,8 +641,8 @@ void main() {
         'properties': {
           id: {
             'type': 'integer',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -659,9 +659,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -682,8 +682,8 @@ void main() {
         'properties': {
           id: {
             'type': 'number',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -700,9 +700,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -720,8 +720,8 @@ void main() {
         'properties': {
           id: {
             'type': 'boolean',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -735,7 +735,7 @@ void main() {
         'value': null,
         'required': true,
         'options': <String, dynamic>{},
-        'type': 'checkbox'
+        'type': 'checkbox',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -751,7 +751,7 @@ void main() {
 
       final schema = {
         'type': 'string',
-        'enum': ['GmbH', 'AG', 'Freiberuflich']
+        'enum': ['GmbH', 'AG', 'Freiberuflich'],
       };
       final field = GridField(
         id: id,
@@ -765,7 +765,7 @@ void main() {
         'value': 'AG',
         'required': true,
         'options': <String, dynamic>{},
-        'type': 'selectBox'
+        'type': 'selectBox',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -789,8 +789,8 @@ void main() {
         'properties': {
           id: {
             'type': 'email',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -807,9 +807,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -829,8 +829,8 @@ void main() {
         'properties': {
           id: {
             'type': 'phoneNumber',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -847,9 +847,9 @@ void main() {
           'multi': true,
           'placeholder': placeholder,
           'description': description,
-          'label': label
+          'label': label,
         },
-        'type': 'textfield'
+        'type': 'textfield',
       };
 
       final parsedComponent = FormComponent.fromJson(json, [field]);
@@ -869,8 +869,8 @@ void main() {
         'properties': {
           id: {
             'type': 'unkown',
-          }
-        }
+          },
+        },
       };
       final field = GridField(
         id: id,
@@ -884,7 +884,7 @@ void main() {
         'required': true,
         'options': <String, dynamic>{},
         'type': 'unkown',
-        'fieldId': 'differentId'
+        'fieldId': 'differentId',
       };
 
       expect(

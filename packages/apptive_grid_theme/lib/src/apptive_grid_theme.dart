@@ -58,6 +58,7 @@ class ApptiveGridTheme {
       background: windowBackground,
     );
     return baseTheme.copyWith(
+      useMaterial3: false,
       primaryColor: colorScheme.primary,
       indicatorColor: colorScheme.primary,
       colorScheme: colorScheme,

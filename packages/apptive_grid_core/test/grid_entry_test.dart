@@ -10,8 +10,8 @@ void main() {
         type: DataType.text,
         schema: {
           'properties': [
-            {'type': 'string'}
-          ]
+            {'type': 'string'},
+          ],
         },
       );
       const value = 'value';

@@ -50,7 +50,7 @@ void main() {
         data: SignatureDataEntity(),
         field: field,
         required: true,
-      )
+      ),
     ],
     links: {ApptiveLinkType.submit: action},
     fields: [field],
@@ -64,7 +64,7 @@ void main() {
         data: SignatureDataEntity(signature),
         field: field,
         required: true,
-      )
+      ),
     ],
     links: {ApptiveLinkType.submit: action},
     fields: [field],

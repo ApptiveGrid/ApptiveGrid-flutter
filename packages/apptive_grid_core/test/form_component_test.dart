@@ -18,13 +18,13 @@ void main() {
           "multi": false,
           "placeholder": null,
           "description": null,
-          "label": null
+          "label": null,
         },
         "required": true,
         "property": "Text",
-        "_links": <String, dynamic>{}
+        "_links": <String, dynamic>{},
       }, [
-        field
+        field,
       ]);
 
       expect(jsonComponent.runtimeType, FormComponent<DataEntity>);

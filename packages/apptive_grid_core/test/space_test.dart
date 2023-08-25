@@ -17,7 +17,7 @@ void main() {
             'self': {
               'href': '/api/users/user/spaces/id',
               'method': 'get',
-            }
+            },
           },
         });
 
@@ -73,7 +73,7 @@ void main() {
             "key": null,
             "color": "#6D16C0",
             "belongsTo": null,
-            "_links": <String, dynamic>{}
+            "_links": <String, dynamic>{},
           };
 
           final space = Space.fromJson(json);
@@ -105,7 +105,7 @@ void main() {
             "key": null,
             "color": "#6D16C0",
             "belongsTo": null,
-            "_links": <String, dynamic>{}
+            "_links": <String, dynamic>{},
           };
 
           final space = Space.fromJson(json);
@@ -146,7 +146,7 @@ void main() {
                 ApptiveLinkType.self: ApptiveLink(
                   uri: Uri.parse('/api/users/user/spaces/id/grids/gridId'),
                   method: 'get',
-                )
+                ),
               },
             ),
           ],
@@ -180,7 +180,7 @@ void main() {
             'self': {
               'href': '/api/users/user/spaces/id',
               'method': 'get',
-            }
+            },
           },
         });
 
@@ -259,7 +259,7 @@ void main() {
             'self': {
               'href': '/api/users/user/spaces/id',
               'method': 'get',
-            }
+            },
           },
         });
 
@@ -278,7 +278,7 @@ void main() {
             'self': {
               'href': '/api/users/user/spaces/id',
               'method': 'get',
-            }
+            },
           },
         });
 
@@ -332,7 +332,7 @@ void main() {
             'self': {
               'href': '/api/users/user/spaces/id',
               'method': 'get',
-            }
+            },
           },
         });
 

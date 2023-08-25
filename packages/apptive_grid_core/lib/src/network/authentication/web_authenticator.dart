@@ -3,8 +3,8 @@
 
 import 'dart:convert';
 import 'dart:html';
-import 'package:http/http.dart' as http;
 
+import 'package:http/http.dart' as http;
 import 'package:openid_client/openid_client.dart';
 
 /// Custom Authenticator for handling Authentication for Flutter Web
@@ -152,7 +152,7 @@ class _CustomAuthenticator {
         'client_id': client.clientId,
         'client_secret': client.clientSecret,
         'token': token.toJson(),
-        'nonce': null
+        'nonce': null,
       });
       window.localStorage['openid_client:credential'] =
           jsonEncode(credential.toJson());

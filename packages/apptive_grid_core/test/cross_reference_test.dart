@@ -12,7 +12,7 @@ void main() {
             {
               'displayValue': 'Yeah!',
               'uri':
-                  '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
+                  '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId',
             }
           ],
           '_id': '60d0370e0edfa83071816e12',
@@ -20,7 +20,7 @@ void main() {
             "self": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/60d0370e0edfa83071816e12",
-              "method": "get"
+              "method": "get",
             },
           },
         }
@@ -30,7 +30,7 @@ void main() {
         {
           "type": {
             "name": "reference",
-            "componentTypes": ["entitySelect"]
+            "componentTypes": ["entitySelect"],
           },
           "key": null,
           "name": "CrossRef",
@@ -38,94 +38,94 @@ void main() {
             "type": "object",
             "properties": {
               "displayValue": {"type": "string"},
-              "uri": {"type": "string"}
+              "uri": {"type": "string"},
             },
             "required": ["uri"],
             "objectType": "entityreference",
-            "gridUri": "/api/users/userId/spaces/spaceId/grids/referencedGrid"
+            "gridUri": "/api/users/userId/spaces/spaceId/grids/referencedGrid",
           },
           "id": "628210a604bd30163b9b7f77",
-          "_links": <String, dynamic>{}
+          "_links": <String, dynamic>{},
         }
       ],
       'name': 'New grid view',
       '_links': {
         "addLink": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
-          "method": "post"
+          "method": "post",
         },
         "forms": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldType": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange",
-          "method": "post"
+          "method": "post",
         },
         "removeField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove",
-          "method": "post"
+          "method": "post",
         },
         "addEntity": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "post"
+          "method": "post",
         },
         "views": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "get"
+          "method": "get",
         },
         "addView": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "post"
+          "method": "post",
         },
         "self": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldKey": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange",
-          "method": "post"
+          "method": "post",
         },
         "query": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/query",
-          "method": "get"
+          "method": "get",
         },
         "entities": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "get"
+          "method": "get",
         },
         "updates": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/updates",
-          "method": "get"
+          "method": "get",
         },
         "schema": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/schema",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldName": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename",
-          "method": "post"
+          "method": "post",
         },
         "addForm": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "post"
+          "method": "post",
         },
         "addField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd",
-          "method": "post"
+          "method": "post",
         },
         "rename": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/Rename",
-          "method": "post"
+          "method": "post",
         },
         "remove": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "delete"
-        }
+          "method": "delete",
+        },
       },
     };
 
@@ -139,7 +139,7 @@ void main() {
           jsonValue: {
             'displayValue': 'Yeah!',
             'uri':
-                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
+                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId',
           },
           gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGrid',
         ),
@@ -170,7 +170,7 @@ void main() {
           jsonValue: {
             'displayValue': 'Yeah!',
             'uri':
-                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
+                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId',
           },
           gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGrid',
         );
@@ -178,7 +178,7 @@ void main() {
           jsonValue: {
             'displayValue': 'Yeah!',
             'uri':
-                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
+                '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId',
           },
           gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGrid',
         );
@@ -258,22 +258,23 @@ void main() {
           {
             "type": {
               "name": "reference",
-              "componentTypes": ["entitySelect"]
+              "componentTypes": ["entitySelect"],
             },
             "schema": {
               "type": "object",
               "properties": {
                 "displayValue": {"type": "string"},
-                "uri": {"type": "string"}
+                "uri": {"type": "string"},
               },
               "required": ["uri"],
               "objectType": "entityreference",
-              "gridUri": "/api/users/userId/spaces/spaceId/grids/referencedGrid"
+              "gridUri":
+                  "/api/users/userId/spaces/spaceId/grids/referencedGrid",
             },
             "id": "3ftoqhqbct15h5o730uknpvp5",
             "name": "name",
             "key": null,
-            "_links": <String, dynamic>{}
+            "_links": <String, dynamic>{},
           }
         ],
         'schemaObject':
@@ -284,12 +285,12 @@ void main() {
             'value': {
               'displayValue': 'Yeah!',
               'uri':
-                  '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
+                  '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId',
             },
             'required': false,
             'options': {'label': null, 'description': null},
             'fieldId': '3ftoqhqbct15h5o730uknpvp5',
-            'type': 'entitySelect'
+            'type': 'entitySelect',
           }
         ],
         'name': 'New Name',
@@ -299,23 +300,23 @@ void main() {
           "submit": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "post"
+            "method": "post",
           },
           "remove": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "delete"
+            "method": "delete",
           },
           "self": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "get"
+            "method": "get",
           },
           "update": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "put"
-          }
+            "method": "put",
+          },
         },
       };
 
@@ -327,7 +328,7 @@ void main() {
         jsonValue: {
           'displayValue': 'Yeah!',
           'uri':
-              '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId'
+              '/api/users/userId/spaces/spaceId/grids/gridId/entities/entityId',
         },
         gridUri: '/api/users/userId/spaces/spaceId/grids/referencedGrid',
       );

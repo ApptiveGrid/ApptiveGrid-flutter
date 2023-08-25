@@ -47,7 +47,7 @@ class FormComponentOptions {
         'multi': multi,
         'placeholder': placeholder,
         'description': description,
-        'label': label
+        'label': label,
       };
 
   @override
