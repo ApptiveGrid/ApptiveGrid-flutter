@@ -469,6 +469,8 @@ class ApptiveGridClient extends ChangeNotifier {
   Future<User> getMe({
     Map<String, String> headers = const {},
   }) async {
+    // Always check for authentication here
+    // as there is no way of loading the currently logged in user without being logged in
     await authenticator.checkAuthentication();
 
     final url = Uri.parse('${options.environment.url}/api/users/me');
@@ -489,15 +491,22 @@ class ApptiveGridClient extends ChangeNotifier {
   Future<Space> getSpace({
     required Uri uri,
     Map<String, String> headers = const {},
+    bool isRetry = false,
   }) async {
-    await authenticator.checkAuthentication();
-
     final url = _generateApptiveGridUri(uri);
     final response = await _client.get(
       url,
       headers: _createHeadersWithDefaults(headers),
     );
     if (response.statusCode >= 400) {
+      if (response.statusCode == 401 && !isRetry) {
+        await authenticator.checkAuthentication();
+        return getSpace(
+          uri: uri,
+          headers: headers,
+          isRetry: true,
+        );
+      }
       throw response;
     }
     return Space.fromJson(json.decode(response.body));
@@ -513,9 +522,8 @@ class ApptiveGridClient extends ChangeNotifier {
     required Uri uri,
     required String formId,
     Map<String, String> headers = const {},
+    bool isRetry = false,
   }) async {
-    await authenticator.checkAuthentication();
-
     final url = _generateApptiveGridUri(uri);
 
     final response = await _client.post(
@@ -527,6 +535,15 @@ class ApptiveGridClient extends ChangeNotifier {
     );
 
     if (response.statusCode >= 400) {
+      if (response.statusCode == 401 && !isRetry) {
+        await authenticator.checkAuthentication();
+        return getEditLink(
+          uri: uri,
+          formId: formId,
+          headers: headers,
+          isRetry: true,
+        );
+      }
       throw response;
     }
 
@@ -551,9 +568,8 @@ class ApptiveGridClient extends ChangeNotifier {
     Map<String, String> headers = const {},
     ApptiveGridHalVersion? halVersion,
     ApptiveGridLayout layout = ApptiveGridLayout.field,
+    bool isRetry = false,
   }) async {
-    await authenticator.checkAuthentication();
-
     final url = _generateApptiveGridUri(uri);
 
     final response = await _client.get(
@@ -566,6 +582,16 @@ class ApptiveGridClient extends ChangeNotifier {
     );
 
     if (response.statusCode >= 400) {
+      if (response.statusCode == 401 && !isRetry) {
+        await authenticator.checkAuthentication();
+        return getEntity(
+          uri: uri,
+          headers: headers,
+          halVersion: halVersion,
+          layout: layout,
+          isRetry: true,
+        );
+      }
       throw response;
     }
 
