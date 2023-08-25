@@ -1,3 +1,7 @@
+## 1.5.0
+
+ - **FEAT**: Add support for ReducedLookUp (SumUp) Type (#112).
+
 ## 1.4.0
 
  - **FEAT**: Lookup DataType (#111).

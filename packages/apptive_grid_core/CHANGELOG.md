@@ -1,3 +1,8 @@
+## 1.7.0
+
+ - **FIX**: Move check for Authentication to only check if necessary (#114).
+ - **FEAT**: Add support for ReducedLookUp (SumUp) Type (#112).
+
 ## 1.6.0
 
  - **FEAT**: Lookup DataType (#111).
