@@ -61,6 +61,7 @@ void main() {
 
   tearDown(() {
     apptiveGridClient.dispose();
+    clearInteractions(httpClient);
   });
 
   group('loadForm', () {
@@ -1859,6 +1860,39 @@ void main() {
         throwsA(isInstanceOf<Response>()),
       );
     });
+
+    test('401 Authenticates and retries', () async {
+      final response = Response(json.encode(rawResponse), 401);
+      final retryResponse = Response(json.encode(rawResponse), 200);
+      bool isRetry = false;
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        if (!isRetry) {
+          isRetry = true;
+          return response;
+        } else {
+          return retryResponse;
+        }
+      });
+
+      await apptiveGridClient.getSpace(uri: spaceUri);
+
+      verify(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(2);
+    });
   });
 
   group('Caching Form Actions', () {
@@ -2059,6 +2093,49 @@ void main() {
         throwsA(isInstanceOf<Response>()),
       );
     });
+
+    test('401 Authenticates and retries', () async {
+      final response = Response(json.encode(rawResponse), 401);
+      final retryResponse = Response(json.encode(rawResponse), 200);
+      bool isRetry = false;
+
+      when(
+        () => httpClient.post(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink',
+          ),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async {
+        if (!isRetry) {
+          isRetry = true;
+          return response;
+        } else {
+          return retryResponse;
+        }
+      });
+
+      await apptiveGridClient.getEditLink(
+        uri: entityUri.replace(
+          pathSegments: [
+            ...entityUri.pathSegments,
+            'EditLink',
+          ],
+        ),
+        formId: form,
+      );
+
+      verify(
+        () => httpClient.post(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink',
+          ),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).called(2);
+    });
   });
 
   group('Get Entity', () {
@@ -2152,6 +2229,41 @@ void main() {
       );
 
       expect(entity, equals(rawResponse));
+    });
+
+    test('401 Authenticates and retries', () async {
+      final response = Response(json.encode(rawResponse), 401);
+      final retryResponse = Response(json.encode(rawResponse), 200);
+      bool isRetry = false;
+
+      when(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((_) async {
+        if (!isRetry) {
+          isRetry = true;
+          return response;
+        } else {
+          return retryResponse;
+        }
+      });
+
+      await apptiveGridClient.getEntity(
+        uri: entityUri,
+      );
+
+      verify(
+        () => httpClient.get(
+          Uri.parse(
+            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
+          ),
+          headers: any(named: 'headers'),
+        ),
+      ).called(2);
     });
   });
 
