@@ -59,7 +59,7 @@ void main() {
         'properties': {
           id: {'type': 'boolean'},
         },
-        'required': []
+        'required': [],
       };
       final component = FormComponent<BooleanDataEntity>(
         property: property,
@@ -125,7 +125,7 @@ void main() {
         'properties': {
           id: {'type': 'boolean'},
         },
-        'required': []
+        'required': [],
       };
       final component = FormComponent<BooleanDataEntity>(
         property: property,
@@ -240,7 +240,7 @@ void main() {
             links: {ApptiveLinkType.submit: action},
             attachmentActions: {
               attachment:
-                  AddAttachmentAction(byteData: bytes, attachment: attachment)
+                  AddAttachmentAction(byteData: bytes, attachment: attachment),
             },
           );
 
@@ -263,7 +263,7 @@ void main() {
           ApptiveGridEnvironment.production: AttachmentConfiguration(
             attachmentApiEndpoint: 'attachmentEndpoint.com/',
             signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
-          )
+          ),
         };
 
         const signedUrl = 'https://signed.url';
@@ -305,7 +305,7 @@ void main() {
                   "unauthenticatedSignedUrlEndpoint": signedFormUrl,
                   "signedUrlEndpoint": signedUrl,
                   "apiEndpoint": attachmentUrl,
-                }
+                },
               }),
               200,
             );
@@ -335,7 +335,7 @@ void main() {
           ApptiveGridEnvironment.production: AttachmentConfiguration(
             attachmentApiEndpoint: 'attachmentEndpoint.com/',
             signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
-          )
+          ),
         };
 
         setUp(() {
@@ -684,7 +684,7 @@ void main() {
                   final requestUri = uploadUri.replace(
                     pathSegments: [
                       (invocation.positionalArguments.first as Uri)
-                          .queryParameters['fileName']!
+                          .queryParameters['fileName']!,
                     ],
                   );
                   // Use filename in upload uri to match error responses
@@ -776,7 +776,7 @@ void main() {
                   final requestUri = uploadUri.replace(
                     pathSegments: [
                       (invocation.positionalArguments.first as Uri)
-                          .queryParameters['fileName']!
+                          .queryParameters['fileName']!,
                     ],
                   );
                   // Use filename in upload uri to match error responses
@@ -833,7 +833,7 @@ void main() {
             ApptiveGridEnvironment.production: AttachmentConfiguration(
               attachmentApiEndpoint: 'attachmentEndpoint.com/',
               signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
-            )
+            ),
           };
 
           setUp(() {
@@ -995,7 +995,7 @@ void main() {
             attachmentApiEndpoint: 'attachmentEndpoint.com/',
             signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
             signedUrlFormApiEndpoint: 'signedUrlFormApiEndpoint.com/',
-          )
+          ),
         };
 
         setUp(() {
@@ -1229,7 +1229,7 @@ void main() {
             attachmentApiEndpoint: 'attachmentEndpoint.com/',
             signedUrlApiEndpoint: 'signedUrlApiEndpoint.com/',
             signedUrlFormApiEndpoint: 'signedUrlFormApiEndpoint.com/',
-          )
+          ),
         };
         final attachment = Attachment(
           name: 'name',

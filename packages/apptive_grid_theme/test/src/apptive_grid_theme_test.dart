@@ -46,12 +46,12 @@ void main() {
                           GoldenTestScenario(
                             name: scenario.key,
                             child: scenario.value,
-                          )
+                          ),
                       ],
                     ),
                   ),
                 ),
-              )
+              ),
           ],
         );
       },
@@ -189,7 +189,7 @@ void main() {
             ),
           ),
         ),
-      )
+      ),
     },
   );
 
@@ -209,9 +209,9 @@ void main() {
           TextButton(
             onPressed: () {},
             child: const Text('OK'),
-          )
+          ),
         ],
-      )
+      ),
     },
   );
 
@@ -229,7 +229,7 @@ void main() {
       'With Actions': AppBar(
         title: const Text('App Bar'),
         actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.add))],
-      )
+      ),
     },
   );
 
@@ -535,7 +535,7 @@ void main() {
             label: 'Item 2',
           ),
         ],
-      )
+      ),
     },
   );
 
@@ -551,7 +551,7 @@ void main() {
             Tab(icon: Icon(Icons.person), text: 'Item 2'),
           ],
         ),
-      )
+      ),
     },
   );
 }

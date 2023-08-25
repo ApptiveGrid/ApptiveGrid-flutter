@@ -567,7 +567,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                   localization.additionalAnswer,
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -601,7 +601,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                   localization.additionalAnswer,
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -646,7 +646,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             },
             child: Text(localization.backToForm),
           ),
-        )
+        ),
       ],
     );
   }

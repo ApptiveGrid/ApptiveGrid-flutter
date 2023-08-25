@@ -40,7 +40,7 @@ class ApptiveGridUserManagementClient {
 
   Map<String, String> get _commonHeaders => {
         'Content-Type': 'application/json',
-        if (locale != null) 'Accept-Language': locale!
+        if (locale != null) 'Accept-Language': locale!,
       };
 
   /// Registers a new user with the given inputs

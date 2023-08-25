@@ -161,7 +161,7 @@ class _LoginContentState extends State<LoginContent> {
                           child: Text(localization.actionRegister),
                         ),
                       ),
-                    ]
+                    ],
                   ],
                 ),
               );
@@ -214,7 +214,7 @@ class _LoginContentState extends State<LoginContent> {
                         });
                       },
                     ),
-                  )
+                  ),
                 ],
               );
             case _LoginContentStep.waitForConfirmation:
@@ -234,7 +234,7 @@ class _LoginContentState extends State<LoginContent> {
                       },
                       child: Text(localization.actionBack),
                     ),
-                  )
+                  ),
                 ],
               );
           }

@@ -15,57 +15,57 @@ void main() {
       {
         "type": {
           "name": "date-time",
-          "componentTypes": ["datePicker"]
+          "componentTypes": ["datePicker"],
         },
         "schema": {"type": "string", "format": "date-time"},
         "id": "4zc4l4c5coyi7qh6q1ozrg54u",
         "name": "Date Time",
         "key": null,
-        "_links": <String, dynamic>{}
+        "_links": <String, dynamic>{},
       },
       {
         "type": {
           "name": "boolean",
-          "componentTypes": ["checkbox"]
+          "componentTypes": ["checkbox"],
         },
         "schema": {"type": "boolean"},
         "id": "4zc4l456pca5ursrt9rxefpsc",
         "name": "Checkmark",
         "key": null,
-        "_links": <String, dynamic>{}
+        "_links": <String, dynamic>{},
       },
       {
         "type": {
           "name": "date",
-          "componentTypes": ["datePicker", "textfield"]
+          "componentTypes": ["datePicker", "textfield"],
         },
         "schema": {"type": "string", "format": "date"},
         "id": "4zc4l49to77dhfagr844flaey",
         "name": "Date",
         "key": null,
-        "_links": <String, dynamic>{}
+        "_links": <String, dynamic>{},
       },
       {
         "type": {
           "name": "string",
-          "componentTypes": ["textfield"]
+          "componentTypes": ["textfield"],
         },
         "schema": {"type": "string"},
         "id": "4zc4l45nmww7ujq7y4axlbtjg",
         "name": "Text",
         "key": null,
-        "_links": <String, dynamic>{}
+        "_links": <String, dynamic>{},
       },
       {
         "type": {
           "name": "integer",
-          "componentTypes": ["textfield"]
+          "componentTypes": ["textfield"],
         },
         "schema": {"type": "integer"},
         "id": "4zc4l48ffin5v8pa2emyx9s15",
         "name": "Number",
         "key": null,
-        "_links": <String, dynamic>{}
+        "_links": <String, dynamic>{},
       },
     ],
     'components': [
@@ -77,10 +77,10 @@ void main() {
           'multi': false,
           'placeholder': '',
           'description': 'Text Description',
-          'label': null
+          'label': null,
         },
         'fieldId': '4zc4l45nmww7ujq7y4axlbtjg',
-        'type': 'textfield'
+        'type': 'textfield',
       },
       {
         'property': 'NumberC',
@@ -90,10 +90,10 @@ void main() {
           'multi': false,
           'placeholder': '',
           'description': 'Number description',
-          'label': 'Number Label'
+          'label': 'Number Label',
         },
         'fieldId': '4zc4l48ffin5v8pa2emyx9s15',
-        'type': 'textfield'
+        'type': 'textfield',
       },
       {
         'property': 'DateTimeC',
@@ -101,10 +101,10 @@ void main() {
         'required': false,
         'options': {
           'label': 'DateTime Label',
-          'description': 'DateTime Description'
+          'description': 'DateTime Description',
         },
         'fieldId': '4zc4l4c5coyi7qh6q1ozrg54u',
-        'type': 'datePicker'
+        'type': 'datePicker',
       },
       {
         'property': 'DateC',
@@ -112,7 +112,7 @@ void main() {
         'required': false,
         'options': {'label': 'Date Label', 'description': 'Date Description'},
         'fieldId': '4zc4l49to77dhfagr844flaey',
-        'type': 'datePicker'
+        'type': 'datePicker',
       },
       {
         'property': 'CheckmarkC',
@@ -120,10 +120,10 @@ void main() {
         'required': false,
         'options': {
           'label': 'Checkbox Label',
-          'description': 'Checkbox Description'
+          'description': 'Checkbox Description',
         },
         'fieldId': '4zc4l456pca5ursrt9rxefpsc',
-        'type': 'checkbox'
+        'type': 'checkbox',
       }
     ],
     'name': name,
@@ -145,23 +145,23 @@ void main() {
       "submit": {
         "href":
             "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-        "method": "post"
+        "method": "post",
       },
       "remove": {
         "href":
             "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-        "method": "delete"
+        "method": "delete",
       },
       "self": {
         "href":
             "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-        "method": "get"
+        "method": "get",
       },
       "update": {
         "href":
             "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-        "method": "put"
-      }
+        "method": "put",
+      },
     },
   };
 
@@ -251,14 +251,14 @@ void main() {
                 'url': {'type': 'string'},
                 'largeThumbnail': {'type': 'string'},
                 'name': {'type': 'string'},
-                'type': {'type': 'string'}
+                'type': {'type': 'string'},
               },
               'required': ['url', 'type'],
-              'objectType': 'attachment'
-            }
+              'objectType': 'attachment',
+            },
           },
         },
-        'required': []
+        'required': [],
       };
       final attachment = Attachment(name: 'name', url: Uri(), type: 'type');
       final component = FormComponent<AttachmentDataEntity>(
@@ -374,13 +374,13 @@ void main() {
         {
           "type": {
             "name": "string",
-            "componentTypes": ["textfield"]
+            "componentTypes": ["textfield"],
           },
           "schema": {"type": "string"},
           "id": "b8qscjhfw5mukbred3tae8bd2",
           "name": "Text",
           "key": null,
-          "_links": <String, dynamic>{}
+          "_links": <String, dynamic>{},
         },
       ],
       'components': [
@@ -392,10 +392,10 @@ void main() {
             'multi': false,
             'placeholder': null,
             'description': null,
-            'label': null
+            'label': null,
           },
           'fieldId': 'b8qscjhfw5mukbred3tae8bd2',
-          'type': 'textfield'
+          'type': 'textfield',
         }
       ],
       'name': 'Name',
@@ -405,18 +405,18 @@ void main() {
         "remove": {
           "href":
               "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-          "method": "delete"
+          "method": "delete",
         },
         "self": {
           "href":
               "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-          "method": "get"
+          "method": "get",
         },
         "update": {
           "href":
               "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-          "method": "put"
-        }
+          "method": "put",
+        },
       },
     };
     test('Form Without Actions parses correctly', () {
@@ -433,23 +433,23 @@ void main() {
           {
             "type": {
               "name": "reference",
-              "componentTypes": ["entitySelect"]
+              "componentTypes": ["entitySelect"],
             },
             "schema": {
               "type": "object",
               "properties": {
                 "displayValue": {"type": "string"},
-                "uri": {"type": "string"}
+                "uri": {"type": "string"},
               },
               "required": ["uri"],
               "objectType": "entityreference",
               "gridUri":
-                  "/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06"
+                  "/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06",
             },
             "id": "3ftoqhqbct15h5o730uknpvp5",
             "name": "Cross Ref",
             "key": null,
-            "_links": <String, dynamic>{}
+            "_links": <String, dynamic>{},
           }
         ],
         'components': [
@@ -459,7 +459,7 @@ void main() {
             'required': false,
             'options': {'label': null, 'description': null},
             'fieldId': '3ftoqhqbct15h5o730uknpvp5',
-            'type': 'entitySelect'
+            'type': 'entitySelect',
           }
         ],
         'name': 'Name',
@@ -469,23 +469,23 @@ void main() {
           "submit": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "post"
+            "method": "post",
           },
           "remove": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "delete"
+            "method": "delete",
           },
           "self": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "get"
+            "method": "get",
           },
           "update": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "put"
-          }
+            "method": "put",
+          },
         },
       };
 
@@ -515,23 +515,23 @@ void main() {
           {
             "type": {
               "name": "reference",
-              "componentTypes": ["entitySelect"]
+              "componentTypes": ["entitySelect"],
             },
             "schema": {
               "type": "object",
               "properties": {
                 "displayValue": {"type": "string"},
-                "uri": {"type": "string"}
+                "uri": {"type": "string"},
               },
               "required": ["uri"],
               "objectType": "entityreference",
               "gridUri":
-                  "/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06"
+                  "/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/views/60d036f00edfa83071816e06",
             },
             "id": "3ftoqhqbct15h5o730uknpvp5",
             "name": "Cross Ref",
             "key": null,
-            "_links": <String, dynamic>{}
+            "_links": <String, dynamic>{},
           }
         ],
         'components': [
@@ -540,12 +540,12 @@ void main() {
             'value': {
               'displayValue': 'Yeah!',
               'uri':
-                  '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d'
+                  '/api/users/609bc536dad545d1af7e82db/spaces/60d036dc0edfa83071816e00/grids/60d036f00edfa83071816e07/entities/60d036ff0edfa83071816e0d',
             },
             'required': false,
             'options': {'label': null, 'description': null},
             'fieldId': '3ftoqhqbct15h5o730uknpvp5',
-            'type': 'entitySelect'
+            'type': 'entitySelect',
           }
         ],
         'name': 'Name',
@@ -555,23 +555,23 @@ void main() {
           "submit": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "post"
+            "method": "post",
           },
           "remove": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "delete"
+            "method": "delete",
           },
           "self": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "get"
+            "method": "get",
           },
           "update": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "put"
-          }
+            "method": "put",
+          },
         },
       };
 

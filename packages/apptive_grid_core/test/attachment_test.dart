@@ -15,7 +15,7 @@ void main() {
                 'url': 'https://attachment.com/id',
                 'largeThumbnail': null,
                 'name': '1.jpeg',
-                'type': 'image/jpeg'
+                'type': 'image/jpeg',
               }
             ]
           ],
@@ -24,7 +24,7 @@ void main() {
             "self": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
-              "method": "get"
+              "method": "get",
             },
           },
         },
@@ -34,7 +34,7 @@ void main() {
         {
           "type": {
             "name": "attachments",
-            "componentTypes": ["filePicker"]
+            "componentTypes": ["filePicker"],
           },
           "key": null,
           "name": "Attachment",
@@ -47,14 +47,14 @@ void main() {
                 "url": {"type": "string"},
                 "largeThumbnail": {"type": "string"},
                 "name": {"type": "string"},
-                "type": {"type": "string"}
+                "type": {"type": "string"},
               },
               "required": ["url", "type"],
-              "objectType": "attachment"
-            }
+              "objectType": "attachment",
+            },
           },
           "id": "628210b904bd301aa89b7f81",
-          "_links": <String, dynamic>{}
+          "_links": <String, dynamic>{},
         }
       ],
       'name': 'Grid 4 View',
@@ -62,80 +62,80 @@ void main() {
       '_links': {
         "addLink": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
-          "method": "post"
+          "method": "post",
         },
         "forms": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldType": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange",
-          "method": "post"
+          "method": "post",
         },
         "removeField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove",
-          "method": "post"
+          "method": "post",
         },
         "addEntity": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "post"
+          "method": "post",
         },
         "views": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "get"
+          "method": "get",
         },
         "addView": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "post"
+          "method": "post",
         },
         "self": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldKey": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange",
-          "method": "post"
+          "method": "post",
         },
         "query": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/query",
-          "method": "get"
+          "method": "get",
         },
         "entities": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "get"
+          "method": "get",
         },
         "updates": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/updates",
-          "method": "get"
+          "method": "get",
         },
         "schema": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/schema",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldName": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename",
-          "method": "post"
+          "method": "post",
         },
         "addForm": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "post"
+          "method": "post",
         },
         "addField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd",
-          "method": "post"
+          "method": "post",
         },
         "rename": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/Rename",
-          "method": "post"
+          "method": "post",
         },
         "remove": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "delete"
-        }
+          "method": "delete",
+        },
       },
     };
     final rawResponseWithNullValue = {
@@ -146,7 +146,7 @@ void main() {
           'fields': [
             null,
           ],
-          '_id': '619b63e84a391314968da9a0'
+          '_id': '619b63e84a391314968da9a0',
         },
       ],
       'filter': {},
@@ -154,7 +154,7 @@ void main() {
         {
           "type": {
             "name": "attachments",
-            "componentTypes": ["filePicker"]
+            "componentTypes": ["filePicker"],
           },
           "key": null,
           "name": "Attachment",
@@ -167,14 +167,14 @@ void main() {
                 "url": {"type": "string"},
                 "largeThumbnail": {"type": "string"},
                 "name": {"type": "string"},
-                "type": {"type": "string"}
+                "type": {"type": "string"},
               },
               "required": ["url", "type"],
-              "objectType": "attachment"
-            }
+              "objectType": "attachment",
+            },
           },
           "id": "628210b904bd301aa89b7f81",
-          "_links": <String, dynamic>{}
+          "_links": <String, dynamic>{},
         }
       ],
       'name': 'Grid 4 View',
@@ -182,80 +182,80 @@ void main() {
       '_links': {
         "addLink": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
-          "method": "post"
+          "method": "post",
         },
         "forms": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldType": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange",
-          "method": "post"
+          "method": "post",
         },
         "removeField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove",
-          "method": "post"
+          "method": "post",
         },
         "addEntity": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "post"
+          "method": "post",
         },
         "views": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "get"
+          "method": "get",
         },
         "addView": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "post"
+          "method": "post",
         },
         "self": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldKey": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange",
-          "method": "post"
+          "method": "post",
         },
         "query": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/query",
-          "method": "get"
+          "method": "get",
         },
         "entities": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "get"
+          "method": "get",
         },
         "updates": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/updates",
-          "method": "get"
+          "method": "get",
         },
         "schema": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/schema",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldName": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename",
-          "method": "post"
+          "method": "post",
         },
         "addForm": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "post"
+          "method": "post",
         },
         "addField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd",
-          "method": "post"
+          "method": "post",
         },
         "rename": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/Rename",
-          "method": "post"
+          "method": "post",
         },
         "remove": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "delete"
-        }
+          "method": "delete",
+        },
       },
     };
 
@@ -272,7 +272,7 @@ void main() {
               'url': 'https://attachment.com/id',
               'largeThumbnail': null,
               'name': '1.jpeg',
-              'type': 'image/jpeg'
+              'type': 'image/jpeg',
             }
           ],
         ),
@@ -303,7 +303,7 @@ void main() {
           {
             "type": {
               "name": "attachments",
-              "componentTypes": ["filePicker"]
+              "componentTypes": ["filePicker"],
             },
             "schema": {
               "type": "array",
@@ -314,16 +314,16 @@ void main() {
                   "url": {"type": "string", "format": "string"},
                   "largeThumbnail": {"type": "string", "format": "string"},
                   "name": {"type": "string", "format": "string"},
-                  "type": {"type": "string", "format": "string"}
+                  "type": {"type": "string", "format": "string"},
                 },
                 "required": ["url", "type"],
-                "objectType": "attachment"
-              }
+                "objectType": "attachment",
+              },
             },
             "id": "id",
             "name": "property",
             "key": null,
-            "_links": <String, dynamic>{}
+            "_links": <String, dynamic>{},
           }
         ],
         'title': 'New title',
@@ -337,7 +337,7 @@ void main() {
                 'url': 'https://attachment.com/id',
                 'largeThumbnail': null,
                 'name': 'anakin_cyrille.PNG',
-                'type': 'image/png'
+                'type': 'image/png',
               }
             ],
             'required': false,
@@ -347,30 +347,30 @@ void main() {
           }
         ],
         'actions': [
-          {'uri': '/api/a/123/456', 'method': 'POST'}
+          {'uri': '/api/a/123/456', 'method': 'POST'},
         ],
         'id': 'formId',
         '_links': {
           "submit": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "post"
+            "method": "post",
           },
           "remove": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "delete"
+            "method": "delete",
           },
           "self": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "get"
+            "method": "get",
           },
           "update": {
             "href":
                 "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
-            "method": "put"
-          }
+            "method": "put",
+          },
         },
       };
 
@@ -384,7 +384,7 @@ void main() {
           'url': 'https://attachment.com/id',
           'largeThumbnail': null,
           'name': 'anakin_cyrille.PNG',
-          'type': 'image/png'
+          'type': 'image/png',
         }
       ]);
 
@@ -410,7 +410,7 @@ void main() {
           'url': 'https://attachment.com/id',
           'largeThumbnail': null,
           'name': 'anakin_cyrille.PNG',
-          'type': 'image/png'
+          'type': 'image/png',
         }
       ]);
       final component = FormComponent<AttachmentDataEntity>(
@@ -441,7 +441,7 @@ void main() {
         'url': 'https://attachment.com/id',
         'largeThumbnail': 'https://attachment.com/id/largeThumbnail',
         'name': 'anakin_cyrille.PNG',
-        'type': 'image/png'
+        'type': 'image/png',
       });
 
       expect(
@@ -472,7 +472,7 @@ void main() {
         'url': 'https://attachment.com/id',
         'largeThumbnail': null,
         'name': 'anakin_cyrille.PNG',
-        'type': 'image/png'
+        'type': 'image/png',
       });
 
       final direct = Attachment(

@@ -47,7 +47,7 @@ void main() {
                 currency: 'EUR',
               ),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -94,7 +94,7 @@ void main() {
                 currency: 'EUR',
               ),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -137,7 +137,7 @@ void main() {
                 currency: 'EUR',
               ),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -191,7 +191,7 @@ void main() {
                 currency: 'EUR',
               ),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -246,7 +246,7 @@ void main() {
                 currency: 'EUR',
               ),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -300,7 +300,7 @@ void main() {
                 currency: 'EUR',
               ),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {

@@ -56,7 +56,7 @@ class RequestResetPasswordContentState
           ? [
               const Center(
                 child: CircularProgressIndicator.adaptive(),
-              )
+              ),
             ]
           : _success
               ? [
@@ -91,7 +91,7 @@ class RequestResetPasswordContentState
                         );
                       },
                     ),
-                  )
+                  ),
                 ]
               : [
                   Text(

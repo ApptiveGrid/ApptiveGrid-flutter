@@ -164,9 +164,9 @@ void main() {
         "self": {
           "href":
               "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca2750af8b43/sviews/63d28a8a78d9ca55c2af8b45",
-          "method": "get"
-        }
-      }
+          "method": "get",
+        },
+      },
     });
 
     test('Direct, equals json', () {

@@ -252,7 +252,7 @@ class _RegisterContentState extends State<RegisterContent> {
               },
               child: Text(localization.actionBack),
             ),
-          )
+          ),
         ],
       );
     }

@@ -59,7 +59,7 @@ void main() {
                 ),
               ),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -95,7 +95,7 @@ void main() {
               property: 'name',
               data: UserDataEntity(),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -140,7 +140,7 @@ void main() {
                 ),
               ),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -207,7 +207,7 @@ void main() {
               property: 'name',
               data: UserDataEntity(),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -276,7 +276,7 @@ void main() {
               property: 'name',
               data: UserDataEntity(),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -409,7 +409,7 @@ void main() {
               property: 'name',
               data: UserDataEntity(),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {
@@ -457,7 +457,7 @@ void main() {
               property: 'name',
               data: UserDataEntity(),
               field: fieldWithoutLink,
-            )
+            ),
           ],
           fields: [fieldWithoutLink],
           links: {
@@ -508,7 +508,7 @@ void main() {
               property: 'name',
               data: UserDataEntity(),
               field: field,
-            )
+            ),
           ],
           fields: [field],
           links: {

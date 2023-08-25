@@ -13,7 +13,7 @@ void main() {
         id: 'invitationId',
         links: {
           ApptiveLinkType.self:
-              ApptiveLink(uri: Uri.parse('/invitation'), method: 'get')
+              ApptiveLink(uri: Uri.parse('/invitation'), method: 'get'),
         },
       );
       final response2 = Invitation(
@@ -22,7 +22,7 @@ void main() {
         id: 'invitationId',
         links: {
           ApptiveLinkType.self:
-              ApptiveLink(uri: Uri.parse('/invitation'), method: 'get')
+              ApptiveLink(uri: Uri.parse('/invitation'), method: 'get'),
         },
       );
 
@@ -39,7 +39,7 @@ void main() {
         id: 'invitationId',
         links: {
           ApptiveLinkType.self:
-              ApptiveLink(uri: Uri.parse('/invitation'), method: 'get')
+              ApptiveLink(uri: Uri.parse('/invitation'), method: 'get'),
         },
       );
 
@@ -57,7 +57,7 @@ void main() {
         id: 'invitationId',
         links: {
           ApptiveLinkType.self:
-              ApptiveLink(uri: Uri.parse('/invitation'), method: 'get')
+              ApptiveLink(uri: Uri.parse('/invitation'), method: 'get'),
         },
       );
       final response2 = Invitation(
@@ -66,7 +66,7 @@ void main() {
         id: 'differentInvitation',
         links: {
           ApptiveLinkType.self:
-              ApptiveLink(uri: Uri.parse('/invitation'), method: 'get')
+              ApptiveLink(uri: Uri.parse('/invitation'), method: 'get'),
         },
       );
 
@@ -81,7 +81,7 @@ void main() {
       id: 'invitationId',
       links: {
         ApptiveLinkType.self:
-            ApptiveLink(uri: Uri.parse('/invitation'), method: 'get')
+            ApptiveLink(uri: Uri.parse('/invitation'), method: 'get'),
       },
     );
 
@@ -103,7 +103,7 @@ void main() {
       id: 'invitationId',
       links: {
         ApptiveLinkType.self:
-            ApptiveLink(uri: Uri.parse('/invitation'), method: 'get')
+            ApptiveLink(uri: Uri.parse('/invitation'), method: 'get'),
       },
     );
 

@@ -231,7 +231,7 @@ void main() {
   group('Sorting', () {
     testWidgets('Sorting is applied', (tester) async {
       final sorting = [
-        const ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)
+        const ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc),
       ];
       final target = TestApp(
         client: client,
@@ -277,7 +277,7 @@ void main() {
 
     testWidgets('Switching Sorting triggers reload', (tester) async {
       final sorting = [
-        const ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc)
+        const ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc),
       ];
       final target = TestApp(
         client: client,
@@ -285,7 +285,7 @@ void main() {
           gridUri1: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
           sorting1: sorting,
           sorting2: const [
-            ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.desc)
+            ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.desc),
           ],
         ),
       );

@@ -99,7 +99,7 @@ string''';
             data: StringDataEntity('Value'),
             field: field,
             required: true,
-          )
+          ),
         ],
         links: {ApptiveLinkType.submit: action},
         fields: [field],

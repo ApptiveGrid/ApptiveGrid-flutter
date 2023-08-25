@@ -76,7 +76,7 @@ class _MyHomePageState extends State<_MyHomePage> {
                   ? Icons.arrow_drop_up
                   : Icons.arrow_drop_down,
             ),
-          )
+          ),
         ],
       ),
       // Add the ApptiveGridGridBuilder to your Widget Tree

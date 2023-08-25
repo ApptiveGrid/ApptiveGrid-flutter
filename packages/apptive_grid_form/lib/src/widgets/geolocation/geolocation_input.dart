@@ -151,7 +151,7 @@ class _GeolocationInputState extends State<GeolocationInput> {
             onPressed: _selectCurrentLocation,
             icon: const Icon(Icons.my_location),
           ),
-        ]
+        ],
       ],
     );
   }

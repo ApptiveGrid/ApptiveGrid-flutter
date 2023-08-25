@@ -42,17 +42,17 @@ void main() {
           '_id': 'row1',
           'fields': ['First'],
           '_links': {
-            'self': {'href': '/api/entities/row1', 'method': 'get'}
-          }
+            'self': {'href': '/api/entities/row1', 'method': 'get'},
+          },
         },
         {
           '_id': 'row2',
           'fields': ['Second'],
           '_links': {
-            'self': {'href': '/api/entities/row2', 'method': 'get'}
-          }
+            'self': {'href': '/api/entities/row2', 'method': 'get'},
+          },
         }
-      ]
+      ],
     };
 
     final filteredQueryResponse = {
@@ -61,10 +61,10 @@ void main() {
           '_id': 'row2',
           'fields': ['Second'],
           '_links': {
-            'self': {'href': '/api/entities/row2', 'method': 'get'}
-          }
+            'self': {'href': '/api/entities/row2', 'method': 'get'},
+          },
         }
-      ]
+      ],
     };
 
     final queryLink = ApptiveLink(
@@ -315,11 +315,11 @@ void main() {
                         gridUri: crossRefUri,
                         value: 'B',
                         entityUri: multiCrossEntity,
-                      )
+                      ),
                     ],
                   ),
                 ),
-                GridEntry(stringField, StringDataEntity('C'))
+                GridEntry(stringField, StringDataEntity('C')),
               ],
               links: {
                 ApptiveLinkType.self: ApptiveLink(
@@ -388,7 +388,7 @@ void main() {
                         gridUri: crossRefUri,
                         value: 'B',
                         entityUri: multiCrossEntity,
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -452,7 +452,7 @@ void main() {
             ),
             field: field,
             required: true,
-          )
+          ),
         ],
         links: {ApptiveLinkType.submit: action},
         fields: [field],

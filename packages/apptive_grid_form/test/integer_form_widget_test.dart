@@ -33,7 +33,7 @@ void main() {
             data: IntegerDataEntity(4711),
             field: field,
             required: true,
-          )
+          ),
         ],
         links: {ApptiveLinkType.submit: action},
         fields: [field],

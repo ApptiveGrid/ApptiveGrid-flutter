@@ -14,7 +14,7 @@ void main() {
             "self": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
-              "method": "get"
+              "method": "get",
             },
           },
         },
@@ -24,7 +24,7 @@ void main() {
               'name': 'jane.doe@2denker.de',
               'displayValue': 'Jane Doe',
               'id': 'userId',
-              'type': 'user'
+              'type': 'user',
             }
           ],
           '_id': '61eeab8286c4f19eee92f1e0',
@@ -32,7 +32,7 @@ void main() {
             "self": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
-              "method": "get"
+              "method": "get",
             },
           },
         },
@@ -42,7 +42,7 @@ void main() {
               'name': '',
               'displayValue': '',
               'id': '61eeac4686c4f1d22992f260',
-              'type': 'link'
+              'type': 'link',
             }
           ],
           '_id': '61eeac6486c4f1885092f263',
@@ -50,7 +50,7 @@ void main() {
             "self": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
-              "method": "get"
+              "method": "get",
             },
           },
         },
@@ -60,7 +60,7 @@ void main() {
               'name': '',
               'displayValue': '',
               'id': '61eeac4686c4f1d22992f263',
-              'type': 'accesscredentials'
+              'type': 'accesscredentials',
             }
           ],
           '_id': '61eeac6486c4f1885092f263',
@@ -68,7 +68,7 @@ void main() {
             "self": {
               "href":
                   "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
-              "method": "get"
+              "method": "get",
             },
           },
         },
@@ -78,7 +78,7 @@ void main() {
         {
           "type": {
             "name": "createdby",
-            "componentTypes": ["textfield"]
+            "componentTypes": ["textfield"],
           },
           "key": null,
           "name": "UserRef",
@@ -88,12 +88,12 @@ void main() {
               "displayValue": {"type": "string", "format": "string"},
               "id": {"type": "string", "format": "string"},
               "type": {"type": "string", "format": "string"},
-              "name": {"type": "string", "format": "string"}
+              "name": {"type": "string", "format": "string"},
             },
-            "objectType": "userReference"
+            "objectType": "userReference",
           },
           "id": "628210d604bd30b6b19b7f9d",
-          "_links": <String, dynamic>{}
+          "_links": <String, dynamic>{},
         },
       ],
       'name': 'Yeah Ansicht',
@@ -101,80 +101,80 @@ void main() {
       '_links': {
         "addLink": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
-          "method": "post"
+          "method": "post",
         },
         "forms": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldType": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange",
-          "method": "post"
+          "method": "post",
         },
         "removeField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove",
-          "method": "post"
+          "method": "post",
         },
         "addEntity": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "post"
+          "method": "post",
         },
         "views": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "get"
+          "method": "get",
         },
         "addView": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-          "method": "post"
+          "method": "post",
         },
         "self": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldKey": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange",
-          "method": "post"
+          "method": "post",
         },
         "query": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/query",
-          "method": "get"
+          "method": "get",
         },
         "entities": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-          "method": "get"
+          "method": "get",
         },
         "updates": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/updates",
-          "method": "get"
+          "method": "get",
         },
         "schema": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/schema",
-          "method": "get"
+          "method": "get",
         },
         "updateFieldName": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename",
-          "method": "post"
+          "method": "post",
         },
         "addForm": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-          "method": "post"
+          "method": "post",
         },
         "addField": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd",
-          "method": "post"
+          "method": "post",
         },
         "rename": {
           "href": "/api/users/userId/spaces/spaceId/grids/gridId/Rename",
-          "method": "post"
+          "method": "post",
         },
         "remove": {
           "href":
               "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-          "method": "delete"
-        }
+          "method": "delete",
+        },
       },
     };
 
@@ -251,19 +251,19 @@ void main() {
         'name': 'jane.doe@2denker.de',
         'displayValue': 'Jane Doe',
         'id': 'userId',
-        'type': 'user'
+        'type': 'user',
       });
       final b = CreatedByDataEntity.fromJson({
         'name': 'jane.doe@2denker.de',
         'displayValue': 'Jane Doe',
         'id': 'userId',
-        'type': 'user'
+        'type': 'user',
       });
       final c = CreatedByDataEntity.fromJson({
         'name': '',
         'displayValue': '',
         'id': 'userId',
-        'type': 'accesscredentials'
+        'type': 'accesscredentials',
       });
       expect(a, equals(b));
       expect(a, isNot(c));
@@ -286,7 +286,7 @@ void main() {
           'name': 'jane.doe@2denker.de',
           'displayValue': 'Jane Doe',
           'id': 'userId',
-          'type': 'user'
+          'type': 'user',
         },
       );
 
