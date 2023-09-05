@@ -362,6 +362,16 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     super.initState();
     _formData = widget.formData;
     _attachmentManager = AttachmentManager(_formData);
+
+    final submitLink = _formData?.links[ApptiveLinkType.submit];
+    if (submitLink != null && widget.submitButtonCallback != null) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => widget.submitButtonCallback?.call(
+          () => _submitForm(submitLink, context),
+          false,
+        ),
+      );
+    }
   }
 
   @override
@@ -393,6 +403,16 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             ? FormData.fromJson(widget.formData!.toJson())
             : null;
         _attachmentManager = AttachmentManager(_formData);
+
+        final submitLink = _formData?.links[ApptiveLinkType.submit];
+        if (submitLink != null && widget.submitButtonCallback != null) {
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) => widget.submitButtonCallback?.call(
+              () => _submitForm(submitLink, context),
+              false,
+            ),
+          );
+        }
       }
       _error = widget.error;
       _success = false;
@@ -430,14 +450,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   Widget _buildForm(BuildContext context, FormData data) {
     final localization = ApptiveGridLocalization.of(context)!;
     final submitLink = data.links[ApptiveLinkType.submit];
-    if (submitLink != null && widget.submitButtonCallback != null) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) => widget.submitButtonCallback?.call(
-          () => _submitForm(submitLink, context),
-          false,
-        ),
-      );
-    }
     // Offset for title and description
     const indexOffset = 2;
     return Provider<AttachmentManager>.value(
@@ -810,6 +822,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   }
 }
 
+/// Callback to build a custom button with a submit function
 typedef SubmitButtonCallback = Function(
   Future<void> Function()? submit,
   bool isSubmitting,
