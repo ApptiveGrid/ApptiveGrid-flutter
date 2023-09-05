@@ -35,6 +35,7 @@ class ApptiveGridForm extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
+    this.showButton = true,
     this.componentBuilder,
   });
 
@@ -111,6 +112,9 @@ class ApptiveGridForm extends StatefulWidget {
   /// Defaults to a localized version of `Send`
   final String? buttonLabel;
 
+  /// Show or hide the submit button at the bottom of the form.
+  final bool showButton;
+
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
 
@@ -166,6 +170,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       scrollController: widget.scrollController,
       buttonAlignment: widget.buttonAlignment,
       buttonLabel: widget.buttonLabel,
+      showButton: widget.showButton,
       componentBuilder: widget.componentBuilder,
     );
   }
@@ -233,6 +238,7 @@ class ApptiveGridFormData extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
+    this.showButton = true,
     this.componentBuilder,
   });
 
@@ -299,6 +305,9 @@ class ApptiveGridFormData extends StatefulWidget {
   /// Label of the Button to submit a form.
   /// Defaults to a localized version of `Send`
   final String? buttonLabel;
+
+  /// Show or hide the submit button at the bottom of the form.
+  final bool showButton;
 
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
@@ -508,7 +517,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                               ),
                           ],
                         );
-                      } else {
+                      } else if (widget.showButton) {
                         return ActionButton(
                           action: submitLink!,
                           onPressed: (link) => _submitForm(link, context),
@@ -518,6 +527,8 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                                 localization.actionSend,
                           ),
                         );
+                      } else {
+                        return const SizedBox();
                       }
                     },
                   ),
