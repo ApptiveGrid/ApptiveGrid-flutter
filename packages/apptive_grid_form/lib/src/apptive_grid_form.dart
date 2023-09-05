@@ -35,7 +35,7 @@ class ApptiveGridForm extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
-    this.showButton = true,
+    this.hideButton = false,
     this.componentBuilder,
   });
 
@@ -113,7 +113,7 @@ class ApptiveGridForm extends StatefulWidget {
   final String? buttonLabel;
 
   /// Show or hide the submit button at the bottom of the form.
-  final bool showButton;
+  final bool hideButton;
 
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
@@ -170,7 +170,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       scrollController: widget.scrollController,
       buttonAlignment: widget.buttonAlignment,
       buttonLabel: widget.buttonLabel,
-      showButton: widget.showButton,
+      hideButton: widget.hideButton,
       componentBuilder: widget.componentBuilder,
     );
   }
@@ -238,7 +238,7 @@ class ApptiveGridFormData extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
-    this.showButton = true,
+    this.hideButton = false,
     this.componentBuilder,
   });
 
@@ -307,7 +307,7 @@ class ApptiveGridFormData extends StatefulWidget {
   final String? buttonLabel;
 
   /// Show or hide the submit button at the bottom of the form.
-  final bool showButton;
+  final bool hideButton;
 
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
@@ -517,7 +517,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                               ),
                           ],
                         );
-                      } else if (widget.showButton) {
+                      } else if (!widget.hideButton) {
                         return ActionButton(
                           action: submitLink!,
                           onPressed: (link) => _submitForm(link, context),
