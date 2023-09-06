@@ -139,8 +139,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
   bool get submitting => _dataKey.currentState?.submitting == true;
 
   /// Submits the [currentData] if not already submitting
-  Future<void>? submitForm(BuildContext context) =>
-      _dataKey.currentState?.submitForm(context);
+  Future<void>? submitForm() => _dataKey.currentState?.submitForm();
 
   @override
   void didUpdateWidget(covariant ApptiveGridForm oldWidget) {
@@ -531,7 +530,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                         );
                       } else if (!widget.hideButton) {
                         return ActionButton(
-                          onPressed: () => submitForm(context),
+                          onPressed: submitForm,
                           child: Text(
                             widget.buttonLabel ??
                                 _formData?.properties?.buttonTitle ??
@@ -676,13 +675,13 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
   /// Submits the [currentData] if not already submitting
-  Future<void> submitForm(BuildContext buildContext) async {
+  Future<void> submitForm() async {
     final link = _formData?.links[ApptiveLinkType.submit];
     if (link != null && _formKey.currentState!.validate()) {
       setState(() {
         _submitting = true;
       });
-      final l10n = ApptiveGridLocalization.of(buildContext)!;
+      final l10n = ApptiveGridLocalization.of(context)!;
       const doneAttachmentPercentage = 0.6;
       const uploadFormPercentage = 0.8;
       const startPercentage = 0.1;

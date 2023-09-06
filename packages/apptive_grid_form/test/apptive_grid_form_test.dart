@@ -1722,7 +1722,7 @@ class _CustomButtonFormWidgetState extends State<_CustomButtonFormWidget> {
           onPressed: _isSubmitting
               ? null
               : () {
-                  _formKey.currentState?.submitForm(context);
+                  _formKey.currentState?.submitForm();
                   setState(() {});
                 },
           child: Text(
