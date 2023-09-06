@@ -8,26 +8,20 @@ class ActionButton extends StatelessWidget {
   /// This uses a RaisedButton.
   const ActionButton({
     super.key,
-    required this.action,
     this.child,
     required this.onPressed,
   });
-
-  /// The action the Button represents
-  final ApptiveLink action;
 
   /// The child Widget displayed in the Button
   final Widget? child;
 
   /// Called when the button is pressed
-  ///
-  /// Will pass the [action] back
-  final void Function(ApptiveLink) onPressed;
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => onPressed(action),
+      onPressed: () => onPressed(),
       child: child,
     );
   }

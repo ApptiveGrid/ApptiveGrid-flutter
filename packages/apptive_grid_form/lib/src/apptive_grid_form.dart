@@ -549,8 +549,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                         );
                       } else if (!widget.hideButton) {
                         return ActionButton(
-                          action: submitLink!,
-                          onPressed: (link) => _submitForm(link, context),
+                          onPressed: () => submitForm(context),
                           child: Text(
                             widget.buttonLabel ??
                                 _formData?.properties?.buttonTitle ??
@@ -694,8 +693,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
-  Future<void> _submitForm(ApptiveLink link, BuildContext buildContext) async {
-    if (_formKey.currentState!.validate()) {
+  Future<void> submitForm(BuildContext buildContext) async {
+    final link = _formData?.links[ApptiveLinkType.submit];
+    if (link != null && _formKey.currentState!.validate()) {
       setState(() {
         _submitting = true;
       });
