@@ -1,5 +1,4 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
-import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -65,7 +64,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verify(
@@ -112,7 +111,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verifyNever(() => client.submitFormWithProgress(submitLink, any()));
@@ -161,7 +160,7 @@ void main() {
       await tester.enterText(find.byType(TextFormField), '9');
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verify(
@@ -217,7 +216,7 @@ void main() {
         await tester.pumpAndSettle();
       }
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verify(
@@ -268,7 +267,7 @@ void main() {
       await tester.enterText(find.byType(TextFormField), '9');
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verify(

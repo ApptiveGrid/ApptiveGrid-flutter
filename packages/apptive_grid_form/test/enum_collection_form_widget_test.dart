@@ -122,7 +122,7 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
         expect(
@@ -187,7 +187,7 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pump();
 
         expect(
@@ -197,7 +197,7 @@ void main() {
 
         await tester.tap(find.text('A'));
         await tester.pump();
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pump();
 
         expect(
@@ -316,7 +316,7 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
         expect(
@@ -382,7 +382,7 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pump();
 
         expect(
@@ -392,7 +392,7 @@ void main() {
 
         await tester.tap(find.text('A'));
         await tester.pump();
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pump();
 
         expect(

@@ -1,5 +1,6 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
@@ -68,7 +69,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(
@@ -87,7 +88,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(
@@ -164,7 +165,7 @@ void main() {
       await tester.enterText(phoneNumberField, phoneNumberInput);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verify(

@@ -100,7 +100,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(

@@ -77,7 +77,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verify(() => client.submitFormWithProgress(submitLink, any())).called(1);
@@ -113,7 +113,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verifyNever(() => client.submitFormWithProgress(submitLink, any()));
@@ -185,7 +185,7 @@ void main() {
       await tester.tap(find.text(user.displayValue));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final capturedForm =
@@ -252,7 +252,7 @@ void main() {
       await tester.tap(find.text(user.displayValue));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final capturedForm =

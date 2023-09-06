@@ -529,7 +529,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                           ],
                         );
                       } else if (!widget.hideButton) {
-                        return ActionButton(
+                        return ElevatedButton(
                           onPressed: submitForm,
                           child: Text(
                             widget.buttonLabel ??

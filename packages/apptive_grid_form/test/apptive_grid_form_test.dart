@@ -214,7 +214,7 @@ void main() {
 
     await tester.pumpWidget(target);
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(ActionButton));
+    await tester.tap(find.byType(ElevatedButton));
     await tester.pumpAndSettle();
 
     final parsedUri = await completer.future;
@@ -327,7 +327,7 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(find.byType(Lottie), findsOneWidget);
@@ -369,7 +369,7 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(find.text(customTitle, skipOffstage: false), findsOneWidget);
@@ -404,7 +404,7 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       await tester.scrollUntilVisible(find.byType(TextButton), 100);
@@ -448,7 +448,7 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(find.text('Success test'), findsNothing);
@@ -493,7 +493,7 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       await tester.scrollUntilVisible(find.byType(TextButton), 100);
@@ -573,7 +573,7 @@ void main() {
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
         expect(find.byType(Lottie), findsOneWidget);
@@ -606,7 +606,7 @@ void main() {
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
         expect(find.byType(Lottie), findsOneWidget);
@@ -640,7 +640,7 @@ void main() {
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
         await tester.scrollUntilVisible(find.byType(TextButton), 100);
@@ -693,7 +693,7 @@ void main() {
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
         await tester.scrollUntilVisible(find.byType(TextButton), 100);
@@ -732,7 +732,7 @@ void main() {
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
         expect(
           find.text('Exception: Testing Errors', skipOffstage: false),
@@ -768,7 +768,7 @@ void main() {
 
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
         expect(
           find.text('400: Testing Errors', skipOffstage: false),
@@ -810,7 +810,7 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(find.byType(Lottie), findsNothing);
@@ -844,7 +844,7 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(find.byType(Lottie), findsNothing);
@@ -903,7 +903,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(find.byType(Lottie), findsOneWidget);
@@ -940,7 +940,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verify(() => httpClient.send(any())).called(1);
@@ -989,7 +989,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verify(() => httpClient.send(any())).called(1);
@@ -1041,7 +1041,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verify(() => httpClient.send(any())).called(1);
@@ -1093,7 +1093,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(
@@ -1171,7 +1171,7 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(
@@ -1214,7 +1214,7 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(
@@ -1256,10 +1256,10 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pump();
 
-      expect(find.byType(ActionButton), findsNothing);
+      expect(find.byType(ElevatedButton), findsNothing);
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       actionCompleter.complete(http.Response('', 200));
       await tester.pump();
@@ -1306,7 +1306,7 @@ void main() {
 
       expect(
         find.descendant(
-          of: find.byType(ActionButton),
+          of: find.byType(ElevatedButton),
           matching: find.text(label),
         ),
         findsOneWidget,
@@ -1348,7 +1348,7 @@ void main() {
 
       expect(
         find.descendant(
-          of: find.byType(ActionButton),
+          of: find.byType(ElevatedButton),
           matching: find.text(label),
         ),
         findsOneWidget,
@@ -1387,7 +1387,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(ActionButton), findsNothing);
+      expect(find.byType(ElevatedButton), findsNothing);
     });
 
     testWidgets('Custom button button', (tester) async {
@@ -1424,7 +1424,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      expect(find.byType(ActionButton), findsNothing);
+      expect(find.byType(ElevatedButton), findsNothing);
       expect(
         find.descendant(
           of: find.byType(TextButton),
@@ -1436,7 +1436,7 @@ void main() {
       await tester.tap(find.text(buttonText));
       await tester.pump();
 
-      expect(find.byType(ActionButton), findsNothing);
+      expect(find.byType(ElevatedButton), findsNothing);
       expect(
         find.descendant(
           of: find.byType(TextButton),
@@ -1449,7 +1449,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.byType(ActionButton), findsNothing);
+      expect(find.byType(ElevatedButton), findsNothing);
       expect(
         find.descendant(
           of: find.byType(TextButton),
@@ -1594,7 +1594,7 @@ void main() {
 
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pump();
 
       expect(find.text('Processing Attachments [0/1]'), findsOneWidget);
