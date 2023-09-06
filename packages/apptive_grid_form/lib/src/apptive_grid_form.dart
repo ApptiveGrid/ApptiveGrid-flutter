@@ -699,10 +699,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       setState(() {
         _submitting = true;
       });
-      widget.submitButtonCallback?.call(
-        () => _submitForm(link, context),
-        true,
-      );
+      widget.submitButtonCallback?.call(null, true);
       final l10n = ApptiveGridLocalization.of(buildContext)!;
       const doneAttachmentPercentage = 0.6;
       const uploadFormPercentage = 0.8;
@@ -823,6 +820,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 }
 
 /// Callback to build a custom button with a submit function
+/// While submitting is true, the submit link will be null
 typedef SubmitButtonCallback = Function(
   Future<void> Function()? submit,
   bool isSubmitting,
