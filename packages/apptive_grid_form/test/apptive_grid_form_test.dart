@@ -1354,6 +1354,170 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets('Hide button', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+          hideButton: true,
+        ),
+      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      final formData = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        links: {ApptiveLinkType.submit: action},
+        fields: [],
+      );
+
+      final actionCompleter = Completer<http.Response>();
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.submitFormWithProgress(action, formData))
+          .thenAnswer((_) {
+        return actionCompleter.future
+            .asStream()
+            .map((event) => SubmitCompleteProgressEvent(event));
+      });
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ActionButton), findsNothing);
+    });
+
+    testWidgets('Load with intial data', (tester) async {
+      const buttonText = 'test';
+      const loadingText = 'loading';
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      final formData = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        links: {ApptiveLinkType.submit: action},
+        fields: [],
+      );
+      final target = TestApp(
+        client: client,
+        child: _CustomButtonFormWidget(
+          customButtonText: buttonText,
+          customButtonLoadingText: loadingText,
+          intialData: formData,
+        ),
+      );
+
+      final actionCompleter = Completer<http.Response>();
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.submitFormWithProgress(action, formData))
+          .thenAnswer((_) {
+        return actionCompleter.future
+            .asStream()
+            .map((event) => SubmitCompleteProgressEvent(event));
+      });
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ActionButton), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(TextButton),
+          matching: find.text(buttonText),
+        ),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text(buttonText));
+      await tester.pump();
+
+      expect(find.byType(ActionButton), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(TextButton),
+          matching: find.text(loadingText),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Custom button button', (tester) async {
+      const buttonText = 'test';
+      const loadingText = 'loading';
+      final target = TestApp(
+        client: client,
+        child: const _CustomButtonFormWidget(
+          customButtonText: buttonText,
+          customButtonLoadingText: loadingText,
+        ),
+      );
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      final formData = FormData(
+        id: 'formId',
+        name: 'Form Name',
+        title: 'Form Title',
+        components: [],
+        links: {ApptiveLinkType.submit: action},
+        fields: [],
+      );
+
+      final actionCompleter = Completer<http.Response>();
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer((realInvocation) async => formData);
+      when(() => client.submitFormWithProgress(action, formData))
+          .thenAnswer((_) {
+        return actionCompleter.future
+            .asStream()
+            .map((event) => SubmitCompleteProgressEvent(event));
+      });
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ActionButton), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(TextButton),
+          matching: find.text(buttonText),
+        ),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text(buttonText));
+      await tester.pump();
+
+      expect(find.byType(ActionButton), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(TextButton),
+          matching: find.text(loadingText),
+        ),
+        findsOneWidget,
+      );
+
+      actionCompleter.complete(http.Response('', 200));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ActionButton), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(TextButton),
+          matching: find.text(buttonText),
+        ),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text(buttonText));
+      await tester.pump();
+    });
   });
 
   group('User Reference', () {
@@ -1583,5 +1747,65 @@ class _ChangingFormWidgetState extends State<_ChangingFormWidget> {
   @override
   Widget build(BuildContext context) {
     return ApptiveGridForm(uri: _displayingUri);
+  }
+}
+
+class _CustomButtonFormWidget extends StatefulWidget {
+  const _CustomButtonFormWidget({
+    required this.customButtonText,
+    required this.customButtonLoadingText,
+    this.intialData,
+  });
+
+  final String customButtonText;
+  final String customButtonLoadingText;
+  final FormData? intialData;
+
+  @override
+  State<StatefulWidget> createState() => _CustomButtonFormWidgetState();
+}
+
+class _CustomButtonFormWidgetState extends State<_CustomButtonFormWidget> {
+  final Uri _uri = Uri.parse('/api/a/form');
+
+  bool _isSubmitting = false;
+  Function()? _submitForm;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextButton(
+          onPressed: _isSubmitting ? null : () => _submitForm?.call(),
+          child: Text(
+            _isSubmitting
+                ? widget.customButtonLoadingText
+                : widget.customButtonText,
+          ),
+        ),
+        Expanded(
+          child: widget.intialData != null
+              ? ApptiveGridFormData(
+                  formData: widget.intialData,
+                  hideButton: true,
+                  onActionSuccess: (_, __) async => false,
+                  submitButtonCallback: (submit, isSubmitting) => setState(() {
+                    _submitForm = submit;
+                    _isSubmitting = isSubmitting;
+                  }),
+                )
+              : ApptiveGridForm(
+                  uri: _uri,
+                  hideButton: true,
+                  onActionSuccess: (_, __) async => false,
+                  submitButtonCallback: (submit, isSubmitting) => setState(() {
+                    _submitForm = submit;
+                    _isSubmitting = isSubmitting;
+                  }),
+                ),
+        ),
+      ],
+    );
   }
 }
