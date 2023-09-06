@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'dart:async';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
@@ -6,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Click calls with Action', (tester) async {
+  testWidgets('Click calls back', (tester) async {
     final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
 
     final completer = Completer<ApptiveLink>();
@@ -15,8 +17,8 @@ void main() {
       MaterialApp(
         home: ActionButton(
           action: action,
-          onPressed: (clickAction) {
-            completer.complete(clickAction);
+          onPressed: (link) {
+            completer.complete(link);
           },
         ),
       ),
@@ -26,5 +28,7 @@ void main() {
 
     final result = await completer.future;
     expect(result, equals(action));
+    await completer.future;
+    expect(completer.isCompleted, true);
   });
 }

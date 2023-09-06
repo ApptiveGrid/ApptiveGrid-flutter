@@ -1,5 +1,4 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
-import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
@@ -63,7 +62,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verify(() => client.submitFormWithProgress(submitLink, any())).called(1);
@@ -99,7 +98,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verifyNever(() => client.submitFormWithProgress(submitLink, any()));
@@ -149,7 +148,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final capturedForm =
@@ -199,7 +198,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final capturedForm =
@@ -246,7 +245,7 @@ void main() {
       await tester.enterText(find.byType(TextFormField), 'apptivegrid.de');
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final capturedForm =
@@ -299,7 +298,7 @@ void main() {
       ); // Flutter Test replaces text
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final capturedForm =

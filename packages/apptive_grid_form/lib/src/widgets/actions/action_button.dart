@@ -2,6 +2,7 @@ import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:flutter/material.dart';
 
 /// Button for a Form Action used inside a [ApptiveGridForm]
+@Deprecated('Use a normal ElevatedButton instead')
 class ActionButton extends StatelessWidget {
   /// Creates an Action Button
   ///

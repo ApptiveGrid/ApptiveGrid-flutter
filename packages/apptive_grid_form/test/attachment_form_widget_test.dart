@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
-import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -114,7 +113,7 @@ void main() {
         await tester.tap(find.text('Select files'));
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
 
         await tester.pumpAndSettle();
 
@@ -223,7 +222,7 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
 
         await tester.pumpAndSettle();
 
@@ -308,7 +307,7 @@ void main() {
         await tester.tap(find.text('Select files'));
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
 
         await tester.pumpAndSettle();
       });
@@ -407,7 +406,7 @@ void main() {
         await tester.tap(find.text('Choose existing'));
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
 
         await tester.pumpAndSettle();
 
@@ -515,7 +514,7 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
 
         await tester.pumpAndSettle();
 
@@ -632,7 +631,7 @@ void main() {
         await tester.tap(find.text('Take Photo or Video'));
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
 
         await tester.pumpAndSettle();
 
@@ -772,7 +771,7 @@ void main() {
       await tester.tap(find.byIcon(Icons.close));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
 
       await tester.pumpAndSettle();
 
@@ -830,7 +829,7 @@ void main() {
         await tester.pumpWidget(target);
         await tester.tap(find.byIcon(Icons.close));
         await tester.pumpAndSettle();
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
 
         await tester.pumpAndSettle();
 
@@ -878,7 +877,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(
@@ -925,7 +924,7 @@ void main() {
         await tester.pumpWidget(target);
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(ActionButton));
+        await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
         expect(
@@ -1010,7 +1009,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       expect(
@@ -1028,7 +1027,7 @@ void main() {
         findsNothing,
       );
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final capturedData = verify(

@@ -93,7 +93,7 @@ void main() {
 
       await tester.enterText(find.byType(TextFormField), 'Value');
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final result = await completer.future;
@@ -138,7 +138,7 @@ void main() {
 
       expect(find.byType(TextFormWidget), findsOneWidget);
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verifyNever(() => client.submitFormWithProgress(action, formData));
@@ -208,7 +208,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final result = await completer.future;
@@ -276,7 +276,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final result = await completer.future
@@ -334,7 +334,7 @@ void main() {
 
       expect(find.byType(DateTimeFormWidget), findsOneWidget);
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verifyNever(() => client.submitFormWithProgress(action, formData));
@@ -400,7 +400,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final result = await completer.future;
@@ -445,7 +445,7 @@ void main() {
 
       expect(find.byType(DateFormWidget), findsOneWidget);
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verifyNever(() => client.submitFormWithProgress(action, formData));
@@ -500,7 +500,7 @@ void main() {
 
       await tester.enterText(find.byType(TextFormField), '12');
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final result = await completer.future;
@@ -583,7 +583,7 @@ void main() {
 
       expect(find.byType(IntegerFormWidget), findsOneWidget);
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verifyNever(() => client.submitFormWithProgress(action, formData));
@@ -638,7 +638,7 @@ void main() {
 
       await tester.enterText(find.byType(TextFormField), '12');
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final result = await completer.future;
@@ -721,7 +721,7 @@ void main() {
 
       expect(find.byType(DecimalFormWidget), findsOneWidget);
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verifyNever(() => client.submitFormWithProgress(action, formData));
@@ -776,7 +776,7 @@ void main() {
 
       await tester.tap(find.byType(Checkbox));
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final result = await completer.future;
@@ -821,7 +821,7 @@ void main() {
 
       expect(find.byType(CheckBoxFormWidget), findsOneWidget);
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verifyNever(() => client.submitFormWithProgress(action, formData));
@@ -885,7 +885,7 @@ void main() {
         find.text('newValue').last,
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       final result = await completer.future;
@@ -935,7 +935,7 @@ void main() {
 
       expect(find.byType(EnumFormWidget), findsOneWidget);
 
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       verifyNever(() => client.submitFormWithProgress(action, formData));

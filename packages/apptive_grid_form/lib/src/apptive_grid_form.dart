@@ -35,6 +35,7 @@ class ApptiveGridForm extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
+    this.hideButton = false,
     this.componentBuilder,
   });
 
@@ -111,6 +112,9 @@ class ApptiveGridForm extends StatefulWidget {
   /// Defaults to a localized version of `Send`
   final String? buttonLabel;
 
+  /// Show or hide the submit button at the bottom of the form.
+  final bool hideButton;
+
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
 
@@ -118,7 +122,8 @@ class ApptiveGridForm extends StatefulWidget {
   ApptiveGridFormState createState() => ApptiveGridFormState();
 }
 
-/// [State] for an [ApptiveGridForm]. Use this to access [currentData] to get the most up to date version
+/// [State] for an [ApptiveGridForm].
+/// Use this to access [currentData] to get the most up to date version and call [submitForm] manually
 class ApptiveGridFormState extends State<ApptiveGridForm> {
   FormData? _formData;
   late ApptiveGridClient _client;
@@ -129,6 +134,12 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
 
   /// Returns the data currently being edited
   FormData? get currentData => _dataKey.currentState?.currentData;
+
+  /// Returns the current submitting status
+  bool get submitting => _dataKey.currentState?.submitting == true;
+
+  /// Submits the [currentData] if not already submitting
+  Future<void>? submitForm() => _dataKey.currentState?.submitForm();
 
   @override
   void didUpdateWidget(covariant ApptiveGridForm oldWidget) {
@@ -166,6 +177,7 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       scrollController: widget.scrollController,
       buttonAlignment: widget.buttonAlignment,
       buttonLabel: widget.buttonLabel,
+      hideButton: widget.hideButton,
       componentBuilder: widget.componentBuilder,
     );
   }
@@ -233,6 +245,7 @@ class ApptiveGridFormData extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
+    this.hideButton = false,
     this.componentBuilder,
   });
 
@@ -300,6 +313,10 @@ class ApptiveGridFormData extends StatefulWidget {
   /// Defaults to a localized version of `Send`
   final String? buttonLabel;
 
+  /// Show or hide the submit button at the bottom of the form.
+  /// Please build a custom buttom using the [submitButtonCallback] to create a way for the user to submit their forms.
+  final bool hideButton;
+
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
 
@@ -309,7 +326,7 @@ class ApptiveGridFormData extends StatefulWidget {
 
 /// [State] for [ApptiveGridFormData]
 ///
-/// Use this to access [currentData]
+/// Use this to access [currentData] and call [submitForm] manually
 class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   FormData? _formData;
   late ApptiveGridClient _client;
@@ -325,6 +342,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   late AttachmentManager _attachmentManager;
 
   bool _submitting = false;
+
+  /// Returns the current submitting status
+  bool get submitting => _submitting;
 
   StreamSubscription<SubmitFormProgressEvent>? _submitProgressSubscription;
   SubmitProgress? _progress;
@@ -508,16 +528,17 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                               ),
                           ],
                         );
-                      } else {
-                        return ActionButton(
-                          action: submitLink!,
-                          onPressed: (link) => _submitForm(link, context),
+                      } else if (!widget.hideButton) {
+                        return ElevatedButton(
+                          onPressed: submitForm,
                           child: Text(
                             widget.buttonLabel ??
                                 _formData?.properties?.buttonTitle ??
                                 localization.actionSend,
                           ),
                         );
+                      } else {
+                        return const SizedBox();
                       }
                     },
                   ),
@@ -653,12 +674,14 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
-  Future<void> _submitForm(ApptiveLink link, BuildContext buildContext) async {
-    if (_formKey.currentState!.validate()) {
+  /// Submits the [currentData] if not already submitting
+  Future<void> submitForm() async {
+    final link = _formData?.links[ApptiveLinkType.submit];
+    if (link != null && _formKey.currentState!.validate()) {
       setState(() {
         _submitting = true;
       });
-      final l10n = ApptiveGridLocalization.of(buildContext)!;
+      final l10n = ApptiveGridLocalization.of(context)!;
       const doneAttachmentPercentage = 0.6;
       const uploadFormPercentage = 0.8;
       const startPercentage = 0.1;

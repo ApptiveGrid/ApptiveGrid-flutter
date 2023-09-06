@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/google_maps_webservice/google_maps_webservice.dart';
-import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
@@ -1400,16 +1399,16 @@ void main() {
       await tester.pumpAndSettle();
 
       final scrollable = find.ancestor(
-        of: find.byType(ActionButton, skipOffstage: false),
+        of: find.byType(ElevatedButton, skipOffstage: false),
         matching: find.byType(Scrollable),
       );
       await tester.scrollUntilVisible(
-        find.byType(ActionButton, skipOffstage: false),
+        find.byType(ElevatedButton, skipOffstage: false),
         400,
         scrollable: scrollable,
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       const requiredString = 'property must not be empty';
@@ -1564,16 +1563,16 @@ void main() {
       await tester.pumpAndSettle();
 
       final scrollable = find.ancestor(
-        of: find.byType(ActionButton, skipOffstage: false),
+        of: find.byType(ElevatedButton, skipOffstage: false),
         matching: find.byType(Scrollable),
       );
       await tester.scrollUntilVisible(
-        find.byType(ActionButton, skipOffstage: false),
+        find.byType(ElevatedButton, skipOffstage: false),
         400,
         scrollable: scrollable,
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ActionButton));
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
       const requiredString = 'property must not be empty';
