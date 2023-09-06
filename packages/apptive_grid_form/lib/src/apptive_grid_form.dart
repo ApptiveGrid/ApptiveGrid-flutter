@@ -35,7 +35,6 @@ class ApptiveGridForm extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
-    this.submitButtonCallback,
     this.hideButton = false,
     this.componentBuilder,
   });
@@ -116,9 +115,6 @@ class ApptiveGridForm extends StatefulWidget {
   /// Show or hide the submit button at the bottom of the form.
   final bool hideButton;
 
-  /// Build a custom buttom to create a way for the user to submit their forms.
-  final SubmitButtonCallback? submitButtonCallback;
-
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
 
@@ -126,7 +122,8 @@ class ApptiveGridForm extends StatefulWidget {
   ApptiveGridFormState createState() => ApptiveGridFormState();
 }
 
-/// [State] for an [ApptiveGridForm]. Use this to access [currentData] to get the most up to date version
+/// [State] for an [ApptiveGridForm].
+/// Use this to access [currentData] to get the most up to date version and call [submitForm] manually
 class ApptiveGridFormState extends State<ApptiveGridForm> {
   FormData? _formData;
   late ApptiveGridClient _client;
@@ -137,6 +134,13 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
 
   /// Returns the data currently being edited
   FormData? get currentData => _dataKey.currentState?.currentData;
+
+  /// Returns the current submitting status
+  bool get submitting => _dataKey.currentState?.submitting == true;
+
+  /// Submits the [currentData] if not already submitting
+  Future<void>? submitForm(BuildContext context) =>
+      _dataKey.currentState?.submitForm(context);
 
   @override
   void didUpdateWidget(covariant ApptiveGridForm oldWidget) {
@@ -175,7 +179,6 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       buttonAlignment: widget.buttonAlignment,
       buttonLabel: widget.buttonLabel,
       hideButton: widget.hideButton,
-      submitButtonCallback: widget.submitButtonCallback,
       componentBuilder: widget.componentBuilder,
     );
   }
@@ -243,7 +246,6 @@ class ApptiveGridFormData extends StatefulWidget {
     this.scrollController,
     this.buttonAlignment = Alignment.center,
     this.buttonLabel,
-    this.submitButtonCallback,
     this.hideButton = false,
     this.componentBuilder,
   });
@@ -316,9 +318,6 @@ class ApptiveGridFormData extends StatefulWidget {
   /// Please build a custom buttom using the [submitButtonCallback] to create a way for the user to submit their forms.
   final bool hideButton;
 
-  /// Build a custom buttom to create a way for the user to submit their forms.
-  final SubmitButtonCallback? submitButtonCallback;
-
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
 
@@ -328,7 +327,7 @@ class ApptiveGridFormData extends StatefulWidget {
 
 /// [State] for [ApptiveGridFormData]
 ///
-/// Use this to access [currentData]
+/// Use this to access [currentData] and call [submitForm] manually
 class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   FormData? _formData;
   late ApptiveGridClient _client;
@@ -344,6 +343,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   late AttachmentManager _attachmentManager;
 
   bool _submitting = false;
+
+  /// Returns the current submitting status
+  bool get submitting => _submitting;
 
   StreamSubscription<SubmitFormProgressEvent>? _submitProgressSubscription;
   SubmitProgress? _progress;
@@ -362,16 +364,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     super.initState();
     _formData = widget.formData;
     _attachmentManager = AttachmentManager(_formData);
-
-    final submitLink = _formData?.links[ApptiveLinkType.submit];
-    if (submitLink != null && widget.submitButtonCallback != null) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) => widget.submitButtonCallback?.call(
-          () => _submitForm(submitLink, context),
-          false,
-        ),
-      );
-    }
   }
 
   @override
@@ -403,16 +395,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             ? FormData.fromJson(widget.formData!.toJson())
             : null;
         _attachmentManager = AttachmentManager(_formData);
-
-        final submitLink = _formData?.links[ApptiveLinkType.submit];
-        if (submitLink != null && widget.submitButtonCallback != null) {
-          WidgetsBinding.instance.addPostFrameCallback(
-            (_) => widget.submitButtonCallback?.call(
-              () => _submitForm(submitLink, context),
-              false,
-            ),
-          );
-        }
       }
       _error = widget.error;
       _success = false;
@@ -693,13 +675,13 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
+  /// Submits the [currentData] if not already submitting
   Future<void> submitForm(BuildContext buildContext) async {
     final link = _formData?.links[ApptiveLinkType.submit];
     if (link != null && _formKey.currentState!.validate()) {
       setState(() {
         _submitting = true;
       });
-      widget.submitButtonCallback?.call(null, true);
       final l10n = ApptiveGridLocalization.of(buildContext)!;
       const doneAttachmentPercentage = 0.6;
       const uploadFormPercentage = 0.8;
@@ -777,10 +759,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           setState(() {
             _submitting = false;
           });
-          widget.submitButtonCallback?.call(
-            () => _submitForm(link, context),
-            false,
-          );
         },
       );
     }
@@ -818,10 +796,3 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     }
   }
 }
-
-/// Callback to build a custom button with a submit function
-/// While submitting is true, the submit link will be null
-typedef SubmitButtonCallback = Function(
-  Future<void> Function()? submit,
-  bool isSubmitting,
-);
