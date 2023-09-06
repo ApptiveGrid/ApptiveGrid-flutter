@@ -1390,63 +1390,6 @@ void main() {
       expect(find.byType(ActionButton), findsNothing);
     });
 
-    testWidgets('Load with intial data', (tester) async {
-      const buttonText = 'test';
-      const loadingText = 'loading';
-      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
-      final formData = FormData(
-        id: 'formId',
-        name: 'Form Name',
-        title: 'Form Title',
-        components: [],
-        links: {ApptiveLinkType.submit: action},
-        fields: [],
-      );
-      final target = TestApp(
-        client: client,
-        child: _CustomButtonFormWidget(
-          customButtonText: buttonText,
-          customButtonLoadingText: loadingText,
-          intialData: formData,
-        ),
-      );
-
-      final actionCompleter = Completer<http.Response>();
-      when(
-        () => client.loadForm(uri: Uri.parse('/api/a/form')),
-      ).thenAnswer((realInvocation) async => formData);
-      when(() => client.submitFormWithProgress(action, formData))
-          .thenAnswer((_) {
-        return actionCompleter.future
-            .asStream()
-            .map((event) => SubmitCompleteProgressEvent(event));
-      });
-
-      await tester.pumpWidget(target);
-      await tester.pumpAndSettle();
-
-      expect(find.byType(ActionButton), findsNothing);
-      expect(
-        find.descendant(
-          of: find.byType(TextButton),
-          matching: find.text(buttonText),
-        ),
-        findsOneWidget,
-      );
-
-      await tester.tap(find.text(buttonText));
-      await tester.pump();
-
-      expect(find.byType(ActionButton), findsNothing);
-      expect(
-        find.descendant(
-          of: find.byType(TextButton),
-          matching: find.text(loadingText),
-        ),
-        findsOneWidget,
-      );
-    });
-
     testWidgets('Custom button button', (tester) async {
       const buttonText = 'test';
       const loadingText = 'loading';
@@ -1754,12 +1697,10 @@ class _CustomButtonFormWidget extends StatefulWidget {
   const _CustomButtonFormWidget({
     required this.customButtonText,
     required this.customButtonLoadingText,
-    this.intialData,
   });
 
   final String customButtonText;
   final String customButtonLoadingText;
-  final FormData? intialData;
 
   @override
   State<StatefulWidget> createState() => _CustomButtonFormWidgetState();
@@ -1768,8 +1709,9 @@ class _CustomButtonFormWidget extends StatefulWidget {
 class _CustomButtonFormWidgetState extends State<_CustomButtonFormWidget> {
   final Uri _uri = Uri.parse('/api/a/form');
 
-  bool _isSubmitting = false;
-  Function()? _submitForm;
+  final _formKey = GlobalKey<ApptiveGridFormState>();
+
+  bool get _isSubmitting => _formKey.currentState?.submitting == true;
 
   @override
   Widget build(BuildContext context) {
@@ -1777,7 +1719,12 @@ class _CustomButtonFormWidgetState extends State<_CustomButtonFormWidget> {
       mainAxisSize: MainAxisSize.min,
       children: [
         TextButton(
-          onPressed: _isSubmitting ? null : () => _submitForm?.call(),
+          onPressed: _isSubmitting
+              ? null
+              : () {
+                  _formKey.currentState?.submitForm(context);
+                  setState(() {});
+                },
           child: Text(
             _isSubmitting
                 ? widget.customButtonLoadingText
@@ -1785,25 +1732,15 @@ class _CustomButtonFormWidgetState extends State<_CustomButtonFormWidget> {
           ),
         ),
         Expanded(
-          child: widget.intialData != null
-              ? ApptiveGridFormData(
-                  formData: widget.intialData,
-                  hideButton: true,
-                  onActionSuccess: (_, __) async => false,
-                  submitButtonCallback: (submit, isSubmitting) => setState(() {
-                    _submitForm = submit;
-                    _isSubmitting = isSubmitting;
-                  }),
-                )
-              : ApptiveGridForm(
-                  uri: _uri,
-                  hideButton: true,
-                  onActionSuccess: (_, __) async => false,
-                  submitButtonCallback: (submit, isSubmitting) => setState(() {
-                    _submitForm = submit;
-                    _isSubmitting = isSubmitting;
-                  }),
-                ),
+          child: ApptiveGridForm(
+            key: _formKey,
+            uri: _uri,
+            hideButton: true,
+            onActionSuccess: (_, __) async {
+              setState(() {});
+              return false;
+            },
+          ),
         ),
       ],
     );
