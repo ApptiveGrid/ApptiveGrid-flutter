@@ -423,8 +423,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 widget.triggerReload?.call();
                 _updateView();
               },
+              additionalAnswerButtonLabel:
+                  _formData?.properties?.afterSubmitAction?.buttonTitle,
               scrollController: widget.scrollController,
-              formData: _formData,
             );
           } else if (_success) {
             return SuccessfulSubmitWidget(
@@ -432,8 +433,11 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 widget.triggerReload?.call();
                 _updateView();
               },
+              successTitle: _formData?.properties?.successTitle,
+              successMessage: _formData?.properties?.successMessage,
+              additionalAnswerButtonLabel:
+                  _formData?.properties?.afterSubmitAction?.buttonTitle,
               scrollController: widget.scrollController,
-              formData: _formData,
             );
           } else if (_formData == null) {
             return const LoadingFormWidget();

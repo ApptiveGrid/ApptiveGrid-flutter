@@ -282,18 +282,26 @@ class SuccessfulSubmitWidget extends StatelessWidget {
   const SuccessfulSubmitWidget({
     super.key,
     required this.didTapAdditionalAnswer,
+    this.successTitle,
+    this.successMessage,
+    this.additionalAnswerButtonLabel,
     this.scrollController,
-    this.formData,
   });
 
   /// Triggers when the user taps the button to submit an additional answer
   final Function() didTapAdditionalAnswer;
 
+  /// The label for the additional answer button
+  final String? successTitle;
+
+  /// The label for the additional answer button
+  final String? successMessage;
+
+  /// The label for the additional answer button
+  final String? additionalAnswerButtonLabel;
+
   /// Optional ScrollController for the Form
   final ScrollController? scrollController;
-
-  /// The current form data
-  final FormData? formData;
 
   @override
   Widget build(BuildContext context) {
@@ -310,14 +318,14 @@ class SuccessfulSubmitWidget extends StatelessWidget {
           ),
         ),
         Text(
-          formData?.properties?.successTitle ?? localization.sendSuccess,
+          successTitle ?? localization.sendSuccess,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
-        if (formData?.properties?.successMessage != null) ...[
+        if (successMessage != null) ...[
           const SizedBox(height: 4),
           Text(
-            formData!.properties!.successMessage!,
+            successMessage!,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
@@ -326,8 +334,7 @@ class SuccessfulSubmitWidget extends StatelessWidget {
           child: TextButton(
             onPressed: didTapAdditionalAnswer,
             child: Text(
-              formData?.properties?.afterSubmitAction?.buttonTitle ??
-                  localization.additionalAnswer,
+              additionalAnswerButtonLabel ?? localization.additionalAnswer,
             ),
           ),
         ),
@@ -342,18 +349,18 @@ class SavedSubmitWidget extends StatelessWidget {
   const SavedSubmitWidget({
     super.key,
     required this.didTapAdditionalAnswer,
+    this.additionalAnswerButtonLabel,
     this.scrollController,
-    this.formData,
   });
 
   /// Triggers when the user taps the button to submit an additional answer
   final Function() didTapAdditionalAnswer;
 
+  /// The label for the additional answer button
+  final String? additionalAnswerButtonLabel;
+
   /// Optional ScrollController for the Form
   final ScrollController? scrollController;
-
-  /// The current form data
-  final FormData? formData;
 
   @override
   Widget build(BuildContext context) {
@@ -378,8 +385,7 @@ class SavedSubmitWidget extends StatelessWidget {
           child: TextButton(
             onPressed: didTapAdditionalAnswer,
             child: Text(
-              formData?.properties?.afterSubmitAction?.buttonTitle ??
-                  localization.additionalAnswer,
+              additionalAnswerButtonLabel ?? localization.additionalAnswer,
             ),
           ),
         ),
