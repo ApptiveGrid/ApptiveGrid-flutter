@@ -440,132 +440,30 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           } else if (_formData == null) {
             return LoadingFormWidget();
           } else {
-            return _buildForm(buildContext, _formData!);
+            return Provider<AttachmentManager>.value(
+              value: _attachmentManager,
+              child: FormDataWidget(
+                data: _formData!,
+                formKey: _formKey,
+                isSubmitting: _submitting,
+                padding: widget.contentPadding ?? _defaultPadding,
+                hideTitle: widget.hideTitle,
+                titlePadding: widget.titlePadding,
+                titleStyle: widget.titleStyle,
+                hideDescription: widget.hideDescription,
+                descriptionPadding: widget.descriptionPadding,
+                descriptionStyle: widget.descriptionStyle,
+                componentBuilder: widget.componentBuilder,
+                hideButton: widget.hideButton,
+                buttonLabel: widget.buttonLabel,
+                buttonAlignment: widget.buttonAlignment,
+                submitForm: submitForm,
+                progress: _progress,
+                scrollController: widget.scrollController,
+              ),
+            );
           }
         },
-      ),
-    );
-  }
-
-  Widget _buildForm(BuildContext context, FormData data) {
-    final localization = ApptiveGridLocalization.of(context)!;
-    final submitLink = data.links[ApptiveLinkType.submit];
-    // Offset for title and description
-    const indexOffset = 2;
-    return Provider<AttachmentManager>.value(
-      value: _attachmentManager,
-      child: Form(
-        key: _formKey,
-        child: ListView.builder(
-          controller: widget.scrollController,
-          itemCount: indexOffset +
-              (data.components?.length ?? 0) +
-              (submitLink != null ? 1 : 0),
-          itemBuilder: (context, index) {
-            // Title
-            if (index == 0) {
-              if (widget.hideTitle || data.title == null) {
-                return const SizedBox();
-              } else {
-                return Padding(
-                  padding: widget.titlePadding ??
-                      widget.contentPadding ??
-                      _defaultPadding,
-                  child: Text(
-                    data.title!,
-                    style: widget.titleStyle ??
-                        Theme.of(context).textTheme.headlineSmall,
-                  ),
-                );
-              }
-            } else if (index == 1) {
-              if (widget.hideDescription || data.description == null) {
-                return const SizedBox();
-              } else {
-                return Padding(
-                  padding: widget.descriptionPadding ??
-                      widget.contentPadding ??
-                      _defaultPadding,
-                  child: Text(
-                    data.description!,
-                    style: widget.descriptionStyle ??
-                        Theme.of(context).textTheme.bodyLarge,
-                  ),
-                );
-              }
-            } else if (index < (data.components?.length ?? 0) + indexOffset) {
-              final componentIndex = index - indexOffset;
-              final component = data.components![componentIndex];
-              final componentWidget = fromModel(component);
-              if (componentWidget is EmptyFormWidget) {
-                // UserReference Widget should be invisible in the Form
-                // So returning without any Padding
-                return componentWidget;
-              } else {
-                return IgnorePointer(
-                  ignoring: _submitting,
-                  child: Padding(
-                    padding: widget.contentPadding ?? _defaultPadding,
-                    child: Builder(
-                      builder: (context) {
-                        final customBuilder =
-                            widget.componentBuilder?.call(context, component);
-                        if (customBuilder != null) {
-                          return customBuilder;
-                        } else {
-                          return componentWidget;
-                        }
-                      },
-                    ),
-                  ),
-                );
-              }
-            } else {
-              return Padding(
-                padding: widget.contentPadding ?? _defaultPadding,
-                child: Align(
-                  alignment: widget.buttonAlignment,
-                  child: Builder(
-                    builder: (_) {
-                      if (_submitting) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            const TextButton(
-                              onPressed: null,
-                              child: Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              ),
-                            ),
-                            if (_progress != null)
-                              Padding(
-                                padding:
-                                    widget.contentPadding ?? _defaultPadding,
-                                child:
-                                    SubmitProgressWidget(progress: _progress!),
-                              ),
-                          ],
-                        );
-                      } else if (!widget.hideButton) {
-                        return ElevatedButton(
-                          onPressed: submitForm,
-                          child: Text(
-                            widget.buttonLabel ??
-                                _formData?.properties?.buttonTitle ??
-                                localization.actionSend,
-                          ),
-                        );
-                      } else {
-                        return const SizedBox();
-                      }
-                    },
-                  ),
-                ),
-              );
-            }
-          },
-        ),
       ),
     );
   }
@@ -699,6 +597,164 @@ class LoadingFormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: CircularProgressIndicator.adaptive(),
+    );
+  }
+}
+
+class FormDataWidget extends StatelessWidget {
+  final FormData data;
+  final GlobalKey<FormState> formKey;
+  final bool isSubmitting;
+  final EdgeInsetsGeometry? titlePadding;
+  final TextStyle? titleStyle;
+  final bool hideTitle;
+  final EdgeInsetsGeometry? descriptionPadding;
+  final TextStyle? descriptionStyle;
+  final bool hideDescription;
+  final EdgeInsetsGeometry padding;
+  final Widget? Function(BuildContext, FormComponent)? componentBuilder;
+  final bool hideButton;
+
+  /// Alignment of the Send Button
+  final Alignment buttonAlignment;
+  final String? buttonLabel;
+  final Function() submitForm;
+  final SubmitProgress? progress;
+  final ScrollController? scrollController;
+
+  const FormDataWidget({
+    super.key,
+    required this.data,
+    required this.formKey,
+    required this.isSubmitting,
+    this.titlePadding,
+    this.titleStyle,
+    required this.hideTitle,
+    this.descriptionPadding,
+    this.descriptionStyle,
+    required this.hideDescription,
+    required this.padding,
+    this.componentBuilder,
+    required this.hideButton,
+    required this.buttonAlignment,
+    this.buttonLabel,
+    required this.submitForm,
+    this.progress,
+    this.scrollController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localization = ApptiveGridLocalization.of(context)!;
+    final submitLink = data.links[ApptiveLinkType.submit];
+    // Offset for title and description
+    const indexOffset = 2;
+    return Form(
+      key: formKey,
+      child: ListView.builder(
+        controller: scrollController,
+        itemCount: indexOffset +
+            (data.components?.length ?? 0) +
+            (submitLink != null ? 1 : 0),
+        itemBuilder: (context, index) {
+          // Title
+          if (index == 0) {
+            if (hideTitle || data.title == null) {
+              return const SizedBox();
+            } else {
+              return Padding(
+                padding: titlePadding ?? padding,
+                child: Text(
+                  data.title!,
+                  style:
+                      titleStyle ?? Theme.of(context).textTheme.headlineSmall,
+                ),
+              );
+            }
+          } else if (index == 1) {
+            if (hideDescription || data.description == null) {
+              return const SizedBox();
+            } else {
+              return Padding(
+                padding: descriptionPadding ?? padding,
+                child: Text(
+                  data.description!,
+                  style:
+                      descriptionStyle ?? Theme.of(context).textTheme.bodyLarge,
+                ),
+              );
+            }
+          } else if (index < (data.components?.length ?? 0) + indexOffset) {
+            final componentIndex = index - indexOffset;
+            final component = data.components![componentIndex];
+            final componentWidget = fromModel(component);
+            if (componentWidget is EmptyFormWidget) {
+              // UserReference Widget should be invisible in the Form
+              // So returning without any Padding
+              return componentWidget;
+            } else {
+              return IgnorePointer(
+                ignoring: isSubmitting,
+                child: Padding(
+                  padding: padding,
+                  child: Builder(
+                    builder: (context) {
+                      final customBuilder =
+                          componentBuilder?.call(context, component);
+                      if (customBuilder != null) {
+                        return customBuilder;
+                      } else {
+                        return componentWidget;
+                      }
+                    },
+                  ),
+                ),
+              );
+            }
+          } else {
+            return Padding(
+              padding: padding,
+              child: Align(
+                alignment: buttonAlignment,
+                child: Builder(
+                  builder: (_) {
+                    if (isSubmitting) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const TextButton(
+                            onPressed: null,
+                            child: Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
+                          ),
+                          if (progress != null)
+                            Padding(
+                              padding: padding,
+                              child: SubmitProgressWidget(progress: progress!),
+                            ),
+                        ],
+                      );
+                    } else if (!hideButton) {
+                      return ElevatedButton(
+                        onPressed: submitForm,
+                        child: Text(
+                          buttonLabel ??
+                              data.properties?.buttonTitle ??
+                              localization.actionSend,
+                        ),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }
