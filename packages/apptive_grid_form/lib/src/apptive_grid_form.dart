@@ -413,18 +413,12 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           } else if (_success) {
             return _buildSuccess(buildContext);
           } else if (_formData == null) {
-            return _buildLoading(buildContext);
+            return LoadingFormWidget();
           } else {
             return _buildForm(buildContext, _formData!);
           }
         },
       ),
-    );
-  }
-
-  Widget _buildLoading(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
     );
   }
 
@@ -793,5 +787,14 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     } catch (e) {
       return null;
     }
+  }
+}
+
+class LoadingFormWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator.adaptive(),
+    );
   }
 }
