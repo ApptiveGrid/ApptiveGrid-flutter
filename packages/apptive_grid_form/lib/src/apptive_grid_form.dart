@@ -416,7 +416,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 _updateView(resetFormData: false);
               },
               scrollController: widget.scrollController,
-              formData: _formData,
             );
           } else if (_saved) {
             return SavedSubmitWidget(

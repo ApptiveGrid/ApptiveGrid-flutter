@@ -220,7 +220,6 @@ class FormErrorWidget extends StatelessWidget {
     required this.padding,
     required this.didTapBackButton,
     this.scrollController,
-    this.formData,
   });
 
   /// The error being displayed
@@ -234,9 +233,6 @@ class FormErrorWidget extends StatelessWidget {
 
   /// Optional ScrollController for the Form
   final ScrollController? scrollController;
-
-  /// The current form data
-  final FormData? formData;
 
   @override
   Widget build(BuildContext context) {
