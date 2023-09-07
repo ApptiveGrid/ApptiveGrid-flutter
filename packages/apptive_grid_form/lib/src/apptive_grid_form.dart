@@ -488,7 +488,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           step: SubmitStep.uploadingAttachments,
           processedAttachments: attachmentCount,
           totalAttachments: attachmentsToUpload,
-          
           progress: startPercentage,
         );
       });
