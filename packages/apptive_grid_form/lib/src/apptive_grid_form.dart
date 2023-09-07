@@ -407,17 +407,28 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       child: Builder(
         builder: (buildContext) {
           if (_error != null) {
-            return _buildError(buildContext);
+            return FormErrorWidget(
+              error: _error,
+              padding: widget.contentPadding ?? _defaultPadding,
+              didTapBackbutton: () {
+                if (_formData == null) {
+                  widget.triggerReload?.call();
+                }
+                _updateView(resetFormData: false);
+              },
+              scrollController: widget.scrollController,
+              formData: _formData,
+            );
           } else if (_saved) {
             return _buildSaved(buildContext);
           } else if (_success) {
             return SuccessfulSubmitWidget(
-              scrollController: widget.scrollController,
-              formData: _formData,
               didTapAdditionalAnswer: () {
                 widget.triggerReload?.call();
                 _updateView();
               },
+              scrollController: widget.scrollController,
+              formData: _formData,
             );
           } else if (_formData == null) {
             return LoadingFormWidget();
@@ -586,51 +597,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
     );
   }
 
-  Widget _buildError(BuildContext context) {
-    final localization = ApptiveGridLocalization.of(context)!;
-    final theme = Theme.of(context);
-    return ListView(
-      controller: widget.scrollController,
-      padding: const EdgeInsets.all(32.0),
-      children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: Lottie.asset(
-            'packages/apptive_grid_form/assets/error.json',
-            repeat: false,
-          ),
-        ),
-        Text(
-          localization.errorTitle,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.headlineMedium,
-        ),
-        Padding(
-          padding: widget.contentPadding ?? _defaultPadding,
-          child: Text(
-            _error is http.Response
-                ? '${_error.statusCode}: ${_error.body}'
-                : _error.toString(),
-            textAlign: TextAlign.center,
-            style: theme.textTheme.labelSmall
-                ?.copyWith(color: theme.colorScheme.error),
-          ),
-        ),
-        Center(
-          child: TextButton(
-            onPressed: () {
-              if (_formData == null) {
-                widget.triggerReload?.call();
-              }
-              _updateView(resetFormData: false);
-            },
-            child: Text(localization.backToForm),
-          ),
-        ),
-      ],
-    );
-  }
-
   EdgeInsets get _defaultPadding => const EdgeInsets.all(8.0);
 
   /// Submits the [currentData] if not already submitting
@@ -764,16 +730,74 @@ class LoadingFormWidget extends StatelessWidget {
   }
 }
 
-class SuccessfulSubmitWidget extends StatelessWidget {
+class FormErrorWidget extends StatelessWidget {
+  final dynamic error;
+  final EdgeInsetsGeometry padding;
+  final Function() didTapBackbutton;
   final ScrollController? scrollController;
   final FormData? formData;
+
+  const FormErrorWidget({
+    super.key,
+    required this.error,
+    required this.padding,
+    required this.didTapBackbutton,
+    this.scrollController,
+    this.formData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localization = ApptiveGridLocalization.of(context)!;
+    final theme = Theme.of(context);
+    return ListView(
+      controller: scrollController,
+      padding: const EdgeInsets.all(32.0),
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: Lottie.asset(
+            'packages/apptive_grid_form/assets/error.json',
+            repeat: false,
+          ),
+        ),
+        Text(
+          localization.errorTitle,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.headlineMedium,
+        ),
+        Padding(
+          padding: padding,
+          child: Text(
+            error is http.Response
+                ? '${error.statusCode}: ${error.body}'
+                : error.toString(),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelSmall
+                ?.copyWith(color: theme.colorScheme.error),
+          ),
+        ),
+        Center(
+          child: TextButton(
+            onPressed: didTapBackbutton,
+            child: Text(localization.backToForm),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SuccessfulSubmitWidget extends StatelessWidget {
   final Function() didTapAdditionalAnswer;
+  final ScrollController? scrollController;
+  final FormData? formData;
 
   const SuccessfulSubmitWidget({
     super.key,
+    required this.didTapAdditionalAnswer,
     this.scrollController,
     this.formData,
-    required this.didTapAdditionalAnswer,
   });
 
   @override
