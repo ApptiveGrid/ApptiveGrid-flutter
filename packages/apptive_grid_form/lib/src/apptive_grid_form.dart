@@ -477,7 +477,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       setState(() {
         _submitting = true;
       });
-      final l10n = ApptiveGridLocalization.of(context)!;
       const doneAttachmentPercentage = 0.6;
       const uploadFormPercentage = 0.8;
       const startPercentage = 0.1;
@@ -486,10 +485,10 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       int attachmentCount = 0;
       setState(() {
         _progress = SubmitProgress(
-          message: l10n.progressProcessAttachment(
-            processed: attachmentCount,
-            total: attachmentsToUpload,
-          ),
+          step: SubmitStep.uploadingAttachments,
+          processedAttachments: attachmentCount,
+          totalAttachments: attachmentsToUpload,
+          
           progress: startPercentage,
         );
       });
@@ -499,10 +498,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           if (event is ProcessedAttachmentProgressEvent) {
             setState(() {
               _progress = SubmitProgress(
-                message: l10n.progressProcessAttachment(
-                  processed: ++attachmentCount,
-                  total: attachmentsToUpload,
-                ),
+                step: SubmitStep.uploadingAttachments,
+                processedAttachments: ++attachmentCount,
+                totalAttachments: attachmentsToUpload,
                 progress: startPercentage +
                     (attachmentCount *
                         (doneAttachmentPercentage - startPercentage) /
@@ -517,7 +515,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           } else if (event is UploadFormProgressEvent) {
             setState(() {
               _progress = SubmitProgress(
-                message: l10n.progressSubmitForm,
+                step: SubmitStep.submittingForm,
+                processedAttachments: attachmentCount,
+                totalAttachments: attachmentsToUpload,
                 progress: uploadFormPercentage,
               );
             });
