@@ -420,7 +420,14 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               formData: _formData,
             );
           } else if (_saved) {
-            return _buildSaved(buildContext);
+            return SavedSubmitWidget(
+              didTapAdditionalAnswer: () {
+                widget.triggerReload?.call();
+                _updateView();
+              },
+              scrollController: widget.scrollController,
+              formData: _formData,
+            );
           } else if (_success) {
             return SuccessfulSubmitWidget(
               didTapAdditionalAnswer: () {
@@ -560,40 +567,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           },
         ),
       ),
-    );
-  }
-
-  Widget _buildSaved(BuildContext context) {
-    final localization = ApptiveGridLocalization.of(context)!;
-    return ListView(
-      controller: widget.scrollController,
-      padding: const EdgeInsets.all(32.0),
-      children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: Lottie.asset(
-            'packages/apptive_grid_form/assets/saved.json',
-            repeat: false,
-          ),
-        ),
-        Text(
-          localization.savedForLater,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        Center(
-          child: TextButton(
-            onPressed: () {
-              widget.triggerReload?.call();
-              _updateView();
-            },
-            child: Text(
-              _formData?.properties?.afterSubmitAction?.buttonTitle ??
-                  localization.additionalAnswer,
-            ),
-          ),
-        ),
-      ],
     );
   }
 
@@ -827,6 +800,51 @@ class SuccessfulSubmitWidget extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
+        Center(
+          child: TextButton(
+            onPressed: didTapAdditionalAnswer,
+            child: Text(
+              formData?.properties?.afterSubmitAction?.buttonTitle ??
+                  localization.additionalAnswer,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SavedSubmitWidget extends StatelessWidget {
+  final Function() didTapAdditionalAnswer;
+  final ScrollController? scrollController;
+  final FormData? formData;
+
+  const SavedSubmitWidget({
+    super.key,
+    required this.didTapAdditionalAnswer,
+    this.scrollController,
+    this.formData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localization = ApptiveGridLocalization.of(context)!;
+    return ListView(
+      controller: scrollController,
+      padding: const EdgeInsets.all(32.0),
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: Lottie.asset(
+            'packages/apptive_grid_form/assets/saved.json',
+            repeat: false,
+          ),
+        ),
+        Text(
+          localization.savedForLater,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
         Center(
           child: TextButton(
             onPressed: didTapAdditionalAnswer,
