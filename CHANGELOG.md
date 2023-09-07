@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-09-07
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_form` - `v1.6.0`](#apptive_grid_form---v160)
+
+---
+
+#### `apptive_grid_form` - `v1.6.0`
+
+ - **FEAT**: Add option to use a custom button to submit forms (#115).
+
+
 ## 2023-08-25
 
 ### Changes

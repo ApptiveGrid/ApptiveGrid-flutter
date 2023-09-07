@@ -1,3 +1,7 @@
+## 1.6.0
+
+ - **FEAT**: Add option to use a custom button to submit forms (#115).
+
 ## 1.5.0
 
  - **FEAT**: Add support for ReducedLookUp (SumUp) Type (#112).
