@@ -1,6 +1,8 @@
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
 import 'package:flutter/material.dart';
 
+/// TODO: Refactor this with dart 3 into a sealed class with the attchment counts as attributes.
+
 /// Represents the current step in the submit progress
 enum SubmitStep {
   /// The step to upload attachments
