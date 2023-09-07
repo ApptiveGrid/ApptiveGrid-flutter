@@ -411,7 +411,14 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           } else if (_saved) {
             return _buildSaved(buildContext);
           } else if (_success) {
-            return _buildSuccess(buildContext);
+            return SuccessfulSubmitWidget(
+              scrollController: widget.scrollController,
+              formData: _formData,
+              didTapAdditionalAnswer: () {
+                widget.triggerReload?.call();
+                _updateView();
+              },
+            );
           } else if (_formData == null) {
             return LoadingFormWidget();
           } else {
@@ -542,48 +549,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           },
         ),
       ),
-    );
-  }
-
-  Widget _buildSuccess(BuildContext context) {
-    final localization = ApptiveGridLocalization.of(context)!;
-    return ListView(
-      controller: widget.scrollController,
-      padding: const EdgeInsets.all(32.0),
-      children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: Lottie.asset(
-            'packages/apptive_grid_form/assets/success.json',
-            repeat: false,
-          ),
-        ),
-        Text(
-          _formData?.properties?.successTitle ?? localization.sendSuccess,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        if (_formData?.properties?.successMessage != null) ...[
-          const SizedBox(height: 4),
-          Text(
-            _formData!.properties!.successMessage!,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
-        Center(
-          child: TextButton(
-            onPressed: () {
-              widget.triggerReload?.call();
-              _updateView();
-            },
-            child: Text(
-              _formData?.properties?.afterSubmitAction?.buttonTitle ??
-                  localization.additionalAnswer,
-            ),
-          ),
-        ),
-      ],
     );
   }
 
@@ -795,6 +760,59 @@ class LoadingFormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: CircularProgressIndicator.adaptive(),
+    );
+  }
+}
+
+class SuccessfulSubmitWidget extends StatelessWidget {
+  final ScrollController? scrollController;
+  final FormData? formData;
+  final Function() didTapAdditionalAnswer;
+
+  const SuccessfulSubmitWidget({
+    super.key,
+    this.scrollController,
+    this.formData,
+    required this.didTapAdditionalAnswer,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localization = ApptiveGridLocalization.of(context)!;
+    return ListView(
+      controller: scrollController,
+      padding: const EdgeInsets.all(32.0),
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: Lottie.asset(
+            'packages/apptive_grid_form/assets/success.json',
+            repeat: false,
+          ),
+        ),
+        Text(
+          formData?.properties?.successTitle ?? localization.sendSuccess,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        if (formData?.properties?.successMessage != null) ...[
+          const SizedBox(height: 4),
+          Text(
+            formData!.properties!.successMessage!,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
+        Center(
+          child: TextButton(
+            onPressed: didTapAdditionalAnswer,
+            child: Text(
+              formData?.properties?.afterSubmitAction?.buttonTitle ??
+                  localization.additionalAnswer,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
