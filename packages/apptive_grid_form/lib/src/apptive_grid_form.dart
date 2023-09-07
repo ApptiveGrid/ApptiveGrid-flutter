@@ -410,7 +410,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             return FormErrorWidget(
               error: _error,
               padding: widget.contentPadding ?? _defaultPadding,
-              didTapBackbutton: () {
+              didTapBackButton: () {
                 if (_formData == null) {
                   widget.triggerReload?.call();
                 }
@@ -438,7 +438,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               formData: _formData,
             );
           } else if (_formData == null) {
-            return LoadingFormWidget();
+            return const LoadingFormWidget();
           } else {
             return Provider<AttachmentManager>.value(
               value: _attachmentManager,
@@ -592,7 +592,11 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   }
 }
 
+/// Shows a spinner while loading the form data
 class LoadingFormWidget extends StatelessWidget {
+  /// Creates a new loading widget
+  const LoadingFormWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const Center(
@@ -601,39 +605,21 @@ class LoadingFormWidget extends StatelessWidget {
   }
 }
 
+/// Displays the current form data with all customizations
 class FormDataWidget extends StatelessWidget {
-  final FormData data;
-  final GlobalKey<FormState> formKey;
-  final bool isSubmitting;
-  final EdgeInsetsGeometry? titlePadding;
-  final TextStyle? titleStyle;
-  final bool hideTitle;
-  final EdgeInsetsGeometry? descriptionPadding;
-  final TextStyle? descriptionStyle;
-  final bool hideDescription;
-  final EdgeInsetsGeometry padding;
-  final Widget? Function(BuildContext, FormComponent)? componentBuilder;
-  final bool hideButton;
-
-  /// Alignment of the Send Button
-  final Alignment buttonAlignment;
-  final String? buttonLabel;
-  final Function() submitForm;
-  final SubmitProgress? progress;
-  final ScrollController? scrollController;
-
+  /// Creates a new form data widget
   const FormDataWidget({
     super.key,
     required this.data,
     required this.formKey,
     required this.isSubmitting,
+    required this.padding,
     this.titlePadding,
     this.titleStyle,
     required this.hideTitle,
     this.descriptionPadding,
     this.descriptionStyle,
     required this.hideDescription,
-    required this.padding,
     this.componentBuilder,
     required this.hideButton,
     required this.buttonAlignment,
@@ -642,6 +628,58 @@ class FormDataWidget extends StatelessWidget {
     this.progress,
     this.scrollController,
   });
+
+  /// The current form data
+  final FormData data;
+
+  /// A key to access the state of the current form
+  final GlobalKey<FormState> formKey;
+
+  /// A flag to signal the the form is currently being submitted
+  final bool isSubmitting;
+
+  /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
+  final EdgeInsetsGeometry padding;
+
+  /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
+  final TextStyle? titleStyle;
+
+  /// Padding for the title. If no Padding is provided the [padding] is used
+  final EdgeInsetsGeometry? titlePadding;
+
+  /// Flag to hide the form title, default is false
+  final bool hideTitle;
+
+  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  final TextStyle? descriptionStyle;
+
+  /// Padding for the description. If no Padding is provided the [padding] is used
+  final EdgeInsetsGeometry? descriptionPadding;
+
+  /// Flag to hide the form description, default is false
+  final bool hideDescription;
+
+  /// A custom Builder for Building custom Widgets for FormComponents
+  final Widget? Function(BuildContext, FormComponent)? componentBuilder;
+
+  /// Alignment of the Send Button
+  final Alignment buttonAlignment;
+
+  /// Label of the Button to submit a form.
+  /// Defaults to a localized version of `Send`
+  final String? buttonLabel;
+
+  /// Show or hide the submit button at the bottom of the form.
+  final bool hideButton;
+
+  /// Triggers when the send button it tapped
+  final Function() submitForm;
+
+  /// The current submission progress
+  final SubmitProgress? progress;
+
+  /// Optional ScrollController for the Form
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -759,21 +797,32 @@ class FormDataWidget extends StatelessWidget {
   }
 }
 
+/// Displays an error the occured while submitting
 class FormErrorWidget extends StatelessWidget {
-  final dynamic error;
-  final EdgeInsetsGeometry padding;
-  final Function() didTapBackbutton;
-  final ScrollController? scrollController;
-  final FormData? formData;
-
+  /// Creates a new error widget
   const FormErrorWidget({
     super.key,
     required this.error,
     required this.padding,
-    required this.didTapBackbutton,
+    required this.didTapBackButton,
     this.scrollController,
     this.formData,
   });
+
+  /// The error being displayed
+  final dynamic error;
+
+  /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
+  final EdgeInsetsGeometry padding;
+
+  /// Triggers when the user taps the back button
+  final Function() didTapBackButton;
+
+  /// Optional ScrollController for the Form
+  final ScrollController? scrollController;
+
+  /// The current form data
+  final FormData? formData;
 
   @override
   Widget build(BuildContext context) {
@@ -808,7 +857,7 @@ class FormErrorWidget extends StatelessWidget {
         ),
         Center(
           child: TextButton(
-            onPressed: didTapBackbutton,
+            onPressed: didTapBackButton,
             child: Text(localization.backToForm),
           ),
         ),
@@ -817,17 +866,24 @@ class FormErrorWidget extends StatelessWidget {
   }
 }
 
+/// Displays a success message after a succesful submission
 class SuccessfulSubmitWidget extends StatelessWidget {
-  final Function() didTapAdditionalAnswer;
-  final ScrollController? scrollController;
-  final FormData? formData;
-
+  /// Creates a new success widget
   const SuccessfulSubmitWidget({
     super.key,
     required this.didTapAdditionalAnswer,
     this.scrollController,
     this.formData,
   });
+
+  /// Triggers when the user taps the button to submit an additional answer
+  final Function() didTapAdditionalAnswer;
+
+  /// Optional ScrollController for the Form
+  final ScrollController? scrollController;
+
+  /// The current form data
+  final FormData? formData;
 
   @override
   Widget build(BuildContext context) {
@@ -870,17 +926,24 @@ class SuccessfulSubmitWidget extends StatelessWidget {
   }
 }
 
+/// Displays a message after a submission has been saved locally
 class SavedSubmitWidget extends StatelessWidget {
-  final Function() didTapAdditionalAnswer;
-  final ScrollController? scrollController;
-  final FormData? formData;
-
+  /// Creates a new saved submission widget
   const SavedSubmitWidget({
     super.key,
     required this.didTapAdditionalAnswer,
     this.scrollController,
     this.formData,
   });
+
+  /// Triggers when the user taps the button to submit an additional answer
+  final Function() didTapAdditionalAnswer;
+
+  /// Optional ScrollController for the Form
+  final ScrollController? scrollController;
+
+  /// The current form data
+  final FormData? formData;
 
   @override
   Widget build(BuildContext context) {
