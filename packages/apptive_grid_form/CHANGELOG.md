@@ -1,3 +1,7 @@
+## 1.6.1
+
+ - **FIX**: Move translations out of the submit method (#116).
+
 ## 1.6.0
 
  - **FEAT**: Add option to use a custom button to submit forms (#115).
