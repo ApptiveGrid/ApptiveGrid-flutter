@@ -1,14 +1,37 @@
+import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
 import 'package:flutter/material.dart';
+
+/// TODO: Refactor this with dart 3 into a sealed class with the attchment counts as attributes.
+
+/// Represents the current step in the submit progress
+enum SubmitStep {
+  /// The step to upload attachments
+  uploadingAttachments,
+
+  /// The step to submit the form data
+  submittingForm,
+}
 
 /// A class to display Progress of a form submission
 class SubmitProgress {
   /// Creates a new SubmitProgress
-  const SubmitProgress({required this.message, required this.progress});
+  const SubmitProgress({
+    required this.step,
+    required this.processedAttachments,
+    required this.totalAttachments,
+    required this.progress,
+  });
 
-  /// The message to display
-  final String message;
+  /// The current step in the submission progress
+  final SubmitStep step;
 
-  /// The progress of the submission
+  /// The number of already processed attachments
+  final int processedAttachments;
+
+  /// The number of all attachments
+  final int totalAttachments;
+
+  /// The total progress of the submission
   final double progress;
 }
 
@@ -22,6 +45,19 @@ class SubmitProgressWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = ApptiveGridLocalization.of(context)!;
+    final String message;
+    switch (progress.step) {
+      case SubmitStep.uploadingAttachments:
+        message = l10n.progressProcessAttachment(
+          processed: progress.processedAttachments,
+          total: progress.totalAttachments,
+        );
+        break;
+      case SubmitStep.submittingForm:
+        message = l10n.progressSubmitForm;
+        break;
+    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -33,7 +69,7 @@ class SubmitProgressWidget extends StatelessWidget {
           height: 4,
         ),
         Text(
-          progress.message,
+          message,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelSmall,
         ),

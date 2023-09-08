@@ -3,11 +3,10 @@ import 'dart:async';
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/src/util/submit_progress.dart';
-import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:apptive_grid_form/src/widgets/form_widget/attachment_manager.dart';
+import 'package:apptive_grid_form/src/widgets/form_widget/form_content_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 /// A Widget to display a ApptiveGrid Form
@@ -407,268 +406,67 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       child: Builder(
         builder: (buildContext) {
           if (_error != null) {
-            return _buildError(buildContext);
+            return FormErrorWidget(
+              error: _error,
+              padding: widget.contentPadding ?? _defaultPadding,
+              didTapBackButton: () {
+                if (_formData == null) {
+                  widget.triggerReload?.call();
+                }
+                _updateView(resetFormData: false);
+              },
+              scrollController: widget.scrollController,
+            );
           } else if (_saved) {
-            return _buildSaved(buildContext);
+            return SavedSubmitWidget(
+              didTapAdditionalAnswer: () {
+                widget.triggerReload?.call();
+                _updateView();
+              },
+              additionalAnswerButtonLabel:
+                  _formData?.properties?.afterSubmitAction?.buttonTitle,
+              scrollController: widget.scrollController,
+            );
           } else if (_success) {
-            return _buildSuccess(buildContext);
+            return SuccessfulSubmitWidget(
+              didTapAdditionalAnswer: () {
+                widget.triggerReload?.call();
+                _updateView();
+              },
+              successTitle: _formData?.properties?.successTitle,
+              successMessage: _formData?.properties?.successMessage,
+              additionalAnswerButtonLabel:
+                  _formData?.properties?.afterSubmitAction?.buttonTitle,
+              scrollController: widget.scrollController,
+            );
           } else if (_formData == null) {
-            return _buildLoading(buildContext);
+            return const LoadingFormWidget();
           } else {
-            return _buildForm(buildContext, _formData!);
+            return Provider<AttachmentManager>.value(
+              value: _attachmentManager,
+              child: FormDataWidget(
+                data: _formData!,
+                formKey: _formKey,
+                isSubmitting: _submitting,
+                padding: widget.contentPadding ?? _defaultPadding,
+                hideTitle: widget.hideTitle,
+                titlePadding: widget.titlePadding,
+                titleStyle: widget.titleStyle,
+                hideDescription: widget.hideDescription,
+                descriptionPadding: widget.descriptionPadding,
+                descriptionStyle: widget.descriptionStyle,
+                componentBuilder: widget.componentBuilder,
+                hideButton: widget.hideButton,
+                buttonLabel: widget.buttonLabel,
+                buttonAlignment: widget.buttonAlignment,
+                submitForm: submitForm,
+                progress: _progress,
+                scrollController: widget.scrollController,
+              ),
+            );
           }
         },
       ),
-    );
-  }
-
-  Widget _buildLoading(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
-    );
-  }
-
-  Widget _buildForm(BuildContext context, FormData data) {
-    final localization = ApptiveGridLocalization.of(context)!;
-    final submitLink = data.links[ApptiveLinkType.submit];
-    // Offset for title and description
-    const indexOffset = 2;
-    return Provider<AttachmentManager>.value(
-      value: _attachmentManager,
-      child: Form(
-        key: _formKey,
-        child: ListView.builder(
-          controller: widget.scrollController,
-          itemCount: indexOffset +
-              (data.components?.length ?? 0) +
-              (submitLink != null ? 1 : 0),
-          itemBuilder: (context, index) {
-            // Title
-            if (index == 0) {
-              if (widget.hideTitle || data.title == null) {
-                return const SizedBox();
-              } else {
-                return Padding(
-                  padding: widget.titlePadding ??
-                      widget.contentPadding ??
-                      _defaultPadding,
-                  child: Text(
-                    data.title!,
-                    style: widget.titleStyle ??
-                        Theme.of(context).textTheme.headlineSmall,
-                  ),
-                );
-              }
-            } else if (index == 1) {
-              if (widget.hideDescription || data.description == null) {
-                return const SizedBox();
-              } else {
-                return Padding(
-                  padding: widget.descriptionPadding ??
-                      widget.contentPadding ??
-                      _defaultPadding,
-                  child: Text(
-                    data.description!,
-                    style: widget.descriptionStyle ??
-                        Theme.of(context).textTheme.bodyLarge,
-                  ),
-                );
-              }
-            } else if (index < (data.components?.length ?? 0) + indexOffset) {
-              final componentIndex = index - indexOffset;
-              final component = data.components![componentIndex];
-              final componentWidget = fromModel(component);
-              if (componentWidget is EmptyFormWidget) {
-                // UserReference Widget should be invisible in the Form
-                // So returning without any Padding
-                return componentWidget;
-              } else {
-                return IgnorePointer(
-                  ignoring: _submitting,
-                  child: Padding(
-                    padding: widget.contentPadding ?? _defaultPadding,
-                    child: Builder(
-                      builder: (context) {
-                        final customBuilder =
-                            widget.componentBuilder?.call(context, component);
-                        if (customBuilder != null) {
-                          return customBuilder;
-                        } else {
-                          return componentWidget;
-                        }
-                      },
-                    ),
-                  ),
-                );
-              }
-            } else {
-              return Padding(
-                padding: widget.contentPadding ?? _defaultPadding,
-                child: Align(
-                  alignment: widget.buttonAlignment,
-                  child: Builder(
-                    builder: (_) {
-                      if (_submitting) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            const TextButton(
-                              onPressed: null,
-                              child: Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              ),
-                            ),
-                            if (_progress != null)
-                              Padding(
-                                padding:
-                                    widget.contentPadding ?? _defaultPadding,
-                                child:
-                                    SubmitProgressWidget(progress: _progress!),
-                              ),
-                          ],
-                        );
-                      } else if (!widget.hideButton) {
-                        return ElevatedButton(
-                          onPressed: submitForm,
-                          child: Text(
-                            widget.buttonLabel ??
-                                _formData?.properties?.buttonTitle ??
-                                localization.actionSend,
-                          ),
-                        );
-                      } else {
-                        return const SizedBox();
-                      }
-                    },
-                  ),
-                ),
-              );
-            }
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSuccess(BuildContext context) {
-    final localization = ApptiveGridLocalization.of(context)!;
-    return ListView(
-      controller: widget.scrollController,
-      padding: const EdgeInsets.all(32.0),
-      children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: Lottie.asset(
-            'packages/apptive_grid_form/assets/success.json',
-            repeat: false,
-          ),
-        ),
-        Text(
-          _formData?.properties?.successTitle ?? localization.sendSuccess,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        if (_formData?.properties?.successMessage != null) ...[
-          const SizedBox(height: 4),
-          Text(
-            _formData!.properties!.successMessage!,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
-        Center(
-          child: TextButton(
-            onPressed: () {
-              widget.triggerReload?.call();
-              _updateView();
-            },
-            child: Text(
-              _formData?.properties?.afterSubmitAction?.buttonTitle ??
-                  localization.additionalAnswer,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSaved(BuildContext context) {
-    final localization = ApptiveGridLocalization.of(context)!;
-    return ListView(
-      controller: widget.scrollController,
-      padding: const EdgeInsets.all(32.0),
-      children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: Lottie.asset(
-            'packages/apptive_grid_form/assets/saved.json',
-            repeat: false,
-          ),
-        ),
-        Text(
-          localization.savedForLater,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        Center(
-          child: TextButton(
-            onPressed: () {
-              widget.triggerReload?.call();
-              _updateView();
-            },
-            child: Text(
-              _formData?.properties?.afterSubmitAction?.buttonTitle ??
-                  localization.additionalAnswer,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildError(BuildContext context) {
-    final localization = ApptiveGridLocalization.of(context)!;
-    final theme = Theme.of(context);
-    return ListView(
-      controller: widget.scrollController,
-      padding: const EdgeInsets.all(32.0),
-      children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: Lottie.asset(
-            'packages/apptive_grid_form/assets/error.json',
-            repeat: false,
-          ),
-        ),
-        Text(
-          localization.errorTitle,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.headlineMedium,
-        ),
-        Padding(
-          padding: widget.contentPadding ?? _defaultPadding,
-          child: Text(
-            _error is http.Response
-                ? '${_error.statusCode}: ${_error.body}'
-                : _error.toString(),
-            textAlign: TextAlign.center,
-            style: theme.textTheme.labelSmall
-                ?.copyWith(color: theme.colorScheme.error),
-          ),
-        ),
-        Center(
-          child: TextButton(
-            onPressed: () {
-              if (_formData == null) {
-                widget.triggerReload?.call();
-              }
-              _updateView(resetFormData: false);
-            },
-            child: Text(localization.backToForm),
-          ),
-        ),
-      ],
     );
   }
 
@@ -681,7 +479,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       setState(() {
         _submitting = true;
       });
-      final l10n = ApptiveGridLocalization.of(context)!;
       const doneAttachmentPercentage = 0.6;
       const uploadFormPercentage = 0.8;
       const startPercentage = 0.1;
@@ -690,10 +487,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       int attachmentCount = 0;
       setState(() {
         _progress = SubmitProgress(
-          message: l10n.progressProcessAttachment(
-            processed: attachmentCount,
-            total: attachmentsToUpload,
-          ),
+          step: SubmitStep.uploadingAttachments,
+          processedAttachments: attachmentCount,
+          totalAttachments: attachmentsToUpload,
           progress: startPercentage,
         );
       });
@@ -703,10 +499,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           if (event is ProcessedAttachmentProgressEvent) {
             setState(() {
               _progress = SubmitProgress(
-                message: l10n.progressProcessAttachment(
-                  processed: ++attachmentCount,
-                  total: attachmentsToUpload,
-                ),
+                step: SubmitStep.uploadingAttachments,
+                processedAttachments: ++attachmentCount,
+                totalAttachments: attachmentsToUpload,
                 progress: startPercentage +
                     (attachmentCount *
                         (doneAttachmentPercentage - startPercentage) /
@@ -721,7 +516,9 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
           } else if (event is UploadFormProgressEvent) {
             setState(() {
               _progress = SubmitProgress(
-                message: l10n.progressSubmitForm,
+                step: SubmitStep.submittingForm,
+                processedAttachments: attachmentCount,
+                totalAttachments: attachmentsToUpload,
                 progress: uploadFormPercentage,
               );
             });
