@@ -21,4 +21,3 @@ export 'package:apptive_grid_form/src/widgets/form_widget/signature_form_widget.
 export 'package:apptive_grid_form/src/widgets/form_widget/text_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/uri_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/user_form_widget.dart';
-export 'package:apptive_grid_form/src/widgets/form_widget/form_content_widgets.dart';
