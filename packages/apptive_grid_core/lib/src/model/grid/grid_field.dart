@@ -68,6 +68,19 @@ class GridField {
         }),
       );
     }
+    if (type == DataType.formula) {
+      return FormulaField(
+        id: id,
+        name: name,
+        key: key,
+        schema: schema,
+        links: links,
+        expression: json['type']['expression'],
+        valueType: DataType.values.firstWhere(
+          (type) => type.backendName == json['type']['valueType']['name'],
+        ),
+      );
+    }
     return GridField(
       id: id,
       name: name,
@@ -319,5 +332,68 @@ class ReducedLookUpField extends GridField {
         lookUpField,
         reducedField,
         reduceFunction,
+      );
+}
+
+/// A [GridField] for [DataType.formula]
+class FormulaField extends GridField {
+  /// Creates a new [GridField] for [DataType.formula]
+  const FormulaField({
+    required super.id,
+    super.key,
+    required super.name,
+    super.links = const {},
+    super.schema,
+    required this.expression,
+    required this.valueType,
+  }) : super(
+          type: DataType.formula,
+        );
+
+  /// A string representation of the formula
+  final String expression;
+
+  /// The result type of the formula
+  final DataType valueType;
+
+  @override
+  Map<String, dynamic> toJson() {
+    final json = super.toJson();
+    json['type'] = {
+      ...json['type'],
+      'valueType': {
+        'name': valueType.backendName,
+      },
+      'expression': expression,
+    };
+    return json;
+  }
+
+  @override
+  String toString() =>
+      'FormulaField(id: $id, name: $name, key: $key, expression: $expression, valueType: $valueType)';
+
+  @override
+  bool operator ==(Object other) {
+    return other is FormulaField &&
+        id == other.id &&
+        name == other.name &&
+        valueType == other.valueType &&
+        expression == other.expression &&
+        f.mapEquals(links, other.links);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        GridField(
+          id: id,
+          name: name,
+          type: type,
+          key: key,
+          links: links,
+          schema: schema,
+        ),
+        valueType,
+        expression,
       );
 }
