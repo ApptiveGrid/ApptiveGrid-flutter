@@ -318,9 +318,9 @@ void main() {
 
         case DataType.reducedLookUp:
           return ReducedLookUpDataEntity(IntegerDataEntity(3));
-        
+
         case DataType.formula:
-          return FormulaDataEntitiy(value: IntegerDataEntity(3));
+          return FormulaDataEntity(value: IntegerDataEntity(3));
       }
     }
 

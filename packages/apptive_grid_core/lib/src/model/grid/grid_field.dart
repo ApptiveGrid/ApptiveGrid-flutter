@@ -361,17 +361,17 @@ class FormulaField extends GridField {
     final json = super.toJson();
     json['type'] = {
       ...json['type'],
+      'expression': expression,
       'valueType': {
         'name': valueType.backendName,
       },
-      'expression': expression,
     };
     return json;
   }
 
   @override
   String toString() =>
-      'FormulaField(id: $id, name: $name, key: $key, expression: $expression, valueType: $valueType)';
+      'FormulaField(id: $id, name: $name, key: $key, expression: $expression, valueType: ${valueType.backendName})';
 
   @override
   bool operator ==(Object other) {
@@ -393,7 +393,7 @@ class FormulaField extends GridField {
           links: links,
           schema: schema,
         ),
-        valueType,
         expression,
+        valueType,
       );
 }
