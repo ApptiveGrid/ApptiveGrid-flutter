@@ -624,6 +624,6 @@ class FormulaDataEntitiy extends DataEntity<DataEntity, Map<String, dynamic>> {
   @override
   Map<String, dynamic> get schemaValue => {
         'value': value?.schemaValue,
-        if (error != null) 'error': error,
+        'error': error,
       };
 }
