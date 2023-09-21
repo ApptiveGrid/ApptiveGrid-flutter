@@ -111,6 +111,11 @@ abstract class DataEntity<T, S> with FilterableMixin {
           json,
           reducedField: (field as ReducedLookUpField).reducedField,
         );
+      case DataType.formula:
+        return FormulaDataEntitiy.fromJson(
+          json,
+          valueType: (field as FormulaField).valueType,
+        );
     }
   }
 }
@@ -588,4 +593,37 @@ class ReducedLookUpDataEntity extends DataEntity<DataEntity, dynamic> {
 
   @override
   dynamic get schemaValue => value?.schemaValue;
+}
+
+/// [DataEntity] representing a Formula
+class FormulaDataEntitiy extends DataEntity<DataEntity, Map<String, dynamic>> {
+  /// Create a new FormulaDataEntitiy
+  FormulaDataEntitiy({DataEntity? value, this.error}) : super(value);
+
+  /// Creates a new FormulaDataEntitiy from a Json Response
+  factory FormulaDataEntitiy.fromJson(
+    dynamic jsonValue, {
+    required DataType valueType,
+  }) {
+    return FormulaDataEntitiy(
+      value: DataEntity.fromJson(
+        json: jsonValue['value'],
+        field: GridField(
+          id: 'id',
+          name: 'name',
+          type: valueType,
+        ),
+      ),
+      error: jsonValue['error'],
+    );
+  }
+
+  /// Error while calculating the formula
+  final String? error;
+
+  @override
+  Map<String, dynamic> get schemaValue => {
+        'value': value?.schemaValue,
+        if (error != null) 'error': error,
+      };
 }
