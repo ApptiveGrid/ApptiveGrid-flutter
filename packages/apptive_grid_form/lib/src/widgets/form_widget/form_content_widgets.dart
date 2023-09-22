@@ -5,6 +5,7 @@ import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'package:collection/collection.dart';
 
 /// Shows a spinner while loading the form data
 class LoadingFormWidget extends StatelessWidget {
@@ -139,6 +140,11 @@ class FormDataWidget extends StatelessWidget {
           } else if (index < (data.components?.length ?? 0) + indexOffset) {
             final componentIndex = index - indexOffset;
             final component = data.components![componentIndex];
+            final properties = data.fieldProperties
+                .firstWhereOrNull((e) => e.fieldId == component.field.id);
+            if (properties?.hidden == true) {
+              return const SizedBox();
+            }
             final componentWidget = fromModel(component);
             if (componentWidget is EmptyFormWidget) {
               // UserReference Widget should be invisible in the Form
