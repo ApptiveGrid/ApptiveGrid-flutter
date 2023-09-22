@@ -1,4 +1,6 @@
 import 'package:apptive_grid_core/src/model/form/after_submit_action.dart';
+import 'package:apptive_grid_core/src/model/form/form_block.dart';
+import 'package:flutter/foundation.dart' as f;
 
 /// Additional properties for the [FormData]
 class FormDataProperties {
@@ -9,6 +11,7 @@ class FormDataProperties {
     this.buttonTitle,
     this.reloadAfterSubmit,
     this.afterSubmitAction,
+    this.blocks,
   });
 
   /// Deserializes [json] into a FormDataProperties Object
@@ -21,6 +24,9 @@ class FormDataProperties {
         afterSubmitAction: json['afterSubmitAction'] != null
             ? AfterSubmitAction.fromJson(json['afterSubmitAction'])
             : null,
+        blocks: (json['blocks'] as List?)
+            ?.map((e) => FormBlock.fromJson(e))
+            .toList(),
       );
 
   /// Custom title for a successfull submission
@@ -38,6 +44,9 @@ class FormDataProperties {
   /// Custom message for a submitting an additional answer
   final AfterSubmitAction? afterSubmitAction;
 
+  /// List of the freeform blocks in the form
+  final List<FormBlock>? blocks;
+
   /// Serializes [FormDataProperties] to json
   Map<String, dynamic> toJson() => {
         if (successTitle != null) 'successTitle': successTitle,
@@ -46,6 +55,7 @@ class FormDataProperties {
         if (reloadAfterSubmit != null) 'reloadAfterSubmit': reloadAfterSubmit,
         if (afterSubmitAction != null)
           'afterSubmitAction': afterSubmitAction!.toJson(),
+        if (blocks != null) 'blocks': blocks!.map((e) => e.toJson()).toList(),
       };
 
   @override
@@ -60,7 +70,8 @@ class FormDataProperties {
         successMessage == other.successMessage &&
         buttonTitle == other.buttonTitle &&
         reloadAfterSubmit == other.reloadAfterSubmit &&
-        afterSubmitAction == other.afterSubmitAction;
+        afterSubmitAction == other.afterSubmitAction &&
+        f.listEquals(blocks, other.blocks);
   }
 
   @override
@@ -70,5 +81,6 @@ class FormDataProperties {
         buttonTitle,
         reloadAfterSubmit,
         afterSubmitAction,
+        blocks,
       );
 }
