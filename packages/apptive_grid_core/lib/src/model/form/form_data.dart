@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_core/src/model/form/form_field_properties.dart';
 import 'package:flutter/foundation.dart' as f;
 
 /// Model for FormData
@@ -16,6 +17,7 @@ class FormData {
     required this.links,
     Map<Attachment, AttachmentAction>? attachmentActions,
     this.properties,
+    this.fieldProperties = const [],
   }) : attachmentActions = attachmentActions ?? HashMap();
 
   /// Deserializes [json] into a FormData Object
@@ -45,6 +47,15 @@ class FormData {
     final properties = json['properties'] != null
         ? FormDataProperties.fromJson(json['properties'])
         : null;
+
+    final List<FormFieldProperties> fieldProperties = [];
+    if (json['fieldProperties'] != null) {
+      for (final field in fields) {
+        fieldProperties.add(
+          FormFieldProperties.fromJson(json: json[field.id], fieldId: field.id),
+        );
+      }
+    }
     return FormData(
       id: id,
       name: name,
@@ -55,6 +66,7 @@ class FormData {
       links: links,
       attachmentActions: attachmentActions,
       properties: properties,
+      fieldProperties: fieldProperties,
     );
   }
 
@@ -85,6 +97,9 @@ class FormData {
   /// Custom title for a successfull submission
   final FormDataProperties? properties;
 
+  /// Additional properties of the fields
+  final List<FormFieldProperties> fieldProperties;
+
   /// Serializes [FormData] to json
   Map<String, dynamic> toJson() {
     return {
@@ -101,6 +116,14 @@ class FormData {
         'attachmentActions':
             attachmentActions.values.map((e) => e.toJson()).toList(),
       if (properties != null) 'properties': properties!.toJson(),
+      'fieldProperties': fieldProperties.map(
+        (e) => {
+          e.fieldId: {
+            'pageId': e.pageId,
+            'fieldIndex': e.fieldIndex,
+          },
+        },
+      ),
     };
   }
 
@@ -129,6 +152,7 @@ class FormData {
         properties == other.properties &&
         f.listEquals(fields, other.fields) &&
         f.listEquals(components, other.components) &&
+        f.listEquals(fieldProperties, other.fieldProperties) &&
         f.mapEquals(attachmentActions, other.attachmentActions) &&
         f.mapEquals(links, other.links);
   }
