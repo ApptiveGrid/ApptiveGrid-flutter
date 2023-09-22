@@ -11,6 +11,7 @@ class FormDataProperties {
     this.buttonTitle,
     this.reloadAfterSubmit,
     this.afterSubmitAction,
+    this.pageIds = const [],
     this.blocks,
   });
 
@@ -24,6 +25,7 @@ class FormDataProperties {
         afterSubmitAction: json['afterSubmitAction'] != null
             ? AfterSubmitAction.fromJson(json['afterSubmitAction'])
             : null,
+        pageIds: json['pageIds'],
         blocks: (json['blocks'] as List?)
             ?.map((e) => FormBlock.fromJson(e))
             .toList(),
@@ -44,6 +46,9 @@ class FormDataProperties {
   /// Custom message for a submitting an additional answer
   final AfterSubmitAction? afterSubmitAction;
 
+  /// The ID's and order of the different page of the form
+  final List<String> pageIds;
+
   /// List of the freeform blocks in the form
   final List<FormBlock>? blocks;
 
@@ -55,12 +60,13 @@ class FormDataProperties {
         if (reloadAfterSubmit != null) 'reloadAfterSubmit': reloadAfterSubmit,
         if (afterSubmitAction != null)
           'afterSubmitAction': afterSubmitAction!.toJson(),
+        'pageIds': pageIds,
         if (blocks != null) 'blocks': blocks!.map((e) => e.toJson()).toList(),
       };
 
   @override
   String toString() {
-    return 'FormDataProperties(successTitle: $successTitle, successMessage: $successMessage, buttonTitle: $buttonTitle, reloadAfterSubmit: $reloadAfterSubmit, afterSubmitAction: $afterSubmitAction)';
+    return 'FormDataProperties(successTitle: $successTitle, successMessage: $successMessage, buttonTitle: $buttonTitle, reloadAfterSubmit: $reloadAfterSubmit, afterSubmitAction: $afterSubmitAction, pageIDs: $pageIds, blocks: $blocks)';
   }
 
   @override
@@ -71,6 +77,7 @@ class FormDataProperties {
         buttonTitle == other.buttonTitle &&
         reloadAfterSubmit == other.reloadAfterSubmit &&
         afterSubmitAction == other.afterSubmitAction &&
+        f.listEquals(pageIds, other.pageIds) &&
         f.listEquals(blocks, other.blocks);
   }
 
@@ -81,6 +88,7 @@ class FormDataProperties {
         buttonTitle,
         reloadAfterSubmit,
         afterSubmitAction,
+        pageIds,
         blocks,
       );
 }
