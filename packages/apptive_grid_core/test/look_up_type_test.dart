@@ -29,6 +29,10 @@ void main() {
               'reducedType': {
                 'name': DataType.integer.backendName,
               },
+              'expression': '',
+              'valueType': {
+                'name': DataType.integer.backendName,
+              },
             },
           },
           "_links": {
@@ -208,6 +212,10 @@ void main() {
               'reducedType': {
                 'name': DataType.integer.backendName,
               },
+              'expression': '',
+              'valueType': {
+                'name': DataType.integer.backendName,
+              },
             },
           },
         });
@@ -310,6 +318,9 @@ void main() {
 
         case DataType.reducedLookUp:
           return ReducedLookUpDataEntity(IntegerDataEntity(3));
+
+        case DataType.formula:
+          return FormulaDataEntity(value: IntegerDataEntity(3));
       }
     }
 

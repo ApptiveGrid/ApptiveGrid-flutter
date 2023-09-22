@@ -111,6 +111,11 @@ abstract class DataEntity<T, S> with FilterableMixin {
           json,
           reducedField: (field as ReducedLookUpField).reducedField,
         );
+      case DataType.formula:
+        return FormulaDataEntity.fromJson(
+          json,
+          valueType: (field as FormulaField).valueType,
+        );
     }
   }
 }
@@ -588,4 +593,51 @@ class ReducedLookUpDataEntity extends DataEntity<DataEntity, dynamic> {
 
   @override
   dynamic get schemaValue => value?.schemaValue;
+}
+
+/// [DataEntity] representing a Formula
+class FormulaDataEntity extends DataEntity<DataEntity, Map<String, dynamic>> {
+  /// Create a new FormulaDataEntity
+  FormulaDataEntity({DataEntity? value, this.error}) : super(value);
+
+  /// Creates a new FormulaDataEntity from a Json Response
+  factory FormulaDataEntity.fromJson(
+    dynamic jsonValue, {
+    required DataType valueType,
+  }) {
+    return FormulaDataEntity(
+      value: DataEntity.fromJson(
+        json: jsonValue['value'],
+        field: GridField(
+          id: 'id',
+          name: 'name',
+          type: valueType,
+        ),
+      ),
+      error: jsonValue['error'],
+    );
+  }
+
+  /// Error while calculating the formula
+  final String? error;
+
+  @override
+  Map<String, dynamic> get schemaValue => {
+        'value': value?.schemaValue,
+        'error': error,
+      };
+
+  @override
+  String toString() =>
+      'FormulaDataEntity(value: ${value?.schemaValue}, error: $error)';
+
+  @override
+  bool operator ==(Object other) {
+    return other is FormulaDataEntity &&
+        value == other.value &&
+        error == other.error;
+  }
+
+  @override
+  int get hashCode => Object.hash(value, error);
 }

@@ -306,4 +306,23 @@ void main() {
       expect(widget.runtimeType, equals(EmptyFormWidget));
     });
   });
+
+  test('FormulaComponent', () {
+    final component = FormComponent<FormulaDataEntity>(
+      field: const FormulaField(
+        id: 'id',
+        name: 'Property',
+        expression: '1+1',
+        valueType: DataType.integer,
+      ),
+      data: FormulaDataEntity(value: IntegerDataEntity(2)),
+      property: 'Property',
+      required: false,
+      options: const FormComponentOptions(),
+    );
+
+    final widget = fromModel(component);
+
+    expect(widget.runtimeType, equals(EmptyFormWidget));
+  });
 }

@@ -24,11 +24,15 @@ void main() {
               'lookupField': '',
               'reduceFunction': 'sum',
               'currency': 'EUR',
+              'expression': '',
               'reducedType': {
                 'name': DataType.integer.backendName,
               },
               'lookupType': {
                 'name': DataType.text.backendName,
+              },
+              'valueType': {
+                'name': DataType.integer.backendName,
               },
             },
           },
@@ -209,11 +213,15 @@ void main() {
               'lookupField': '',
               'reduceFunction': 'sum',
               'currency': 'EUR',
+              'expression': '',
               'reducedType': {
                 'name': DataType.integer.backendName,
               },
               'lookupType': {
                 'name': DataType.text.backendName,
+              },
+              'valueType': {
+                'name': DataType.integer.backendName,
               },
             },
           },
@@ -317,6 +325,9 @@ void main() {
 
         case DataType.reducedLookUp:
           return ReducedLookUpDataEntity(IntegerDataEntity(3));
+
+        case DataType.formula:
+          return FormulaDataEntity(value: IntegerDataEntity(3));
       }
     }
 
