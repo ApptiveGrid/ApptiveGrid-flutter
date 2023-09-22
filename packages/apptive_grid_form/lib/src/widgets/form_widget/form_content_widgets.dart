@@ -153,7 +153,7 @@ class FormDataWidget extends StatelessWidget {
               return componentWidget;
             } else {
               return IgnorePointer(
-                ignoring: isSubmitting,
+                ignoring: properties?.disabled == true || isSubmitting,
                 child: Padding(
                   padding: padding,
                   child: Builder(
