@@ -52,7 +52,10 @@ class FormData {
     if (json['fieldProperties'] != null) {
       for (final field in fields) {
         fieldProperties.add(
-          FormFieldProperties.fromJson(json: json[field.id], fieldId: field.id),
+          FormFieldProperties.fromJson(
+            json: json['fieldProperties'][field.id],
+            fieldId: field.id,
+          ),
         );
       }
     }

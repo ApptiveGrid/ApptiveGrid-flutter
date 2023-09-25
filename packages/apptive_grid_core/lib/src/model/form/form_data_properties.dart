@@ -23,7 +23,7 @@ class FormDataProperties {
         afterSubmitAction: json['afterSubmitAction'] != null
             ? AfterSubmitAction.fromJson(json['afterSubmitAction'])
             : null,
-        pageIds: json['pageIds'],
+        pageIds: json['pageIds'] ?? [],
       );
 
   /// Custom title for a successfull submission

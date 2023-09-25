@@ -10,8 +10,8 @@ class FormFieldProperties {
         pageId: json['pageId'],
         fieldIndex: json['fieldIndex'],
         defaultValue: json['defaultValue'],
-        disabled: json['disabled'],
-        hidden: json['hidden'],
+        disabled: json['disabled'] ?? false,
+        hidden: json['hidden'] ?? false,
       );
 
   /// Creates a FormFieldProperties Object
