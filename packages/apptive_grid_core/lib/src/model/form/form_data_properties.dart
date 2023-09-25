@@ -57,7 +57,7 @@ class FormDataProperties {
 
   @override
   String toString() {
-    return 'FormDataProperties(successTitle: $successTitle, successMessage: $successMessage, buttonTitle: $buttonTitle, reloadAfterSubmit: $reloadAfterSubmit, afterSubmitAction: $afterSubmitAction, pageIDs: $pageIds)';
+    return 'FormDataProperties(successTitle: $successTitle, successMessage: $successMessage, buttonTitle: $buttonTitle, reloadAfterSubmit: $reloadAfterSubmit, afterSubmitAction: $afterSubmitAction, pageIds: $pageIds)';
   }
 
   @override
