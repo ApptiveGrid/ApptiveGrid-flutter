@@ -7,10 +7,10 @@ class FormFieldProperties {
     required dynamic json,
     required GridField field,
   }) {
-    dynamic defaultValue;
+    DataEntity? defaultValue;
     if (json['defaultValue'] != null) {
       defaultValue =
-          DataEntity.fromJson(json: json['defaultValue'], field: field).value;
+          DataEntity.fromJson(json: json['defaultValue'], field: field);
     }
 
     return FormFieldProperties(
@@ -43,7 +43,7 @@ class FormFieldProperties {
   final int? fieldIndex;
 
   /// Default value of the form field
-  final dynamic defaultValue;
+  final DataEntity? defaultValue;
 
   /// Flag whether the form field is hidden. This usually means it also has a [defaultValue] set
   final bool hidden;
@@ -52,11 +52,15 @@ class FormFieldProperties {
   final bool disabled;
 
   /// Serializes [FormFieldProperties] to json
+  ///
+  /// This does not include the [fieldId] since it is used as the key to a map of [FormFieldProperties] jsons
   Map<String, dynamic> toJson() {
     return {
       if (pageId != null) 'pageId': pageId,
       if (fieldIndex != null) 'fieldIndex': fieldIndex,
-      if (defaultValue != null) 'defaultValue': defaultValue,
+      if (defaultValue != null) 'defaultValue': defaultValue!.schemaValue,
+      if (hidden) 'hidden': true,
+      if (disabled) 'disabled': true,
     };
   }
 }

@@ -119,13 +119,8 @@ class FormData {
         'attachmentActions':
             attachmentActions.values.map((e) => e.toJson()).toList(),
       if (properties != null) 'properties': properties!.toJson(),
-      'fieldProperties': fieldProperties.map(
-        (e) => {
-          e.fieldId: {
-            'pageId': e.pageId,
-            'fieldIndex': e.fieldIndex,
-          },
-        },
+      'fieldProperties': Map.fromEntries(
+        fieldProperties.map((e) => MapEntry(e.fieldId, e.toJson())),
       ),
     };
   }
