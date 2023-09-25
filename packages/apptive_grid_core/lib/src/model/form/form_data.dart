@@ -127,7 +127,7 @@ class FormData {
 
   @override
   String toString() {
-    return 'FormData(id: $id, name: $name, title: $title, description: $description, components: $components, fields: $fields, links: $links, attachmentActions: $attachmentActions)';
+    return 'FormData(id: $id, name: $name, title: $title, description: $description, components: $components, fields: $fields, links: $links, attachmentActions: $attachmentActions, properties: $properties, fieldProperties: $fieldProperties)';
   }
 
   /// Creates a [Map] used to send this data back to a server

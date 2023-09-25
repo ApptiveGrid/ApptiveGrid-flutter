@@ -1,4 +1,5 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_core/src/model/form/form_field_properties.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -10,6 +11,7 @@ void main() {
   const reloadAfterSubmit = true;
   const successTitle = 'successTitle';
   const successMessage = 'successMessage';
+  const pageId = 'pageOne';
   final response = {
     'fields': [
       {
@@ -140,6 +142,37 @@ void main() {
         'trigger': 'button',
         'buttonTitle': additionalAnswerButtonTitle,
       },
+      'pageIds': [
+        pageId,
+      ],
+    },
+    'fieldProperties': {
+      '4zc4l4c5coyi7qh6q1ozrg54u': {
+        'pageId': pageId,
+        'fieldIndex': 0,
+      },
+      '4zc4l456pca5ursrt9rxefpsc': {
+        'pageId': pageId,
+        'fieldIndex': 1,
+        'defaultValue': false,
+      },
+      '4zc4l49to77dhfagr844flaey': {
+        'pageId': pageId,
+        'fieldIndex': 2,
+        'hidden': true,
+      },
+      '4zc4l45nmww7ujq7y4axlbtjg': {
+        'pageId': pageId,
+        'fieldIndex': 3,
+        'disabled': true,
+        'defaultValue': 'default',
+      },
+      '4zc4l48ffin5v8pa2emyx9s15': {
+        'pageId': pageId,
+        'fieldIndex': 4,
+        'hidden': true,
+        'defaultValue': 10,
+      },
     },
     '_links': {
       "submit": {
@@ -185,6 +218,40 @@ void main() {
         BooleanDataEntity,
       ]);
 
+      expect(formData.properties!.pageIds.length, equals(1));
+
+      expect(formData.properties!.pageIds.first, equals(pageId));
+
+      expect(formData.fieldProperties.length, equals(5));
+
+      for (var i = 0; i < 5; i++) {
+        final field = formData.fields![i];
+        final fieldProperties = formData.fieldProperties[i];
+
+        expect(fieldProperties.fieldId, equals(field.id));
+        expect(fieldProperties.pageId, equals(pageId));
+
+        switch (field.type) {
+          case DataType.dateTime:
+            break;
+          case DataType.checkbox:
+            expect(fieldProperties.defaultValue?.value, equals(false));
+            break;
+          case DataType.date:
+            expect(fieldProperties.hidden, equals(true));
+            break;
+          case DataType.text:
+            expect(fieldProperties.disabled, equals(true));
+            expect(fieldProperties.defaultValue?.value, equals('default'));
+            break;
+          case DataType.integer:
+            expect(fieldProperties.hidden, equals(true));
+            expect(fieldProperties.defaultValue?.value, equals(10));
+            break;
+          default:
+        }
+      }
+
       expect(
         formData.properties,
         FormDataProperties(
@@ -197,6 +264,7 @@ void main() {
             trigger: AfterSubmitActionTrigger.button,
             buttonTitle: additionalAnswerButtonTitle,
           ),
+          pageIds: [pageId],
         ),
       );
     });
@@ -231,7 +299,14 @@ void main() {
           reloadAfterSubmit: reloadAfterSubmit,
           successTitle: successTitle,
           successMessage: successMessage,
+          pageIds: [pageId],
         ),
+        fieldProperties: [
+          FormFieldProperties(
+            fieldId: component.fieldId,
+            pageId: pageId,
+          ),
+        ],
       );
 
       expect(FormData.fromJson(formData.toJson()), equals(formData));
@@ -280,6 +355,7 @@ void main() {
         components: [component],
         links: {ApptiveLinkType.submit: action},
         fields: [component.field],
+        fieldProperties: [FormFieldProperties(fieldId: component.fieldId)],
       );
 
       final attachmentAction =
@@ -604,29 +680,36 @@ void main() {
         successMessage: 'successMessage',
         buttonTitle: 'buttonTitle',
         reloadAfterSubmit: true,
+        pageIds: [pageId],
       );
       final b = FormDataProperties(
         successTitle: 'successTitle',
         successMessage: 'successMessage',
         buttonTitle: 'buttonTitle',
         reloadAfterSubmit: true,
+        pageIds: [pageId],
       );
       final c = FormDataProperties(
         successTitle: 'successTitle',
         successMessage: 'successMessage',
         buttonTitle: 'buttonTitle2',
         reloadAfterSubmit: true,
+        pageIds: [],
       );
       expect(a, equals(b));
       expect(a, isNot(c));
     });
 
     test('Hashcode', () {
+      const action = AfterSubmitAction(type: AfterSubmitActionType.none);
+      final pageIds = [pageId];
       final properties = FormDataProperties(
         successTitle: 'successTitle',
         successMessage: 'successMessage',
         buttonTitle: 'buttonTitle',
         reloadAfterSubmit: true,
+        afterSubmitAction: action,
+        pageIds: pageIds,
       );
 
       expect(
@@ -636,7 +719,8 @@ void main() {
           'successMessage',
           'buttonTitle',
           true,
-          null,
+          action,
+          pageIds,
         ),
       );
     });
@@ -647,12 +731,13 @@ void main() {
         successMessage: 'successMessage',
         buttonTitle: 'buttonTitle',
         reloadAfterSubmit: true,
+        pageIds: [pageId],
       );
 
       expect(
         properties.toString(),
         equals(
-          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true, afterSubmitAction: null)',
+          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true, afterSubmitAction: null, pageIDs: [$pageId])',
         ),
       );
     });

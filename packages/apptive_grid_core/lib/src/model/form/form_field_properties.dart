@@ -63,4 +63,39 @@ class FormFieldProperties {
       if (disabled) 'disabled': true,
     };
   }
+
+  @override
+  String toString() {
+    return 'FormFieldProperties('
+        'fieldId: $fieldId, '
+        'pageId: $pageId, '
+        'fieldIndex: $fieldIndex, '
+        'defaultValue: ${defaultValue?.schemaValue}, '
+        'hidden: $hidden, '
+        'disabled: $disabled)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is FormFieldProperties &&
+        other.fieldId == fieldId &&
+        other.pageId == pageId &&
+        other.fieldIndex == fieldIndex &&
+        other.defaultValue == defaultValue &&
+        other.hidden == hidden &&
+        other.disabled == disabled;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      fieldId,
+      pageId,
+      fieldIndex,
+      defaultValue,
+      hidden,
+      disabled,
+    );
+  }
 }
