@@ -13,6 +13,7 @@ export 'package:apptive_grid_core/src/model/form/component/options.dart';
 export 'package:apptive_grid_core/src/model/form/form_actions.dart';
 export 'package:apptive_grid_core/src/model/form/form_data.dart';
 export 'package:apptive_grid_core/src/model/form/form_data_properties.dart';
+export 'package:apptive_grid_core/src/model/form/form_field_properties.dart';
 export 'package:apptive_grid_core/src/model/geolocation/geolocation.dart';
 export 'package:apptive_grid_core/src/model/grid/grid.dart';
 export 'package:apptive_grid_core/src/model/grid/grid_entry.dart';
