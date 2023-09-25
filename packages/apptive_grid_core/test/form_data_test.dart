@@ -1,5 +1,4 @@
 import 'package:apptive_grid_core/apptive_grid_core.dart';
-import 'package:apptive_grid_core/src/model/form/form_field_properties.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
