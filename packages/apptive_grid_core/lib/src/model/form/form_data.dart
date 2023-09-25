@@ -54,7 +54,7 @@ class FormData {
         fieldProperties.add(
           FormFieldProperties.fromJson(
             json: json['fieldProperties'][field.id],
-            fieldId: field.id,
+            field: field,
           ),
         );
       }
