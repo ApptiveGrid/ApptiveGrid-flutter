@@ -798,4 +798,81 @@ void main() {
       });
     });
   });
+  group('FormFieldProperties', () {
+    test('Equality', () {
+      final a = FormFieldProperties(
+        fieldId: 'field1',
+        pageId: pageId,
+        fieldIndex: 0,
+        defaultValue: BooleanDataEntity(true),
+        disabled: false,
+        hidden: false,
+      );
+      final b = FormFieldProperties(
+        fieldId: 'field1',
+        pageId: pageId,
+        fieldIndex: 0,
+        defaultValue: BooleanDataEntity(true),
+        disabled: false,
+        hidden: false,
+      );
+      final c = FormFieldProperties(
+        fieldId: 'field2',
+        pageId: pageId,
+        fieldIndex: 0,
+        defaultValue: BooleanDataEntity(true),
+        disabled: false,
+        hidden: false,
+      );
+      expect(a, equals(b));
+      expect(a, isNot(c));
+    });
+
+    test('Hashcode', () {
+      final properties = FormFieldProperties(
+        fieldId: 'field1',
+        pageId: pageId,
+        fieldIndex: 0,
+        defaultValue: BooleanDataEntity(true),
+        disabled: false,
+        hidden: false,
+      );
+
+      expect(
+        properties.hashCode,
+        Object.hash(
+          'field1',
+          pageId,
+          0,
+          BooleanDataEntity(true),
+          false,
+          false,
+        ),
+      );
+    });
+
+    test('toString()', () {
+      final properties = FormFieldProperties(
+        fieldId: 'field1',
+        pageId: pageId,
+        fieldIndex: 0,
+        defaultValue: BooleanDataEntity(true),
+        disabled: false,
+        hidden: false,
+      );
+
+      expect(
+        properties.toString(),
+        equals(
+          'FormFieldProperties('
+          'fieldId: field1, '
+          'pageId: $pageId, '
+          'fieldIndex: 0, '
+          'defaultValue: true, '
+          'hidden: false, '
+          'disabled: false)',
+        ),
+      );
+    });
+  });
 }

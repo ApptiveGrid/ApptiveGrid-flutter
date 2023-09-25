@@ -51,12 +51,15 @@ class FormData {
     final List<FormFieldProperties> fieldProperties = [];
     if (json['fieldProperties'] != null) {
       for (final field in fields) {
-        fieldProperties.add(
-          FormFieldProperties.fromJson(
-            json: json['fieldProperties'][field.id],
-            field: field,
-          ),
-        );
+        final propertiesJson = json['fieldProperties'][field.id];
+        if (propertiesJson != null) {
+          fieldProperties.add(
+            FormFieldProperties.fromJson(
+              json: propertiesJson,
+              field: field,
+            ),
+          );
+        }
       }
     }
     return FormData(
