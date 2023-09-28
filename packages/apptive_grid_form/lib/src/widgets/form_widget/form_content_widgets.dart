@@ -142,7 +142,9 @@ class FormDataWidget extends StatelessWidget {
             final component = data.components![componentIndex];
             final properties = data.fieldProperties
                 .firstWhereOrNull((e) => e.fieldId == component.field.id);
-            component.data.value = properties?.defaultValue?.value;
+            if (properties?.defaultValue?.value != null) {
+              component.data.value = properties?.defaultValue?.value;
+            }
             if (properties?.hidden == true) {
               return const SizedBox();
             }
