@@ -21,6 +21,57 @@ void main() {
   });
 
   group('Default', () {
+    group('Options', () {
+      testWidgets('Disabled', (tester) async {
+        final action =
+            ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+        const field =
+            GridField(id: 'fieldId', name: 'name', type: DataType.singleSelect);
+        final formData = FormData(
+          id: 'formId',
+          title: 'title',
+          components: [
+            FormComponent<EnumDataEntity>(
+              property: 'Property',
+              data: EnumDataEntity(value: 'A', options: {'A', 'B', 'C'}),
+              field: field,
+              required: true,
+            ),
+          ],
+          fieldProperties: [
+            FormFieldProperties(fieldId: field.id, disabled: true),
+          ],
+          links: {ApptiveLinkType.submit: action},
+          fields: [field],
+        );
+        final client = MockApptiveGridClient();
+        when(() => client.sendPendingActions())
+            .thenAnswer((_) => Future.value([]));
+        when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+          (_) =>
+              Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+        );
+
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridFormData(
+            formData: formData,
+          ),
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        expect(
+          tester
+              .widget<DropdownButtonFormField<String>>(
+                find.byType(DropdownButtonFormField<String>).first,
+              )
+              .onChanged,
+          null,
+        );
+      });
+    });
     group('Validation', () {
       testWidgets('is required but filled sends', (tester) async {
         final action =
@@ -71,6 +122,58 @@ void main() {
   });
 
   group('List', () {
+    group('Options', () {
+      testWidgets('Disabled', (tester) async {
+        final action =
+            ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+        const field =
+            GridField(id: 'fieldId', name: 'name', type: DataType.singleSelect);
+        final formData = FormData(
+          id: 'formId',
+          title: 'title',
+          components: [
+            FormComponent<EnumDataEntity>(
+              property: 'Property',
+              data: EnumDataEntity(value: 'A', options: {'A', 'B', 'C'}),
+              field: field,
+              required: true,
+              type: 'selectList',
+            ),
+          ],
+          fieldProperties: [
+            FormFieldProperties(fieldId: field.id, disabled: true),
+          ],
+          links: {ApptiveLinkType.submit: action},
+          fields: [field],
+        );
+        final client = MockApptiveGridClient();
+        when(() => client.sendPendingActions())
+            .thenAnswer((_) => Future.value([]));
+        when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+          (_) =>
+              Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+        );
+
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridFormData(
+            formData: formData,
+          ),
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        expect(
+          tester
+              .widget<RadioListTile<String?>>(
+                find.byType(RadioListTile<String?>).first,
+              )
+              .onChanged,
+          null,
+        );
+      });
+    });
     group('Validation', () {
       testWidgets('is required but filled sends', (tester) async {
         final action =

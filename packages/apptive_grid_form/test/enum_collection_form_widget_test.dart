@@ -84,6 +84,41 @@ void main() {
       expect(component.data.value, equals(<String>{}));
     });
 
+    group('Options', () {
+      testWidgets('Disabled', (tester) async {
+        final component = FormComponent<EnumCollectionDataEntity>(
+          property: 'Property',
+          data: EnumCollectionDataEntity(
+            value: {},
+            options: {
+              'A',
+              'B',
+            },
+          ),
+          field: field,
+        );
+
+        final target = TestApp(
+          child: EnumCollectionFormWidget(
+            component: component,
+            enabled: false,
+          ),
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        expect(
+          tester
+              .widget<ChoiceChip>(
+                find.byType(ChoiceChip).first,
+              )
+              .onSelected,
+          null,
+        );
+      });
+    });
+
     group('Validation', () {
       testWidgets('is required but filled sends', (tester) async {
         final action =
@@ -275,6 +310,42 @@ void main() {
       await tester.pump();
 
       expect(component.data.value, equals(<String>{}));
+    });
+
+    group('Options', () {
+      testWidgets('Disabled', (tester) async {
+        final component = FormComponent<EnumCollectionDataEntity>(
+          property: 'Property',
+          data: EnumCollectionDataEntity(
+            value: {},
+            options: {
+              'A',
+              'B',
+            },
+          ),
+          field: field,
+          type: 'multiSelectList',
+        );
+
+        final target = TestApp(
+          child: EnumCollectionFormWidget(
+            component: component,
+            enabled: false,
+          ),
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        expect(
+          tester
+              .widget<CheckboxListTile>(
+                find.byType(CheckboxListTile).first,
+              )
+              .enabled,
+          false,
+        );
+      });
     });
 
     group('Validation', () {

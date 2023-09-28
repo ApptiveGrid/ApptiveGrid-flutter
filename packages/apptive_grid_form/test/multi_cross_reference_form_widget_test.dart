@@ -415,4 +415,79 @@ void main() {
       );
     });
   });
+
+  group('Options', () {
+    testWidgets('Disabled', (tester) async {
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+      const field = GridField(
+        id: 'fieldId',
+        name: 'name',
+        type: DataType.multiCrossReference,
+      );
+      final formData = FormData(
+        id: 'formId',
+        title: 'title',
+        components: [
+          FormComponent<MultiCrossReferenceDataEntity>(
+            property: 'Property',
+            data: MultiCrossReferenceDataEntity(
+              gridUri: Uri.parse('/api/a/user/spaces/space/grids/grid'),
+              references: [
+                CrossReferenceDataEntity(
+                  value: 'CrossRef',
+                  gridUri: Uri.parse('/api/a/user/spaces/space/grids/grid'),
+                  entityUri: Uri.parse(
+                    '/api/a/user/spaces/space/grids/grid/entities/entity',
+                  ),
+                ),
+              ],
+            ),
+            field: field,
+            required: true,
+          ),
+        ],
+        fieldProperties: [
+          FormFieldProperties(fieldId: field.id, disabled: true),
+        ],
+        links: {ApptiveLinkType.submit: action},
+        fields: [field],
+      );
+      final client = MockApptiveGridClient();
+      when(() => client.loadGrid(uri: any(named: 'uri'), loadEntities: false))
+          .thenAnswer(
+        (invocation) async => Grid(
+          id: 'grid',
+          name: 'name',
+          fields: [],
+          rows: [],
+          links: {},
+        ),
+      );
+
+      when(() => client.sendPendingActions())
+          .thenAnswer((_) => Future.value([]));
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<DropdownButtonFormField>(
+              find.byType(DropdownButtonFormField).first,
+            )
+            .onChanged,
+        null,
+      );
+    });
+  });
 }

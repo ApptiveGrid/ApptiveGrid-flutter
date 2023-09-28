@@ -131,4 +131,53 @@ string''';
       );
     });
   });
+
+  group('Options', () {
+    testWidgets('is required but filled sends', (tester) async {
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+      const field = GridField(id: 'fieldId', name: 'name', type: DataType.text);
+      final formData = FormData(
+        id: 'formId',
+        title: 'title',
+        components: [
+          FormComponent<StringDataEntity>(
+            property: 'Property',
+            data: StringDataEntity('Value'),
+            field: field,
+            required: true,
+          ),
+        ],
+        fieldProperties: [
+          FormFieldProperties(fieldId: field.id, disabled: true),
+        ],
+        links: {ApptiveLinkType.submit: action},
+        fields: [field],
+      );
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions())
+          .thenAnswer((_) => Future.value([]));
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('body', 200))),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<TextFormField>(
+              find.byType(TextFormField).first,
+            )
+            .enabled,
+        false,
+      );
+    });
+  });
 }

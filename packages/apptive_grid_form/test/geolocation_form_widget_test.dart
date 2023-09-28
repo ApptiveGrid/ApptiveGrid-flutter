@@ -5,6 +5,7 @@ import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/google_maps_webservice/google_maps_webservice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:http/http.dart';
@@ -1597,6 +1598,79 @@ void main() {
           saveToPendingItems: any(named: 'saveToPendingItems'),
         ),
       ).called(1);
+    });
+  });
+  group('Options', () {
+    testWidgets('Disabled', (tester) async {
+      final mockGeolocationHttpClient = MockHttpClient();
+      final target = TestApp(
+        options: ApptiveGridOptions(
+          formWidgetConfigurations: [
+            GeolocationFormWidgetConfiguration(
+              placesApiKey: 'placesApiKey',
+              httpClient: mockGeolocationHttpClient,
+            ),
+          ],
+        ),
+        child: ApptiveGridFormData(
+          formData: FormData(
+            id: 'formId',
+            title: 'title',
+            components: [
+              FormComponent<GeolocationDataEntity>(
+                property: 'property',
+                data: GeolocationDataEntity(
+                  const Geolocation(latitude: 47, longitude: 11),
+                ),
+                field: field,
+              ),
+            ],
+            fieldProperties: [
+              FormFieldProperties(fieldId: field.id, disabled: true),
+            ],
+            links: {},
+            fields: [field],
+          ),
+        ),
+      );
+
+      when(
+        () => mockGeolocationHttpClient.get(
+          any(),
+          headers: any(named: 'headers'),
+        ),
+      ).thenAnswer((invocation) async {
+        final requestUri = invocation.positionalArguments.first as Uri;
+
+        if (requestUri.path.contains('geocode')) {
+          final response = GeocodingResponse(
+            status: 'OK',
+            results: [
+              GeocodingResult(
+                geometry: Geometry(location: Location(lat: 47, lng: 11)),
+                placeId: 'placeId',
+                formattedAddress: 'ZWEIDENKER',
+              ),
+            ],
+          );
+          return Response(jsonEncode(response.toJson()), 200);
+        }
+
+        throw 'MissingMockResponse for GET $requestUri';
+      });
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<TypeAheadField<Prediction>>(
+              find.byType(TypeAheadField<Prediction>).first,
+            )
+            .textFieldConfiguration
+            .enabled,
+        false,
+      );
     });
   });
 }
