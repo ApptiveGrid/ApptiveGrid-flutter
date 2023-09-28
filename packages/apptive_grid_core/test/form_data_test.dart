@@ -196,7 +196,7 @@ void main() {
       },
     },
   };
-  final mininalResponse = {
+  final minimalResponse = {
     'fields': [
       {
         "type": {
