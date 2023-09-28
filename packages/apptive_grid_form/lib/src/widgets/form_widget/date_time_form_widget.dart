@@ -13,10 +13,14 @@ class DateTimeFormWidget extends StatefulWidget {
   const DateTimeFormWidget({
     super.key,
     required this.component,
+    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<DateTimeDataEntity> component;
+
+  /// Flag whether the widget is enabled
+  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _DateTimeFormWidgetState();
@@ -51,6 +55,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
           return null;
         }
       },
+      enabled: widget.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data.value,
       builder: (state) {
@@ -64,34 +69,37 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
             children: [
               Flexible(
                 child: InkWell(
-                  onTap: () {
-                    final initialDate =
-                        widget.component.data.value ?? DateTime.now();
-                    showDatePicker(
-                      context: context,
-                      initialDate: initialDate,
-                      firstDate: DateTime.fromMillisecondsSinceEpoch(0),
-                      lastDate: DateTime.fromMillisecondsSinceEpoch(
-                        const Duration(days: 100000000).inMilliseconds,
-                      ),
-                    ).then((value) {
-                      if (value != null) {
-                        final oldDate = widget.component.data.value ?? value;
-                        final newDate = DateTime(
-                          value.year,
-                          value.month,
-                          value.day,
-                          oldDate.hour,
-                          oldDate.minute,
-                          oldDate.second,
-                        );
-                        state.didChange(newDate);
-                        setState(() {
-                          widget.component.data.value = newDate;
-                        });
-                      }
-                    });
-                  },
+                  onTap: widget.enabled
+                      ? () {
+                          final initialDate =
+                              widget.component.data.value ?? DateTime.now();
+                          showDatePicker(
+                            context: context,
+                            initialDate: initialDate,
+                            firstDate: DateTime.fromMillisecondsSinceEpoch(0),
+                            lastDate: DateTime.fromMillisecondsSinceEpoch(
+                              const Duration(days: 100000000).inMilliseconds,
+                            ),
+                          ).then((value) {
+                            if (value != null) {
+                              final oldDate =
+                                  widget.component.data.value ?? value;
+                              final newDate = DateTime(
+                                value.year,
+                                value.month,
+                                value.day,
+                                oldDate.hour,
+                                oldDate.minute,
+                                oldDate.second,
+                              );
+                              state.didChange(newDate);
+                              setState(() {
+                                widget.component.data.value = newDate;
+                              });
+                            }
+                          });
+                        }
+                      : null,
                   child: AbsorbPointer(
                     child: TextField(
                       controller: _dateController,
@@ -102,6 +110,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
                         filled: false,
                         contentPadding: EdgeInsets.zero,
                       ),
+                      enabled: widget.enabled,
                     ),
                   ),
                 ),

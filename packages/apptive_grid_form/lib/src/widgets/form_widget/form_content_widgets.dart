@@ -142,11 +142,12 @@ class FormDataWidget extends StatelessWidget {
             final component = data.components![componentIndex];
             final properties = data.fieldProperties
                 .firstWhereOrNull((e) => e.fieldId == component.field.id);
-            component.data.value ??= properties?.defaultValue?.value;
+            component.data.value = properties?.defaultValue?.value;
             if (properties?.hidden == true) {
               return const SizedBox();
             }
-            final componentWidget = fromModel(component);
+            final componentWidget =
+                fromModel(component, enabled: properties?.disabled != true);
             if (componentWidget is EmptyFormWidget) {
               // UserReference Widget should be invisible in the Form
               // So returning without any Padding

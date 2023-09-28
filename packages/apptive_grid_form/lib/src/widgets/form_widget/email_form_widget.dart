@@ -9,10 +9,14 @@ class EmailFormWidget extends StatefulWidget {
   const EmailFormWidget({
     super.key,
     required this.component,
+    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<EmailDataEntity> component;
+
+  /// Flag whether the widget is enabled
+  final bool enabled;
 
   @override
   State<EmailFormWidget> createState() => _EmailFormWidgetState();
@@ -65,6 +69,7 @@ class _EmailFormWidgetState extends State<EmailFormWidget>
       decoration: widget.component.baseDecoration,
       autofillHints: const {AutofillHints.email},
       keyboardType: TextInputType.emailAddress,
+      enabled: widget.enabled,
     );
   }
 }

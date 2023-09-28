@@ -14,10 +14,14 @@ class AttachmentFormWidget extends StatefulWidget {
   const AttachmentFormWidget({
     super.key,
     required this.component,
+    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<AttachmentDataEntity> component;
+
+  /// Flag whether the widget is enabled
+  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _AttachmentFormWidgetState();
@@ -46,6 +50,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
             return null;
           }
         },
+        enabled: widget.enabled,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         initialValue: widget.component.data,
         builder: (formState) {
@@ -82,23 +87,25 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
                           Expanded(
                             child: Text(attachment.name),
                           ),
-                          IconButton(
-                            onPressed: () {
-                              attachmentManager.removeAttachment(attachment);
-                              widget.component.data.value?.remove(attachment);
-                              formState.didChange(widget.component.data);
-                              setState(() {});
-                            },
-                            icon: const Icon(Icons.close),
-                          ),
+                          if (widget.enabled)
+                            IconButton(
+                              onPressed: () {
+                                attachmentManager.removeAttachment(attachment);
+                                widget.component.data.value?.remove(attachment);
+                                formState.didChange(widget.component.data);
+                                setState(() {});
+                              },
+                              icon: const Icon(Icons.close),
+                            ),
                         ],
                       );
                     },
                   ).toList(),
-                AddAttachmentButton(
-                  onAttachmentsAdded: (newAttachments) =>
-                      _attachmentsAdded(newAttachments, formState),
-                ),
+                if (widget.enabled)
+                  AddAttachmentButton(
+                    onAttachmentsAdded: (newAttachments) =>
+                        _attachmentsAdded(newAttachments, formState),
+                  ),
               ],
             ),
           );

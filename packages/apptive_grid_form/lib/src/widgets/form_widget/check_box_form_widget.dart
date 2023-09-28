@@ -8,10 +8,14 @@ class CheckBoxFormWidget extends StatefulWidget {
   const CheckBoxFormWidget({
     super.key,
     required this.component,
+    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<BooleanDataEntity> component;
+
+  /// Flag whether the widget is enabled
+  final bool enabled;
 
   @override
   State<CheckBoxFormWidget> createState() => _CheckBoxFormWidgetState();
@@ -35,6 +39,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget>
         }
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      enabled: widget.enabled,
       builder: (state) {
         return InputDecorator(
           decoration: InputDecoration(
@@ -60,11 +65,13 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget>
                   width: 24,
                   child: Checkbox(
                     value: widget.component.data.value,
-                    onChanged: (newValue) {
-                      widget.component.data.value = newValue;
-                      state.didChange(newValue);
-                      setState(() {});
-                    },
+                    onChanged: widget.enabled
+                        ? (newValue) {
+                            widget.component.data.value = newValue;
+                            state.didChange(newValue);
+                            setState(() {});
+                          }
+                        : null,
                   ),
                 ),
                 const SizedBox(

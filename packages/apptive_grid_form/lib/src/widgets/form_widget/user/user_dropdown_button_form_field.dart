@@ -4,11 +4,14 @@ class _UserDropdownButtonFormField extends StatefulWidget {
   const _UserDropdownButtonFormField({
     required this.component,
     required this.onSelected,
+    this.enabled = true,
   });
 
   final FormComponent<UserDataEntity> component;
 
   final void Function(DataUser? user) onSelected;
+
+  final bool enabled;
 
   @override
   _UserDropdownButtonFormFieldState createState() =>
@@ -39,10 +42,12 @@ class _UserDropdownButtonFormFieldState
       isExpanded: true,
       items: _items(),
       menuMaxHeight: MediaQuery.of(context).size.height * 0.95,
-      onChanged: (_) {}, // coverage:ignore-line
-      onTap: () {
-        _filterController.text = '';
-      },
+      onChanged: widget.enabled ? (_) {} : null, // coverage:ignore-line
+      onTap: widget.enabled
+          ? () {
+              _filterController.text = '';
+            }
+          : null,
       validator: (user) {
         if (widget.component.required && (user == null)) {
           return ApptiveGridLocalization.of(context)!
@@ -59,6 +64,9 @@ class _UserDropdownButtonFormFieldState
   }
 
   List<DropdownMenuItem<DataUser>>? _items() {
+    if (!widget.enabled) {
+      return null;
+    }
     final localization = ApptiveGridLocalization.of(context)!;
     final searchBox = DropdownMenuItem<DataUser>(
       enabled: false,

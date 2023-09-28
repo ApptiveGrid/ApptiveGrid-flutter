@@ -9,10 +9,14 @@ class TextFormWidget extends StatefulWidget {
   const TextFormWidget({
     super.key,
     required this.component,
+    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<StringDataEntity> component;
+
+  /// Flag whether the widget is enabled
+  final bool enabled;
 
   @override
   State<TextFormWidget> createState() => _TextFormWidgetState();
@@ -57,6 +61,7 @@ class _TextFormWidgetState extends State<TextFormWidget>
       minLines: widget.component.options.multi ? 3 : 1,
       maxLines: widget.component.options.multi ? null : 1,
       decoration: widget.component.baseDecoration,
+      enabled: widget.enabled,
     );
   }
 }

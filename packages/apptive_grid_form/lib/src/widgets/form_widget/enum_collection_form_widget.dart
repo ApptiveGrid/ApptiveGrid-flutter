@@ -9,10 +9,14 @@ class EnumCollectionFormWidget extends StatefulWidget {
   const EnumCollectionFormWidget({
     super.key,
     required this.component,
+    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<EnumCollectionDataEntity> component;
+
+  /// Flag whether the widget is enabled
+  final bool enabled;
 
   @override
   State<EnumCollectionFormWidget> createState() =>
@@ -39,6 +43,7 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data,
+      enabled: widget.enabled,
       builder: (fieldState) {
         return InputDecorator(
           decoration: widget.component.baseDecoration.copyWith(
@@ -63,9 +68,11 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
                           value: widget.component.data.value?.contains(entry),
                           title: Text(entry),
                           controlAffinity: ListTileControlAffinity.leading,
-                          onChanged: (isSelected) {
-                            _onSelected(entry, isSelected, fieldState);
-                          },
+                          onChanged: widget.enabled
+                              ? (isSelected) =>
+                                  _onSelected(entry, isSelected, fieldState)
+                              : null,
+                          enabled: widget.enabled,
                         ),
                     ],
                   );
@@ -78,9 +85,10 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
                           label: Text(e),
                           selected:
                               widget.component.data.value?.contains(e) ?? false,
-                          onSelected: (isSelected) {
-                            _onSelected(e, isSelected, fieldState);
-                          },
+                          onSelected: widget.enabled
+                              ? (isSelected) =>
+                                  _onSelected(e, isSelected, fieldState)
+                              : null,
                         ),
                       )
                       .toList(),

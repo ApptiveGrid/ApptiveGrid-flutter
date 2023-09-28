@@ -12,10 +12,14 @@ class DecimalFormWidget extends StatefulWidget {
   const DecimalFormWidget({
     super.key,
     required this.component,
+    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<DecimalDataEntity> component;
+
+  /// Flag whether the widget is enabled
+  final bool enabled;
 
   @override
   State<DecimalFormWidget> createState() => _DecimalFormWidgetState();
@@ -69,6 +73,7 @@ class _DecimalFormWidgetState extends State<DecimalFormWidget>
           return null;
         }
       },
+      enabled: widget.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       expands: widget.component.options.multi,
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))],

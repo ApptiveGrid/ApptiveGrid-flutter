@@ -10,10 +10,14 @@ class IntegerFormWidget extends StatefulWidget {
   const IntegerFormWidget({
     super.key,
     required this.component,
+    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<IntegerDataEntity> component;
+
+  /// Flag whether the widget is enabled
+  final bool enabled;
 
   @override
   State<IntegerFormWidget> createState() => _IntegerFormWidgetState();
@@ -58,6 +62,7 @@ class _IntegerFormWidgetState extends State<IntegerFormWidget>
           return null;
         }
       },
+      enabled: widget.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       expands: widget.component.options.multi,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],

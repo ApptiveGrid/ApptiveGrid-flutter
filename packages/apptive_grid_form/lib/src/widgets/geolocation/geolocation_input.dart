@@ -18,6 +18,7 @@ class GeolocationInput extends StatefulWidget {
     super.key,
     this.location,
     this.onLocationChanged,
+    this.enabled = true,
   });
 
   /// Currently select [Geolocation]
@@ -31,6 +32,9 @@ class GeolocationInput extends StatefulWidget {
   ///
   /// Called with `null` if the user clears the currently selected Location
   final void Function(Geolocation?)? onLocationChanged;
+
+  /// Flag whether the widget is enabled
+  final bool enabled;
 
   @override
   State<GeolocationInput> createState() => _GeolocationInputState();
@@ -93,6 +97,7 @@ class _GeolocationInputState extends State<GeolocationInput> {
             ),
             textFieldConfiguration: TextFieldConfiguration(
               controller: _locationBoxController,
+              enabled: widget.enabled,
               decoration: InputDecoration(
                 isDense: true,
                 prefixIcon: Icon(
@@ -148,7 +153,7 @@ class _GeolocationInputState extends State<GeolocationInput> {
             width: 4,
           ),
           IconButton(
-            onPressed: _selectCurrentLocation,
+            onPressed: widget.enabled ? _selectCurrentLocation : null,
             icon: const Icon(Icons.my_location),
           ),
         ],
