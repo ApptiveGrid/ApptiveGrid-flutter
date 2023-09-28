@@ -196,6 +196,146 @@ void main() {
       },
     },
   };
+  final mininalResponse = {
+    'fields': [
+      {
+        "type": {
+          "name": "date-time",
+          "componentTypes": ["datePicker"],
+        },
+        "schema": {"type": "string", "format": "date-time"},
+        "id": "4zc4l4c5coyi7qh6q1ozrg54u",
+        "name": "Date Time",
+        "key": null,
+        "_links": <String, dynamic>{},
+      },
+      {
+        "type": {
+          "name": "boolean",
+          "componentTypes": ["checkbox"],
+        },
+        "schema": {"type": "boolean"},
+        "id": "4zc4l456pca5ursrt9rxefpsc",
+        "name": "Checkmark",
+        "key": null,
+        "_links": <String, dynamic>{},
+      },
+      {
+        "type": {
+          "name": "date",
+          "componentTypes": ["datePicker", "textfield"],
+        },
+        "schema": {"type": "string", "format": "date"},
+        "id": "4zc4l49to77dhfagr844flaey",
+        "name": "Date",
+        "key": null,
+        "_links": <String, dynamic>{},
+      },
+      {
+        "type": {
+          "name": "string",
+          "componentTypes": ["textfield"],
+        },
+        "schema": {"type": "string"},
+        "id": "4zc4l45nmww7ujq7y4axlbtjg",
+        "name": "Text",
+        "key": null,
+        "_links": <String, dynamic>{},
+      },
+      {
+        "type": {
+          "name": "integer",
+          "componentTypes": ["textfield"],
+        },
+        "schema": {"type": "integer"},
+        "id": "4zc4l48ffin5v8pa2emyx9s15",
+        "name": "Number",
+        "key": null,
+        "_links": <String, dynamic>{},
+      },
+    ],
+    'components': [
+      {
+        'property': 'TextC',
+        'value': null,
+        'required': false,
+        'options': {
+          'multi': false,
+          'placeholder': '',
+          'description': 'Text Description',
+          'label': null,
+        },
+        'fieldId': '4zc4l45nmww7ujq7y4axlbtjg',
+        'type': 'textfield',
+      },
+      {
+        'property': 'NumberC',
+        'value': null,
+        'required': false,
+        'options': {
+          'multi': false,
+          'placeholder': '',
+          'description': 'Number description',
+          'label': 'Number Label',
+        },
+        'fieldId': '4zc4l48ffin5v8pa2emyx9s15',
+        'type': 'textfield',
+      },
+      {
+        'property': 'DateTimeC',
+        'value': null,
+        'required': false,
+        'options': {
+          'label': 'DateTime Label',
+          'description': 'DateTime Description',
+        },
+        'fieldId': '4zc4l4c5coyi7qh6q1ozrg54u',
+        'type': 'datePicker',
+      },
+      {
+        'property': 'DateC',
+        'value': null,
+        'required': false,
+        'options': {'label': 'Date Label', 'description': 'Date Description'},
+        'fieldId': '4zc4l49to77dhfagr844flaey',
+        'type': 'datePicker',
+      },
+      {
+        'property': 'CheckmarkC',
+        'value': null,
+        'required': false,
+        'options': {
+          'label': 'Checkbox Label',
+          'description': 'Checkbox Description',
+        },
+        'fieldId': '4zc4l456pca5ursrt9rxefpsc',
+        'type': 'checkbox',
+      }
+    ],
+    'id': 'formId',
+    '_links': {
+      "submit": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "post",
+      },
+      "remove": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "delete",
+      },
+      "self": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "get",
+      },
+      "update": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "put",
+      },
+    },
+  };
 
   group('Parsing', () {
     test('Successful', () {
@@ -266,6 +406,31 @@ void main() {
           pageIds: [pageId],
         ),
       );
+    });
+    test('Successful minimal response', () {
+      final formData = FormData.fromJson(mininalResponse);
+
+      expect(formData.name, equals(null));
+      expect(formData.title, equals(null));
+      expect(formData.description, equals(null));
+
+      expect(formData.links[ApptiveLinkType.submit], isNotNull);
+
+      expect(formData.components!.length, equals(5));
+
+      expect(formData.components!.map((e) => e.data.runtimeType).toList(), [
+        StringDataEntity,
+        IntegerDataEntity,
+        DateTimeDataEntity,
+        DateDataEntity,
+        BooleanDataEntity,
+      ]);
+
+      expect(formData.properties, equals(null));
+
+      expect(formData.fieldProperties.length, equals(0));
+
+      expect(formData.properties, equals(null));
     });
   });
 
