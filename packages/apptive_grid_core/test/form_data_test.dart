@@ -901,7 +901,7 @@ void main() {
       expect(
         properties.toString(),
         equals(
-          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true, afterSubmitAction: null, pageIDs: [$pageId])',
+          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true, afterSubmitAction: null, pageIds: [$pageId])',
         ),
       );
     });
