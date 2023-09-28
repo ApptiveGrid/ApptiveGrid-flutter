@@ -267,16 +267,18 @@ void main() {
     });
 
     testWidgets('Disabled', (tester) async {
-      await tester.pumpWidget(TestApp(
-        client: client,
-        child: Form(
-          key: formKey,
-          child: CrossReferenceFormWidget(
-            component: component,
-            enabled: false,
+      await tester.pumpWidget(
+        TestApp(
+          client: client,
+          child: Form(
+            key: formKey,
+            child: CrossReferenceFormWidget(
+              component: component,
+              enabled: false,
+            ),
           ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       expect(
