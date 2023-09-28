@@ -55,10 +55,12 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
                     value: entry,
                     title: Text(entry),
                     groupValue: widget.component.data.value,
-                    onChanged: (newValue) {
-                      fieldState.didChange(newValue);
-                      _onChanged(newValue);
-                    },
+                    onChanged: widget.enabled
+                        ? (newValue) {
+                            fieldState.didChange(newValue);
+                            _onChanged(newValue);
+                          }
+                        : null,
                   ),
               ],
             ),

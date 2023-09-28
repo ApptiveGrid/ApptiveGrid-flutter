@@ -109,6 +109,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
                         isDense: true,
                         filled: false,
                         contentPadding: EdgeInsets.zero,
+                        enabled: widget.enabled,
                       ),
                       enabled: widget.enabled,
                     ),
@@ -117,31 +118,33 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
               ),
               Flexible(
                 child: InkWell(
-                  onTap: () {
-                    final initialDate =
-                        widget.component.data.value ?? DateTime.now();
-                    showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.fromDateTime(initialDate),
-                    ).then((value) {
-                      if (value != null) {
-                        setState(() {
-                          final newDate = DateTime(
-                            initialDate.year,
-                            initialDate.month,
-                            initialDate.day,
-                            value.hour,
-                            value.minute,
-                            initialDate.second,
-                            initialDate.millisecond,
-                            initialDate.microsecond,
-                          );
-                          widget.component.data.value = newDate;
-                          state.didChange(newDate);
-                        });
-                      }
-                    });
-                  },
+                  onTap: widget.enabled
+                      ? () {
+                          final initialDate =
+                              widget.component.data.value ?? DateTime.now();
+                          showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(initialDate),
+                          ).then((value) {
+                            if (value != null) {
+                              setState(() {
+                                final newDate = DateTime(
+                                  initialDate.year,
+                                  initialDate.month,
+                                  initialDate.day,
+                                  value.hour,
+                                  value.minute,
+                                  initialDate.second,
+                                  initialDate.millisecond,
+                                  initialDate.microsecond,
+                                );
+                                widget.component.data.value = newDate;
+                                state.didChange(newDate);
+                              });
+                            }
+                          });
+                        }
+                      : null,
                   child: AbsorbPointer(
                     child: TextField(
                       controller: _timeController,
@@ -151,7 +154,9 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
                         filled: false,
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.zero,
+                        enabled: widget.enabled,
                       ),
+                      enabled: widget.enabled,
                     ),
                   ),
                 ),
