@@ -117,6 +117,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
                     borderRadius: BorderRadius.circular(4),
                     child: GeolocationMap(
                       location: widget.component.data.value,
+                      enabled: widget.enabled,
                       onLocationChanged: (newLocation) {
                         _updateLocation(
                           formState: formState,
