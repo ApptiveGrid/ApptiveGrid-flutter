@@ -1,3 +1,4 @@
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/src/util/submit_progress.dart';
@@ -477,6 +478,12 @@ class FormPage extends StatelessWidget {
   /// Optional ScrollController for the Form
   final ScrollController? scrollController;
 
+  List<FormBlock>? get _blocks => pageId != null
+      ? data.properties?.blocks
+          ?.where((block) => block.pageId == pageId)
+          .toList()
+      : data.properties?.blocks;
+
   List<FormFieldProperties> get _fieldProperties => pageId != null
       ? data.fieldProperties
           .where((properties) => properties.pageId == pageId)
@@ -515,7 +522,7 @@ class FormPage extends StatelessWidget {
         controller: scrollController,
         itemCount: indexOffset +
             (_components?.length ?? 0) +
-            (data.properties?.blocks?.length ?? 0) +
+            (_blocks?.length ?? 0) +
             (submitLink != null ? 1 : 0),
         itemBuilder: (context, index) {
           // Title
@@ -547,15 +554,15 @@ class FormPage extends StatelessWidget {
             }
           } else if (index <
               (_components?.length ?? 0) +
-                  (data.properties?.blocks?.length ?? 0) +
+                  (_blocks?.length ?? 0) +
                   indexOffset) {
             final componentIndex = index - indexOffset;
 
             final FormComponent component;
             final FormFieldProperties? properties;
 
-            if (data.properties?.blocks?.isNotEmpty == true) {
-              final block = data.properties?.blocks?.firstWhereOrNull(
+            if (_blocks?.isNotEmpty == true) {
+              final block = _blocks?.firstWhereOrNull(
                 (element) =>
                     element.pageId == pageId &&
                     element.fieldIndex == componentIndex,
