@@ -133,10 +133,13 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       isExpanded: true,
       items: _items(),
       menuMaxHeight: MediaQuery.of(context).size.height * 0.95,
-      onChanged: (_) {}, // coverage:ignore-line
-      onTap: () {
-        _filterController.text = '';
-      },
+      onChanged:
+          widget.component.enabled ? (_) {} : null, // coverage:ignore-line
+      onTap: widget.component.enabled
+          ? () {
+              _filterController.text = '';
+            }
+          : null,
       validator: (value) {
         if (widget.component.required &&
             ((T == CrossReferenceDataEntity &&

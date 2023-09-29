@@ -16,7 +16,12 @@ import 'package:provider/provider.dart';
 /// Allows the user to change the location by dragging and releasing the marker on a new Location
 class GeolocationMap extends StatefulWidget {
   /// Creates a new MapWidget
-  const GeolocationMap({super.key, this.location, this.onLocationChanged});
+  const GeolocationMap({
+    super.key,
+    this.location,
+    this.onLocationChanged,
+    this.enabled = true,
+  });
 
   /// Currently select [Geolocation]
   ///
@@ -28,6 +33,9 @@ class GeolocationMap extends StatefulWidget {
   /// Called with a [Geolocation] if the user either selects a location
   /// by clicking the map or dragging the currently selected lcoation to a new place
   final void Function(Geolocation?)? onLocationChanged;
+
+  /// Flag whether the widget is enabled. Defaults to `true`
+  final bool enabled;
 
   @override
   State<GeolocationMap> createState() => _GeolocationMapState();
@@ -82,12 +90,12 @@ class _GeolocationMapState extends State<GeolocationMap> {
               Marker(
                 markerId: const MarkerId('currentLocationMarker'),
                 position: locationAsLatLng!,
-                draggable: true,
+                draggable: widget.enabled,
                 onDragEnd: _locationSelected,
               ),
             }
           : {},
-      onTap: _locationSelected,
+      onTap: widget.enabled ? _locationSelected : null,
       gestureRecognizers: {
         Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer()),
       },

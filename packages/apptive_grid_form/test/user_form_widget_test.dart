@@ -622,4 +622,53 @@ void main() {
       ); // Once for initial load, once for focus of search field, once after cleared input
     });
   });
+  group('Options', () {
+    testWidgets('is required but filled sends', (tester) async {
+      final formUri = Uri.parse('form');
+      when(() => client.loadForm(uri: formUri)).thenAnswer(
+        (_) async => FormData(
+          id: 'id',
+          title: 'title',
+          components: [
+            FormComponent(
+              property: 'name',
+              required: true,
+              data: UserDataEntity(
+                DataUser(
+                  displayValue: 'displayValue',
+                  uri: Uri(path: '/users/id'),
+                ),
+              ),
+              field: field,
+            ),
+          ],
+          fieldProperties: [
+            FormFieldProperties(fieldId: field.id, disabled: true),
+          ],
+          fields: [field],
+          links: {
+            ApptiveLinkType.submit: submitLink,
+          },
+        ),
+      );
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: formUri,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<DropdownButtonFormField<DataUser>>(
+              find.byType(DropdownButtonFormField<DataUser>).first,
+            )
+            .onChanged,
+        null,
+      );
+    });
+  });
 }

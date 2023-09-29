@@ -51,6 +51,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
           return null;
         }
       },
+      enabled: widget.component.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data,
       builder: (formState) {
@@ -97,6 +98,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
                 ),
                 GeolocationInput(
                   location: widget.component.data.value,
+                  enabled: widget.component.enabled,
                   onLocationChanged: (newLocation) {
                     _updateLocation(
                       formState: formState,
@@ -111,6 +113,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
                     borderRadius: BorderRadius.circular(4),
                     child: GeolocationMap(
                       location: widget.component.data.value,
+                      enabled: widget.component.enabled,
                       onLocationChanged: (newLocation) {
                         _updateLocation(
                           formState: formState,

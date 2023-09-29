@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:collection/collection.dart';
 
 /// Data Object that represents a entry in a Form
 ///
@@ -14,6 +15,7 @@ class FormComponent<T extends DataEntity> {
     this.required = false,
     required this.field,
     String? type,
+    this.enabled = true,
   }) : type = type ?? field.type.name;
 
   /// Casts this FormComponent to a FormComponent with a specific DataEntity Type
@@ -25,6 +27,7 @@ class FormComponent<T extends DataEntity> {
       required: required,
       field: field,
       type: type,
+      enabled: enabled,
     );
   }
 
@@ -51,6 +54,9 @@ class FormComponent<T extends DataEntity> {
   /// Id of this FormComponent
   String get fieldId => field.id;
 
+  /// Flag whether the component is enabled. Defaults to `true`
+  final bool enabled;
+
   /// Saves this into a [Map] that can be encoded using [json.encode]
   Map<String, dynamic> toJson() => {
         'property': property,
@@ -63,7 +69,7 @@ class FormComponent<T extends DataEntity> {
 
   @override
   String toString() {
-    return 'FormComponent(property: $property, field: $field, data: $data, options: $options, required: $required, type: $type)';
+    return 'FormComponent(property: $property, field: $field, data: $data, options: $options, required: $required, type: $type, enabled: $enabled)';
   }
 
   @override
@@ -74,17 +80,22 @@ class FormComponent<T extends DataEntity> {
         data == other.data &&
         options == other.options &&
         required == other.required &&
-        type == other.type;
+        type == other.type &&
+        enabled == other.enabled;
   }
 
   @override
   int get hashCode =>
-      Object.hash(field, property, data, options, required, type);
+      Object.hash(field, property, data, options, required, type, enabled);
 
   /// Mapping to a concrete implementation based on [json] and [schema]
   ///
   /// Throws an [ArgumentError] if not matching implementation is found.
-  static FormComponent fromJson(dynamic json, List<GridField> fields) {
+  static FormComponent fromJson(
+    dynamic json, {
+    required List<GridField> fields,
+    List<FormFieldProperties> additionalProperties = const [],
+  }) {
     final id = json['fieldId'];
     final property = json['property'];
     final field = fields.firstWhere(
@@ -110,6 +121,10 @@ class FormComponent<T extends DataEntity> {
       required: required,
       field: field,
       type: type,
+      enabled: additionalProperties
+              .firstWhereOrNull((e) => e.fieldId == id)
+              ?.disabled !=
+          true,
     );
   }
 }

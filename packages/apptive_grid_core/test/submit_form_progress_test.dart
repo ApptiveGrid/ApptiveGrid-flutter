@@ -73,7 +73,7 @@ void main() {
 
       expect(
         event.toString(),
-        'UploadFormProgressEvent(formData: FormData(id: id, name: form, title: null, description: null, components: [], fields: [], links: {}, attachmentActions: {}))',
+        'UploadFormProgressEvent(formData: FormData(id: id, name: form, title: null, description: null, components: [], fields: [], links: {}, attachmentActions: {}, properties: null, fieldProperties: []))',
       );
     });
 

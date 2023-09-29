@@ -35,6 +35,7 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget>
         }
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      enabled: widget.component.enabled,
       builder: (state) {
         return InputDecorator(
           decoration: InputDecoration(
@@ -60,11 +61,13 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget>
                   width: 24,
                   child: Checkbox(
                     value: widget.component.data.value,
-                    onChanged: (newValue) {
-                      widget.component.data.value = newValue;
-                      state.didChange(newValue);
-                      setState(() {});
-                    },
+                    onChanged: widget.component.enabled
+                        ? (newValue) {
+                            widget.component.data.value = newValue;
+                            state.didChange(newValue);
+                            setState(() {});
+                          }
+                        : null,
                   ),
                 ),
                 const SizedBox(

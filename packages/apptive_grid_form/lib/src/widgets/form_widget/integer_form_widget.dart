@@ -58,6 +58,7 @@ class _IntegerFormWidgetState extends State<IntegerFormWidget>
           return null;
         }
       },
+      enabled: widget.component.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       expands: widget.component.options.multi,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],

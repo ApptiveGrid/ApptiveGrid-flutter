@@ -66,6 +66,7 @@ class _CurrencyFormWidgetState extends State<CurrencyFormWidget>
           return null;
         }
       },
+      enabled: widget.component.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       expands: widget.component.options.multi,
       inputFormatters: [

@@ -10,6 +10,7 @@ environment:
 
 dependencies:
   apptive_grid_core: ^1.7.0
+  collection: ^1.17.2
   file_picker: ^5.2.11
   flutter:
     sdk: flutter

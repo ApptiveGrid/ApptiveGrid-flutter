@@ -71,6 +71,7 @@ class _UriFormWidgetState extends State<UriFormWidget>
       minLines: 1,
       maxLines: 1,
       decoration: widget.component.baseDecoration,
+      enabled: widget.component.enabled,
     );
   }
 }

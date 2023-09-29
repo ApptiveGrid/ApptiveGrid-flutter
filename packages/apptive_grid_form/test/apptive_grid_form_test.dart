@@ -29,6 +29,9 @@ void main() {
         ),
       ),
     );
+    registerFallbackValue(
+      FormData(id: 'id', components: [], fields: [], links: {}),
+    );
   });
 
   setUp(() {
@@ -1653,6 +1656,539 @@ void main() {
 
       expect(customComponent, equals(formComponent));
       expect(find.byType(TextFormField), findsNothing);
+    });
+  });
+
+  group('Field properties', () {
+    const field = GridField(
+      id: 'field',
+      name: 'name',
+      type: DataType.text,
+      schema: {},
+    );
+    testWidgets('Hidden', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer(
+        (realInvocation) async => FormData(
+          id: 'formId',
+          components: [
+            FormComponent(
+              property: 'property',
+              data: StringDataEntity(),
+              field: field,
+            ),
+          ],
+          fields: [field],
+          fieldProperties: [
+            FormFieldProperties(
+              fieldId: field.id,
+              hidden: true,
+            ),
+          ],
+          links: {},
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text('property'), findsNothing);
+    });
+    testWidgets('Disabled', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+
+      const defaultValue = 'default';
+
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer(
+        (realInvocation) async => FormData(
+          id: 'formId',
+          components: [
+            FormComponent(
+              property: 'property',
+              data: StringDataEntity(),
+              field: field,
+            ),
+          ],
+          fields: [field],
+          fieldProperties: [
+            FormFieldProperties(
+              fieldId: field.id,
+              defaultValue: StringDataEntity(defaultValue),
+              disabled: true,
+            ),
+          ],
+          links: {},
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text(defaultValue), findsOneWidget);
+      expect(find.text(defaultValue).hitTestable(), findsNothing);
+    });
+
+    group('Default value', () {
+      final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+      testWidgets('Show default value', (tester) async {
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridForm(
+            uri: Uri.parse('/api/a/form'),
+          ),
+        );
+
+        const defaultValue = 'default';
+
+        when(
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
+        ).thenAnswer(
+          (realInvocation) async => FormData(
+            id: 'formId',
+            components: [
+              FormComponent(
+                property: 'property',
+                data: StringDataEntity(),
+                field: field,
+              ),
+            ],
+            fields: [field],
+            fieldProperties: [
+              FormFieldProperties(
+                fieldId: field.id,
+                defaultValue: StringDataEntity(defaultValue),
+              ),
+            ],
+            links: {},
+          ),
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        expect(find.text(defaultValue), findsOneWidget);
+      });
+      testWidgets('Show default value', (tester) async {
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridForm(
+            uri: Uri.parse('/api/a/form'),
+          ),
+        );
+
+        const defaultValue = 'default';
+
+        when(
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
+        ).thenAnswer(
+          (realInvocation) async => FormData(
+            id: 'formId',
+            components: [
+              FormComponent(
+                property: 'property',
+                data: StringDataEntity(),
+                field: field,
+              ),
+            ],
+            fields: [field],
+            fieldProperties: [
+              FormFieldProperties(
+                fieldId: field.id,
+                defaultValue: StringDataEntity(defaultValue),
+              ),
+            ],
+            links: {},
+          ),
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        expect(find.text(defaultValue), findsOneWidget);
+      });
+      testWidgets('Default value submits', (tester) async {
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridForm(
+            uri: Uri.parse('/api/a/form'),
+          ),
+        );
+
+        const defaultValue = 'default';
+
+        final didComplete = Completer();
+
+        when(
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
+        ).thenAnswer(
+          (realInvocation) async => FormData(
+            id: 'formId',
+            components: [
+              FormComponent(
+                property: 'property',
+                data: StringDataEntity(),
+                field: field,
+              ),
+            ],
+            fields: [field],
+            fieldProperties: [
+              FormFieldProperties(
+                fieldId: field.id,
+                defaultValue: StringDataEntity(defaultValue),
+              ),
+            ],
+            links: {ApptiveLinkType.submit: action},
+          ),
+        );
+        when(
+          () => client.submitFormWithProgress(
+            action,
+            any(
+              that: predicate<FormData>(
+                (formData) =>
+                    formData.components?.first.data.value == defaultValue,
+              ),
+            ),
+          ),
+        ).thenAnswer(
+          (_) {
+            didComplete.complete();
+            return Stream.value(
+              SubmitCompleteProgressEvent(http.Response('', 200)),
+            );
+          },
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        await didComplete.future;
+      });
+      testWidgets('Disabled default value submits', (tester) async {
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridForm(
+            uri: Uri.parse('/api/a/form'),
+          ),
+        );
+
+        const defaultValue = 'default';
+
+        final didComplete = Completer();
+
+        when(
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
+        ).thenAnswer(
+          (realInvocation) async => FormData(
+            id: 'formId',
+            components: [
+              FormComponent(
+                property: 'property',
+                data: StringDataEntity(),
+                field: field,
+              ),
+            ],
+            fields: [field],
+            fieldProperties: [
+              FormFieldProperties(
+                fieldId: field.id,
+                defaultValue: StringDataEntity(defaultValue),
+                disabled: true,
+              ),
+            ],
+            links: {ApptiveLinkType.submit: action},
+          ),
+        );
+        when(
+          () => client.submitFormWithProgress(
+            action,
+            any(
+              that: predicate<FormData>(
+                (formData) =>
+                    formData.components?.first.data.value == defaultValue,
+              ),
+            ),
+          ),
+        ).thenAnswer(
+          (_) {
+            didComplete.complete();
+            return Stream.value(
+              SubmitCompleteProgressEvent(http.Response('', 200)),
+            );
+          },
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        await didComplete.future;
+      });
+      testWidgets('Hidden default value submits', (tester) async {
+        final target = TestApp(
+          client: client,
+          child: ApptiveGridForm(
+            uri: Uri.parse('/api/a/form'),
+          ),
+        );
+
+        const defaultValue = 'default';
+
+        final didComplete = Completer();
+
+        when(
+          () => client.loadForm(uri: Uri.parse('/api/a/form')),
+        ).thenAnswer(
+          (realInvocation) async => FormData(
+            id: 'formId',
+            components: [
+              FormComponent(
+                property: 'property',
+                data: StringDataEntity(),
+                field: field,
+              ),
+            ],
+            fields: [field],
+            fieldProperties: [
+              FormFieldProperties(
+                fieldId: field.id,
+                defaultValue: StringDataEntity(defaultValue),
+                hidden: true,
+              ),
+            ],
+            links: {ApptiveLinkType.submit: action},
+          ),
+        );
+        when(
+          () => client.submitFormWithProgress(
+            action,
+            any(
+              that: predicate<FormData>(
+                (formData) =>
+                    formData.components?.first.data.value == defaultValue,
+              ),
+            ),
+          ),
+        ).thenAnswer(
+          (_) {
+            didComplete.complete();
+            return Stream.value(
+              SubmitCompleteProgressEvent(http.Response('', 200)),
+            );
+          },
+        );
+
+        await tester.pumpWidget(target);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        await didComplete.future;
+      });
+    });
+  });
+
+  group('Paged forms', () {
+    final fields = List.generate(
+      3,
+      (index) => GridField(
+        id: 'field$index',
+        name: 'name',
+        type: DataType.text,
+        schema: {},
+      ),
+    );
+    final pages = List.generate(3, (index) => 'page$index');
+    final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+
+    setUp(() {
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer(
+        (realInvocation) async => FormData(
+          id: 'formId',
+          components: fields
+              .map(
+                (field) => FormComponent(
+                  property: 'property',
+                  data: StringDataEntity(),
+                  field: field,
+                  required: true,
+                ),
+              )
+              .toList(),
+          fields: fields,
+          fieldProperties: fields
+              .map(
+                (field) => FormFieldProperties(
+                  fieldId: field.id,
+                  defaultValue: StringDataEntity(),
+                  pageId: pages[fields.indexOf(field)],
+                ),
+              )
+              .toList(),
+          properties: FormDataProperties(pageIds: pages),
+          links: {ApptiveLinkType.submit: action},
+        ),
+      );
+    });
+
+    testWidgets('Page navigation', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      final findNext = find.descendant(
+        of: find.byType(ElevatedButton),
+        matching: find.text('Next'),
+      );
+
+      final findBack = find.descendant(
+        of: find.byType(ElevatedButton),
+        matching: find.text('Back'),
+      );
+
+      expect(findNext, findsOneWidget);
+      expect(findBack, findsNothing);
+
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+
+      expect(findNext, findsOneWidget);
+      expect(findBack, findsNothing);
+
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), 'text1');
+
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+
+      expect(findNext, findsOneWidget);
+      expect(findBack, findsOneWidget);
+      expect(find.text('text1'), findsNothing);
+
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+
+      expect(findNext, findsOneWidget);
+      expect(findBack, findsOneWidget);
+      expect(find.text('text1'), findsNothing);
+
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), 'text2');
+
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+
+      expect(findNext, findsNothing);
+      expect(findBack, findsOneWidget);
+      expect(find.text('text1'), findsNothing);
+      expect(find.text('text2'), findsNothing);
+
+      await tester.tap(find.text('Submit'));
+      await tester.pumpAndSettle();
+
+      expect(findNext, findsNothing);
+      expect(findBack, findsOneWidget);
+      expect(find.text('text1'), findsNothing);
+      expect(find.text('text2'), findsNothing);
+
+      await tester.tap(find.text('Back'));
+      await tester.pumpAndSettle();
+
+      expect(findNext, findsOneWidget);
+      expect(findBack, findsOneWidget);
+      expect(find.text('text1'), findsNothing);
+      expect(find.text('text2'), findsOneWidget);
+
+      await tester.tap(find.text('Back'));
+      await tester.pumpAndSettle();
+
+      expect(findNext, findsOneWidget);
+      expect(findBack, findsNothing);
+      expect(find.text('text1'), findsOneWidget);
+      expect(find.text('text2'), findsNothing);
+    });
+    testWidgets('Submit sends all set data', (tester) async {
+      when(
+        () => client.submitFormWithProgress(
+          action,
+          any(
+            that: predicate<FormData>((data) {
+              for (var i = 0; i < pages.length; i++) {
+                if (data.components![i].data.value != pages[i]) {
+                  return false;
+                }
+              }
+              return true;
+            }),
+          ),
+        ),
+      ).thenAnswer(
+        (_) => Stream.value(
+          SubmitCompleteProgressEvent(http.Response('', 200)),
+        ),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      for (var i = 0; i < pages.length; i++) {
+        await tester.tap(find.byType(TextFormField));
+        await tester.enterText(find.byType(TextFormField), pages[i]);
+
+        await tester.tap(find.byType(ElevatedButton).last);
+        await tester.pumpAndSettle();
+      }
+      verify(
+        () => client.submitFormWithProgress(
+          action,
+          any(
+            that: predicate<FormData>((data) {
+              for (var i = 0; i < pages.length; i++) {
+                if (data.components![i].data.value != pages[i]) {
+                  return false;
+                }
+              }
+              return true;
+            }),
+          ),
+        ),
+      ).called(1);
     });
   });
 }

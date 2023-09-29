@@ -393,6 +393,7 @@ void main() {
               component.options,
               component.required,
               component.type,
+              component.enabled,
             ),
           );
         });

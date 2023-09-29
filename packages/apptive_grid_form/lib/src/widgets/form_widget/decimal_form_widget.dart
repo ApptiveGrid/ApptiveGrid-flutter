@@ -69,6 +69,7 @@ class _DecimalFormWidgetState extends State<DecimalFormWidget>
           return null;
         }
       },
+      enabled: widget.component.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       expands: widget.component.options.multi,
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))],

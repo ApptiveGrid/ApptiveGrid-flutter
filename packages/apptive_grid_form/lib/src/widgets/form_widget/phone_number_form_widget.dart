@@ -74,6 +74,7 @@ class _PhoneNumberFormWidgetState extends State<PhoneNumberFormWidget>
         AutofillHints.telephoneNumberLocal,
       },
       keyboardType: TextInputType.phone,
+      enabled: widget.component.enabled,
     );
   }
 }

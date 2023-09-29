@@ -63,11 +63,14 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
           return null;
         }
       },
+      enabled: widget.component.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data,
       builder: (formState) {
         return GestureDetector(
-          onTap: !_isLoadingPreviousValue ? _openSignatureSheet : null,
+          onTap: !_isLoadingPreviousValue && widget.component.enabled
+              ? _openSignatureSheet
+              : null,
           child: InputDecorator(
             decoration: widget.component.baseDecoration.copyWith(
               errorText: formState.errorText,

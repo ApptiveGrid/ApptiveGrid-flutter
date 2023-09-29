@@ -10,22 +10,25 @@ void main() {
         type: DataType.text,
       );
 
-      final jsonComponent = FormComponent.fromJson({
-        "fieldId": "id",
-        "type": "textfield",
-        "value": null,
-        "options": {
-          "multi": false,
-          "placeholder": null,
-          "description": null,
-          "label": null,
+      final jsonComponent = FormComponent.fromJson(
+        {
+          "fieldId": "id",
+          "type": "textfield",
+          "value": null,
+          "options": {
+            "multi": false,
+            "placeholder": null,
+            "description": null,
+            "label": null,
+          },
+          "required": true,
+          "property": "Text",
+          "_links": <String, dynamic>{},
         },
-        "required": true,
-        "property": "Text",
-        "_links": <String, dynamic>{},
-      }, [
-        field,
-      ]);
+        fields: [
+          field,
+        ],
+      );
 
       expect(jsonComponent.runtimeType, FormComponent<DataEntity>);
       final castedComponent = jsonComponent.cast<StringDataEntity>();
@@ -56,7 +59,8 @@ void main() {
           'data: StringDataEntity(value: null)}, '
           'options: FormComponentOptions(multi: false, placeholder: null, description: null, label: null), '
           'required: false, '
-          'type: FormField)',
+          'type: FormField, '
+          'enabled: true)',
         ),
       );
     });

@@ -32,6 +32,7 @@ void main() {
     late ApptiveGridClient client;
     late Widget target;
     late GlobalKey<FormState> formKey;
+    late FormComponent<CrossReferenceDataEntity> component;
 
     final gridUri = Uri.parse('/api/users/user/spaces/space/grids/grid');
     const field = GridField(id: 'field', name: 'Name', type: DataType.text);
@@ -98,7 +99,7 @@ void main() {
       client = MockApptiveGridClient();
       formKey = GlobalKey();
       final data = CrossReferenceDataEntity(gridUri: gridUri);
-      final component = FormComponent<CrossReferenceDataEntity>(
+      component = FormComponent<CrossReferenceDataEntity>(
         property: 'Property',
         data: data,
         field: field,
@@ -263,6 +264,36 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('null'), findsNothing);
+    });
+
+    testWidgets('Disabled', (tester) async {
+      await tester.pumpWidget(
+        TestApp(
+          client: client,
+          child: Form(
+            key: formKey,
+            child: CrossReferenceFormWidget(
+              component: FormComponent<CrossReferenceDataEntity>(
+                property: 'Property',
+                data: CrossReferenceDataEntity(gridUri: gridUri),
+                field: field,
+                required: true,
+                enabled: false,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<DropdownButtonFormField>(
+              find.byType(DropdownButtonFormField).first,
+            )
+            .onChanged,
+        null,
+      );
     });
 
     group('Preview Value', () {

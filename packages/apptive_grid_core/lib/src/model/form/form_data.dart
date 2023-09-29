@@ -30,11 +30,6 @@ class FormData {
             ?.map((json) => GridField.fromJson(json))
             .toList() ??
         [];
-    final components = (json['components'] as List?)
-        ?.map<FormComponent>(
-          (e) => FormComponent.fromJson(e, fields),
-        )
-        .toList();
     final links = linkMapFromJson(json['_links']);
     final attachmentActions = json['attachmentActions'] != null
         ? Map.fromEntries(
@@ -51,11 +46,26 @@ class FormData {
     final List<FormFieldProperties> fieldProperties = [];
     if (json['fieldProperties'] != null) {
       for (final field in fields) {
-        fieldProperties.add(
-          FormFieldProperties.fromJson(json: json[field.id], fieldId: field.id),
-        );
+        final propertiesJson = json['fieldProperties'][field.id];
+        if (propertiesJson != null) {
+          fieldProperties.add(
+            FormFieldProperties.fromJson(
+              json: propertiesJson,
+              field: field,
+            ),
+          );
+        }
       }
     }
+    final components = (json['components'] as List?)
+        ?.map<FormComponent>(
+          (e) => FormComponent.fromJson(
+            e,
+            fields: fields,
+            additionalProperties: fieldProperties,
+          ),
+        )
+        .toList();
     return FormData(
       id: id,
       name: name,
@@ -116,20 +126,15 @@ class FormData {
         'attachmentActions':
             attachmentActions.values.map((e) => e.toJson()).toList(),
       if (properties != null) 'properties': properties!.toJson(),
-      'fieldProperties': fieldProperties.map(
-        (e) => {
-          e.fieldId: {
-            'pageId': e.pageId,
-            'fieldIndex': e.fieldIndex,
-          },
-        },
+      'fieldProperties': Map.fromEntries(
+        fieldProperties.map((e) => MapEntry(e.fieldId, e.toJson())),
       ),
     };
   }
 
   @override
   String toString() {
-    return 'FormData(id: $id, name: $name, title: $title, description: $description, components: $components, fields: $fields, links: $links, attachmentActions: $attachmentActions)';
+    return 'FormData(id: $id, name: $name, title: $title, description: $description, components: $components, fields: $fields, links: $links, attachmentActions: $attachmentActions, properties: $properties, fieldProperties: $fieldProperties)';
   }
 
   /// Creates a [Map] used to send this data back to a server

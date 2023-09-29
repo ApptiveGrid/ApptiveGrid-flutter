@@ -368,4 +368,44 @@ void main() {
       checkSignature(isEmpty: true);
     });
   });
+
+  group('Options', () {
+    testWidgets('Disabled', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: FormData(
+            id: 'formId',
+            title: 'title',
+            components: [
+              FormComponent<SignatureDataEntity>(
+                property: 'Property',
+                data: SignatureDataEntity(),
+                field: field,
+                required: true,
+                enabled: false,
+              ),
+            ],
+            fieldProperties: [
+              FormFieldProperties(fieldId: field.id, disabled: true),
+            ],
+            links: {ApptiveLinkType.submit: action},
+            fields: [field],
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<GestureDetector>(
+              find.byType(GestureDetector).first,
+            )
+            .onTap,
+        null,
+      );
+    });
+  });
 }

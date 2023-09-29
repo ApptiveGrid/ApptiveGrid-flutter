@@ -25,7 +25,7 @@ class FormDataProperties {
         afterSubmitAction: json['afterSubmitAction'] != null
             ? AfterSubmitAction.fromJson(json['afterSubmitAction'])
             : null,
-        pageIds: json['pageIds'],
+        pageIds: json['pageIds']?.cast<String>() ?? [],
         blocks: (json['blocks'] as List?)
             ?.map((e) => FormBlock.fromJson(e))
             .toList(),

@@ -31,6 +31,7 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
         validator: _validate,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         initialValue: widget.component.data.value,
+        enabled: widget.component.enabled,
         builder: (fieldState) {
           return InputDecorator(
             decoration: widget.component.baseDecoration.copyWith(
@@ -50,10 +51,12 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
                     value: entry,
                     title: Text(entry),
                     groupValue: widget.component.data.value,
-                    onChanged: (newValue) {
-                      fieldState.didChange(newValue);
-                      _onChanged(newValue);
-                    },
+                    onChanged: widget.component.enabled
+                        ? (newValue) {
+                            fieldState.didChange(newValue);
+                            _onChanged(newValue);
+                          }
+                        : null,
                   ),
               ],
             ),
@@ -80,7 +83,7 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
             ),
           )
           .toList(),
-      onChanged: _onChanged,
+      onChanged: widget.component.enabled ? _onChanged : null,
       validator: _validate,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       value: widget.component.data.value,
