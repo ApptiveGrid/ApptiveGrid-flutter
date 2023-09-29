@@ -1,15 +1,3 @@
-/// Represent the different types of blocks in a form
-enum FormBlockType {
-  /// A simple text block
-  text;
-}
-
-/// Represent the different style of blocks in a form
-enum FormBlockStyle {
-  /// The text is displayed in a paragraph
-  paragraph;
-}
-
 /// A freeform block inside of a form
 class FormBlock {
   /// Deserializes [json] into a FormBlock Object
@@ -17,10 +5,8 @@ class FormBlock {
         id: json['id'],
         text: json['text'],
         fieldIndex: json['fieldIndex'],
-        type: FormBlockType.values
-            .firstWhere((element) => element.name == json['type']),
-        style: FormBlockStyle.values
-            .firstWhere((element) => element.name == json['style']),
+        type: json['type'],
+        style: json['style'],
         pageId: json['pageId'],
       );
 
@@ -47,10 +33,10 @@ class FormBlock {
   final String text;
 
   /// Type of the block
-  final FormBlockType type;
+  final String type;
 
   /// Style of the block
-  final FormBlockStyle style;
+  final String style;
 
   /// Serializes the FormBlock to a json map
   Map<String, dynamic> toJson() => {
@@ -58,7 +44,7 @@ class FormBlock {
         'pageId': pageId,
         'fieldIndex': fieldIndex,
         'text': text,
-        'type': type.name,
-        'style': style.name,
+        'type': type,
+        'style': style,
       };
 }
