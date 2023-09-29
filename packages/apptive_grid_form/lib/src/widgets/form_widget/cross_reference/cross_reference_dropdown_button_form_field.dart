@@ -180,7 +180,7 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
   }
 
   List<DropdownMenuItem<dynamic>>? _items() {
-    if (_error != null || _grid == null || !widget.enabled) {
+    if (_error != null || _grid == null) {
       return null;
     } else {
       final localization = ApptiveGridLocalization.of(context)!;

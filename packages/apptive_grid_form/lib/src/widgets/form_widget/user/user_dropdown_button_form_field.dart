@@ -64,9 +64,6 @@ class _UserDropdownButtonFormFieldState
   }
 
   List<DropdownMenuItem<DataUser>>? _items() {
-    if (!widget.enabled) {
-      return null;
-    }
     final localization = ApptiveGridLocalization.of(context)!;
     final searchBox = DropdownMenuItem<DataUser>(
       enabled: false,
