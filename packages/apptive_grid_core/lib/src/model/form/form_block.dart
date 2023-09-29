@@ -47,4 +47,32 @@ class FormBlock {
         'type': type,
         'style': style,
       };
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        pageId,
+        fieldIndex,
+        text,
+        type,
+        style,
+      );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is FormBlock &&
+        other.id == id &&
+        other.pageId == pageId &&
+        other.fieldIndex == fieldIndex &&
+        other.text == text &&
+        other.type == type &&
+        other.style == style;
+  }
+
+  @override
+  String toString() {
+    return 'FormBlock(id: $id, pageId: $pageId, fieldIndex: $fieldIndex, text: $text, type: $type, style: $style)';
+  }
 }
