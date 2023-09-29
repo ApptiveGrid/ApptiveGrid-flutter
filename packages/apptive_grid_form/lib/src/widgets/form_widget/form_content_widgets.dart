@@ -106,6 +106,12 @@ class _FormDataWidgetState extends State<FormDataWidget> {
       [];
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final pages = widget.data.properties?.pageIds;
     if (pages != null && pages.length > 1) {
