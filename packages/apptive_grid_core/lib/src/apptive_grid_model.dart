@@ -11,6 +11,7 @@ export 'package:apptive_grid_core/src/model/form/after_submit_action.dart';
 export 'package:apptive_grid_core/src/model/form/component/form_component.dart';
 export 'package:apptive_grid_core/src/model/form/component/options.dart';
 export 'package:apptive_grid_core/src/model/form/form_actions.dart';
+export 'package:apptive_grid_core/src/model/form/form_block.dart';
 export 'package:apptive_grid_core/src/model/form/form_data.dart';
 export 'package:apptive_grid_core/src/model/form/form_data_properties.dart';
 export 'package:apptive_grid_core/src/model/form/form_field_properties.dart';
