@@ -20,7 +20,7 @@ class SignatureFormWidget extends StatefulWidget {
   /// Component this Widget should reflect
   final FormComponent<SignatureDataEntity> component;
 
-  /// Flag whether the widget is enabled
+  /// Flag whether the widget is enabled. Defaults to `true`
   final bool enabled;
 
   @override

@@ -33,7 +33,7 @@ class GeolocationInput extends StatefulWidget {
   /// Called with `null` if the user clears the currently selected Location
   final void Function(Geolocation?)? onLocationChanged;
 
-  /// Flag whether the widget is enabled
+  /// Flag whether the widget is enabled. Defaults to `true`
   final bool enabled;
 
   @override

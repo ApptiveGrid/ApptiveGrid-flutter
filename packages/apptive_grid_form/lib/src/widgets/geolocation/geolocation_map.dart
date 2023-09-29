@@ -34,7 +34,7 @@ class GeolocationMap extends StatefulWidget {
   /// by clicking the map or dragging the currently selected lcoation to a new place
   final void Function(Geolocation?)? onLocationChanged;
 
-  /// Flag whether the widget is enabled
+  /// Flag whether the widget is enabled. Defaults to `true`
   final bool enabled;
 
   @override

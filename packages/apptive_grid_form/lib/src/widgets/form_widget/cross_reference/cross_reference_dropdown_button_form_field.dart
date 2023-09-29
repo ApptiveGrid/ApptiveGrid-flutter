@@ -40,7 +40,7 @@ class CrossReferenceDropdownButtonFormField<T extends DataEntity>
   /// A [Notifier] to notify when the selected entity changed
   final SelectedRowsNotifier selectedNotifier;
 
-  /// Flag whether the widget is enabled
+  /// Flag whether the widget is enabled. Defaults to `true`
   final bool enabled;
 
   @override

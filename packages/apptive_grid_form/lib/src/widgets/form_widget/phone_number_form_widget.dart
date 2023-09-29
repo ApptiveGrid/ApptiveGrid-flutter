@@ -16,7 +16,7 @@ class PhoneNumberFormWidget extends StatefulWidget {
   /// Component this Widget should reflect
   final FormComponent<PhoneNumberDataEntity> component;
 
-  /// Flag whether the widget is enabled
+  /// Flag whether the widget is enabled. Defaults to `true`
   final bool enabled;
 
   @override
