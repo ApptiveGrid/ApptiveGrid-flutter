@@ -26,6 +26,8 @@ class ApptiveGridForm extends StatefulWidget {
     this.descriptionPadding,
     this.hideTitle = false,
     this.hideDescription = false,
+    this.textBlockPadding,
+    this.textBlockStyle,
     this.onFormLoaded,
     this.onActionSuccess,
     this.onSavedToPending,
@@ -61,6 +63,12 @@ class ApptiveGridForm extends StatefulWidget {
 
   /// Flag to hide the form description, default is false
   final bool hideDescription;
+
+  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  final TextStyle? textBlockStyle;
+
+  /// Padding for the description. If no Padding is provided the [padding] is used
+  final EdgeInsetsGeometry? textBlockPadding;
 
   /// Callback after [FormData] loads successfully
   ///
@@ -168,6 +176,8 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       descriptionPadding: widget.descriptionPadding,
       hideTitle: widget.hideTitle,
       hideDescription: widget.hideDescription,
+      textBlockPadding: widget.textBlockPadding,
+      textBlockStyle: widget.textBlockStyle,
       onActionSuccess: widget.onActionSuccess,
       onSavedToPending: widget.onSavedToPending,
       onCreated: widget.onCreated,
@@ -236,6 +246,8 @@ class ApptiveGridFormData extends StatefulWidget {
     this.descriptionPadding,
     this.hideTitle = false,
     this.hideDescription = false,
+    this.textBlockPadding,
+    this.textBlockStyle,
     this.onActionSuccess,
     this.onSavedToPending,
     this.onCreated,
@@ -274,6 +286,12 @@ class ApptiveGridFormData extends StatefulWidget {
 
   /// Flag to hide the form description, default is false
   final bool hideDescription;
+
+  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  final TextStyle? textBlockStyle;
+
+  /// Padding for the description. If no Padding is provided the [padding] is used
+  final EdgeInsetsGeometry? textBlockPadding;
 
   /// Callback after [ApptiveLink] completes Successfully
   ///
@@ -452,6 +470,8 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
                 hideDescription: widget.hideDescription,
                 descriptionPadding: widget.descriptionPadding,
                 descriptionStyle: widget.descriptionStyle,
+                textBlockPadding: widget.textBlockPadding,
+                textBlockStyle: widget.textBlockStyle,
                 componentBuilder: widget.componentBuilder,
                 hideButton: widget.hideButton,
                 buttonLabel: widget.buttonLabel,

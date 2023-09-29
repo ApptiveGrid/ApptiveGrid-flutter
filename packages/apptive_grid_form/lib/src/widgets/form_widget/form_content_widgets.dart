@@ -34,6 +34,8 @@ class FormDataWidget extends StatefulWidget {
     this.descriptionPadding,
     this.descriptionStyle,
     required this.hideDescription,
+    this.textBlockPadding,
+    this.textBlockStyle,
     this.componentBuilder,
     required this.hideButton,
     required this.buttonAlignment,
@@ -69,6 +71,12 @@ class FormDataWidget extends StatefulWidget {
 
   /// Flag to hide the form description, default is false
   final bool hideDescription;
+
+  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  final TextStyle? textBlockStyle;
+
+  /// Padding for the description. If no Padding is provided the [padding] is used
+  final EdgeInsetsGeometry? textBlockPadding;
 
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
@@ -127,6 +135,8 @@ class _FormDataWidgetState extends State<FormDataWidget> {
               descriptionPadding: widget.descriptionPadding,
               descriptionStyle: widget.descriptionStyle,
               hideDescription: widget.hideDescription,
+              textBlockPadding: widget.textBlockPadding,
+              textBlockStyle: widget.textBlockStyle,
               buttonLabel: widget.buttonLabel,
               hideButton: widget.hideButton,
               buttonAlignment: widget.buttonAlignment,
@@ -167,6 +177,8 @@ class _FormDataWidgetState extends State<FormDataWidget> {
         descriptionPadding: widget.descriptionPadding,
         descriptionStyle: widget.descriptionStyle,
         hideDescription: widget.hideDescription,
+        textBlockPadding: widget.textBlockPadding,
+        textBlockStyle: widget.textBlockStyle,
         buttonLabel: widget.buttonLabel,
         hideButton: widget.hideButton,
         buttonAlignment: widget.buttonAlignment,
@@ -385,6 +397,8 @@ class FormPage extends StatelessWidget {
     this.descriptionPadding,
     this.descriptionStyle,
     required this.hideDescription,
+    this.textBlockPadding,
+    this.textBlockStyle,
     this.componentBuilder,
     required this.hideButton,
     required this.buttonAlignment,
@@ -428,6 +442,12 @@ class FormPage extends StatelessWidget {
 
   /// Flag to hide the form description, default is false
   final bool hideDescription;
+
+  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  final TextStyle? textBlockStyle;
+
+  /// Padding for the description. If no Padding is provided the [padding] is used
+  final EdgeInsetsGeometry? textBlockPadding;
 
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
