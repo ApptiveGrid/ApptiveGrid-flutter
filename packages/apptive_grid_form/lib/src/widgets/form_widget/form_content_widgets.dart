@@ -105,6 +105,8 @@ class _FormDataWidgetState extends State<FormDataWidget> {
     super.dispose();
   }
 
+  final Map<String, GlobalKey<FormState>> _keys = {};
+
   @override
   Widget build(BuildContext context) {
     final pages = widget.data.properties?.pageIds;
@@ -114,7 +116,10 @@ class _FormDataWidgetState extends State<FormDataWidget> {
         physics: const NeverScrollableScrollPhysics(),
         children: pages.map(
           (pageId) {
-            final key = GlobalKey<FormState>(debugLabel: pageId);
+            final key = _keys.putIfAbsent(
+              pageId,
+              () => GlobalKey<FormState>(debugLabel: pageId),
+            );
             return FormPage(
               pageId: pageId,
               data: widget.data,
