@@ -26,7 +26,6 @@ class FormDataWidget extends StatefulWidget {
   const FormDataWidget({
     super.key,
     required this.data,
-    required this.formKey,
     required this.isSubmitting,
     required this.padding,
     this.titlePadding,
@@ -46,9 +45,6 @@ class FormDataWidget extends StatefulWidget {
 
   /// The current form data
   final FormData data;
-
-  /// A key to access the state of the current form
-  final GlobalKey<FormState> formKey;
 
   /// A flag to signal the the form is currently being submitted
   final bool isSubmitting;

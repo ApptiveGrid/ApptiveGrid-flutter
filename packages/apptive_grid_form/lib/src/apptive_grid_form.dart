@@ -330,8 +330,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   FormData? _formData;
   late ApptiveGridClient _client;
 
-  final _formKey = GlobalKey<FormState>();
-
   bool _success = false;
 
   dynamic _error;
@@ -446,7 +444,6 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
               value: _attachmentManager,
               child: FormDataWidget(
                 data: _formData!,
-                formKey: _formKey,
                 isSubmitting: _submitting,
                 padding: widget.contentPadding ?? _defaultPadding,
                 hideTitle: widget.hideTitle,
@@ -475,7 +472,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   /// Submits the [currentData] if not already submitting
   Future<void> submitForm() async {
     final link = _formData?.links[ApptiveLinkType.submit];
-    if (link != null && _formKey.currentState!.validate()) {
+    if (link != null ) {
       setState(() {
         _submitting = true;
       });
