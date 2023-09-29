@@ -8,14 +8,10 @@ class CrossReferenceFormWidget extends StatefulWidget {
   const CrossReferenceFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<CrossReferenceDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<CrossReferenceFormWidget> createState() =>
@@ -45,7 +41,6 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
         _selectedNotifier.entities = [widget.component.data.entityUri];
         state.closeOverlay();
       },
-      enabled: widget.enabled,
     );
   }
 }

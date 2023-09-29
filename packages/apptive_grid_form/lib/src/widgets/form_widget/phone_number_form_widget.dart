@@ -10,14 +10,10 @@ class PhoneNumberFormWidget extends StatefulWidget {
   const PhoneNumberFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<PhoneNumberDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<PhoneNumberFormWidget> createState() => _PhoneNumberFormWidgetState();
@@ -78,7 +74,7 @@ class _PhoneNumberFormWidgetState extends State<PhoneNumberFormWidget>
         AutofillHints.telephoneNumberLocal,
       },
       keyboardType: TextInputType.phone,
-      enabled: widget.enabled,
+      enabled: widget.component.enabled,
     );
   }
 }

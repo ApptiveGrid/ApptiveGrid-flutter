@@ -8,14 +8,10 @@ class MultiCrossReferenceFormWidget extends StatefulWidget {
   const MultiCrossReferenceFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<MultiCrossReferenceDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<MultiCrossReferenceFormWidget> createState() =>
@@ -41,7 +37,6 @@ class _MultiCrossReferenceFormWidgetState
       selectedItemBuilder: (data) => Text(
         data!.value!.map((e) => e.value ?? '').join(', '),
       ),
-      enabled: widget.enabled,
       selectedNotifier: _selectedNotifier,
       onSelected: (entity, selected, state) {
         if (selected) {

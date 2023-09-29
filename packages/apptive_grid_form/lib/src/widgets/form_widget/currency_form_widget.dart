@@ -11,14 +11,10 @@ class CurrencyFormWidget extends StatefulWidget {
   const CurrencyFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<CurrencyDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<CurrencyFormWidget> createState() => _CurrencyFormWidgetState();
@@ -70,7 +66,7 @@ class _CurrencyFormWidgetState extends State<CurrencyFormWidget>
           return null;
         }
       },
-      enabled: widget.enabled,
+      enabled: widget.component.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       expands: widget.component.options.multi,
       inputFormatters: [

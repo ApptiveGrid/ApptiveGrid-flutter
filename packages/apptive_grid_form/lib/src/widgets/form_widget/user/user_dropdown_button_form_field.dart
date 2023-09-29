@@ -4,14 +4,11 @@ class _UserDropdownButtonFormField extends StatefulWidget {
   const _UserDropdownButtonFormField({
     required this.component,
     required this.onSelected,
-    this.enabled = true,
   });
 
   final FormComponent<UserDataEntity> component;
 
   final void Function(DataUser? user) onSelected;
-
-  final bool enabled;
 
   @override
   _UserDropdownButtonFormFieldState createState() =>
@@ -42,8 +39,9 @@ class _UserDropdownButtonFormFieldState
       isExpanded: true,
       items: _items(),
       menuMaxHeight: MediaQuery.of(context).size.height * 0.95,
-      onChanged: widget.enabled ? (_) {} : null, // coverage:ignore-line
-      onTap: widget.enabled
+      onChanged:
+          widget.component.enabled ? (_) {} : null, // coverage:ignore-line
+      onTap: widget.component.enabled
           ? () {
               _filterController.text = '';
             }

@@ -9,14 +9,10 @@ class EnumCollectionFormWidget extends StatefulWidget {
   const EnumCollectionFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<EnumCollectionDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<EnumCollectionFormWidget> createState() =>
@@ -43,7 +39,7 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data,
-      enabled: widget.enabled,
+      enabled: widget.component.enabled,
       builder: (fieldState) {
         return InputDecorator(
           decoration: widget.component.baseDecoration.copyWith(
@@ -68,11 +64,11 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
                           value: widget.component.data.value?.contains(entry),
                           title: Text(entry),
                           controlAffinity: ListTileControlAffinity.leading,
-                          onChanged: widget.enabled
+                          onChanged: widget.component.enabled
                               ? (isSelected) =>
                                   _onSelected(entry, isSelected, fieldState)
                               : null,
-                          enabled: widget.enabled,
+                          enabled: widget.component.enabled,
                         ),
                     ],
                   );
@@ -85,7 +81,7 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
                           label: Text(e),
                           selected:
                               widget.component.data.value?.contains(e) ?? false,
-                          onSelected: widget.enabled
+                          onSelected: widget.component.enabled
                               ? (isSelected) =>
                                   _onSelected(e, isSelected, fieldState)
                               : null,

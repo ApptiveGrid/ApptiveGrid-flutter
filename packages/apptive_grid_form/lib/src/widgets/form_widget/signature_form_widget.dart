@@ -14,14 +14,10 @@ class SignatureFormWidget extends StatefulWidget {
   const SignatureFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<SignatureDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _SignatureFormWidgetState();
@@ -67,12 +63,12 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
           return null;
         }
       },
-      enabled: widget.enabled,
+      enabled: widget.component.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data,
       builder: (formState) {
         return GestureDetector(
-          onTap: !_isLoadingPreviousValue && widget.enabled
+          onTap: !_isLoadingPreviousValue && widget.component.enabled
               ? _openSignatureSheet
               : null,
           child: InputDecorator(

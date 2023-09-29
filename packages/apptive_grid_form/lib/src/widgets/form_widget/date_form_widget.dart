@@ -12,14 +12,10 @@ class DateFormWidget extends StatefulWidget {
   const DateFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<DateDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _DateFormWidgetState();
@@ -43,7 +39,7 @@ class _DateFormWidgetState extends State<DateFormWidget>
       _controller.text = dateString;
     }
     return InkWell(
-      onTap: widget.enabled
+      onTap: widget.component.enabled
           ? () {
               final initialDate = widget.component.data.value ?? DateTime.now();
               showDatePicker(
@@ -75,7 +71,7 @@ class _DateFormWidgetState extends State<DateFormWidget>
               return null;
             }
           },
-          enabled: widget.enabled,
+          enabled: widget.component.enabled,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: widget.component.baseDecoration,
         ),

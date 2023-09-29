@@ -19,7 +19,6 @@ class CrossReferenceDropdownButtonFormField<T extends DataEntity>
     required this.selectedItemBuilder,
     required this.onSelected,
     required this.selectedNotifier,
-    this.enabled = true,
   }) : assert(
           T == CrossReferenceDataEntity || T == MultiCrossReferenceDataEntity,
         );
@@ -39,9 +38,6 @@ class CrossReferenceDropdownButtonFormField<T extends DataEntity>
 
   /// A [Notifier] to notify when the selected entity changed
   final SelectedRowsNotifier selectedNotifier;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   CrossReferenceDropdownButtonFormFieldState<T> createState() =>
@@ -137,8 +133,9 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       isExpanded: true,
       items: _items(),
       menuMaxHeight: MediaQuery.of(context).size.height * 0.95,
-      onChanged: widget.enabled ? (_) {} : null, // coverage:ignore-line
-      onTap: widget.enabled
+      onChanged:
+          widget.component.enabled ? (_) {} : null, // coverage:ignore-line
+      onTap: widget.component.enabled
           ? () {
               _filterController.text = '';
             }

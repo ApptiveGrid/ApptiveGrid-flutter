@@ -14,14 +14,10 @@ class AttachmentFormWidget extends StatefulWidget {
   const AttachmentFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<AttachmentDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _AttachmentFormWidgetState();
@@ -50,7 +46,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
             return null;
           }
         },
-        enabled: widget.enabled,
+        enabled: widget.component.enabled,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         initialValue: widget.component.data,
         builder: (formState) {
@@ -87,7 +83,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
                           Expanded(
                             child: Text(attachment.name),
                           ),
-                          if (widget.enabled)
+                          if (widget.component.enabled)
                             IconButton(
                               onPressed: () {
                                 attachmentManager.removeAttachment(attachment);
@@ -101,7 +97,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
                       );
                     },
                   ).toList(),
-                if (widget.enabled)
+                if (widget.component.enabled)
                   AddAttachmentButton(
                     onAttachmentsAdded: (newAttachments) =>
                         _attachmentsAdded(newAttachments, formState),

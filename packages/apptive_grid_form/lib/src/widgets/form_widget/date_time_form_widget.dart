@@ -13,14 +13,10 @@ class DateTimeFormWidget extends StatefulWidget {
   const DateTimeFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<DateTimeDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _DateTimeFormWidgetState();
@@ -55,7 +51,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
           return null;
         }
       },
-      enabled: widget.enabled,
+      enabled: widget.component.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data.value,
       builder: (state) {
@@ -69,7 +65,7 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
             children: [
               Flexible(
                 child: InkWell(
-                  onTap: widget.enabled
+                  onTap: widget.component.enabled
                       ? () {
                           final initialDate =
                               widget.component.data.value ?? DateTime.now();
@@ -109,16 +105,16 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
                         isDense: true,
                         filled: false,
                         contentPadding: EdgeInsets.zero,
-                        enabled: widget.enabled,
+                        enabled: widget.component.enabled,
                       ),
-                      enabled: widget.enabled,
+                      enabled: widget.component.enabled,
                     ),
                   ),
                 ),
               ),
               Flexible(
                 child: InkWell(
-                  onTap: widget.enabled
+                  onTap: widget.component.enabled
                       ? () {
                           final initialDate =
                               widget.component.data.value ?? DateTime.now();
@@ -154,9 +150,9 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
                         filled: false,
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.zero,
-                        enabled: widget.enabled,
+                        enabled: widget.component.enabled,
                       ),
-                      enabled: widget.enabled,
+                      enabled: widget.component.enabled,
                     ),
                   ),
                 ),

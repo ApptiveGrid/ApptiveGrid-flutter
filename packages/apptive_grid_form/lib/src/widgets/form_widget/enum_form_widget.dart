@@ -9,14 +9,10 @@ class EnumFormWidget extends StatefulWidget {
   const EnumFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<EnumDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<EnumFormWidget> createState() => _EnumFormWidgetState();
@@ -35,7 +31,7 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
         validator: _validate,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         initialValue: widget.component.data.value,
-        enabled: widget.enabled,
+        enabled: widget.component.enabled,
         builder: (fieldState) {
           return InputDecorator(
             decoration: widget.component.baseDecoration.copyWith(
@@ -55,7 +51,7 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
                     value: entry,
                     title: Text(entry),
                     groupValue: widget.component.data.value,
-                    onChanged: widget.enabled
+                    onChanged: widget.component.enabled
                         ? (newValue) {
                             fieldState.didChange(newValue);
                             _onChanged(newValue);
@@ -87,7 +83,7 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
             ),
           )
           .toList(),
-      onChanged: widget.enabled ? _onChanged : null,
+      onChanged: widget.component.enabled ? _onChanged : null,
       validator: _validate,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       value: widget.component.data.value,

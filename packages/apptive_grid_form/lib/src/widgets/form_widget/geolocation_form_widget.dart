@@ -16,14 +16,10 @@ class GeolocationFormWidget extends StatefulWidget {
   const GeolocationFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<GeolocationDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<GeolocationFormWidget> createState() => _GeolocationFormWidgetState();
@@ -55,7 +51,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
           return null;
         }
       },
-      enabled: widget.enabled,
+      enabled: widget.component.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data,
       builder: (formState) {
@@ -102,7 +98,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
                 ),
                 GeolocationInput(
                   location: widget.component.data.value,
-                  enabled: widget.enabled,
+                  enabled: widget.component.enabled,
                   onLocationChanged: (newLocation) {
                     _updateLocation(
                       formState: formState,
@@ -117,7 +113,7 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
                     borderRadius: BorderRadius.circular(4),
                     child: GeolocationMap(
                       location: widget.component.data.value,
-                      enabled: widget.enabled,
+                      enabled: widget.component.enabled,
                       onLocationChanged: (newLocation) {
                         _updateLocation(
                           formState: formState,

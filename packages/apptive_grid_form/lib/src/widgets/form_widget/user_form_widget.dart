@@ -13,14 +13,10 @@ class UserFormWidget extends StatefulWidget {
   const UserFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<UserDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<UserFormWidget> createState() => _UserFormWidgetState();
@@ -31,7 +27,6 @@ class _UserFormWidgetState extends State<UserFormWidget> {
   Widget build(BuildContext context) {
     return _UserDropdownButtonFormField(
       component: widget.component,
-      enabled: widget.enabled,
       onSelected: (user) {
         setState(() {
           widget.component.data.value = user;

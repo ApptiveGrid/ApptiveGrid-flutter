@@ -10,14 +10,10 @@ class UriFormWidget extends StatefulWidget {
   const UriFormWidget({
     super.key,
     required this.component,
-    this.enabled = true,
   });
 
   /// Component this Widget should reflect
   final FormComponent<UriDataEntity> component;
-
-  /// Flag whether the widget is enabled. Defaults to `true`
-  final bool enabled;
 
   @override
   State<UriFormWidget> createState() => _UriFormWidgetState();
@@ -75,7 +71,7 @@ class _UriFormWidgetState extends State<UriFormWidget>
       minLines: 1,
       maxLines: 1,
       decoration: widget.component.baseDecoration,
-      enabled: widget.enabled,
+      enabled: widget.component.enabled,
     );
   }
 }
