@@ -472,7 +472,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
   /// Submits the [currentData] if not already submitting
   Future<void> submitForm() async {
     final link = _formData?.links[ApptiveLinkType.submit];
-    if (link != null ) {
+    if (link != null) {
       setState(() {
         _submitting = true;
       });
