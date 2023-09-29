@@ -99,12 +99,6 @@ class FormDataWidget extends StatefulWidget {
 class _FormDataWidgetState extends State<FormDataWidget> {
   late final _pageController = PageController();
 
-  late final List<GlobalKey<FormState>> _pageKeys = widget
-          .data.properties?.pageIds
-          .map((_) => GlobalKey<FormState>())
-          .toList() ??
-      [];
-
   @override
   void dispose() {
     _pageController.dispose();
@@ -120,7 +114,7 @@ class _FormDataWidgetState extends State<FormDataWidget> {
         physics: const NeverScrollableScrollPhysics(),
         children: pages.map(
           (pageId) {
-            final key = _pageKeys[pageId.indexOf(pageId)];
+            final key = GlobalKey<FormState>(debugLabel: pageId);
             return FormPage(
               pageId: pageId,
               data: widget.data,
@@ -160,10 +154,11 @@ class _FormDataWidgetState extends State<FormDataWidget> {
         ).toList(),
       );
     } else {
+      final key = GlobalKey<FormState>(debugLabel: pages?.first);
       return FormPage(
         pageId: pages?.firstOrNull,
         data: widget.data,
-        formKey: _pageKeys.first,
+        formKey: key,
         isSubmitting: widget.isSubmitting,
         padding: widget.padding,
         titlePadding: widget.titlePadding,
@@ -179,7 +174,7 @@ class _FormDataWidgetState extends State<FormDataWidget> {
         progress: widget.progress,
         scrollController: widget.scrollController,
         submitForm: () {
-          if (_pageKeys.first.currentState!.validate()) {
+          if (key.currentState!.validate()) {
             widget.submitForm();
           }
         },
