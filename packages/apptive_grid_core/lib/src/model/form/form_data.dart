@@ -29,11 +29,6 @@ class FormData {
             ?.map((json) => GridField.fromJson(json))
             .toList() ??
         [];
-    final components = (json['components'] as List?)
-        ?.map<FormComponent>(
-          (e) => FormComponent.fromJson(e, fields),
-        )
-        .toList();
     final links = linkMapFromJson(json['_links']);
     final attachmentActions = json['attachmentActions'] != null
         ? Map.fromEntries(
@@ -61,6 +56,15 @@ class FormData {
         }
       }
     }
+    final components = (json['components'] as List?)
+        ?.map<FormComponent>(
+          (e) => FormComponent.fromJson(
+            e,
+            fields: fields,
+            additionalProperties: fieldProperties,
+          ),
+        )
+        .toList();
     return FormData(
       id: id,
       name: name,
