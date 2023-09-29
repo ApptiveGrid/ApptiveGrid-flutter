@@ -515,6 +515,7 @@ class FormPage extends StatelessWidget {
         controller: scrollController,
         itemCount: indexOffset +
             (_components?.length ?? 0) +
+            (data.properties?.blocks?.length ?? 0) +
             (submitLink != null ? 1 : 0),
         itemBuilder: (context, index) {
           // Title
@@ -544,11 +545,45 @@ class FormPage extends StatelessWidget {
                 ),
               );
             }
-          } else if (index < (_components?.length ?? 0) + indexOffset) {
+          } else if (index <
+              (_components?.length ?? 0) +
+                  (data.properties?.blocks?.length ?? 0) +
+                  indexOffset) {
             final componentIndex = index - indexOffset;
-            final component = _components![componentIndex];
-            final properties = _fieldProperties
-                .firstWhereOrNull((e) => e.fieldId == component.field.id);
+
+            final FormComponent component;
+            final FormFieldProperties? properties;
+
+            if (data.properties?.blocks?.isNotEmpty == true) {
+              final block = data.properties?.blocks?.firstWhereOrNull(
+                (element) =>
+                    element.pageId == pageId &&
+                    element.fieldIndex == componentIndex,
+              );
+
+              if (block != null) {
+                return Padding(
+                  padding: textBlockPadding ?? padding,
+                  child: Text(
+                    block.text,
+                    style:
+                        textBlockStyle ?? Theme.of(context).textTheme.bodyLarge,
+                  ),
+                );
+              }
+
+              properties = _fieldProperties.firstWhere(
+                (element) => element.fieldIndex == componentIndex,
+              );
+              component = _components!.firstWhere(
+                (element) => element.fieldId == properties!.fieldId,
+              );
+            } else {
+              component = _components![componentIndex];
+              properties = _fieldProperties
+                  .firstWhereOrNull((e) => e.fieldId == component.field.id);
+            }
+
             if (properties?.defaultValue?.value != null) {
               component.data.value = properties?.defaultValue?.value;
             }
