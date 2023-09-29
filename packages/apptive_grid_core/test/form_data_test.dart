@@ -144,6 +144,16 @@ void main() {
       'pageIds': [
         pageId,
       ],
+      'blocks': [
+        {
+          'id': 'id',
+          'pageId': pageId,
+          'fieldIndex': 5,
+          'text': 'text',
+          'type': 'type',
+          'style': 'style',
+        },
+      ],
     },
     'fieldProperties': {
       '4zc4l4c5coyi7qh6q1ozrg54u': {
@@ -404,6 +414,16 @@ void main() {
             buttonTitle: additionalAnswerButtonTitle,
           ),
           pageIds: [pageId],
+          blocks: [
+            FormBlock(
+              id: 'id',
+              pageId: pageId,
+              fieldIndex: 5,
+              text: 'text',
+              type: 'type',
+              style: 'style',
+            ),
+          ],
         ),
       );
     });
@@ -885,6 +905,7 @@ void main() {
           true,
           action,
           pageIds,
+          null,
         ),
       );
     });
@@ -901,7 +922,7 @@ void main() {
       expect(
         properties.toString(),
         equals(
-          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true, afterSubmitAction: null, pageIds: [$pageId])',
+          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true, afterSubmitAction: null, pageIds: [$pageId], blocks: null)',
         ),
       );
     });
