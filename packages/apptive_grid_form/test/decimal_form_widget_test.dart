@@ -121,6 +121,7 @@ void main() {
             data: DecimalDataEntity(47.11),
             field: field,
             required: true,
+            enabled: false,
           ),
         ],
         links: {ApptiveLinkType.submit: action},

@@ -1623,6 +1623,7 @@ void main() {
                   const Geolocation(latitude: 47, longitude: 11),
                 ),
                 field: field,
+                enabled: false,
               ),
             ],
             fieldProperties: [

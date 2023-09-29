@@ -19,6 +19,7 @@ void main() {
             data: EmailDataEntity(),
             field: field,
             required: required,
+            enabled: enabled,
           ),
         ],
         fieldProperties: [

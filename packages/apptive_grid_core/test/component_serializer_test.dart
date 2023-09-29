@@ -19,7 +19,7 @@ void main() {
       );
 
       expect(
-        FormComponent.fromJson(component.toJson(), [component.field]),
+        FormComponent.fromJson(component.toJson(), fields: [component.field]),
         equals(component),
       );
     });
@@ -41,7 +41,7 @@ void main() {
       );
 
       expect(
-        FormComponent.fromJson(component.toJson(), [component.field]),
+        FormComponent.fromJson(component.toJson(), fields: [component.field]),
         equals(component),
       );
     });
@@ -63,7 +63,7 @@ void main() {
       );
 
       expect(
-        FormComponent.fromJson(component.toJson(), [component.field]),
+        FormComponent.fromJson(component.toJson(), fields: [component.field]),
         equals(component),
       );
     });
@@ -79,7 +79,7 @@ void main() {
       );
 
       expect(
-        FormComponent.fromJson(component.toJson(), [component.field]),
+        FormComponent.fromJson(component.toJson(), fields: [component.field]),
         equals(component),
       );
     });
@@ -99,7 +99,7 @@ void main() {
       );
 
       expect(
-        FormComponent.fromJson(component.toJson(), [component.field]),
+        FormComponent.fromJson(component.toJson(), fields: [component.field]),
         equals(component),
       );
     });
@@ -119,7 +119,7 @@ void main() {
       );
 
       expect(
-        FormComponent.fromJson(component.toJson(), [component.field]),
+        FormComponent.fromJson(component.toJson(), fields: [component.field]),
         equals(component),
       );
     });
@@ -148,7 +148,7 @@ void main() {
         'type': 'selectBox',
       };
 
-      final jsonComponent = FormComponent.fromJson(json, [field]);
+      final jsonComponent = FormComponent.fromJson(json, fields: [field]);
       final component = FormComponent<EnumDataEntity>(
         field: const GridField(
           id: id,
@@ -167,7 +167,7 @@ void main() {
       expect(
         FormComponent.fromJson(
           jsonComponent.toJson(),
-          [field],
+          fields: [field],
         ),
         component,
       );
@@ -199,7 +199,7 @@ void main() {
         'type': 'selectBox',
       };
 
-      final jsonComponent = FormComponent.fromJson(json, [field]);
+      final jsonComponent = FormComponent.fromJson(json, fields: [field]);
       final component = FormComponent<EnumCollectionDataEntity>(
         field: const GridField(
           id: id,
@@ -218,7 +218,7 @@ void main() {
       expect(
         FormComponent.fromJson(
           jsonComponent.toJson(),
-          [field],
+          fields: [field],
         ),
         component,
       );
@@ -243,7 +243,7 @@ void main() {
       );
 
       expect(
-        FormComponent.fromJson(component.toJson(), [component.field]),
+        FormComponent.fromJson(component.toJson(), fields: [component.field]),
         equals(component),
       );
     });
@@ -267,7 +267,7 @@ void main() {
       );
 
       expect(
-        FormComponent.fromJson(component.toJson(), [component.field]),
+        FormComponent.fromJson(component.toJson(), fields: [component.field]),
         equals(component),
       );
     });
@@ -297,7 +297,7 @@ void main() {
       );
 
       expect(
-        FormComponent.fromJson(component.toJson(), [component.field]),
+        FormComponent.fromJson(component.toJson(), fields: [component.field]),
         equals(component),
       );
     });

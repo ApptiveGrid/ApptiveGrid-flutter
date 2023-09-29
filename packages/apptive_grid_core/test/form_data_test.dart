@@ -408,7 +408,7 @@ void main() {
       );
     });
     test('Successful minimal response', () {
-      final formData = FormData.fromJson(mininalResponse);
+      final formData = FormData.fromJson(minimalResponse);
 
       expect(formData.name, equals(null));
       expect(formData.title, equals(null));

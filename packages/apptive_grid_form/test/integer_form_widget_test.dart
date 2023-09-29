@@ -78,6 +78,7 @@ void main() {
             data: IntegerDataEntity(4711),
             field: field,
             required: true,
+            enabled: false,
           ),
         ],
         fieldProperties: [

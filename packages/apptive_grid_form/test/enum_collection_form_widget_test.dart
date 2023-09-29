@@ -96,12 +96,12 @@ void main() {
             },
           ),
           field: field,
+          enabled: false,
         );
 
         final target = TestApp(
           child: EnumCollectionFormWidget(
             component: component,
-            enabled: false,
           ),
         );
 
@@ -325,12 +325,12 @@ void main() {
           ),
           field: field,
           type: 'multiSelectList',
+          enabled: false,
         );
 
         final target = TestApp(
           child: EnumCollectionFormWidget(
             component: component,
-            enabled: false,
           ),
         );
 

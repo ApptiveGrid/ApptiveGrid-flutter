@@ -273,8 +273,13 @@ void main() {
           child: Form(
             key: formKey,
             child: CrossReferenceFormWidget(
-              component: component,
-              enabled: false,
+              component: FormComponent<CrossReferenceDataEntity>(
+                property: 'Property',
+                data: CrossReferenceDataEntity(gridUri: gridUri),
+                field: field,
+                required: true,
+                enabled: false,
+              ),
             ),
           ),
         ),

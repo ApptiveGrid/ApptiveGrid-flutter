@@ -141,6 +141,7 @@ void main() {
             data: DateDataEntity(DateTime.now()),
             field: field,
             required: true,
+            enabled: false,
           ),
         ],
         links: {ApptiveLinkType.submit: action},

@@ -383,6 +383,7 @@ void main() {
                 data: SignatureDataEntity(),
                 field: field,
                 required: true,
+                enabled: false,
               ),
             ],
             fieldProperties: [

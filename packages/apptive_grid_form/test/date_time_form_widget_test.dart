@@ -280,6 +280,7 @@ void main() {
             data: DateTimeDataEntity(DateTime.now()),
             field: field,
             required: true,
+            enabled: false,
           ),
         ],
         fieldProperties: [

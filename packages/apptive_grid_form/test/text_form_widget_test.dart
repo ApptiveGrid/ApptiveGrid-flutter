@@ -145,6 +145,7 @@ string''';
             data: StringDataEntity('Value'),
             field: field,
             required: true,
+            enabled: false,
           ),
         ],
         fieldProperties: [

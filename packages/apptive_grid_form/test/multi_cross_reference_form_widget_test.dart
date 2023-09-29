@@ -444,6 +444,7 @@ void main() {
             ),
             field: field,
             required: true,
+            enabled: false,
           ),
         ],
         fieldProperties: [

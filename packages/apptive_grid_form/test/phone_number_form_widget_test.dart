@@ -197,6 +197,7 @@ void main() {
             data: PhoneNumberDataEntity(),
             field: field,
             required: true,
+            enabled: false,
           ),
         ],
         fieldProperties: [
