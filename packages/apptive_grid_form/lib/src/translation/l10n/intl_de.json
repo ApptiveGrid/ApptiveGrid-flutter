@@ -25,5 +25,7 @@
     "clear": "Korrigieren",
     "save": "Speichern",
     "signHere": "Hier unterschreiben",
-    "missingCountryCode": "Eine Ländervorwahl wird erwartet (z.B. +49)"
+    "missingCountryCode": "Eine Ländervorwahl wird erwartet (z.B. +49)",
+    "pageNext": "Weiter",
+    "pageBack": "Zurück"
 }

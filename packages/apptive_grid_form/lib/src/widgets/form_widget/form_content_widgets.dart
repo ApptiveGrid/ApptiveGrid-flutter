@@ -587,13 +587,13 @@ class FormPage extends StatelessWidget {
                           _canPageBack
                               ? ElevatedButton(
                                   onPressed: () => pageBack?.call(),
-                                  child: Text('pageBack'),
+                                  child: Text(localization.pageBack),
                                 )
                               : const SizedBox(),
                           if (_canPageForward)
                             ElevatedButton(
                               onPressed: () => pageForward?.call(),
-                              child: Text('nextPage'),
+                              child: Text(localization.pageNext),
                             ),
                           if (!hideButton && !_canPageForward)
                             ElevatedButton(
