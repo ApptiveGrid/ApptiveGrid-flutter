@@ -154,7 +154,7 @@ class _FormDataWidgetState extends State<FormDataWidget> {
         ).toList(),
       );
     } else {
-      final key = GlobalKey<FormState>(debugLabel: pages?.first);
+      final key = GlobalKey<FormState>();
       return FormPage(
         pageId: pages?.firstOrNull,
         data: widget.data,
@@ -457,19 +457,23 @@ class FormPage extends StatelessWidget {
   /// Optional ScrollController for the Form
   final ScrollController? scrollController;
 
-  List<FormFieldProperties> get _fieldProperties => data.fieldProperties
-      .where((properties) => properties.pageId == pageId)
-      .toList();
+  List<FormFieldProperties> get _fieldProperties => pageId != null
+      ? data.fieldProperties
+          .where((properties) => properties.pageId == pageId)
+          .toList()
+      : data.fieldProperties;
 
-  List<FormComponent>? get _components => data.components
-      ?.where(
-        (component) =>
-            _fieldProperties.firstWhereOrNull(
-              (properties) => properties.fieldId == component.fieldId,
-            ) !=
-            null,
-      )
-      .toList();
+  List<FormComponent>? get _components => pageId != null
+      ? data.components
+          ?.where(
+            (component) =>
+                _fieldProperties.firstWhereOrNull(
+                  (properties) => properties.fieldId == component.fieldId,
+                ) !=
+                null,
+          )
+          .toList()
+      : data.components;
 
   bool get _canPageBack =>
       data.properties?.pageIds.firstOrNull != pageId &&
