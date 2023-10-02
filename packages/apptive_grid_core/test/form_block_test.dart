@@ -18,7 +18,7 @@ void main() {
         FormTextBlock(
           id: 'id',
           pageId: 'pageId',
-          fieldIndex: 0,
+          positionOnPage: 0,
           text: 'text',
           type: 'type',
           style: 'style',
@@ -29,7 +29,7 @@ void main() {
       final block = FormTextBlock(
         id: 'id',
         pageId: 'pageId',
-        fieldIndex: 0,
+        positionOnPage: 0,
         text: 'text',
         type: 'type',
         style: 'style',
@@ -52,7 +52,7 @@ void main() {
     final a = FormTextBlock(
       id: 'id',
       pageId: 'pageId',
-      fieldIndex: 0,
+      positionOnPage: 0,
       text: 'text',
       type: 'type',
       style: 'style',
@@ -61,7 +61,7 @@ void main() {
     final b = FormTextBlock(
       id: 'id',
       pageId: 'pageId',
-      fieldIndex: 0,
+      positionOnPage: 0,
       text: 'text',
       type: 'type',
       style: 'style',
@@ -70,7 +70,7 @@ void main() {
     final c = FormTextBlock(
       id: 'id2',
       pageId: 'pageId',
-      fieldIndex: 0,
+      positionOnPage: 0,
       text: 'text',
       type: 'type',
       style: 'style',
@@ -84,7 +84,7 @@ void main() {
     final formBlock = FormTextBlock(
       id: 'id',
       pageId: 'pageId',
-      fieldIndex: 0,
+      positionOnPage: 0,
       text: 'text',
       type: 'type',
       style: 'style',
@@ -92,14 +92,14 @@ void main() {
 
     expect(
       formBlock.toString(),
-      'FormTextBlock(id: id, pageId: pageId, fieldIndex: 0, text: text, type: type, style: style)',
+      'FormTextBlock(id: id, pageId: pageId, positionOnPage: 0, text: text, type: type, style: style)',
     );
   });
   test('Hashcode', () async {
     final formBlock = FormTextBlock(
       id: 'id',
       pageId: 'pageId',
-      fieldIndex: 0,
+      positionOnPage: 0,
       text: 'text',
       type: 'type',
       style: 'style',
@@ -109,7 +109,7 @@ void main() {
       Object.hash(
         formBlock.id,
         formBlock.pageId,
-        formBlock.fieldIndex,
+        formBlock.positionOnPage,
         formBlock.text,
         formBlock.type,
         formBlock.style,

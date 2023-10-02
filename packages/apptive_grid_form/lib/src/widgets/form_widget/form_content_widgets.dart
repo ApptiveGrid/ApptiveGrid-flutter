@@ -565,7 +565,7 @@ class FormPage extends StatelessWidget {
               final block = _blocks?.firstWhereOrNull(
                 (element) =>
                     element.pageId == pageId &&
-                    element.fieldIndex == componentIndex,
+                    element.positionOnPage == componentIndex,
               );
 
               if (block != null) {
@@ -580,7 +580,7 @@ class FormPage extends StatelessWidget {
               }
 
               properties = _fieldProperties.firstWhere(
-                (element) => element.fieldIndex == componentIndex,
+                (element) => element.positionOnPage == componentIndex,
               );
               component = _components!.firstWhere(
                 (element) => element.fieldId == properties!.fieldId,

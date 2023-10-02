@@ -4,7 +4,7 @@ class FormTextBlock {
   factory FormTextBlock.fromJson(dynamic json) => FormTextBlock(
         id: json['id'],
         text: json['text'],
-        fieldIndex: json['fieldIndex'],
+        positionOnPage: json['fieldIndex'],
         type: json['type'],
         style: json['style'],
         pageId: json['pageId'],
@@ -14,7 +14,7 @@ class FormTextBlock {
   FormTextBlock({
     required this.id,
     required this.pageId,
-    required this.fieldIndex,
+    required this.positionOnPage,
     required this.text,
     required this.type,
     required this.style,
@@ -27,7 +27,7 @@ class FormTextBlock {
   final String pageId;
 
   /// Position of the block in the page
-  final int fieldIndex;
+  final int positionOnPage;
 
   /// Text of the block
   final String text;
@@ -42,7 +42,7 @@ class FormTextBlock {
   Map<String, dynamic> toJson() => {
         'id': id,
         'pageId': pageId,
-        'fieldIndex': fieldIndex,
+        'fieldIndex': positionOnPage,
         'text': text,
         'type': type,
         'style': style,
@@ -52,7 +52,7 @@ class FormTextBlock {
   int get hashCode => Object.hash(
         id,
         pageId,
-        fieldIndex,
+        positionOnPage,
         text,
         type,
         style,
@@ -65,7 +65,7 @@ class FormTextBlock {
     return other is FormTextBlock &&
         other.id == id &&
         other.pageId == pageId &&
-        other.fieldIndex == fieldIndex &&
+        other.positionOnPage == positionOnPage &&
         other.text == text &&
         other.type == type &&
         other.style == style;
@@ -73,6 +73,6 @@ class FormTextBlock {
 
   @override
   String toString() {
-    return 'FormTextBlock(id: $id, pageId: $pageId, fieldIndex: $fieldIndex, text: $text, type: $type, style: $style)';
+    return 'FormTextBlock(id: $id, pageId: $pageId, positionOnPage: $positionOnPage, text: $text, type: $type, style: $style)';
   }
 }

@@ -2219,7 +2219,7 @@ void main() {
             FormFieldProperties(
               fieldId: field.id,
               defaultValue: StringDataEntity(),
-              fieldIndex: 1,
+              positionOnPage: 1,
               pageId: 'pageId',
             ),
           ],
@@ -2229,7 +2229,7 @@ void main() {
               FormTextBlock(
                 id: 'id0',
                 pageId: 'pageId',
-                fieldIndex: 0,
+                positionOnPage: 0,
                 text: 'block1',
                 type: 'type',
                 style: 'style',
@@ -2237,7 +2237,7 @@ void main() {
               FormTextBlock(
                 id: 'id1',
                 pageId: 'pageId',
-                fieldIndex: 2,
+                positionOnPage: 2,
                 text: 'block2',
                 type: 'type',
                 style: 'style',
@@ -2290,13 +2290,13 @@ void main() {
             FormFieldProperties(
               fieldId: field.id,
               defaultValue: StringDataEntity(),
-              fieldIndex: 1,
+              positionOnPage: 1,
               pageId: 'pageId0',
             ),
             FormFieldProperties(
               fieldId: field2.id,
               defaultValue: StringDataEntity(),
-              fieldIndex: 1,
+              positionOnPage: 1,
               pageId: 'pageId1',
             ),
           ],
@@ -2306,7 +2306,7 @@ void main() {
               FormTextBlock(
                 id: 'id0',
                 pageId: 'pageId0',
-                fieldIndex: 0,
+                positionOnPage: 0,
                 text: 'block1',
                 type: 'type',
                 style: 'style',
@@ -2314,7 +2314,7 @@ void main() {
               FormTextBlock(
                 id: 'id1',
                 pageId: 'pageId0',
-                fieldIndex: 2,
+                positionOnPage: 2,
                 text: 'block2',
                 type: 'type',
                 style: 'style',
@@ -2322,7 +2322,7 @@ void main() {
               FormTextBlock(
                 id: 'id2',
                 pageId: 'pageId1',
-                fieldIndex: 0,
+                positionOnPage: 0,
                 text: 'block3',
                 type: 'type',
                 style: 'style',
@@ -2330,7 +2330,7 @@ void main() {
               FormTextBlock(
                 id: 'id3',
                 pageId: 'pageId1',
-                fieldIndex: 2,
+                positionOnPage: 2,
                 text: 'block4',
                 type: 'type',
                 style: 'style',

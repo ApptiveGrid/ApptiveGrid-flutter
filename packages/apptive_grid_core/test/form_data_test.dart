@@ -418,7 +418,7 @@ void main() {
             FormTextBlock(
               id: 'id',
               pageId: pageId,
-              fieldIndex: 5,
+              positionOnPage: 5,
               text: 'text',
               type: 'type',
               style: 'style',
@@ -988,7 +988,7 @@ void main() {
       final a = FormFieldProperties(
         fieldId: 'field1',
         pageId: pageId,
-        fieldIndex: 0,
+        positionOnPage: 0,
         defaultValue: BooleanDataEntity(true),
         disabled: false,
         hidden: false,
@@ -996,7 +996,7 @@ void main() {
       final b = FormFieldProperties(
         fieldId: 'field1',
         pageId: pageId,
-        fieldIndex: 0,
+        positionOnPage: 0,
         defaultValue: BooleanDataEntity(true),
         disabled: false,
         hidden: false,
@@ -1004,7 +1004,7 @@ void main() {
       final c = FormFieldProperties(
         fieldId: 'field2',
         pageId: pageId,
-        fieldIndex: 0,
+        positionOnPage: 0,
         defaultValue: BooleanDataEntity(true),
         disabled: false,
         hidden: false,
@@ -1017,7 +1017,7 @@ void main() {
       final properties = FormFieldProperties(
         fieldId: 'field1',
         pageId: pageId,
-        fieldIndex: 0,
+        positionOnPage: 0,
         defaultValue: BooleanDataEntity(true),
         disabled: false,
         hidden: false,
@@ -1040,7 +1040,7 @@ void main() {
       final properties = FormFieldProperties(
         fieldId: 'field1',
         pageId: pageId,
-        fieldIndex: 0,
+        positionOnPage: 0,
         defaultValue: BooleanDataEntity(true),
         disabled: false,
         hidden: false,
@@ -1052,7 +1052,7 @@ void main() {
           'FormFieldProperties('
           'fieldId: field1, '
           'pageId: $pageId, '
-          'fieldIndex: 0, '
+          'positionOnPage: 0, '
           'defaultValue: true, '
           'hidden: false, '
           'disabled: false)',
