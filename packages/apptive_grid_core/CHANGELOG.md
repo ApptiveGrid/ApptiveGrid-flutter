@@ -1,3 +1,9 @@
+## 1.8.0
+
+ - **FEAT**: Add support for text blocks in forms (#120).
+ - **FEAT**: Add defaultValue, hidden and disabled property to form fields (#118).
+ - **FEAT**: Add formula type (#117).
+
 ## 1.7.0
 
  - **FIX**: Move check for Authentication to only check if necessary (#114).

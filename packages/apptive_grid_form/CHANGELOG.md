@@ -1,3 +1,10 @@
+## 1.7.0
+
+ - **FEAT**: Add support for text blocks in forms (#120).
+ - **FEAT**: Add support for paged forms (#119).
+ - **FEAT**: Add defaultValue, hidden and disabled property to form fields (#118).
+ - **FEAT**: Add formula type (#117).
+
 ## 1.6.1
 
  - **FIX**: Move translations out of the submit method (#116).
