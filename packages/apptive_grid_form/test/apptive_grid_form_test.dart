@@ -2226,7 +2226,7 @@ void main() {
           properties: FormDataProperties(
             pageIds: ['pageId'],
             blocks: [
-              FormBlock(
+              FormTextBlock(
                 id: 'id0',
                 pageId: 'pageId',
                 fieldIndex: 0,
@@ -2234,7 +2234,7 @@ void main() {
                 type: 'type',
                 style: 'style',
               ),
-              FormBlock(
+              FormTextBlock(
                 id: 'id1',
                 pageId: 'pageId',
                 fieldIndex: 2,
@@ -2303,7 +2303,7 @@ void main() {
           properties: FormDataProperties(
             pageIds: ['pageId0', 'pageId1'],
             blocks: [
-              FormBlock(
+              FormTextBlock(
                 id: 'id0',
                 pageId: 'pageId0',
                 fieldIndex: 0,
@@ -2311,7 +2311,7 @@ void main() {
                 type: 'type',
                 style: 'style',
               ),
-              FormBlock(
+              FormTextBlock(
                 id: 'id1',
                 pageId: 'pageId0',
                 fieldIndex: 2,
@@ -2319,7 +2319,7 @@ void main() {
                 type: 'type',
                 style: 'style',
               ),
-              FormBlock(
+              FormTextBlock(
                 id: 'id2',
                 pageId: 'pageId1',
                 fieldIndex: 0,
@@ -2327,7 +2327,7 @@ void main() {
                 type: 'type',
                 style: 'style',
               ),
-              FormBlock(
+              FormTextBlock(
                 id: 'id3',
                 pageId: 'pageId1',
                 fieldIndex: 2,

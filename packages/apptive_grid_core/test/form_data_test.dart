@@ -415,7 +415,7 @@ void main() {
           ),
           pageIds: [pageId],
           blocks: [
-            FormBlock(
+            FormTextBlock(
               id: 'id',
               pageId: pageId,
               fieldIndex: 5,

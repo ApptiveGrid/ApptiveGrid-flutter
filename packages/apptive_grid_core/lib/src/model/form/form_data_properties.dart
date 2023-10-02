@@ -27,7 +27,7 @@ class FormDataProperties {
             : null,
         pageIds: json['pageIds']?.cast<String>() ?? [],
         blocks: (json['blocks'] as List?)
-            ?.map((e) => FormBlock.fromJson(e))
+            ?.map((e) => FormTextBlock.fromJson(e))
             .toList(),
       );
 
@@ -50,7 +50,7 @@ class FormDataProperties {
   final List<String> pageIds;
 
   /// List of the freeform blocks in the form
-  final List<FormBlock>? blocks;
+  final List<FormTextBlock>? blocks;
 
   /// Serializes [FormDataProperties] to json
   Map<String, dynamic> toJson() => {

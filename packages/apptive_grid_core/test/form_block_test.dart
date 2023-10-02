@@ -14,8 +14,8 @@ void main() {
       };
 
       expect(
-        FormBlock.fromJson(json),
-        FormBlock(
+        FormTextBlock.fromJson(json),
+        FormTextBlock(
           id: 'id',
           pageId: 'pageId',
           fieldIndex: 0,
@@ -26,7 +26,7 @@ void main() {
       );
     });
     test('To json', () async {
-      final block = FormBlock(
+      final block = FormTextBlock(
         id: 'id',
         pageId: 'pageId',
         fieldIndex: 0,
@@ -49,7 +49,7 @@ void main() {
     });
   });
   test('Equality', () async {
-    final a = FormBlock(
+    final a = FormTextBlock(
       id: 'id',
       pageId: 'pageId',
       fieldIndex: 0,
@@ -58,7 +58,7 @@ void main() {
       style: 'style',
     );
 
-    final b = FormBlock(
+    final b = FormTextBlock(
       id: 'id',
       pageId: 'pageId',
       fieldIndex: 0,
@@ -67,7 +67,7 @@ void main() {
       style: 'style',
     );
 
-    final c = FormBlock(
+    final c = FormTextBlock(
       id: 'id2',
       pageId: 'pageId',
       fieldIndex: 0,
@@ -81,7 +81,7 @@ void main() {
     expect(b, isNot(equals(c)));
   });
   test('toString', () async {
-    final formBlock = FormBlock(
+    final formBlock = FormTextBlock(
       id: 'id',
       pageId: 'pageId',
       fieldIndex: 0,
@@ -92,11 +92,11 @@ void main() {
 
     expect(
       formBlock.toString(),
-      'FormBlock(id: id, pageId: pageId, fieldIndex: 0, text: text, type: type, style: style)',
+      'FormTextBlock(id: id, pageId: pageId, fieldIndex: 0, text: text, type: type, style: style)',
     );
   });
   test('Hashcode', () async {
-    final formBlock = FormBlock(
+    final formBlock = FormTextBlock(
       id: 'id',
       pageId: 'pageId',
       fieldIndex: 0,

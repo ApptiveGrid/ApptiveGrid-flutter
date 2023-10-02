@@ -1,7 +1,7 @@
-/// A freeform block inside of a form
-class FormBlock {
-  /// Deserializes [json] into a FormBlock Object
-  factory FormBlock.fromJson(dynamic json) => FormBlock(
+/// A freeform text block inside of a form
+class FormTextBlock {
+  /// Deserializes [json] into a FormTextBlock Object
+  factory FormTextBlock.fromJson(dynamic json) => FormTextBlock(
         id: json['id'],
         text: json['text'],
         fieldIndex: json['fieldIndex'],
@@ -10,8 +10,8 @@ class FormBlock {
         pageId: json['pageId'],
       );
 
-  /// Creates a FormBlock Object
-  FormBlock({
+  /// Creates a FormTextBlock Object
+  FormTextBlock({
     required this.id,
     required this.pageId,
     required this.fieldIndex,
@@ -38,7 +38,7 @@ class FormBlock {
   /// Style of the block
   final String style;
 
-  /// Serializes the FormBlock to a json map
+  /// Serializes the FormTextBlock to a json map
   Map<String, dynamic> toJson() => {
         'id': id,
         'pageId': pageId,
@@ -62,7 +62,7 @@ class FormBlock {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is FormBlock &&
+    return other is FormTextBlock &&
         other.id == id &&
         other.pageId == pageId &&
         other.fieldIndex == fieldIndex &&
@@ -73,6 +73,6 @@ class FormBlock {
 
   @override
   String toString() {
-    return 'FormBlock(id: $id, pageId: $pageId, fieldIndex: $fieldIndex, text: $text, type: $type, style: $style)';
+    return 'FormTextBlock(id: $id, pageId: $pageId, fieldIndex: $fieldIndex, text: $text, type: $type, style: $style)';
   }
 }

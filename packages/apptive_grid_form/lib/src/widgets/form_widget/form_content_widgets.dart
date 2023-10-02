@@ -478,7 +478,7 @@ class FormPage extends StatelessWidget {
   /// Optional ScrollController for the Form
   final ScrollController? scrollController;
 
-  List<FormBlock>? get _blocks => pageId != null
+  List<FormTextBlock>? get _blocks => pageId != null
       ? data.properties?.blocks
           ?.where((block) => block.pageId == pageId)
           .toList()
