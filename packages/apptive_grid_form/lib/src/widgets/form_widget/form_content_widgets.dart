@@ -55,7 +55,7 @@ class FormDataWidget extends StatefulWidget {
   /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
   final EdgeInsetsGeometry padding;
 
-  /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
+  /// Style for the Form Title. If no style is provided [headlineSmall] of the [TextTheme] will be used
   final TextStyle? titleStyle;
 
   /// Padding for the title. If no Padding is provided the [padding] is used
@@ -64,7 +64,7 @@ class FormDataWidget extends StatefulWidget {
   /// Flag to hide the form title, default is false
   final bool hideTitle;
 
-  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  /// Style for the Form Description. If no style is provided [bodyLarge] of the [TextTheme] will be used
   final TextStyle? descriptionStyle;
 
   /// Padding for the description. If no Padding is provided the [padding] is used
@@ -73,7 +73,7 @@ class FormDataWidget extends StatefulWidget {
   /// Flag to hide the form description, default is false
   final bool hideDescription;
 
-  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  /// Style for the Form Description. If no style is provided [bodyLarge] of the [TextTheme] will be used
   final TextStyle? textBlockStyle;
 
   /// Padding for the description. If no Padding is provided the [padding] is used
@@ -426,7 +426,7 @@ class FormPage extends StatelessWidget {
   /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
   final EdgeInsetsGeometry padding;
 
-  /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
+  /// Style for the Form Title. If no style is provided [headlineSmall] of the [TextTheme] will be used
   final TextStyle? titleStyle;
 
   /// Padding for the title. If no Padding is provided the [padding] is used
@@ -435,7 +435,7 @@ class FormPage extends StatelessWidget {
   /// Flag to hide the form title, default is false
   final bool hideTitle;
 
-  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  /// Style for the Form Description. If no style is provided [bodyLarge] of the [TextTheme] will be used
   final TextStyle? descriptionStyle;
 
   /// Padding for the description. If no Padding is provided the [padding] is used
@@ -444,7 +444,7 @@ class FormPage extends StatelessWidget {
   /// Flag to hide the form description, default is false
   final bool hideDescription;
 
-  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  /// Style for the Form Description. If no style is provided [bodyLarge] of the [TextTheme] will be used
   final TextStyle? textBlockStyle;
 
   /// Padding for the description. If no Padding is provided the [padding] is used
