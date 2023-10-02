@@ -2233,7 +2233,7 @@ void main() {
                 positionOnPage: 0,
                 text: 'block1',
                 type: 'type',
-                style: 'style',
+                style: FormTextBlockStyle.paragraph,
               ),
               FormTextBlock(
                 id: 'id1',
@@ -2241,7 +2241,7 @@ void main() {
                 positionOnPage: 2,
                 text: 'block2',
                 type: 'type',
-                style: 'style',
+                style: FormTextBlockStyle.paragraph,
               ),
             ],
           ),
@@ -2310,7 +2310,7 @@ void main() {
                 positionOnPage: 0,
                 text: 'block1',
                 type: 'type',
-                style: 'style',
+                style: FormTextBlockStyle.paragraph,
               ),
               FormTextBlock(
                 id: 'id1',
@@ -2318,7 +2318,7 @@ void main() {
                 positionOnPage: 2,
                 text: 'block2',
                 type: 'type',
-                style: 'style',
+                style: FormTextBlockStyle.paragraph,
               ),
               FormTextBlock(
                 id: 'id2',
@@ -2326,7 +2326,7 @@ void main() {
                 positionOnPage: 0,
                 text: 'block3',
                 type: 'type',
-                style: 'style',
+                style: FormTextBlockStyle.paragraph,
               ),
               FormTextBlock(
                 id: 'id3',
@@ -2334,7 +2334,7 @@ void main() {
                 positionOnPage: 2,
                 text: 'block4',
                 type: 'type',
-                style: 'style',
+                style: FormTextBlockStyle.paragraph,
               ),
             ],
           ),

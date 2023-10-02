@@ -1,3 +1,12 @@
+/// Styles of the text blocks in a form
+enum FormTextBlockStyle {
+  /// The block is styled like the header of the form
+  header,
+
+  /// The block is styled like the description of the form
+  paragraph;
+}
+
 /// A freeform text block inside of a form
 class FormTextBlock {
   /// Deserializes [json] into a FormTextBlock Object
@@ -6,7 +15,8 @@ class FormTextBlock {
         text: json['text'],
         positionOnPage: json['fieldIndex'],
         type: json['type'],
-        style: json['style'],
+        style: FormTextBlockStyle.values
+            .firstWhere((e) => e.name == json['style']),
         pageId: json['pageId'],
       );
 
@@ -38,9 +48,7 @@ class FormTextBlock {
   final String type;
 
   /// Style of the block
-  ///
-  /// This is currently not being used in the package. On the web frontend it is used to differentiate between different block styles (header and paragraph).
-  final String style;
+  final FormTextBlockStyle style;
 
   /// Serializes the FormTextBlock to a json map
   Map<String, dynamic> toJson() => {
@@ -49,7 +57,7 @@ class FormTextBlock {
         'fieldIndex': positionOnPage,
         'text': text,
         'type': type,
-        'style': style,
+        'style': style.name,
       };
 
   @override

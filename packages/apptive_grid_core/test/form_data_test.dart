@@ -421,7 +421,7 @@ void main() {
               positionOnPage: 5,
               text: 'text',
               type: 'type',
-              style: 'style',
+              style: FormTextBlockStyle.paragraph,
             ),
           ],
         ),

@@ -10,7 +10,7 @@ void main() {
         'fieldIndex': 0,
         'text': 'text',
         'type': 'type',
-        'style': 'style',
+        'style': 'paragraph',
       };
 
       expect(
@@ -21,7 +21,7 @@ void main() {
           positionOnPage: 0,
           text: 'text',
           type: 'type',
-          style: 'style',
+          style: FormTextBlockStyle.paragraph,
         ),
       );
     });
@@ -32,7 +32,7 @@ void main() {
         positionOnPage: 0,
         text: 'text',
         type: 'type',
-        style: 'style',
+        style: FormTextBlockStyle.paragraph,
       );
 
       expect(
@@ -43,7 +43,7 @@ void main() {
           'fieldIndex': 0,
           'text': 'text',
           'type': 'type',
-          'style': 'style',
+          'style': 'paragraph',
         },
       );
     });
@@ -55,7 +55,7 @@ void main() {
       positionOnPage: 0,
       text: 'text',
       type: 'type',
-      style: 'style',
+      style: FormTextBlockStyle.paragraph,
     );
 
     final b = FormTextBlock(
@@ -64,7 +64,7 @@ void main() {
       positionOnPage: 0,
       text: 'text',
       type: 'type',
-      style: 'style',
+      style: FormTextBlockStyle.paragraph,
     );
 
     final c = FormTextBlock(
@@ -73,7 +73,7 @@ void main() {
       positionOnPage: 0,
       text: 'text',
       type: 'type',
-      style: 'style',
+      style: FormTextBlockStyle.paragraph,
     );
 
     expect(a, equals(b));
@@ -87,12 +87,12 @@ void main() {
       positionOnPage: 0,
       text: 'text',
       type: 'type',
-      style: 'style',
+      style: FormTextBlockStyle.paragraph,
     );
 
     expect(
       formBlock.toString(),
-      'FormTextBlock(id: id, pageId: pageId, positionOnPage: 0, text: text, type: type, style: style)',
+      'FormTextBlock(id: id, pageId: pageId, positionOnPage: 0, text: text, type: type, style: FormTextBlockStyle.paragraph)',
     );
   });
   test('Hashcode', () async {
@@ -102,7 +102,7 @@ void main() {
       positionOnPage: 0,
       text: 'text',
       type: 'type',
-      style: 'style',
+      style: FormTextBlockStyle.paragraph,
     );
     expect(
       formBlock.hashCode,

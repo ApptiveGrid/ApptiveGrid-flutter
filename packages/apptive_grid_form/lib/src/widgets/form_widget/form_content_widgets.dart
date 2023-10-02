@@ -534,6 +534,10 @@ class FormPage extends StatelessWidget {
     final submitLink = data.links[ApptiveLinkType.submit];
     // Offset for title and description
     const indexOffset = 2;
+    final titleStyle =
+        this.titleStyle ?? Theme.of(context).textTheme.headlineSmall;
+    final descriptionStyle =
+        this.descriptionStyle ?? Theme.of(context).textTheme.bodyLarge;
     return Form(
       key: formKey,
       child: ListView.builder(
@@ -552,8 +556,7 @@ class FormPage extends StatelessWidget {
                 padding: titlePadding ?? padding,
                 child: Text(
                   data.title!,
-                  style:
-                      titleStyle ?? Theme.of(context).textTheme.headlineSmall,
+                  style: titleStyle,
                 ),
               );
             }
@@ -565,8 +568,7 @@ class FormPage extends StatelessWidget {
                 padding: descriptionPadding ?? padding,
                 child: Text(
                   data.description!,
-                  style:
-                      descriptionStyle ?? Theme.of(context).textTheme.bodyLarge,
+                  style: descriptionStyle,
                 ),
               );
             }
@@ -587,12 +589,17 @@ class FormPage extends StatelessWidget {
               );
 
               if (block != null) {
+                TextStyle? style = textBlockStyle;
+                if (style == null && block.style == FormTextBlockStyle.header) {
+                  style ??= titleStyle;
+                } else {
+                  style ??= descriptionStyle;
+                }
                 return Padding(
                   padding: textBlockPadding ?? padding,
                   child: Text(
                     block.text,
-                    style:
-                        textBlockStyle ?? Theme.of(context).textTheme.bodyLarge,
+                    style: style,
                   ),
                 );
               }
