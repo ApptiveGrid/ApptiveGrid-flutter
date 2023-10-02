@@ -151,7 +151,7 @@ void main() {
           'fieldIndex': 5,
           'text': 'text',
           'type': 'type',
-          'style': 'style',
+          'style': 'paragraph',
         },
       ],
     },
