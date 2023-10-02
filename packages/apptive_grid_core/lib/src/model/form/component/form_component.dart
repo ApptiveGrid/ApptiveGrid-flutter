@@ -92,8 +92,8 @@ class FormComponent<T extends DataEntity> {
   ///
   /// Throws an [ArgumentError] if not matching implementation is found.
   static FormComponent fromJson(
-    dynamic json, {
-    required List<GridField> fields,
+    dynamic json,
+    List<GridField> fields, {
     List<FormFieldProperties> additionalProperties = const [],
   }) {
     final id = json['fieldId'];
