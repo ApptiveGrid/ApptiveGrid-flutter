@@ -144,6 +144,16 @@ void main() {
       'pageIds': [
         pageId,
       ],
+      'blocks': [
+        {
+          'id': 'id',
+          'pageId': pageId,
+          'fieldIndex': 5,
+          'text': 'text',
+          'type': 'type',
+          'style': 'paragraph',
+        },
+      ],
     },
     'fieldProperties': {
       '4zc4l4c5coyi7qh6q1ozrg54u': {
@@ -404,6 +414,16 @@ void main() {
             buttonTitle: additionalAnswerButtonTitle,
           ),
           pageIds: [pageId],
+          blocks: [
+            FormTextBlock(
+              id: 'id',
+              pageId: pageId,
+              positionOnPage: 5,
+              text: 'text',
+              type: 'type',
+              style: FormTextBlockStyle.paragraph,
+            ),
+          ],
         ),
       );
     });
@@ -885,6 +905,7 @@ void main() {
           true,
           action,
           pageIds,
+          null,
         ),
       );
     });
@@ -901,7 +922,7 @@ void main() {
       expect(
         properties.toString(),
         equals(
-          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true, afterSubmitAction: null, pageIds: [$pageId])',
+          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true, afterSubmitAction: null, pageIds: [$pageId], blocks: null)',
         ),
       );
     });
@@ -967,7 +988,7 @@ void main() {
       final a = FormFieldProperties(
         fieldId: 'field1',
         pageId: pageId,
-        fieldIndex: 0,
+        positionOnPage: 0,
         defaultValue: BooleanDataEntity(true),
         disabled: false,
         hidden: false,
@@ -975,7 +996,7 @@ void main() {
       final b = FormFieldProperties(
         fieldId: 'field1',
         pageId: pageId,
-        fieldIndex: 0,
+        positionOnPage: 0,
         defaultValue: BooleanDataEntity(true),
         disabled: false,
         hidden: false,
@@ -983,7 +1004,7 @@ void main() {
       final c = FormFieldProperties(
         fieldId: 'field2',
         pageId: pageId,
-        fieldIndex: 0,
+        positionOnPage: 0,
         defaultValue: BooleanDataEntity(true),
         disabled: false,
         hidden: false,
@@ -996,7 +1017,7 @@ void main() {
       final properties = FormFieldProperties(
         fieldId: 'field1',
         pageId: pageId,
-        fieldIndex: 0,
+        positionOnPage: 0,
         defaultValue: BooleanDataEntity(true),
         disabled: false,
         hidden: false,
@@ -1019,7 +1040,7 @@ void main() {
       final properties = FormFieldProperties(
         fieldId: 'field1',
         pageId: pageId,
-        fieldIndex: 0,
+        positionOnPage: 0,
         defaultValue: BooleanDataEntity(true),
         disabled: false,
         hidden: false,
@@ -1031,7 +1052,7 @@ void main() {
           'FormFieldProperties('
           'fieldId: field1, '
           'pageId: $pageId, '
-          'fieldIndex: 0, '
+          'positionOnPage: 0, '
           'defaultValue: true, '
           'hidden: false, '
           'disabled: false)',

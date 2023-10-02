@@ -16,7 +16,7 @@ class FormFieldProperties {
     return FormFieldProperties(
       fieldId: field.id,
       pageId: json['pageId'],
-      fieldIndex: json['fieldIndex'],
+      positionOnPage: json['fieldIndex'],
       defaultValue: defaultValue,
       disabled: json['disabled'] ?? false,
       hidden: json['hidden'] ?? false,
@@ -27,7 +27,7 @@ class FormFieldProperties {
   FormFieldProperties({
     required this.fieldId,
     this.pageId,
-    this.fieldIndex,
+    this.positionOnPage,
     this.defaultValue,
     this.disabled = false,
     this.hidden = false,
@@ -40,7 +40,7 @@ class FormFieldProperties {
   final String? pageId;
 
   /// Position on the page
-  final int? fieldIndex;
+  final int? positionOnPage;
 
   /// Default value of the form field
   final DataEntity? defaultValue;
@@ -57,7 +57,7 @@ class FormFieldProperties {
   Map<String, dynamic> toJson() {
     return {
       if (pageId != null) 'pageId': pageId,
-      if (fieldIndex != null) 'fieldIndex': fieldIndex,
+      if (positionOnPage != null) 'fieldIndex': positionOnPage,
       if (defaultValue != null) 'defaultValue': defaultValue!.schemaValue,
       if (hidden) 'hidden': true,
       if (disabled) 'disabled': true,
@@ -69,7 +69,7 @@ class FormFieldProperties {
     return 'FormFieldProperties('
         'fieldId: $fieldId, '
         'pageId: $pageId, '
-        'fieldIndex: $fieldIndex, '
+        'positionOnPage: $positionOnPage, '
         'defaultValue: ${defaultValue?.schemaValue}, '
         'hidden: $hidden, '
         'disabled: $disabled)';
@@ -81,7 +81,7 @@ class FormFieldProperties {
     return other is FormFieldProperties &&
         other.fieldId == fieldId &&
         other.pageId == pageId &&
-        other.fieldIndex == fieldIndex &&
+        other.positionOnPage == positionOnPage &&
         other.defaultValue == defaultValue &&
         other.hidden == hidden &&
         other.disabled == disabled;
@@ -92,7 +92,7 @@ class FormFieldProperties {
     return Object.hash(
       fieldId,
       pageId,
-      fieldIndex,
+      positionOnPage,
       defaultValue,
       hidden,
       disabled,

@@ -2192,6 +2192,176 @@ void main() {
       ).called(1);
     });
   });
+
+  group('Text blocks', () {
+    const field = GridField(
+      id: 'field',
+      name: 'name',
+      type: DataType.text,
+      schema: {},
+    );
+    final action = ApptiveLink(uri: Uri.parse('uri'), method: 'method');
+    testWidgets('Show on single page', (tester) async {
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer(
+        (realInvocation) async => FormData(
+          id: 'formId',
+          components: [
+            FormComponent(
+              property: 'property',
+              data: StringDataEntity(),
+              field: field,
+              required: true,
+            ),
+          ],
+          fields: [field],
+          fieldProperties: [
+            FormFieldProperties(
+              fieldId: field.id,
+              defaultValue: StringDataEntity(),
+              positionOnPage: 1,
+              pageId: 'pageId',
+            ),
+          ],
+          properties: FormDataProperties(
+            pageIds: ['pageId'],
+            blocks: [
+              FormTextBlock(
+                id: 'id0',
+                pageId: 'pageId',
+                positionOnPage: 0,
+                text: 'block1',
+                type: 'type',
+                style: FormTextBlockStyle.paragraph,
+              ),
+              FormTextBlock(
+                id: 'id1',
+                pageId: 'pageId',
+                positionOnPage: 2,
+                text: 'block2',
+                type: 'type',
+                style: FormTextBlockStyle.paragraph,
+              ),
+            ],
+          ),
+          links: {ApptiveLinkType.submit: action},
+        ),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text('block1'), findsOneWidget);
+      expect(find.text('block2'), findsOneWidget);
+    });
+    testWidgets('Show on multi page', (tester) async {
+      const field2 = GridField(
+        id: 'field2',
+        name: 'name',
+        type: DataType.text,
+        schema: {},
+      );
+      when(
+        () => client.loadForm(uri: Uri.parse('/api/a/form')),
+      ).thenAnswer(
+        (realInvocation) async => FormData(
+          id: 'formId',
+          components: [
+            FormComponent(
+              property: 'property',
+              data: StringDataEntity(),
+              field: field,
+            ),
+            FormComponent(
+              property: 'property',
+              data: StringDataEntity(),
+              field: field2,
+            ),
+          ],
+          fields: [field, field2],
+          fieldProperties: [
+            FormFieldProperties(
+              fieldId: field.id,
+              defaultValue: StringDataEntity(),
+              positionOnPage: 1,
+              pageId: 'pageId0',
+            ),
+            FormFieldProperties(
+              fieldId: field2.id,
+              defaultValue: StringDataEntity(),
+              positionOnPage: 1,
+              pageId: 'pageId1',
+            ),
+          ],
+          properties: FormDataProperties(
+            pageIds: ['pageId0', 'pageId1'],
+            blocks: [
+              FormTextBlock(
+                id: 'id0',
+                pageId: 'pageId0',
+                positionOnPage: 0,
+                text: 'block1',
+                type: 'type',
+                style: FormTextBlockStyle.paragraph,
+              ),
+              FormTextBlock(
+                id: 'id1',
+                pageId: 'pageId0',
+                positionOnPage: 2,
+                text: 'block2',
+                type: 'type',
+                style: FormTextBlockStyle.paragraph,
+              ),
+              FormTextBlock(
+                id: 'id2',
+                pageId: 'pageId1',
+                positionOnPage: 0,
+                text: 'block3',
+                type: 'type',
+                style: FormTextBlockStyle.paragraph,
+              ),
+              FormTextBlock(
+                id: 'id3',
+                pageId: 'pageId1',
+                positionOnPage: 2,
+                text: 'block4',
+                type: 'type',
+                style: FormTextBlockStyle.paragraph,
+              ),
+            ],
+          ),
+          links: {ApptiveLinkType.submit: action},
+        ),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridForm(
+          uri: Uri.parse('/api/a/form'),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(find.text('block1'), findsOneWidget);
+      expect(find.text('block2'), findsOneWidget);
+
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('block3'), findsOneWidget);
+      expect(find.text('block4'), findsOneWidget);
+    });
+  });
 }
 
 class _ChangingFormWidget extends StatefulWidget {

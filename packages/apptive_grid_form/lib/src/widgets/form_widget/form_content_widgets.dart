@@ -1,3 +1,4 @@
+import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/src/util/submit_progress.dart';
@@ -34,6 +35,8 @@ class FormDataWidget extends StatefulWidget {
     this.descriptionPadding,
     this.descriptionStyle,
     required this.hideDescription,
+    this.textBlockPadding,
+    this.textBlockStyle,
     this.componentBuilder,
     required this.hideButton,
     required this.buttonAlignment,
@@ -52,7 +55,7 @@ class FormDataWidget extends StatefulWidget {
   /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
   final EdgeInsetsGeometry padding;
 
-  /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
+  /// Style for the Form Title. If no style is provided [headlineSmall] of the [TextTheme] will be used
   final TextStyle? titleStyle;
 
   /// Padding for the title. If no Padding is provided the [padding] is used
@@ -61,7 +64,7 @@ class FormDataWidget extends StatefulWidget {
   /// Flag to hide the form title, default is false
   final bool hideTitle;
 
-  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  /// Style for the Form Description. If no style is provided [bodyLarge] of the [TextTheme] will be used
   final TextStyle? descriptionStyle;
 
   /// Padding for the description. If no Padding is provided the [padding] is used
@@ -69,6 +72,12 @@ class FormDataWidget extends StatefulWidget {
 
   /// Flag to hide the form description, default is false
   final bool hideDescription;
+
+  /// Style for the Form Description. If no style is provided [bodyLarge] of the [TextTheme] will be used
+  final TextStyle? textBlockStyle;
+
+  /// Padding for the description. If no Padding is provided the [padding] is used
+  final EdgeInsetsGeometry? textBlockPadding;
 
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
@@ -144,6 +153,7 @@ class _FormDataWidgetState extends State<FormDataWidget> {
                 descriptionPadding: widget.descriptionPadding,
                 descriptionStyle: widget.descriptionStyle,
                 hideDescription: widget.hideDescription,
+                textBlockPadding: widget.textBlockPadding,
                 buttonLabel: widget.buttonLabel,
                 hideButton: widget.hideButton,
                 buttonAlignment: widget.buttonAlignment,
@@ -185,6 +195,7 @@ class _FormDataWidgetState extends State<FormDataWidget> {
         descriptionPadding: widget.descriptionPadding,
         descriptionStyle: widget.descriptionStyle,
         hideDescription: widget.hideDescription,
+        textBlockPadding: widget.textBlockPadding,
         buttonLabel: widget.buttonLabel,
         hideButton: widget.hideButton,
         buttonAlignment: widget.buttonAlignment,
@@ -403,6 +414,7 @@ class FormPage extends StatelessWidget {
     this.descriptionPadding,
     this.descriptionStyle,
     required this.hideDescription,
+    this.textBlockPadding,
     this.componentBuilder,
     required this.hideButton,
     required this.buttonAlignment,
@@ -429,7 +441,7 @@ class FormPage extends StatelessWidget {
   /// Padding of the Items in the Form. If no Padding is provided a EdgeInsets.all(8.0) will be used.
   final EdgeInsetsGeometry padding;
 
-  /// Style for the Form Title. If no style is provided [headline5] of the [TextTheme] will be used
+  /// Style for the Form Title. If no style is provided [headlineSmall] of the [TextTheme] will be used
   final TextStyle? titleStyle;
 
   /// Padding for the title. If no Padding is provided the [padding] is used
@@ -438,7 +450,7 @@ class FormPage extends StatelessWidget {
   /// Flag to hide the form title, default is false
   final bool hideTitle;
 
-  /// Style for the Form Description. If no style is provided [bodyText1] of the [TextTheme] will be used
+  /// Style for the Form Description. If no style is provided [bodyLarge] of the [TextTheme] will be used
   final TextStyle? descriptionStyle;
 
   /// Padding for the description. If no Padding is provided the [padding] is used
@@ -446,6 +458,9 @@ class FormPage extends StatelessWidget {
 
   /// Flag to hide the form description, default is false
   final bool hideDescription;
+
+  /// Padding for the description. If no Padding is provided the [padding] is used
+  final EdgeInsetsGeometry? textBlockPadding;
 
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
@@ -474,6 +489,12 @@ class FormPage extends StatelessWidget {
 
   /// Optional ScrollController for the Form
   final ScrollController? scrollController;
+
+  List<FormTextBlock>? get _blocks => pageId != null
+      ? data.properties?.blocks
+          ?.where((block) => block.pageId == pageId)
+          .toList()
+      : data.properties?.blocks;
 
   List<FormFieldProperties> get _fieldProperties => pageId != null
       ? data.fieldProperties
@@ -507,12 +528,17 @@ class FormPage extends StatelessWidget {
     final submitLink = data.links[ApptiveLinkType.submit];
     // Offset for title and description
     const indexOffset = 2;
+    final titleStyle =
+        this.titleStyle ?? Theme.of(context).textTheme.headlineSmall;
+    final descriptionStyle =
+        this.descriptionStyle ?? Theme.of(context).textTheme.bodyLarge;
     return Form(
       key: formKey,
       child: ListView.builder(
         controller: scrollController,
         itemCount: indexOffset +
             (_components?.length ?? 0) +
+            (_blocks?.length ?? 0) +
             (submitLink != null ? 1 : 0),
         itemBuilder: (context, index) {
           // Title
@@ -524,8 +550,7 @@ class FormPage extends StatelessWidget {
                 padding: titlePadding ?? padding,
                 child: Text(
                   data.title!,
-                  style:
-                      titleStyle ?? Theme.of(context).textTheme.headlineSmall,
+                  style: titleStyle,
                 ),
               );
             }
@@ -537,16 +562,53 @@ class FormPage extends StatelessWidget {
                 padding: descriptionPadding ?? padding,
                 child: Text(
                   data.description!,
-                  style:
-                      descriptionStyle ?? Theme.of(context).textTheme.bodyLarge,
+                  style: descriptionStyle,
                 ),
               );
             }
-          } else if (index < (_components?.length ?? 0) + indexOffset) {
+          } else if (index <
+              (_components?.length ?? 0) +
+                  (_blocks?.length ?? 0) +
+                  indexOffset) {
             final componentIndex = index - indexOffset;
-            final component = _components![componentIndex];
-            final properties = _fieldProperties
-                .firstWhereOrNull((e) => e.fieldId == component.field.id);
+
+            final FormComponent component;
+            final FormFieldProperties? properties;
+
+            if (_blocks?.isNotEmpty == true) {
+              final block = _blocks?.firstWhereOrNull(
+                (element) =>
+                    element.pageId == pageId &&
+                    element.positionOnPage == componentIndex,
+              );
+
+              if (block != null) {
+                TextStyle? style;
+                if (block.style == FormTextBlockStyle.header) {
+                  style = titleStyle;
+                }
+                style ??= descriptionStyle;
+                return Padding(
+                  padding: textBlockPadding ?? padding,
+                  child: Text(
+                    block.text,
+                    style: style,
+                  ),
+                );
+              }
+
+              properties = _fieldProperties.firstWhere(
+                (element) => element.positionOnPage == componentIndex,
+              );
+              component = _components!.firstWhere(
+                (element) => element.fieldId == properties!.fieldId,
+              );
+            } else {
+              component = _components![componentIndex];
+              properties = _fieldProperties
+                  .firstWhereOrNull((e) => e.fieldId == component.field.id);
+            }
+
             if (properties?.defaultValue?.value != null) {
               component.data.value = properties?.defaultValue?.value;
             }
