@@ -25,5 +25,7 @@
     "clear": "Clear",
     "save": "Save",
     "signHere": "Sign here",
-    "missingCountryCode": "International code is required (e.g. +49)"
+    "missingCountryCode": "International code is required (e.g. +49)",
+    "pageNext": "Next",
+    "pageBack": "Back"
 }

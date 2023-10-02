@@ -66,4 +66,8 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   @override
   String get missingCountryCode =>
       "Eine Ländervorwahl wird erwartet (z.B. +49)";
+  @override
+  String get pageNext => "Weiter";
+  @override
+  String get pageBack => "Zurück";
 }

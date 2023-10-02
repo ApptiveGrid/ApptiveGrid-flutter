@@ -86,4 +86,10 @@ abstract class ApptiveGridTranslation {
 
   /// Hint that a phonenumber need to start with a country code
   String get missingCountryCode;
+
+  /// Label for the next page button
+  String get pageNext;
+
+  /// Label for the page back button
+  String get pageBack;
 }
