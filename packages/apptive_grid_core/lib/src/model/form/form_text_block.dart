@@ -33,9 +33,13 @@ class FormTextBlock {
   final String text;
 
   /// Type of the block
+  ///
+  /// This is currently not being used in the package. On the web frontend it is used to differentiate between different block types.
   final String type;
 
   /// Style of the block
+  ///
+  /// This is currently not being used in the package. On the web frontend it is used to differentiate between different block styles (header and paragraph).
   final String style;
 
   /// Serializes the FormTextBlock to a json map
