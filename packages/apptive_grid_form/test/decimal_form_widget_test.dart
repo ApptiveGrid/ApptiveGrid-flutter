@@ -109,4 +109,55 @@ void main() {
       );
     });
   });
+  group('Options', () {
+    testWidgets('Disabled', (tester) async {
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+      final formData = FormData(
+        id: 'formId',
+        title: 'title',
+        components: [
+          FormComponent<DecimalDataEntity>(
+            property: 'Property',
+            data: DecimalDataEntity(47.11),
+            field: field,
+            required: true,
+            enabled: false,
+          ),
+        ],
+        links: {ApptiveLinkType.submit: action},
+        fieldProperties: [
+          FormFieldProperties(
+            fieldId: field.id,
+            disabled: true,
+          ),
+        ],
+        fields: [field],
+      );
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions())
+          .thenAnswer((_) => Future.value([]));
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('', 200))),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<TextFormField>(
+              find.byType(TextFormField).first,
+            )
+            .enabled,
+        false,
+      );
+    });
+  });
 }

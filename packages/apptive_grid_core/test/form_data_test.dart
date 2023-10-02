@@ -10,6 +10,7 @@ void main() {
   const reloadAfterSubmit = true;
   const successTitle = 'successTitle';
   const successMessage = 'successMessage';
+  const pageId = 'pageOne';
   final response = {
     'fields': [
       {
@@ -140,7 +141,178 @@ void main() {
         'trigger': 'button',
         'buttonTitle': additionalAnswerButtonTitle,
       },
+      'pageIds': [
+        pageId,
+      ],
     },
+    'fieldProperties': {
+      '4zc4l4c5coyi7qh6q1ozrg54u': {
+        'pageId': pageId,
+        'fieldIndex': 0,
+      },
+      '4zc4l456pca5ursrt9rxefpsc': {
+        'pageId': pageId,
+        'fieldIndex': 1,
+        'defaultValue': false,
+      },
+      '4zc4l49to77dhfagr844flaey': {
+        'pageId': pageId,
+        'fieldIndex': 2,
+        'hidden': true,
+      },
+      '4zc4l45nmww7ujq7y4axlbtjg': {
+        'pageId': pageId,
+        'fieldIndex': 3,
+        'disabled': true,
+        'defaultValue': 'default',
+      },
+      '4zc4l48ffin5v8pa2emyx9s15': {
+        'pageId': pageId,
+        'fieldIndex': 4,
+        'hidden': true,
+        'defaultValue': 10,
+      },
+    },
+    '_links': {
+      "submit": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "post",
+      },
+      "remove": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "delete",
+      },
+      "self": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "get",
+      },
+      "update": {
+        "href":
+            "/api/users/614c5440b50f51e3ea8a2a50/spaces/62600bf5d7f0d75408996f69/grids/62600bf9d7f0d75408996f6c/forms/6262aadbcd22c4725899a114",
+        "method": "put",
+      },
+    },
+  };
+  final minimalResponse = {
+    'fields': [
+      {
+        "type": {
+          "name": "date-time",
+          "componentTypes": ["datePicker"],
+        },
+        "schema": {"type": "string", "format": "date-time"},
+        "id": "4zc4l4c5coyi7qh6q1ozrg54u",
+        "name": "Date Time",
+        "key": null,
+        "_links": <String, dynamic>{},
+      },
+      {
+        "type": {
+          "name": "boolean",
+          "componentTypes": ["checkbox"],
+        },
+        "schema": {"type": "boolean"},
+        "id": "4zc4l456pca5ursrt9rxefpsc",
+        "name": "Checkmark",
+        "key": null,
+        "_links": <String, dynamic>{},
+      },
+      {
+        "type": {
+          "name": "date",
+          "componentTypes": ["datePicker", "textfield"],
+        },
+        "schema": {"type": "string", "format": "date"},
+        "id": "4zc4l49to77dhfagr844flaey",
+        "name": "Date",
+        "key": null,
+        "_links": <String, dynamic>{},
+      },
+      {
+        "type": {
+          "name": "string",
+          "componentTypes": ["textfield"],
+        },
+        "schema": {"type": "string"},
+        "id": "4zc4l45nmww7ujq7y4axlbtjg",
+        "name": "Text",
+        "key": null,
+        "_links": <String, dynamic>{},
+      },
+      {
+        "type": {
+          "name": "integer",
+          "componentTypes": ["textfield"],
+        },
+        "schema": {"type": "integer"},
+        "id": "4zc4l48ffin5v8pa2emyx9s15",
+        "name": "Number",
+        "key": null,
+        "_links": <String, dynamic>{},
+      },
+    ],
+    'components': [
+      {
+        'property': 'TextC',
+        'value': null,
+        'required': false,
+        'options': {
+          'multi': false,
+          'placeholder': '',
+          'description': 'Text Description',
+          'label': null,
+        },
+        'fieldId': '4zc4l45nmww7ujq7y4axlbtjg',
+        'type': 'textfield',
+      },
+      {
+        'property': 'NumberC',
+        'value': null,
+        'required': false,
+        'options': {
+          'multi': false,
+          'placeholder': '',
+          'description': 'Number description',
+          'label': 'Number Label',
+        },
+        'fieldId': '4zc4l48ffin5v8pa2emyx9s15',
+        'type': 'textfield',
+      },
+      {
+        'property': 'DateTimeC',
+        'value': null,
+        'required': false,
+        'options': {
+          'label': 'DateTime Label',
+          'description': 'DateTime Description',
+        },
+        'fieldId': '4zc4l4c5coyi7qh6q1ozrg54u',
+        'type': 'datePicker',
+      },
+      {
+        'property': 'DateC',
+        'value': null,
+        'required': false,
+        'options': {'label': 'Date Label', 'description': 'Date Description'},
+        'fieldId': '4zc4l49to77dhfagr844flaey',
+        'type': 'datePicker',
+      },
+      {
+        'property': 'CheckmarkC',
+        'value': null,
+        'required': false,
+        'options': {
+          'label': 'Checkbox Label',
+          'description': 'Checkbox Description',
+        },
+        'fieldId': '4zc4l456pca5ursrt9rxefpsc',
+        'type': 'checkbox',
+      }
+    ],
+    'id': 'formId',
     '_links': {
       "submit": {
         "href":
@@ -185,6 +357,40 @@ void main() {
         BooleanDataEntity,
       ]);
 
+      expect(formData.properties!.pageIds.length, equals(1));
+
+      expect(formData.properties!.pageIds.first, equals(pageId));
+
+      expect(formData.fieldProperties.length, equals(5));
+
+      for (var i = 0; i < 5; i++) {
+        final field = formData.fields![i];
+        final fieldProperties = formData.fieldProperties[i];
+
+        expect(fieldProperties.fieldId, equals(field.id));
+        expect(fieldProperties.pageId, equals(pageId));
+
+        switch (field.type) {
+          case DataType.dateTime:
+            break;
+          case DataType.checkbox:
+            expect(fieldProperties.defaultValue?.value, equals(false));
+            break;
+          case DataType.date:
+            expect(fieldProperties.hidden, equals(true));
+            break;
+          case DataType.text:
+            expect(fieldProperties.disabled, equals(true));
+            expect(fieldProperties.defaultValue?.value, equals('default'));
+            break;
+          case DataType.integer:
+            expect(fieldProperties.hidden, equals(true));
+            expect(fieldProperties.defaultValue?.value, equals(10));
+            break;
+          default:
+        }
+      }
+
       expect(
         formData.properties,
         FormDataProperties(
@@ -197,8 +403,34 @@ void main() {
             trigger: AfterSubmitActionTrigger.button,
             buttonTitle: additionalAnswerButtonTitle,
           ),
+          pageIds: [pageId],
         ),
       );
+    });
+    test('Successful minimal response', () {
+      final formData = FormData.fromJson(minimalResponse);
+
+      expect(formData.name, equals(null));
+      expect(formData.title, equals(null));
+      expect(formData.description, equals(null));
+
+      expect(formData.links[ApptiveLinkType.submit], isNotNull);
+
+      expect(formData.components!.length, equals(5));
+
+      expect(formData.components!.map((e) => e.data.runtimeType).toList(), [
+        StringDataEntity,
+        IntegerDataEntity,
+        DateTimeDataEntity,
+        DateDataEntity,
+        BooleanDataEntity,
+      ]);
+
+      expect(formData.properties, equals(null));
+
+      expect(formData.fieldProperties.length, equals(0));
+
+      expect(formData.properties, equals(null));
     });
   });
 
@@ -231,7 +463,14 @@ void main() {
           reloadAfterSubmit: reloadAfterSubmit,
           successTitle: successTitle,
           successMessage: successMessage,
+          pageIds: [pageId],
         ),
+        fieldProperties: [
+          FormFieldProperties(
+            fieldId: component.fieldId,
+            pageId: pageId,
+          ),
+        ],
       );
 
       expect(FormData.fromJson(formData.toJson()), equals(formData));
@@ -280,6 +519,7 @@ void main() {
         components: [component],
         links: {ApptiveLinkType.submit: action},
         fields: [component.field],
+        fieldProperties: [FormFieldProperties(fieldId: component.fieldId)],
       );
 
       final attachmentAction =
@@ -604,29 +844,36 @@ void main() {
         successMessage: 'successMessage',
         buttonTitle: 'buttonTitle',
         reloadAfterSubmit: true,
+        pageIds: [pageId],
       );
       final b = FormDataProperties(
         successTitle: 'successTitle',
         successMessage: 'successMessage',
         buttonTitle: 'buttonTitle',
         reloadAfterSubmit: true,
+        pageIds: [pageId],
       );
       final c = FormDataProperties(
         successTitle: 'successTitle',
         successMessage: 'successMessage',
         buttonTitle: 'buttonTitle2',
         reloadAfterSubmit: true,
+        pageIds: [],
       );
       expect(a, equals(b));
       expect(a, isNot(c));
     });
 
     test('Hashcode', () {
+      const action = AfterSubmitAction(type: AfterSubmitActionType.none);
+      final pageIds = [pageId];
       final properties = FormDataProperties(
         successTitle: 'successTitle',
         successMessage: 'successMessage',
         buttonTitle: 'buttonTitle',
         reloadAfterSubmit: true,
+        afterSubmitAction: action,
+        pageIds: pageIds,
       );
 
       expect(
@@ -636,7 +883,8 @@ void main() {
           'successMessage',
           'buttonTitle',
           true,
-          null,
+          action,
+          pageIds,
         ),
       );
     });
@@ -647,12 +895,13 @@ void main() {
         successMessage: 'successMessage',
         buttonTitle: 'buttonTitle',
         reloadAfterSubmit: true,
+        pageIds: [pageId],
       );
 
       expect(
         properties.toString(),
         equals(
-          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true, afterSubmitAction: null)',
+          'FormDataProperties(successTitle: successTitle, successMessage: successMessage, buttonTitle: buttonTitle, reloadAfterSubmit: true, afterSubmitAction: null, pageIds: [$pageId])',
         ),
       );
     });
@@ -711,6 +960,83 @@ void main() {
           ),
         );
       });
+    });
+  });
+  group('FormFieldProperties', () {
+    test('Equality', () {
+      final a = FormFieldProperties(
+        fieldId: 'field1',
+        pageId: pageId,
+        fieldIndex: 0,
+        defaultValue: BooleanDataEntity(true),
+        disabled: false,
+        hidden: false,
+      );
+      final b = FormFieldProperties(
+        fieldId: 'field1',
+        pageId: pageId,
+        fieldIndex: 0,
+        defaultValue: BooleanDataEntity(true),
+        disabled: false,
+        hidden: false,
+      );
+      final c = FormFieldProperties(
+        fieldId: 'field2',
+        pageId: pageId,
+        fieldIndex: 0,
+        defaultValue: BooleanDataEntity(true),
+        disabled: false,
+        hidden: false,
+      );
+      expect(a, equals(b));
+      expect(a, isNot(c));
+    });
+
+    test('Hashcode', () {
+      final properties = FormFieldProperties(
+        fieldId: 'field1',
+        pageId: pageId,
+        fieldIndex: 0,
+        defaultValue: BooleanDataEntity(true),
+        disabled: false,
+        hidden: false,
+      );
+
+      expect(
+        properties.hashCode,
+        Object.hash(
+          'field1',
+          pageId,
+          0,
+          BooleanDataEntity(true),
+          false,
+          false,
+        ),
+      );
+    });
+
+    test('toString()', () {
+      final properties = FormFieldProperties(
+        fieldId: 'field1',
+        pageId: pageId,
+        fieldIndex: 0,
+        defaultValue: BooleanDataEntity(true),
+        disabled: false,
+        hidden: false,
+      );
+
+      expect(
+        properties.toString(),
+        equals(
+          'FormFieldProperties('
+          'fieldId: field1, '
+          'pageId: $pageId, '
+          'fieldIndex: 0, '
+          'defaultValue: true, '
+          'hidden: false, '
+          'disabled: false)',
+        ),
+      );
     });
   });
 }

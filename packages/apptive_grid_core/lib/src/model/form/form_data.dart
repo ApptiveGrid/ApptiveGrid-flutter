@@ -16,6 +16,7 @@ class FormData {
     required this.links,
     Map<Attachment, AttachmentAction>? attachmentActions,
     this.properties,
+    this.fieldProperties = const [],
   }) : attachmentActions = attachmentActions ?? HashMap();
 
   /// Deserializes [json] into a FormData Object
@@ -28,11 +29,6 @@ class FormData {
             ?.map((json) => GridField.fromJson(json))
             .toList() ??
         [];
-    final components = (json['components'] as List?)
-        ?.map<FormComponent>(
-          (e) => FormComponent.fromJson(e, fields),
-        )
-        .toList();
     final links = linkMapFromJson(json['_links']);
     final attachmentActions = json['attachmentActions'] != null
         ? Map.fromEntries(
@@ -45,6 +41,30 @@ class FormData {
     final properties = json['properties'] != null
         ? FormDataProperties.fromJson(json['properties'])
         : null;
+
+    final List<FormFieldProperties> fieldProperties = [];
+    if (json['fieldProperties'] != null) {
+      for (final field in fields) {
+        final propertiesJson = json['fieldProperties'][field.id];
+        if (propertiesJson != null) {
+          fieldProperties.add(
+            FormFieldProperties.fromJson(
+              json: propertiesJson,
+              field: field,
+            ),
+          );
+        }
+      }
+    }
+    final components = (json['components'] as List?)
+        ?.map<FormComponent>(
+          (e) => FormComponent.fromJson(
+            e,
+            fields,
+            additionalProperties: fieldProperties,
+          ),
+        )
+        .toList();
     return FormData(
       id: id,
       name: name,
@@ -55,6 +75,7 @@ class FormData {
       links: links,
       attachmentActions: attachmentActions,
       properties: properties,
+      fieldProperties: fieldProperties,
     );
   }
 
@@ -85,6 +106,9 @@ class FormData {
   /// Custom title for a successfull submission
   final FormDataProperties? properties;
 
+  /// Additional properties of the fields
+  final List<FormFieldProperties> fieldProperties;
+
   /// Serializes [FormData] to json
   Map<String, dynamic> toJson() {
     return {
@@ -101,12 +125,15 @@ class FormData {
         'attachmentActions':
             attachmentActions.values.map((e) => e.toJson()).toList(),
       if (properties != null) 'properties': properties!.toJson(),
+      'fieldProperties': Map.fromEntries(
+        fieldProperties.map((e) => MapEntry(e.fieldId, e.toJson())),
+      ),
     };
   }
 
   @override
   String toString() {
-    return 'FormData(id: $id, name: $name, title: $title, description: $description, components: $components, fields: $fields, links: $links, attachmentActions: $attachmentActions)';
+    return 'FormData(id: $id, name: $name, title: $title, description: $description, components: $components, fields: $fields, links: $links, attachmentActions: $attachmentActions, properties: $properties, fieldProperties: $fieldProperties)';
   }
 
   /// Creates a [Map] used to send this data back to a server
@@ -129,6 +156,7 @@ class FormData {
         properties == other.properties &&
         f.listEquals(fields, other.fields) &&
         f.listEquals(components, other.components) &&
+        f.listEquals(fieldProperties, other.fieldProperties) &&
         f.mapEquals(attachmentActions, other.attachmentActions) &&
         f.mapEquals(links, other.links);
   }

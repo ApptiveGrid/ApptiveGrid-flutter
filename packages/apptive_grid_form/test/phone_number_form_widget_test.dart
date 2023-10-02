@@ -185,4 +185,52 @@ void main() {
       ).called(1);
     });
   });
+  group('Options', () {
+    testWidgets('Disabled', (tester) async {
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+      final formData = FormData(
+        id: 'formId',
+        title: 'title',
+        components: [
+          FormComponent<PhoneNumberDataEntity>(
+            property: 'Property',
+            data: PhoneNumberDataEntity(),
+            field: field,
+            required: true,
+            enabled: false,
+          ),
+        ],
+        fieldProperties: [
+          FormFieldProperties(fieldId: field.id, disabled: true),
+        ],
+        links: {ApptiveLinkType.submit: action},
+        fields: [field],
+      );
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions())
+          .thenAnswer((_) => Future.value([]));
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('', 200))),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<TextFormField>(
+              find.byType(TextFormField).first,
+            )
+            .enabled,
+        false,
+      );
+    });
+  });
 }

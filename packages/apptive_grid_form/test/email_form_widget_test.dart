@@ -10,7 +10,7 @@ import 'common.dart';
 void main() {
   final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
   const field = GridField(id: 'fieldId', name: 'name', type: DataType.email);
-  FormData formData({bool required = true}) => FormData(
+  FormData formData({bool required = true, bool enabled = true}) => FormData(
         id: 'formId',
         title: 'title',
         components: [
@@ -19,7 +19,11 @@ void main() {
             data: EmailDataEntity(),
             field: field,
             required: required,
+            enabled: enabled,
           ),
+        ],
+        fieldProperties: [
+          FormFieldProperties(fieldId: field.id, disabled: !enabled),
         ],
         links: {ApptiveLinkType.submit: action},
         fields: [field],
@@ -194,6 +198,28 @@ void main() {
           ),
         ),
       ).called(1);
+    });
+  });
+  group('Options', () {
+    testWidgets('Disabled', (tester) async {
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData(required: false, enabled: false),
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<TextFormField>(
+              find.byType(TextFormField).first,
+            )
+            .enabled,
+        false,
+      );
     });
   });
 }

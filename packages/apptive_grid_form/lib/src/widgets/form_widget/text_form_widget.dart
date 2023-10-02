@@ -57,6 +57,7 @@ class _TextFormWidgetState extends State<TextFormWidget>
       minLines: widget.component.options.multi ? 3 : 1,
       maxLines: widget.component.options.multi ? null : 1,
       decoration: widget.component.baseDecoration,
+      enabled: widget.component.enabled,
     );
   }
 }

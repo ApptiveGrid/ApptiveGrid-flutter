@@ -1,4 +1,5 @@
 import 'package:apptive_grid_core/src/model/form/after_submit_action.dart';
+import 'package:flutter/foundation.dart' as f;
 
 /// Additional properties for the [FormData]
 class FormDataProperties {
@@ -9,6 +10,7 @@ class FormDataProperties {
     this.buttonTitle,
     this.reloadAfterSubmit,
     this.afterSubmitAction,
+    this.pageIds = const [],
   });
 
   /// Deserializes [json] into a FormDataProperties Object
@@ -21,6 +23,7 @@ class FormDataProperties {
         afterSubmitAction: json['afterSubmitAction'] != null
             ? AfterSubmitAction.fromJson(json['afterSubmitAction'])
             : null,
+        pageIds: json['pageIds']?.cast<String>() ?? [],
       );
 
   /// Custom title for a successfull submission
@@ -38,6 +41,9 @@ class FormDataProperties {
   /// Custom message for a submitting an additional answer
   final AfterSubmitAction? afterSubmitAction;
 
+  /// The ID's and order of the different page of the form
+  final List<String> pageIds;
+
   /// Serializes [FormDataProperties] to json
   Map<String, dynamic> toJson() => {
         if (successTitle != null) 'successTitle': successTitle,
@@ -46,11 +52,12 @@ class FormDataProperties {
         if (reloadAfterSubmit != null) 'reloadAfterSubmit': reloadAfterSubmit,
         if (afterSubmitAction != null)
           'afterSubmitAction': afterSubmitAction!.toJson(),
+        'pageIds': pageIds,
       };
 
   @override
   String toString() {
-    return 'FormDataProperties(successTitle: $successTitle, successMessage: $successMessage, buttonTitle: $buttonTitle, reloadAfterSubmit: $reloadAfterSubmit, afterSubmitAction: $afterSubmitAction)';
+    return 'FormDataProperties(successTitle: $successTitle, successMessage: $successMessage, buttonTitle: $buttonTitle, reloadAfterSubmit: $reloadAfterSubmit, afterSubmitAction: $afterSubmitAction, pageIds: $pageIds)';
   }
 
   @override
@@ -60,7 +67,8 @@ class FormDataProperties {
         successMessage == other.successMessage &&
         buttonTitle == other.buttonTitle &&
         reloadAfterSubmit == other.reloadAfterSubmit &&
-        afterSubmitAction == other.afterSubmitAction;
+        afterSubmitAction == other.afterSubmitAction &&
+        f.listEquals(pageIds, other.pageIds);
   }
 
   @override
@@ -70,5 +78,6 @@ class FormDataProperties {
         buttonTitle,
         reloadAfterSubmit,
         afterSubmitAction,
+        pageIds,
       );
 }

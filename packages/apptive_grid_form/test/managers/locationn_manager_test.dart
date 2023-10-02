@@ -50,6 +50,8 @@ void main() {
         heading: 12,
         speed: 12,
         speedAccuracy: 12,
+        altitudeAccuracy: 0,
+        headingAccuracy: 0,
       );
       when(
         () => geolocator.getCurrentPosition(

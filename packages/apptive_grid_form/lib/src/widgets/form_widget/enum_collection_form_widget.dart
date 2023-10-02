@@ -39,6 +39,7 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data,
+      enabled: widget.component.enabled,
       builder: (fieldState) {
         return InputDecorator(
           decoration: widget.component.baseDecoration.copyWith(
@@ -63,9 +64,11 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
                           value: widget.component.data.value?.contains(entry),
                           title: Text(entry),
                           controlAffinity: ListTileControlAffinity.leading,
-                          onChanged: (isSelected) {
-                            _onSelected(entry, isSelected, fieldState);
-                          },
+                          onChanged: widget.component.enabled
+                              ? (isSelected) =>
+                                  _onSelected(entry, isSelected, fieldState)
+                              : null,
+                          enabled: widget.component.enabled,
                         ),
                     ],
                   );
@@ -78,9 +81,10 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
                           label: Text(e),
                           selected:
                               widget.component.data.value?.contains(e) ?? false,
-                          onSelected: (isSelected) {
-                            _onSelected(e, isSelected, fieldState);
-                          },
+                          onSelected: widget.component.enabled
+                              ? (isSelected) =>
+                                  _onSelected(e, isSelected, fieldState)
+                              : null,
                         ),
                       )
                       .toList(),

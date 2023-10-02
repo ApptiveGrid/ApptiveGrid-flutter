@@ -46,6 +46,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
             return null;
           }
         },
+        enabled: widget.component.enabled,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         initialValue: widget.component.data,
         builder: (formState) {
@@ -82,23 +83,25 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
                           Expanded(
                             child: Text(attachment.name),
                           ),
-                          IconButton(
-                            onPressed: () {
-                              attachmentManager.removeAttachment(attachment);
-                              widget.component.data.value?.remove(attachment);
-                              formState.didChange(widget.component.data);
-                              setState(() {});
-                            },
-                            icon: const Icon(Icons.close),
-                          ),
+                          if (widget.component.enabled)
+                            IconButton(
+                              onPressed: () {
+                                attachmentManager.removeAttachment(attachment);
+                                widget.component.data.value?.remove(attachment);
+                                formState.didChange(widget.component.data);
+                                setState(() {});
+                              },
+                              icon: const Icon(Icons.close),
+                            ),
                         ],
                       );
                     },
                   ).toList(),
-                AddAttachmentButton(
-                  onAttachmentsAdded: (newAttachments) =>
-                      _attachmentsAdded(newAttachments, formState),
-                ),
+                if (widget.component.enabled)
+                  AddAttachmentButton(
+                    onAttachmentsAdded: (newAttachments) =>
+                        _attachmentsAdded(newAttachments, formState),
+                  ),
               ],
             ),
           );

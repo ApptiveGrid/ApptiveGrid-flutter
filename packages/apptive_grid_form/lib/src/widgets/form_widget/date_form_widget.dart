@@ -39,24 +39,26 @@ class _DateFormWidgetState extends State<DateFormWidget>
       _controller.text = dateString;
     }
     return InkWell(
-      onTap: () {
-        final initialDate = widget.component.data.value ?? DateTime.now();
-        showDatePicker(
-          context: context,
-          initialDate: initialDate,
-          firstDate: DateTime.fromMillisecondsSinceEpoch(0),
-          lastDate: DateTime.fromMillisecondsSinceEpoch(
-            const Duration(days: 100000000).inMilliseconds,
-          ),
-        ).then((value) {
-          if (value != null) {
-            _formKey.currentState!.didChange(dateFormat.format(value));
-            setState(() {
-              widget.component.data.value = value;
-            });
-          }
-        });
-      },
+      onTap: widget.component.enabled
+          ? () {
+              final initialDate = widget.component.data.value ?? DateTime.now();
+              showDatePicker(
+                context: context,
+                initialDate: initialDate,
+                firstDate: DateTime.fromMillisecondsSinceEpoch(0),
+                lastDate: DateTime.fromMillisecondsSinceEpoch(
+                  const Duration(days: 100000000).inMilliseconds,
+                ),
+              ).then((value) {
+                if (value != null) {
+                  _formKey.currentState!.didChange(dateFormat.format(value));
+                  setState(() {
+                    widget.component.data.value = value;
+                  });
+                }
+              });
+            }
+          : null,
       child: AbsorbPointer(
         child: TextFormField(
           key: _formKey,
@@ -69,6 +71,7 @@ class _DateFormWidgetState extends State<DateFormWidget>
               return null;
             }
           },
+          enabled: widget.component.enabled,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: widget.component.baseDecoration,
         ),

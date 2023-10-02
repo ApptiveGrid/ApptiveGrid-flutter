@@ -65,6 +65,7 @@ class _EmailFormWidgetState extends State<EmailFormWidget>
       decoration: widget.component.baseDecoration,
       autofillHints: const {AutofillHints.email},
       keyboardType: TextInputType.emailAddress,
+      enabled: widget.component.enabled,
     );
   }
 }

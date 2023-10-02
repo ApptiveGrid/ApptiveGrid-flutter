@@ -322,4 +322,57 @@ void main() {
       expect(find.text('10,00 €'), findsOneWidget);
     });
   });
+
+  group('Options', () {
+    testWidgets('Disabled', (tester) async {
+      final formUri = Uri.parse('form');
+      when(() => client.loadForm(uri: formUri)).thenAnswer(
+        (_) async => FormData(
+          id: 'id',
+          title: 'title',
+          components: [
+            FormComponent(
+              required: true,
+              property: 'name',
+              data: CurrencyDataEntity(
+                value: 10,
+                currency: 'EUR',
+              ),
+              field: field,
+            ),
+          ],
+          fieldProperties: [
+            FormFieldProperties(
+              fieldId: field.id,
+              disabled: true,
+            ),
+          ],
+          fields: [field],
+          links: {
+            ApptiveLinkType.submit: submitLink,
+          },
+        ),
+      );
+
+      final target = TestApp(
+        client: client,
+        locale: const Locale('de', 'DE'),
+        child: ApptiveGridForm(
+          uri: formUri,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<TextFormField>(
+              find.byType(TextFormField).first,
+            )
+            .enabled,
+        false,
+      );
+    });
+  });
 }

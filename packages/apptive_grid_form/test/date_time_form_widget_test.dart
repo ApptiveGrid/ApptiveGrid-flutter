@@ -267,4 +267,62 @@ void main() {
       equals(newDate),
     );
   });
+
+  group('Options', () {
+    testWidgets('Disabled', (tester) async {
+      final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+      final formData = FormData(
+        id: 'formId',
+        title: 'title',
+        components: [
+          FormComponent<DateTimeDataEntity>(
+            property: 'Property',
+            data: DateTimeDataEntity(DateTime.now()),
+            field: field,
+            required: true,
+            enabled: false,
+          ),
+        ],
+        fieldProperties: [
+          FormFieldProperties(fieldId: field.id, disabled: true),
+        ],
+        links: {ApptiveLinkType.submit: action},
+        fields: [field],
+      );
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions())
+          .thenAnswer((_) => Future.value([]));
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(SubmitCompleteProgressEvent(Response('', 200))),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formData,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<TextField>(
+              find.byType(TextField).at(0),
+            )
+            .enabled,
+        false,
+      );
+
+      expect(
+        tester
+            .widget<TextField>(
+              find.byType(TextField).at(1),
+            )
+            .enabled,
+        false,
+      );
+    });
+  });
 }
