@@ -25,7 +25,7 @@ void main() {
           "property": "Text",
           "_links": <String, dynamic>{},
         },
-        fields: [
+        [
           field,
         ],
       );

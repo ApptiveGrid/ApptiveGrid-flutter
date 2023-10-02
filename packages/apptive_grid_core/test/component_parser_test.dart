@@ -38,7 +38,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
@@ -88,7 +88,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
@@ -138,7 +138,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       final cleanValue = value.replaceAll('\n', ' ');
 
@@ -180,7 +180,7 @@ void main() {
         'type': 'datePicker',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
@@ -220,7 +220,7 @@ void main() {
         'type': 'datePicker',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
@@ -267,7 +267,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
@@ -317,7 +317,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
@@ -367,7 +367,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(47.0));
@@ -414,7 +414,7 @@ void main() {
         'type': 'checkbox',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
@@ -461,7 +461,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
@@ -510,7 +510,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(value));
@@ -561,7 +561,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
@@ -592,7 +592,7 @@ void main() {
         'type': 'datePicker',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
@@ -623,7 +623,7 @@ void main() {
         'type': 'datePicker',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
@@ -664,7 +664,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
@@ -705,7 +705,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
@@ -738,7 +738,7 @@ void main() {
         'type': 'checkbox',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(false));
@@ -768,7 +768,7 @@ void main() {
         'type': 'selectBox',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals('AG'));
@@ -812,7 +812,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
@@ -852,7 +852,7 @@ void main() {
         'type': 'textfield',
       };
 
-      final parsedComponent = FormComponent.fromJson(json, fields: [field]);
+      final parsedComponent = FormComponent.fromJson(json, [field]);
 
       expect(parsedComponent.property, equals(property));
       expect(parsedComponent.data.value, equals(null));
@@ -888,7 +888,7 @@ void main() {
       };
 
       expect(
-        () => FormComponent.fromJson(json, fields: [field]),
+        () => FormComponent.fromJson(json, [field]),
         throwsException,
       );
     });

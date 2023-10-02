@@ -60,7 +60,7 @@ class FormData {
         ?.map<FormComponent>(
           (e) => FormComponent.fromJson(
             e,
-            fields: fields,
+            fields,
             additionalProperties: fieldProperties,
           ),
         )
