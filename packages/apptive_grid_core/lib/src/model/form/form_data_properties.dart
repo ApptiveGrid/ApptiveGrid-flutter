@@ -1,5 +1,5 @@
 import 'package:apptive_grid_core/src/model/form/after_submit_action.dart';
-import 'package:apptive_grid_core/src/model/form/form_block.dart';
+import 'package:apptive_grid_core/src/model/form/form_text_block.dart';
 import 'package:flutter/foundation.dart' as f;
 
 /// Additional properties for the [FormData]
