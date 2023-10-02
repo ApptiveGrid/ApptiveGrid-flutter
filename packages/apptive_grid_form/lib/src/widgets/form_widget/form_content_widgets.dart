@@ -114,55 +114,73 @@ class _FormDataWidgetState extends State<FormDataWidget> {
     super.dispose();
   }
 
+  final Map<String, GlobalKey<FormState>> _keys = {};
+
   @override
   Widget build(BuildContext context) {
     final pages = widget.data.properties?.pageIds;
     if (pages != null && pages.length > 1) {
-      return PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: pages.map(
-          (pageId) {
-            final key = GlobalKey<FormState>(debugLabel: pageId);
-            return FormPage(
-              pageId: pageId,
-              data: widget.data,
-              formKey: key,
-              isSubmitting: widget.isSubmitting,
-              padding: widget.padding,
-              titlePadding: widget.titlePadding,
-              titleStyle: widget.titleStyle,
-              hideTitle: widget.hideTitle,
-              descriptionPadding: widget.descriptionPadding,
-              descriptionStyle: widget.descriptionStyle,
-              hideDescription: widget.hideDescription,
-              textBlockPadding: widget.textBlockPadding,
-              textBlockStyle: widget.textBlockStyle,
-              buttonLabel: widget.buttonLabel,
-              hideButton: widget.hideButton,
-              buttonAlignment: widget.buttonAlignment,
-              componentBuilder: widget.componentBuilder,
-              progress: widget.progress,
-              submitForm: () {
-                if (key.currentState!.validate()) {
-                  widget.submitForm();
-                }
-              },
-              pageBack: () => _pageController.previousPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.bounceInOut,
-              ),
-              pageForward: () {
-                if (key.currentState!.validate()) {
-                  _pageController.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.bounceInOut,
-                  );
-                }
-              },
+      return WillPopScope(
+        onWillPop: () async {
+          if ((_pageController.page ?? 0) > 0) {
+            _pageController.previousPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.bounceInOut,
             );
-          },
-        ).toList(),
+            return false;
+          } else {
+            return true;
+          }
+        },
+        child: PageView(
+          controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: pages.map(
+            (pageId) {
+              final key = _keys.putIfAbsent(
+                pageId,
+                () => GlobalKey<FormState>(debugLabel: pageId),
+              );
+              return FormPage(
+                pageId: pageId,
+                data: widget.data,
+                formKey: key,
+                isSubmitting: widget.isSubmitting,
+                padding: widget.padding,
+                titlePadding: widget.titlePadding,
+                titleStyle: widget.titleStyle,
+                hideTitle: widget.hideTitle,
+                descriptionPadding: widget.descriptionPadding,
+                descriptionStyle: widget.descriptionStyle,
+                hideDescription: widget.hideDescription,
+                textBlockPadding: widget.textBlockPadding,
+                textBlockStyle: widget.textBlockStyle,
+                buttonLabel: widget.buttonLabel,
+                hideButton: widget.hideButton,
+                buttonAlignment: widget.buttonAlignment,
+                componentBuilder: widget.componentBuilder,
+                progress: widget.progress,
+                submitForm: () {
+                  if (key.currentState!.validate()) {
+                    widget.submitForm();
+                  }
+                },
+                pageBack: () => _pageController.previousPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.bounceInOut,
+                ),
+                pageForward: () {
+                  if (key.currentState!.validate()) {
+                    _pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.bounceInOut,
+                    );
+                  }
+                },
+              );
+            },
+          ).toList(),
+        ),
       );
     } else {
       final key = GlobalKey<FormState>();
