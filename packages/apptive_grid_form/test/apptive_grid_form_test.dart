@@ -2128,7 +2128,8 @@ void main() {
       expect(find.text('text1'), findsNothing);
       expect(find.text('text2'), findsOneWidget);
 
-      await tester.tap(find.text('Back'));
+      final dynamic widgetsAppState = tester.state(find.byType(WidgetsApp));
+      await widgetsAppState.didPopRoute();
       await tester.pumpAndSettle();
 
       expect(findNext, findsOneWidget);

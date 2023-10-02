@@ -114,7 +114,7 @@ class _FormDataWidgetState extends State<FormDataWidget> {
       return WillPopScope(
         onWillPop: () async {
           if ((_pageController.page ?? 0) > 0) {
-            await _pageController.previousPage(
+            _pageController.previousPage(
               duration: const Duration(milliseconds: 300),
               curve: Curves.bounceInOut,
             );
