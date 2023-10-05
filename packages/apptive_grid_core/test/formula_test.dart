@@ -16,6 +16,13 @@ void main() {
       },
     ): 2.5,
     const ValueType(
+      type: DataType.currency,
+      additionalProperties: {
+        'currency': 'EUR',
+        'componentTypes': ['textfield'],
+      },
+    ): 3.75,
+    const ValueType(
       type: DataType.text,
       additionalProperties: {
         'componentTypes': ['textfield'],
