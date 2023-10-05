@@ -313,7 +313,7 @@ void main() {
         id: 'id',
         name: 'Property',
         expression: '1+1',
-        valueType: DataType.integer,
+        valueType: ValueType(type: DataType.integer),
       ),
       data: FormulaDataEntity(value: IntegerDataEntity(2)),
       property: 'Property',
