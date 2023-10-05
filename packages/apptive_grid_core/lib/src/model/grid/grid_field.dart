@@ -76,9 +76,7 @@ class GridField {
         schema: schema,
         links: links,
         expression: json['type']['expression'],
-        valueType: DataType.values.firstWhere(
-          (type) => type.backendName == json['type']['valueType']['name'],
-        ),
+        valueType: ValueType.fromJson(json['type']['valueType']),
       );
     }
     return GridField(
@@ -354,7 +352,7 @@ class FormulaField extends GridField {
   final String expression;
 
   /// The result type of the formula
-  final DataType valueType;
+  final ValueType valueType;
 
   @override
   Map<String, dynamic> toJson() {
@@ -362,16 +360,14 @@ class FormulaField extends GridField {
     json['type'] = {
       ...json['type'],
       'expression': expression,
-      'valueType': {
-        'name': valueType.backendName,
-      },
+      'valueType': valueType.toJson(),
     };
     return json;
   }
 
   @override
   String toString() =>
-      'FormulaField(id: $id, name: $name, key: $key, expression: $expression, valueType: ${valueType.backendName})';
+      'FormulaField(id: $id, name: $name, key: $key, expression: $expression, valueType: $valueType)';
 
   @override
   bool operator ==(Object other) {
