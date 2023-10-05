@@ -603,15 +603,20 @@ class FormulaDataEntity extends DataEntity<DataEntity, Map<String, dynamic>> {
   /// Creates a new FormulaDataEntity from a Json Response
   factory FormulaDataEntity.fromJson(
     dynamic jsonValue, {
-    required DataType valueType,
+    required ValueType valueType,
   }) {
     return FormulaDataEntity(
       value: DataEntity.fromJson(
         json: jsonValue['value'],
-        field: GridField(
-          id: 'id',
-          name: 'name',
-          type: valueType,
+        field: GridField.fromJson(
+          {
+            'id': 'id',
+            'name': 'name',
+            'type': {
+              'name': valueType.type.backendName,
+              ...valueType.additionalProperties ?? {},
+            },
+          },
         ),
       ),
       error: jsonValue['error'],
