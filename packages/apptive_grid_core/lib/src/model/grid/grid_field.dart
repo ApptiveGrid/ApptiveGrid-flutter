@@ -397,3 +397,53 @@ class FormulaField extends GridField {
         valueType,
       );
 }
+
+/// The result type of the formula
+class ValueType {
+  /// Creates a new [ValueType]
+  const ValueType({
+    required this.type,
+    this.additionalProperties,
+  });
+
+  /// Creates a [ValueType] from [json]
+  factory ValueType.fromJson(Map<String, dynamic> json) {
+    return ValueType(
+      type: DataType.values.firstWhere(
+        (type) => type.backendName == json['name'],
+      ),
+      additionalProperties: Map.fromEntries(
+        json.entries.where((element) => element.key != 'name'),
+      ),
+    );
+  }
+
+  /// The result data type of the formula
+  final DataType type;
+
+  /// Additional information of the resulting field
+  final Map<String, dynamic>? additionalProperties;
+
+  /// Creates a [json] representation of the [ValueType]
+  Map<String, dynamic> toJson() => {
+        'name': type.backendName,
+        ...additionalProperties ?? {},
+      };
+
+  @override
+  String toString() =>
+      'ValueType(type: ${type.backendName}, additionalProperties: $additionalProperties)';
+
+  @override
+  bool operator ==(Object other) {
+    return other is ValueType &&
+        type == other.type &&
+        f.mapEquals(additionalProperties, other.additionalProperties);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        type,
+        additionalProperties,
+      );
+}
