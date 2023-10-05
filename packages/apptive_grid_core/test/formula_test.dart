@@ -2,17 +2,53 @@ import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final Map<DataType, dynamic> supportedTypes = {
-    DataType.integer: 2,
-    DataType.decimal: 2.5,
-    DataType.text: 'olleh',
-    DataType.dateTime: DateTime(2000).toIso8601String(),
-    DataType.date: DateTime(2000).toIso8601String(),
+  final Map<ValueType, dynamic> supportedTypes = {
+    const ValueType(
+      type: DataType.integer,
+      additionalProperties: {
+        'componentTypes': ['textfield'],
+      },
+    ): 2,
+    const ValueType(
+      type: DataType.decimal,
+      additionalProperties: {
+        'componentTypes': ['textfield'],
+      },
+    ): 2.5,
+    const ValueType(
+      type: DataType.currency,
+      additionalProperties: {
+        'currency': 'EUR',
+        'componentTypes': ['textfield'],
+      },
+    ): 3.75,
+    const ValueType(
+      type: DataType.text,
+      additionalProperties: {
+        'componentTypes': ['textfield'],
+      },
+    ): 'olleh',
+    const ValueType(
+      type: DataType.dateTime,
+      additionalProperties: {
+        'componentTypes': ['textfield'],
+      },
+    ): DateTime(2000).toIso8601String(),
+    const ValueType(
+      type: DataType.date,
+      additionalProperties: {
+        'componentTypes': ['textfield'],
+      },
+    ): DateTime(2000).toIso8601String(),
   };
   for (final valueType in supportedTypes.entries) {
-    group('Value type ${valueType.key.backendName}', () {
-      final valueGridField =
-          GridField(id: 'id', name: 'name', type: valueType.key);
+    group('Value type ${valueType.key.type.backendName}', () {
+      final valueGridField = GridField.fromJson({
+        'id': 'id',
+        'name': 'name',
+        'type': valueType.key.toJson(),
+      });
+
       final valueDataEntity = DataEntity.fromJson(
         json: valueType.value,
         field: valueGridField,
@@ -30,10 +66,10 @@ void main() {
               ],
               '_id': '60d0370e0edfa83071816e12',
               '_links': {
-                "self": {
-                  "href":
-                      "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0",
-                  "method": "get",
+                'self': {
+                  'href':
+                      '/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04/entities/619b63e84a391314968da9a0',
+                  'method': 'get',
                 },
               },
             }
@@ -41,35 +77,32 @@ void main() {
           'filter': {},
           'fields': [
             {
-              "key": null,
-              "id": "fieldId",
-              "schema": {},
-              "name": "Formula Field",
-              "type": {
-                "name": "formula",
-                "typeName": "formula",
-                "expression": "test",
-                "valueType": {
-                  "name": valueType.key.backendName,
-                  "componentTypes": ["textfield"],
-                },
-                "componentTypes": ["textfield"],
+              'key': null,
+              'id': 'fieldId',
+              'schema': {},
+              'name': 'Formula Field',
+              'type': {
+                'name': 'formula',
+                'typeName': 'formula',
+                'expression': 'test',
+                'valueType': valueType.key.toJson(),
+                'componentTypes': ['textfield'],
               },
-              "_links": {
-                "patch": {
-                  "href":
-                      "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
-                  "method": "patch",
+              '_links': {
+                'patch': {
+                  'href':
+                      '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId',
+                  'method': 'patch',
                 },
-                "query": {
-                  "href":
-                      "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query",
-                  "method": "get",
+                'query': {
+                  'href':
+                      '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query',
+                  'method': 'get',
                 },
-                "self": {
-                  "href":
-                      "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
-                  "method": "get",
+                'self': {
+                  'href':
+                      '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId',
+                  'method': 'get',
                 },
               },
             }
@@ -77,83 +110,83 @@ void main() {
           'name': 'New grid view',
           'id': 'gridId',
           '_links': {
-            "addLink": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/AddLink",
-              "method": "post",
+            'addLink': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/AddLink',
+              'method': 'post',
             },
-            "forms": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-              "method": "get",
+            'forms': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/forms',
+              'method': 'get',
             },
-            "updateFieldType": {
-              "href":
-                  "/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange",
-              "method": "post",
+            'updateFieldType': {
+              'href':
+                  '/api/users/userId/spaces/spaceId/grids/gridId/ColumnTypeChange',
+              'method': 'post',
             },
-            "removeField": {
-              "href":
-                  "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove",
-              "method": "post",
+            'removeField': {
+              'href':
+                  '/api/users/userId/spaces/spaceId/grids/gridId/ColumnRemove',
+              'method': 'post',
             },
-            "addEntity": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-              "method": "post",
+            'addEntity': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/entities',
+              'method': 'post',
             },
-            "views": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-              "method": "get",
+            'views': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/views',
+              'method': 'get',
             },
-            "addView": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/views",
-              "method": "post",
+            'addView': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/views',
+              'method': 'post',
             },
-            "self": {
-              "href":
-                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-              "method": "get",
+            'self': {
+              'href':
+                  '/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04',
+              'method': 'get',
             },
-            "updateFieldKey": {
-              "href":
-                  "/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange",
-              "method": "post",
+            'updateFieldKey': {
+              'href':
+                  '/api/users/userId/spaces/spaceId/grids/gridId/ColumnKeyChange',
+              'method': 'post',
             },
-            "query": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/query",
-              "method": "get",
+            'query': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/query',
+              'method': 'get',
             },
-            "entities": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/entities",
-              "method": "get",
+            'entities': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/entities',
+              'method': 'get',
             },
-            "updates": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/updates",
-              "method": "get",
+            'updates': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/updates',
+              'method': 'get',
             },
-            "schema": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/schema",
-              "method": "get",
+            'schema': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/schema',
+              'method': 'get',
             },
-            "updateFieldName": {
-              "href":
-                  "/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename",
-              "method": "post",
+            'updateFieldName': {
+              'href':
+                  '/api/users/userId/spaces/spaceId/grids/gridId/ColumnRename',
+              'method': 'post',
             },
-            "addForm": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/forms",
-              "method": "post",
+            'addForm': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/forms',
+              'method': 'post',
             },
-            "addField": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd",
-              "method": "post",
+            'addField': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/ColumnAdd',
+              'method': 'post',
             },
-            "rename": {
-              "href": "/api/users/userId/spaces/spaceId/grids/gridId/Rename",
-              "method": "post",
+            'rename': {
+              'href': '/api/users/userId/spaces/spaceId/grids/gridId/Rename',
+              'method': 'post',
             },
-            "remove": {
-              "href":
-                  "/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04",
-              "method": "delete",
+            'remove': {
+              'href':
+                  '/api/users/userId/spaces/spaceId/grids/61bb271d457c98231c8fbb04',
+              'method': 'delete',
             },
           },
         };
@@ -188,7 +221,7 @@ void main() {
               valueType: valueType.key,
               schema: {},
             ).toString(),
-            'FormulaField(id: id, name: Formula, key: key, expression: test, valueType: ${valueType.key.backendName})',
+            'FormulaField(id: id, name: Formula, key: key, expression: test, valueType: ${valueType.key})',
           );
         });
 
@@ -261,35 +294,32 @@ void main() {
           final responseWithFormula = {
             'fields': [
               {
-                "key": null,
-                "id": "3ftoqhqbct15h5o730uknpvp5",
-                "schema": {},
-                "name": "name",
-                "type": {
-                  "name": "formula",
-                  "typeName": "formula",
-                  "expression": "test",
-                  "valueType": {
-                    "name": valueType.key.backendName,
-                    "componentTypes": ["textfield"],
-                  },
-                  "componentTypes": ["textfield"],
+                'key': null,
+                'id': '3ftoqhqbct15h5o730uknpvp5',
+                'schema': {},
+                'name': 'name',
+                'type': {
+                  'name': 'formula',
+                  'typeName': 'formula',
+                  'expression': 'test',
+                  'valueType': valueType.key.toJson(),
+                  'componentTypes': ['textfield'],
                 },
-                "_links": {
-                  "patch": {
-                    "href":
-                        "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
-                    "method": "patch",
+                '_links': {
+                  'patch': {
+                    'href':
+                        '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId',
+                    'method': 'patch',
                   },
-                  "query": {
-                    "href":
-                        "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query",
-                    "method": "get",
+                  'query': {
+                    'href':
+                        '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId/query',
+                    'method': 'get',
                   },
-                  "self": {
-                    "href":
-                        "/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId",
-                    "method": "get",
+                  'self': {
+                    'href':
+                        '/api/users/userId/spaces/spaceId/grids/gridId/fields/fieldId',
+                    'method': 'get',
                   },
                 },
               }
@@ -310,25 +340,25 @@ void main() {
             'title': 'New title',
             'id': 'formId',
             '_links': {
-              "submit": {
-                "href":
-                    "/api/users/userId/spaces/spaceId/grids/gridId/forms/formId",
-                "method": "post",
+              'submit': {
+                'href':
+                    '/api/users/userId/spaces/spaceId/grids/gridId/forms/formId',
+                'method': 'post',
               },
-              "remove": {
-                "href":
-                    "/api/users/userId/spaces/spaceId/grids/gridId/forms/formId",
-                "method": "delete",
+              'remove': {
+                'href':
+                    '/api/users/userId/spaces/spaceId/grids/gridId/forms/formId',
+                'method': 'delete',
               },
-              "self": {
-                "href":
-                    "/api/users/userId/spaces/spaceId/grids/gridId/forms/formId",
-                "method": "get",
+              'self': {
+                'href':
+                    '/api/users/userId/spaces/spaceId/grids/gridId/forms/formId',
+                'method': 'get',
               },
-              "update": {
-                "href":
-                    "/api/users/userId/spaces/spaceId/grids/gridId/forms/formId",
-                "method": "put",
+              'update': {
+                'href':
+                    '/api/users/userId/spaces/spaceId/grids/gridId/forms/formId',
+                'method': 'put',
               },
             },
           };

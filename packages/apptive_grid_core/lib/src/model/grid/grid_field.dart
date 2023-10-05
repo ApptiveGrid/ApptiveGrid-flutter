@@ -76,9 +76,7 @@ class GridField {
         schema: schema,
         links: links,
         expression: json['type']['expression'],
-        valueType: DataType.values.firstWhere(
-          (type) => type.backendName == json['type']['valueType']['name'],
-        ),
+        valueType: ValueType.fromJson(json['type']['valueType']),
       );
     }
     return GridField(
@@ -354,7 +352,7 @@ class FormulaField extends GridField {
   final String expression;
 
   /// The result type of the formula
-  final DataType valueType;
+  final ValueType valueType;
 
   @override
   Map<String, dynamic> toJson() {
@@ -362,16 +360,14 @@ class FormulaField extends GridField {
     json['type'] = {
       ...json['type'],
       'expression': expression,
-      'valueType': {
-        'name': valueType.backendName,
-      },
+      'valueType': valueType.toJson(),
     };
     return json;
   }
 
   @override
   String toString() =>
-      'FormulaField(id: $id, name: $name, key: $key, expression: $expression, valueType: ${valueType.backendName})';
+      'FormulaField(id: $id, name: $name, key: $key, expression: $expression, valueType: $valueType)';
 
   @override
   bool operator ==(Object other) {
@@ -395,5 +391,55 @@ class FormulaField extends GridField {
         ),
         expression,
         valueType,
+      );
+}
+
+/// The result type of the formula
+class ValueType {
+  /// Creates a new [ValueType]
+  const ValueType({
+    required this.type,
+    this.additionalProperties,
+  });
+
+  /// Creates a [ValueType] from [json]
+  factory ValueType.fromJson(Map<String, dynamic> json) {
+    return ValueType(
+      type: DataType.values.firstWhere(
+        (type) => type.backendName == json['name'],
+      ),
+      additionalProperties: Map.fromEntries(
+        json.entries.where((element) => element.key != 'name'),
+      ),
+    );
+  }
+
+  /// The result data type of the formula
+  final DataType type;
+
+  /// Additional information of the resulting field
+  final Map<String, dynamic>? additionalProperties;
+
+  /// Creates a [json] representation of the [ValueType]
+  Map<String, dynamic> toJson() => {
+        'name': type.backendName,
+        ...additionalProperties ?? {},
+      };
+
+  @override
+  String toString() =>
+      'ValueType(type: ${type.backendName}, additionalProperties: $additionalProperties)';
+
+  @override
+  bool operator ==(Object other) {
+    return other is ValueType &&
+        type == other.type &&
+        f.mapEquals(additionalProperties, other.additionalProperties);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        type,
+        additionalProperties,
       );
 }
