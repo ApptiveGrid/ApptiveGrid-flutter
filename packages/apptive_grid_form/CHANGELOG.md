@@ -1,3 +1,7 @@
+## 1.7.1
+
+ - **FIX**: Formula type parsing for complex types (#121).
+
 ## 1.7.0
 
  - **FEAT**: Add support for text blocks in forms (#120).
