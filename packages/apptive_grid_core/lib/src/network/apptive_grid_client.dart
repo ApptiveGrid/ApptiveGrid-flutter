@@ -288,12 +288,9 @@ class ApptiveGridClient extends ChangeNotifier {
       for (final chunkedActions in actions.values.slices(2)) {
         await Future.wait(
           chunkedActions.map(
-            (action) => switch (action.type) {
-              AttachmentActionType.add => _attachmentProcessor
-                    .uploadAttachment(
-                  action as AddAttachmentAction,
-                )
-                    .then((response) {
+            (action) => switch (action) {
+              AddAttachmentAction() =>
+                _attachmentProcessor.uploadAttachment(action).then((response) {
                   statusController?.add(
                     ProcessedAttachmentProgressEvent(
                       action.attachment,
@@ -303,19 +300,15 @@ class ApptiveGridClient extends ChangeNotifier {
                 }).catchError((error) {
                   throw error;
                 }),
-              AttachmentActionType.delete => Future.value().then((response) {
+              DeleteAttachmentAction() => Future.value().then((response) {
                   statusController?.add(
-                    ProcessedAttachmentProgressEvent(
-                      action.attachment,
-                    ),
+                    ProcessedAttachmentProgressEvent(action.attachment),
                   );
                   return response;
                 }),
-              AttachmentActionType.rename => Future.value().then((response) {
+              RenameAttachmentAction() => Future.value().then((response) {
                   statusController?.add(
-                    ProcessedAttachmentProgressEvent(
-                      action.attachment,
-                    ),
+                    ProcessedAttachmentProgressEvent(action.attachment),
                   );
                   return response;
                 })

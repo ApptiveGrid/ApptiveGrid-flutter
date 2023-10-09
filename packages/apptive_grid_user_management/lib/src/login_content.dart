@@ -166,8 +166,9 @@ class _LoginContentState extends State<LoginContent> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(localization
-                  .joinGroup(widget.appName ?? _client?.group ?? '')),
+              Text(
+                localization.joinGroup(widget.appName ?? _client?.group ?? ''),
+              ),
               if (_error != null) ...[
                 SizedBox(
                   height: spacing,
