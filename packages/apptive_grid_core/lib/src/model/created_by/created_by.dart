@@ -76,14 +76,9 @@ enum CreatedByType {
 }
 
 extension _UserReferenceX on CreatedByType {
-  String get backendType {
-    switch (this) {
-      case CreatedByType.user:
-        return 'user';
-      case CreatedByType.formLink:
-        return 'link';
-      case CreatedByType.apiCredentials:
-        return 'accesscredentials';
-    }
-  }
+  String get backendType => switch (this) {
+        CreatedByType.user => 'user',
+        CreatedByType.formLink => 'link',
+        CreatedByType.apiCredentials => 'accesscredentials',
+      };
 }

@@ -36,23 +36,21 @@ abstract class AttachmentAction {
       ),
     );
     final attachment = Attachment.fromJson(json['attachment']);
-    switch (type) {
-      case AttachmentActionType.add:
-        return AddAttachmentAction(
+    return switch (type) {
+      AttachmentActionType.add => AddAttachmentAction(
           byteData: json['byteData'] != null
               ? Uint8List.fromList(json['byteData'].cast<int>())
               : null,
           path: json['path'],
           attachment: attachment,
-        );
-      case AttachmentActionType.delete:
-        return DeleteAttachmentAction(attachment: attachment);
-      case AttachmentActionType.rename:
-        return RenameAttachmentAction(
+        ),
+      AttachmentActionType.delete =>
+        DeleteAttachmentAction(attachment: attachment),
+      AttachmentActionType.rename => RenameAttachmentAction(
           newName: json['newName'],
           attachment: attachment,
-        );
-    }
+        ),
+    };
   }
 
   /// Serializes an AttachmentAction to json

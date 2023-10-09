@@ -5,67 +5,56 @@ import 'package:flutter/material.dart';
 /// Returns a corresponding Widget for a specific [component]
 ///
 /// Throws an [ArgumentError] if no Widget for a specific [DataType] is found
-Widget fromModel(FormComponent component, {bool enabled = true}) {
-  switch (component.field.type) {
-    case DataType.text:
-      return TextFormWidget(component: component.cast<StringDataEntity>());
-    case DataType.dateTime:
-      return DateTimeFormWidget(
-        component: component.cast<DateTimeDataEntity>(),
-      );
-    case DataType.date:
-      return DateFormWidget(component: component.cast<DateDataEntity>());
-    case DataType.integer:
-      return IntegerFormWidget(component: component.cast<IntegerDataEntity>());
-    case DataType.decimal:
-      return DecimalFormWidget(component: component.cast<DecimalDataEntity>());
-    case DataType.checkbox:
-      return CheckBoxFormWidget(component: component.cast<BooleanDataEntity>());
-    case DataType.singleSelect:
-      return EnumFormWidget(component: component.cast<EnumDataEntity>());
-    case DataType.crossReference:
-      return CrossReferenceFormWidget(
-        component: component.cast<CrossReferenceDataEntity>(),
-      );
-    case DataType.attachment:
-      return AttachmentFormWidget(
-        component: component.cast<AttachmentDataEntity>(),
-      );
-    case DataType.enumCollection:
-      return EnumCollectionFormWidget(
-        component: component.cast<EnumCollectionDataEntity>(),
-      );
-    case DataType.geolocation:
-      return GeolocationFormWidget(
-        component: component.cast<GeolocationDataEntity>(),
-      );
-    case DataType.multiCrossReference:
-      return MultiCrossReferenceFormWidget(
-        component: component.cast<MultiCrossReferenceDataEntity>(),
-      );
-    case DataType.user:
-      return UserFormWidget(component: component.cast<UserDataEntity>());
-    case DataType.currency:
-      return CurrencyFormWidget(
-        component: component.cast<CurrencyDataEntity>(),
-      );
-    case DataType.uri:
-      return UriFormWidget(component: component.cast<UriDataEntity>());
-    case DataType.email:
-      return EmailFormWidget(component: component.cast<EmailDataEntity>());
-    case DataType.phoneNumber:
-      return PhoneNumberFormWidget(
-        component: component.cast<PhoneNumberDataEntity>(),
-      );
-    case DataType.signature:
-      return SignatureFormWidget(
-        component: component.cast<SignatureDataEntity>(),
-      );
-    case DataType.createdBy:
-    case DataType.createdAt:
-    case DataType.lookUp:
-    case DataType.reducedLookUp:
-    case DataType.formula:
-      return const EmptyFormWidget();
-  }
-}
+Widget fromModel(FormComponent component, {bool enabled = true}) =>
+    switch (component.field.type) {
+      DataType.text =>
+        TextFormWidget(component: component.cast<StringDataEntity>()),
+      DataType.dateTime => DateTimeFormWidget(
+          component: component.cast<DateTimeDataEntity>(),
+        ),
+      DataType.date =>
+        DateFormWidget(component: component.cast<DateDataEntity>()),
+      DataType.integer =>
+        IntegerFormWidget(component: component.cast<IntegerDataEntity>()),
+      DataType.decimal =>
+        DecimalFormWidget(component: component.cast<DecimalDataEntity>()),
+      DataType.checkbox =>
+        CheckBoxFormWidget(component: component.cast<BooleanDataEntity>()),
+      DataType.singleSelect =>
+        EnumFormWidget(component: component.cast<EnumDataEntity>()),
+      DataType.crossReference => CrossReferenceFormWidget(
+          component: component.cast<CrossReferenceDataEntity>(),
+        ),
+      DataType.attachment => AttachmentFormWidget(
+          component: component.cast<AttachmentDataEntity>(),
+        ),
+      DataType.enumCollection => EnumCollectionFormWidget(
+          component: component.cast<EnumCollectionDataEntity>(),
+        ),
+      DataType.geolocation => GeolocationFormWidget(
+          component: component.cast<GeolocationDataEntity>(),
+        ),
+      DataType.multiCrossReference => MultiCrossReferenceFormWidget(
+          component: component.cast<MultiCrossReferenceDataEntity>(),
+        ),
+      DataType.user =>
+        UserFormWidget(component: component.cast<UserDataEntity>()),
+      DataType.currency => CurrencyFormWidget(
+          component: component.cast<CurrencyDataEntity>(),
+        ),
+      DataType.uri => UriFormWidget(component: component.cast<UriDataEntity>()),
+      DataType.email =>
+        EmailFormWidget(component: component.cast<EmailDataEntity>()),
+      DataType.phoneNumber => PhoneNumberFormWidget(
+          component: component.cast<PhoneNumberDataEntity>(),
+        ),
+      DataType.signature => SignatureFormWidget(
+          component: component.cast<SignatureDataEntity>(),
+        ),
+      DataType.createdBy ||
+      DataType.createdAt ||
+      DataType.lookUp ||
+      DataType.reducedLookUp ||
+      DataType.formula =>
+        const EmptyFormWidget(),
+    };

@@ -39,85 +39,62 @@ abstract class DataEntity<T, S> with FilterableMixin {
   static DataEntity fromJson({
     required dynamic json,
     required GridField field,
-  }) {
-    switch (field.type) {
-      case DataType.text:
-        return StringDataEntity(json);
-      case DataType.dateTime:
-        return DateTimeDataEntity.fromJson(json);
-      case DataType.date:
-        return DateDataEntity.fromJson(json);
-      case DataType.integer:
-        return IntegerDataEntity(json);
-      case DataType.checkbox:
-        return BooleanDataEntity(json);
-      case DataType.singleSelect:
-        return EnumDataEntity(
-          value: json,
-          options: (field.schema['enum']?.cast<String>() as List<String>?)
-                  ?.toSet() ??
-              {},
-        );
-      case DataType.crossReference:
-        return CrossReferenceDataEntity.fromJson(
-          jsonValue: json,
-          gridUri: field.schema['gridUri'] ?? '',
-        );
-      case DataType.decimal:
-        return DecimalDataEntity(json);
-      case DataType.attachment:
-        return AttachmentDataEntity.fromJson(json);
-      case DataType.enumCollection:
-        return EnumCollectionDataEntity(
-          value: ((json ?? <String>[]).cast<String>() as List<String>).toSet(),
-          options:
-              (field.schema['items']?['enum']?.cast<String>() as List<String>?)
-                      ?.toSet() ??
-                  {},
-        );
-      case DataType.geolocation:
-        return GeolocationDataEntity.fromJson(json);
-      case DataType.multiCrossReference:
-        return MultiCrossReferenceDataEntity.fromJson(
-          jsonValue: json,
-          gridUri: field.schema['items']?['gridUri'] ?? '',
-        );
-      case DataType.createdBy:
-        return CreatedByDataEntity.fromJson(json);
-      case DataType.user:
-        return UserDataEntity.fromJson(json);
-      case DataType.currency:
-        return CurrencyDataEntity(
-          value: json,
-          currency: (field as CurrencyGridField).currency,
-        );
-      case DataType.uri:
-        return UriDataEntity.fromJson(json);
-      case DataType.email:
-        return EmailDataEntity(json);
-      case DataType.phoneNumber:
-        return PhoneNumberDataEntity(json);
-      case DataType.signature:
-        return SignatureDataEntity.fromJson(json);
-      case DataType.createdAt:
-        return DateTimeDataEntity.fromJson(json);
-      case DataType.lookUp:
-        return LookUpDataEntity.fromJson(
-          json,
-          lookedUpField: (field as LookUpGridField).lookedUpField,
-        );
-      case DataType.reducedLookUp:
-        return ReducedLookUpDataEntity.fromJson(
-          json,
-          reducedField: (field as ReducedLookUpField).reducedField,
-        );
-      case DataType.formula:
-        return FormulaDataEntity.fromJson(
-          json,
-          valueType: (field as FormulaField).valueType,
-        );
-    }
-  }
+  }) =>
+      switch (field.type) {
+        DataType.text => StringDataEntity(json),
+        DataType.dateTime => DateTimeDataEntity.fromJson(json),
+        DataType.date => DateDataEntity.fromJson(json),
+        DataType.integer => IntegerDataEntity(json),
+        DataType.checkbox => BooleanDataEntity(json),
+        DataType.singleSelect => EnumDataEntity(
+            value: json,
+            options: (field.schema['enum']?.cast<String>() as List<String>?)
+                    ?.toSet() ??
+                {},
+          ),
+        DataType.crossReference => CrossReferenceDataEntity.fromJson(
+            jsonValue: json,
+            gridUri: field.schema['gridUri'] ?? '',
+          ),
+        DataType.decimal => DecimalDataEntity(json),
+        DataType.attachment => AttachmentDataEntity.fromJson(json),
+        DataType.enumCollection => EnumCollectionDataEntity(
+            value:
+                ((json ?? <String>[]).cast<String>() as List<String>).toSet(),
+            options: (field.schema['items']?['enum']?.cast<String>()
+                        as List<String>?)
+                    ?.toSet() ??
+                {},
+          ),
+        DataType.geolocation => GeolocationDataEntity.fromJson(json),
+        DataType.multiCrossReference => MultiCrossReferenceDataEntity.fromJson(
+            jsonValue: json,
+            gridUri: field.schema['items']?['gridUri'] ?? '',
+          ),
+        DataType.createdBy => CreatedByDataEntity.fromJson(json),
+        DataType.user => UserDataEntity.fromJson(json),
+        DataType.currency => CurrencyDataEntity(
+            value: json,
+            currency: (field as CurrencyGridField).currency,
+          ),
+        DataType.uri => UriDataEntity.fromJson(json),
+        DataType.email => EmailDataEntity(json),
+        DataType.phoneNumber => PhoneNumberDataEntity(json),
+        DataType.signature => SignatureDataEntity.fromJson(json),
+        DataType.createdAt => DateTimeDataEntity.fromJson(json),
+        DataType.lookUp => LookUpDataEntity.fromJson(
+            json,
+            lookedUpField: (field as LookUpGridField).lookedUpField,
+          ),
+        DataType.reducedLookUp => ReducedLookUpDataEntity.fromJson(
+            json,
+            reducedField: (field as ReducedLookUpField).reducedField,
+          ),
+        DataType.formula => FormulaDataEntity.fromJson(
+            json,
+            valueType: (field as FormulaField).valueType,
+          ),
+      } as DataEntity;
 }
 
 /// [DataEntity] representing [String] Objects
