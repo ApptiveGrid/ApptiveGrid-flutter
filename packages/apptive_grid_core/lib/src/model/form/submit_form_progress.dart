@@ -2,7 +2,7 @@ import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:http/http.dart';
 
 /// An Event indicating that a Form Submission has progressed
-abstract class SubmitFormProgressEvent {
+sealed class SubmitFormProgressEvent {
   const SubmitFormProgressEvent._();
 }
 

@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 ///
 /// [T] type of the data used in Flutter
 /// [S] type used when sending Data back
-abstract class DataEntity<T, S> with FilterableMixin {
+sealed class DataEntity<T, S> with FilterableMixin {
   /// Create a new DataEntity with [value]
   DataEntity([this.value]);
 
