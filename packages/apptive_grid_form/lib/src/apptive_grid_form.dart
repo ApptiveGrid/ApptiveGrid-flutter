@@ -503,8 +503,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
       final attachmentsToUpload = _formData!.attachmentActions.length;
       int attachmentCount = 0;
       setState(() {
-        _progress = SubmitProgress(
-          step: SubmitStep.uploadingAttachments,
+        _progress = UploadingAttachmentsProgress(
           processedAttachments: attachmentCount,
           totalAttachments: attachmentsToUpload,
           progress: startPercentage,
@@ -515,8 +514,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
         (event) async {
           if (event is ProcessedAttachmentProgressEvent) {
             setState(() {
-              _progress = SubmitProgress(
-                step: SubmitStep.uploadingAttachments,
+              _progress = UploadingAttachmentsProgress(
                 processedAttachments: ++attachmentCount,
                 totalAttachments: attachmentsToUpload,
                 progress: startPercentage +
@@ -532,10 +530,7 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
             }
           } else if (event is UploadFormProgressEvent) {
             setState(() {
-              _progress = SubmitProgress(
-                step: SubmitStep.submittingForm,
-                processedAttachments: attachmentCount,
-                totalAttachments: attachmentsToUpload,
+              _progress = SubmittingFormProgress(
                 progress: uploadFormPercentage,
               );
             });
