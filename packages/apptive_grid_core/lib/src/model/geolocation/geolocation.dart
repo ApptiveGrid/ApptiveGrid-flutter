@@ -5,10 +5,21 @@ class Geolocation {
 
   /// Creates a new Geolocation from a [json] respones
   factory Geolocation.fromJson(dynamic json) {
-    return Geolocation(
-      latitude: (json['lat'] as num).toDouble(),
-      longitude: (json['lon'] as num).toDouble(),
-    );
+    if (json
+        case {
+          'lat': num lat,
+          'lon': num lon,
+        }) {
+      return Geolocation(
+        latitude: lat.toDouble(),
+        longitude: lon.toDouble(),
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid Geolocation json: $json',
+      );
+    }
   }
 
   /// Creates a json map expected by the server
