@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-10-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_form` - `v1.7.2`](#apptive_grid_form---v172)
+
+---
+
+#### `apptive_grid_form` - `v1.7.2`
+
+ - **FIX**: Use easeInOut curve for page transition (#122).
+
+
 ## 2023-10-06
 
 ### Changes
