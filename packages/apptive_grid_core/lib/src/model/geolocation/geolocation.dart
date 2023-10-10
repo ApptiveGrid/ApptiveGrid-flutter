@@ -17,7 +17,7 @@ class Geolocation {
     } else {
       throw ArgumentError.value(
         json,
-        'Invalid Geolocation json: $json',
+        'Invalid json format for parsing Geolocation',
       );
     }
   }

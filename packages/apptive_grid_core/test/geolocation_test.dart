@@ -397,6 +397,33 @@ void main() {
   });
 
   group('Geolocation', () {
+    group('Parsing', () {
+      test('Succeeds', () {
+        final json = {
+          'lon': 11,
+          'lat': 47,
+        };
+
+        final geolocation = Geolocation.fromJson(json);
+
+        expect(geolocation.latitude, json['lat']);
+        expect(geolocation.longitude, json['lon']);
+      });
+      test('Fails', () {
+        final json = {
+          'lon': 11,
+          'lat': '47',
+        };
+
+        try {
+          Geolocation.fromJson(json);
+          fail('Parsing should not succeed');
+        } catch (error) {
+          expect(error, isArgumentError);
+          expect((error as ArgumentError).invalidValue, equals(json));
+        }
+      });
+    });
     test('Equality', () {
       const one = Geolocation(
         latitude: 47,
