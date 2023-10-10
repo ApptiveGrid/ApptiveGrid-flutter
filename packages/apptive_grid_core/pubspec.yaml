@@ -9,7 +9,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  collection: ^1.17.1
+  collection: ^1.17.2
   image: ^4.0.17
   intl: ^0.18.0
   http: ^0.13.6
@@ -20,15 +20,15 @@ dependencies:
   universal_file: ^1.0.0
   universal_platform: ^1.0.0+1
   url_launcher: ^6.1.10
-  uuid: ^3.0.7
-  flutter_secure_storage: ^8.0.0
+  uuid: ^4.1.0
+  flutter_secure_storage: ^9.0.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flutter_lints: ^2.0.1
   pedantic: ^1.11.1
-  mocktail: ^0.3.0
+  mocktail: ^1.0.1
   url_launcher_platform_interface: ^2.1.2
   uni_links_platform_interface: ^1.0.0
   plugin_platform_interface: ^2.1.4

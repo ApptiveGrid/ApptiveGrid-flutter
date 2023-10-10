@@ -16,16 +16,16 @@ dependencies:
     sdk: flutter
   flutter_svg: ^2.0.5
   flutter_typeahead: ^4.3.8
-  geolocator: ^9.0.2
+  geolocator: ^10.0.1
   google_maps_flutter: ^2.2.6
   google_maps_flutter_platform_interface: ^2.2.6
   hand_signature: ^3.0.1
   http: ^0.13.6
-  image_picker: ^0.8.7+4
+  image_picker: ^1.0.4
   intl: ^0.18.0
   linked_scroll_controller: ^0.2.0
   lottie: ^2.3.2
-  permission_handler: ^10.2.0
+  permission_handler: ^11.0.1
   permission_handler_platform_interface: ^3.9.0
   provider: ^6.0.5
   universal_file: ^1.0.0
@@ -37,8 +37,8 @@ dev_dependencies:
     sdk: flutter
   image_picker_platform_interface: ^2.6.3
   pedantic: ^1.11.1
-  mocktail: ^0.3.0
-  mocktail_image_network: ^0.3.1
+  mocktail: ^1.0.1
+  mocktail_image_network: ^1.0.0
   plugin_platform_interface: ^2.1.4
   flutter_test:
     sdk: flutter
