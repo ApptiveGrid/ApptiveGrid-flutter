@@ -19,34 +19,44 @@ class Grid {
 
   /// Deserializes [json] into a [Grid] Object
   factory Grid.fromJson(Map<String, dynamic> json) {
-    final id = json['id'];
-    final fields = (json['fields'] as List?)
-        ?.map((json) => GridField.fromJson(json))
-        .toList();
-    final hiddenFields = (json['hiddenFields'] as List?)
-        ?.map((json) => GridField.fromJson(json))
-        .toList();
-    final entries = fields != null
-        ? (json['entities'] as List?)
-            ?.map((e) => GridRow.fromJson(e, fields))
-            .toList()
-        : null;
-    final filter = json['filter'];
-    final sorting = json['sorting'];
-    return Grid(
-      id: id,
-      name: json['name'],
-      key: json['key'],
-      fields: fields,
-      hiddenFields: hiddenFields,
-      rows: entries,
-      filter: filter,
-      sorting: sorting,
-      links: linkMapFromJson(json['_links']),
-      embeddedForms: (json['_embedded']?['forms'] as List?)
-          ?.map((e) => FormData.fromJson(e))
-          .toList(),
-    );
+    if (json
+        case {
+          'id': String id,
+          'name': String name,
+          'key': String? key,
+          'fields': List? fields,
+          'hiddenFields': List? hiddenFields,
+          'entities': List? entities,
+          'filter': dynamic filter,
+          'sorting': dynamic sorting,
+          '_links': Map<String, dynamic>? links,
+          '_embedded': {
+            'forms': List? embeddedForms,
+          }?,
+        }) {
+      final parsedFields =
+          fields?.map((json) => GridField.fromJson(json)).toList();
+      return Grid(
+        id: id,
+        name: name,
+        key: key,
+        fields: parsedFields,
+        hiddenFields:
+            hiddenFields?.map((json) => GridField.fromJson(json)).toList(),
+        rows: parsedFields != null
+            ? entities?.map((e) => GridRow.fromJson(e, parsedFields)).toList()
+            : null,
+        filter: filter,
+        sorting: sorting,
+        links: linkMapFromJson(links),
+        embeddedForms: embeddedForms?.map((e) => FormData.fromJson(e)).toList(),
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid Grid json: $json',
+      );
+    }
   }
 
   /// Id of this Grid

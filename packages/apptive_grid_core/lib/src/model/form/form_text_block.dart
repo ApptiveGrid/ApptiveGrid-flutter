@@ -10,15 +10,31 @@ enum FormTextBlockStyle {
 /// A freeform text block inside of a form
 class FormTextBlock {
   /// Deserializes [json] into a FormTextBlock Object
-  factory FormTextBlock.fromJson(dynamic json) => FormTextBlock(
-        id: json['id'],
-        text: json['text'],
-        positionOnPage: json['fieldIndex'],
-        type: json['type'],
-        style: FormTextBlockStyle.values
-            .firstWhere((e) => e.name == json['style']),
-        pageId: json['pageId'],
+  factory FormTextBlock.fromJson(dynamic json) {
+    if (json
+        case {
+          'id': String id,
+          'pageId': String? pageId,
+          'fieldIndex': int positionOnPage,
+          'type': String type,
+          'style': String style,
+          'text': String text,
+        }) {
+      return FormTextBlock(
+        id: id,
+        text: text,
+        positionOnPage: positionOnPage,
+        type: type,
+        style: FormTextBlockStyle.values.firstWhere((e) => e.name == style),
+        pageId: pageId,
       );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid FormTextBlock json: $json',
+      );
+    }
+  }
 
   /// Creates a FormTextBlock Object
   FormTextBlock({
@@ -34,7 +50,7 @@ class FormTextBlock {
   final String id;
 
   /// Page of the block in the form
-  final String pageId;
+  final String? pageId;
 
   /// Position of the block in the page
   final int positionOnPage;

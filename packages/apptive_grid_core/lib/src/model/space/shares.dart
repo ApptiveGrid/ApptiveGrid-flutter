@@ -31,12 +31,25 @@ class Share {
 
   /// Creates a Share from value [json]
   factory Share.fromJson(dynamic json) {
-    return Share(
-      role: Role.values.firstWhere((role) => role.backendName == json['role']),
-      emails: List<String>.from(json['emails']),
-      users: List<String>.from(json['users']),
-      links: linkMapFromJson(json['_links']),
-    );
+    if (json
+        case {
+          'role': String role,
+          'emails': List<String> emails,
+          'users': List<String> users,
+          '_links': Map<String, dynamic>? links,
+        }) {
+      return Share(
+        role: Role.values.firstWhere((e) => e.backendName == role),
+        emails: emails,
+        users: users,
+        links: linkMapFromJson(links),
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid Share json: $json',
+      );
+    }
   }
 
   /// Serializes this [Share] to a json Map

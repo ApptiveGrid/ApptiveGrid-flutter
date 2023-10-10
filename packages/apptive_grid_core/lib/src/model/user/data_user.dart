@@ -10,10 +10,21 @@ class DataUser {
 
   /// Creates a new DataUser from a [json] response
   factory DataUser.fromJson(Map<String, dynamic> json) {
-    return DataUser(
-      displayValue: json['displayValue'] ?? '',
-      uri: Uri.parse(json['uri'] ?? ''),
-    );
+    if (json
+        case {
+          'displayValue': String? displayValue,
+          'uri': String? uri,
+        }) {
+      return DataUser(
+        displayValue: displayValue ?? '',
+        uri: Uri.parse(uri ?? ''),
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid DataUser json: $json',
+      );
+    }
   }
 
   /// Converts this DataUser to a json representation

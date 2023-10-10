@@ -17,38 +17,50 @@ enum _AttachmentActionType {
 
 /// Abstract class describing an Attachment Action
 sealed class AttachmentAction {
+  /// Create a specific AttachmentAction from a json file
+  factory AttachmentAction.fromJson(dynamic json) {
+    return switch (json) {
+      {
+        'type': String type,
+        'attachment': Map<String, dynamic> attachment,
+        'byteData': List<int>? byteData,
+      }
+          when type == _AttachmentActionType.add.name =>
+        AddAttachmentAction(
+          byteData: byteData != null ? Uint8List.fromList(byteData) : null,
+          path: json['path'],
+          attachment: Attachment.fromJson(attachment),
+        ),
+      {
+        'type': String type,
+        'attachment': Map<String, dynamic> attachment,
+      }
+          when type == _AttachmentActionType.delete.name =>
+        DeleteAttachmentAction(
+          attachment: Attachment.fromJson(attachment),
+        ),
+      {
+        'type': String type,
+        'attachment': Map<String, dynamic> attachment,
+        'newName': String newName,
+      }
+          when type == _AttachmentActionType.rename.name =>
+        RenameAttachmentAction(
+          newName: newName,
+          attachment: Attachment.fromJson(attachment),
+        ),
+      _ => throw ArgumentError.value(
+          json,
+          'Invalid AttachmentAction json: $json',
+        ),
+    };
+  }
+
   /// Creates a new Action of a specific [type] for an [attachment]
   AttachmentAction({required this.attachment});
 
   /// [Attachment] this action is performed on
   final Attachment attachment;
-
-  /// Create a specific AttachmentAction from a json file
-  static AttachmentAction fromJson(dynamic json) {
-    final type = _AttachmentActionType.values.firstWhere(
-      (element) => element.toString() == json['type'],
-      orElse: () => throw ArgumentError.value(
-        json['type'],
-        'Unknown AttachmentActionType ${json['type']}',
-      ),
-    );
-    final attachment = Attachment.fromJson(json['attachment']);
-    return switch (type) {
-      _AttachmentActionType.add => AddAttachmentAction(
-          byteData: json['byteData'] != null
-              ? Uint8List.fromList(json['byteData'].cast<int>())
-              : null,
-          path: json['path'],
-          attachment: attachment,
-        ),
-      _AttachmentActionType.delete =>
-        DeleteAttachmentAction(attachment: attachment),
-      _AttachmentActionType.rename => RenameAttachmentAction(
-          newName: json['newName'],
-          attachment: attachment,
-        ),
-    };
-  }
 
   /// Serializes an AttachmentAction to json
   Map<String, dynamic> toJson();

@@ -16,77 +16,132 @@ class GridField {
 
   /// Creates a GridField from [json]
   factory GridField.fromJson(Map<String, dynamic> json) {
-    final type = DataType.values
-        .firstWhere((type) => type.backendName == json['type']['name']);
-    final id = json['id'];
-    final name = json['name'];
-    final key = json['key'];
-    final links = linkMapFromJson(json['_links']);
-    final schema = json['schema'];
-    if (type == DataType.currency) {
-      return CurrencyGridField(
-        id: id,
-        name: name,
-        key: key,
-        schema: schema,
-        links: links,
-        currency: json['type']['currency'],
-      );
-    }
-    if (type == DataType.lookUp) {
-      return LookUpGridField(
-        id: id,
-        name: name,
-        key: key,
-        schema: schema,
-        links: links,
-        referenceField: Uri.parse(json['type']['referenceField']),
-        lookUpField: Uri.parse(json['type']['lookupField']),
-        lookedUpField: GridField.fromJson({
-          'id': 'lookedUpId',
-          'name': 'lookedUp',
-          'schema': {},
-          'type': json['type']['lookupType'],
-        }),
-      );
-    }
-    if (type == DataType.reducedLookUp) {
-      return ReducedLookUpField(
-        id: id,
-        name: name,
-        key: key,
-        schema: schema,
-        links: links,
-        referencesField: Uri.parse(json['type']['referencesField']),
-        lookUpField: Uri.parse(json['type']['lookupField']),
-        reduceFunction: json['type']['reduceFunction'],
-        reducedField: GridField.fromJson({
-          'id': 'reducedId',
-          'name': 'reduced',
-          'schema': {},
-          'type': json['type']['reducedType'],
-        }),
-      );
-    }
-    if (type == DataType.formula) {
-      return FormulaField(
-        id: id,
-        name: name,
-        key: key,
-        schema: schema,
-        links: links,
-        expression: json['type']['expression'],
-        valueType: ValueType.fromJson(json['type']['valueType']),
-      );
-    }
-    return GridField(
-      id: id,
-      name: name,
-      key: key,
-      schema: schema,
-      links: links,
-      type: type,
-    );
+    return switch (json) {
+      {
+        'id': String id,
+        'key': String? key,
+        'name': String name,
+        '_links': Map<String, dynamic>? links,
+        'schema': dynamic schema,
+        'type': {
+          'name': String type,
+          'currency': String currency,
+        }
+      }
+          when type == DataType.currency.backendName =>
+        CurrencyGridField(
+          id: id,
+          name: name,
+          key: key,
+          schema: schema,
+          links: linkMapFromJson(links),
+          currency: currency,
+        ),
+      {
+        'id': String id,
+        'key': String? key,
+        'name': String name,
+        '_links': Map<String, dynamic>? links,
+        'schema': dynamic schema,
+        'type': {
+          'name': String type,
+          'referenceField': String referenceField,
+          'lookupField': String lookupField,
+          'lookupType': String lookupType,
+        }
+      }
+          when type == DataType.lookUp.backendName =>
+        LookUpGridField(
+          id: id,
+          name: name,
+          key: key,
+          schema: schema,
+          links: linkMapFromJson(links),
+          referenceField: Uri.parse(referenceField),
+          lookUpField: Uri.parse(lookupField),
+          lookedUpField: GridField.fromJson({
+            'id': 'lookedUpId',
+            'name': 'lookedUp',
+            'schema': {},
+            'type': lookupType,
+          }),
+        ),
+      {
+        'id': String id,
+        'key': String? key,
+        'name': String name,
+        '_links': Map<String, dynamic>? links,
+        'schema': dynamic schema,
+        'type': {
+          'name': String type,
+          'referencesField': String referencesField,
+          'lookupField': String lookupField,
+          'reduceFunction': String reduceFunction,
+          'reducedType': String reducedType,
+        }
+      }
+          when type == DataType.reducedLookUp.backendName =>
+        ReducedLookUpField(
+          id: id,
+          name: name,
+          key: key,
+          schema: schema,
+          links: linkMapFromJson(links),
+          referencesField: Uri.parse(referencesField),
+          lookUpField: Uri.parse(lookupField),
+          reduceFunction: reduceFunction,
+          reducedField: GridField.fromJson({
+            'id': 'reducedId',
+            'name': 'reduced',
+            'schema': {},
+            'type': reducedType,
+          }),
+        ),
+      {
+        'id': String id,
+        'key': String? key,
+        'name': String name,
+        '_links': Map<String, dynamic>? links,
+        'schema': dynamic schema,
+        'type': {
+          'name': String type,
+          'expression': String expression,
+          'valueType': Map<String, dynamic> valueType,
+        }
+      }
+          when type == DataType.formula.backendName =>
+        FormulaField(
+          id: id,
+          name: name,
+          key: key,
+          schema: schema,
+          links: linkMapFromJson(links),
+          expression: expression,
+          valueType: ValueType.fromJson(valueType),
+        ),
+      {
+        'id': String id,
+        'key': String? key,
+        'name': String name,
+        '_links': Map<String, dynamic>? links,
+        'schema': dynamic schema,
+        'type': {
+          'name': String type,
+        }
+      } =>
+        GridField(
+          id: id,
+          name: name,
+          key: key,
+          schema: schema,
+          links: linkMapFromJson(links),
+          type: DataType.values.firstWhere((e) => e.backendName == type),
+        ),
+      _ => throw ArgumentError.value(
+          json,
+          'Invalid GridField json: $json',
+        ),
+    };
   }
 
   /// id of the field
@@ -404,14 +459,22 @@ class ValueType {
 
   /// Creates a [ValueType] from [json]
   factory ValueType.fromJson(Map<String, dynamic> json) {
-    return ValueType(
-      type: DataType.values.firstWhere(
-        (type) => type.backendName == json['name'],
-      ),
-      additionalProperties: Map.fromEntries(
-        json.entries.where((element) => element.key != 'name'),
-      ),
-    );
+    if (json
+        case {
+          'name': String name,
+        }) {
+      return ValueType(
+        type: DataType.values.firstWhere((type) => type.backendName == name),
+        additionalProperties: Map.fromEntries(
+          json.entries.where((element) => element.key != 'name'),
+        ),
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid ValueType json: $json',
+      );
+    }
   }
 
   /// The result data type of the formula

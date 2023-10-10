@@ -21,62 +21,69 @@ class FormData {
 
   /// Deserializes [json] into a FormData Object
   factory FormData.fromJson(Map<String, dynamic> json) {
-    final id = json['id'];
-    final name = json['name'];
-    final title = json['title'];
-    final description = json['description'];
-    final fields = (json['fields'] as List?)
-            ?.map((json) => GridField.fromJson(json))
-            .toList() ??
-        [];
-    final links = linkMapFromJson(json['_links']);
-    final attachmentActions = json['attachmentActions'] != null
-        ? Map.fromEntries(
-            (json['attachmentActions'] as List).map((entry) {
-              final action = AttachmentAction.fromJson(entry);
-              return MapEntry(action.attachment, action);
-            }).toList(),
-          )
-        : <Attachment, AttachmentAction>{};
-    final properties = json['properties'] != null
-        ? FormDataProperties.fromJson(json['properties'])
-        : null;
-
-    final List<FormFieldProperties> fieldProperties = [];
-    if (json['fieldProperties'] != null) {
-      for (final field in fields) {
-        final propertiesJson = json['fieldProperties'][field.id];
-        if (propertiesJson != null) {
-          fieldProperties.add(
-            FormFieldProperties.fromJson(
-              json: propertiesJson,
-              field: field,
-            ),
-          );
+    if (json
+        case {
+          'id': String id,
+          'name': String? name,
+          'title': String? title,
+          'description': String? description,
+          'fields': List? fields,
+          '_links': Map<String, dynamic>? links,
+          'attachmentActions': List? attachmentActions,
+          'properties': Map<String, dynamic>? properties,
+          'fieldProperties': Map<String, dynamic>? fieldProperties,
+          'components': List? components,
+        }) {
+      final fieldsParsed =
+          fields?.map((json) => GridField.fromJson(json)).toList() ?? [];
+      final List<FormFieldProperties> fieldPropertiesParsed = [];
+      if (fieldProperties != null) {
+        for (final field in fieldsParsed) {
+          final propertiesJson = fieldProperties[field.id];
+          if (propertiesJson != null) {
+            fieldPropertiesParsed.add(
+              FormFieldProperties.fromJson(
+                json: propertiesJson,
+                field: field,
+              ),
+            );
+          }
         }
       }
+      return FormData(
+        id: id,
+        name: name,
+        title: title,
+        description: description,
+        components: components
+            ?.map<FormComponent>(
+              (e) => FormComponent.fromJson(
+                e,
+                fieldsParsed,
+                additionalProperties: fieldPropertiesParsed,
+              ),
+            )
+            .toList(),
+        fields: fieldsParsed,
+        links: linkMapFromJson(links),
+        attachmentActions: attachmentActions != null
+            ? Map.fromEntries(
+                attachmentActions.map((entry) {
+                  final action = AttachmentAction.fromJson(entry);
+                  return MapEntry(action.attachment, action);
+                }).toList(),
+              )
+            : {},
+        properties:
+            properties != null ? FormDataProperties.fromJson(properties) : null,
+        fieldProperties: fieldPropertiesParsed,
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid FormDataProperties json: $json',
+      );
     }
-    final components = (json['components'] as List?)
-        ?.map<FormComponent>(
-          (e) => FormComponent.fromJson(
-            e,
-            fields,
-            additionalProperties: fieldProperties,
-          ),
-        )
-        .toList();
-    return FormData(
-      id: id,
-      name: name,
-      title: title,
-      description: description,
-      components: components,
-      fields: fields,
-      links: links,
-      attachmentActions: attachmentActions,
-      properties: properties,
-      fieldProperties: fieldProperties,
-    );
   }
 
   /// Id of the Form

@@ -4,16 +4,20 @@ import 'package:flutter/foundation.dart' as f;
 /// Response when loading entities of a Grid with [ApptiveGridClient.loadEntities]
 class EntitiesResponse<T> {
   /// Constructs a new [EntitiesResponse] instance from a JSON [Map].
-  factory EntitiesResponse.fromJson(dynamic json) {
-    if (json is List) {
-      return EntitiesResponse<T>(items: json.cast<T>());
-    } else {
-      return EntitiesResponse<T>(
-        items: json['items'].cast<T>(),
-        pageMetaData: PageMetaData.fromJson(json),
-      );
-    }
-  }
+  factory EntitiesResponse.fromJson(dynamic json) => switch (json) {
+        {
+          'item': List items,
+        } =>
+          EntitiesResponse(
+            items: items.cast<T>(),
+            pageMetaData: PageMetaData.fromJson(json),
+          ),
+        List items => EntitiesResponse(items: items.cast<T>()),
+        _ => throw ArgumentError.value(
+            json,
+            'Invalid EntitiesResponse json: $json',
+          ),
+      };
 
   /// Creates a new Response Object with [items] and [pageMetaData]
   const EntitiesResponse({
@@ -54,14 +58,24 @@ class EntitiesResponse<T> {
 /// A class representing a response containing the paging meta data.
 class PageMetaData {
   /// Constructs a new [PageMetaData] instance from a JSON [Map].
-  factory PageMetaData.fromJson(dynamic json) {
-    return PageMetaData(
-      numberOfItems: json['numberOfItems'],
-      numberOfPages: json['numberOfPages'],
-      size: json['size'],
-      page: json['page'],
-    );
-  }
+  factory PageMetaData.fromJson(dynamic json) => switch (json) {
+        {
+          'numberOfItems': int numberOfItems,
+          'numberOfPages': int numberOfPages,
+          'size': int size,
+          'page': int page,
+        } =>
+          PageMetaData(
+            numberOfItems: numberOfItems,
+            numberOfPages: numberOfPages,
+            size: size,
+            page: page,
+          ),
+        _ => throw ArgumentError.value(
+            json,
+            'Invalid PageMetaData json: $json',
+          ),
+      };
 
   /// Constructs a new [PageMetaData].
   ///

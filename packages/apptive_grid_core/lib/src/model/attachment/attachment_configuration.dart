@@ -14,14 +14,28 @@ class AttachmentConfiguration {
   });
 
   /// Creates a new AttachmentConfiguration from json
-  factory AttachmentConfiguration.fromJson(Map<String, dynamic> json) {
-    return AttachmentConfiguration(
-      signedUrlApiEndpoint: json['signedUrlEndpoint'] ?? json['signedUrl'],
-      signedUrlFormApiEndpoint:
-          json['unauthenticatedSignedUrlEndpoint'] ?? json['signedUrlForm'],
-      attachmentApiEndpoint: json['apiEndpoint'] ?? json['storageUrl'],
-    );
-  }
+  factory AttachmentConfiguration.fromJson(Map<String, dynamic> json) =>
+      switch (json) {
+        {
+          'signedUrlEndpoint': String? signedUrlEndpoint,
+          'signedUrl': String signedUrl,
+          'unauthenticatedSignedUrlEndpoint': String?
+              unauthenticatedSignedUrlEndpoint,
+          'signedUrlForm': String signedUrlForm,
+          'apiEndpoint': String? apiEndpoint,
+          'storageUrl': String storageUrl,
+        } =>
+          AttachmentConfiguration(
+            signedUrlApiEndpoint: signedUrlEndpoint ?? signedUrl,
+            signedUrlFormApiEndpoint:
+                unauthenticatedSignedUrlEndpoint ?? signedUrlForm,
+            attachmentApiEndpoint: apiEndpoint ?? storageUrl,
+          ),
+        _ => throw ArgumentError.value(
+            json,
+            'Invalid AttachmentConfiguration json: $json',
+          ),
+      };
 
   /// Endpoint used to generate an upload url
   final String signedUrlApiEndpoint;

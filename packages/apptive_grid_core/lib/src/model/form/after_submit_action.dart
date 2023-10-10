@@ -3,18 +3,30 @@
 class AfterSubmitAction {
   /// Creates a new instance of the AfterSubmitAction class from the given JSON
   /// data.
-  factory AfterSubmitAction.fromJson(dynamic json) => AfterSubmitAction(
-        type: AfterSubmitActionType.values
-            .firstWhere((type) => type.name == json['action']),
-        buttonTitle: json['buttonTitle'],
-        trigger: json['trigger'] != null
-            ? AfterSubmitActionTrigger.values
-                .firstWhere((trigger) => trigger.name == json['trigger'])
-            : null,
-        delay: json['delay'] != null ? Duration(seconds: json['delay']) : null,
-        targetUrl:
-            json['targetUrl'] != null ? Uri.parse(json['targetUrl']) : null,
-      );
+  factory AfterSubmitAction.fromJson(dynamic json) => switch (json) {
+        {
+          'action': String action,
+          'buttonTitle': String? buttonTitle,
+          'trigger': String? trigger,
+          'delay': int? delay,
+          'targetUrl': String? targetUrl,
+        } =>
+          AfterSubmitAction(
+            type: AfterSubmitActionType.values
+                .firstWhere((type) => type.name == action),
+            buttonTitle: buttonTitle,
+            trigger: trigger != null
+                ? AfterSubmitActionTrigger.values
+                    .firstWhere((e) => e.name == trigger)
+                : null,
+            delay: delay != null ? Duration(seconds: delay) : null,
+            targetUrl: targetUrl != null ? Uri.parse(targetUrl) : null,
+          ),
+        _ => throw ArgumentError.value(
+            json,
+            'Invalid AfterSubmitAction json: $json',
+          ),
+      };
 
   /// Creates a new instance of the AfterSubmitAction class.
   const AfterSubmitAction({

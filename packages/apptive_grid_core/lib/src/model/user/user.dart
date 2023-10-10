@@ -15,15 +15,33 @@ class User {
   });
 
   /// Deserializes [json] into a [User] Object
-  User.fromJson(Map<String, dynamic> json)
-      : email = json['email'],
-        lastName = json['lastName'],
-        firstName = json['firstName'],
-        id = json['id'],
-        links = linkMapFromJson(json['_links']),
-        embeddedSpaces = (json['_embedded']?['spaces'] as List?)
-            ?.map((e) => Space.fromJson(e))
-            .toList();
+  factory User.fromJson(Map<String, dynamic> json) {
+    if (json
+        case {
+          'id': String id,
+          'email': String email,
+          'firstName': String firstName,
+          'lastName': String lastName,
+          '_links': Map<String, dynamic> links,
+          '_embedded': {
+            'spaces': List? embeddedSpaces,
+          }?,
+        }) {
+      return User(
+        email: email,
+        lastName: lastName,
+        firstName: firstName,
+        id: id,
+        links: linkMapFromJson(links),
+        embeddedSpaces: embeddedSpaces?.map((e) => Space.fromJson(e)).toList(),
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid User json: $json',
+      );
+    }
+  }
 
   /// Email of the this [User]
   final String email;

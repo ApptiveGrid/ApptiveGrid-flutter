@@ -18,25 +18,30 @@ class SView {
   factory SView.fromJson(
     dynamic json,
   ) {
-    final type =
-        SViewType.values.firstWhere((type) => type.backendName == json['type']);
-    final fields = (json['fields'] as List?)
-        ?.map((json) => GridField.fromJson(json))
-        .toList();
-    final fieldProperties =
-        (json['fieldProperties'] as Map?)?.cast<String, dynamic>();
-
-    return SView(
-      name: json['name'],
-      id: json['id'],
-      type: type,
-      links: linkMapFromJson(
-        json['_links'],
-      ),
-      fields: fields,
-      fieldProperties: fieldProperties,
-      properties: json['properties'],
-    );
+    if (json
+        case {
+          'id': String id,
+          'name': String name,
+          'type': String type,
+          'fields': List? fields,
+          'fieldProperties': Map<String, dynamic>? fieldProperties,
+          '_links': Map<String, dynamic>? links,
+        }) {
+      return SView(
+        id: id,
+        name: name,
+        type: SViewType.values.firstWhere((e) => e.backendName == type),
+        links: linkMapFromJson(links),
+        fields: fields?.map((json) => GridField.fromJson(json)).toList(),
+        fieldProperties: fieldProperties,
+        properties: json['properties'],
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid SView json: $json',
+      );
+    }
   }
 
   /// Serializes this sview into a json Map

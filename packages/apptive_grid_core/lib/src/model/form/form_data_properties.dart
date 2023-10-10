@@ -17,19 +17,32 @@ class FormDataProperties {
 
   /// Deserializes [json] into a FormDataProperties Object
   factory FormDataProperties.fromJson(Map<String, dynamic> json) =>
-      FormDataProperties(
-        successTitle: json['successTitle'],
-        successMessage: json['successMessage'],
-        buttonTitle: json['buttonTitle'],
-        reloadAfterSubmit: json['reloadAfterSubmit'],
-        afterSubmitAction: json['afterSubmitAction'] != null
-            ? AfterSubmitAction.fromJson(json['afterSubmitAction'])
-            : null,
-        pageIds: json['pageIds']?.cast<String>() ?? [],
-        blocks: (json['blocks'] as List?)
-            ?.map((e) => FormTextBlock.fromJson(e))
-            .toList(),
-      );
+      switch (json) {
+        {
+          'successTitle': String? successTitle,
+          'successMessage': String? successMessage,
+          'buttonTitle': String? buttonTitle,
+          'reloadAfterSubmit': bool? reloadAfterSubmit,
+          'afterSubmitAction': dynamic afterSubmitAction,
+          'pageIds': List<String>? pageIds,
+          'blocks': List? blocks,
+        } =>
+          FormDataProperties(
+            successTitle: successTitle,
+            successMessage: successMessage,
+            buttonTitle: buttonTitle,
+            reloadAfterSubmit: reloadAfterSubmit,
+            afterSubmitAction: afterSubmitAction != null
+                ? AfterSubmitAction.fromJson(afterSubmitAction)
+                : null,
+            pageIds: pageIds ?? [],
+            blocks: blocks?.map((e) => FormTextBlock.fromJson(e)).toList(),
+          ),
+        _ => throw ArgumentError.value(
+            json,
+            'Invalid FormDataProperties json: $json',
+          ),
+      };
 
   /// Custom title for a successfull submission
   final String? successTitle;

@@ -17,18 +17,27 @@ class GridRow {
     dynamic json,
     List<GridField> fields,
   ) {
-    final data = json['fields'] as List;
-    final entries = List<GridEntry>.generate(
-      data.length,
-      (i) => GridEntry.fromJson(data[i], fields[i]),
-    );
-    return GridRow(
-      id: json['_id'],
-      entries: entries,
-      links: linkMapFromJson(
-        json['_links'],
-      ),
-    );
+    if (json
+        case {
+          '_id': String id,
+          'fields': List data,
+          '_links': Map<String, dynamic>? links,
+        }) {
+      final entries = List<GridEntry>.generate(
+        data.length,
+        (i) => GridEntry.fromJson(data[i], fields[i]),
+      );
+      return GridRow(
+        id: id,
+        entries: entries,
+        links: linkMapFromJson(links),
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid GridRow json: $json',
+      );
+    }
   }
 
   /// id of the row

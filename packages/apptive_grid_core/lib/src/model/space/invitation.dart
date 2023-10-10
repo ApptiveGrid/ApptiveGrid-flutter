@@ -13,12 +13,24 @@ class Invitation {
 
   /// Creates a Invitation from value [json]
   factory Invitation.fromJson(dynamic json) {
-    return Invitation(
-      id: json['id'],
-      role: Role.values.firstWhere((role) => role.backendName == json['role']),
-      email: json['email'],
-      links: linkMapFromJson(json['_links']),
-    );
+    if (json
+        case {
+          'id': String id,
+          'role': String role,
+          '_links': Map<String, dynamic>? links,
+        }) {
+      return Invitation(
+        id: id,
+        role: Role.values.firstWhere((e) => e.backendName == role),
+        email: json['email'],
+        links: linkMapFromJson(links),
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid Invitation json: $json',
+      );
+    }
   }
 
   /// Serializes this [Invitation] to a json Map

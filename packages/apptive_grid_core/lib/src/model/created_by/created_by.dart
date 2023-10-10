@@ -9,15 +9,26 @@ class CreatedBy {
   });
 
   /// Creates a new CreatedBy Object from a [json] response
-  factory CreatedBy.fromJson(dynamic json) {
-    return CreatedBy(
-      displayValue: json['displayValue'],
-      id: json['id'],
-      name: json['name'],
-      type: CreatedByType.values
-          .firstWhere((element) => element.backendType == json['type']),
-    );
-  }
+  factory CreatedBy.fromJson(dynamic json) => switch (json) {
+        {
+          'id': String id,
+          'name': String name,
+          'displayValue': String? displayValue,
+          'type': String type,
+        } =>
+          CreatedBy(
+            displayValue: displayValue,
+            id: id,
+            name: name,
+            type: CreatedByType.values.firstWhere(
+              (element) => element.backendType == type,
+            ),
+          ),
+        _ => throw ArgumentError.value(
+            json,
+            'Invalid CreatedBy json: $json',
+          ),
+      };
 
   /// Maps the [CreatedBy] to a format the server can understand
   Map<String, String?> toJson() => {

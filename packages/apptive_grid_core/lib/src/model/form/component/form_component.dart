@@ -96,35 +96,36 @@ class FormComponent<T extends DataEntity> {
     List<GridField> fields, {
     List<FormFieldProperties> additionalProperties = const [],
   }) {
-    final id = json['fieldId'];
-    final property = json['property'];
-    final field = fields.firstWhere(
-      (e) => e.id == id,
-      orElse: () => throw Exception('Field with id $id not found'),
-    );
-    final options = FormComponentOptions.fromJson(json['options']);
-    final required = json['required'] ?? false;
-    final data = DataEntity.fromJson(json: json['value'], field: field);
-
-    if (field.type == DataType.text &&
-        options.multi == false &&
-        data.value?.contains('\n') == true) {
-      data.value = data.value?.replaceAll('\n', ' ');
+    if (json
+        case {
+          'fieldId': String fieldId,
+          'property': String property,
+          'options': Map<String, dynamic> options,
+          'value': dynamic value,
+          'type': String? type,
+          'required': bool? required,
+        }) {
+      final field = fields.firstWhere(
+        (e) => e.id == fieldId,
+        orElse: () => throw Exception('Field with id $fieldId not found'),
+      );
+      return FormComponent(
+        property: property,
+        data: DataEntity.fromJson(json: value, field: field),
+        options: FormComponentOptions.fromJson(options),
+        required: required ?? false,
+        field: field,
+        type: type,
+        enabled: additionalProperties
+                .firstWhereOrNull((e) => e.fieldId == fieldId)
+                ?.disabled !=
+            true,
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid FormComponent json: $json',
+      );
     }
-
-    final type = json['type'];
-
-    return FormComponent(
-      property: property,
-      data: data,
-      options: options,
-      required: required,
-      field: field,
-      type: type,
-      enabled: additionalProperties
-              .firstWhereOrNull((e) => e.fieldId == id)
-              ?.disabled !=
-          true,
-    );
   }
 }

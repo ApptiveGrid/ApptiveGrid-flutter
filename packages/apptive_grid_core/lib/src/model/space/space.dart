@@ -20,31 +20,41 @@ class Space {
   });
 
   /// Deserializes [json] into a [Space] Object
-  factory Space.fromJson(Map<String, dynamic> json) {
-    final type = json['type'];
-    if (type == 'sharedSpace') {
-      return SharedSpace.fromJson(json);
-    } else {
-      return Space(
-        name: json['name'],
-        id: json['id'],
-        links: linkMapFromJson(json['_links']),
-        embeddedGrids: (json['_embedded']?['grids'] as List?)
-            ?.map((e) => Grid.fromJson(e))
-            .toList(),
-        key: json['key'],
-        category: json['belongsTo'],
-        color: json['color'] != null
-            ? Color(
-                int.parse(json['color'].substring(1, 7), radix: 16) +
-                    0xFF000000,
-              )
-            : null,
-        icon: json['icon'],
-        iconSet: json['iconset'],
-      );
-    }
-  }
+  factory Space.fromJson(Map<String, dynamic> json) => switch (json) {
+        {'type': 'sharedSpace'} => SharedSpace.fromJson(json),
+        {
+          'id': String id,
+          'name': String name,
+          'key': String? key,
+          'belongsTo': String? category,
+          'color': String? color,
+          'icon': String? icon,
+          'iconset': String? iconSet,
+          '_links': Map<String, dynamic>? links,
+          '_embedded': {
+            'grids': List? embeddedGrids,
+          }?,
+        } =>
+          Space(
+            id: id,
+            name: name,
+            key: key,
+            category: category,
+            icon: icon,
+            iconSet: iconSet,
+            links: linkMapFromJson(links),
+            embeddedGrids: embeddedGrids?.map((e) => Grid.fromJson(e)).toList(),
+            color: color != null
+                ? Color(
+                    int.parse(color.substring(1, 7), radix: 16) + 0xFF000000,
+                  )
+                : null,
+          ),
+        _ => throw ArgumentError.value(
+            json,
+            'Invalid Space json: $json',
+          ),
+      };
 
   /// Name of this space
   final String name;
@@ -153,24 +163,43 @@ class SharedSpace extends Space {
 
   /// Deserializes [json] into a [Space] Object
   factory SharedSpace.fromJson(Map<String, dynamic> json) {
-    return SharedSpace(
-      name: json['name'],
-      id: json['id'],
-      realSpace: Uri.parse(json['realSpace']),
-      links: linkMapFromJson(json['_links']),
-      embeddedGrids: (json['_embedded']?['grids'] as List?)
-          ?.map((e) => Grid.fromJson(e))
-          .toList(),
-      key: json['key'],
-      category: json['belongsTo'],
-      color: json['color'] != null
-          ? Color(
-              int.parse(json['color'].substring(1, 7), radix: 16) + 0xFF000000,
-            )
-          : null,
-      icon: json['icon'],
-      iconSet: json['iconset'],
-    );
+    if (json
+        case {
+          'id': String id,
+          'name': String name,
+          'realSpace': String realSpace,
+          'key': String? key,
+          'belongsTo': String? category,
+          'color': String? color,
+          'icon': String? icon,
+          'iconset': String? iconSet,
+          '_links': Map<String, dynamic>? links,
+          '_embedded': {
+            'grids': List? embeddedGrids,
+          }?,
+        }) {
+      return SharedSpace(
+        id: id,
+        name: name,
+        realSpace: Uri.parse(realSpace),
+        key: key,
+        category: category,
+        icon: icon,
+        iconSet: iconSet,
+        links: linkMapFromJson(links),
+        embeddedGrids: embeddedGrids?.map((e) => Grid.fromJson(e)).toList(),
+        color: color != null
+            ? Color(
+                int.parse(color.substring(1, 7), radix: 16) + 0xFF000000,
+              )
+            : null,
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid SharedSpace json: $json',
+      );
+    }
   }
 
   /// Uri of the [Space] that is shared

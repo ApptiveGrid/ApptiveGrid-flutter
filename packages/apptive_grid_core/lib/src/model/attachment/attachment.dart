@@ -10,16 +10,28 @@ class Attachment {
   });
 
   /// Deserializes [json] into an Attachment Object
-  Attachment.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        url = Uri.parse(json['url']),
-        type = json['type'],
-        smallThumbnail = json['smallThumbnail'] != null
-            ? Uri.parse(json['smallThumbnail'])
-            : null,
-        largeThumbnail = json['largeThumbnail'] != null
-            ? Uri.parse(json['largeThumbnail'])
-            : null;
+  factory Attachment.fromJson(Map<String, dynamic> json) => switch (json) {
+        {
+          'name': String name,
+          'url': String url,
+          'type': String type,
+          'smallThumbnail': String? smallThumbnail,
+          'largeThumbnail': String? largeThumbnail,
+        } =>
+          Attachment(
+            name: name,
+            url: Uri.parse(url),
+            type: type,
+            smallThumbnail:
+                smallThumbnail != null ? Uri.parse(smallThumbnail) : null,
+            largeThumbnail:
+                largeThumbnail != null ? Uri.parse(largeThumbnail) : null,
+          ),
+        _ => throw ArgumentError.value(
+            json,
+            'Invalid Attachment json: $json',
+          ),
+      };
 
   /// Name of the Attachment
   final String name;

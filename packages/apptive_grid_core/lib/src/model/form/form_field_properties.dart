@@ -7,20 +7,30 @@ class FormFieldProperties {
     required dynamic json,
     required GridField field,
   }) {
-    DataEntity? defaultValue;
-    if (json['defaultValue'] != null) {
-      defaultValue =
-          DataEntity.fromJson(json: json['defaultValue'], field: field);
+    if (json
+        case {
+          'defaultValue': dynamic defaultValue,
+          'pageId': String? pageId,
+          'fieldIndex': int? positionOnPage,
+          'disabled': bool? disabled,
+          'hidden': bool? hidden,
+        }) {
+      return FormFieldProperties(
+        fieldId: field.id,
+        pageId: pageId,
+        positionOnPage: positionOnPage,
+        defaultValue: defaultValue != null
+            ? DataEntity.fromJson(json: defaultValue, field: field)
+            : null,
+        disabled: disabled ?? false,
+        hidden: hidden ?? false,
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid FormFieldProperties json: $json',
+      );
     }
-
-    return FormFieldProperties(
-      fieldId: field.id,
-      pageId: json['pageId'],
-      positionOnPage: json['fieldIndex'],
-      defaultValue: defaultValue,
-      disabled: json['disabled'] ?? false,
-      hidden: json['hidden'] ?? false,
-    );
   }
 
   /// Creates a [FormFieldProperties] Object

@@ -12,17 +12,25 @@ class FormComponentOptions {
 
   /// Deserializes [json] into [FormComponentOptions]
   factory FormComponentOptions.fromJson(Map<String, dynamic> json) {
-    final jsonMulti = json['multi'] ?? false;
-    final jsonPlaceholder = json['placeholder'];
-    final jsonDescription = json['description'];
-    final jsonLabel = json['label'];
-
-    return FormComponentOptions(
-      multi: jsonMulti,
-      placeholder: jsonPlaceholder,
-      description: jsonDescription,
-      label: jsonLabel,
-    );
+    if (json
+        case {
+          'multi': bool? multi,
+          'placeholder': String? placeholder,
+          'description': String? description,
+          'label': String? label,
+        }) {
+      return FormComponentOptions(
+        multi: multi ?? false,
+        placeholder: placeholder,
+        description: description,
+        label: label,
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid FormComponentOptions json: $json',
+      );
+    }
   }
 
   /// Description that describes the Component

@@ -8,10 +8,23 @@ class ApptiveLink {
   /// Creates a [ApptiveLink] from [json]
   /// Expect [uri] in a field called `href` and [method] in a field called `method`
   factory ApptiveLink.fromJson(dynamic json) {
-    return ApptiveLink(
-      uri: Uri.parse(json['href'] ?? json['url'] ?? json['uri']),
-      method: json['method'],
-    );
+    if (json
+        case {
+          'href': String? href,
+          'url': String? url,
+          'uri': String uri,
+          'method': String method,
+        }) {
+      return ApptiveLink(
+        uri: Uri.parse(href ?? url ?? uri),
+        method: method,
+      );
+    } else {
+      throw ArgumentError.value(
+        json,
+        'Invalid ApptiveLink json: $json',
+      );
+    }
   }
 
   /// Parses this into a json object
