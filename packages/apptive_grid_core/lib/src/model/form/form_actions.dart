@@ -9,10 +9,21 @@ class ActionItem {
   });
 
   /// Creates a ActionItem base on a [json] map
-  ActionItem.fromJson(Map<String, dynamic> json)
-      // ignore: deprecated_member_use_from_same_package
-      : link = ApptiveLink.fromJson(json['link'] ?? json['action']),
-        data = FormData.fromJson(json['data']);
+  factory ActionItem.fromJson(Map<String, dynamic> json) => switch (json) {
+        {
+          'action': dynamic action,
+          'link': dynamic link,
+          'data': dynamic data,
+        } =>
+          ActionItem(
+            link: ApptiveLink.fromJson(link ?? action),
+            data: FormData.fromJson(data),
+          ),
+        _ => throw ArgumentError.value(
+            json,
+            'Invalid ActionItem json: $json',
+          ),
+      };
 
   /// Action to be performed
   // ignore: deprecated_member_use_from_same_package
