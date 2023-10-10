@@ -26,7 +26,7 @@ sealed class AttachmentAction {
   /// Create a specific AttachmentAction from a json file
   static AttachmentAction fromJson(dynamic json) {
     final type = _AttachmentActionType.values.firstWhere(
-      (element) => element.toString() == json['type'],
+      (e) => e.name == json['type'],
       orElse: () => throw ArgumentError.value(
         json['type'],
         'Unknown AttachmentActionType ${json['type']}',
