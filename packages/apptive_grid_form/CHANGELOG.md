@@ -1,3 +1,7 @@
+## 1.7.2
+
+ - **FIX**: Use easeInOut curve for page transition (#122).
+
 ## 1.7.1
 
  - **FIX**: Formula type parsing for complex types (#121).
