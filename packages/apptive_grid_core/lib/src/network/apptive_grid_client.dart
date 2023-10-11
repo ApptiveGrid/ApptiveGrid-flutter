@@ -184,6 +184,7 @@ class ApptiveGridClient extends ChangeNotifier {
         yield ErrorProgressEvent(error);
       }
 
+      controller.close();
       return;
     }
 
