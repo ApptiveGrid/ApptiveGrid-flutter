@@ -287,14 +287,10 @@ class ApptiveGridClient extends ChangeNotifier {
     try {
       for (final chunkedActions in actions.values.slices(2)) {
         await Future.wait(
-          chunkedActions.map((action) {
-            switch (action.type) {
-              case AttachmentActionType.add:
-                return _attachmentProcessor
-                    .uploadAttachment(
-                  action as AddAttachmentAction,
-                )
-                    .then((response) {
+          chunkedActions.map(
+            (action) => switch (action) {
+              AddAttachmentAction() =>
+                _attachmentProcessor.uploadAttachment(action).then((response) {
                   statusController?.add(
                     ProcessedAttachmentProgressEvent(
                       action.attachment,
@@ -303,31 +299,21 @@ class ApptiveGridClient extends ChangeNotifier {
                   return response;
                 }).catchError((error) {
                   throw error;
-                });
-              case AttachmentActionType.delete:
-                debugPrint('Delete Attachment ${action.attachment}');
-                return Future.value().then((response) {
+                }),
+              DeleteAttachmentAction() => Future.value().then((response) {
                   statusController?.add(
-                    ProcessedAttachmentProgressEvent(
-                      action.attachment,
-                    ),
+                    ProcessedAttachmentProgressEvent(action.attachment),
                   );
                   return response;
-                });
-              case AttachmentActionType.rename:
-                debugPrint(
-                  'Rename Attachment ${action.attachment} to "${action.attachment.name}"',
-                );
-                return Future.value().then((response) {
+                }),
+              RenameAttachmentAction() => Future.value().then((response) {
                   statusController?.add(
-                    ProcessedAttachmentProgressEvent(
-                      action.attachment,
-                    ),
+                    ProcessedAttachmentProgressEvent(action.attachment),
                   );
                   return response;
-                });
-            }
-          }),
+                })
+            },
+          ),
         );
       }
       final response = http.Response('AttachmentActionSuccess', 200);

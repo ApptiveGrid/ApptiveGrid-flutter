@@ -23,7 +23,7 @@ part 'package:apptive_grid_core/src/network/filter/filter_expressions.dart';
 /// [CollectionDataEntity] Filter
 /// [AnyOfFilter], [AllOfFilter], [NoneOfFilter]
 ///
-abstract class ApptiveGridFilter {
+sealed class ApptiveGridFilter {
   const ApptiveGridFilter._();
 
   /// Creates a Map Object that can be send to the Backend. (Should be json encoded)

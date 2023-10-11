@@ -54,9 +54,8 @@ class _ApptiveGridUserManagementContentState
 
   @override
   Widget build(BuildContext context) {
-    switch (_contentType) {
-      case ContentType.login:
-        return LoginContent(
+    return switch (_contentType) {
+      ContentType.login => LoginContent(
           appName: widget.appName,
           requestRegistration: () {
             setState(() {
@@ -65,9 +64,8 @@ class _ApptiveGridUserManagementContentState
           },
           requestResetPassword: widget.requestResetPassword,
           onLogin: widget.onLogin,
-        );
-      case ContentType.register:
-        return RegisterContent(
+        ),
+      ContentType.register => RegisterContent(
           onLogin: widget.onLogin,
           appName: widget.appName,
           requestLogin: () {
@@ -75,8 +73,8 @@ class _ApptiveGridUserManagementContentState
               _contentType = ContentType.login;
             });
           },
-        );
-    }
+        )
+    };
   }
 }
 

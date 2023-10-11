@@ -381,22 +381,16 @@ void main() {
         expect(fieldProperties.pageId, equals(pageId));
 
         switch (field.type) {
-          case DataType.dateTime:
-            break;
           case DataType.checkbox:
             expect(fieldProperties.defaultValue?.value, equals(false));
-            break;
           case DataType.date:
             expect(fieldProperties.hidden, equals(true));
-            break;
           case DataType.text:
             expect(fieldProperties.disabled, equals(true));
             expect(fieldProperties.defaultValue?.value, equals('default'));
-            break;
           case DataType.integer:
             expect(fieldProperties.hidden, equals(true));
             expect(fieldProperties.defaultValue?.value, equals(10));
-            break;
           default:
         }
       }

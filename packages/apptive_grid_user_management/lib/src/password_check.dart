@@ -23,9 +23,8 @@ class PasswordCheck extends StatelessWidget {
             ?.widget
             .passwordRequirement ??
         PasswordRequirement.enforced;
-    switch (requirement) {
-      case PasswordRequirement.enforced:
-        return PasswordRuleCheck(
+    return switch (requirement) {
+      PasswordRequirement.enforced => PasswordRuleCheck(
           key: validationKey,
           controller: controller,
           ruleSet: PasswordRuleSet(
@@ -35,9 +34,8 @@ class PasswordCheck extends StatelessWidget {
             lowercase: 1,
             uppercase: 1,
           ),
-        );
-      case PasswordRequirement.safetyHint:
-        return PasswordRuleCheck.suggestedSafety(
+        ),
+      PasswordRequirement.safetyHint => PasswordRuleCheck.suggestedSafety(
           key: validationKey,
           controller: controller,
           ruleSet: PasswordRuleSet(
@@ -52,8 +50,8 @@ class PasswordCheck extends StatelessWidget {
               specialCharacters: 1,
             ),
           ],
-        );
-    }
+        ),
+    };
   }
 }
 

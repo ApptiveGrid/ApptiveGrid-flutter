@@ -1,38 +1,35 @@
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
 import 'package:flutter/material.dart';
 
-/// TODO: Refactor this with dart 3 into a sealed class with the attchment counts as attributes.
+/// A class to display progress of a form submission
+sealed class SubmitProgress {
+  /// Creates a new SubmitProgress
+  const SubmitProgress({required this.progress});
 
-/// Represents the current step in the submit progress
-enum SubmitStep {
-  /// The step to upload attachments
-  uploadingAttachments,
-
-  /// The step to submit the form data
-  submittingForm,
+  /// The total progress of the submission
+  final double progress;
 }
 
-/// A class to display Progress of a form submission
-class SubmitProgress {
-  /// Creates a new SubmitProgress
-  const SubmitProgress({
-    required this.step,
+/// A class to display progress of submitting the form data without the attachments
+class SubmittingFormProgress extends SubmitProgress {
+  /// Creates a new SubmittingFormProgress
+  SubmittingFormProgress({required super.progress});
+}
+
+/// A class to display progress of uploading the attachments
+class UploadingAttachmentsProgress extends SubmitProgress {
+  /// Creates a new UploadingAttachmentsProgress
+  const UploadingAttachmentsProgress({
+    required super.progress,
     required this.processedAttachments,
     required this.totalAttachments,
-    required this.progress,
   });
-
-  /// The current step in the submission progress
-  final SubmitStep step;
 
   /// The number of already processed attachments
   final int processedAttachments;
 
   /// The number of all attachments
   final int totalAttachments;
-
-  /// The total progress of the submission
-  final double progress;
 }
 
 /// A Widget to display [SubmitProgress]
@@ -46,18 +43,17 @@ class SubmitProgressWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = ApptiveGridLocalization.of(context)!;
-    final String message;
-    switch (progress.step) {
-      case SubmitStep.uploadingAttachments:
-        message = l10n.progressProcessAttachment(
-          processed: progress.processedAttachments,
-          total: progress.totalAttachments,
-        );
-        break;
-      case SubmitStep.submittingForm:
-        message = l10n.progressSubmitForm;
-        break;
-    }
+    final message = switch (progress) {
+      UploadingAttachmentsProgress(
+        processedAttachments: final processedAttachments,
+        totalAttachments: final totalAttachments,
+      ) =>
+        l10n.progressProcessAttachment(
+          processed: processedAttachments,
+          total: totalAttachments,
+        ),
+      SubmittingFormProgress() => l10n.progressSubmitForm,
+    };
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,

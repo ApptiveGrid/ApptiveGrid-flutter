@@ -22,7 +22,7 @@ enum _FieldOperator {
 }
 
 /// Filter to check for a single Field with [fieldId]
-abstract class _FieldFilter extends ApptiveGridFilter {
+sealed class _FieldFilter extends ApptiveGridFilter {
   const _FieldFilter._({
     required this.operator,
     required this.fieldId,

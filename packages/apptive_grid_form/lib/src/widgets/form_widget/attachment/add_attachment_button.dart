@@ -83,18 +83,11 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
         ];
       },
       onSelected: (option) async {
-        late final Future<List<Attachment>?> attachmentSelection;
-        switch (option) {
-          case _SourceOption.files:
-            attachmentSelection = _pickFromFiles();
-            break;
-          case _SourceOption.gallery:
-            attachmentSelection = _pickFromImageLibrary();
-            break;
-          case _SourceOption.camera:
-            attachmentSelection = _takePicture();
-            break;
-        }
+        final Future<List<Attachment>?> attachmentSelection = switch (option) {
+          _SourceOption.files => _pickFromFiles(),
+          _SourceOption.gallery => _pickFromImageLibrary(),
+          _SourceOption.camera => _takePicture()
+        };
         final attachments = await attachmentSelection;
         if (attachments != null) {
           widget.onAttachmentsAdded?.call(attachments);
@@ -200,25 +193,12 @@ enum _SourceOption { files, gallery, camera }
 extension _SourceOptionX on _SourceOption {
   IconData get icon {
     final isApple = UniversalPlatform.isMacOS || UniversalPlatform.isIOS;
-    switch (this) {
-      case _SourceOption.files:
-        if (isApple) {
-          return CupertinoIcons.folder;
-        } else {
-          return Icons.folder;
-        }
-      case _SourceOption.gallery:
-        if (isApple) {
-          return CupertinoIcons.photo_on_rectangle;
-        } else {
-          return Icons.photo;
-        }
-      case _SourceOption.camera:
-        if (isApple) {
-          return CupertinoIcons.camera;
-        } else {
-          return Icons.camera_alt;
-        }
-    }
+    return switch (this) {
+      _SourceOption.files => isApple ? CupertinoIcons.folder : Icons.folder,
+      _SourceOption.gallery =>
+        isApple ? CupertinoIcons.photo_on_rectangle : Icons.photo,
+      _SourceOption.camera =>
+        isApple ? CupertinoIcons.camera : Icons.camera_alt,
+    };
   }
 }

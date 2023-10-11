@@ -220,109 +220,69 @@ void main() {
           },
         });
 
-    DataEntity subEntity(DataType type) {
-      switch (type) {
-        case DataType.text:
-          return StringDataEntity('Test');
-        case DataType.dateTime:
-          return DateTimeDataEntity(DateTime(2023, 07, 07, 11, 42));
-        case DataType.date:
-          return DateDataEntity(DateTime(2023, 07, 07));
-
-        case DataType.integer:
-          return IntegerDataEntity(1);
-
-        case DataType.decimal:
-          return DecimalDataEntity(1.1);
-
-        case DataType.checkbox:
-          return BooleanDataEntity(true);
-
-        case DataType.singleSelect:
-          return EnumDataEntity(value: 'value');
-
-        case DataType.enumCollection:
-          return EnumCollectionDataEntity(value: {'value1', 'value2'});
-
-        case DataType.crossReference:
-          return CrossReferenceDataEntity(
-            value: 'DisplayValue',
-            gridUri: Uri(),
-            entityUri: Uri.parse('path/to/refEntity'),
-          );
-
-        case DataType.attachment:
-          return AttachmentDataEntity(
-            [Attachment(name: 'name', url: Uri(), type: 'image/png')],
-          );
-
-        case DataType.geolocation:
-          return GeolocationDataEntity(
-            const Geolocation(latitude: 47, longitude: 11),
-          );
-
-        case DataType.multiCrossReference:
-          return MultiCrossReferenceDataEntity(
-            gridUri: Uri(),
-            references: [
-              CrossReferenceDataEntity(
-                value: 'DisplayValue1',
-                gridUri: Uri(),
-                entityUri: Uri.parse('path/to/refEntity1'),
-              ),
-              CrossReferenceDataEntity(
-                value: 'DisplayValue2',
-                gridUri: Uri(),
-                entityUri: Uri.parse('path/to/refEntity2'),
-              ),
-            ],
-          );
-
-        case DataType.createdBy:
-          return CreatedByDataEntity(
-            const CreatedBy(
-              id: 'id',
-              type: CreatedByType.user,
-              name: 'Creator',
-              displayValue: 'User',
+    DataEntity subEntity(DataType type) => switch (type) {
+          DataType.text => StringDataEntity('Test'),
+          DataType.dateTime =>
+            DateTimeDataEntity(DateTime(2023, 07, 07, 11, 42)),
+          DataType.date => DateDataEntity(DateTime(2023, 07, 07)),
+          DataType.integer => IntegerDataEntity(1),
+          DataType.decimal => DecimalDataEntity(1.1),
+          DataType.checkbox => BooleanDataEntity(true),
+          DataType.singleSelect => EnumDataEntity(value: 'value'),
+          DataType.enumCollection =>
+            EnumCollectionDataEntity(value: {'value1', 'value2'}),
+          DataType.crossReference => CrossReferenceDataEntity(
+              value: 'DisplayValue',
+              gridUri: Uri(),
+              entityUri: Uri.parse('path/to/refEntity'),
             ),
-          );
-
-        case DataType.user:
-          return UserDataEntity(
-            DataUser(displayValue: 'User Name', uri: Uri()),
-          );
-
-        case DataType.currency:
-          return CurrencyDataEntity(currency: 'EUR', value: 47.11);
-
-        case DataType.uri:
-          return UriDataEntity(Uri(path: '/test/uri'));
-
-        case DataType.email:
-          return EmailDataEntity('email@testing.com');
-
-        case DataType.phoneNumber:
-          return PhoneNumberDataEntity('+49123456');
-
-        case DataType.signature:
-          return SignatureDataEntity(
-            Attachment(name: 'signature', url: Uri(), type: 'image/svg'),
-          );
-
-        case DataType.createdAt:
-          return DateTimeDataEntity(DateTime(2023, 7, 7, 11, 58));
-
-        case DataType.lookUp:
-          return LookUpDataEntity(StringDataEntity('Chaining'));
-
-        case DataType.reducedLookUp:
-          return ReducedLookUpDataEntity(IntegerDataEntity(3));
-
-        case DataType.formula:
-          return FormulaDataEntity(value: IntegerDataEntity(3));
-      }
-    }
+          DataType.attachment => AttachmentDataEntity(
+              [Attachment(name: 'name', url: Uri(), type: 'image/png')],
+            ),
+          DataType.geolocation => GeolocationDataEntity(
+              const Geolocation(latitude: 47, longitude: 11),
+            ),
+          DataType.multiCrossReference => MultiCrossReferenceDataEntity(
+              gridUri: Uri(),
+              references: [
+                CrossReferenceDataEntity(
+                  value: 'DisplayValue1',
+                  gridUri: Uri(),
+                  entityUri: Uri.parse('path/to/refEntity1'),
+                ),
+                CrossReferenceDataEntity(
+                  value: 'DisplayValue2',
+                  gridUri: Uri(),
+                  entityUri: Uri.parse('path/to/refEntity2'),
+                ),
+              ],
+            ),
+          DataType.createdBy => CreatedByDataEntity(
+              const CreatedBy(
+                id: 'id',
+                type: CreatedByType.user,
+                name: 'Creator',
+                displayValue: 'User',
+              ),
+            ),
+          DataType.user => UserDataEntity(
+              DataUser(displayValue: 'User Name', uri: Uri()),
+            ),
+          DataType.currency =>
+            CurrencyDataEntity(currency: 'EUR', value: 47.11),
+          DataType.uri => UriDataEntity(Uri(path: '/test/uri')),
+          DataType.email => EmailDataEntity('email@testing.com'),
+          DataType.phoneNumber => PhoneNumberDataEntity('+49123456'),
+          DataType.signature => SignatureDataEntity(
+              Attachment(name: 'signature', url: Uri(), type: 'image/svg'),
+            ),
+          DataType.createdAt =>
+            DateTimeDataEntity(DateTime(2023, 7, 7, 11, 58)),
+          DataType.lookUp => LookUpDataEntity(StringDataEntity('Chaining')),
+          DataType.reducedLookUp =>
+            ReducedLookUpDataEntity(IntegerDataEntity(3)),
+          DataType.formula => FormulaDataEntity(value: IntegerDataEntity(3))
+        } as DataEntity;
 
     for (final type in DataType.values) {
       test('Parses Lookup Type with Looked Up $type', () {

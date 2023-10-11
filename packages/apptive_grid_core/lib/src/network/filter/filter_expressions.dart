@@ -1,6 +1,6 @@
 part of 'package:apptive_grid_core/src/network/filter/apptive_grid_filter.dart';
 
-abstract class _FilterExpression with FilterableMixin {
+sealed class _FilterExpression with FilterableMixin {
   const _FilterExpression({required this.expression});
 
   final String expression;

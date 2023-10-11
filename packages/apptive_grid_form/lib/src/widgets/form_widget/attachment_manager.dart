@@ -23,11 +23,11 @@ class AttachmentManager {
 
   /// Removes an Attachment. Used for deleting Attachments
   void removeAttachment(Attachment attachment) {
-    final actionType = formData?.attachmentActions[attachment]?.type;
-    if (actionType == null) {
+    final action = formData?.attachmentActions[attachment];
+    if (action == null) {
       formData?.attachmentActions[attachment] =
           DeleteAttachmentAction(attachment: attachment);
-    } else if (actionType == AttachmentActionType.add) {
+    } else if (action is AddAttachmentAction) {
       formData?.attachmentActions.remove(attachment);
     }
   }
