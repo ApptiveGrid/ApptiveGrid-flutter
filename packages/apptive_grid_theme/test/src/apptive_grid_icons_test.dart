@@ -13,7 +13,7 @@ void main() {
     'ApptiveGridIcons',
     fileName: 'apptive-grid-icons',
     builder: () {
-      const icons = {
+      final icons = {
         'Grid': ApptiveGridIcons.grid,
         'Forms': ApptiveGridIcons.form,
         'Kanban': ApptiveGridIcons.kanban,
