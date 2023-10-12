@@ -1,3 +1,9 @@
+## 2.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
 ## 1.7.2
 
  - **FIX**: Use easeInOut curve for page transition (#122).

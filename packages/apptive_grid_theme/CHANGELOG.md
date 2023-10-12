@@ -1,3 +1,7 @@
+## 1.2.1
+
+ - **REFACTOR**: Adjust upper SDK Constraint to <4.0.0 (#125).
+
 ## 1.2.0
 
  - **FEAT**: Upgrade Dependencies for Flutter 3.10 (#108).

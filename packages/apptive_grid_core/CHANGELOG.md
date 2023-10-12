@@ -1,3 +1,10 @@
+## 2.0.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Close Submit StreamController (#127).
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
 ## 1.8.1
 
  - **FIX**: Formula type parsing for complex types (#121).

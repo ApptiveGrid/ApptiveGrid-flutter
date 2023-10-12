@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-10-12
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`apptive_grid_core` - `v2.0.0`](#apptive_grid_core---v200)
+ - [`apptive_grid_form` - `v2.0.0`](#apptive_grid_form---v200)
+ - [`apptive_grid_grid_builder` - `v2.0.0`](#apptive_grid_grid_builder---v200)
+ - [`apptive_grid_user_management` - `v2.0.0`](#apptive_grid_user_management---v200)
+
+Packages with other changes:
+
+ - [`apptive_grid_theme` - `v1.2.1`](#apptive_grid_theme---v121)
+
+---
+
+#### `apptive_grid_core` - `v2.0.0`
+
+ - **FIX**: Close Submit StreamController (#127).
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
+#### `apptive_grid_form` - `v2.0.0`
+
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
+#### `apptive_grid_grid_builder` - `v2.0.0`
+
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
+#### `apptive_grid_user_management` - `v2.0.0`
+
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
+#### `apptive_grid_theme` - `v1.2.1`
+
+ - **REFACTOR**: Adjust upper SDK Constraint to <4.0.0 (#125).
+
+
 ## 2023-10-10
 
 ### Changes
