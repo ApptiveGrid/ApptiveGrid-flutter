@@ -880,16 +880,20 @@ void main() {
     setUp(() {
       httpClient = MockHttpClient();
 
-      when(
-        () => httpClient.get(
-          Uri.parse(env.url + formUri.toString()),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer(
-        (_) async => http.Response(jsonEncode(data.toJson()), 200),
-      );
       when(() => httpClient.send(any())).thenAnswer(
-        (invocation) async => http.StreamedResponse(Stream.value([]), 400),
+        (invocation) async {
+          final request =
+              invocation.positionalArguments.first as http.BaseRequest;
+          if (request.url.path ==
+              Uri.parse(env.url + formUri.toString()).path) {
+            return http.StreamedResponse(
+              Stream.value(utf8.encode(jsonEncode(data.toJson()))),
+              200,
+            );
+          } else {
+            return http.StreamedResponse(Stream.value([]), 400);
+          }
+        },
       );
     });
 
@@ -946,7 +950,15 @@ void main() {
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      verify(() => httpClient.send(any())).called(1);
+      verify(
+        () => httpClient.send(
+          any(
+            that: predicate<http.BaseRequest>(
+              (request) => request.method == 'POST',
+            ),
+          ),
+        ),
+      ).called(1);
 
       expect(
         find.text(
@@ -995,7 +1007,15 @@ void main() {
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      verify(() => httpClient.send(any())).called(1);
+      verify(
+        () => httpClient.send(
+          any(
+            that: predicate<http.BaseRequest>(
+              (request) => request.method == 'POST',
+            ),
+          ),
+        ),
+      ).called(1);
 
       expect(
         find.text(
@@ -1047,7 +1067,15 @@ void main() {
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
 
-      verify(() => httpClient.send(any())).called(1);
+      verify(
+        () => httpClient.send(
+          any(
+            that: predicate<http.BaseRequest>(
+              (request) => request.method == 'POST',
+            ),
+          ),
+        ),
+      ).called(1);
 
       expect(
         find.text(
