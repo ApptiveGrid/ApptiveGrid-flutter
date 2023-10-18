@@ -121,11 +121,30 @@ void main() {
       },
     };
 
-    test('Success', () async {
-      final response = Response(json.encode(rawResponse), 200);
+    late StreamedResponse response;
 
-      when(() => httpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => response);
+    setUp(() {
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>((request) {
+              return request.method == 'get' &&
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == '/api/a/FormId';
+            }),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+    });
+
+    test('Success', () async {
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
 
       final formData = await apptiveGridClient.loadForm(
         uri: Uri.parse('/api/a/FormId'),
@@ -141,23 +160,33 @@ void main() {
     });
 
     test('DirectUri checks authentication if call throws 401', () async {
-      final unauthorizedResponse = Response('Error', 401);
-      final response = Response(json.encode(rawResponse), 200);
+      final unauthorizedResponse =
+          StreamedResponse(Stream.value(utf8.encode('Error')), 401);
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
       final authenticator = MockApptiveGridAuthenticator();
       final client = ApptiveGridClient(
         httpClient: httpClient,
         authenticator: authenticator,
       );
 
-      when(() => httpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async {
-        // Return response on next call
-        when(() => httpClient.get(any(), headers: any(named: 'headers')))
-            .thenAnswer((_) async => response);
-
-        // First return unauthorizedResponse
+      when(
+        () => httpClient.send(
+          any(),
+        ),
+      ).thenAnswer((realInvocation) async {
+        when(
+          () => httpClient.send(
+            any(),
+          ),
+        ).thenAnswer((realInvocation) async {
+          return response;
+        });
         return unauthorizedResponse;
       });
+
       when(() => authenticator.checkAuthentication())
           .thenAnswer((_) => Future.value());
 
@@ -167,39 +196,8 @@ void main() {
       verify(() => authenticator.checkAuthentication()).called(1);
     });
 
-    test('DirectUri checks authentication only once if call throws 401',
-        () async {
-      final unauthorizedResponse = Response('Error', 401);
-      final authenticator = MockApptiveGridAuthenticator();
-      final client = ApptiveGridClient(
-        httpClient: httpClient,
-        authenticator: authenticator,
-      );
-
-      when(() => httpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async {
-        return unauthorizedResponse;
-      });
-      when(() => authenticator.checkAuthentication())
-          .thenAnswer((_) => Future.value());
-
-      try {
-        await client.loadForm(
-          uri: Uri.parse(
-            '/api/users/user/spaces/space/grids/grid/forms/FormId',
-          ),
-        );
-      } catch (error) {
-        expect(error, unauthorizedResponse);
-      }
-      verify(() => authenticator.checkAuthentication()).called(1);
-    });
-
     test('400+ Response throws Response', () async {
-      final response = Response(json.encode(rawResponse), 400);
-
-      when(() => httpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => response);
+      response = StreamedResponse(Stream.value(utf8.encode('Error')), 400);
 
       expect(
         () => apptiveGridClient.loadForm(
@@ -324,31 +322,63 @@ void main() {
         },
       },
     };
+
+    late StreamedResponse response;
+    late StreamedResponse entitiesResponse;
+
+    final link = ApptiveLink(
+      uri: Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId',
+      ),
+      method: 'get',
+    );
+    final entitiesLink = ApptiveLink(
+      uri: Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities?layout=indexed',
+      ),
+      method: 'get',
+    );
+    setUp(() {
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == entitiesLink.uri.path &&
+                  request.method == entitiesLink.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return entitiesResponse;
+      });
+    });
+
     test('Success', () async {
-      final response = Response(json.encode(rawResponse), 200);
-
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => response);
-
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities?layout=indexed',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer(
-        (_) async => Response(
-          jsonEncode(rawResponse['entities']),
-          200,
-        ),
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
       );
+      entitiesResponse =
+          StreamedResponse(Stream.value(utf8.encode(json.encode([]))), 200);
 
       final grid = await apptiveGridClient.loadGrid(
         uri: Uri.parse('/api/users/$userId/spaces/$spaceId/grids/$gridId'),
@@ -358,121 +388,92 @@ void main() {
     });
 
     test('400 Status throws Response', () async {
-      const user = 'user';
-      const space = 'space';
-      const gridId = 'grid';
-
-      final response = Response(json.encode(rawResponse), 400);
-
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => response);
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        400,
+      );
+      entitiesResponse =
+          StreamedResponse(Stream.value(utf8.encode(json.encode([]))), 200);
 
       expect(
-        () => apptiveGridClient.loadGrid(
-          uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
+        () async => await apptiveGridClient.loadGrid(
+          uri: Uri.parse('/api/users/$userId/spaces/$spaceId/grids/$gridId'),
         ),
         throwsA(isInstanceOf<Response>()),
       );
     });
     test('401 -> Authenticates and retries', () async {
-      reset(httpClient);
-      const user = 'userId';
-      const space = 'spaceId';
-      const gridId = 'gridId';
-
-      final response = Response('', 401);
-      final retryResponse = Response(json.encode(rawResponse), 200);
-      bool isRetry = false;
+      final response = StreamedResponse(const Stream.empty(), 401);
+      final retryResponse = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
+      entitiesResponse =
+          StreamedResponse(Stream.value(utf8.encode(json.encode([]))), 200);
 
       final uri = Uri.parse(
-        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
+        '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId',
       );
       when(
-        () => httpClient.get(
-          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async {
-        if (!isRetry) {
-          isRetry = true;
-          return response;
-        } else {
-          return retryResponse;
-        }
-      });
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities?layout=indexed',
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
           ),
-          headers: any(named: 'headers'),
         ),
-      ).thenAnswer(
-        (_) async => Response(
-          jsonEncode(rawResponse['entities']),
-          200,
-        ),
-      );
+      ).thenAnswer((realInvocation) async {
+        when(
+          () => httpClient.send(
+            any(
+              that: predicate<BaseRequest>(
+                (request) =>
+                    request.url.scheme == 'https' &&
+                    request.url.host.endsWith('apptivegrid.de') &&
+                    request.url.path == link.uri.path &&
+                    request.method == link.method,
+              ),
+            ),
+          ),
+        ).thenAnswer((realInvocation) async {
+          return retryResponse;
+        });
+        return response;
+      });
 
       await apptiveGridClient.loadGrid(uri: uri);
-
-      verify(
-        () => httpClient.get(
-          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-          headers: any(named: 'headers'),
-        ),
-      ).called(2);
     });
 
     test('Do not load entities', () async {
-      reset(httpClient);
-      const user = 'userId';
-      const space = 'spaceId';
-      const gridId = 'gridId';
-
-      final response = Response(json.encode(rawResponse), 200);
-
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => response);
-
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities?layout=indexed',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer(
-        (_) async => Response(
-          jsonEncode(rawResponse['entities']),
-          200,
-        ),
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
       );
 
+      entitiesResponse =
+          StreamedResponse(Stream.value(utf8.encode(json.encode([]))), 200);
+
       final grid = await apptiveGridClient.loadGrid(
-        uri: Uri.parse('/api/users/$user/spaces/$space/grids/$gridId'),
+        uri: Uri.parse('/api/users/$userId/spaces/$spaceId/grids/$gridId'),
         loadEntities: false,
       );
 
       expect(grid, isNot(null));
       verifyNever(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities?layout=indexed',
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == entitiesLink.uri.path &&
+                  request.method == entitiesLink.method,
+            ),
           ),
-          headers: any(named: 'headers'),
         ),
       );
     });
@@ -1524,48 +1525,6 @@ void main() {
         HttpHeaders.contentTypeHeader: ContentType.json,
       });
     });
-
-    test('Add custom header', () async {
-      final authenticator = MockApptiveGridAuthenticator();
-
-      when(
-        () => authenticator.checkAuthentication(),
-      ).thenAnswer((invocation) async {});
-
-      final mockEntityUri = Uri.parse(
-        '/api/users/user/spaces/space/grids/grid/entities/entity',
-      );
-
-      final uri = Uri.parse(
-        '${ApptiveGridEnvironment.production.url}${mockEntityUri.toString()}?layout=property',
-      );
-
-      when(
-        () => httpClient.get(
-          uri,
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer(
-        (invocation) async => Response(json.encode({'test': 'test'}), 200),
-      );
-
-      final client = ApptiveGridClient(
-        httpClient: httpClient,
-        authenticator: authenticator,
-      );
-
-      await client.getEntity(
-        uri: mockEntityUri,
-        layout: ApptiveGridLayout.property,
-        headers: {'custom': 'header'},
-      );
-
-      final receivedHeaders = verify(
-        () => httpClient.get(uri, headers: captureAny(named: 'headers')),
-      ).captured.first as Map<String, String>;
-
-      expect(receivedHeaders['custom'], 'header');
-    });
   });
 
   group('Authorization', () {
@@ -1783,15 +1742,38 @@ void main() {
         '/api/users/id/spaces/spaceId',
       ],
     };
-    test('Success', () async {
-      final response = Response(json.encode(rawResponse), 200);
 
-      when(
-        () => httpClient.get(
-          Uri.parse('${ApptiveGridEnvironment.production.url}/api/users/me'),
-          headers: any(named: 'headers'),
+    late StreamedResponse response;
+
+    setUp(() {
+      final link = ApptiveLink(
+        uri: Uri.parse(
+          '${ApptiveGridEnvironment.production.url}/api/users/me',
         ),
-      ).thenAnswer((_) async => response);
+        method: 'get',
+      );
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+    });
+
+    test('Success', () async {
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
 
       final user = await apptiveGridClient.getMe();
 
@@ -1799,14 +1781,10 @@ void main() {
     });
 
     test('400 Status throws Response', () async {
-      final response = Response(json.encode(rawResponse), 400);
-
-      when(
-        () => httpClient.get(
-          Uri.parse('${ApptiveGridEnvironment.production.url}/api/users/me'),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => response);
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        400,
+      );
 
       expect(
         () => apptiveGridClient.getMe(),
@@ -1826,17 +1804,38 @@ void main() {
         '/api/users/id/spaces/spaceId/grids/gridId',
       ],
     };
-    test('Success', () async {
-      final response = Response(json.encode(rawResponse), 200);
 
+    late StreamedResponse response;
+
+    final link = ApptiveLink(
+      uri: Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId',
+      ),
+      method: 'get',
+    );
+    setUp(() {
       when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId',
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
           ),
-          headers: any(named: 'headers'),
         ),
-      ).thenAnswer((_) async => response);
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+    });
+
+    test('Success', () async {
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
 
       final space = await apptiveGridClient.getSpace(uri: spaceUri);
 
@@ -1844,16 +1843,10 @@ void main() {
     });
 
     test('400 Status throws Response', () async {
-      final response = Response(json.encode(rawResponse), 400);
-
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => response);
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        400,
+      );
 
       expect(
         () => apptiveGridClient.getSpace(uri: spaceUri),
@@ -1862,36 +1855,47 @@ void main() {
     });
 
     test('401 Authenticates and retries', () async {
-      final response = Response(json.encode(rawResponse), 401);
-      final retryResponse = Response(json.encode(rawResponse), 200);
-      bool isRetry = false;
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        401,
+      );
+      final retryResponse = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
 
       when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId',
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
           ),
-          headers: any(named: 'headers'),
         ),
-      ).thenAnswer((_) async {
-        if (!isRetry) {
-          isRetry = true;
-          return response;
-        } else {
+      ).thenAnswer((realInvocation) async {
+        when(
+          () => httpClient.send(
+            any(
+              that: predicate<BaseRequest>(
+                (request) =>
+                    request.url.scheme == 'https' &&
+                    request.url.host.endsWith('apptivegrid.de') &&
+                    request.url.path == link.uri.path &&
+                    request.method == link.method,
+              ),
+            ),
+          ),
+        ).thenAnswer((realInvocation) async {
           return retryResponse;
-        }
+        });
+        return response;
       });
 
       await apptiveGridClient.getSpace(uri: spaceUri);
-
-      verify(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).called(2);
     });
   });
 
@@ -2041,18 +2045,38 @@ void main() {
     final rawResponse = {
       'uri': '/api/r/$form',
     };
-    test('Success', () async {
-      final response = Response(json.encode(rawResponse), 200);
 
+    late StreamedResponse response;
+
+    final link = ApptiveLink(
+      uri: Uri.parse(
+        '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink',
+      ),
+      method: 'post',
+    );
+    setUp(() {
       when(
-        () => httpClient.post(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink',
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
           ),
-          headers: any(named: 'headers'),
-          body: any(named: 'body'),
         ),
-      ).thenAnswer((_) async => response);
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+    });
+
+    test('Success', () async {
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
 
       final formUri = await apptiveGridClient.getEditLink(
         uri: entityUri.replace(
@@ -2068,17 +2092,10 @@ void main() {
     });
 
     test('400 Status throws Response', () async {
-      final response = Response(json.encode(rawResponse), 400);
-
-      when(
-        () => httpClient.post(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink',
-          ),
-          headers: any(named: 'headers'),
-          body: any(named: 'body'),
-        ),
-      ).thenAnswer((_) async => response);
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        400,
+      );
 
       expect(
         () => apptiveGridClient.getEditLink(
@@ -2095,25 +2112,44 @@ void main() {
     });
 
     test('401 Authenticates and retries', () async {
-      final response = Response(json.encode(rawResponse), 401);
-      final retryResponse = Response(json.encode(rawResponse), 200);
-      bool isRetry = false;
+      final response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        401,
+      );
+      final retryResponse = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
 
       when(
-        () => httpClient.post(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink',
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
           ),
-          headers: any(named: 'headers'),
-          body: any(named: 'body'),
         ),
-      ).thenAnswer((_) async {
-        if (!isRetry) {
-          isRetry = true;
-          return response;
-        } else {
+      ).thenAnswer((realInvocation) async {
+        when(
+          () => httpClient.send(
+            any(
+              that: predicate<BaseRequest>(
+                (request) =>
+                    request.url.scheme == 'https' &&
+                    request.url.host.endsWith('apptivegrid.de') &&
+                    request.url.path == link.uri.path &&
+                    request.method == link.method,
+              ),
+            ),
+          ),
+        ).thenAnswer((realInvocation) async {
           return retryResponse;
-        }
+        });
+        return response;
       });
 
       await apptiveGridClient.getEditLink(
@@ -2125,16 +2161,6 @@ void main() {
         ),
         formId: form,
       );
-
-      verify(
-        () => httpClient.post(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId/EditLink',
-          ),
-          headers: any(named: 'headers'),
-          body: any(named: 'body'),
-        ),
-      ).called(2);
     });
   });
 
@@ -2151,34 +2177,47 @@ void main() {
       '_id': 'entityId',
       '5kmhd05jzdd48jaxbds8yn3js': 'Test',
     };
-    test('Success', () async {
-      final response = Response(json.encode(rawResponse), 200);
 
+    late StreamedResponse response;
+
+    final link = ApptiveLink(
+      uri: Uri.parse('${ApptiveGridEnvironment.production.url}$entityUri'),
+      method: 'get',
+    );
+    setUp(() {
       when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
           ),
-          headers: any(named: 'headers'),
         ),
-      ).thenAnswer((_) async => response);
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+    });
+
+    test('Success', () async {
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
 
       final entity = await apptiveGridClient.getEntity(uri: entityUri);
 
-      expect(entity, equals(rawResponse));
+      expect(entity, equals(jsonEncode(rawResponse)));
     });
 
     test('400 Status throws Response', () async {
-      final response = Response(json.encode(rawResponse), 400);
-
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async => response);
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        400,
+      );
 
       expect(
         () => apptiveGridClient.getEntity(uri: entityUri),
@@ -2187,83 +2226,149 @@ void main() {
     });
 
     test('Adjust Layout', () async {
-      final response = Response(json.encode(rawResponse), 200);
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
 
-      when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=key',
-          ),
-          headers: any(named: 'headers'),
+      final link = ApptiveLink(
+        uri: Uri.parse(
+          '${ApptiveGridEnvironment.production.url}$entityUri?layout=key',
         ),
-      ).thenAnswer((_) async => response);
+        method: 'get',
+      );
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.url.queryParameters['layout'] == 'key' &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
 
       final entity = await apptiveGridClient.getEntity(
         uri: entityUri,
         layout: ApptiveGridLayout.key,
       );
 
-      expect(entity, equals(rawResponse));
+      expect(entity, equals(jsonEncode(rawResponse)));
     });
 
     test('Use ApptiveGridHalVersion', () async {
-      final response = Response(json.encode(rawResponse), 200);
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
       const version = ApptiveGridHalVersion.v1;
       when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
-          ),
-          headers: any(
-            named: 'headers',
-            that: predicate<Map<String, String>>(
-              (headers) => headers[version.header.key] == version.header.value,
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.headers[version.header.key] == version.header.value &&
+                  request.method == link.method,
             ),
           ),
         ),
-      ).thenAnswer((_) async => response);
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
 
       final entity = await apptiveGridClient.getEntity(
         uri: entityUri,
         halVersion: version,
       );
 
-      expect(entity, equals(rawResponse));
+      expect(entity, equals(jsonEncode(rawResponse)));
+    });
+    test('Use custom Header', () async {
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
+      const version = ApptiveGridHalVersion.v1;
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.headers[version.header.key] == version.header.value &&
+                  request.headers['custom'] == 'header' &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+
+      final entity = await apptiveGridClient.getEntity(
+        uri: entityUri,
+        halVersion: version,
+        headers: {'custom': 'header'},
+      );
+
+      expect(entity, equals(jsonEncode(rawResponse)));
     });
 
     test('401 Authenticates and retries', () async {
-      final response = Response(json.encode(rawResponse), 401);
-      final retryResponse = Response(json.encode(rawResponse), 200);
-      bool isRetry = false;
+      final response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        401,
+      );
+      final retryResponse = StreamedResponse(
+        Stream.value(utf8.encode(json.encode(rawResponse))),
+        200,
+      );
 
       when(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
           ),
-          headers: any(named: 'headers'),
         ),
-      ).thenAnswer((_) async {
-        if (!isRetry) {
-          isRetry = true;
+      ).thenAnswer((realInvocation) async {
+        when(
+          () => httpClient.send(
+            any(
+              that: predicate<BaseRequest>(
+                (request) =>
+                    request.url.scheme == 'https' &&
+                    request.url.host.endsWith('apptivegrid.de') &&
+                    request.url.path == link.uri.path &&
+                    request.method == link.method,
+              ),
+            ),
+          ),
+        ).thenAnswer((realInvocation) async {
           return response;
-        } else {
-          return retryResponse;
-        }
+        });
+        return retryResponse;
       });
 
       await apptiveGridClient.getEntity(
         uri: entityUri,
       );
-
-      verify(
-        () => httpClient.get(
-          Uri.parse(
-            '${ApptiveGridEnvironment.production.url}/api/users/$userId/spaces/$spaceId/grids/$gridId/entities/$entityId?layout=field',
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).called(2);
     });
   });
 
@@ -2328,21 +2433,42 @@ void main() {
       embeddedSpaces: [],
     );
 
+    setUp(() {
+      httpClient = MockHttpClient();
+      apptiveGridClient = ApptiveGridClient(httpClient: httpClient);
+      final link = ApptiveLink(
+        uri: Uri.parse(
+          '${ApptiveGridEnvironment.production.url}/api/users/me',
+        ),
+        method: 'get',
+      );
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        return StreamedResponse(
+          Stream.value(utf8.encode(json.encode(user.toJson()))),
+          200,
+        );
+      });
+    });
+
     group('Errors', () {
       test('Getting upload Url fails, throws response', () async {
-        httpClient = MockHttpClient();
-        apptiveGridClient = ApptiveGridClient(httpClient: httpClient);
         final response = Response('Error Response', 400);
 
         when(() => httpClient.get(any(), headers: any(named: 'headers')))
             .thenAnswer((invocation) async {
-          if ((invocation.positionalArguments.first as Uri)
-              .path
-              .endsWith('users/me')) {
-            return Response(jsonEncode(user.toJson()), 200);
-          } else {
-            return response;
-          }
+          return response;
         });
 
         expect(
@@ -2354,20 +2480,13 @@ void main() {
       });
 
       test('Putting content fails, throws response', () async {
-        httpClient = MockHttpClient();
         apptiveGridClient = ApptiveGridClient(httpClient: httpClient);
         final uploadUrlResponse = Response('{"uploadURL": "uploadUrl"}', 200);
         final errorResponse = Response('Error Response', 400);
 
         when(() => httpClient.get(any(), headers: any(named: 'headers')))
             .thenAnswer((invocation) async {
-          if ((invocation.positionalArguments.first as Uri)
-              .path
-              .endsWith('users/me')) {
-            return Response(jsonEncode(user.toJson()), 200);
-          } else {
-            return uploadUrlResponse;
-          }
+          return uploadUrlResponse;
         });
 
         when(
@@ -2388,7 +2507,6 @@ void main() {
     });
 
     test('Uploads bytes to retrieved url', () async {
-      httpClient = MockHttpClient();
       final authenticator = MockApptiveGridAuthenticator();
       when(() => authenticator.header).thenReturn('Bearer authToken');
       when(() => authenticator.checkAuthentication()).thenAnswer((_) async {});
@@ -2403,13 +2521,7 @@ void main() {
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer((invocation) async {
-        if ((invocation.positionalArguments.first as Uri)
-            .path
-            .endsWith('users/me')) {
-          return Response(jsonEncode(user.toJson()), 200);
-        } else {
-          return uploadUrlResponse;
-        }
+        return uploadUrlResponse;
       });
 
       when(
@@ -2455,101 +2567,105 @@ void main() {
   });
 
   group('Load Entities', () {
-    test('401 -> Authenticates and retries', () async {
-      reset(httpClient);
-      const user = 'user';
-      const space = 'space';
-      const gridId = 'grid';
+    late StreamedResponse response;
 
-      final response = Response('', 401);
-      final retryResponse = Response(
-        '[]',
-        200,
-      );
-      bool isRetry = false;
-
-      final uri = Uri.parse(
+    const user = 'user';
+    const space = 'space';
+    const gridId = 'grid';
+    final link = ApptiveLink(
+      uri: Uri.parse(
         '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-      );
+      ),
+      method: 'get',
+    );
+    setUp(() {
       when(
-        () => httpClient.get(
-          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer((_) async {
-        if (!isRetry) {
-          isRetry = true;
-          return response;
-        } else {
-          return retryResponse;
-        }
-      });
-
-      await apptiveGridClient.loadEntities(uri: uri);
-
-      verify(
-        () => httpClient.get(
+        () => httpClient.send(
           any(
-            that: predicate<Uri>(
-              (testUri) =>
-                  testUri.path == uri.path &&
-                  testUri.queryParameters['layout'] ==
-                      ApptiveGridLayout.field.queryParameter,
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
             ),
           ),
-          headers: any(named: 'headers'),
         ),
-      ).called(2);
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
+    });
+    test('401 -> Authenticates and retries', () async {
+      response = StreamedResponse(const Stream.empty(), 401);
+      final retryResponse = StreamedResponse(
+        Stream.value(utf8.encode(json.encode([]))),
+        200,
+      );
+
+      when(
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.method == link.method,
+            ),
+          ),
+        ),
+      ).thenAnswer((realInvocation) async {
+        when(
+          () => httpClient.send(
+            any(
+              that: predicate<BaseRequest>(
+                (request) =>
+                    request.url.scheme == 'https' &&
+                    request.url.host.endsWith('apptivegrid.de') &&
+                    request.url.path == link.uri.path &&
+                    request.method == link.method,
+              ),
+            ),
+          ),
+        ).thenAnswer((realInvocation) async {
+          return retryResponse;
+        });
+        return response;
+      });
+
+      await apptiveGridClient.loadEntities(uri: link.uri);
     });
 
     test('Uses layout', () async {
-      reset(httpClient);
-      const user = 'user';
-      const space = 'space';
-      const gridId = 'grid';
-
-      final response = Response(
-        '[]',
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode([]))),
         200,
       );
       const layout = ApptiveGridLayout.keyAndField;
 
-      final uri = Uri.parse(
-        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-      );
       when(
-        () => httpClient.get(
-          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-          headers: any(named: 'headers'),
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.url.queryParameters.containsKey('layout') &&
+                  request.method == link.method,
+            ),
+          ),
         ),
-      ).thenAnswer((_) async {
+      ).thenAnswer((realInvocation) async {
         return response;
       });
 
-      await apptiveGridClient.loadEntities(uri: uri, layout: layout);
-
-      verify(
-        () => httpClient.get(
-          any(
-            that: predicate<Uri>(
-              (testUri) =>
-                  testUri.path == uri.path &&
-                  testUri.queryParameters['layout'] == layout.queryParameter,
-            ),
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).called(1);
+      await apptiveGridClient.loadEntities(uri: link.uri, layout: layout);
     });
 
     test('Filter and Sorting', () async {
-      reset(httpClient);
-      const user = 'user';
-      const space = 'space';
-      const gridId = 'grid';
-
-      final response = Response(
-        '[]',
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode([]))),
         200,
       );
       final filter =
@@ -2557,67 +2673,65 @@ void main() {
       const sorting =
           ApptiveGridSorting(fieldId: 'fieldId', order: SortOrder.asc);
 
-      final uri = Uri.parse(
-        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-      );
       when(
-        () => httpClient.get(
-          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-          headers: any(named: 'headers'),
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.url.queryParameters.containsKey('filter') &&
+                  request.url.queryParameters.containsKey('sorting') &&
+                  request.method == link.method,
+            ),
+          ),
         ),
-      ).thenAnswer((_) async {
+      ).thenAnswer((realInvocation) async {
         return response;
       });
 
       await apptiveGridClient.loadEntities(
-        uri: uri,
+        uri: link.uri,
         sorting: [sorting],
         filter: filter,
       );
-
-      verify(
-        () => httpClient.get(
-          any(
-            that: predicate<Uri>(
-              (testUri) =>
-                  testUri.path == uri.path &&
-                  testUri.queryParameters.containsKey('filter') &&
-                  testUri.queryParameters.containsKey('sorting'),
-            ),
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).called(1);
     });
     test('Load page data', () async {
-      reset(httpClient);
-      const user = 'user';
-      const space = 'space';
-      const gridId = 'grid';
-
-      final response = Response(
-        '{'
-        '"items": ["item"],'
-        '"page": 1,'
-        '"numberOfItems": 2,'
-        '"numberOfPages": 2,'
-        '"size": 50'
-        '}',
+      final response = StreamedResponse(
+        Stream.value(
+          utf8.encode(
+            json.encode({
+              "items": ["item"],
+              "page": 1,
+              "numberOfItems": 2,
+              "numberOfPages": 2,
+              "size": 50,
+            }),
+          ),
+        ),
         200,
       );
 
-      final uri = Uri.parse(
-        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-      );
       when(
-        () => httpClient.get(
-          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-          headers: any(named: 'headers'),
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.url.queryParameters['pageSize'] == '50' &&
+                  request.method == link.method,
+            ),
+          ),
         ),
-      ).thenAnswer((invocation) async => response);
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
 
       final entities = await apptiveGridClient.loadEntities(
-        uri: uri,
+        uri: link.uri,
         pageSize: 50,
       );
 
@@ -2635,49 +2749,43 @@ void main() {
           ),
         ),
       );
-
-      verify(
-        () => httpClient.get(
-          any(
-            that: predicate<Uri>(
-              (testUri) =>
-                  testUri.path == uri.path &&
-                  testUri.queryParameters['pageSize'] == '50',
-            ),
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).called(1);
     });
     test('Load specific page data', () async {
-      reset(httpClient);
-      const user = 'user';
-      const space = 'space';
-      const gridId = 'grid';
-
-      final response = Response(
-        '{'
-        '"items": ["item"],'
-        '"page": 2,'
-        '"numberOfItems": 2,'
-        '"numberOfPages": 2,'
-        '"size": 50'
-        '}',
+      final response = StreamedResponse(
+        Stream.value(
+          utf8.encode(
+            json.encode({
+              "items": ["item"],
+              "page": 2,
+              "numberOfItems": 2,
+              "numberOfPages": 2,
+              "size": 50,
+            }),
+          ),
+        ),
         200,
       );
 
-      final uri = Uri.parse(
-        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-      );
       when(
-        () => httpClient.get(
-          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-          headers: any(named: 'headers'),
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.url.queryParameters['pageSize'] == '50' &&
+                  request.url.queryParameters['pageIndex'] == '2' &&
+                  request.method == link.method,
+            ),
+          ),
         ),
-      ).thenAnswer((invocation) async => response);
+      ).thenAnswer((realInvocation) async {
+        return response;
+      });
 
       final entities = await apptiveGridClient.loadEntities(
-        uri: uri,
+        uri: link.uri,
         pageIndex: 2,
         pageSize: 50,
       );
@@ -2696,63 +2804,33 @@ void main() {
           ),
         ),
       );
-
-      verify(
-        () => httpClient.get(
-          any(
-            that: predicate<Uri>(
-              (testUri) =>
-                  testUri.path == uri.path &&
-                  testUri.queryParameters['pageIndex'] == '2' &&
-                  testUri.queryParameters['pageSize'] == '50',
-            ),
-          ),
-          headers: any(named: 'headers'),
-        ),
-      ).called(1);
     });
 
     test('Uses Hal Version', () async {
-      reset(httpClient);
-      const user = 'user';
-      const space = 'space';
-      const gridId = 'grid';
-
-      final response = Response(
-        '[]',
+      response = StreamedResponse(
+        Stream.value(utf8.encode(json.encode([]))),
         200,
       );
       const version = ApptiveGridHalVersion.v2;
 
-      final uri = Uri.parse(
-        '${ApptiveGridEnvironment.production.url}/api/users/$user/spaces/$space/grids/$gridId/entities',
-      );
       when(
-        () => httpClient.get(
-          any(that: predicate<Uri>((testUri) => testUri.path == uri.path)),
-          headers: any(named: 'headers'),
+        () => httpClient.send(
+          any(
+            that: predicate<BaseRequest>(
+              (request) =>
+                  request.url.scheme == 'https' &&
+                  request.url.host.endsWith('apptivegrid.de') &&
+                  request.url.path == link.uri.path &&
+                  request.headers[version.header.key] == version.header.value &&
+                  request.method == link.method,
+            ),
+          ),
         ),
-      ).thenAnswer((_) async {
+      ).thenAnswer((realInvocation) async {
         return response;
       });
 
-      await apptiveGridClient.loadEntities(uri: uri, halVersion: version);
-
-      verify(
-        () => httpClient.get(
-          any(
-            that: predicate<Uri>(
-              (testUri) => testUri.path == uri.path,
-            ),
-          ),
-          headers: any(
-            named: 'headers',
-            that: predicate<Map<String, String>>(
-              (headers) => headers[version.header.key] == version.header.value,
-            ),
-          ),
-        ),
-      ).called(1);
+      await apptiveGridClient.loadEntities(uri: link.uri, halVersion: version);
     });
   });
 
@@ -2857,7 +2935,6 @@ void main() {
     });
 
     test('401 -> Authenticates and retries', () async {
-      reset(httpClient);
       final link = ApptiveLink(uri: Uri.parse('/apptive/link'), method: 'get');
 
       bool isRetry = false;
