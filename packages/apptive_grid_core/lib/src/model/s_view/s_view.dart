@@ -64,7 +64,7 @@ class SView {
                   },
                 ),
               ),
-            }
+            },
           },
         },
         if (properties != null) 'properties': properties,
