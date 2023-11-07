@@ -11,6 +11,8 @@ class SView {
     required this.links,
     this.fields,
     this.slotProperties,
+    @Deprecated('This is no longer used. Use [slotProperties] instead')
+    Map<String, dynamic>? fieldProperties,
     this.slots,
     this.properties,
   });
@@ -91,8 +93,8 @@ class SView {
   final Map<String, dynamic>? slotProperties;
 
   /// Field Properties
-  @Deprecated('Use [slotProperties] instead')
-  Map<String, dynamic>? get fieldProperties => slotProperties;
+  @Deprecated('This is no longer used. Use [slotProperties] instead')
+  Map<String, dynamic>? get fieldProperties => null;
 
   /// General properties of this sview
   final Map<dynamic, dynamic>? properties;
