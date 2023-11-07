@@ -10,12 +10,12 @@ class SView {
     required this.type,
     required this.links,
     this.fields,
-    @Deprecated('This is no longer used. Use [slotProperties] instead')
+    @Deprecated('This will be deprecated in favor of [slotProperties]')
     Map<String, dynamic>? fieldProperties,
     this.slotProperties,
     this.slots,
     this.properties,
-  });
+  }) : _fieldProperties = fieldProperties;
 
   /// Creates a SView from value [json]
   factory SView.fromJson(
@@ -28,6 +28,8 @@ class SView {
         .toList();
     final slotProperties =
         (json['slotProperties'] as Map?)?.cast<String, dynamic>();
+    final fieldProperties =
+        (json['fieldProperties'] as Map?)?.cast<String, dynamic>();
     final slots = (json['_embedded']?['schema']?['slots'] as Map?)
         ?.cast<String, dynamic>()
         .map(
@@ -45,6 +47,8 @@ class SView {
       ),
       fields: fields,
       slotProperties: slotProperties,
+      // ignore: deprecated_member_use_from_same_package
+      fieldProperties: fieldProperties,
       slots: slots,
       properties: json['properties'],
     );
@@ -58,6 +62,7 @@ class SView {
         '_links': links.toJson(),
         if (fields != null) 'fields': fields!.map((e) => e.toJson()).toList(),
         if (slotProperties != null) 'slotProperties': slotProperties,
+        if (_fieldProperties != null) 'fieldProperties': _fieldProperties,
         if (properties != null) 'properties': properties,
         if (slots != null)
           '_embedded': {
@@ -93,8 +98,11 @@ class SView {
   final Map<String, dynamic>? slotProperties;
 
   /// Field Properties
-  @Deprecated('This is no longer used. Use [slotProperties] instead')
-  Map<String, dynamic>? get fieldProperties => null;
+  @Deprecated('This will be deprecated in favor of [slotProperties]')
+  Map<String, dynamic>? get fieldProperties =>
+      _fieldProperties ?? slotProperties;
+
+  final Map<String, dynamic>? _fieldProperties;
 
   /// General properties of this sview
   final Map<dynamic, dynamic>? properties;
@@ -111,6 +119,7 @@ class SView {
         mapEquals(links, other.links) &&
         listEquals(fields, other.fields) &&
         mapEquals(slotProperties, other.slotProperties) &&
+        mapEquals(_fieldProperties, other._fieldProperties) &&
         mapEquals(slots, other.slots) &&
         mapEquals(properties, other.properties);
   }
@@ -122,6 +131,7 @@ class SView {
         type,
         links,
         fields,
+        _fieldProperties,
         slotProperties,
         slots,
         properties,
