@@ -9,6 +9,8 @@ class SView {
     required this.id,
     required this.type,
     required this.links,
+    this.fields,
+    this.slotProperties,
     this.slots,
     this.properties,
   });
@@ -19,6 +21,9 @@ class SView {
   ) {
     final type =
         SViewType.values.firstWhere((type) => type.backendName == json['type']);
+    final fields = (json['fields'] as List?)
+        ?.map((json) => GridField.fromJson(json))
+        .toList();
     final slotProperties =
         (json['slotProperties'] as Map?)?.cast<String, dynamic>();
     final slots = (json['_embedded']?['schema']?['slots'] as Map?)
@@ -26,10 +31,7 @@ class SView {
         .map(
           (key, value) => MapEntry(
             key,
-            SViewSlot.fromJson(
-              value,
-              properties: slotProperties?[key],
-            ),
+            SViewSlot.fromJson(value),
           ),
         );
     return SView(
@@ -39,6 +41,8 @@ class SView {
       links: linkMapFromJson(
         json['_links'],
       ),
+      fields: fields,
+      slotProperties: slotProperties,
       slots: slots,
       properties: json['properties'],
     );
@@ -50,23 +54,20 @@ class SView {
         'name': name,
         'type': type.backendName,
         '_links': links.toJson(),
-        if (slots != null) ...{
-          'slotProperties':
-              slots!.map((key, value) => MapEntry(key, value.properties ?? {})),
+        if (fields != null) 'fields': fields!.map((e) => e.toJson()).toList(),
+        if (slotProperties != null) 'slotProperties': slotProperties,
+        if (properties != null) 'properties': properties,
+        if (slots != null)
           '_embedded': {
             'schema': {
               'slots': slots!.map(
                 (key, value) => MapEntry(
                   key,
-                  {
-                    'position': value.position,
-                    'type': {'name': value.type.backendName},
-                  },
+                  value.toJson(),
                 ),
               ),
             },
           },
-        },
         if (properties != null) 'properties': properties,
       };
 
@@ -82,14 +83,18 @@ class SView {
   /// Map of [ApptiveLinks] relevant to this view
   final LinkMap links;
 
+  /// The fields in this SView
+  final List<GridField>? fields;
+
+  /// Slot Properties
+  /// For example this can indicate which field to use for Kanban state
+  final Map<String, dynamic>? slotProperties;
+
   /// General properties of this sview
   final Map<dynamic, dynamic>? properties;
 
   /// Map of field id to sview slot
   final Map<String, SViewSlot>? slots;
-
-  /// List of field ids in this sview
-  List<String> get fieldIds => slots?.keys.toList() ?? [];
 
   @override
   bool operator ==(Object other) {
@@ -98,16 +103,27 @@ class SView {
         id == other.id &&
         type == other.type &&
         mapEquals(links, other.links) &&
+        listEquals(fields, other.fields) &&
+        mapEquals(slotProperties, other.slotProperties) &&
         mapEquals(slots, other.slots) &&
         mapEquals(properties, other.properties);
   }
 
   @override
-  int get hashCode => Object.hash(id, name, type, links, slots, properties);
+  int get hashCode => Object.hash(
+        id,
+        name,
+        type,
+        links,
+        fields,
+        slotProperties,
+        slots,
+        properties,
+      );
 
   @override
   String toString() {
-    return 'SView(name: $name, type: $type, id: $id, links: $links, slots: $slots, properties: $properties)';
+    return 'SView(name: $name, type: $type, id: $id, links: $links, slotProperties: $slotProperties, field: $fields  slots: $slots, properties: $properties)';
   }
 }
 
@@ -143,22 +159,24 @@ class SViewSlot {
     required this.type,
     this.key,
     this.name,
-    this.properties,
   });
 
   /// Creates a SViewSlot from value [json]
-  factory SViewSlot.fromJson(
-    dynamic json, {
-    Map<String, dynamic>? properties,
-  }) =>
-      SViewSlot(
+  factory SViewSlot.fromJson(dynamic json) => SViewSlot(
         position: json['position'],
         type: DataType.values
             .firstWhere((e) => e.backendName == json['type']['name']),
         key: json['key'],
         name: json['name'],
-        properties: properties,
       );
+
+  /// Serializes this sview into a json Map
+  Map<String, dynamic> toJson() => {
+        if (key != null) 'key': key,
+        if (name != null) 'name': name,
+        'position': position,
+        'type': {'name': type.backendName},
+      };
 
   /// Position of the sview slot
   final int position;
@@ -172,17 +190,13 @@ class SViewSlot {
   /// [DataType] of the sview slot
   final DataType type;
 
-  /// Additional properties of the sview slot
-  final Map<String, dynamic>? properties;
-
   @override
   bool operator ==(Object other) {
     return other is SViewSlot &&
         position == other.position &&
         key == other.key &&
         name == other.name &&
-        type == other.type &&
-        mapEquals(properties, other.properties);
+        type == other.type;
   }
 
   @override
@@ -191,11 +205,10 @@ class SViewSlot {
         key,
         name,
         type,
-        properties,
       );
 
   @override
   String toString() {
-    return 'SViewSlot(position: $position, key: $key, name: $name type: $type, properties: $properties)';
+    return 'SViewSlot(position: $position, key: $key, name: $name type: $type)';
   }
 }
