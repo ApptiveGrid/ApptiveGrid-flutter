@@ -84,6 +84,82 @@ void main() {
          "isKanbanState": true
       }
    },
+   "fields": [
+      {
+         "key": null,
+         "type": {
+            "name": "string",
+            "typeName": "string",
+            "componentTypes": [
+               "textfield"
+            ]
+         },
+         "schema": {
+            "type": "string"
+         },
+         "id": "63d28a8978d9ca3100af8b3f",
+         "name": "name",
+         "_links": {
+            "patch": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f",
+               "method": "patch"
+            },
+            "query": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f/query",
+               "method": "get"
+            },
+            "self": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f",
+               "method": "get"
+            },
+            "extractToGrid": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f/extractToGrid",
+               "method": "post"
+            }
+         }
+      },
+      {
+         "key": null,
+         "type": {
+            "options": [
+               "A"
+            ],
+            "componentTypes": [
+               "selectBox",
+               "selectList"
+            ],
+            "name": "enum",
+            "typeName": "enum",
+            "extended": false
+         },
+         "schema": {
+            "type": "string",
+            "enum": [
+               "A"
+            ]
+         },
+         "id": "63e4a86993cf49fd11b08f2a",
+         "name": "New field",
+         "_links": {
+            "patch": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63e4a86993cf49fd11b08f2a",
+               "method": "patch"
+            },
+            "query": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63e4a86993cf49fd11b08f2a/query",
+               "method": "get"
+            },
+            "self": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63e4a86993cf49fd11b08f2a",
+               "method": "get"
+            },
+            "extractToGrid": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63e4a86993cf49fd11b08f2a/extractToGrid",
+               "method": "post"
+            }
+         }
+      }
+   ],
    "properties": {
       "version": 2
    },
@@ -160,11 +236,10 @@ void main() {
       expect(fromJson.id, equals('63e4a68393cf49ae03b08f1d'));
       expect(fromJson.type, equals(SViewType.kanban));
       expect(
-        fromJson
-            .slots!['63e4a86993cf49fd11b08f2a']!.properties!['isKanbanState'],
+        fromJson.slotProperties!['63e4a86993cf49fd11b08f2a']['isKanbanState'],
         equals(true),
       );
-      expect(fromJson.fieldIds, [
+      expect(fromJson.fields!.map((e) => e.id).toList(), [
         '63d28a8978d9ca3100af8b3f',
         '63e4a86993cf49fd11b08f2a',
       ]);
@@ -183,6 +258,75 @@ void main() {
    "properties": {
       "version": 2
    },
+   "fields": [
+      {
+         "key": null,
+         "type": {
+            "name": "string",
+            "typeName": "string",
+            "componentTypes": [
+               "textfield"
+            ]
+         },
+         "schema": {
+            "type": "string"
+         },
+         "id": "63d28a8978d9ca3100af8b3f",
+         "name": "name",
+         "_links": {
+            "patch": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f",
+               "method": "patch"
+            },
+            "query": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f/query",
+               "method": "get"
+            },
+            "self": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f",
+               "method": "get"
+            },
+            "extractToGrid": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f/extractToGrid",
+               "method": "post"
+            }
+         }
+      },
+      {
+         "key": null,
+         "type": {
+            "name": "date-time",
+            "typeName": "date-time",
+            "componentTypes": [
+               "datePicker"
+            ]
+         },
+         "schema": {
+            "type": "string",
+            "format": "date-time"
+         },
+         "id": "63e4acde93cf492621b08f2e",
+         "name": "Neues Feld 1",
+         "_links": {
+            "patch": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63e4acde93cf492621b08f2e",
+               "method": "patch"
+            },
+            "query": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63e4acde93cf492621b08f2e/query",
+               "method": "get"
+            },
+            "self": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63e4acde93cf492621b08f2e",
+               "method": "get"
+            },
+            "extractToGrid": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63e4acde93cf492621b08f2e/extractToGrid",
+               "method": "post"
+            }
+         }
+      }
+   ],
    "type": "calendar",
    "id": "63e4a68693cf49beccb08f23",
    "name": "Grid Ansicht 4",
@@ -250,11 +394,10 @@ void main() {
       expect(fromJson.id, equals('63e4a68693cf49beccb08f23'));
       expect(fromJson.type, equals(SViewType.calendar));
       expect(
-        fromJson
-            .slots!['63e4acde93cf492621b08f2e']!.properties!['isStartField'],
+        fromJson.slotProperties?['63e4acde93cf492621b08f2e']['isStartField'],
         equals(true),
       );
-      expect(fromJson.fieldIds, [
+      expect(fromJson.fields!.map((e) => e.id).toList(), [
         '63d28a8978d9ca3100af8b3f',
         '63e4acde93cf492621b08f2e',
       ]);
@@ -267,6 +410,41 @@ void main() {
    "slotProperties": {
       "63d28a8978d9ca3100af8b3f": {}
    },
+   "fields": [
+      {
+         "key": null,
+         "type": {
+            "name": "string",
+            "typeName": "string",
+            "componentTypes": [
+               "textfield"
+            ]
+         },
+         "schema": {
+            "type": "string"
+         },
+         "id": "63d28a8978d9ca3100af8b3f",
+         "name": "name",
+         "_links": {
+            "patch": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f",
+               "method": "patch"
+            },
+            "query": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f/query",
+               "method": "get"
+            },
+            "self": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f",
+               "method": "get"
+            },
+            "extractToGrid": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f/extractToGrid",
+               "method": "post"
+            }
+         }
+      }
+   ],
    "properties": {
       "zoomLevel": 14,
       "version": 1,
@@ -336,7 +514,10 @@ void main() {
         fromJson.properties!['stateFieldId'],
         equals('63e4ace493cf492621b08f32'),
       );
-      expect(fromJson.fieldIds, ['63d28a8978d9ca3100af8b3f']);
+      expect(
+        fromJson.fields!.map((e) => e.id).toList(),
+        ['63d28a8978d9ca3100af8b3f'],
+      );
 
       expect(SView.fromJson(fromJson.toJson()), equals(fromJson));
     });
@@ -349,6 +530,41 @@ void main() {
    "properties": {
       "version": 1
    },
+   "fields": [
+      {
+         "key": null,
+         "type": {
+            "name": "string",
+            "typeName": "string",
+            "componentTypes": [
+               "textfield"
+            ]
+         },
+         "schema": {
+            "type": "string"
+         },
+         "id": "63d28a8978d9ca3100af8b3f",
+         "name": "name",
+         "_links": {
+            "patch": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f",
+               "method": "patch"
+            },
+            "query": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f/query",
+               "method": "get"
+            },
+            "self": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f",
+               "method": "get"
+            },
+            "extractToGrid": {
+               "href": "/api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca3100af8b3e/fields/63d28a8978d9ca3100af8b3f/extractToGrid",
+               "method": "post"
+            }
+         }
+      }
+   ],
    "type": "spreadsheet",
    "id": "63d28a8a78d9ca55c2af8b45",
    "name": "Grid Ansicht",
@@ -405,7 +621,10 @@ void main() {
       expect(fromJson.name, equals('Grid Ansicht'));
       expect(fromJson.id, equals('63d28a8a78d9ca55c2af8b45'));
       expect(fromJson.type, equals(SViewType.spreadsheet));
-      expect(fromJson.fieldIds, ['63d28a8978d9ca3100af8b3f']);
+      expect(
+        fromJson.fields!.map((e) => e.id).toList(),
+        ['63d28a8978d9ca3100af8b3f'],
+      );
 
       expect(SView.fromJson(fromJson.toJson()), equals(fromJson));
     });
@@ -421,6 +640,53 @@ void main() {
       "639b0614d8165f7cb0ac2ea9": {},
       "639b05fed8165f7cb0ac2ea4": {}
    },
+   "fields": [
+      {
+         "name": "Default",
+         "id": "639b05e0d8165f7cb0ac2e9b",
+         "key": null,
+         "schema": {
+            "type": "string",
+            "enum": [
+               "A",
+               "B",
+               "C"
+            ]
+         },
+         "type": {
+            "options": [
+               "A",
+               "B",
+               "C"
+            ],
+            "componentTypes": [
+               "selectBox",
+               "selectList"
+            ],
+            "name": "enum",
+            "typeName": "enum",
+            "extended": false
+         },
+         "_links": {
+            "patch": {
+               "href": "/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/639b05e0d8165f7cb0ac2e9a/fields/639b05e0d8165f7cb0ac2e9b",
+               "method": "patch"
+            },
+            "query": {
+               "href": "/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/639b05e0d8165f7cb0ac2e9a/fields/639b05e0d8165f7cb0ac2e9b/query",
+               "method": "get"
+            },
+            "self": {
+               "href": "/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/639b05e0d8165f7cb0ac2e9a/fields/639b05e0d8165f7cb0ac2e9b",
+               "method": "get"
+            },
+            "extractToGrid": {
+               "href": "/api/users/614c5440b50f51e3ea8a2a50/spaces/639b05dcd8165f7cb0ac2e98/grids/639b05e0d8165f7cb0ac2e9a/fields/639b05e0d8165f7cb0ac2e9b/extractToGrid",
+               "method": "post"
+            }
+         }
+      }
+   ],
    "type": "gallery",
    "properties": {
       "version": 1
@@ -485,7 +751,10 @@ void main() {
       expect(fromJson.name, equals('Radio Test Ansicht 2'));
       expect(fromJson.id, equals('64197559dbe97e4cf0b3c4db'));
       expect(fromJson.type, equals(SViewType.gallery));
-      expect(fromJson.fieldIds, ['639b05e0d8165f7cb0ac2e9b']);
+      expect(
+        fromJson.fields!.map((e) => e.id).toList(),
+        ['639b05e0d8165f7cb0ac2e9b'],
+      );
 
       expect(SView.fromJson(fromJson.toJson()), equals(fromJson));
     });
@@ -527,7 +796,7 @@ void main() {
       expect(
         jsonView.toString(),
         equals(
-          'SView(name: Grid Ansicht, type: SViewType.spreadsheet, id: 63d28a8a78d9ca55c2af8b45, links: {ApptiveLinkType.self: ApptiveLink(uri: /api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca2750af8b43/sviews/63d28a8a78d9ca55c2af8b45, method: get)}, slots: null, properties: null)',
+          'SView(name: Grid Ansicht, type: SViewType.spreadsheet, id: 63d28a8a78d9ca55c2af8b45, links: {ApptiveLinkType.self: ApptiveLink(uri: /api/users/609bd67b9fcca3ea397e70c6/spaces/63d28a8578d9ca55c2af8b3c/grids/63d28a8978d9ca2750af8b43/sviews/63d28a8a78d9ca55c2af8b45, method: get)}, slotProperties: null, field: null  slots: null, properties: null)',
         ),
       );
     });
@@ -541,6 +810,8 @@ void main() {
             'Grid Ansicht',
             SViewType.spreadsheet,
             jsonView.links,
+            null,
+            null,
             null,
             null,
           ),
@@ -573,7 +844,7 @@ void main() {
       expect(
         jsonSlot.toString(),
         equals(
-          'SViewSlot(position: 1, key: key, name: name type: DataType.text, properties: null)',
+          'SViewSlot(position: 1, key: key, name: name type: DataType.text)',
         ),
       );
     });
@@ -587,7 +858,6 @@ void main() {
             'key',
             'name',
             DataType.text,
-            null,
           ),
         ),
       );
