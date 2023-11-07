@@ -90,6 +90,10 @@ class SView {
   /// For example this can indicate which field to use for Kanban state
   final Map<String, dynamic>? slotProperties;
 
+  /// Field Properties
+  @Deprecated('Use [slotProperties] instead')
+  Map<String, dynamic>? get fieldProperties => slotProperties;
+
   /// General properties of this sview
   final Map<dynamic, dynamic>? properties;
 
