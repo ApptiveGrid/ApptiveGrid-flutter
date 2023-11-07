@@ -10,9 +10,9 @@ class SView {
     required this.type,
     required this.links,
     this.fields,
-    this.slotProperties,
     @Deprecated('This is no longer used. Use [slotProperties] instead')
     Map<String, dynamic>? fieldProperties,
+    this.slotProperties,
     this.slots,
     this.properties,
   });
