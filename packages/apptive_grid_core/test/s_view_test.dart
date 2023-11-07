@@ -790,6 +790,8 @@ void main() {
       );
 
       expect(direct, equals(jsonView));
+      // ignore: deprecated_member_use_from_same_package
+      expect(direct.fieldProperties, equals(null));
     });
 
     test('toString()', () {
