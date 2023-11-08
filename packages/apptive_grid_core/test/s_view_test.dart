@@ -1453,7 +1453,8 @@ void main() {
       final sview = SView.fromJson(jsonDecode(json));
 
       expect(sview.type, equals(SViewType.spreadsheet));
-      expect(sview.slotProperties, null);
+      // ignore: deprecated_member_use_from_same_package
+      expect(sview.slotProperties, equals(sview.fieldProperties));
     });
 
     test('Parse old kanban', () {
@@ -2118,7 +2119,8 @@ void main() {
         sview.fieldProperties!['77ugrb8mc6qy2ujwmw5bkimtd']['isKanbanState'],
         equals(true),
       );
-      expect(sview.slotProperties, null);
+      // ignore: deprecated_member_use_from_same_package
+      expect(sview.slotProperties, equals(sview.fieldProperties));
     });
   });
 

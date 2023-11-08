@@ -12,10 +12,11 @@ class SView {
     this.fields,
     @Deprecated('This will be deprecated in favor of [slotProperties]')
     Map<String, dynamic>? fieldProperties,
-    this.slotProperties,
+    Map<String, dynamic>? slotProperties,
     this.slots,
     this.properties,
-  }) : _fieldProperties = fieldProperties;
+  })  : _fieldProperties = fieldProperties,
+        _slotProperties = slotProperties;
 
   /// Creates a SView from value [json]
   factory SView.fromJson(
@@ -95,7 +96,10 @@ class SView {
 
   /// Slot Properties
   /// For example this can indicate which field to use for Kanban state
-  final Map<String, dynamic>? slotProperties;
+  Map<String, dynamic>? get slotProperties =>
+      _slotProperties ?? _fieldProperties;
+
+  final Map<String, dynamic>? _slotProperties;
 
   /// Field Properties
   @Deprecated('This will be deprecated in favor of [slotProperties]')
