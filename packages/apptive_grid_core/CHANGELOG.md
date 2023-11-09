@@ -1,3 +1,7 @@
+## 2.1.0
+
+ - **FEAT**: Support for slots in SViews (#130).
+
 ## 2.0.0
 
 > Note: This release has breaking changes.
