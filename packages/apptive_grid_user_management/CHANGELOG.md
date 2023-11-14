@@ -1,3 +1,13 @@
+## 2.0.1
+
+ - Update a dependency to the latest release.
+
+## 2.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
 ## 1.4.5
 
  - Update a dependency to the latest release.
@@ -80,7 +90,7 @@
 * Update apptive_grid_core Package to include breaking [Model Changes from Version 0.10.0](https://pub.dev/packages/apptive_grid_core/changelog#0100)
 * Add support for custom translations
 ### Breaking Change
-* Model changes from apptive_grid_core see [here]((https://pub.dev/packages/apptive_grid_core/changelog#0100)) for more details
+* Model changes from apptive_grid_core see [here](https://pub.dev/packages/apptive_grid_core/changelog#0100) for more details
 * Remove `ApptiveGridUserManagement.withClient` in favor of a named argument in the default constructor
 
 ## 0.0.5-alpha.4

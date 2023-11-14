@@ -103,23 +103,16 @@ class ApptiveGridClient extends ChangeNotifier {
     final url = _generateApptiveGridUri(uri);
     final sanitizedUrl =
         url.replace(path: url.path.replaceAll(RegExp('/r/'), '/a/'));
-    final response = await _client.get(
-      sanitizedUrl,
-      headers: _createHeadersWithDefaults(headers),
+
+    final data = await performApptiveLink<FormData>(
+      link: ApptiveLink(uri: sanitizedUrl, method: 'get'),
+      headers: headers,
+      parseResponse: (response) async {
+        return FormData.fromJson(json.decode(response.body));
+      },
     );
-    if (response.statusCode >= 400) {
-      if (response.statusCode == 401 && !isRetry) {
-        await authenticator.checkAuthentication();
-        return loadForm(
-          uri: uri,
-          headers: headers,
-          isRetry: true,
-        );
-      } else {
-        throw response;
-      }
-    }
-    return FormData.fromJson(json.decode(response.body));
+
+    return data!;
   }
 
   /// Submits [formData] against [link]
@@ -184,6 +177,7 @@ class ApptiveGridClient extends ChangeNotifier {
         yield ErrorProgressEvent(error);
       }
 
+      controller.close();
       return;
     }
 
@@ -345,26 +339,15 @@ class ApptiveGridClient extends ChangeNotifier {
     Map<String, String> headers = const {},
     bool loadEntities = true,
   }) async {
-    final gridViewUrl = _generateApptiveGridUri(uri);
+    final gridViewResponse = await performApptiveLink<http.Response>(
+      link: ApptiveLink(uri: uri, method: 'get'),
+      headers: headers,
+      halVersion: ApptiveGridHalVersion.v2,
+      isRetry: isRetry,
+      parseResponse: (response) async => response,
+    );
 
-    final gridHeaders = _createHeadersWithDefaults(headers);
-    gridHeaders.addEntries([ApptiveGridHalVersion.v2.header]);
-    final gridViewResponse =
-        await _client.get(gridViewUrl, headers: gridHeaders);
-    if (gridViewResponse.statusCode >= 400) {
-      if (gridViewResponse.statusCode == 401 && !isRetry) {
-        await authenticator.checkAuthentication();
-        return loadGrid(
-          uri: uri,
-          sorting: sorting,
-          filter: filter,
-          isRetry: true,
-        );
-      }
-      throw gridViewResponse;
-    }
-
-    final gridToParse = jsonDecode(gridViewResponse.body);
+    final gridToParse = jsonDecode(gridViewResponse!.body);
     final grid = Grid.fromJson(gridToParse);
     if (loadEntities && grid.links.containsKey(ApptiveLinkType.entities)) {
       final entitiesResponse = await this.loadEntities(
@@ -392,7 +375,7 @@ class ApptiveGridClient extends ChangeNotifier {
   /// [halVersion] describes what Hal Version of ApptiveGrid should be used. This can effect the format and features of the response and might break parsing.
   /// [pageIndex] is the index of the page to be loaded.
   /// [pageSize] is the requested item count in the loaded page.
-  /// Paging currently requireds the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
+  /// Paging currently requires the header to contain `'accept': 'application/vnd.apptivegrid.hal'`.
   Future<EntitiesResponse<T>> loadEntities<T>({
     required Uri uri,
     ApptiveGridLayout layout = ApptiveGridLayout.field,
@@ -404,10 +387,8 @@ class ApptiveGridClient extends ChangeNotifier {
     int? pageIndex,
     int? pageSize,
   }) async {
-    final baseUrl = Uri.parse(options.environment.url);
-    final requestUri = uri.replace(
-      scheme: baseUrl.scheme,
-      host: baseUrl.host,
+    return (await performApptiveLink(
+      link: ApptiveLink(uri: uri, method: 'get'),
       queryParameters: {
         'layout': layout.queryParameter,
         if (sorting != null)
@@ -416,34 +397,13 @@ class ApptiveGridClient extends ChangeNotifier {
         if (filter != null) 'filter': jsonEncode(filter.toJson()),
         if (pageIndex != null) 'pageIndex': '$pageIndex',
         if (pageSize != null) 'pageSize': '$pageSize',
-        ...uri.queryParameters,
       },
-    );
-
-    final response = await _client.get(
-      requestUri,
-      headers: _createHeadersWithDefaults(headers, halVersion),
-    );
-
-    if (response.statusCode >= 400) {
-      if (response.statusCode == 401 && !isRetry) {
-        await authenticator.checkAuthentication();
-        return loadEntities<T>(
-          uri: uri,
-          layout: layout,
-          sorting: sorting,
-          filter: filter,
-          isRetry: true,
-          headers: headers,
-          pageIndex: pageIndex,
-          pageSize: pageSize,
-          halVersion: halVersion,
-        );
-      }
-      throw response;
-    }
-
-    return EntitiesResponse<T>.fromJson(jsonDecode(response.body));
+      halVersion: halVersion,
+      isRetry: isRetry,
+      headers: headers,
+      parseResponse: (response) async =>
+          EntitiesResponse<T>.fromJson(jsonDecode(response.body)),
+    ))!;
   }
 
   /// Get the [User] that is authenticated
@@ -460,12 +420,12 @@ class ApptiveGridClient extends ChangeNotifier {
     await authenticator.checkAuthentication();
 
     final url = Uri.parse('${options.environment.url}/api/users/me');
-    final response =
-        await _client.get(url, headers: _createHeadersWithDefaults(headers));
-    if (response.statusCode >= 400) {
-      throw response;
-    }
-    return User.fromJson(json.decode(response.body));
+    return (await performApptiveLink<User>(
+      link: ApptiveLink(uri: url, method: 'get'),
+      headers: headers,
+      parseResponse: (response) async =>
+          User.fromJson(json.decode(response.body)),
+    ))!;
   }
 
   /// Get the [Space] represented by [spaceUri]
@@ -479,23 +439,13 @@ class ApptiveGridClient extends ChangeNotifier {
     Map<String, String> headers = const {},
     bool isRetry = false,
   }) async {
-    final url = _generateApptiveGridUri(uri);
-    final response = await _client.get(
-      url,
-      headers: _createHeadersWithDefaults(headers),
-    );
-    if (response.statusCode >= 400) {
-      if (response.statusCode == 401 && !isRetry) {
-        await authenticator.checkAuthentication();
-        return getSpace(
-          uri: uri,
-          headers: headers,
-          isRetry: true,
-        );
-      }
-      throw response;
-    }
-    return Space.fromJson(json.decode(response.body));
+    return (await performApptiveLink<Space>(
+      link: ApptiveLink(uri: uri, method: 'get'),
+      headers: headers,
+      isRetry: isRetry,
+      parseResponse: (response) async =>
+          Space.fromJson(json.decode(response.body)),
+    ))!;
   }
 
   /// Creates and returns a [Uri] pointing to a Form filled with the Data represented for a given entitiy
@@ -510,33 +460,18 @@ class ApptiveGridClient extends ChangeNotifier {
     Map<String, String> headers = const {},
     bool isRetry = false,
   }) async {
-    final url = _generateApptiveGridUri(uri);
-
-    final response = await _client.post(
-      url,
-      headers: _createHeadersWithDefaults(headers),
+    return (await performApptiveLink<Uri>(
+      link: ApptiveLink(uri: uri, method: 'post'),
       body: jsonEncode({
         'formId': formId,
       }),
-    );
-
-    if (response.statusCode >= 400) {
-      if (response.statusCode == 401 && !isRetry) {
-        await authenticator.checkAuthentication();
-        return getEditLink(
-          uri: uri,
-          formId: formId,
-          headers: headers,
-          isRetry: true,
-        );
-      }
-      throw response;
-    }
-
-    return Uri.parse(
-      ((json.decode(response.body) as Map)['uri'] as String)
-          .replaceAll(RegExp('/r/'), '/a/'),
-    );
+      headers: headers,
+      isRetry: isRetry,
+      parseResponse: (response) async => Uri.parse(
+        ((json.decode(response.body) as Map)['uri'] as String)
+            .replaceAll(RegExp('/r/'), '/a/'),
+      ),
+    ))!;
   }
 
   /// Get a specific entity via a [uri]
@@ -556,32 +491,20 @@ class ApptiveGridClient extends ChangeNotifier {
     ApptiveGridLayout layout = ApptiveGridLayout.field,
     bool isRetry = false,
   }) async {
-    final url = _generateApptiveGridUri(uri);
-
-    final response = await _client.get(
-      url.replace(
-        queryParameters: {
-          'layout': layout.queryParameter,
-        },
+    return performApptiveLink(
+      link: ApptiveLink(
+        uri: uri.replace(
+          queryParameters: {
+            'layout': layout.queryParameter,
+          },
+        ),
+        method: 'get',
       ),
-      headers: _createHeadersWithDefaults(headers, halVersion),
+      headers: headers,
+      halVersion: halVersion,
+      isRetry: isRetry,
+      parseResponse: (response) async => response.body,
     );
-
-    if (response.statusCode >= 400) {
-      if (response.statusCode == 401 && !isRetry) {
-        await authenticator.checkAuthentication();
-        return getEntity(
-          uri: uri,
-          headers: headers,
-          halVersion: halVersion,
-          layout: layout,
-          isRetry: true,
-        );
-      }
-      throw response;
-    }
-
-    return jsonDecode(response.body);
   }
 
   /// Authenticate the User

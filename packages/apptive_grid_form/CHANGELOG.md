@@ -1,3 +1,17 @@
+## 2.0.1
+
+ - Update a dependency to the latest release.
+
+## 2.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
+## 1.7.2
+
+ - **FIX**: Use easeInOut curve for page transition (#122).
+
 ## 1.7.1
 
  - **FIX**: Formula type parsing for complex types (#121).

@@ -3,6 +3,100 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-11-09
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_core` - `v2.1.0`](#apptive_grid_core---v210)
+ - [`apptive_grid_form` - `v2.0.1`](#apptive_grid_form---v201)
+ - [`apptive_grid_user_management` - `v2.0.1`](#apptive_grid_user_management---v201)
+ - [`apptive_grid_grid_builder` - `v2.0.1`](#apptive_grid_grid_builder---v201)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `apptive_grid_form` - `v2.0.1`
+ - `apptive_grid_user_management` - `v2.0.1`
+ - `apptive_grid_grid_builder` - `v2.0.1`
+
+---
+
+#### `apptive_grid_core` - `v2.1.0`
+
+ - **FEAT**: Support for slots in SViews (#130).
+
+
+## 2023-10-12
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`apptive_grid_core` - `v2.0.0`](#apptive_grid_core---v200)
+ - [`apptive_grid_form` - `v2.0.0`](#apptive_grid_form---v200)
+ - [`apptive_grid_grid_builder` - `v2.0.0`](#apptive_grid_grid_builder---v200)
+ - [`apptive_grid_user_management` - `v2.0.0`](#apptive_grid_user_management---v200)
+
+Packages with other changes:
+
+ - [`apptive_grid_theme` - `v1.2.1`](#apptive_grid_theme---v121)
+
+---
+
+#### `apptive_grid_core` - `v2.0.0`
+
+ - **FIX**: Close Submit StreamController (#127).
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
+#### `apptive_grid_form` - `v2.0.0`
+
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
+#### `apptive_grid_grid_builder` - `v2.0.0`
+
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
+#### `apptive_grid_user_management` - `v2.0.0`
+
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
+#### `apptive_grid_theme` - `v1.2.1`
+
+ - **REFACTOR**: Adjust upper SDK Constraint to <4.0.0 (#125).
+
+
+## 2023-10-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_form` - `v1.7.2`](#apptive_grid_form---v172)
+
+---
+
+#### `apptive_grid_form` - `v1.7.2`
+
+ - **FIX**: Use easeInOut curve for page transition (#122).
+
+
 ## 2023-10-06
 
 ### Changes

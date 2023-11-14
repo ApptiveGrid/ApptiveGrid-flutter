@@ -7,23 +7,23 @@ abstract class ApptiveGridIcons {
   ApptiveGridIcons._();
 
   /// A More Icon
-  static const IconData more = MdiIcons.dotsHorizontalCircle;
+  static final IconData more = MdiIcons.dotsHorizontalCircle;
 
   /// Icon for Grids
-  static const IconData grid = MdiIcons.table;
+  static final IconData grid = MdiIcons.table;
 
   /// Icon for Forms
-  static const IconData form = MdiIcons.formTextbox;
+  static final IconData form = MdiIcons.formTextbox;
 
   /// Icon for Kanban Boards
-  static const IconData kanban = MdiIcons.trello;
+  static final IconData kanban = MdiIcons.trello;
 
   /// Icon for Calendar
-  static const IconData calendar = MdiIcons.calendar;
+  static final IconData calendar = MdiIcons.calendar;
 
   /// Icon for Map Views
-  static const IconData map = MdiIcons.googleMaps;
+  static final IconData map = MdiIcons.googleMaps;
 
   /// Icon for Gallery Views
-  static const IconData gallery = MdiIcons.viewGrid;
+  static final IconData gallery = MdiIcons.viewGrid;
 }

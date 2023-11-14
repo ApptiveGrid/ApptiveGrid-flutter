@@ -166,13 +166,13 @@ class _FormDataWidgetState extends State<FormDataWidget> {
                 },
                 pageBack: () => _pageController.previousPage(
                   duration: const Duration(milliseconds: 300),
-                  curve: Curves.bounceInOut,
+                  curve: Curves.easeInOut,
                 ),
                 pageForward: () {
                   if (key.currentState!.validate()) {
                     _pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
-                      curve: Curves.bounceInOut,
+                      curve: Curves.easeInOut,
                     );
                   }
                 },

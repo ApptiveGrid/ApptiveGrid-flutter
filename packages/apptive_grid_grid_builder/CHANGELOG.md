@@ -1,3 +1,13 @@
+## 2.0.1
+
+ - Update a dependency to the latest release.
+
+## 2.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **REFACTOR**: Upgrade to dart 3 (#123).
+
 ## 1.2.5
 
  - Update a dependency to the latest release.
@@ -66,7 +76,7 @@
 * GridField now includes `key` and `schema`
 * Deprecate `ApptiveLink`(`GridUri`, `FormUri`, `EntityUri`, etc) in favor of plain `Uri`
 ### Breaking Change
-* Model changes from apptive_grid_core see [here]((https://pub.dev/packages/apptive_grid_core/changelog#0100)) for more details
+* Model changes from apptive_grid_core see [here](https://pub.dev/packages/apptive_grid_core/changelog#0100) for more details
 * Removed `spaceUris` from `User` and `gridUris` from `Space`
 
 ## 0.9.0-alpha.5
