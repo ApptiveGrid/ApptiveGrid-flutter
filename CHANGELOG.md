@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-11-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_core` - `v2.1.1`](#apptive_grid_core---v211)
+ - [`apptive_grid_form` - `v2.0.2`](#apptive_grid_form---v202)
+ - [`apptive_grid_user_management` - `v2.0.2`](#apptive_grid_user_management---v202)
+ - [`apptive_grid_grid_builder` - `v2.0.2`](#apptive_grid_grid_builder---v202)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `apptive_grid_user_management` - `v2.0.2`
+ - `apptive_grid_grid_builder` - `v2.0.2`
+
+---
+
+#### `apptive_grid_core` - `v2.1.1`
+
+ - **REFACTOR**: Use performApptiveLink for Client Functions (#129).
+
+#### `apptive_grid_form` - `v2.0.2`
+
+ - **REFACTOR**: Use performApptiveLink for Client Functions (#129).
+ - **FIX**: Fix Signatures not being submitted in Forms (#131).
+
+
 ## 2023-11-09
 
 ### Changes

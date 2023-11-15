@@ -1,3 +1,8 @@
+## 2.0.2
+
+ - **REFACTOR**: Use performApptiveLink for Client Functions (#129).
+ - **FIX**: Fix Signatures not being submitted in Forms (#131).
+
 ## 2.0.1
 
  - Update a dependency to the latest release.

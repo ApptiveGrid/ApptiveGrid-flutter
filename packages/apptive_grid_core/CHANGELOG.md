@@ -1,3 +1,7 @@
+## 2.1.1
+
+ - **REFACTOR**: Use performApptiveLink for Client Functions (#129).
+
 ## 2.1.0
 
  - **FEAT**: Support for slots in SViews (#130).
