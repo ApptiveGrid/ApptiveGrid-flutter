@@ -200,11 +200,22 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
   void _loadSignature(Attachment signature) async {
     final client = ApptiveGrid.getClient(context, listen: false).httpClient;
     try {
-      final response = await client.get(signature.url);
-      if (response.statusCode >= 400) {
-        throw response;
+      final attachmentManager =
+          Provider.of<AttachmentManager>(context, listen: false);
+      late final Uint8List svgBytes;
+      if (attachmentManager.formData?.attachmentActions[signature]
+          is AddAttachmentAction) {
+        final addAction = attachmentManager
+            .formData!.attachmentActions[signature] as AddAttachmentAction;
+        svgBytes = addAction.byteData!;
+      } else {
+        final response = await client.get(signature.url);
+        if (response.statusCode >= 400) {
+          throw response;
+        }
+        svgBytes = response.bodyBytes;
       }
-      final rawString = String.fromCharCodes(response.bodyBytes);
+      final rawString = String.fromCharCodes(svgBytes);
       final parsedSvg = SvgStringLoader(rawString).provideSvg(null);
       setState(() {
         _loadedSvg = parsedSvg;
