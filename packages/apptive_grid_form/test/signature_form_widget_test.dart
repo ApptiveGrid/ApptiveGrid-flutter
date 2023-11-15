@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
 import 'package:flutter/material.dart';
@@ -143,20 +145,27 @@ void main() {
     });
   });
   group('add signature', () {
-    final attachmentProcessor = MockAttachmentProcessor();
-    when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
-    when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
-      (invocation) async {
-        final name = invocation.positionalArguments.first;
-        return Attachment(
-          name: name,
-          type: 'image/svg+xml',
-          url: Uri.parse(
-            '$name.com',
-          ),
-        );
-      },
-    );
+    late MockAttachmentProcessor attachmentProcessor;
+    setUp(() {
+      attachmentProcessor = MockAttachmentProcessor();
+      when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
+      when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
+        (invocation) async {
+          final name = invocation.positionalArguments.first;
+          return Attachment(
+            name: name,
+            type: 'image/svg+xml',
+            url: Uri.parse(
+              '$name.com',
+            ),
+          );
+        },
+      );
+    });
+
+    tearDown(() {
+      formData.attachmentActions.clear();
+    });
 
     testWidgets('add new signature', (tester) async {
       final target = TestApp(
@@ -175,11 +184,11 @@ void main() {
       await tester.tap(find.byType(SignatureFormWidget));
       await tester.pumpAndSettle();
 
-      final sigantureField = tester.getRect(find.byType(HandSignature));
+      final signatureField = tester.getRect(find.byType(HandSignature));
 
       await tester.dragFrom(
-        sigantureField.centerLeft,
-        sigantureField.centerRight,
+        signatureField.centerLeft,
+        signatureField.centerRight,
       );
       await tester.pumpAndSettle();
 
@@ -215,11 +224,11 @@ void main() {
       await tester.tap(find.byType(SignatureFormWidget));
       await tester.pumpAndSettle();
 
-      var sigantureField = tester.getRect(find.byType(HandSignature));
+      var signature = tester.getRect(find.byType(HandSignature));
 
       await tester.dragFrom(
-        sigantureField.centerLeft,
-        sigantureField.centerRight,
+        signature.centerLeft,
+        signature.centerRight,
       );
       await tester.pumpAndSettle();
 
@@ -242,11 +251,11 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      sigantureField = tester.getRect(find.byType(HandSignature));
+      signature = tester.getRect(find.byType(HandSignature));
 
       await tester.dragFrom(
-        sigantureField.centerLeft,
-        sigantureField.centerRight,
+        signature.centerLeft,
+        signature.centerRight,
       );
       await tester.pumpAndSettle();
 
@@ -334,6 +343,11 @@ void main() {
     });
   });
   group('load prefilled signature', () {
+    tearDown(() {
+      formDataPrefilled.attachmentActions.clear();
+      clearInteractions(httpClient);
+    });
+
     testWidgets('load prefilled', (tester) async {
       when(() => httpClient.get(signature.url))
           .thenAnswer((invocation) async => http.Response(svgString, 200));
@@ -349,6 +363,26 @@ void main() {
       await tester.pumpAndSettle();
 
       checkSignature(isEmpty: false);
+    });
+
+    testWidgets('Load Prefilled from AddAction', (tester) async {
+      formDataPrefilled.attachmentActions[signature] = AddAttachmentAction(
+        attachment: signature,
+        byteData: Uint8List.fromList(svgString.codeUnits),
+      );
+
+      final target = TestApp(
+        client: client,
+        child: ApptiveGridFormData(
+          formData: formDataPrefilled,
+        ),
+      );
+
+      await tester.pumpWidget(target);
+      await tester.pumpAndSettle();
+
+      checkSignature(isEmpty: false);
+      verifyNever(() => httpClient.get(signature.url));
     });
 
     testWidgets('load prefilled error show empty', (tester) async {
