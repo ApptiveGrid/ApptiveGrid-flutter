@@ -40,8 +40,10 @@ class ApptiveGridTheme {
       light: const Color(0xFFF7F7F7),
       dark: darkWindowBackground,
     );
-    final baseTheme =
-        _withBrightness(light: ThemeData.light(), dark: ThemeData.dark());
+    final baseTheme = _withBrightness(
+      light: ThemeData.light(useMaterial3: false),
+      dark: ThemeData.dark(useMaterial3: false),
+    );
     final textTheme = _textTheme(baseTheme.textTheme);
 
     final buttonShape =
@@ -58,7 +60,6 @@ class ApptiveGridTheme {
       background: windowBackground,
     );
     return baseTheme.copyWith(
-      useMaterial3: false,
       primaryColor: colorScheme.primary,
       indicatorColor: colorScheme.primary,
       colorScheme: colorScheme,
