@@ -41,6 +41,14 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v1
         with:
           path: ./packages/apptive_grid_user_management/coverage/lcov.info
+      - name: Archive Golden failures
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Golden failures
+          retention-days: 2
+          path: |
+            **/test/**/failures/**/*.*
 
   android_examples:
     name: Build Android Examples
