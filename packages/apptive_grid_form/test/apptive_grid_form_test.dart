@@ -700,6 +700,7 @@ void main() {
         await tester.pumpAndSettle();
 
         await tester.scrollUntilVisible(find.byType(TextButton), 100);
+        await tester.pumpAndSettle();
         await tester.tap(find.byType(TextButton, skipOffstage: false));
         await tester.pumpAndSettle();
 
