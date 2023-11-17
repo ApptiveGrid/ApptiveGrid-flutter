@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-11-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`apptive_grid_form` - `v2.1.0`](#apptive_grid_form---v210)
+ - [`apptive_grid_theme` - `v1.3.0`](#apptive_grid_theme---v130)
+
+---
+
+#### `apptive_grid_form` - `v2.1.0`
+
+ - **FEAT**: Flutter 3.16 Support (#132).
+
+#### `apptive_grid_theme` - `v1.3.0`
+
+ - **FEAT**: Flutter 3.16 Support (#132).
+
+
 ## 2023-11-15
 
 ### Changes

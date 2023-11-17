@@ -1,3 +1,7 @@
+## 2.1.0
+
+ - **FEAT**: Flutter 3.16 Support (#132).
+
 ## 2.0.2
 
  - **REFACTOR**: Use performApptiveLink for Client Functions (#129).

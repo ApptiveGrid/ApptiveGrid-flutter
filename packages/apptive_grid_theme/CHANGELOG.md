@@ -1,3 +1,7 @@
+## 1.3.0
+
+ - **FEAT**: Flutter 3.16 Support (#132).
+
 ## 1.2.1
 
  - **REFACTOR**: Adjust upper SDK Constraint to <4.0.0 (#125).
