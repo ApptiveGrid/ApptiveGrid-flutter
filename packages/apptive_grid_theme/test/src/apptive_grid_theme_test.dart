@@ -179,6 +179,7 @@ void main() {
   goldenTestInLightAndDark(
     description: 'Card',
     fileName: 'card',
+    constraints: const BoxConstraints(maxWidth: 1500),
     scenarios: {
       'Card': const Center(
         child: Card(
@@ -236,6 +237,7 @@ void main() {
   goldenTestInLightAndDark(
     description: 'Text Theme',
     fileName: 'text',
+    constraints: const BoxConstraints(maxWidth: 1500),
     scenarios: {
       'Display Large': Builder(
         builder: (context) {

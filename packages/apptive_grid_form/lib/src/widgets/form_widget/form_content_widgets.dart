@@ -3,10 +3,10 @@ import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/src/util/submit_progress.dart';
 import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
-import 'package:collection/collection.dart';
 
 /// Shows a spinner while loading the form data
 class LoadingFormWidget extends StatelessWidget {
@@ -120,16 +120,14 @@ class _FormDataWidgetState extends State<FormDataWidget> {
   Widget build(BuildContext context) {
     final pages = widget.data.properties?.pageIds;
     if (pages != null && pages.length > 1) {
-      return WillPopScope(
-        onWillPop: () async {
+      return PopScope(
+        canPop: _pageController.hasClients && (_pageController.page ?? 0) == 0,
+        onPopInvoked: (_) {
           if ((_pageController.page ?? 0) > 0) {
             _pageController.previousPage(
               duration: const Duration(milliseconds: 300),
-              curve: Curves.bounceInOut,
+              curve: Curves.easeInOut,
             );
-            return false;
-          } else {
-            return true;
           }
         },
         child: PageView(
