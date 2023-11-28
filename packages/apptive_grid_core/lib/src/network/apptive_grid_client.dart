@@ -503,7 +503,7 @@ class ApptiveGridClient extends ChangeNotifier {
       headers: headers,
       halVersion: halVersion,
       isRetry: isRetry,
-      parseResponse: (response) async => response.body,
+      parseResponse: (response) async => json.decode(response.body),
     );
   }
 
