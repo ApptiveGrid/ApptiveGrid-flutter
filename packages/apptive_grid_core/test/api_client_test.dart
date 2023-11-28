@@ -2210,7 +2210,7 @@ void main() {
 
       final entity = await apptiveGridClient.getEntity(uri: entityUri);
 
-      expect(entity, equals(jsonEncode(rawResponse)));
+      expect(entity, equals(rawResponse));
     });
 
     test('400 Status throws Response', () async {
@@ -2259,7 +2259,7 @@ void main() {
         layout: ApptiveGridLayout.key,
       );
 
-      expect(entity, equals(jsonEncode(rawResponse)));
+      expect(entity, equals(rawResponse));
     });
 
     test('Use ApptiveGridHalVersion', () async {
@@ -2290,7 +2290,7 @@ void main() {
         halVersion: version,
       );
 
-      expect(entity, equals(jsonEncode(rawResponse)));
+      expect(entity, equals(rawResponse));
     });
     test('Use custom Header', () async {
       response = StreamedResponse(
@@ -2322,7 +2322,7 @@ void main() {
         headers: {'custom': 'header'},
       );
 
-      expect(entity, equals(jsonEncode(rawResponse)));
+      expect(entity, equals(rawResponse));
     });
 
     test('401 Authenticates and retries', () async {
