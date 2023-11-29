@@ -144,6 +144,7 @@ class ApptiveGridTheme {
           ),
           borderRadius: BorderRadius.circular(8),
         ),
+        labelStyle: textTheme.titleMedium,
       ),
       dialogTheme: baseTheme.dialogTheme.copyWith(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -229,6 +230,9 @@ class ApptiveGridTheme {
           return null;
         }),
       ),
+      listTileTheme: baseTheme.listTileTheme.copyWith(
+        titleTextStyle: baseTheme.textTheme.titleMedium,
+      ),
     );
   }
 
@@ -277,7 +281,7 @@ class ApptiveGridTheme {
       ),
       titleSmall: TextStyle(
         fontSize: 14,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
         package: fontPackage,
       ),
       bodyLarge: TextStyle(
