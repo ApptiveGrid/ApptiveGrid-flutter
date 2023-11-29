@@ -117,6 +117,7 @@ class ApptiveGridTheme {
           light: ApptiveGridColors.lightGrey,
           dark: Colors.white54,
         ),
+        indicatorSize: TabBarIndicatorSize.tab,
       ),
       inputDecorationTheme: baseTheme.inputDecorationTheme.copyWith(
         filled: true,
