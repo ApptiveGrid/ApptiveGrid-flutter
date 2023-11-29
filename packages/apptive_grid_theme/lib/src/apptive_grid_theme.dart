@@ -41,8 +41,8 @@ class ApptiveGridTheme {
       dark: darkWindowBackground,
     );
     final baseTheme = _withBrightness(
-      light: ThemeData.light(useMaterial3: false),
-      dark: ThemeData.dark(useMaterial3: false),
+      light: ThemeData.light(),
+      dark: ThemeData.dark(),
     );
     final textTheme = _textTheme(baseTheme.textTheme);
 
