@@ -72,6 +72,7 @@ class ApptiveGridTheme {
         textTheme: ButtonTextTheme.primary,
       ),
       floatingActionButtonTheme: baseTheme.floatingActionButtonTheme.copyWith(
+        shape: const CircleBorder(),
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
       ),
@@ -161,6 +162,7 @@ class ApptiveGridTheme {
       appBarTheme: baseTheme.appBarTheme.copyWith(
         color: Colors.transparent,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: false,
         actionsIconTheme: IconThemeData(
           color: colorScheme.primary,
