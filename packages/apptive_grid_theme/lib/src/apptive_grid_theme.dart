@@ -41,8 +41,8 @@ class ApptiveGridTheme {
       dark: darkWindowBackground,
     );
     final baseTheme = _withBrightness(
-      light: ThemeData.light(useMaterial3: false),
-      dark: ThemeData.dark(useMaterial3: false),
+      light: ThemeData.light(),
+      dark: ThemeData.dark(),
     );
     final textTheme = _textTheme(baseTheme.textTheme);
 
@@ -72,6 +72,7 @@ class ApptiveGridTheme {
         textTheme: ButtonTextTheme.primary,
       ),
       floatingActionButtonTheme: baseTheme.floatingActionButtonTheme.copyWith(
+        shape: const CircleBorder(),
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
       ),
@@ -117,6 +118,7 @@ class ApptiveGridTheme {
           light: ApptiveGridColors.lightGrey,
           dark: Colors.white54,
         ),
+        indicatorSize: TabBarIndicatorSize.tab,
       ),
       inputDecorationTheme: baseTheme.inputDecorationTheme.copyWith(
         filled: true,
@@ -143,6 +145,7 @@ class ApptiveGridTheme {
           ),
           borderRadius: BorderRadius.circular(8),
         ),
+        labelStyle: textTheme.titleMedium,
       ),
       dialogTheme: baseTheme.dialogTheme.copyWith(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -159,6 +162,7 @@ class ApptiveGridTheme {
       appBarTheme: baseTheme.appBarTheme.copyWith(
         color: Colors.transparent,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: false,
         actionsIconTheme: IconThemeData(
           color: colorScheme.primary,
@@ -228,6 +232,9 @@ class ApptiveGridTheme {
           return null;
         }),
       ),
+      listTileTheme: baseTheme.listTileTheme.copyWith(
+        titleTextStyle: baseTheme.textTheme.titleMedium,
+      ),
     );
   }
 
@@ -276,7 +283,7 @@ class ApptiveGridTheme {
       ),
       titleSmall: TextStyle(
         fontSize: 14,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
         package: fontPackage,
       ),
       bodyLarge: TextStyle(
