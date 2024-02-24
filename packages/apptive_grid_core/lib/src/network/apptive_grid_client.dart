@@ -35,6 +35,9 @@ class ApptiveGridClient extends ChangeNotifier {
   /// Returns the [ApptiveGridOptions] for the current Client
   ApptiveGridOptions get options => _options;
 
+  /// Returns the current authentication token.
+  String? get authToken => authenticator.getAuthToken();
+
   /// Updates the [options]
   Future<void> setOptions(ApptiveGridOptions options) async {
     // Keep old environment as change is handled in [updateEnvironment]
