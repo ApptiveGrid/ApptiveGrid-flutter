@@ -30,15 +30,16 @@ class TestLoader extends SvgNetworkLoader {
 
   @override
   String provideSvg(Uint8List? message) {
-    // Your implementation here.
     return '<svg width="10" height="10"></svg>';
   }
 
   @override
   SvgCacheKey cacheKey(BuildContext? context) {
-    // Your implementation here.
     return SvgCacheKey(
-        theme: getTheme(context), colorMapper: colorMapper, keyData: keyName);
+      theme: getTheme(context),
+      colorMapper: colorMapper,
+      keyData: keyName,
+    );
   }
 }
 

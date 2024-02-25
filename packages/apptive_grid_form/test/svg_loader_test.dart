@@ -5,7 +5,6 @@ import 'package:apptive_grid_form/src/widgets/attachment/thumbnail.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'dart:io';
 
 // Mock classes
 class MockAttachment extends Mock implements Attachment {}
@@ -54,7 +53,9 @@ void main() {
         type: 'image/svg',
       );
       final action = AddAttachmentAction(
-          byteData: Uint8List(10), attachment: attachment); // Example byte data
+        byteData: Uint8List(10),
+        attachment: attachment,
+      ); // Example byte data
 
       final loader = SvgLoaderFactory.getLoader(addAttachmentAction: action);
 
