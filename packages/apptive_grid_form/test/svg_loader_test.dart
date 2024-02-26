@@ -13,7 +13,9 @@ class MockAddAttachmentAction extends Mock implements AddAttachmentAction {}
 
 void main() {
   group('SvgLoaderFactory Tests', () {
-    test('returns SvgNetworkLoader when only Attachment is provided', () {
+    test(
+        'returns SvgNetworkLoader when only Attachment with largeThumbnailUri is provided',
+        () {
       final attachment = Attachment(
         name: 'svg',
         url: Uri(path: '/uri'),
@@ -25,6 +27,36 @@ void main() {
 
       expect(loader, isA<SvgNetworkLoader>());
       expect((loader as SvgNetworkLoader).url, '/largeThumbnailUri');
+    });
+
+    test(
+        'returns SvgNetworkLoader when only Attachment with smallThumbnail is provided',
+        () {
+      final attachment = Attachment(
+        name: 'svg',
+        url: Uri(path: '/uri'),
+        smallThumbnail: Uri(path: '/smallThumbnail'),
+        type: 'image/svg',
+      );
+
+      final loader = SvgLoaderFactory.getLoader(attachment: attachment);
+
+      expect(loader, isA<SvgNetworkLoader>());
+      expect((loader as SvgNetworkLoader).url, '/smallThumbnail');
+    });
+
+    test('returns SvgNetworkLoader when only Attachment with uri is provided',
+        () {
+      final attachment = Attachment(
+        name: 'svg',
+        url: Uri(path: '/uri'),
+        type: 'image/svg',
+      );
+
+      final loader = SvgLoaderFactory.getLoader(attachment: attachment);
+
+      expect(loader, isA<SvgNetworkLoader>());
+      expect((loader as SvgNetworkLoader).url, '/uri');
     });
 
     test('returns SvgFileLoader when AddAttachmentAction with path is provided',
