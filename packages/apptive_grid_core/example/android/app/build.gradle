@@ -34,7 +34,7 @@ android {
 
     defaultConfig {
         applicationId "de.zweidenker.example"
-        minSdkVersion 18
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
