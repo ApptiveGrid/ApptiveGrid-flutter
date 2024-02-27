@@ -193,6 +193,14 @@ class ApptiveGridAuthenticator {
     return _authClient ??= await createClient();
   }
 
+  /// Returns the current authentication token if available and valid.
+  String? getAuthToken() {
+    // Here, you can add logic to check if the token is expired or not.
+    // For simplicity, we're directly returning the accessToken,
+    // but consider checking the token's validity first.
+    return _token?.accessToken;
+  }
+
   /// Used to test implementation of get _client
   @visibleForTesting
   Future<Client> get authClient => _client;

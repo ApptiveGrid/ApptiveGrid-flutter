@@ -15,6 +15,7 @@ class Thumbnail extends StatelessWidget {
     super.key,
     required this.attachment,
     this.addAttachmentAction,
+    this.svgLoader,
   });
 
   /// The Attachment to display a Thumbnail for
@@ -23,29 +24,18 @@ class Thumbnail extends StatelessWidget {
   /// An AddAttachmentAction to allow to display a thumbnail from [AddAttachmentAction.path] or [AddAttachmentAction.byteData]
   final AddAttachmentAction? addAttachmentAction;
 
+  /// An SvgLoader to use for loading SVGs. If provided, this loader will be used instead of creating a new one based on the attachment details.
+  final SvgLoader? svgLoader; // Add this new property
+
   @override
   Widget build(BuildContext context) {
     // svg Pictures
     if (attachment.type.contains('svg')) {
-      late final BytesLoader pictureProvider;
-      if (addAttachmentAction != null) {
-        if (addAttachmentAction!.path != null) {
-          pictureProvider = SvgFileLoader(
-            File(addAttachmentAction!.path!),
-          );
-        } else {
-          pictureProvider = SvgBytesLoader(
-            addAttachmentAction!.byteData!,
-          );
-        }
-      } else {
-        pictureProvider = SvgNetworkLoader(
-          (attachment.smallThumbnail ??
-                  attachment.largeThumbnail ??
-                  attachment.url)
-              .toString(),
-        );
-      }
+      final BytesLoader pictureProvider = SvgLoaderFactory.getLoader(
+        attachment: attachment,
+        addAttachmentAction: addAttachmentAction,
+        svgLoader: svgLoader,
+      );
       return SvgPicture(
         pictureProvider,
         fit: BoxFit.cover,
@@ -87,6 +77,44 @@ class Thumbnail extends StatelessWidget {
 
     // Other Files
     return _FileIcon(type: attachment.type);
+  }
+}
+
+/// A factory class for creating instances of [BytesLoader] to handle SVG loading.
+///
+/// This class provides a static method to obtain the appropriate [BytesLoader]
+/// based on the given parameters. It can choose between a file loader, a byte loader,
+/// or a network loader to fetch and render SVG images.
+class SvgLoaderFactory {
+  /// Returns an instance of [BytesLoader] based on the provided parameters.
+  ///
+  /// This method selects the appropriate SVG loader for a given attachment or action.
+  /// If an explicit [svgLoader] is provided, it returns that loader directly.
+  /// If [addAttachmentAction] is specified with a path, it returns a [SvgFileLoader].
+  /// If [addAttachmentAction] is specified with byte data, it returns a [SvgBytesLoader].
+  /// Otherwise, it falls back to creating a [SvgNetworkLoader] using the URL from the [attachment].
+  ///
+  static BytesLoader getLoader({
+    Attachment? attachment,
+    AddAttachmentAction? addAttachmentAction,
+    SvgLoader? svgLoader,
+  }) {
+    if (svgLoader != null) {
+      return svgLoader;
+    } else if (addAttachmentAction != null) {
+      if (addAttachmentAction.path != null) {
+        return SvgFileLoader(File(addAttachmentAction.path!));
+      } else {
+        return SvgBytesLoader(addAttachmentAction.byteData!);
+      }
+    } else {
+      return SvgNetworkLoader(
+        (attachment!.smallThumbnail ??
+                attachment.largeThumbnail ??
+                attachment.url)
+            .toString(),
+      );
+    }
   }
 }
 

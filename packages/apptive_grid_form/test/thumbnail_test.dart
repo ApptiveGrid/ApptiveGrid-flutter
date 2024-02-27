@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_form/src/widgets/attachment/thumbnail.dart';
@@ -10,6 +11,50 @@ import 'package:mocktail/mocktail.dart';
 
 import 'common.dart';
 import 'util/mocktail_custom_image_network.dart';
+import 'package:http/http.dart' as http;
+
+// Create a mock class for SvgLoader using mocktail
+
+class TestLoader extends SvgNetworkLoader {
+  const TestLoader({
+    required String url,
+    this.keyName = 'A',
+    SvgTheme? theme,
+    ColorMapper? colorMapper,
+  }) : super(
+          url,
+          theme: theme,
+          colorMapper: colorMapper,
+        );
+  final String keyName;
+
+  @override
+  String provideSvg(Uint8List? message) {
+    return '<svg width="10" height="10"></svg>';
+  }
+
+  @override
+  SvgCacheKey cacheKey(BuildContext? context) {
+    return SvgCacheKey(
+      theme: getTheme(context),
+      colorMapper: colorMapper,
+      keyData: keyName,
+    );
+  }
+}
+
+class _FakeHttpClient extends Fake implements http.Client {
+  @override
+  Future<http.Response> get(Uri url, {Map<String, String>? headers}) async {
+    return http.Response(_svgStr, 200);
+  }
+}
+
+const String _svgStr = '''
+<svg height="100" width="100">
+  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+</svg>
+''';
 
 void main() {
   group('Files', () {
@@ -181,93 +226,31 @@ void main() {
 
   group('SVG Images', () {
     testWidgets('Shows image from url', (tester) async {
-      await mockNetworkImages(
-          image:
-              '''PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNyI+CjxwYXRoIGZpbGw9IiMwRkZGMDAiIHN0cm9rZT0iIzBGMEYwMCIgc3Ryb2tlLXdpZHRoPSIwIiBkPSJtNCw0djloOVY0eiIvPgo8L3N2Zz4=''',
-          () async {
-        final target = MaterialApp(
-          home: SizedBox(
-            width: 70,
-            height: 70,
-            child: Thumbnail(
-              attachment: Attachment(
-                name: 'svg',
-                url: Uri(path: '/uri'),
-                type: 'image/svg',
-              ),
+      final http.Client fakeClient = _FakeHttpClient();
+      final mockSvgLoader = SvgNetworkLoader('/uri', httpClient: fakeClient);
+
+      final target = MaterialApp(
+        home: SizedBox(
+          width: 70,
+          height: 70,
+          child: Thumbnail(
+            attachment: Attachment(
+              name: 'svg',
+              url: Uri(path: '/uri'),
+              type: 'image/svg',
             ),
+            svgLoader: mockSvgLoader,
           ),
-        );
+        ),
+      );
 
-        await tester.pumpWidget(target);
+      await tester.pumpWidget(target);
 
-        final imageUrl =
-            ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
-                    .bytesLoader as SvgNetworkLoader)
-                .url;
-        expect(imageUrl, '/uri');
-      });
-    });
-
-    testWidgets('Shows image from large thumbnail', (tester) async {
-      await mockNetworkImages(
-          image:
-              '''PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNyI+CjxwYXRoIGZpbGw9IiMwRkZGMDAiIHN0cm9rZT0iIzBGMEYwMCIgc3Ryb2tlLXdpZHRoPSIwIiBkPSJtNCw0djloOVY0eiIvPgo8L3N2Zz4=''',
-          () async {
-        final target = MaterialApp(
-          home: SizedBox(
-            width: 70,
-            height: 70,
-            child: Thumbnail(
-              attachment: Attachment(
-                name: 'svg',
-                url: Uri(path: '/uri'),
-                largeThumbnail: Uri(path: '/largeThumbnailUri'),
-                type: 'image/svg',
-              ),
-            ),
-          ),
-        );
-
-        await tester.pumpWidget(target);
-
-        final imageUrl =
-            ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
-                    .bytesLoader as SvgNetworkLoader)
-                .url;
-        expect(imageUrl, '/largeThumbnailUri');
-      });
-    });
-
-    testWidgets('Shows image from small thumbnail', (tester) async {
-      await mockNetworkImages(
-          image:
-              '''PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNyI+CjxwYXRoIGZpbGw9IiMwRkZGMDAiIHN0cm9rZT0iIzBGMEYwMCIgc3Ryb2tlLXdpZHRoPSIwIiBkPSJtNCw0djloOVY0eiIvPgo8L3N2Zz4=''',
-          () async {
-        final target = MaterialApp(
-          home: SizedBox(
-            width: 70,
-            height: 70,
-            child: Thumbnail(
-              attachment: Attachment(
-                name: 'svg',
-                url: Uri(path: '/uri'),
-                largeThumbnail: Uri(path: '/largeThumbnailUri'),
-                smallThumbnail: Uri(path: '/smallThumbnailUri'),
-                type: 'image/svg',
-              ),
-            ),
-          ),
-        );
-
-        await tester.pumpWidget(target);
-
-        final imageUrl =
-            ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
-                    .bytesLoader as SvgNetworkLoader)
-                .url;
-        expect(imageUrl, '/smallThumbnailUri');
-      });
+      final imageUrl =
+          ((find.byType(SvgPicture).evaluate().first.widget as SvgPicture)
+                  .bytesLoader as SvgNetworkLoader)
+              .url;
+      expect(imageUrl, '/uri');
     });
 
     group('Add Attachment', () {

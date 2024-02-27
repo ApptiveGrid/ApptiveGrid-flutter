@@ -1276,6 +1276,28 @@ void main() {
     });
   });
 
+  group('Get User token', () {
+    test('Get Token returns token', () async {
+      final httpClient = MockHttpClient();
+      final agClient = MockApptiveGridClient();
+      when(() => agClient.options).thenReturn(const ApptiveGridOptions());
+      authenticator =
+          ApptiveGridAuthenticator(client: agClient, httpClient: httpClient);
+
+      final tokenTime = DateTime.now();
+      final tokenResponse = {
+        'token_type': 'Bearer',
+        'access_token': '12345',
+        'expires_at': tokenTime.millisecondsSinceEpoch,
+        'expires_in': tokenTime.microsecondsSinceEpoch,
+      };
+
+      await authenticator.setUserToken(tokenResponse);
+
+      expect(authenticator.getAuthToken(), tokenResponse['access_token']);
+    });
+  });
+
   group('Authenticator', () {
     final urlLauncher = MockUrlLauncher();
 

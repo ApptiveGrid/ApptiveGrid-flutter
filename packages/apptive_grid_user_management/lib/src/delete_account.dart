@@ -158,7 +158,7 @@ class DeleteAccountState extends State<DeleteAccount> {
                       });
                       if (deleted == true) {
                         widget.onAccountDeleted();
-                        if (mounted) {
+                        if (context.mounted) {
                           Navigator.of(context).pop();
                         }
                       }

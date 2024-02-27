@@ -1,3 +1,7 @@
+## 2.1.2
+
+ - **FEAT**: Make the current authentication token accessible
+
 ## 2.1.1
 
  - **REFACTOR**: Use performApptiveLink for Client Functions (#129).
