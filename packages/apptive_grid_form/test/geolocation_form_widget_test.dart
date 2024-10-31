@@ -932,12 +932,12 @@ void main() {
       final circleTapStream = StreamController<CircleTapEvent>.broadcast();
       when(() => mockMap.onCircleTap(mapId: any(named: 'mapId')))
           .thenAnswer((_) => circleTapStream.stream);
-      final clusterTapStream =
-          StreamController<ClusterTapEvent>.broadcast();
+      final clusterTapStream = StreamController<ClusterTapEvent>.broadcast();
       when(() => mockMap.onClusterTap(mapId: any(named: 'mapId')))
           .thenAnswer((_) => clusterTapStream.stream);
-      when(() => mockMap.updateClusterManagers(any(), mapId: any(named: 'mapId')))
-          .thenAnswer((_) async {});
+      when(
+        () => mockMap.updateClusterManagers(any(), mapId: any(named: 'mapId')),
+      ).thenAnswer((_) async {});
       when(() => mockMap.updateHeatmaps(any(), mapId: any(named: 'mapId')))
           .thenAnswer((_) async {});
 
