@@ -13,11 +13,14 @@ void main() async {
     ),
   );
   await enableWebAuth(options);
-  runApp(ApptiveGrid(options: options, child: MyApp()));
+  runApp(const ApptiveGrid(options: options, child: MyApp()));
 }
 
 /// You can access the ApptiveGridClient via ApptiveGrid.getClient()
 class MyApp extends StatefulWidget {
+  /// A widget that demonstrates ApptiveGrid functionality
+  const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
