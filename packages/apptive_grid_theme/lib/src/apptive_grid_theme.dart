@@ -85,8 +85,7 @@ class ApptiveGridTheme {
               return colorScheme.onPrimary;
             }
           }),
-          backgroundColor:
-              WidgetStateProperty.resolveWith(_resolveButtonColor),
+          backgroundColor: WidgetStateProperty.resolveWith(_resolveButtonColor),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -187,8 +186,8 @@ class ApptiveGridTheme {
         secondarySelectedColor: colorScheme.primary,
       ),
       checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
+        fillColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
           if (states.contains(WidgetState.disabled)) {
             return null;
           }
@@ -199,8 +198,8 @@ class ApptiveGridTheme {
         }),
       ),
       radioTheme: RadioThemeData(
-        fillColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
+        fillColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
           if (states.contains(WidgetState.disabled)) {
             return null;
           }
@@ -211,8 +210,8 @@ class ApptiveGridTheme {
         }),
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
+        thumbColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
           if (states.contains(WidgetState.disabled)) {
             return null;
           }
@@ -221,8 +220,8 @@ class ApptiveGridTheme {
           }
           return null;
         }),
-        trackColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
+        trackColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
           if (states.contains(WidgetState.disabled)) {
             return null;
           }

@@ -7,7 +7,7 @@ scripts:
 
   lint:all:
     run: |
-      melos run lint:analyze && melos publish -y && melos run lint:format
+      melos run lint:analyze && melos lint:pub && melos run lint:format
 
   lint:analyze:
     run: |
@@ -17,7 +17,7 @@ scripts:
   lint:pub:
     run: |
       melos exec -c 5 -- \
-        "dart pub publish --dry-run"
+        "flutter pub publish --dry-run"
     packageFilters:
       ignore: "*example*"
       noPrivate: true
