@@ -41,8 +41,8 @@ class ApptiveGridTheme {
       dark: darkWindowBackground,
     );
     final baseTheme = _withBrightness(
-      light: ThemeData.light(useMaterial3: false),
-      dark: ThemeData.dark(useMaterial3: false),
+      light: ThemeData.light(),
+      dark: ThemeData.dark(),
     );
     final textTheme = _textTheme(baseTheme.textTheme);
 
@@ -60,12 +60,13 @@ class ApptiveGridTheme {
       surface: windowBackground,
       seedColor: windowBackground,
       onSurface: windowBackground,
-      onSurfaceVariant: windowBackground,
     );
+
     return baseTheme.copyWith(
       primaryColor: colorScheme.primary,
       indicatorColor: colorScheme.primary,
       colorScheme: colorScheme,
+      canvasColor: windowBackground,
       textSelectionTheme: baseTheme.textSelectionTheme.copyWith(
         selectionHandleColor: colorScheme.primary,
         selectionColor: colorScheme.primary.withOpacity(0.4),
@@ -153,6 +154,7 @@ class ApptiveGridTheme {
         labelStyle: textTheme.titleMedium,
       ),
       dialogTheme: baseTheme.dialogTheme.copyWith(
+        backgroundColor: windowBackground,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       scaffoldBackgroundColor: windowBackground,
