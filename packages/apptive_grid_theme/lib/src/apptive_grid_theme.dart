@@ -41,8 +41,8 @@ class ApptiveGridTheme {
       dark: darkWindowBackground,
     );
     final baseTheme = _withBrightness(
-      light: ThemeData.light(),
-      dark: ThemeData.dark(),
+      light: ThemeData.light(useMaterial3: false),
+      dark: ThemeData.dark(useMaterial3: false),
     );
     final textTheme = _textTheme(baseTheme.textTheme);
 
@@ -52,12 +52,15 @@ class ApptiveGridTheme {
       shape: WidgetStateProperty.all(buttonShape),
     );
 
-    final colorScheme = baseTheme.colorScheme.copyWith(
+    final colorScheme = ColorScheme.fromSeed(
       primary: ApptiveGridColors.apptiveGridBlue,
       secondary: ApptiveGridColors.apptiveGridBlue,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
       surface: windowBackground,
+      seedColor: windowBackground,
+      onSurface: windowBackground,
+      onSurfaceVariant: windowBackground,
     );
     return baseTheme.copyWith(
       primaryColor: colorScheme.primary,
@@ -70,6 +73,9 @@ class ApptiveGridTheme {
       buttonTheme: baseTheme.buttonTheme.copyWith(
         buttonColor: colorScheme.primary,
         textTheme: ButtonTextTheme.primary,
+      ),
+      bottomAppBarTheme: baseTheme.bottomAppBarTheme.copyWith(
+        surfaceTintColor: windowBackground,
       ),
       floatingActionButtonTheme: baseTheme.floatingActionButtonTheme.copyWith(
         shape: const CircleBorder(),
