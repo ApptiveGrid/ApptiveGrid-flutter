@@ -30,12 +30,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
-  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
-  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
-PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
+PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.15.2

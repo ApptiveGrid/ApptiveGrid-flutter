@@ -17,8 +17,8 @@ dependencies:
   flutter_svg: ^2.0.10
   flutter_typeahead: ^4.3.8
   geolocator: ^10.0.1
-  google_maps_flutter: ^2.2.6
-  google_maps_flutter_platform_interface: ^2.2.6
+  google_maps_flutter: ^2.9.0
+  google_maps_flutter_platform_interface: ^2.9.0
   hand_signature: ^3.0.1
   http: '>=0.13.6 <2.0.0'
   image_picker: ^1.0.4
