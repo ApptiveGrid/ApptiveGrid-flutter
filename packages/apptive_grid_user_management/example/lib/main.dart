@@ -178,13 +178,15 @@ class _AccountPageState extends State<AccountPage> {
                     ApptiveGrid.getClient(context, listen: false)
                         .logout()
                         .then((_) {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) {
-                            return const LoginRegistrationPage();
-                          },
-                        ),
-                      );
+                      if (context.mounted) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) {
+                              return const LoginRegistrationPage();
+                            },
+                          ),
+                        );
+                      }
                     });
                   },
                   child: const Text('Logout'),

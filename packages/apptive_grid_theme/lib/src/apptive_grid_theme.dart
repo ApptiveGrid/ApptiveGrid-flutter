@@ -41,28 +41,32 @@ class ApptiveGridTheme {
       dark: darkWindowBackground,
     );
     final baseTheme = _withBrightness(
-      light: ThemeData.light(useMaterial3: false),
-      dark: ThemeData.dark(useMaterial3: false),
+      light: ThemeData.light(),
+      dark: ThemeData.dark(),
     );
     final textTheme = _textTheme(baseTheme.textTheme);
 
     final buttonShape =
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(4));
     final baseButtonStyle = ButtonStyle(
-      shape: MaterialStateProperty.all(buttonShape),
+      shape: WidgetStateProperty.all(buttonShape),
     );
 
-    final colorScheme = baseTheme.colorScheme.copyWith(
+    final colorScheme = ColorScheme.fromSeed(
       primary: ApptiveGridColors.apptiveGridBlue,
       secondary: ApptiveGridColors.apptiveGridBlue,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
-      background: windowBackground,
+      surface: windowBackground,
+      seedColor: windowBackground,
+      onSurface: windowBackground,
     );
+
     return baseTheme.copyWith(
       primaryColor: colorScheme.primary,
       indicatorColor: colorScheme.primary,
       colorScheme: colorScheme,
+      canvasColor: windowBackground,
       textSelectionTheme: baseTheme.textSelectionTheme.copyWith(
         selectionHandleColor: colorScheme.primary,
         selectionColor: colorScheme.primary.withOpacity(0.4),
@@ -71,37 +75,40 @@ class ApptiveGridTheme {
         buttonColor: colorScheme.primary,
         textTheme: ButtonTextTheme.primary,
       ),
+      bottomAppBarTheme: baseTheme.bottomAppBarTheme.copyWith(
+        surfaceTintColor: windowBackground,
+      ),
       floatingActionButtonTheme: baseTheme.floatingActionButtonTheme.copyWith(
+        shape: const CircleBorder(),
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: baseButtonStyle.copyWith(
-          foregroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) {
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
               return ApptiveGridColors.lightGrey;
             } else {
               return colorScheme.onPrimary;
             }
           }),
-          backgroundColor:
-              MaterialStateProperty.resolveWith(_resolveButtonColor),
+          backgroundColor: WidgetStateProperty.resolveWith(_resolveButtonColor),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: baseButtonStyle.copyWith(
-          foregroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) {
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
               return ApptiveGridColors.lightGrey;
             } else {
               return colorScheme.primary;
             }
           }),
-          side: MaterialStateProperty.resolveWith((states) {
+          side: WidgetStateProperty.resolveWith((states) {
             final color = _resolveButtonColor(states);
             late final double width;
-            if (states.contains(MaterialState.pressed) ||
-                states.contains(MaterialState.hovered)) {
+            if (states.contains(WidgetState.pressed) ||
+                states.contains(WidgetState.hovered)) {
               width = 3;
             } else {
               width = 1;
@@ -117,6 +124,7 @@ class ApptiveGridTheme {
           light: ApptiveGridColors.lightGrey,
           dark: Colors.white54,
         ),
+        indicatorSize: TabBarIndicatorSize.tab,
       ),
       inputDecorationTheme: baseTheme.inputDecorationTheme.copyWith(
         filled: true,
@@ -143,8 +151,10 @@ class ApptiveGridTheme {
           ),
           borderRadius: BorderRadius.circular(8),
         ),
+        labelStyle: textTheme.titleMedium,
       ),
       dialogTheme: baseTheme.dialogTheme.copyWith(
+        backgroundColor: windowBackground,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       scaffoldBackgroundColor: windowBackground,
@@ -159,6 +169,7 @@ class ApptiveGridTheme {
       appBarTheme: baseTheme.appBarTheme.copyWith(
         color: Colors.transparent,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: false,
         actionsIconTheme: IconThemeData(
           color: colorScheme.primary,
@@ -183,50 +194,53 @@ class ApptiveGridTheme {
         secondarySelectedColor: colorScheme.primary,
       ),
       checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
-          if (states.contains(MaterialState.disabled)) {
+        fillColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.disabled)) {
             return null;
           }
-          if (states.contains(MaterialState.selected)) {
+          if (states.contains(WidgetState.selected)) {
             return colorScheme.primary;
           }
           return null;
         }),
       ),
       radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
-          if (states.contains(MaterialState.disabled)) {
+        fillColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.disabled)) {
             return null;
           }
-          if (states.contains(MaterialState.selected)) {
+          if (states.contains(WidgetState.selected)) {
             return colorScheme.primary;
           }
           return null;
         }),
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
-          if (states.contains(MaterialState.disabled)) {
+        thumbColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.disabled)) {
             return null;
           }
-          if (states.contains(MaterialState.selected)) {
+          if (states.contains(WidgetState.selected)) {
             return colorScheme.primary;
           }
           return null;
         }),
-        trackColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
-          if (states.contains(MaterialState.disabled)) {
+        trackColor:
+            WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.disabled)) {
             return null;
           }
-          if (states.contains(MaterialState.selected)) {
+          if (states.contains(WidgetState.selected)) {
             return colorScheme.primary;
           }
           return null;
         }),
+      ),
+      listTileTheme: baseTheme.listTileTheme.copyWith(
+        titleTextStyle: baseTheme.textTheme.titleMedium,
       ),
     );
   }
@@ -276,7 +290,7 @@ class ApptiveGridTheme {
       ),
       titleSmall: TextStyle(
         fontSize: 14,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
         package: fontPackage,
       ),
       bodyLarge: TextStyle(
@@ -324,8 +338,8 @@ class ApptiveGridTheme {
     );
   }
 
-  Color _resolveButtonColor(Set<MaterialState> states) {
-    if (states.contains(MaterialState.disabled)) {
+  Color _resolveButtonColor(Set<WidgetState> states) {
+    if (states.contains(WidgetState.disabled)) {
       return ApptiveGridColors.lightGrey.withOpacity(
         _withBrightness(
           light: 0.3,

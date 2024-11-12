@@ -480,7 +480,7 @@ void main() {
     fileName: 'progress_indicator',
     scenarios: {
       'Circular': const CircularProgressIndicator(
-        value: 0.5,
+        value: 0.0,
       ),
       'Linear': const LinearProgressIndicator(
         value: 0.5,

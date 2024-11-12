@@ -19,6 +19,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.24.4
       - uses: bluefireteam/melos-action@v1
 
       - name: Format, Lint, Publishability
@@ -57,7 +60,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'oracle'
+          java-version: '17'
       - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.24.4
       - uses: bluefireteam/melos-action@v1
 
       - name: Build Android Examples
@@ -71,6 +81,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v2
+        with:
+            channel: stable
+            flutter-version: 3.24.4
       - uses: bluefireteam/melos-action@v1
 
       - name: Build iOS Examples
