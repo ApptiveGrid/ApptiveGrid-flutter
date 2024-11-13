@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 /// Throws an [ArgumentError] if no Widget for a specific [DataType] is found
 Widget fromModel(FormComponent component, {bool enabled = true}) =>
     switch (component.field.type) {
-      DataType.text =>
+      DataType.text ||
+      DataType.richText =>
         TextFormWidget(component: component.cast<StringDataEntity>()),
       DataType.dateTime => DateTimeFormWidget(
           component: component.cast<DateTimeDataEntity>(),

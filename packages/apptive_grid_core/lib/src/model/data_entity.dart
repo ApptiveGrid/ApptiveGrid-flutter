@@ -42,6 +42,7 @@ sealed class DataEntity<T, S> with FilterableMixin {
   }) =>
       switch (field.type) {
         DataType.text => StringDataEntity(json),
+        DataType.richText => StringDataEntity(json),
         DataType.dateTime => DateTimeDataEntity.fromJson(json),
         DataType.date => DateDataEntity.fromJson(json),
         DataType.integer => IntegerDataEntity(json),
