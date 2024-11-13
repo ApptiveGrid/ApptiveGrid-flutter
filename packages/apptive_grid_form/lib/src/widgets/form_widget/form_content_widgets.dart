@@ -122,7 +122,7 @@ class _FormDataWidgetState extends State<FormDataWidget> {
     if (pages != null && pages.length > 1) {
       return PopScope(
         canPop: _pageController.hasClients && (_pageController.page ?? 0) == 0,
-        onPopInvoked: (_) {
+        onPopInvoked: (bool didPop) async {
           if ((_pageController.page ?? 0) > 0) {
             _pageController.previousPage(
               duration: const Duration(milliseconds: 300),

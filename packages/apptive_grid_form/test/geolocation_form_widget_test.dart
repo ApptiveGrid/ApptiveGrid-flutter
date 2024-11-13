@@ -24,6 +24,8 @@ void main() {
     registerFallbackValue(CircleUpdates.from(const {}, const {}));
     registerFallbackValue(PolygonUpdates.from(const {}, const {}));
     registerFallbackValue(PolylineUpdates.from(const {}, const {}));
+    registerFallbackValue(ClusterManagerUpdates.from(const {}, const {}));
+    registerFallbackValue(HeatmapUpdates.from(const {}, const {}));
     registerFallbackValue(CameraUpdate.newLatLng(const LatLng(0, 0)));
     registerFallbackValue(
       FormData(id: 'id', links: {}, title: '', components: [], fields: []),
@@ -854,25 +856,19 @@ void main() {
       final initCompleter = Completer();
 
       when(
-        () => mockMap.buildViewWithTextDirection(
+        () => mockMap.buildViewWithConfiguration(
           any(),
           any(),
-          initialCameraPosition: any(named: 'initialCameraPosition'),
-          textDirection: any(named: 'textDirection'),
-          markers: any(named: 'markers'),
-          polygons: any(named: 'polygons'),
-          polylines: any(named: 'polylines'),
-          circles: any(named: 'circles'),
-          tileOverlays: any(named: 'tileOverlays'),
-          gestureRecognizers: any(named: 'gestureRecognizers'),
-          mapOptions: any(named: 'mapOptions'),
+          widgetConfiguration: any(named: 'widgetConfiguration'),
+          mapConfiguration: any(named: 'mapConfiguration'),
+          mapObjects: any(named: 'mapObjects'),
         ),
       ).thenAnswer((invocation) {
         if (!initCompleter.isCompleted) {
           (invocation.positionalArguments[1] as Function(int))
               .call(invocation.positionalArguments[0]);
         }
-        markers = invocation.namedArguments[const Symbol('markers')]
+        markers = invocation.namedArguments[const Symbol('mapObjects')].markers
             .map<MarkerId>((e) => (e as Marker).markerId)
             .toSet();
         return Container();
@@ -890,10 +886,8 @@ void main() {
           (invocation.positionalArguments[1] as Function(int))
               .call(invocation.positionalArguments[0]);
         }
-        markers = (invocation.namedArguments[const Symbol('mapObjects')]
-                as MapObjects)
-            .markers
-            .map<MarkerId>((e) => e.markerId)
+        markers = invocation.namedArguments[const Symbol('mapObjects')].markers
+            .map<MarkerId>((e) => (e as Marker).markerId)
             .toSet();
         return Container();
       });
@@ -938,6 +932,14 @@ void main() {
       final circleTapStream = StreamController<CircleTapEvent>.broadcast();
       when(() => mockMap.onCircleTap(mapId: any(named: 'mapId')))
           .thenAnswer((_) => circleTapStream.stream);
+      final clusterTapStream = StreamController<ClusterTapEvent>.broadcast();
+      when(() => mockMap.onClusterTap(mapId: any(named: 'mapId')))
+          .thenAnswer((_) => clusterTapStream.stream);
+      when(
+        () => mockMap.updateClusterManagers(any(), mapId: any(named: 'mapId')),
+      ).thenAnswer((_) async {});
+      when(() => mockMap.updateHeatmaps(any(), mapId: any(named: 'mapId')))
+          .thenAnswer((_) async {});
 
       when(
         () => mockMap.updateTileOverlays(
@@ -945,8 +947,9 @@ void main() {
           mapId: any(named: 'mapId'),
         ),
       ).thenAnswer((_) async {});
-      when(() => mockMap.updateMapOptions(any(), mapId: any(named: 'mapId')))
-          .thenAnswer((_) async {});
+      when(
+        () => mockMap.updateMapConfiguration(any(), mapId: any(named: 'mapId')),
+      ).thenAnswer((_) async {});
       when(() => mockMap.updateMarkers(any(), mapId: any(named: 'mapId')))
           .thenAnswer((_) async {});
       when(() => mockMap.updateCircles(any(), mapId: any(named: 'mapId')))
