@@ -44,3 +44,10 @@ To add a new type the following steps need to be taken
 ### apptive_grid_form
 - Add a `FormWidget` in [the form_widget Folder](packages/apptive_grid_form/lib/src/widgets/form_widget)
 - Make sure that your newly created `FormWidget` is added in [fromModel](packages/apptive_grid_form/lib/src/widgets/form_widget/form_widget.dart)
+
+## Using a specific flutter version on your local machine :
+
+- use `flutter doctor` to figure out where flutter is installed
+- navigate to the local flutter repo inside the installation path e.g `~/Documents/2denker/Flutter/SDK/flutter`
+- `git checkout <version number>`
+- run `flutter doctor` again to install flutter with the specified version
