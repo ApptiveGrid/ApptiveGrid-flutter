@@ -1,3 +1,7 @@
+## 2.1.1
+
+ - **FEAT**: Rich Text Type.
+
 ## 2.1.0
 
  - **FEAT**: Flutter 3.16 Support (#132).
