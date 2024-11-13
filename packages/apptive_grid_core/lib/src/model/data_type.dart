@@ -3,6 +3,9 @@ enum DataType {
   /// Type to display [String]
   text(backendName: 'string'),
 
+  /// Type to display rich text with markdown formatting
+  richText(backendName: 'richText'),
+
   /// Type to display [DateTime]
   dateTime(backendName: 'date-time'),
 

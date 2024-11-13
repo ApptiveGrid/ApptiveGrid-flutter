@@ -222,6 +222,7 @@ void main() {
 
     DataEntity subEntity(DataType type) => switch (type) {
           DataType.text => StringDataEntity('Test'),
+          DataType.richText => StringDataEntity('*Rich* Test'),
           DataType.dateTime =>
             DateTimeDataEntity(DateTime(2023, 07, 07, 11, 42)),
           DataType.date => DateDataEntity(DateTime(2023, 07, 07)),

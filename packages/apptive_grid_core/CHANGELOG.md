@@ -1,3 +1,7 @@
+## 2.1.3
+
+ - **FEAT**: Rich Text Type
+
 ## 2.1.2
 
  - **FEAT**: Make the current authentication token accessible
