@@ -51,3 +51,25 @@ To add a new type the following steps need to be taken
 - navigate to the local flutter repo inside the installation path e.g `~/Documents/2denker/Flutter/SDK/flutter`
 - `git checkout <version number>`
 - run `flutter doctor` again to install flutter with the specified version
+
+
+## Use an unpublished version of apptivegrid packages :
+
+```
+apptive_grid_core:
+    git:
+        url: https://github.com/ApptiveGrid/ApptiveGrid-flutter.git/
+        ref: main # branch name
+        path: packages/apptive_grid_core
+```
+
+If a dependency is also using this package, you can force it to use the specified version as well : 
+```
+dependency_overrides:
+  apptive_grid_core:
+    git:
+        url: https://github.com/ApptiveGrid/ApptiveGrid-flutter.git/
+        ref: main # branch name
+        path: packages/apptive_grid_core
+        version: 2.1.3
+```
