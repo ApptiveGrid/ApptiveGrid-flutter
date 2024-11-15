@@ -627,18 +627,18 @@ class FormulaDataEntity extends DataEntity<DataEntity, Map<String, dynamic>> {
 }
 
 /// [DataEntity] representing a [DataResource]
-class DataResourceEntity extends DataEntity<DataResource, dynamic> {
-  /// Creates a new DataResourceEntity Object with value [value]
-  DataResourceEntity([super.value]);
+class ResourceDataEntity extends DataEntity<DataResource, dynamic> {
+  /// Creates a new ResourceDataEntity Object with value [value]
+  ResourceDataEntity([super.value]);
 
-  /// Creates a new DataResourceEntity Object from json
+  /// Creates a new ResourceDataEntity Object from json
   /// [json] needs to be an object that is parsed with [DataResource.fromJson]
-  factory DataResourceEntity.fromJson(dynamic json) {
+  factory ResourceDataEntity.fromJson(dynamic json) {
     DataResource? jsonResource;
     if (json != null) {
       jsonResource = DataResource.fromJson(json);
     }
-    return DataResourceEntity(jsonResource);
+    return ResourceDataEntity(jsonResource);
   }
 
   /// Returns [value] as a json object map
