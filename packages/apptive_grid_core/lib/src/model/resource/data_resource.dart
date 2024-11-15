@@ -7,6 +7,7 @@ class DataResource {
     required this.href,
     required this.type,
     required this.name,
+    required this.metaType,
   });
 
   /// Creates a new DataResource from a [json] response
@@ -20,6 +21,10 @@ class DataResource {
         orElse: () => DataResourceType.unknown,
       ),
       name: json['name'] ?? '',
+      metaType: DataResourceMetaType.values.firstWhere(
+        (e) => e.name == json['metaType'],
+        orElse: () => DataResourceMetaType.unknown,
+      ),
     );
   }
 
@@ -28,6 +33,7 @@ class DataResource {
         '_links': {ApptiveLinkType.self.name: href.toJson()},
         'type': type.backendName,
         'name': name,
+        'metaType': metaType.name,
       };
 
   /// Uri pointing to the resource
@@ -39,9 +45,12 @@ class DataResource {
   /// Name of the resource
   final String name;
 
+  /// Meta type of the resource
+  final DataResourceMetaType metaType;
+
   @override
   String toString() {
-    return 'DataResource(href: $href, type: $type, name: $name)';
+    return 'DataResource(href: $href, type: $type, name: $name, metaType: $metaType)';
   }
 
   @override
@@ -49,50 +58,66 @@ class DataResource {
     return other is DataResource &&
         href == other.href &&
         type == other.type &&
-        name == other.name;
+        name == other.name &&
+        metaType == other.metaType;
   }
 
   @override
-  int get hashCode => Object.hash(href, type, name);
+  int get hashCode => Object.hash(href, type, name, metaType);
+}
+
+/// Enum representing the different meta types of data resources
+enum DataResourceMetaType {
+  /// A view meta type
+  view,
+
+  /// A grid meta type
+  grid,
+
+  /// A space meta type
+  space,
+
+  /// A form meta type
+  form,
+
+  /// A block meta type
+  block,
+
+  /// A unknown meta type
+  unknown,
 }
 
 /// Types of data resources supported by the system
 enum DataResourceType {
-  /// A standard grid resource type
-  grid(backendName: 'grid'),
+  /// A space resource type
+  space(backendName: 'space'),
 
   /// A persistent grid resource type
   persistentGrid(backendName: 'persistent'),
 
-  /// A view resource type
-  view(backendName: 'view'),
-
   /// A virtual grid resource type
   virtualGrid(backendName: 'virtual'),
 
-  /// A space resource type
-  space(backendName: 'space'),
+  /// A block of type page
+  pageBlock(backendName: 'page'),
 
-  /// A form resource type
+  /// A resource of type form
   form(backendName: 'form'),
 
-  /// A block resource type
-  block(backendName: 'block'),
-
   /// A spreadsheet resource type
-  spreadsheet(backendName: 'spreadsheet'),
+  spreadsheetView(backendName: 'spreadsheet'),
 
   /// A kanban board resource type
-  kanban(backendName: 'kanban'),
+  kanbanView(backendName: 'kanban'),
 
   /// A calendar resource type
-  calendar(backendName: 'calendar'),
+  calendarView(backendName: 'calendar'),
 
   /// A map resource type
-  map(backendName: 'map'),
+  mapView(backendName: 'map'),
 
   /// A gallery resource type
-  gallery(backendName: 'gallery'),
+  galleryView(backendName: 'gallery'),
 
   /// An unknown resource type
   unknown(backendName: 'unknown');

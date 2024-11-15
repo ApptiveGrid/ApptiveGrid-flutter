@@ -20,6 +20,7 @@ void main() {
         "name": "Resource Space",
         "id": "66f415f8e26ae86e74df53b0",
         "type": "space",
+        "metaType": "space",
       };
 
       final resourceDataEntity = ResourceDataEntity.fromJson(rawSpaceResource);
@@ -27,6 +28,10 @@ void main() {
       expect(resourceDataEntity.value, isNot(null));
       expect(resourceDataEntity.value!.name, equals('Resource Space'));
       expect(resourceDataEntity.value!.type, equals(DataResourceType.space));
+      expect(
+        resourceDataEntity.value!.metaType,
+        equals(DataResourceMetaType.space),
+      );
       expect(
         resourceDataEntity.value!.href.uri,
         equals(
@@ -58,6 +63,10 @@ void main() {
       expect(resourceDataEntity.value!.name, equals('???'));
       expect(resourceDataEntity.value!.type, equals(DataResourceType.unknown));
       expect(
+        resourceDataEntity.value!.metaType,
+        equals(DataResourceMetaType.unknown),
+      );
+      expect(
         resourceDataEntity.value!.href.uri,
         equals(
           Uri(
@@ -80,6 +89,10 @@ void main() {
       expect(resourceDataEntity.value, isNot(null));
       expect(resourceDataEntity.value!.name, equals('???'));
       expect(resourceDataEntity.value!.type, equals(DataResourceType.unknown));
+      expect(
+        resourceDataEntity.value!.metaType,
+        equals(DataResourceMetaType.unknown),
+      );
       expect(
         resourceDataEntity.value!.href.uri,
         equals(
