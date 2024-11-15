@@ -286,7 +286,8 @@ void main() {
           DataType.resource => ResourceDataEntity(
               DataResource(
                 href: ApptiveLink(uri: Uri(path: '/test/uri'), method: 'GET'),
-                type: DataResourceType.spreadsheet,
+                type: DataResourceType.spreadsheetView,
+                metaType: DataResourceMetaType.view,
                 name: 'testResource',
               ),
             )
