@@ -84,8 +84,7 @@ void main() {
         resourceDataEntity.value!.href.uri,
         equals(
           Uri(
-            path:
-                'missing_link',
+            path: 'missing_link',
           ),
         ),
       );
