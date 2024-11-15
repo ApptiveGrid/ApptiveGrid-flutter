@@ -67,5 +67,41 @@ void main() {
         ),
       );
     });
+
+    test('From resource with missing link maps correctly', () {
+      final rawUnknownResource = {
+        "name": "???",
+        "type": "whatever",
+      };
+
+      final resourceDataEntity =
+          ResourceDataEntity.fromJson(rawUnknownResource);
+
+      expect(resourceDataEntity.value, isNot(null));
+      expect(resourceDataEntity.value!.name, equals('???'));
+      expect(resourceDataEntity.value!.type, equals(DataResourceType.unknown));
+      expect(
+        resourceDataEntity.value!.href.uri,
+        equals(
+          Uri(
+            path:
+                'missing_link',
+          ),
+        ),
+      );
+    });
+
+    test('toString, HashCode', () {
+      final rawUnknownResource = {
+        "name": "???",
+        "type": "whatever",
+      };
+
+      final resourceDataEntity =
+          ResourceDataEntity.fromJson(rawUnknownResource);
+
+      expect(resourceDataEntity.value.toString(), isNot(null));
+      expect(resourceDataEntity.value.hashCode, isNot(null));
+    });
   });
 }

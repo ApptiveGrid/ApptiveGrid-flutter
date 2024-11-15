@@ -11,7 +11,7 @@ class DataResource {
 
   /// Creates a new DataResource from a [json] response
   factory DataResource.fromJson(Map<String, dynamic> json) {
-    final links = linkMapFromJson(json['_links']);
+    final links = linkMapFromJson(json['_links'] ?? {});
     return DataResource(
       href: links[ApptiveLinkType.self] ??
           ApptiveLink(method: 'GET', uri: Uri.parse('missing_link')),
