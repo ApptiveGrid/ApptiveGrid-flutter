@@ -37,7 +37,8 @@ To add a new type the following steps need to be taken
 
 ### apptive_grid_core
 
-- `DataType` in [data_type.dart](packages/apptive_grid_core/lib/model/data_type.dart) needs to be added and parsing implemented in `dataTypeFromSchemaProperty` in the same file
+- `DataType` in [data_type.dart](packages/apptive_grid_core/lib/model/data_type.dart) needs to be added
+- parsing implemented in `formJSON` of the DataEntity class
 - [`DataEntity`](packages/apptive_grid_core/lib/src/model/data_entity.dart) representing the added `DataType` needs to be added
 
 

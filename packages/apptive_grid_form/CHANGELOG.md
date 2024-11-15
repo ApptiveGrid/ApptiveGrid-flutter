@@ -1,3 +1,7 @@
+## 2.1.2
+
+ - **FEAT**: Resource Type (provisional field implementation)
+
 ## 2.1.1
 
  - **FEAT**: Rich Text Type.

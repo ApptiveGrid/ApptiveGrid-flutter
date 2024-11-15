@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 Widget fromModel(FormComponent component, {bool enabled = true}) =>
     switch (component.field.type) {
       DataType.text ||
+      DataType.resource ||
       DataType.richText =>
         TextFormWidget(component: component.cast<StringDataEntity>()),
       DataType.dateTime => DateTimeFormWidget(

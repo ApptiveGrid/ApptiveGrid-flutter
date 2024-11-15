@@ -1,3 +1,7 @@
+## 2.1.4
+
+ - **FEAT**: Resource Type
+
 ## 2.1.3
 
  - **FEAT**: Rich Text Type

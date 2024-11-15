@@ -63,7 +63,7 @@ extension LinkMapX on LinkMap {
 /// Parses [json] into a [LinkMap]
 /// The keys in [json] are expected to be the `name` of a [ApptiveLinkType]
 /// If the name does not match a know [ApptiveLinkType] the entry will be ignored
-LinkMap linkMapFromJson(Map<String, dynamic>? json) {
+LinkMap linkMapFromJson(Map<dynamic, dynamic>? json) {
   if (json == null) {
     return {};
   }

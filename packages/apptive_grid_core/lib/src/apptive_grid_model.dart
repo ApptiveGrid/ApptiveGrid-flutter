@@ -28,3 +28,4 @@ export 'package:apptive_grid_core/src/model/space/shares.dart';
 export 'package:apptive_grid_core/src/model/space/space.dart';
 export 'package:apptive_grid_core/src/model/user/data_user.dart';
 export 'package:apptive_grid_core/src/model/user/user.dart';
+export 'package:apptive_grid_core/src/model/resource/data_resource.dart';
