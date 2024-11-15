@@ -290,7 +290,13 @@ void main() {
           DataType.reducedLookUp =>
             ReducedLookUpDataEntity(IntegerDataEntity(3)),
           DataType.formula => FormulaDataEntity(value: IntegerDataEntity(3)),
-          DataType.resource => ResourceDataEntity(DataResource(href: ApptiveLink(uri: Uri(path: '/test/uri'), method: 'GET'), type: DataResourceType.spreadsheet, name: 'testResource'))
+          DataType.resource => ResourceDataEntity(
+              DataResource(
+                href: ApptiveLink(uri: Uri(path: '/test/uri'), method: 'GET'),
+                type: DataResourceType.spreadsheet,
+                name: 'testResource',
+              ),
+            )
         } as DataEntity;
 
     for (final type in DataType.values) {

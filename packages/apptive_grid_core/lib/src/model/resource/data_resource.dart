@@ -11,18 +11,22 @@ class DataResource {
 
   /// Creates a new DataResource from a [json] response
   factory DataResource.fromJson(Map<String, dynamic> json) {
+    final links = linkMapFromJson(json['_links']);
     return DataResource(
-      href: linkMapFromJson(json['_links'])['self'] ?? ApptiveLink(method: 'GET', uri: Uri.parse('missing_link')),
-      type: DataResourceType.values.firstWhere((e) => e.backendName == json['type'], orElse: () => DataResourceType.unknown),
+      href: links[ApptiveLinkType.self] ??
+          ApptiveLink(method: 'GET', uri: Uri.parse('missing_link')),
+      type: DataResourceType.values.firstWhere(
+        (e) => e.backendName == json['type'],
+        orElse: () => DataResourceType.unknown,
+      ),
       name: json['name'] ?? '',
     );
   }
 
   /// Converts this DataResource to a json representation
   Map<String, dynamic> toJson() => {
-        '_links': href.toJson(),
-        
-        'type': type,
+        '_links': {ApptiveLinkType.self.name: href.toJson()},
+        'type': type.backendName,
         'name': name,
       };
 
@@ -42,7 +46,10 @@ class DataResource {
 
   @override
   bool operator ==(Object other) {
-    return other is DataResource && href == other.href && type == other.type && name == other.name;
+    return other is DataResource &&
+        href == other.href &&
+        type == other.type &&
+        name == other.name;
   }
 
   @override
