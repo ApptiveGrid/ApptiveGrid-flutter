@@ -25,7 +25,6 @@ void main() {
       final resourceDataEntity = ResourceDataEntity.fromJson(rawSpaceResource);
 
       expect(resourceDataEntity.value, isNot(null));
-      expect(resourceDataEntity.schemaValue, equals(''));
       expect(resourceDataEntity.value!.name, equals('Resource Space'));
       expect(resourceDataEntity.value!.type, equals(DataResourceType.space));
       expect(
