@@ -95,6 +95,7 @@ sealed class DataEntity<T, S> with FilterableMixin {
             json,
             valueType: (field as FormulaField).valueType,
           ),
+        DataType.resource => ResourceDataEntity.fromJson(json),
       } as DataEntity;
 }
 
@@ -623,4 +624,24 @@ class FormulaDataEntity extends DataEntity<DataEntity, Map<String, dynamic>> {
 
   @override
   int get hashCode => Object.hash(value, error);
+}
+
+/// [DataEntity] representing a [DataResource]
+class ResourceDataEntity extends DataEntity<DataResource, dynamic> {
+  /// Creates a new ResourceDataEntity Object with value [value]
+  ResourceDataEntity([super.value]);
+
+  /// Creates a new ResourceDataEntity Object from json
+  /// [json] needs to be an object that is parsed with [DataResource.fromJson]
+  factory ResourceDataEntity.fromJson(dynamic json) {
+    DataResource? jsonResource;
+    if (json != null) {
+      jsonResource = DataResource.fromJson(json);
+    }
+    return ResourceDataEntity(jsonResource);
+  }
+
+  /// Returns [value] as a json object map
+  @override
+  dynamic get schemaValue => value?.toJson();
 }

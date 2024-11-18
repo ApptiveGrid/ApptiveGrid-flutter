@@ -70,7 +70,10 @@ enum DataType {
   reducedLookUp(backendName: 'reducedLookupCollectionType'),
 
   /// Type for a calculated formula
-  formula(backendName: 'formula');
+  formula(backendName: 'formula'),
+
+  /// Type for a reference to a resource (e.g. grids, views)
+  resource(backendName: 'resource');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({
