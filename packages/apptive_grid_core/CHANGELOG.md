@@ -1,3 +1,7 @@
+## 2.1.5
+
+ - **FEAT**: use displayValue for Resource Type
+
 ## 2.1.4
 
  - **FEAT**: Resource Type

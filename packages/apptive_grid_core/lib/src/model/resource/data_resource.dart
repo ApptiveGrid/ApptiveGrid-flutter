@@ -20,7 +20,7 @@ class DataResource {
         (e) => e.backendName == json['type'],
         orElse: () => DataResourceType.unknown,
       ),
-      name: json['name'] ?? '',
+      name: json['displayValue'] ?? json['name'] ?? '',
       metaType: DataResourceMetaType.values.firstWhere(
         (e) => e.name == json['metaType'],
         orElse: () => DataResourceMetaType.unknown,
