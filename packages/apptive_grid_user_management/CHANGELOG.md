@@ -1,3 +1,7 @@
+## 2.0.3
+
+ - Update for flutter 3.22.3 (intl 19)
+
 ## 2.0.2
 
  - Update a dependency to the latest release.
