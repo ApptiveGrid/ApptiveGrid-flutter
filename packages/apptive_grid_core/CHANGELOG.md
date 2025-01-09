@@ -1,3 +1,7 @@
+## 2.1.6
+
+ - **FEAT**: Add plan to Space
+
 ## 2.1.5
 
  - **FEAT**: use displayValue for Resource Type

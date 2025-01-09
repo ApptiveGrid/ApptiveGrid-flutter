@@ -228,6 +228,7 @@ void main() {
             null,
             null,
             null,
+            null,
           ),
         ),
       );
@@ -239,7 +240,7 @@ void main() {
       expect(
         space.toString(),
         equals(
-          'Space(name: name, id: id, key: null, category: null, color: null, icon: null, iconSet: null, links: {}, embeddedGrids: null)',
+          'Space(name: name, id: id, key: null, category: null, color: null, icon: null, iconSet: null, plan: null, links: {}, embeddedGrids: null)',
         ),
       );
     });
@@ -428,7 +429,7 @@ void main() {
       expect(
         space.toString(),
         equals(
-          'SharedSpace(name: name, id: id, key: null, category: null, realSpace: realSpace, color: null, icon: null, iconSet: null, links: {}, embeddedGrids: null)',
+          'SharedSpace(name: name, id: id, key: null, category: null, realSpace: realSpace, color: null, icon: null, iconSet: null, plan: null, links: {}, embeddedGrids: null)',
         ),
       );
     });
