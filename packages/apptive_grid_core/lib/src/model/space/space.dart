@@ -108,7 +108,7 @@ class Space {
 
   @override
   String toString() {
-    return 'Space(name: $name, id: $id, key: $key, category: $category, color: $color, icon: $icon, iconSet: $iconSet, links: $links, embeddedGrids: $embeddedGrids)';
+    return 'Space(name: $name, id: $id, key: $key, category: $category, color: $color, icon: $icon, iconSet: $iconSet, plan: $plan, links: $links, embeddedGrids: $embeddedGrids)';
   }
 
   @override
@@ -196,7 +196,7 @@ class SharedSpace extends Space {
 
   @override
   String toString() {
-    return 'SharedSpace(name: $name, id: $id, key: $key, category: $category, realSpace: ${realSpace.toString()}, color: $color, icon: $icon, iconSet: $iconSet, links: $links, embeddedGrids: $embeddedGrids)';
+    return 'SharedSpace(name: $name, id: $id, key: $key, category: $category, realSpace: ${realSpace.toString()}, color: $color, icon: $icon, iconSet: $iconSet, plan: $plan, links: $links, embeddedGrids: $embeddedGrids)';
   }
 
   @override
