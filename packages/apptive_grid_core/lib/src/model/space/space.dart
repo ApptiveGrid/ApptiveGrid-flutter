@@ -17,6 +17,7 @@ class Space {
     this.color,
     this.icon,
     this.iconSet,
+    this.plan,
   });
 
   /// Deserializes [json] into a [Space] Object
@@ -42,6 +43,7 @@ class Space {
             : null,
         icon: json['icon'],
         iconSet: json['iconset'],
+        plan: json['plan'],
       );
     }
   }
@@ -73,6 +75,9 @@ class Space {
   /// IconSet that [icon] is from
   final String? iconSet;
 
+  /// Plan of this space
+  final String? plan;
+
   /// Serializes this [Space] into a json Map
   Map<String, dynamic> toJson() {
     final jsonMap = {
@@ -87,6 +92,7 @@ class Space {
             '#${color!.red.toRadixString(16)}${color!.green.toRadixString(16)}${color!.blue.toRadixString(16)}',
       if (icon != null) 'icon': icon,
       if (iconSet != null) 'iconset': iconSet,
+      if (plan != null) 'plan': plan,
     };
 
     if (embeddedGrids != null) {
@@ -116,7 +122,8 @@ class Space {
         f.listEquals(embeddedGrids, other.embeddedGrids) &&
         color == other.color &&
         iconSet == other.iconSet &&
-        icon == other.icon;
+        icon == other.icon &&
+        plan == other.plan;
   }
 
   @override
@@ -130,6 +137,7 @@ class Space {
         color,
         iconSet,
         icon,
+        plan,
       );
 }
 
@@ -149,6 +157,7 @@ class SharedSpace extends Space {
     super.color,
     super.icon,
     super.iconSet,
+    super.plan,
   });
 
   /// Deserializes [json] into a [Space] Object
@@ -170,6 +179,7 @@ class SharedSpace extends Space {
           : null,
       icon: json['icon'],
       iconSet: json['iconset'],
+      plan: json['plan'],
     );
   }
 
