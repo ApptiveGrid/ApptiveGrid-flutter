@@ -16,7 +16,7 @@ dependencies:
   mime: ^1.0.4
   provider: ^6.0.5
   openid_client: ^0.4.7
-  uni_links: ^0.5.1
+  app_links: ^6.4.0
   universal_file: ^1.0.0
   universal_platform: ^1.0.0+1
   url_launcher: ^6.1.10
@@ -30,7 +30,6 @@ dev_dependencies:
   pedantic: ^1.11.1
   mocktail: ^1.0.1
   url_launcher_platform_interface: ^2.1.2
-  uni_links_platform_interface: ^1.0.0
   plugin_platform_interface: ^2.1.4
   flutter_secure_storage_platform_interface: ^1.0.1
   flutter_test:

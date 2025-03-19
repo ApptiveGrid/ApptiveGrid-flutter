@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:openid_client/openid_client.dart';
-import 'package:uni_links/uni_links.dart' as uni_links;
+import 'package:app_links/app_links.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -23,9 +23,11 @@ class ApptiveGridAuthenticator {
     this.httpClient,
     AuthenticationStorage? authenticationStorage,
     VoidCallback? onAuthenticationChanged,
+    AppLinks? appLinks,
   }) {
     _onAuthenticationChanged = onAuthenticationChanged;
     _authenticationStorage = authenticationStorage;
+    _appLinks = appLinks ?? AppLinks();
     performSetup();
   }
 
@@ -46,6 +48,8 @@ class ApptiveGridAuthenticator {
 
   late Completer _setupCompleter;
 
+  late AppLinks _appLinks;
+
   /// Performs general Authenticator Setup tasks
   /// like checking for saved credentials
   /// and listening to authentication callbacks
@@ -53,15 +57,14 @@ class ApptiveGridAuthenticator {
     _setupCompleter = Completer();
     if (!kIsWeb) {
       _authCallbackSubscription?.cancel();
-      _authCallbackSubscription = uni_links.uriLinkStream
+      _authCallbackSubscription = _appLinks.uriLinkStream
           .where(
             (event) =>
-                event != null &&
                 event.scheme ==
-                    client.options.authenticationOptions.redirectScheme
-                        ?.toLowerCase(),
+                client.options.authenticationOptions.redirectScheme
+                    ?.toLowerCase(),
           )
-          .listen((event) => _handleAuthRedirect(event!));
+          .listen((event) => _handleAuthRedirect(event));
     }
 
     if (client.options.authenticationOptions.persistCredentials) {
