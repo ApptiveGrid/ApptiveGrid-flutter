@@ -108,7 +108,10 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
 
   Future<List<Attachment>?> _pickFromFiles() async {
     final result = await FilePicker.pickFiles(
-        allowMultiple: true, withData: true, type: FileType.any,);
+      allowMultiple: true,
+      withData: true,
+      type: FileType.any,
+    );
 
     if (result != null && result.files.isNotEmpty && mounted) {
       final newAttachments = <Attachment>[];

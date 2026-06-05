@@ -1681,10 +1681,12 @@ void main() {
       expect(
         tester
             .widget<TextField>(
-              find.descendant(
-                of: find.byType(TypeAheadField<Prediction>),
-                matching: find.byType(TextField),
-              ).first,
+              find
+                  .descendant(
+                    of: find.byType(TypeAheadField<Prediction>),
+                    matching: find.byType(TextField),
+                  )
+                  .first,
             )
             .enabled,
         false,
