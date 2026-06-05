@@ -38,6 +38,8 @@ void main() {
     );
     registerFallbackValue(const MapConfiguration());
     registerFallbackValue(const MapObjects());
+    registerFallbackValue(const CameraUpdateAnimationConfiguration());
+    registerFallbackValue(GroundOverlayUpdates.from(const {}, const {}));
   });
 
   const field =
@@ -961,6 +963,16 @@ void main() {
 
       when(() => mockMap.animateCamera(any(), mapId: any(named: 'mapId')))
           .thenAnswer((_) async {});
+      when(
+        () => mockMap.animateCameraWithConfiguration(
+          any(),
+          any(),
+          mapId: any(named: 'mapId'),
+        ),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockMap.updateGroundOverlays(any(), mapId: any(named: 'mapId')),
+      ).thenAnswer((_) async {});
     });
 
     tearDown(() {

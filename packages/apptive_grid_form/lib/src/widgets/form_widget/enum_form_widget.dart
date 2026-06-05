@@ -44,25 +44,26 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                RadioGroup<String?>(
-                  groupValue: widget.component.data.value,
-                  onChanged: (newValue) {
-                    if (widget.component.enabled) {
+                AbsorbPointer(
+                  absorbing: !widget.component.enabled,
+                  child: RadioGroup<String?>(
+                    groupValue: widget.component.data.value,
+                    onChanged: (newValue) {
                       fieldState.didChange(newValue);
                       _onChanged(newValue);
-                    }
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (final entry in widget.component.data.options)
-                        RadioListTile<String?>(
-                          tileColor: Colors.transparent,
-                          shape: Border.all(color: Colors.transparent),
-                          value: entry,
-                          title: Text(entry),
-                        ),
-                    ],
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (final entry in widget.component.data.options)
+                          RadioListTile<String?>(
+                            tileColor: Colors.transparent,
+                            shape: Border.all(color: Colors.transparent),
+                            value: entry,
+                            title: Text(entry),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ],
