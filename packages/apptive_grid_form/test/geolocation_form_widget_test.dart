@@ -1680,10 +1680,12 @@ void main() {
 
       expect(
         tester
-            .widget<TypeAheadField<Prediction>>(
-              find.byType(TypeAheadField<Prediction>).first,
+            .widget<TextField>(
+              find.descendant(
+                of: find.byType(TypeAheadField<Prediction>),
+                matching: find.byType(TextField),
+              ).first,
             )
-            .textFieldConfiguration
             .enabled,
         false,
       );

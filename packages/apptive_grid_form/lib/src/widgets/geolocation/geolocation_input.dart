@@ -92,11 +92,10 @@ class _GeolocationInputState extends State<GeolocationInput> {
       children: [
         Expanded(
           child: TypeAheadField<Prediction>(
-            suggestionsBoxDecoration: SuggestionsBoxDecoration(
-              shape: Theme.of(context).cardTheme.shape,
-            ),
-            textFieldConfiguration: TextFieldConfiguration(
-              controller: _locationBoxController,
+            controller: _locationBoxController,
+            builder: (context, controller, focusNode) => TextField(
+              controller: controller,
+              focusNode: focusNode,
               enabled: widget.enabled,
               decoration: InputDecoration(
                 isDense: true,
@@ -116,16 +115,21 @@ class _GeolocationInputState extends State<GeolocationInput> {
                 hintText: translations.searchLocation,
               ),
             ),
+            decorationBuilder: (context, child) => Material(
+              shape: Theme.of(context).cardTheme.shape,
+              type: MaterialType.card,
+              child: child,
+            ),
             suggestionsCallback: _getQueryProposals,
             itemBuilder: (_, suggestion) {
               return ListTile(
                 title: Text(suggestion.description ?? ''),
               );
             },
-            noItemsFoundBuilder: (_) {
+            emptyBuilder: (_) {
               return ListTile(title: Text(translations.searchLocationNoResult));
             },
-            onSuggestionSelected: (suggestion) async {
+            onSelected: (suggestion) async {
               if (suggestion.description != null) {
                 _locationBoxController.text = suggestion.description!;
               }
