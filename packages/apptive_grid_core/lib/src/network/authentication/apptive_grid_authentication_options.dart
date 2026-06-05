@@ -61,11 +61,12 @@ class ApptiveGridApiKey {
   /// Creates a ApptiveGridApiKey Model
   ///
   /// You will get these values if you create a new ApiKey in your Profile in the ApptiveGrid App
+  // coverage:ignore-start
   const ApptiveGridApiKey({
-    // coverage:ignore-line
     required this.authKey,
     required this.password,
   });
+  // coverage:ignore-end
 
   /// Auth Key of the ApiKey
   final String authKey;

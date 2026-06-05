@@ -28,6 +28,7 @@ class Today extends _FilterExpression with ComparableFilterableMixin {
 /// If filtering for a field with [DataType.createdBy] you should combine it with [ActorFilter]
 class LoggedInUser extends _FilterExpression with ActorFilterableMixin {
   /// Creates a Filter Expression to check the loggedIn User
-  const LoggedInUser()
-      : super(expression: 'loggedInUser()'); // coverage:ignore-line
+  // coverage:ignore-start
+  const LoggedInUser() : super(expression: 'loggedInUser()');
+  // coverage:ignore-end
 }
