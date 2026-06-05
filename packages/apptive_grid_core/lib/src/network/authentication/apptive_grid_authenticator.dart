@@ -53,9 +53,7 @@ class ApptiveGridAuthenticator {
     _setupCompleter = Completer();
     if (!kIsWeb) {
       _authCallbackSubscription?.cancel();
-      _authCallbackSubscription = AppLinksPlatform
-          .instance
-          .uriLinkStream
+      _authCallbackSubscription = AppLinksPlatform.instance.uriLinkStream
           .where(
             (event) =>
                 event.scheme ==

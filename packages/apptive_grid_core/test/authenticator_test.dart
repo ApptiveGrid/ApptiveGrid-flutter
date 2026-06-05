@@ -552,7 +552,8 @@ void main() {
       final tokenStorage = MockAuthenticationStorage();
       final originalUniLinks = AppLinksPlatform.instance;
       final mockAppLinks = MockAppLinks();
-      when(() => mockAppLinks.uriLinkStream).thenAnswer((_) => const Stream.empty());
+      when(() => mockAppLinks.uriLinkStream)
+          .thenAnswer((_) => const Stream.empty());
       AppLinksPlatform.instance = mockAppLinks;
       when(() => tokenStorage.credential).thenAnswer((_) => null);
 

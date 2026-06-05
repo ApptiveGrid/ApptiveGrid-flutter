@@ -10,7 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:mime/mime.dart';
-import 'dart:io' if (dart.library.html) 'package:apptive_grid_core/src/network/stub_io.dart';
+import 'dart:io'
+    if (dart.library.html) 'package:apptive_grid_core/src/network/stub_io.dart';
 import 'package:uuid/uuid.dart';
 
 /// Processor for Attachments.
