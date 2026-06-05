@@ -57,7 +57,7 @@ class GridRowWidget extends StatelessWidget {
       child: DecoratedBox(
         decoration: selected
             ? BoxDecoration(
-                color: selectedColor.withOpacity(0.3),
+                color: selectedColor.withValues(alpha: 0.3),
               )
             : const BoxDecoration(),
         child: _GridRow(

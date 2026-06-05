@@ -1,4 +1,3 @@
-library apptive_grid_form_widgets;
 
 export 'package:apptive_grid_form/src/widgets/actions/action_button.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/attachment_form_widget.dart';

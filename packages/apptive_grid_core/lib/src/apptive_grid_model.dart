@@ -1,4 +1,3 @@
-library apptive_grid_model;
 
 export 'package:apptive_grid_core/src/model/attachment/attachment.dart';
 export 'package:apptive_grid_core/src/model/attachment/attachment_action.dart';

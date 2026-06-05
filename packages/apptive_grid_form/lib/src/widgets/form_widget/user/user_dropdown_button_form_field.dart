@@ -56,7 +56,7 @@ class _UserDropdownButtonFormFieldState
       },
       selectedItemBuilder: _selectedItems,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      value: widget.component.data.value,
+      initialValue: widget.component.data.value,
       decoration: widget.component.baseDecoration,
     );
   }

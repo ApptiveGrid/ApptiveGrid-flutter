@@ -22,9 +22,7 @@ class FlutterSecureStorageCredentialStorage implements AuthenticationStorage {
   static const _credentialKey = 'ApptiveGridCredential';
 
   final _flutterSecureStorage = const FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
-    ),
+    aOptions: AndroidOptions(),
   );
 
   @override

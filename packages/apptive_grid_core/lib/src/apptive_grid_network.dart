@@ -1,4 +1,3 @@
-library apptive_grid_network;
 
 export 'package:apptive_grid_core/src/model/form/submit_form_progress.dart';
 export 'package:apptive_grid_core/src/network/apptive_grid_client.dart';

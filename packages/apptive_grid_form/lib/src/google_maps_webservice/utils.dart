@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs
 // coverage:ignore-file
 
-library google_maps_webservice.utils;
-
 import 'dart:async';
 
 import 'package:http/http.dart';

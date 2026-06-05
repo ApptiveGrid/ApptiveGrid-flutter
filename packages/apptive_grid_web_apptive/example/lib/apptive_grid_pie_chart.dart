@@ -183,7 +183,7 @@ class _FieldSelectorState extends State<FieldSelector> {
         Expanded(
           flex: 2,
           child: DropdownButtonFormField<GridField?>(
-            value: widget.value,
+            initialValue: widget.value,
             validator: (value) {
               if (value == null) {
                 return 'Select a Column that should be displayed in the pie chart.';

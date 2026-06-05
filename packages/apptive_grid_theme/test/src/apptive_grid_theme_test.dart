@@ -450,15 +450,15 @@ void main() {
     description: 'Radio',
     fileName: 'radio',
     scenarios: {
-      'Checked': Radio(
-        value: true,
+      'Checked': RadioGroup<bool>(
         groupValue: true,
         onChanged: (_) {},
+        child: const Radio<bool>(value: true),
       ),
-      'Un-Checked': Radio(
-        value: false,
+      'Un-Checked': RadioGroup<bool>(
         groupValue: true,
         onChanged: (_) {},
+        child: const Radio<bool>(value: false),
       ),
     },
   );

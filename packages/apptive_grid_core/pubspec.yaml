@@ -32,7 +32,6 @@ dev_dependencies:
   url_launcher_platform_interface: ^2.1.2
   plugin_platform_interface: ^2.1.4
   flutter_secure_storage_platform_interface: ^2.0.1
-  app_links_platform_interface: ^2.0.2
   flutter_test:
     sdk: flutter
 

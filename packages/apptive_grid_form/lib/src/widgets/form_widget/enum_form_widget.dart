@@ -44,20 +44,27 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                for (final entry in widget.component.data.options)
-                  RadioListTile<String?>(
-                    tileColor: Colors.transparent,
-                    shape: Border.all(color: Colors.transparent),
-                    value: entry,
-                    title: Text(entry),
-                    groupValue: widget.component.data.value,
-                    onChanged: widget.component.enabled
-                        ? (newValue) {
-                            fieldState.didChange(newValue);
-                            _onChanged(newValue);
-                          }
-                        : null,
+                RadioGroup<String?>(
+                  groupValue: widget.component.data.value,
+                  onChanged: (newValue) {
+                    if (widget.component.enabled) {
+                      fieldState.didChange(newValue);
+                      _onChanged(newValue);
+                    }
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (final entry in widget.component.data.options)
+                        RadioListTile<String?>(
+                          tileColor: Colors.transparent,
+                          shape: Border.all(color: Colors.transparent),
+                          value: entry,
+                          title: Text(entry),
+                        ),
+                    ],
                   ),
+                ),
               ],
             ),
           );
@@ -86,7 +93,7 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
       onChanged: widget.component.enabled ? _onChanged : null,
       validator: _validate,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      value: widget.component.data.value,
+      initialValue: widget.component.data.value,
       decoration: widget.component.baseDecoration,
     );
   }

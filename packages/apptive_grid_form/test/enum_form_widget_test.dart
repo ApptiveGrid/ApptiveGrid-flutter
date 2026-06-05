@@ -168,8 +168,8 @@ void main() {
 
         expect(
           tester
-              .widget<RadioListTile<String?>>(
-                find.byType(RadioListTile<String?>).first,
+              .widget<RadioGroup<String?>>(
+                find.byType(RadioGroup<String?>).first,
               )
               .onChanged,
           null,

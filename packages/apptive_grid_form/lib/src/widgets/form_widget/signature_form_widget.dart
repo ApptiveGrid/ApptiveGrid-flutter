@@ -169,7 +169,7 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
     _loadedSvg = null;
     _signatureController.clear();
     if (paths != null) {
-      _signatureController.importPath(paths);
+      _signatureController.addPath(paths);
     }
 
     final attachmentManager =

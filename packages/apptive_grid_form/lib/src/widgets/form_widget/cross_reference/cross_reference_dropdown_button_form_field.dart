@@ -159,7 +159,7 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       },
       selectedItemBuilder: _selectedItems,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      value: () {
+      initialValue: () {
         if (widget.component.data.value == null ||
             (widget.component.data.value is Iterable &&
                 widget.component.data.value.isEmpty) ||
@@ -417,7 +417,7 @@ class _CrossReferenceSelectionGridState
           onSelectionChanged: widget.onSelected,
           controller: _scrollControllers[row.id],
           color: index % 2 != 0
-              ? Theme.of(context).hintColor.withOpacity(0.04)
+              ? Theme.of(context).hintColor.withValues(alpha: 0.04)
               : null,
         );
       },

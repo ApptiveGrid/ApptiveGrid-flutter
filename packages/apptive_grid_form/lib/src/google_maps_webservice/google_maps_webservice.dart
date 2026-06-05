@@ -2,7 +2,7 @@
 ///
 /// This is required as the published google_maps_webservice does not offer null safety in a stable release
 /// Once https://github.com/lejard-h/google_maps_webservice/issues/138 is resolved this should be removed and the published version should be used again
-library google_maps_webservice;
+library;
 
 export 'package:apptive_grid_form/src/google_maps_webservice/core.dart';
 export 'package:apptive_grid_form/src/google_maps_webservice/geocoding.dart';

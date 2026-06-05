@@ -1,4 +1,3 @@
-library apptive_grid_user_management;
 
 export 'package:apptive_grid_core/apptive_grid_core.dart';
 
