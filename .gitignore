@@ -58,3 +58,6 @@ melos_*.iml
 packages/**/example/pubspec.lock
 pubspec_overrides.yaml
 .dart_tool
+
+# Flutter ephemeral generated files
+**/Flutter/ephemeral/
