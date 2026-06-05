@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "de.zweidenker.example"
-    compileSdk 34
+    compileSdk 36
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -33,7 +33,7 @@ android {
     defaultConfig {
         applicationId "de.zweidenker.example"
         minSdk flutter.minSdkVersion
-        targetSdk 34
+        targetSdk 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
