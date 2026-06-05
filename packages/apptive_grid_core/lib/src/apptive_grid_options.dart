@@ -91,5 +91,5 @@ class ApptiveGridOptions {
 /// A Configuration for FormWidgets needed for certain [DataType]s with [apptive_grid_form](https://pub.dev/packages/apptive_grid_form)
 abstract class FormWidgetConfiguration {
   /// Enable const constructor for children
-  const FormWidgetConfiguration();
+  const FormWidgetConfiguration(); // coverage:ignore-line
 }

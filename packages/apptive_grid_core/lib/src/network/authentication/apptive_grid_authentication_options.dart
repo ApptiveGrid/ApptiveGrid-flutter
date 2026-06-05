@@ -62,6 +62,7 @@ class ApptiveGridApiKey {
   ///
   /// You will get these values if you create a new ApiKey in your Profile in the ApptiveGrid App
   const ApptiveGridApiKey({
+    // coverage:ignore-line
     required this.authKey,
     required this.password,
   });
