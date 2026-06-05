@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
+import 'package:app_links_platform_interface/app_links_platform_interface.dart';
 
 import '../../infrastructure/mocks.dart';
 
@@ -113,28 +113,28 @@ void main() {
 
   group('Custom Translations', () {
     final client = MockApptiveGridUserManagementClient();
-    late UniLinksPlatform initialUniLinks;
+    late AppLinksPlatform initialAppLinks;
 
-    late Completer<String?> initialLink;
-    late StreamController<String?> controller;
+    late Completer<Uri?> initialLink;
+    late StreamController<Uri> controller;
 
-    late MockUniLinks uniLink;
+    late MockAppLinks appLink;
 
     setUpAll(() {
-      initialLink = Completer<String?>();
+      initialLink = Completer<Uri?>();
       controller = StreamController.broadcast();
-      initialUniLinks = UniLinksPlatform.instance;
-      uniLink = MockUniLinks();
-      UniLinksPlatform.instance = uniLink;
+      initialAppLinks = AppLinksPlatform.instance;
+      appLink = MockAppLinks();
+      AppLinksPlatform.instance = appLink;
 
-      when(() => uniLink.linkStream).thenAnswer((_) => controller.stream);
-      when(uniLink.getInitialLink).thenAnswer((_) async => initialLink.future);
+      when(() => appLink.uriLinkStream).thenAnswer((_) => controller.stream);
+      when(appLink.getInitialLink).thenAnswer((_) async => initialLink.future);
     });
 
     tearDownAll(() {
-      UniLinksPlatform.instance = initialUniLinks;
+      AppLinksPlatform.instance = initialAppLinks;
       controller.close();
-      reset(uniLink);
+      reset(appLink);
     });
 
     testWidgets('Login Content', (tester) async {
@@ -291,7 +291,7 @@ void main() {
       await tester.pumpWidget(apptiveGridUserManagement);
       await tester.pump();
 
-      controller.add(uri.toString());
+      controller.add(uri);
 
       final confirmWidget = await callbackCompleter.future;
 
@@ -335,7 +335,7 @@ void main() {
       await tester.pumpWidget(apptiveGridUserManagement);
       await tester.pump();
 
-      controller.add(uri.toString());
+      controller.add(uri);
 
       final confirmWidget = await callbackCompleter.future;
 

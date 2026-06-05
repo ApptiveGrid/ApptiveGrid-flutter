@@ -11,7 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:openid_client/openid_client.dart' show TokenResponse;
-import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
+import 'package:app_links_platform_interface/app_links_platform_interface.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import 'authenticator_test.dart';
@@ -45,10 +45,10 @@ void main() {
   });
 
   setUp(() {
-    final mockUniLink = MockUniLinks();
-    UniLinksPlatform.instance = mockUniLink;
-    final stream = StreamController<String?>.broadcast();
-    when(() => mockUniLink.linkStream).thenAnswer((_) => stream.stream);
+    final mockAppLink = MockAppLinks();
+    AppLinksPlatform.instance = mockAppLink;
+    final stream = StreamController<Uri>.broadcast();
+    when(() => mockAppLink.uriLinkStream).thenAnswer((_) => stream.stream);
 
     authenticator = MockApptiveGridAuthenticator();
     when(() => authenticator.checkAuthentication()).thenAnswer((_) async {});

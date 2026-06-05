@@ -8,7 +8,7 @@ import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_m
 import 'package:apptive_grid_user_management/src/translation/apptive_grid_user_management_translation.dart';
 import 'package:apptive_grid_user_management/src/user_management_client.dart';
 import 'package:flutter/material.dart';
-import 'package:uni_links/uni_links.dart' as uni_links;
+import 'package:app_links_platform_interface/app_links_platform_interface.dart';
 
 /// Adds the ability to add ApptiveGridUserManagement to an App
 /// This should live near an [ApptiveGrid] Widget
@@ -110,7 +110,7 @@ class ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
           apptiveGridClient: ApptiveGrid.getClient(context),
         );
 
-    uni_links.getInitialUri().then((uri) async {
+    AppLinksPlatform.instance.getInitialLink().then((uri) async {
       final isConfirmation = await _requestConfirmation(uri);
       final isReset = await _requestPasswordReset(uri);
 
@@ -119,7 +119,8 @@ class ApptiveGridUserManagementState extends State<ApptiveGridUserManagement> {
 
       return uri;
     });
-    _deepLinkSubscription = uni_links.uriLinkStream.listen(_checkLink);
+    _deepLinkSubscription =
+        AppLinksPlatform.instance.uriLinkStream.listen(_checkLink);
   }
 
   @override

@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:openid_client/openid_client.dart';
-import 'package:uni_links/uni_links.dart' as uni_links;
+import 'package:app_links_platform_interface/app_links_platform_interface.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -53,15 +53,16 @@ class ApptiveGridAuthenticator {
     _setupCompleter = Completer();
     if (!kIsWeb) {
       _authCallbackSubscription?.cancel();
-      _authCallbackSubscription = uni_links.uriLinkStream
+      _authCallbackSubscription = AppLinksPlatform
+          .instance
+          .uriLinkStream
           .where(
             (event) =>
-                event != null &&
                 event.scheme ==
-                    client.options.authenticationOptions.redirectScheme
-                        ?.toLowerCase(),
+                client.options.authenticationOptions.redirectScheme
+                    ?.toLowerCase(),
           )
-          .listen((event) => _handleAuthRedirect(event!));
+          .listen(_handleAuthRedirect);
     }
 
     if (client.options.authenticationOptions.persistCredentials) {
