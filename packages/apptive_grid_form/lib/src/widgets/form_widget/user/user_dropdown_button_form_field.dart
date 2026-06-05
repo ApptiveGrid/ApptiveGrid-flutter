@@ -110,17 +110,13 @@ class _UserDropdownButtonFormFieldState
   }
 
   List<Widget> _selectedItems(BuildContext context) {
-    if (widget.component.data.value == null) {
-      return [];
-    }
     final localization = ApptiveGridLocalization.of(context)!;
-
     final pleaseSelect = Text(localization.selectEntry);
-    return [
-      ...[pleaseSelect],
-      if (widget.component.data.value != null)
-        DataUserWidget(user: widget.component.data.value!),
-    ];
+    final userWidget = widget.component.data.value != null
+        ? DataUserWidget(user: widget.component.data.value!)
+        : pleaseSelect;
+    // Must match length of _items() which always returns 2 items.
+    return [pleaseSelect, userWidget];
   }
 }
 
