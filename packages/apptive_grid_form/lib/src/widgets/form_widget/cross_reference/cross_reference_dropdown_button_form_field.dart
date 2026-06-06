@@ -159,7 +159,7 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
       },
       selectedItemBuilder: _selectedItems,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      value: () {
+      initialValue: () {
         if (widget.component.data.value == null ||
             (widget.component.data.value is Iterable &&
                 widget.component.data.value.isEmpty) ||
@@ -248,18 +248,19 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
 
   List<Widget> _selectedItems(BuildContext context) {
     final localization = ApptiveGridLocalization.of(context)!;
-
-    if (widget.component.data.value == null ||
-        (widget.component.data.value is Iterable &&
-            widget.component.data.value.isEmpty) ||
-        (widget.component.data.value is String &&
-            widget.component.data.value.isEmpty)) {
-      return [];
-    }
     final pleaseSelect = Text(localization.selectEntry);
+    final hasValue = widget.component.data.value != null &&
+        !(widget.component.data.value is Iterable &&
+            widget.component.data.value.isEmpty) &&
+        !(widget.component.data.value is String &&
+            widget.component.data.value.isEmpty);
+    // Must match length of _items() which returns 3 items when grid is loaded.
     return [
-      ...[pleaseSelect, pleaseSelect],
-      widget.selectedItemBuilder(widget.component.data),
+      pleaseSelect,
+      pleaseSelect,
+      hasValue
+          ? widget.selectedItemBuilder(widget.component.data)
+          : pleaseSelect,
     ];
   }
 }
@@ -417,7 +418,7 @@ class _CrossReferenceSelectionGridState
           onSelectionChanged: widget.onSelected,
           controller: _scrollControllers[row.id],
           color: index % 2 != 0
-              ? Theme.of(context).hintColor.withOpacity(0.04)
+              ? Theme.of(context).hintColor.withValues(alpha: 0.04)
               : null,
         );
       },

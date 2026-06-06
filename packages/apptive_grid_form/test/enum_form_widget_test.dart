@@ -168,11 +168,16 @@ void main() {
 
         expect(
           tester
-              .widget<RadioListTile<String?>>(
-                find.byType(RadioListTile<String?>).first,
+              .widget<AbsorbPointer>(
+                find
+                    .ancestor(
+                      of: find.byType(RadioGroup<String?>).first,
+                      matching: find.byType(AbsorbPointer),
+                    )
+                    .first,
               )
-              .onChanged,
-          null,
+              .absorbing,
+          true,
         );
       });
     });

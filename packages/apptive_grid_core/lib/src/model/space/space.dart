@@ -89,7 +89,7 @@ class Space {
       if (category != null) 'belongsTo': category,
       if (color != null)
         'color':
-            '#${color!.red.toRadixString(16)}${color!.green.toRadixString(16)}${color!.blue.toRadixString(16)}',
+            '#${(color!.r * 255.0).round().clamp(0, 255).toRadixString(16)}${(color!.g * 255.0).round().clamp(0, 255).toRadixString(16)}${(color!.b * 255.0).round().clamp(0, 255).toRadixString(16)}',
       if (icon != null) 'icon': icon,
       if (iconSet != null) 'iconset': iconSet,
       if (plan != null) 'plan': plan,

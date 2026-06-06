@@ -1,4 +1,6 @@
 @TestOn('!browser')
+library;
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -13,24 +15,24 @@ import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:openid_client/openid_client.dart';
 import 'package:openid_client/openid_client_io.dart' as openid;
-import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
+import 'package:app_links_platform_interface/app_links_platform_interface.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import 'mocks.dart';
 
 void main() {
-  late StreamController<String?> streamController;
+  late StreamController<Uri> streamController;
   late ApptiveGridAuthenticator authenticator;
 
   setUpAll(() {
     registerFallbackValue(Uri());
     registerFallbackValue(const LaunchOptions());
 
-    final mockUniLink = MockUniLinks();
-    UniLinksPlatform.instance = mockUniLink;
-    streamController = StreamController<String?>.broadcast();
-    when(() => mockUniLink.linkStream)
+    final mockAppLink = MockAppLinks();
+    AppLinksPlatform.instance = mockAppLink;
+    streamController = StreamController<Uri>.broadcast();
+    when(() => mockAppLink.uriLinkStream)
         .thenAnswer((_) => streamController.stream);
   });
 
@@ -151,7 +153,7 @@ void main() {
       final uri =
           Uri(scheme: customScheme, queryParameters: responseMap, host: 'host');
 
-      streamController.add(uri.toString());
+      streamController.add(uri);
       final completerResult = await completer.future;
       await completerResult.getTokenResponse();
       await credential.getTokenResponse();
@@ -255,7 +257,7 @@ void main() {
       final uri =
           Uri(scheme: customScheme, queryParameters: responseMap, host: 'host');
 
-      streamController.add(uri.toString());
+      streamController.add(uri);
       final authResult = await credentialCompleter.future;
 
       expect(authResult.toJson(), credential.toJson());
@@ -548,10 +550,11 @@ void main() {
     test('No saved token, auto authenticate true, not authenticate', () async {
       final httpClient = MockHttpClient();
       final tokenStorage = MockAuthenticationStorage();
-      final originalUniLinks = UniLinksPlatform.instance;
-      final mockUniLinks = MockUniLinks();
-      when(() => mockUniLinks.linkStream).thenAnswer((_) => Stream.value(null));
-      UniLinksPlatform.instance = mockUniLinks;
+      final originalUniLinks = AppLinksPlatform.instance;
+      final mockAppLinks = MockAppLinks();
+      when(() => mockAppLinks.uriLinkStream)
+          .thenAnswer((_) => const Stream.empty());
+      AppLinksPlatform.instance = mockAppLinks;
       when(() => tokenStorage.credential).thenAnswer((_) => null);
 
       final client = MockApptiveGridClient();
@@ -574,7 +577,7 @@ void main() {
 
       expect(isAuthenticated, equals(false));
 
-      UniLinksPlatform.instance = originalUniLinks;
+      AppLinksPlatform.instance = originalUniLinks;
     });
   });
 

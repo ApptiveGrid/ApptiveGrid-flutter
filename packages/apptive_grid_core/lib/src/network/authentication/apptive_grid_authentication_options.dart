@@ -16,7 +16,7 @@ class ApptiveGridAuthenticationOptions {
   /// If the Authentication is happening in an external Browser add your custom Redirect URI Scheme so the User gets redirected to the App
   ///
   /// Remember that you might need to add some native configurations so your app knows how to handle the redirect.
-  /// For more Info check out https://pub.dev/packages/uni_links
+  /// For more Info check out https://pub.dev/packages/app_links
   final String? redirectScheme;
 
   /// User Group of the users
@@ -61,10 +61,12 @@ class ApptiveGridApiKey {
   /// Creates a ApptiveGridApiKey Model
   ///
   /// You will get these values if you create a new ApiKey in your Profile in the ApptiveGrid App
+  // coverage:ignore-start
   const ApptiveGridApiKey({
     required this.authKey,
     required this.password,
   });
+  // coverage:ignore-end
 
   /// Auth Key of the ApiKey
   final String authKey;

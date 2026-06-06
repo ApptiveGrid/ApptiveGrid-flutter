@@ -1,6 +1,6 @@
 name: apptive_grid_theme
 description: All theming for apps using ApptiveGrid. This includes colors, icons and fonts used by ApptiveGrid.
-version: 1.3.0
+version: 1.4.0
 homepage: https://www.apptivegrid.de
 repository: https://github.com/ApptiveGrid/apptive_grid_flutter/tree/main/packages/apptive_grid_theme
 
@@ -11,18 +11,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  material_design_icons_flutter: ^7.0.7296
   universal_platform: ^1.0.0+1
 
 
+
 dev_dependencies:
-  alchemist:
-    git:
-      url: https://github.com/abausg/alchemist
-      ref: flutter-3-13
+  alchemist: ^0.14.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.1
+  flutter_lints: ^6.0.0
   golden_toolkit: ^0.15.0
 
 flutter:
@@ -38,3 +35,6 @@ flutter:
           weight: 700
         - asset: fonts/DMSans-Regular.ttf
           weight: 400
+    - family: Material Design Icons
+      fonts:
+        - asset: fonts/materialdesignicons-webfont.ttf

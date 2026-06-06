@@ -38,6 +38,8 @@ void main() {
     );
     registerFallbackValue(const MapConfiguration());
     registerFallbackValue(const MapObjects());
+    registerFallbackValue(const CameraUpdateAnimationConfiguration());
+    registerFallbackValue(GroundOverlayUpdates.from(const {}, const {}));
   });
 
   const field =
@@ -961,6 +963,16 @@ void main() {
 
       when(() => mockMap.animateCamera(any(), mapId: any(named: 'mapId')))
           .thenAnswer((_) async {});
+      when(
+        () => mockMap.animateCameraWithConfiguration(
+          any(),
+          any(),
+          mapId: any(named: 'mapId'),
+        ),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockMap.updateGroundOverlays(any(), mapId: any(named: 'mapId')),
+      ).thenAnswer((_) async {});
     });
 
     tearDown(() {
@@ -1668,10 +1680,14 @@ void main() {
 
       expect(
         tester
-            .widget<TypeAheadField<Prediction>>(
-              find.byType(TypeAheadField<Prediction>).first,
+            .widget<TextField>(
+              find
+                  .descendant(
+                    of: find.byType(TypeAheadField<Prediction>),
+                    matching: find.byType(TextField),
+                  )
+                  .first,
             )
-            .textFieldConfiguration
             .enabled,
         false,
       );

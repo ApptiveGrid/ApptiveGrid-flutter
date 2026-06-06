@@ -1,7 +1,8 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:universal_file/universal_file.dart';
+import 'dart:io'
+    if (dart.library.html) 'package:apptive_grid_form/src/widgets/attachment/stub_io.dart';
 
 part 'package:apptive_grid_form/src/widgets/attachment/type_map.dart';
 

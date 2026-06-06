@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:apptive_grid_core/src/network/attachment_processor.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/src/platform/file_picker_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:geolocator/geolocator.dart';
@@ -24,7 +24,7 @@ class MockAttachmentProcessor extends Mock implements AttachmentProcessor {}
 
 class MockFilePicker extends Mock
     with MockPlatformInterfaceMixin
-    implements FilePicker {}
+    implements FilePickerPlatform {}
 
 class MockImagePicker extends Mock
     with MockPlatformInterfaceMixin

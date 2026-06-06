@@ -96,7 +96,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
                         ],
                       );
                     },
-                  ).toList(),
+                  ),
                 if (widget.component.enabled)
                   AddAttachmentButton(
                     onAttachmentsAdded: (newAttachments) =>

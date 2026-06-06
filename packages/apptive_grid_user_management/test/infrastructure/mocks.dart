@@ -4,14 +4,14 @@ import 'package:apptive_grid_user_management/src/user_management_client.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
+import 'package:app_links_platform_interface/app_links_platform_interface.dart';
 
 class MockApptiveGridUserManagementClient extends Mock
     implements ApptiveGridUserManagementClient {}
 
-class MockUniLinks extends Mock
+class MockAppLinks extends Mock
     with MockPlatformInterfaceMixin
-    implements UniLinksPlatform {}
+    implements AppLinksPlatform {}
 
 class MockApptiveGridClient extends Mock implements ApptiveGridClient {}
 

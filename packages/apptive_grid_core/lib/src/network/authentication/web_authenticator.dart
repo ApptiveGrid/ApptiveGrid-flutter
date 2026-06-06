@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_web_libraries_in_flutter
+// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
 // coverage:ignore-file
 
 import 'dart:convert';
@@ -60,7 +60,7 @@ class _CustomAuthenticator {
         );
 
   _CustomAuthenticator(
-    client, {
+    Client client, {
     Iterable<String> scopes = const [],
     String? redirectedUri,
   }) : this._(

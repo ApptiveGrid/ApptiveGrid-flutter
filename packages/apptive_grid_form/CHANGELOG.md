@@ -1,3 +1,9 @@
+## 2.2.0
+
+ - **FEAT**: Upgrade to Flutter 3.44.0 compatible dependencies (flutter_typeahead ^6.0.0, file_picker ^11.0.0, permission_handler ^12.0.0).
+ - **FIX**: Update TypeAheadField API for flutter_typeahead 6.0.0.
+ - **FIX**: Update FilePicker API for file_picker 11.0.0.
+
 ## 2.1.2
 
  - **FEAT**: Resource Type (provisional field implementation)

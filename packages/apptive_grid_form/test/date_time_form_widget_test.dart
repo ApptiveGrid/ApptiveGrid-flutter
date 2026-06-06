@@ -54,7 +54,16 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('11/5/2021'), findsOneWidget);
-      expect(find.text('4:32 PM'), findsOneWidget);
+      // intl 0.20+ uses a narrow no-break space (U+202F) before AM/PM
+      expect(
+        find.byWidgetPredicate(
+          (w) =>
+              w is EditableText &&
+              w.controller.text.contains('4:32') &&
+              w.controller.text.contains('PM'),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('de has German Date Format', (tester) async {

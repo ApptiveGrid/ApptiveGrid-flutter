@@ -64,12 +64,11 @@ class ApptiveGridTheme {
 
     return baseTheme.copyWith(
       primaryColor: colorScheme.primary,
-      indicatorColor: colorScheme.primary,
       colorScheme: colorScheme,
       canvasColor: windowBackground,
       textSelectionTheme: baseTheme.textSelectionTheme.copyWith(
         selectionHandleColor: colorScheme.primary,
-        selectionColor: colorScheme.primary.withOpacity(0.4),
+        selectionColor: colorScheme.primary.withValues(alpha: 0.4),
       ),
       buttonTheme: baseTheme.buttonTheme.copyWith(
         buttonColor: colorScheme.primary,
@@ -117,8 +116,9 @@ class ApptiveGridTheme {
           }),
         ),
       ),
-      hintColor: ApptiveGridColors.lightGrey.withOpacity(0.8),
+      hintColor: ApptiveGridColors.lightGrey.withValues(alpha: 0.8),
       tabBarTheme: baseTheme.tabBarTheme.copyWith(
+        indicatorColor: colorScheme.primary,
         labelColor: colorScheme.primary,
         unselectedLabelColor: _withBrightness(
           light: ApptiveGridColors.lightGrey,
@@ -167,7 +167,7 @@ class ApptiveGridTheme {
         ),
       ),
       appBarTheme: baseTheme.appBarTheme.copyWith(
-        color: Colors.transparent,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
@@ -340,8 +340,8 @@ class ApptiveGridTheme {
 
   Color _resolveButtonColor(Set<WidgetState> states) {
     if (states.contains(WidgetState.disabled)) {
-      return ApptiveGridColors.lightGrey.withOpacity(
-        _withBrightness(
+      return ApptiveGridColors.lightGrey.withValues(
+        alpha: _withBrightness(
           light: 0.3,
           dark: 0.3,
         ),

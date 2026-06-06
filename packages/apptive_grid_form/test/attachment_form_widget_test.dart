@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/src/platform/file_picker_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
@@ -54,7 +55,7 @@ void main() {
             ),
           ]),
         );
-        FilePicker.platform = filePicker;
+        FilePickerPlatform.instance = filePicker;
 
         final data = AttachmentDataEntity(
           [Attachment(name: filename, url: attachmentUri, type: 'image/png')],
@@ -156,7 +157,7 @@ void main() {
             ),
           ]),
         );
-        FilePicker.platform = filePicker;
+        FilePickerPlatform.instance = filePicker;
 
         final attachment1 =
             Attachment(name: filename1, url: attachmentUri1, type: 'image/png');
@@ -251,7 +252,7 @@ void main() {
         ).thenAnswer(
           (invocation) async => null,
         );
-        FilePicker.platform = filePicker;
+        FilePickerPlatform.instance = filePicker;
 
         final action =
             ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
@@ -715,7 +716,7 @@ void main() {
           ),
         ]),
       );
-      FilePicker.platform = filePicker;
+      FilePickerPlatform.instance = filePicker;
 
       final data = AttachmentDataEntity(
         [],
@@ -960,7 +961,7 @@ void main() {
           ),
         ]),
       );
-      FilePicker.platform = filePicker;
+      FilePickerPlatform.instance = filePicker;
 
       final data = AttachmentDataEntity(
         [Attachment(name: filename, url: attachmentUri, type: 'image/png')],
