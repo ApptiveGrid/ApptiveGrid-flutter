@@ -1,3 +1,7 @@
+## 2.1.7
+
+ - **CHORE**: Update dependencies for Flutter 3.44.0 compatibility.
+
 ## 2.1.6
 
  - **FEAT**: Add plan to Space

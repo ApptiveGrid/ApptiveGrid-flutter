@@ -1,3 +1,8 @@
+## 1.4.0
+
+ - **FEAT**: Bundle Material Design Icons font directly, removing dependency on material_design_icons_flutter.
+ - **CHORE**: Update alchemist to ^0.14.0.
+
 ## 1.3.0
 
  - **FEAT**: Flutter 3.16 Support (#132).

@@ -1,3 +1,7 @@
+## 2.0.3
+
+ - **CHORE**: Update dependencies for Flutter 3.44.0 compatibility.
+
 ## 2.0.2
 
  - Update a dependency to the latest release.
