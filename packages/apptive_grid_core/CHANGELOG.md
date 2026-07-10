@@ -1,3 +1,7 @@
+## 2.1.8
+
+ - **FIX**: Only listen for auth redirect when a redirect scheme is set (#147).
+
 ## 2.1.7
 
  - **CHORE**: Update dependencies for Flutter 3.44.0 compatibility.
