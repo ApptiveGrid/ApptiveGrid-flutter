@@ -30,7 +30,7 @@ class FlutterSecureStorageCredentialStorage implements AuthenticationStorage {
       _flutterSecureStorage.read(key: _credentialKey);
 
   @override
-  FutureOr<void> saveCredential(String? credential) {
-    _flutterSecureStorage.write(key: _credentialKey, value: credential);
+  Future<void> saveCredential(String? credential) async {
+    await _flutterSecureStorage.write(key: _credentialKey, value: credential);
   }
 }

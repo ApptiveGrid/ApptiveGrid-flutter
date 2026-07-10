@@ -51,7 +51,13 @@ class ApptiveGridAuthenticator {
   /// and listening to authentication callbacks
   Future<void> performSetup() async {
     _setupCompleter = Completer();
-    if (!kIsWeb) {
+    // Only listen for auth redirects when a redirect scheme is configured.
+    // Otherwise a second client without a redirect scheme (e.g. one created by
+    // an `ApptiveGrid` widget with default options) would subscribe to the same
+    // app_links stream and swallow the redirect meant for the authenticating
+    // client, leaving the login hanging.
+    if (!kIsWeb &&
+        client.options.authenticationOptions.redirectScheme != null) {
       _authCallbackSubscription?.cancel();
       _authCallbackSubscription = AppLinksPlatform.instance.uriLinkStream
           .where(
