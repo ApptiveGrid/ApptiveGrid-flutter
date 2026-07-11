@@ -51,23 +51,7 @@ class ApptiveGridAuthenticator {
   /// and listening to authentication callbacks
   Future<void> performSetup() async {
     _setupCompleter = Completer();
-    // Only listen for auth redirects when a redirect scheme is configured.
-    // Otherwise a second client without a redirect scheme (e.g. one created by
-    // an `ApptiveGrid` widget with default options) would subscribe to the same
-    // app_links stream and swallow the redirect meant for the authenticating
-    // client, leaving the login hanging.
-    if (!kIsWeb &&
-        client.options.authenticationOptions.redirectScheme != null) {
-      _authCallbackSubscription?.cancel();
-      _authCallbackSubscription = AppLinksPlatform.instance.uriLinkStream
-          .where(
-            (event) =>
-                event.scheme ==
-                client.options.authenticationOptions.redirectScheme
-                    ?.toLowerCase(),
-          )
-          .listen(_handleAuthRedirect);
-    }
+    _subscribeToRedirects();
 
     if (client.options.authenticationOptions.persistCredentials) {
       _authenticationStorage ??= const FlutterSecureStorageCredentialStorage();
@@ -76,6 +60,31 @@ class ApptiveGridAuthenticator {
     } else {
       _setupCompleter.complete();
     }
+  }
+
+  /// Subscribes to the app_links redirect stream.
+  ///
+  /// Only subscribes when a redirect scheme is configured — a client without
+  /// one (e.g. an `ApptiveGrid` widget with default options) must not consume
+  /// the redirect meant for the authenticating client.
+  ///
+  /// `AppLinksPlatform.instance.uriLinkStream` is backed by a single native
+  /// EventChannel that only forwards events to whichever listener subscribed
+  /// most recently — any other code that also listens to it (directly, or
+  /// via a package such as `ApptiveGridUserManagement`'s own deep-link
+  /// handling) silently steals every future redirect away from this
+  /// subscription, with no error on either side. Re-subscribing right before
+  /// opening a new login attempt (see [authenticate]) reclaims the listener
+  /// at the moment it's actually needed, rather than relying on the one-time
+  /// subscription from [performSetup] still being intact.
+  void _subscribeToRedirects() {
+    if (kIsWeb) return;
+    final redirectScheme = client.options.authenticationOptions.redirectScheme;
+    if (redirectScheme == null) return;
+    _authCallbackSubscription?.cancel();
+    _authCallbackSubscription = AppLinksPlatform.instance.uriLinkStream
+        .where((event) => event.scheme == redirectScheme.toLowerCase())
+        .listen(_handleAuthRedirect);
   }
 
   /// Override the token for testing purposes
@@ -214,6 +223,7 @@ class ApptiveGridAuthenticator {
   ///
   /// Returns [Credential] from the authentication call
   Future<Credential?> authenticate() async {
+    _subscribeToRedirects();
     final authClient = await _client;
 
     final authenticator = testAuthenticator ??
@@ -280,7 +290,40 @@ class ApptiveGridAuthenticator {
   /// If the User is not authenticated and [ApptiveGridAuthenticationOptions.autoAuthenticate] is true this will call [authenticate]
   ///
   /// If the token is expired it will refresh the token using the refresh token
-  Future<void> checkAuthentication({bool requestNewToken = true}) async {
+  Future<void> checkAuthentication({bool requestNewToken = true}) {
+    // checkAuthentication is called independently by every authenticated
+    // request (getMe, loadGrid, the 401-retry in performApptiveLink, ...).
+    // Without coordination, several requests firing while there is no token
+    // yet — e.g. right after a login redirect, while authenticate() is still
+    // storing the fresh token — each independently see `_token == null` and
+    // call authenticate() again, opening another login browser on top of a
+    // login that already succeeded. Share a single in-flight check so
+    // concurrent callers await the same result instead.
+    final inFlightCheck = _checkAuthenticationFuture;
+    if (inFlightCheck != null) {
+      if (!requestNewToken || _inFlightCheckRequestsNewToken) {
+        return inFlightCheck;
+      }
+      // The in-flight check was started with requestNewToken: false (the
+      // silent check from performSetup) and may finish without a token,
+      // while this caller is allowed to open the login page. Run a full
+      // check once the in-flight one completes — a cheap no-op if that
+      // check already restored a token.
+      return inFlightCheck
+          .then((_) => checkAuthentication(requestNewToken: true));
+    }
+    _inFlightCheckRequestsNewToken = requestNewToken;
+    return _checkAuthenticationFuture =
+        _performCheckAuthentication(requestNewToken: requestNewToken)
+            .whenComplete(() => _checkAuthenticationFuture = null);
+  }
+
+  Future<void>? _checkAuthenticationFuture;
+  bool _inFlightCheckRequestsNewToken = false;
+
+  Future<void> _performCheckAuthentication({
+    bool requestNewToken = true,
+  }) async {
     if (_token == null) {
       await Future.value(
         _authenticationStorage?.credential,

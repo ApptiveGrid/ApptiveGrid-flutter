@@ -1,3 +1,8 @@
+## 2.1.9
+
+ - **FIX**: Re-subscribe to the auth redirect stream before opening the login page, so other app_links listeners (e.g. ApptiveGridUserManagement) can no longer steal the OAuth redirect and leave the login hanging.
+ - **FIX**: Share a single in-flight `checkAuthentication` so concurrent requests no longer open multiple login pages.
+
 ## 2.1.8
 
  - **FIX**: Only listen for auth redirect when a redirect scheme is set (#147).
