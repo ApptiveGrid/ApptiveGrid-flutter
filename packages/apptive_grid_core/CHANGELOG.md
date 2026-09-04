@@ -1,3 +1,7 @@
+## 2.2.0
+
+ - **FEAT**: Add `Address` DataType, `Address` model and `AddressDataEntity`.
+
 ## 2.1.9
 
  - **FIX**: Re-subscribe to the auth redirect stream before opening the login page, so other app_links listeners (e.g. ApptiveGridUserManagement) can no longer steal the OAuth redirect and leave the login hanging.

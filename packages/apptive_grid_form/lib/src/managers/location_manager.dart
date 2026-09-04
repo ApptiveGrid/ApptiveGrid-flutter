@@ -83,4 +83,19 @@ class LocationManager {
       locationType: locationType,
     );
   }
+
+  /// Queries the GoogleGeocoding API for [address]
+  ///
+  /// Uses [GoogleMapsGeocoding.searchByAddress]
+  Future<GeocodingResponse> getPlaceByAddress(
+    String address, {
+    String? language,
+    String? region,
+  }) {
+    return _googleMapsGeocoding.searchByAddress(
+      address,
+      language: language,
+      region: region,
+    );
+  }
 }

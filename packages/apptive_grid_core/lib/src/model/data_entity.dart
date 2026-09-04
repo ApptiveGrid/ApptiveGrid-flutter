@@ -68,6 +68,7 @@ sealed class DataEntity<T, S> with FilterableMixin {
                 {},
           ),
         DataType.geolocation => GeolocationDataEntity.fromJson(json),
+        DataType.address => AddressDataEntity.fromJson(json),
         DataType.multiCrossReference => MultiCrossReferenceDataEntity.fromJson(
             jsonValue: json,
             gridUri: field.schema['items']?['gridUri'] ?? '',
@@ -360,6 +361,25 @@ class GeolocationDataEntity extends DataEntity<Geolocation, dynamic> {
   }
 
   /// Returns [value] coordinates in a array
+  @override
+  dynamic get schemaValue => value?.toJson();
+}
+
+/// [DataEntity] representing [Address]es
+class AddressDataEntity extends DataEntity<Address, dynamic> {
+  /// Creates a new AddressDataEntity Object with value [value]
+  AddressDataEntity([super.value]);
+
+  /// Creates a new AddressDataEntity Object from json
+  factory AddressDataEntity.fromJson(dynamic json) {
+    Address? jsonValue;
+    if (json != null) {
+      jsonValue = Address.fromJson(json);
+    }
+    return AddressDataEntity(jsonValue);
+  }
+
+  /// Returns [value] as a json map
   @override
   dynamic get schemaValue => value?.toJson();
 }

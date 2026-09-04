@@ -92,4 +92,28 @@ abstract class ApptiveGridTranslation {
 
   /// Label for the page back button
   String get pageBack;
+
+  /// Label for the first address line of an [AddressFormWidget]
+  String get addressLine1Label;
+
+  /// Label for the second address line of an [AddressFormWidget]
+  String get addressLine2Label;
+
+  /// Label for the city field of an [AddressFormWidget]
+  String get addressCityLabel;
+
+  /// Label for the postal code field of an [AddressFormWidget]
+  String get addressPostCodeLabel;
+
+  /// Label for the state field of an [AddressFormWidget]
+  String get addressStateLabel;
+
+  /// Label for the country field of an [AddressFormWidget]
+  String get addressCountryLabel;
+
+  /// Label for the Button that geocodes the entered address of an [AddressFormWidget]
+  String get determinePosition;
+
+  /// Message displayed when geocoding the entered address of an [AddressFormWidget] failed
+  String get addressGeocodingFailed;
 }

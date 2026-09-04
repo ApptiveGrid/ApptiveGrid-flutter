@@ -1,3 +1,8 @@
+## 2.3.0
+
+ - **FEAT**: Add `AddressFormWidget` to support the `Address` DataType, including a country field and a map/geocoding picker for the address' geolocation.
+ - **FIX**: Stop mapping `DataType.resource` to `TextFormWidget`. Its `ResourceDataEntity` could not be cast to a `StringDataEntity`, so any form containing a resource field threw at runtime. Resource fields are hidden for now; their value is still submitted.
+
 ## 2.2.1
 
  - **CHORE**: Bump hand_signature to ^3.1.0 (#146).

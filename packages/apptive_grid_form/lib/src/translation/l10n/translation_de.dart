@@ -70,4 +70,21 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get pageNext => "Weiter";
   @override
   String get pageBack => "Zurück";
+  @override
+  String get addressLine1Label => "Adresse Zeile 1";
+  @override
+  String get addressLine2Label => "Adresse Zeile 2";
+  @override
+  String get addressCityLabel => "Stadt";
+  @override
+  String get addressPostCodeLabel => "Postleitzahl";
+  @override
+  String get addressStateLabel => "Bundesland";
+  @override
+  String get addressCountryLabel => "Land";
+  @override
+  String get determinePosition => "Position ermitteln";
+  @override
+  String get addressGeocodingFailed =>
+      "Position konnte nicht automatisch ermittelt werden";
 }

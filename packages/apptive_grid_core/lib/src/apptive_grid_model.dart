@@ -1,3 +1,4 @@
+export 'package:apptive_grid_core/src/model/address/address.dart';
 export 'package:apptive_grid_core/src/model/attachment/attachment.dart';
 export 'package:apptive_grid_core/src/model/attachment/attachment_action.dart';
 export 'package:apptive_grid_core/src/model/attachment/attachment_configuration.dart';

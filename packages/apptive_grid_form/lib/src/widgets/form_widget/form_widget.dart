@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 Widget fromModel(FormComponent component, {bool enabled = true}) =>
     switch (component.field.type) {
       DataType.text ||
-      DataType.resource ||
       DataType.richText =>
         TextFormWidget(component: component.cast<StringDataEntity>()),
       DataType.dateTime => DateTimeFormWidget(
@@ -36,6 +35,8 @@ Widget fromModel(FormComponent component, {bool enabled = true}) =>
       DataType.geolocation => GeolocationFormWidget(
           component: component.cast<GeolocationDataEntity>(),
         ),
+      DataType.address =>
+        AddressFormWidget(component: component.cast<AddressDataEntity>()),
       DataType.multiCrossReference => MultiCrossReferenceFormWidget(
           component: component.cast<MultiCrossReferenceDataEntity>(),
         ),
@@ -59,4 +60,10 @@ Widget fromModel(FormComponent component, {bool enabled = true}) =>
       DataType.reducedLookUp ||
       DataType.formula =>
         const EmptyFormWidget(),
+      // [DataType.resource] has no input Widget yet. It used to be mapped to
+      // [TextFormWidget], but its [DataEntity] is a [ResourceDataEntity], so
+      // casting it to a [StringDataEntity] threw at runtime. Hiding the field
+      // keeps its value intact, since [FormData.toRequestObject] submits every
+      // component regardless of the Widget it is rendered with.
+      DataType.resource => const EmptyFormWidget(),
     };

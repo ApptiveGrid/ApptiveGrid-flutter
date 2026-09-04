@@ -243,6 +243,9 @@ void main() {
           DataType.geolocation => GeolocationDataEntity(
               const Geolocation(latitude: 47, longitude: 11),
             ),
+          DataType.address => AddressDataEntity(
+              const Address(line1: 'Musterstraße 1', city: 'Berlin'),
+            ),
           DataType.multiCrossReference => MultiCrossReferenceDataEntity(
               gridUri: Uri(),
               references: [

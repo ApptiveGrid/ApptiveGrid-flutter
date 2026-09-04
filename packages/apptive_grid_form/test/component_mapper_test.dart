@@ -288,6 +288,51 @@ void main() {
       expect(widget.runtimeType, equals(EmptyFormWidget));
     });
 
+    test('AddressComponent', () {
+      final component = FormComponent<AddressDataEntity>(
+        field: const GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.address,
+        ),
+        data: AddressDataEntity(),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, equals(AddressFormWidget));
+      expect((widget as AddressFormWidget).component, equals(component));
+    });
+
+    test('ResourceComponent is not rendered', () {
+      // Regression: `resource` used to be mapped to a TextFormWidget, which
+      // cast the ResourceDataEntity to a StringDataEntity and threw.
+      final component = FormComponent<ResourceDataEntity>(
+        field: const GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.resource,
+        ),
+        data: ResourceDataEntity(
+          DataResource.fromJson(const {
+            'displayValue': 'A Resource',
+            'type': 'grid',
+            'metaType': 'gridUri',
+          }),
+        ),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, equals(EmptyFormWidget));
+    });
+
     test('ReducedLookUp', () {
       final component = FormComponent<ReducedLookUpDataEntity>(
         field: const GridField(
