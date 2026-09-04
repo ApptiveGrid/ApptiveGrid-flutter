@@ -132,6 +132,7 @@ class ApptiveGridClient extends ChangeNotifier {
 
     _performAttachmentActions(
       formData.attachmentActions,
+      formData: formData,
       fromForm: true,
       headers: headers,
       statusController: controller,
@@ -274,23 +275,36 @@ class ApptiveGridClient extends ChangeNotifier {
 
   Future<http.Response> _performAttachmentActions(
     Map<Attachment, AttachmentAction> actions, {
+    FormData? formData,
     bool fromForm = false,
     Map<String, String> headers = const {},
     StreamController<SubmitFormProgressEvent>? statusController,
   }) async {
+    final replacements = <Attachment, Attachment>{};
     try {
       for (final chunkedActions in actions.values.slices(2)) {
         await Future.wait(
           chunkedActions.map(
             (action) => switch (action) {
-              AddAttachmentAction() =>
-                _attachmentProcessor.uploadAttachment(action).then((response) {
+              AddAttachmentAction() => _attachmentProcessor
+                    .upload(
+                  action,
+                  resolveUploadTarget: _uploadTargetResolver(
+                    action.attachment,
+                    formData,
+                    headers,
+                  ),
+                )
+                    .then((result) {
+                  if (result.attachment != action.attachment) {
+                    replacements[action.attachment] = result.attachment;
+                  }
                   statusController?.add(
                     ProcessedAttachmentProgressEvent(
                       action.attachment,
                     ),
                   );
-                  return response;
+                  return result.response;
                 }).catchError((error) {
                   throw error;
                 }),
@@ -310,6 +324,9 @@ class ApptiveGridClient extends ChangeNotifier {
           ),
         );
       }
+      if (formData != null) {
+        _applyAttachmentReplacements(formData, replacements);
+      }
       final response = http.Response('AttachmentActionSuccess', 200);
       statusController?.add(AttachmentCompleteProgressEvent(response));
       statusController?.close();
@@ -319,6 +336,80 @@ class ApptiveGridClient extends ChangeNotifier {
       statusController?.close();
       final response = http.Response('AttachmentActionError', 400);
       return response;
+    }
+  }
+
+  /// Builds a resolver that requests pre-signed upload targets from the server
+  ///
+  /// Prefers the [ApptiveLinkType.uploadUri] of the [GridField] that
+  /// [attachment] belongs to and falls back to the one of [formData].
+  /// Returns `null` if neither provides the link, in which case the upload
+  /// falls back to [AttachmentConfiguration] based endpoints.
+  AttachmentUploadTargetResolver? _uploadTargetResolver(
+    Attachment attachment,
+    FormData? formData,
+    Map<String, String> headers,
+  ) {
+    if (formData == null) {
+      return null;
+    }
+    final link = _uploadUriLink(attachment, formData);
+    if (link == null) {
+      return null;
+    }
+    return () async {
+      final target = await performApptiveLink<AttachmentUploadTarget>(
+        link: link,
+        body: {'type': 'public'},
+        headers: headers,
+        parseResponse: (response) async =>
+            AttachmentUploadTarget.fromJson(jsonDecode(response.body)),
+      );
+      if (target == null) {
+        throw Exception('Could not resolve an upload target for $attachment');
+      }
+      return target;
+    };
+  }
+
+  ApptiveLink? _uploadUriLink(Attachment attachment, FormData formData) {
+    for (final component in formData.components ?? <FormComponent>[]) {
+      final data = component.data;
+      if (data is AttachmentDataEntity &&
+          (data.value?.contains(attachment) ?? false)) {
+        final fieldLink = component.field.links[ApptiveLinkType.uploadUri];
+        if (fieldLink != null) {
+          return fieldLink;
+        }
+        break;
+      }
+    }
+    return formData.links[ApptiveLinkType.uploadUri];
+  }
+
+  /// Replaces attachments in [formData] with the versions returned by the
+  /// server so that the submitted data points at the actual file locations
+  void _applyAttachmentReplacements(
+    FormData formData,
+    Map<Attachment, Attachment> replacements,
+  ) {
+    if (replacements.isEmpty) {
+      return;
+    }
+    for (final component in formData.components ?? <FormComponent>[]) {
+      final data = component.data;
+      if (data is AttachmentDataEntity) {
+        final attachments = data.value;
+        if (attachments == null) {
+          continue;
+        }
+        for (var i = 0; i < attachments.length; i++) {
+          final replacement = replacements[attachments[i]];
+          if (replacement != null) {
+            attachments[i] = replacement;
+          }
+        }
+      }
     }
   }
 

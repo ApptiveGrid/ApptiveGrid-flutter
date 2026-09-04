@@ -111,28 +111,57 @@ class AttachmentProcessor {
   /// If the attachment is not an image the file will be uploaded without any alterations
   Future<http.Response> uploadAttachment(
     AddAttachmentAction attachmentAction,
-  ) async {
-    final config = await configuration;
-    final useAuthenticatedApiEndpoint = (await authenticator.isAuthenticated) ||
-        config.signedUrlFormApiEndpoint == null;
+  ) async =>
+      (await upload(attachmentAction)).response;
 
-    if (useAuthenticatedApiEndpoint) {
-      await authenticator.checkAuthentication();
+  /// Uploads [AttachmentAction.byteData] for [AttachmentAction.attachment] of [attachmentAction]
+  ///
+  /// If [resolveUploadTarget] is provided the server determines where the files
+  /// are stored. It is called once per uploaded file (the attachment itself and
+  /// each of its thumbnails) and the returned [AttachmentUploadTarget.uri] is
+  /// used for the respective url of the returned [Attachment]. In this case no
+  /// [AttachmentConfiguration] is required.
+  ///
+  /// Without [resolveUploadTarget] the urls that were generated in
+  /// [createAttachment] are kept and a pre-signed url is requested from the
+  /// endpoints of [configuration].
+  ///
+  /// If the attachment is an image (see [createAttachment]) it will upload a scaled version of the original (max Side 1000px) and tries to upload thumbnails (256px and 64px)
+  /// If uploading one or more of the thumbnails fails the upload will still be handled as success as long as the main file did upload successfully
+  ///
+  /// If the attachment is not an image the file will be uploaded without any alterations
+  ///
+  /// Returns the response of uploading the main file together with the
+  /// [Attachment] as it should be stored
+  Future<({http.Response response, Attachment attachment})> upload(
+    AddAttachmentAction attachmentAction, {
+    AttachmentUploadTargetResolver? resolveUploadTarget,
+  }) async {
+    Uri? baseUploadUri;
+    final uploadHeaders = <String, String>{};
+
+    if (resolveUploadTarget == null) {
+      final config = await configuration;
+      final useAuthenticatedApiEndpoint =
+          (await authenticator.isAuthenticated) ||
+              config.signedUrlFormApiEndpoint == null;
+
+      if (useAuthenticatedApiEndpoint) {
+        await authenticator.checkAuthentication();
+        uploadHeaders[HttpHeaders.authorizationHeader] = authenticator.header!;
+      }
+
+      baseUploadUri = Uri.parse(
+        useAuthenticatedApiEndpoint
+            ? config.signedUrlApiEndpoint
+            : config.signedUrlFormApiEndpoint!,
+      );
     }
 
-    final baseUploadUri = Uri.parse(
-      useAuthenticatedApiEndpoint
-          ? config.signedUrlApiEndpoint
-          : config.signedUrlFormApiEndpoint!,
-    );
-    var uploadHeaders = <String, String>{};
-    if (useAuthenticatedApiEndpoint) {
-      uploadHeaders[HttpHeaders.authorizationHeader] = authenticator.header!;
-    }
+    final attachment = attachmentAction.attachment;
+    final type = attachment.type;
 
-    if (attachmentAction.attachment.type.startsWith('image')) {
-      final type = attachmentAction.attachment.type;
-
+    if (type.startsWith('image')) {
       final resizeId = _uuid.v4();
       final imagePaths = await scaleImageToMaxSize(
         sizes: [1000, 256, 64],
@@ -143,81 +172,122 @@ class AttachmentProcessor {
       );
 
       if (imagePaths != null) {
-        final uploads = await Future.wait<http.Response>(
-          [
-            _uploadFile(
-              baseUri: baseUploadUri,
-              headers: uploadHeaders,
-              createBytes: () => File(imagePaths[0]).readAsBytes(),
-              name: attachmentAction.attachment.url.pathSegments.last,
-              type: type,
-            ),
-            if (attachmentAction.attachment.largeThumbnail != null)
-              _uploadFile(
+        final mainUpload = _uploadFile(
+          baseUri: baseUploadUri,
+          resolveUploadTarget: resolveUploadTarget,
+          headers: uploadHeaders,
+          createBytes: () => File(imagePaths[0]).readAsBytes(),
+          plannedUri: attachment.url,
+          type: type,
+        );
+        final largeThumbnailUpload = attachment.largeThumbnail != null
+            ? _uploadFile(
                 baseUri: baseUploadUri,
+                resolveUploadTarget: resolveUploadTarget,
                 headers: uploadHeaders,
                 createBytes: () => File(imagePaths[1]).readAsBytes(),
-                name: attachmentAction
-                    .attachment.largeThumbnail!.pathSegments.last,
+                plannedUri: attachment.largeThumbnail!,
                 type: type,
               ).catchError((error) {
                 debugPrint('Could not upload large thumbnail');
                 debugPrint(error.toString());
-                return http.Response('', 200); // coverage:ignore-line
-              }),
-            if (attachmentAction.attachment.smallThumbnail != null)
-              _uploadFile(
+                return (response: http.Response('', 200), uri: null);
+              })
+            : null;
+        final smallThumbnailUpload = attachment.smallThumbnail != null
+            ? _uploadFile(
                 baseUri: baseUploadUri,
+                resolveUploadTarget: resolveUploadTarget,
                 headers: uploadHeaders,
                 createBytes: () => File(imagePaths[2]).readAsBytes(),
-                name: attachmentAction
-                    .attachment.smallThumbnail!.pathSegments.last,
+                plannedUri: attachment.smallThumbnail!,
                 type: type,
               ).catchError((error) {
                 debugPrint('Could not upload small thumbnail');
                 debugPrint(error.toString());
-                return http.Response('', 200); // coverage:ignore-line
-              }),
-          ],
+                return (response: http.Response('', 200), uri: null);
+              })
+            : null;
+
+        final main = await mainUpload;
+        final large = await largeThumbnailUpload;
+        final small = await smallThumbnailUpload;
+
+        return (
+          response: main.response,
+          attachment: Attachment(
+            name: attachment.name,
+            url: main.uri!,
+            type: type,
+            largeThumbnail: large?.uri,
+            smallThumbnail: small?.uri,
+          ),
         );
-        return uploads.first;
       }
     }
 
-    return _uploadFile(
+    final upload = await _uploadFile(
       baseUri: baseUploadUri,
+      resolveUploadTarget: resolveUploadTarget,
       headers: uploadHeaders,
       createBytes: () async =>
           attachmentAction.byteData ??
           await File(attachmentAction.path!).readAsBytes(),
-      name: attachmentAction.attachment.url.pathSegments.last,
-      type: attachmentAction.attachment.type,
+      plannedUri: attachment.url,
+      type: type,
+    );
+
+    return (
+      response: upload.response,
+      attachment: Attachment(
+        name: attachment.name,
+        url: upload.uri!,
+        type: type,
+        largeThumbnail: attachment.largeThumbnail,
+        smallThumbnail: attachment.smallThumbnail,
+      ),
     );
   }
 
-  Future<http.Response> _uploadFile({
-    required Uri baseUri,
+  /// Uploads a single file and returns the url it is available at
+  ///
+  /// With [resolveUploadTarget] the server assigns the url, otherwise
+  /// [plannedUri] is kept and only the pre-signed upload url is requested from
+  /// [baseUri]
+  Future<({http.Response response, Uri? uri})> _uploadFile({
+    required Uri? baseUri,
+    required AttachmentUploadTargetResolver? resolveUploadTarget,
     required Map<String, String> headers,
     required Future<Uint8List> Function() createBytes,
-    required String name,
+    required Uri plannedUri,
     required String type,
   }) async {
-    final uri = baseUri.replace(
-      queryParameters: {
-        'fileName': name,
-        'fileType': type,
-      },
-    );
+    late final Uri uploadUrl;
+    late final Uri resultUri;
 
-    final uploadUrlResponse = await _client.get(uri, headers: headers);
+    if (resolveUploadTarget != null) {
+      final target = await resolveUploadTarget();
+      uploadUrl = target.presignedUri;
+      resultUri = target.uri;
+    } else {
+      final uri = baseUri!.replace(
+        queryParameters: {
+          'fileName': plannedUri.pathSegments.last,
+          'fileType': type,
+        },
+      );
 
-    if (uploadUrlResponse.statusCode >= 400) {
-      throw uploadUrlResponse;
+      final uploadUrlResponse = await _client.get(uri, headers: headers);
+
+      if (uploadUrlResponse.statusCode >= 400) {
+        throw uploadUrlResponse;
+      }
+
+      uploadUrl = Uri.parse(
+        jsonDecode(uploadUrlResponse.body)['uploadURL'],
+      );
+      resultUri = plannedUri;
     }
-
-    final uploadUrl = Uri.parse(
-      jsonDecode(uploadUrlResponse.body)['uploadURL'],
-    );
 
     final bodyBytes = await createBytes();
 
@@ -232,7 +302,7 @@ class AttachmentProcessor {
     if (putResponse.statusCode >= 400) {
       throw putResponse;
     } else {
-      return putResponse;
+      return (response: putResponse, uri: resultUri);
     }
   }
 
