@@ -272,7 +272,9 @@ void main() {
       final stored =
           (formData.components!.first.data as AttachmentDataEntity).value!;
       expect(
-          stored.single.url, Uri.parse('https://placeholder.url/local-uuid'));
+        stored.single.url,
+        Uri.parse('https://placeholder.url/local-uuid'),
+      );
     });
   });
 }
