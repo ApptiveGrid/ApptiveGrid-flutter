@@ -316,6 +316,25 @@ class _CrossReferenceSelectionGridState
     super.dispose();
   }
 
+  /// Extracts the entity list from a query response body.
+  ///
+  /// The entities endpoint answers in one of two shapes: a bare JSON list, or
+  /// a paged object under `items` (see [EntitiesResponse]). It never returns
+  /// an `entities` key — [ApptiveGridClient.loadGrid] synthesises that one
+  /// locally before handing the map to [Grid.fromJson], which is what made it
+  /// look like a wire format. Reading `entities` here therefore threw
+  /// `type 'Null' is not a subtype of type 'List<dynamic>'` against a real
+  /// backend, breaking every cross reference and multi cross reference field.
+  ///
+  /// `entities` is still accepted so that any deployment actually serving it
+  /// keeps working.
+  List<dynamic> _entitiesFromBody(dynamic body) {
+    if (body is Map && body['entities'] is List) {
+      return body['entities'] as List;
+    }
+    return EntitiesResponse<dynamic>.fromJson(body).items;
+  }
+
   Future<void> _loadRows() async {
     setState(() {
       _error = null;
@@ -331,7 +350,7 @@ class _CrossReferenceSelectionGridState
           if (query.isNotEmpty) 'matching': query,
         },
         parseResponse: (response) async {
-          final entities = jsonDecode(response.body)['entities'] as List;
+          final entities = _entitiesFromBody(jsonDecode(response.body));
           final newRows = <GridRow>[];
           for (final entity in entities) {
             final entries = <GridEntry>[];

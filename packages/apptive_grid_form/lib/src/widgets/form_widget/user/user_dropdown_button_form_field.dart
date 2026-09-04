@@ -178,7 +178,14 @@ class _UserMenuSelectionListState extends State<_UserMenuSelectionList> {
           if (query.isNotEmpty) 'matching': query,
         },
         parseResponse: (response) async {
-          final jsonList = jsonDecode(response.body) as List<dynamic>;
+          // Tolerate a paged `{items: [...]}` body as well as the bare list
+          // this endpoint returns today — the cross reference field used to
+          // assume a single shape here and broke when the response differed.
+          // EntitiesResponse passes a bare list straight through, so this is
+          // behaviour-preserving for the current format.
+          final jsonList =
+              EntitiesResponse<dynamic>.fromJson(jsonDecode(response.body))
+                  .items;
           return jsonList.map((json) => DataUser.fromJson(json)).toList();
         },
       )
