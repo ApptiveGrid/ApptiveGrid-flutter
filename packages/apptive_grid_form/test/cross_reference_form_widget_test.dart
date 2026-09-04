@@ -626,5 +626,68 @@ void main() {
         expect(find.text('Second'), findsNWidgets(1));
       });
     }
+
+    testWidgets('requests the indexed layout', (tester) async {
+      // Parsing indexes into entity['fields'], which only the indexed layout
+      // provides. The endpoint defaults to the `field` layout, where values
+      // are keyed by field id and `fields` is absent.
+      final client = MockApptiveGridClient();
+      Map<String, String>? sentQueryParameters;
+      final grid = Grid(
+        id: 'grid',
+        name: 'Test',
+        fields: [field],
+        rows: const [],
+        links: {
+          ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
+          ApptiveLinkType.query: queryLink,
+        },
+      );
+
+      when(() => client.sendPendingActions()).thenAnswer((_) async => []);
+      when(() => client.loadGrid(uri: any(named: 'uri'), loadEntities: false))
+          .thenAnswer((_) async => grid);
+      when(
+        () => client.performApptiveLink<List<GridRow>>(
+          link: queryLink,
+          queryParameters: any(named: 'queryParameters'),
+          parseResponse: any(named: 'parseResponse'),
+        ),
+      ).thenAnswer((invocation) async {
+        sentQueryParameters =
+            invocation.namedArguments[const Symbol('queryParameters')]
+                as Map<String, String>?;
+        final parseResponse =
+            invocation.namedArguments[const Symbol('parseResponse')]
+                as Future<List<GridRow>?> Function(Response);
+        return parseResponse(Response(jsonEncode({'items': rowJson}), 200));
+      });
+
+      await tester.pumpWidget(
+        TestApp(
+          client: client,
+          child: Form(
+            key: GlobalKey<FormState>(),
+            child: CrossReferenceFormWidget(
+              component: FormComponent<CrossReferenceDataEntity>(
+                property: 'Property',
+                data: CrossReferenceDataEntity(gridUri: gridUri),
+                field: const GridField(
+                  id: 'fieldId',
+                  name: 'name',
+                  type: DataType.crossReference,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.arrow_drop_down));
+      await tester.pumpAndSettle();
+
+      expect(sentQueryParameters?['layout'], 'indexed');
+    });
   });
 }

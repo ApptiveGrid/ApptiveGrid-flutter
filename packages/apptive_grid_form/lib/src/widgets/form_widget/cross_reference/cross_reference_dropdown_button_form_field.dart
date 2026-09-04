@@ -347,6 +347,13 @@ class _CrossReferenceSelectionGridState
           .performApptiveLink<List<GridRow>>(
         link: entitiesLink,
         queryParameters: {
+          // The parsing below indexes into `entity['fields']`, which only
+          // exists in the `indexed` layout. Without this the endpoint falls
+          // back to its `field` default, where values are keyed by field id
+          // and `fields` is absent — the same cast failure one line down.
+          // ApptiveGridClient.loadGrid requests `indexed` for exactly this
+          // reason.
+          'layout': ApptiveGridLayout.indexed.queryParameter,
           if (query.isNotEmpty) 'matching': query,
         },
         parseResponse: (response) async {
