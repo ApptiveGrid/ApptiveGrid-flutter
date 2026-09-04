@@ -1,5 +1,7 @@
 // Stub for dart:io on web platform — methods are never called on web.
 
+import 'dart:typed_data';
+
 /// Web stub for dart:io File.
 class File {
   /// Creates a File stub with the given [path].
@@ -9,7 +11,11 @@ class File {
   final String path;
 
   /// Stub — returns empty bytes on web.
-  Future<List<int>> readAsBytes() async => [];
+  ///
+  /// Mirrors `dart:io`'s `Uint8List` return type: callers such as
+  /// [AttachmentProcessor] declare `Future<Uint8List>`, and a `List<int>`
+  /// here fails to compile for the web.
+  Future<Uint8List> readAsBytes() async => Uint8List(0);
 
   /// Stub — returns false on web.
   Future<bool> exists() async => false;
