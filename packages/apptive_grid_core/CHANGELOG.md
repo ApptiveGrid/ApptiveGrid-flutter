@@ -1,3 +1,8 @@
+## 2.2.0
+
+ - **FEAT**: Add `ApptiveLinkType.uploadUri` and `ApptiveLinkType.s3UploadUri`. Both were dropped while parsing `_links` before.
+ - **FEAT**: Upload attachments through the `uploadUri` HAL link when a `FormData` or its `GridField` provides one. The server then determines where a file is stored and the submitted data points at the returned url. Without the link the `AttachmentConfiguration` based upload is used as before.
+
 ## 2.1.9
 
  - **FIX**: Re-subscribe to the auth redirect stream before opening the login page, so other app_links listeners (e.g. ApptiveGridUserManagement) can no longer steal the OAuth redirect and leave the login hanging.
