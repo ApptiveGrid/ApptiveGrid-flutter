@@ -357,19 +357,13 @@ class ApptiveGridClient extends ChangeNotifier {
     if (link == null) {
       return null;
     }
-    return () async {
-      final target = await performApptiveLink<AttachmentUploadTarget>(
-        link: link,
-        body: {'type': 'public'},
-        headers: headers,
-        parseResponse: (response) async =>
-            AttachmentUploadTarget.fromJson(jsonDecode(response.body)),
-      );
-      if (target == null) {
-        throw Exception('Could not resolve an upload target for $attachment');
-      }
-      return target;
-    };
+    return () async => (await performApptiveLink<AttachmentUploadTarget>(
+          link: link,
+          body: {'type': 'public'},
+          headers: headers,
+          parseResponse: (response) async =>
+              AttachmentUploadTarget.fromJson(jsonDecode(response.body)),
+        ))!;
   }
 
   ApptiveLink? _uploadUriLink(Attachment attachment, FormData formData) {
