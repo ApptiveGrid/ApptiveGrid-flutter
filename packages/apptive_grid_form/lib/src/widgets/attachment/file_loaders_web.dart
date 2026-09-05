@@ -11,4 +11,4 @@ ImageProvider fileImageProvider(String path) => MemoryImage(Uint8List(0));
 
 /// See [fileImageProvider] — unreachable on the web, kept for type checking.
 BytesLoader svgFileLoader(String path) =>
-    SvgStringLoader('<svg xmlns="http://www.w3.org/2000/svg"/>');
+    const SvgStringLoader('<svg xmlns="http://www.w3.org/2000/svg"/>');

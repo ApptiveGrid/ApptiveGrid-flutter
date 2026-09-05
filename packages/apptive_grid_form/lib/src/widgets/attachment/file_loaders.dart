@@ -5,5 +5,7 @@
 /// for it there is not the type `FileImage`/`SvgFileLoader` expect — so the
 /// loaders themselves, not just the `File` class, have to be swapped out per
 /// platform.
+library;
+
 export 'package:apptive_grid_form/src/widgets/attachment/file_loaders_io.dart'
     if (dart.library.html) 'package:apptive_grid_form/src/widgets/attachment/file_loaders_web.dart';
