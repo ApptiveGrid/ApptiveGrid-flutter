@@ -10,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
 
 import 'common.dart';
 
@@ -573,6 +574,246 @@ void main() {
     });
   });
 
+  group('Map toggle', () {
+    testWidgets('Show map is disabled without a location', (tester) async {
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: MockHttpClient()),
+      );
+      await tester.pumpAndSettle();
+
+      final toggle = tester.widget<TextButton>(
+        find.byKey(const Key('AddressFormWidget.toggleMap')),
+      );
+      expect(toggle.onPressed, isNull);
+      expect(find.text('Show map'), findsOneWidget);
+    });
+  });
+
+  group('Current location', () {
+    late GeolocatorPlatform originalGeolocator;
+    late PermissionHandlerPlatform originalPermissions;
+    late MockGeolocator geolocator;
+    late MockPermissionHandler permissions;
+
+    setUp(() {
+      originalGeolocator = GeolocatorPlatform.instance;
+      originalPermissions = PermissionHandlerPlatform.instance;
+      geolocator = MockGeolocator();
+      permissions = MockPermissionHandler();
+      GeolocatorPlatform.instance = geolocator;
+      PermissionHandlerPlatform.instance = permissions;
+      when(
+        () => geolocator.getCurrentPosition(
+          locationSettings: any(named: 'locationSettings'),
+        ),
+      ).thenAnswer(
+        (_) async => Position(
+          latitude: 47,
+          longitude: 11,
+          timestamp: DateTime.now(),
+          accuracy: 0,
+          altitude: 0,
+          heading: 0,
+          speed: 0,
+          speedAccuracy: 0,
+          altitudeAccuracy: 0,
+          headingAccuracy: 0,
+        ),
+      );
+    });
+
+    tearDown(() {
+      GeolocatorPlatform.instance = originalGeolocator;
+      PermissionHandlerPlatform.instance = originalPermissions;
+    });
+
+    void grantPermission(PermissionStatus status) {
+      when(
+        () => permissions.requestPermissions([Permission.locationWhenInUse]),
+      ).thenAnswer((_) async => {Permission.locationWhenInUse: status});
+    }
+
+    GeocodingResponse reverseGeocoded() => GeocodingResponse(
+          status: 'OK',
+          results: [
+            GeocodingResult(
+              placeId: 'p',
+              types: const ['street_address'],
+              geometry: Geometry(location: Location(lat: 47.001, lng: 11.001)),
+              addressComponents: [
+                placeComponent('route', 'Bergstraße'),
+                placeComponent('street_number', '3'),
+                placeComponent('locality', 'Innsbruck'),
+                placeComponent('postal_code', '6020'),
+                placeComponent('administrative_area_level_1', 'Tirol'),
+                placeComponent('country', 'Österreich'),
+              ],
+            ),
+          ],
+        );
+
+    MockHttpClient geocodeClient(GeocodingResponse response) {
+      final client = MockHttpClient();
+      when(() => client.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments[0] as Uri;
+        if (uri.path.contains('geocode')) {
+          return Response(jsonEncode(response.toJson()), 200);
+        }
+        return Response('', 404);
+      });
+      return client;
+    }
+
+    testWidgets('Fills the address from the device position', (tester) async {
+      grantPermission(PermissionStatus.granted);
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      await tester.pumpWidget(
+        targetWithComponent(
+          component,
+          geolocationHttpClient: geocodeClient(reverseGeocoded()),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester
+          .tap(find.byKey(const Key('AddressFormWidget.currentLocation')));
+      await tester.pumpAndSettle();
+
+      // Austria: number before the street, like the frontend does it.
+      expect(component.data.value?.line1, equals('3 Bergstraße'));
+      expect(component.data.value?.postCode, equals('6020'));
+      expect(component.data.value?.city, equals('Innsbruck'));
+      expect(component.data.value?.country, equals('Österreich'));
+      // The device position wins over the geocoded coordinates.
+      expect(
+        component.data.value?.geoLocation,
+        equals(const Geolocation(latitude: 47, longitude: 11)),
+      );
+      expect(find.text('Innsbruck'), findsOneWidget);
+      expect(
+        find.byKey(const Key('AddressFormWidget.currentLocation')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Denied permission leaves the address alone', (tester) async {
+      grantPermission(PermissionStatus.denied);
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      await tester.pumpWidget(
+        targetWithComponent(
+          component,
+          geolocationHttpClient: geocodeClient(reverseGeocoded()),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester
+          .tap(find.byKey(const Key('AddressFormWidget.currentLocation')));
+      await tester.pumpAndSettle();
+
+      expect(component.data.value, isNull);
+      verifyNever(
+        () => geolocator.getCurrentPosition(
+          locationSettings: any(named: 'locationSettings'),
+        ),
+      );
+      expect(
+        find.byKey(const Key('AddressFormWidget.currentLocation')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Permanently denied permission hides the button',
+        (tester) async {
+      grantPermission(PermissionStatus.permanentlyDenied);
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: MockHttpClient()),
+      );
+      await tester.pumpAndSettle();
+
+      await tester
+          .tap(find.byKey(const Key('AddressFormWidget.currentLocation')));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const Key('AddressFormWidget.currentLocation')),
+        findsNothing,
+      );
+    });
+
+    testWidgets('No reverse geocoding result shows a message', (tester) async {
+      grantPermission(PermissionStatus.granted);
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      await tester.pumpWidget(
+        targetWithComponent(
+          component,
+          geolocationHttpClient: geocodeClient(
+            GeocodingResponse(status: 'ZERO_RESULTS', results: []),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester
+          .tap(find.byKey(const Key('AddressFormWidget.currentLocation')));
+      await tester.pumpAndSettle();
+
+      expect(component.data.value, isNull);
+      expect(
+        find.text('Current position could not be resolved to an address'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Failing reverse geocoding shows a message', (tester) async {
+      grantPermission(PermissionStatus.granted);
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      final client = MockHttpClient();
+      when(() => client.get(any(), headers: any(named: 'headers')))
+          .thenThrow(Exception('offline'));
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: client),
+      );
+      await tester.pumpAndSettle();
+
+      await tester
+          .tap(find.byKey(const Key('AddressFormWidget.currentLocation')));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Current position could not be resolved to an address'),
+        findsOneWidget,
+      );
+    });
+  });
+
   group('Labels', () {
     testWidgets('Custom line labels from FormFieldProperties are used',
         (tester) async {
@@ -680,7 +921,9 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      final button = tester.widget<TextButton>(find.byType(TextButton));
+      final button = tester.widget<TextButton>(
+        find.widgetWithText(TextButton, 'Determine position'),
+      );
       expect(button.onPressed, isNull);
     });
 
@@ -716,7 +959,7 @@ void main() {
       await tester.pumpWidget(target);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(TextButton));
+      await tester.tap(find.text('Determine position'));
       await tester.pumpAndSettle();
 
       expect(
@@ -747,7 +990,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(TextButton));
+      await tester.tap(find.text('Determine position'));
       await tester.pumpAndSettle();
 
       expect(
@@ -872,6 +1115,10 @@ void main() {
         );
         await tester.pumpAndSettle();
 
+        expect(find.byType(GeolocationMap), findsNothing);
+        await tester.tap(find.text('Show map'));
+        await tester.pumpAndSettle();
+
         final map = tester.widget<GeolocationMap>(find.byType(GeolocationMap));
         map.onLocationChanged!(
           const Geolocation(latitude: 48.1, longitude: 11.6),
@@ -928,7 +1175,7 @@ void main() {
 
         expect(find.byType(GeolocationMap), findsNothing);
 
-        await tester.tap(find.byType(TextButton));
+        await tester.tap(find.text('Determine position'));
         await tester.pumpAndSettle();
 
         expect(component.data.value?.geoLocation, isNotNull);
@@ -936,7 +1183,14 @@ void main() {
           component.data.value?.geoLocation,
           equals(const Geolocation(latitude: 52.52, longitude: 13.4)),
         );
+        // The map stays hidden until asked for, and can be put away again.
+        expect(find.byType(GeolocationMap), findsNothing);
+        await tester.tap(find.text('Show map'));
+        await tester.pumpAndSettle();
         expect(find.byType(GeolocationMap), findsOneWidget);
+        await tester.tap(find.text('Hide map'));
+        await tester.pumpAndSettle();
+        expect(find.byType(GeolocationMap), findsNothing);
       });
     });
   });

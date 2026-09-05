@@ -91,6 +91,15 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get addressSuggestionFailed =>
       "Adresse konnte nicht übernommen werden";
   @override
+  String get useCurrentLocation => "Aktuellen Standort verwenden";
+  @override
+  String get addressFromLocationFailed =>
+      "Aktuelle Position konnte nicht in eine Adresse umgewandelt werden";
+  @override
+  String get showMap => "Karte anzeigen";
+  @override
+  String get hideMap => "Karte ausblenden";
+  @override
   String get recordVideo => "Video aufnehmen";
   @override
   String resourceGroupLabel(DataResourceMetaType metaType) =>

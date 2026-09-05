@@ -122,6 +122,18 @@ abstract class ApptiveGridTranslation {
   /// Message displayed when a picked address suggestion could not be loaded in an [AddressFormWidget]
   String get addressSuggestionFailed;
 
+  /// Tooltip of the button that fills an [AddressFormWidget] from the device position
+  String get useCurrentLocation;
+
+  /// Message displayed when the device position could not be turned into an address in an [AddressFormWidget]
+  String get addressFromLocationFailed;
+
+  /// Label of the button that reveals the map of an [AddressFormWidget]
+  String get showMap;
+
+  /// Label of the button that hides the map of an [AddressFormWidget]
+  String get hideMap;
+
   /// Header for a group of resources of the same [DataResourceMetaType] in a [ResourceFormWidget]
   String resourceGroupLabel(DataResourceMetaType metaType);
 

@@ -126,6 +126,53 @@ void main() {
     });
   });
 
+  group('addressFromGeocodingResult', () {
+    test('maps components and prefers the given location', () {
+      final result = GeocodingResult(
+        placeId: 'p',
+        types: const ['street_address'],
+        geometry: Geometry(location: Location(lat: 52.5, lng: 13.4)),
+        addressComponents: [
+          component('route', 'Musterstraße'),
+          component('street_number', '1'),
+          component('locality', 'Berlin'),
+          component('postal_code', '12345'),
+          component('administrative_area_level_1', 'Berlin'),
+          component('country', 'Deutschland'),
+        ],
+      );
+
+      final address = addressFromGeocodingResult(
+        result,
+        location: const Geolocation(latitude: 52.51, longitude: 13.41),
+      );
+
+      expect(address.line1, equals('Musterstraße 1'));
+      expect(address.line2, isNull);
+      expect(address.postCode, equals('12345'));
+      expect(
+        address.geoLocation,
+        equals(const Geolocation(latitude: 52.51, longitude: 13.41)),
+      );
+    });
+
+    test('falls back to the result geometry without a location', () {
+      final result = GeocodingResult(
+        placeId: 'p',
+        geometry: Geometry(location: Location(lat: 52.5, lng: 13.4)),
+        addressComponents: [component('locality', 'Berlin')],
+      );
+
+      final address = addressFromGeocodingResult(result);
+
+      expect(address.city, equals('Berlin'));
+      expect(
+        address.geoLocation,
+        equals(const Geolocation(latitude: 52.5, longitude: 13.4)),
+      );
+    });
+  });
+
   group('countries', () {
     test('has every country with both names', () {
       expect(kCountries.length, equals(249));

@@ -9,6 +9,7 @@ import 'package:apptive_grid_form/src/widgets/form_widget/form_widget_helpers.da
 import 'package:apptive_grid_form/src/widgets/geolocation/geolocation_map.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +38,15 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
   dynamic _error;
   bool _geocoding = false;
   String? _geocodingError;
+
+  /// The map is opt-in; it takes a lot of space and most entries never need it.
+  bool _showMap = false;
+
+  /// Result of the last location permission request. The button stays until
+  /// the user permanently denied it, like in the geolocation field.
+  PermissionStatus? _locationPermission;
+
+  bool _locating = false;
 
   late final TextEditingController _line1Controller;
   late final TextEditingController _line2Controller;
@@ -136,7 +146,31 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
                 // Room for the field's floating label, so it does not collide
                 // with the decorator's own label above the group.
                 const SizedBox(height: 12),
-                _buildLine1Field(providerContext, formState, translations),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: _buildLine1Field(
+                        providerContext,
+                        formState,
+                        translations,
+                      ),
+                    ),
+                    if (_locationPermission !=
+                        PermissionStatus.permanentlyDenied) ...[
+                      const SizedBox(width: 4),
+                      IconButton(
+                        key: const Key('AddressFormWidget.currentLocation'),
+                        tooltip: translations.useCurrentLocation,
+                        onPressed: widget.component.enabled && !_locating
+                            ? () =>
+                                _useCurrentLocation(providerContext, formState)
+                            : null,
+                        icon: const Icon(Icons.my_location),
+                      ),
+                    ],
+                  ],
+                ),
                 const SizedBox(height: 8),
                 TextField(
                   key: const Key('AddressFormWidget.line2'),
@@ -208,9 +242,20 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
                 const SizedBox(height: 8),
                 Row(
                   children: [
+                    TextButton(
+                      key: const Key('AddressFormWidget.toggleMap'),
+                      onPressed:
+                          widget.component.data.value?.geoLocation != null
+                              ? () => setState(() => _showMap = !_showMap)
+                              : null,
+                      child: Text(
+                        _showMap ? translations.hideMap : translations.showMap,
+                      ),
+                    ),
                     Expanded(
                       child: Text(
                         _geocodingError ?? '',
+                        textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context).colorScheme.error,
                             ),
@@ -226,7 +271,8 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
                     ),
                   ],
                 ),
-                if (widget.component.data.value?.geoLocation != null) ...[
+                if (_showMap &&
+                    widget.component.data.value?.geoLocation != null) ...[
                   const SizedBox(height: 8),
                   AspectRatio(
                     aspectRatio: 3 / 2,
@@ -363,20 +409,7 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
     if (!mounted) {
       return;
     }
-    final address = addressFromPlaceDetails(place);
-    _line1Controller.text = address.line1 ?? '';
-    _line2Controller.text = address.line2 ?? '';
-    _cityController.text = address.city ?? '';
-    _postCodeController.text = address.postCode ?? '';
-    _stateController.text = address.state ?? '';
-    _countryController.text = address.country ?? '';
-    setState(() {
-      widget.component.data.value = address;
-    });
-    formState.didChange(widget.component.data);
-    // Setting the text above would re-query the suggestions for the picked
-    // street; the address is complete now, so leave the field.
-    FocusManager.instance.primaryFocus?.unfocus();
+    _applyAddress(formState, addressFromPlaceDetails(place));
   }
 
   Widget _buildCountryField(
@@ -473,6 +506,80 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
       widget.component.data.value = update(current);
     });
     formState.didChange(widget.component.data);
+  }
+
+  /// Writes [address] into every field and the component, then leaves the
+  /// address line so the typeahead does not re-open for the new text.
+  void _applyAddress(
+    FormFieldState<AddressDataEntity> formState,
+    Address address,
+  ) {
+    _line1Controller.text = address.line1 ?? '';
+    _line2Controller.text = address.line2 ?? '';
+    _cityController.text = address.city ?? '';
+    _postCodeController.text = address.postCode ?? '';
+    _stateController.text = address.state ?? '';
+    _countryController.text = address.country ?? '';
+    setState(() {
+      widget.component.data.value = address;
+      _geocodingError = null;
+    });
+    formState.didChange(widget.component.data);
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  /// Fills the address from the device position via reverse geocoding
+  Future<void> _useCurrentLocation(
+    BuildContext providerContext,
+    FormFieldState<AddressDataEntity> formState,
+  ) async {
+    final translations = ApptiveGridLocalization.of(context)!;
+    final languageCode = Localizations.maybeLocaleOf(context)?.languageCode;
+    final permissionManager =
+        Provider.of<PermissionManager>(providerContext, listen: false);
+    final locationManager =
+        Provider.of<LocationManager>(providerContext, listen: false);
+    setState(() {
+      _locating = true;
+      _geocodingError = null;
+    });
+    try {
+      final status = await permissionManager
+          .requestPermission(Permission.locationWhenInUse);
+      if (!mounted) return;
+      setState(() => _locationPermission = status);
+      if (status != PermissionStatus.granted) return;
+
+      final position = await locationManager.getCurrentPosition();
+      final location = Geolocation(
+        latitude: position.latitude,
+        longitude: position.longitude,
+      );
+      final response = await locationManager.getPlaceByLocation(
+        location,
+        language: languageCode,
+      );
+      if (!mounted) return;
+      final result = response.results.firstOrNull;
+      if (result == null) {
+        setState(() {
+          _geocodingError = translations.addressFromLocationFailed;
+        });
+        return;
+      }
+      _applyAddress(
+        formState,
+        addressFromGeocodingResult(result, location: location),
+      );
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _geocodingError = translations.addressFromLocationFailed;
+        });
+      }
+    } finally {
+      if (mounted) setState(() => _locating = false);
+    }
   }
 
   Future<void> _determinePosition(

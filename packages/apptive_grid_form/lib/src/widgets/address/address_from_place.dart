@@ -10,8 +10,36 @@ import 'package:apptive_grid_form/src/google_maps_webservice/google_maps_webserv
 ///   address and the name is not already line1 (e.g. a business).
 /// - `locality` → city, `postal_code` → postCode,
 ///   `administrative_area_level_1` → state, `country` → country.
-Address addressFromPlaceDetails(PlaceDetails place) {
-  String? component(String type) => place.addressComponents
+Address addressFromPlaceDetails(PlaceDetails place) => addressFromComponents(
+      components: place.addressComponents,
+      types: place.types,
+      name: place.name,
+      location: place.geometry?.location,
+    );
+
+/// Builds an [Address] from a reverse geocoding [result]
+///
+/// Geocoding results carry no place name, so line2 stays empty. [location]
+/// overrides the result's own geometry – pass the device position so the
+/// stored coordinates are the ones the user actually stands at.
+Address addressFromGeocodingResult(
+  GeocodingResult result, {
+  Geolocation? location,
+}) =>
+    addressFromComponents(
+      components: result.addressComponents,
+      types: result.types,
+      location: result.geometry.location,
+    ).copyWith(geoLocation: location);
+
+/// Shared mapping of Google address components to an [Address]
+Address addressFromComponents({
+  required List<AddressComponent> components,
+  required List<String> types,
+  String? name,
+  Location? location,
+}) {
+  String? component(String type) => components
       .cast<AddressComponent?>()
       .firstWhere(
         (component) => component!.types.contains(type),
@@ -25,13 +53,13 @@ Address addressFromPlaceDetails(PlaceDetails place) {
   final line1 = _streetLine(country, street, streetNumber);
 
   String? line2;
-  if (!place.types.contains('street_address') &&
-      place.name.isNotEmpty &&
-      line1 != place.name) {
-    line2 = place.name;
+  if (name != null &&
+      name.isNotEmpty &&
+      !types.contains('street_address') &&
+      line1 != name) {
+    line2 = name;
   }
 
-  final location = place.geometry?.location;
   return Address(
     line1: line1,
     line2: line2,
