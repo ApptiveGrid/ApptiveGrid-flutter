@@ -2,7 +2,9 @@ import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/managers/location_manager.dart';
 import 'package:apptive_grid_form/src/managers/permission_manager.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
-import 'package:apptive_grid_form/src/widgets/address/country_names.dart';
+import 'package:apptive_grid_form/src/google_maps_webservice/google_maps_webservice.dart';
+import 'package:apptive_grid_form/src/widgets/address/address_from_place.dart';
+import 'package:apptive_grid_form/src/widgets/address/countries.dart';
 import 'package:apptive_grid_form/src/widgets/form_widget/form_widget_helpers.dart';
 import 'package:apptive_grid_form/src/widgets/geolocation/geolocation_map.dart';
 import 'package:collection/collection.dart';
@@ -16,10 +18,15 @@ class AddressFormWidget extends StatefulWidget {
   const AddressFormWidget({
     super.key,
     required this.component,
+    this.fieldProperties,
   });
 
   /// Component this Widget should reflect
   final FormComponent<AddressDataEntity> component;
+
+  /// Per-field settings of the form, used for the custom
+  /// [FormFieldProperties.line1Label] and [FormFieldProperties.line2Label]
+  final FormFieldProperties? fieldProperties;
 
   @override
   State<AddressFormWidget> createState() => _AddressFormWidgetState();
@@ -40,6 +47,12 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
 
   @override
   bool get wantKeepAlive => true;
+
+  String _line1Label(ApptiveGridTranslation translations) =>
+      widget.fieldProperties?.line1Label ?? translations.addressLine1Label;
+
+  String _line2Label(ApptiveGridTranslation translations) =>
+      widget.fieldProperties?.line2Label ?? translations.addressLine2Label;
 
   @override
   void initState() {
@@ -121,26 +134,14 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 4),
-                TextField(
-                  key: const Key('AddressFormWidget.line1'),
-                  controller: _line1Controller,
-                  enabled: widget.component.enabled,
-                  decoration: InputDecoration(
-                    labelText: translations.addressLine1Label,
-                    isDense: true,
-                  ),
-                  onChanged: (value) => _updateAddress(
-                    formState,
-                    (address) => address.copyWith(line1: value),
-                  ),
-                ),
+                _buildLine1Field(providerContext, formState, translations),
                 const SizedBox(height: 8),
                 TextField(
                   key: const Key('AddressFormWidget.line2'),
                   controller: _line2Controller,
                   enabled: widget.component.enabled,
                   decoration: InputDecoration(
-                    labelText: translations.addressLine2Label,
+                    labelText: _line2Label(translations),
                     isDense: true,
                   ),
                   onChanged: (value) => _updateAddress(
@@ -249,12 +250,119 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
     );
   }
 
+  /// The first address line with Google Places suggestions
+  ///
+  /// Typing keeps working as a plain text field; picking a suggestion fills
+  /// all fields from the place details, like the web frontend does.
+  Widget _buildLine1Field(
+    BuildContext providerContext,
+    FormFieldState<AddressDataEntity> formState,
+    ApptiveGridTranslation translations,
+  ) {
+    return TypeAheadField<Prediction>(
+      controller: _line1Controller,
+      builder: (context, controller, focusNode) => TextField(
+        key: const Key('AddressFormWidget.line1'),
+        controller: controller,
+        focusNode: focusNode,
+        enabled: widget.component.enabled,
+        decoration: InputDecoration(
+          labelText: _line1Label(translations),
+          isDense: true,
+        ),
+        onChanged: (value) => _updateAddress(
+          formState,
+          (address) => address.copyWith(line1: value),
+        ),
+      ),
+      decorationBuilder: (context, child) => Material(
+        shape: Theme.of(context).cardTheme.shape,
+        type: MaterialType.card,
+        child: child,
+      ),
+      suggestionsCallback: (pattern) =>
+          _searchAddresses(providerContext, pattern),
+      itemBuilder: (_, suggestion) => ListTile(
+        title: Text(suggestion.description ?? ''),
+      ),
+      // A street Google does not know is still a valid input, so an empty
+      // result list shows nothing instead of a "no results" hint.
+      emptyBuilder: (_) => const SizedBox.shrink(),
+      onSelected: (suggestion) =>
+          _applyPlace(providerContext, formState, suggestion),
+    );
+  }
+
+  Future<List<Prediction>> _searchAddresses(
+    BuildContext providerContext,
+    String pattern,
+  ) async {
+    if (pattern.trim().isEmpty) {
+      return [];
+    }
+    final locationManager =
+        Provider.of<LocationManager>(providerContext, listen: false);
+    // Restrict suggestions to the chosen country, like the frontend's
+    // componentRestrictions. Unknown or empty country: search worldwide.
+    final country = countryByName(widget.component.data.value?.country);
+    try {
+      final response = await locationManager.autocompleteAddress(
+        pattern,
+        language: Localizations.maybeLocaleOf(context)?.languageCode,
+        countryCodes: [if (country != null) country.alpha2],
+      );
+      return response.predictions;
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<void> _applyPlace(
+    BuildContext providerContext,
+    FormFieldState<AddressDataEntity> formState,
+    Prediction suggestion,
+  ) async {
+    final placeId = suggestion.placeId;
+    if (placeId == null) {
+      return;
+    }
+    final locationManager =
+        Provider.of<LocationManager>(providerContext, listen: false);
+    final PlaceDetails place;
+    try {
+      place = (await locationManager.getPlaceDetails(
+        placeId,
+        language: Localizations.maybeLocaleOf(context)?.languageCode,
+        fields: const ['address_components', 'geometry', 'name', 'types'],
+      ))
+          .result;
+    } catch (_) {
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+    final address = addressFromPlaceDetails(place);
+    _line1Controller.text = address.line1 ?? '';
+    _line2Controller.text = address.line2 ?? '';
+    _cityController.text = address.city ?? '';
+    _postCodeController.text = address.postCode ?? '';
+    _stateController.text = address.state ?? '';
+    _countryController.text = address.country ?? '';
+    setState(() {
+      widget.component.data.value = address;
+    });
+    formState.didChange(widget.component.data);
+  }
+
   Widget _buildCountryField(
     FormFieldState<AddressDataEntity> formState,
     ApptiveGridTranslation translations,
   ) {
     final locale = Localizations.maybeLocaleOf(context)?.languageCode;
-    final countryNames = locale == 'de' ? kCountryNamesDe : kCountryNamesEn;
+    final countryNames = [
+      for (final country in kCountries) country.name(locale),
+    ];
     return TypeAheadField<String>(
       controller: _countryController,
       builder: (context, controller, focusNode) => TextField(
@@ -314,7 +422,7 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
     }
     final address = selection?.value;
     final missingLabels = [
-      if (address?.line1?.isNotEmpty != true) translations.addressLine1Label,
+      if (address?.line1?.isNotEmpty != true) _line1Label(translations),
       if (address?.city?.isNotEmpty != true) translations.addressCityLabel,
       if (address?.postCode?.isNotEmpty != true)
         translations.addressPostCodeLabel,

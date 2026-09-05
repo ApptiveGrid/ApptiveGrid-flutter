@@ -43,6 +43,7 @@ void main() {
   Widget targetWithComponent(
     FormComponent<AddressDataEntity> component, {
     required Client geolocationHttpClient,
+    List<FormFieldProperties> fieldProperties = const [],
   }) {
     return TestApp(
       options: ApptiveGridOptions(
@@ -60,10 +61,63 @@ void main() {
           components: [component],
           links: {},
           fields: [field],
+          fieldProperties: fieldProperties,
         ),
       ),
     );
   }
+
+  /// Stubs the Places endpoints: suggestions for the address line and the
+  /// details of the single suggestion. Returns the recorded request URIs.
+  List<Uri> stubPlaces(
+    Client client, {
+    required PlaceDetails details,
+    String description = 'Musterstraße 1, 12345 Berlin, Deutschland',
+  }) {
+    final requests = <Uri>[];
+    when(() => client.get(any(), headers: any(named: 'headers')))
+        .thenAnswer((invocation) async {
+      final uri = invocation.positionalArguments[0] as Uri;
+      requests.add(uri);
+      if (uri.path.contains('autocomplete')) {
+        final response = PlacesAutocompleteResponse(
+          status: 'OK',
+          predictions: [
+            Prediction(description: description, placeId: 'placeId'),
+          ],
+        );
+        return Response(jsonEncode(response.toJson()), 200);
+      }
+      if (uri.path.contains('details')) {
+        final response = PlacesDetailsResponse(
+          status: 'OK',
+          result: details,
+          htmlAttributions: [],
+        );
+        return Response(jsonEncode(response.toJson()), 200);
+      }
+      return Response('', 404);
+    });
+    return requests;
+  }
+
+  AddressComponent placeComponent(String type, String name) =>
+      AddressComponent(types: [type], longName: name, shortName: name);
+
+  final berlinPlace = PlaceDetails(
+    name: 'Musterstraße 1',
+    placeId: 'placeId',
+    types: const ['street_address'],
+    addressComponents: [
+      placeComponent('route', 'Musterstraße'),
+      placeComponent('street_number', '1'),
+      placeComponent('locality', 'Berlin'),
+      placeComponent('postal_code', '12345'),
+      placeComponent('administrative_area_level_1', 'Berlin'),
+      placeComponent('country', 'Deutschland'),
+    ],
+    geometry: Geometry(location: Location(lat: 52.5, lng: 13.4)),
+  );
 
   group('Rendering', () {
     testWidgets('Missing GeolocationFormWidgetConfiguration shows error',
@@ -244,6 +298,198 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.textContaining('must not be empty'), findsNothing);
+    });
+  });
+
+  group('Places', () {
+    testWidgets('Typing in line1 shows address suggestions', (tester) async {
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      final client = MockHttpClient();
+      stubPlaces(client, details: berlinPlace);
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: client),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byKey(const Key('AddressFormWidget.line1')),
+        'Muster',
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Musterstraße 1, 12345 Berlin, Deutschland'),
+        findsOneWidget,
+      );
+      // Typing alone already updates the value, a suggestion is optional.
+      expect(component.data.value?.line1, equals('Muster'));
+    });
+
+    testWidgets('Picking a suggestion fills every field from the place',
+        (tester) async {
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      final client = MockHttpClient();
+      final requests = stubPlaces(client, details: berlinPlace);
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: client),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byKey(const Key('AddressFormWidget.line1')),
+        'Muster',
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Musterstraße 1, 12345 Berlin, Deutschland'));
+      await tester.pumpAndSettle();
+
+      expect(
+        component.data.value,
+        equals(
+          const Address(
+            line1: 'Musterstraße 1',
+            city: 'Berlin',
+            postCode: '12345',
+            state: 'Berlin',
+            country: 'Deutschland',
+            geoLocation: Geolocation(latitude: 52.5, longitude: 13.4),
+          ),
+        ),
+      );
+      expect(find.text('Berlin'), findsWidgets);
+      expect(find.text('12345'), findsOneWidget);
+      expect(find.text('Deutschland'), findsOneWidget);
+      final detailsRequest =
+          requests.firstWhere((uri) => uri.path.contains('details'));
+      expect(detailsRequest.queryParameters['placeid'], equals('placeId'));
+      expect(
+        detailsRequest.queryParameters['fields'],
+        equals('address_components,geometry,name,types'),
+      );
+    });
+
+    testWidgets('Suggestions are restricted to the chosen country',
+        (tester) async {
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(const Address(country: 'Germany')),
+        field: field,
+      );
+      final client = MockHttpClient();
+      final requests = stubPlaces(client, details: berlinPlace);
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: client),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byKey(const Key('AddressFormWidget.line1')),
+        'Muster',
+      );
+      await tester.pumpAndSettle();
+
+      final autocomplete =
+          requests.firstWhere((uri) => uri.path.contains('autocomplete'));
+      expect(autocomplete.queryParameters['components'], equals('country:de'));
+      expect(autocomplete.queryParameters['types'], equals('address'));
+      expect(autocomplete.queryParameters['language'], equals('en'));
+    });
+
+    testWidgets('Unknown country searches worldwide', (tester) async {
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(const Address(country: 'Atlantis')),
+        field: field,
+      );
+      final client = MockHttpClient();
+      final requests = stubPlaces(client, details: berlinPlace);
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: client),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byKey(const Key('AddressFormWidget.line1')),
+        'Muster',
+      );
+      await tester.pumpAndSettle();
+
+      final autocomplete =
+          requests.firstWhere((uri) => uri.path.contains('autocomplete'));
+      expect(autocomplete.queryParameters.containsKey('components'), isFalse);
+    });
+
+    testWidgets('Failing suggestions keep the typed text', (tester) async {
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      final client = MockHttpClient();
+      when(() => client.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => Response('boom', 500));
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: client),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byKey(const Key('AddressFormWidget.line1')),
+        'Musterstraße 1',
+      );
+      await tester.pumpAndSettle();
+
+      expect(component.data.value?.line1, equals('Musterstraße 1'));
+      expect(tester.takeException(), isNull);
+    });
+  });
+
+  group('Labels', () {
+    testWidgets('Custom line labels from FormFieldProperties are used',
+        (tester) async {
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+        required: true,
+      );
+      await tester.pumpWidget(
+        targetWithComponent(
+          component,
+          geolocationHttpClient: MockHttpClient(),
+          fieldProperties: [
+            FormFieldProperties(
+              fieldId: field.id,
+              line1Label: 'Straße und Hausnummer',
+              line2Label: 'Adresszusatz',
+            ),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Straße und Hausnummer'), findsOneWidget);
+      expect(find.text('Adresszusatz'), findsOneWidget);
+      expect(find.text('Address Line 1'), findsNothing);
+
+      // The custom label also names the missing field in the error.
+      await tester.enterText(
+        find.byKey(const Key('AddressFormWidget.city')),
+        'Berlin',
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('Straße und Hausnummer, Post Code, Country'),
+        findsOneWidget,
+      );
     });
   });
 

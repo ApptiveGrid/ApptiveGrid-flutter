@@ -307,6 +307,30 @@ void main() {
       expect((widget as AddressFormWidget).component, equals(component));
     });
 
+    test('AddressComponent receives its FormFieldProperties', () {
+      const field = GridField(
+        id: 'id',
+        name: 'Property',
+        type: DataType.address,
+      );
+      final component = FormComponent<AddressDataEntity>(
+        field: field,
+        data: AddressDataEntity(),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+      final properties = FormFieldProperties(
+        fieldId: 'id',
+        line1Label: 'Straße',
+        line2Label: 'Zusatz',
+      );
+
+      final widget = fromModel(component, properties: properties);
+
+      expect((widget as AddressFormWidget).fieldProperties, equals(properties));
+    });
+
     test('ResourceComponent', () {
       // Regression: `resource` used to be mapped to a TextFormWidget, which
       // cast the ResourceDataEntity to a StringDataEntity and threw.

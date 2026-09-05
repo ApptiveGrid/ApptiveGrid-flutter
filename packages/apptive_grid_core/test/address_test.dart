@@ -401,5 +401,36 @@ void main() {
       expect(copy.line1, 'Musterstraße 1');
       expect(copy.city, 'Berlin');
     });
+
+    group('displayString', () {
+      test('joins all parts like the frontend', () {
+        const address = Address(
+          line1: 'Musterstraße 1',
+          line2: 'Hinterhaus',
+          postCode: '12345',
+          city: 'Berlin',
+          state: 'Berlin',
+          country: 'Deutschland',
+        );
+
+        expect(
+          address.displayString,
+          equals(
+            'Musterstraße 1, Hinterhaus, 12345 Berlin, Berlin Deutschland',
+          ),
+        );
+      });
+
+      test('skips missing and empty parts', () {
+        const address =
+            Address(line1: 'Musterstraße 1', line2: '', city: 'Berlin');
+
+        expect(address.displayString, equals('Musterstraße 1, Berlin'));
+      });
+
+      test('is empty for an empty address', () {
+        expect(const Address().displayString, isEmpty);
+      });
+    });
   });
 }

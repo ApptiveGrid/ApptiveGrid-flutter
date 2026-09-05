@@ -67,6 +67,24 @@ class Address {
         if (geoLocation != null) 'geoLocation': geoLocation!.toJson(),
       };
 
+  /// A single-line representation for lists and previews
+  ///
+  /// Mirrors the frontend's `AGAddress.displayString`: `line1, line2,
+  /// postCode city, state country`, skipping parts that are null or empty.
+  String get displayString {
+    String? line(String? a, String? b) {
+      final parts = [a, b].where((p) => p != null && p.isNotEmpty);
+      return parts.isEmpty ? null : parts.join(' ');
+    }
+
+    return [
+      line(line1, null),
+      line(line2, null),
+      line(postCode, city),
+      line(state, country),
+    ].whereType<String>().join(', ');
+  }
+
   /// Creates a copy of this [Address] with the given fields replaced
   Address copyWith({
     String? line1,

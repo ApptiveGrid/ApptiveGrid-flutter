@@ -20,6 +20,8 @@ class FormFieldProperties {
       defaultValue: defaultValue,
       disabled: json['disabled'] ?? false,
       hidden: json['hidden'] ?? false,
+      line1Label: json['line1Label'],
+      line2Label: json['line2Label'],
     );
   }
 
@@ -31,6 +33,8 @@ class FormFieldProperties {
     this.defaultValue,
     this.disabled = false,
     this.hidden = false,
+    this.line1Label,
+    this.line2Label,
   });
 
   /// Id of the field the properties belong to
@@ -51,6 +55,12 @@ class FormFieldProperties {
   /// Flag whether the form field is read-only
   final bool disabled;
 
+  /// Custom label for the first line of a [DataType.address] field
+  final String? line1Label;
+
+  /// Custom label for the second line of a [DataType.address] field
+  final String? line2Label;
+
   /// Serializes [FormFieldProperties] to json
   ///
   /// This does not include the [fieldId] since it is used as the key to a map of [FormFieldProperties] jsons
@@ -61,6 +71,8 @@ class FormFieldProperties {
       if (defaultValue != null) 'defaultValue': defaultValue!.schemaValue,
       if (hidden) 'hidden': true,
       if (disabled) 'disabled': true,
+      if (line1Label != null) 'line1Label': line1Label,
+      if (line2Label != null) 'line2Label': line2Label,
     };
   }
 
@@ -72,7 +84,9 @@ class FormFieldProperties {
         'positionOnPage: $positionOnPage, '
         'defaultValue: ${defaultValue?.schemaValue}, '
         'hidden: $hidden, '
-        'disabled: $disabled)';
+        'disabled: $disabled, '
+        'line1Label: $line1Label, '
+        'line2Label: $line2Label)';
   }
 
   @override
@@ -84,7 +98,9 @@ class FormFieldProperties {
         other.positionOnPage == positionOnPage &&
         other.defaultValue == defaultValue &&
         other.hidden == hidden &&
-        other.disabled == disabled;
+        other.disabled == disabled &&
+        other.line1Label == line1Label &&
+        other.line2Label == line2Label;
   }
 
   @override
@@ -96,6 +112,8 @@ class FormFieldProperties {
       defaultValue,
       hidden,
       disabled,
+      line1Label,
+      line2Label,
     );
   }
 }

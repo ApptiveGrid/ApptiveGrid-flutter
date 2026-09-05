@@ -48,6 +48,30 @@ class LocationManager {
     );
   }
 
+  /// Queries the GooglePlaces Autocomplete Service for addresses
+  ///
+  /// Other than [queryAutocomplete] this can restrict results to
+  /// [countryCodes] (ISO 3166-1 alpha-2), the way the web frontend does with
+  /// `componentRestrictions.country`.
+  ///
+  /// Uses [GoogleMapsPlaces.autocomplete]
+  Future<PlacesAutocompleteResponse> autocompleteAddress(
+    String input, {
+    String? language,
+    String? sessionToken,
+    List<String> countryCodes = const [],
+  }) {
+    return _googleMapsPlaces.autocomplete(
+      input,
+      language: language,
+      sessionToken: sessionToken,
+      types: const ['address'],
+      components: [
+        for (final code in countryCodes) Component(Component.country, code),
+      ],
+    );
+  }
+
   /// Queries the GooglePlaces API for Details for [placeId]
   ///
   /// Uses [GoogleMapsPlaces.getDetailsByPlaceId]

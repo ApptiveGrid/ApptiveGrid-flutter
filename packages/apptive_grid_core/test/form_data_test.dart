@@ -1026,6 +1026,8 @@ void main() {
           BooleanDataEntity(true),
           false,
           false,
+          null,
+          null,
         ),
       );
     });
@@ -1049,7 +1051,45 @@ void main() {
           'positionOnPage: 0, '
           'defaultValue: true, '
           'hidden: false, '
-          'disabled: false)',
+          'disabled: false, '
+          'line1Label: null, '
+          'line2Label: null)',
+        ),
+      );
+    });
+
+    test('Address labels parse and serialize', () {
+      const field =
+          GridField(id: 'addr', name: 'Address', type: DataType.address);
+      final properties = FormFieldProperties.fromJson(
+        json: {
+          'pageId': pageId,
+          'fieldIndex': 2,
+          'line1Label': 'Straße und Hausnummer',
+          'line2Label': 'Adresszusatz',
+        },
+        field: field,
+      );
+
+      expect(properties.line1Label, equals('Straße und Hausnummer'));
+      expect(properties.line2Label, equals('Adresszusatz'));
+      expect(
+        properties.toJson(),
+        equals({
+          'pageId': pageId,
+          'fieldIndex': 2,
+          'line1Label': 'Straße und Hausnummer',
+          'line2Label': 'Adresszusatz',
+        }),
+      );
+      expect(
+        properties,
+        isNot(
+          FormFieldProperties(
+            fieldId: 'addr',
+            pageId: pageId,
+            positionOnPage: 2,
+          ),
         ),
       );
     });
