@@ -353,6 +353,7 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
     } catch (_) {
       // The typed text stays; say why nothing was filled in.
       if (mounted) {
+        final translations = ApptiveGridLocalization.of(context)!;
         setState(() {
           _geocodingError = translations.addressSuggestionFailed;
         });
