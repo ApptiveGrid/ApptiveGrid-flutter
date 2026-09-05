@@ -108,6 +108,12 @@ class FormDataWidget extends StatefulWidget {
 class _FormDataWidgetState extends State<FormDataWidget> {
   late final _pageController = PageController();
 
+  /// Index of the visible page. Kept as state so the [PopScope] below is
+  /// rebuilt when it changes – `_pageController.page` alone does not trigger
+  /// a rebuild, which left `canPop` stuck at its first-build value and made
+  /// the back button dead on the first page.
+  int _currentPage = 0;
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -121,9 +127,11 @@ class _FormDataWidgetState extends State<FormDataWidget> {
     final pages = widget.data.properties?.pageIds;
     if (pages != null && pages.length > 1) {
       return PopScope(
-        canPop: _pageController.hasClients && (_pageController.page ?? 0) == 0,
-        onPopInvokedWithResult: (bool didPop, _) async {
-          if ((_pageController.page ?? 0) > 0) {
+        // Leaving the form is only allowed from the first page; on later
+        // pages a back gesture or button goes one page back instead.
+        canPop: _currentPage == 0,
+        onPopInvokedWithResult: (bool didPop, _) {
+          if (!didPop && _currentPage > 0) {
             _pageController.previousPage(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
@@ -133,6 +141,7 @@ class _FormDataWidgetState extends State<FormDataWidget> {
         child: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
+          onPageChanged: (page) => setState(() => _currentPage = page),
           children: pages.map(
             (pageId) {
               final key = _keys.putIfAbsent(

@@ -2166,6 +2166,56 @@ void main() {
       expect(find.text('text1'), findsOneWidget);
       expect(find.text('text2'), findsNothing);
     });
+    testWidgets('Back leaves the form from the first page, also after paging',
+        (tester) async {
+      // The form is pushed as a route so that leaving it is observable.
+      final target = TestApp(
+        client: client,
+        child: Builder(
+          builder: (context) => ElevatedButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                // Like the app's form screen: the form lives in a Scaffold.
+                builder: (_) => Scaffold(
+                  body: ApptiveGridForm(uri: Uri.parse('/api/a/form')),
+                ),
+              ),
+            ),
+            child: const Text('Open form'),
+          ),
+        ),
+      );
+      await tester.pumpWidget(target);
+      await tester.tap(find.text('Open form'));
+      await tester.pumpAndSettle();
+      expect(find.byType(ApptiveGridForm), findsOneWidget);
+
+      final dynamic widgetsAppState = tester.state(find.byType(WidgetsApp));
+
+      // Straight from the first page: the form is left.
+      await widgetsAppState.didPopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byType(ApptiveGridForm), findsNothing);
+
+      // Visit the second page, come back with the system back, then leave.
+      await tester.tap(find.text('Open form'));
+      await tester.pumpAndSettle();
+      // The first page's field is required; fill it so 'Next' may advance.
+      await tester.enterText(find.byType(TextFormField), 'text1');
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(ElevatedButton, 'Back'), findsOneWidget);
+
+      await widgetsAppState.didPopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byType(ApptiveGridForm), findsOneWidget);
+      expect(find.widgetWithText(ElevatedButton, 'Back'), findsNothing);
+
+      await widgetsAppState.didPopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byType(ApptiveGridForm), findsNothing);
+    });
+
     testWidgets('Submit sends all set data', (tester) async {
       when(
         () => client.submitFormWithProgress(
