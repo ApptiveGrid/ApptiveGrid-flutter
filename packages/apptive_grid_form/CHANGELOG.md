@@ -1,7 +1,8 @@
 ## 2.3.0
 
  - **FEAT**: Add `AddressFormWidget` to support the `Address` DataType, including a country field and a map/geocoding picker for the address' geolocation.
- - **FIX**: Stop mapping `DataType.resource` to `TextFormWidget`. Its `ResourceDataEntity` could not be cast to a `StringDataEntity`, so any form containing a resource field threw at runtime. Resource fields are hidden for now; their value is still submitted.
+ - **FEAT**: Add `ResourceFormWidget` to select a resource in a `DataType.resource` field. Options are loaded from the field's `resources` link and grouped by meta type like on the web.
+ - **FIX**: `DataType.resource` used to be mapped to `TextFormWidget`, whose cast to `StringDataEntity` threw at runtime for every form containing a resource field.
 
 ## 2.2.1
 

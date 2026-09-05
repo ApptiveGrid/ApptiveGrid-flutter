@@ -661,7 +661,14 @@ class ResourceDataEntity extends DataEntity<DataResource, dynamic> {
     return ResourceDataEntity(jsonResource);
   }
 
-  /// Returns [value] as a json object map
+  /// Returns [value] as a json object map with an additional `href`
+  ///
+  /// The backend resolves a written resource solely through a top-level
+  /// `href` and ignores other keys, while [DataResource.toJson] alone would be
+  /// rejected. Keeping the full object next to it lets cached forms
+  /// ([FormData.toJson]) round-trip without losing name and type.
   @override
-  dynamic get schemaValue => value?.toJson();
+  dynamic get schemaValue => value != null
+      ? {...value!.toJson(), 'href': value!.href.uri.toString()}
+      : null;
 }

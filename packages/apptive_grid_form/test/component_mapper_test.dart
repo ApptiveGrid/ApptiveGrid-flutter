@@ -307,7 +307,7 @@ void main() {
       expect((widget as AddressFormWidget).component, equals(component));
     });
 
-    test('ResourceComponent is not rendered', () {
+    test('ResourceComponent', () {
       // Regression: `resource` used to be mapped to a TextFormWidget, which
       // cast the ResourceDataEntity to a StringDataEntity and threw.
       final component = FormComponent<ResourceDataEntity>(
@@ -330,7 +330,8 @@ void main() {
 
       final widget = fromModel(component);
 
-      expect(widget.runtimeType, equals(EmptyFormWidget));
+      expect(widget.runtimeType, equals(ResourceFormWidget));
+      expect((widget as ResourceFormWidget).component, equals(component));
     });
 
     test('ReducedLookUp', () {

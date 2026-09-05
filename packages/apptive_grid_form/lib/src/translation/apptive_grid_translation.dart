@@ -1,3 +1,5 @@
+import 'package:apptive_grid_core/apptive_grid_core.dart';
+
 /// Abstract class containing all Strings for ApptiveGrid
 abstract class ApptiveGridTranslation {
   /// Super const constructor
@@ -116,4 +118,7 @@ abstract class ApptiveGridTranslation {
 
   /// Message displayed when geocoding the entered address of an [AddressFormWidget] failed
   String get addressGeocodingFailed;
+
+  /// Header for a group of resources of the same [DataResourceMetaType] in a [ResourceFormWidget]
+  String resourceGroupLabel(DataResourceMetaType metaType);
 }

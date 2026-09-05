@@ -128,6 +128,9 @@ enum ApptiveLinkType {
   /// Query for Collaborators in a [DataType.user] Field
   collaborators,
 
+  /// List the resources that can be selected in a [DataType.resource] Field
+  resources,
+
   // AGExternalLinkPresenter
   /// Processes an External ApptiveGridLink
   process,

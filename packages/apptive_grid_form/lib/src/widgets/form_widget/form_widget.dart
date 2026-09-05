@@ -60,10 +60,7 @@ Widget fromModel(FormComponent component, {bool enabled = true}) =>
       DataType.reducedLookUp ||
       DataType.formula =>
         const EmptyFormWidget(),
-      // [DataType.resource] has no input Widget yet. It used to be mapped to
-      // [TextFormWidget], but its [DataEntity] is a [ResourceDataEntity], so
-      // casting it to a [StringDataEntity] threw at runtime. Hiding the field
-      // keeps its value intact, since [FormData.toRequestObject] submits every
-      // component regardless of the Widget it is rendered with.
-      DataType.resource => const EmptyFormWidget(),
+      DataType.resource => ResourceFormWidget(
+          component: component.cast<ResourceDataEntity>(),
+        ),
     };

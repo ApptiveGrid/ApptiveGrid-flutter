@@ -87,4 +87,18 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   @override
   String get addressGeocodingFailed =>
       "Position konnte nicht automatisch ermittelt werden";
+  @override
+  String resourceGroupLabel(DataResourceMetaType metaType) =>
+      switch (metaType) {
+        DataResourceMetaType.grid => "Grids und Ansichten",
+        DataResourceMetaType.view ||
+        DataResourceMetaType.gridView =>
+          "Ansichten",
+        DataResourceMetaType.space => "Spaces",
+        DataResourceMetaType.form => "Formulare",
+        DataResourceMetaType.block => "Seiten",
+        DataResourceMetaType.externalHook => "Links",
+        DataResourceMetaType.flowNode => "Flows",
+        DataResourceMetaType.unknown => "Sonstiges",
+      };
 }
