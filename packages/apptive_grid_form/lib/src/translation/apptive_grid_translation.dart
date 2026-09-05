@@ -119,6 +119,9 @@ abstract class ApptiveGridTranslation {
   /// Message displayed when geocoding the entered address of an [AddressFormWidget] failed
   String get addressGeocodingFailed;
 
+  /// Message displayed when a picked address suggestion could not be loaded in an [AddressFormWidget]
+  String get addressSuggestionFailed;
+
   /// Header for a group of resources of the same [DataResourceMetaType] in a [ResourceFormWidget]
   String resourceGroupLabel(DataResourceMetaType metaType);
 

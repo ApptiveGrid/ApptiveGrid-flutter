@@ -397,8 +397,57 @@ void main() {
       expect(detailsRequest.queryParameters['placeid'], equals('placeId'));
       expect(
         detailsRequest.queryParameters['fields'],
-        equals('address_components,geometry,name,types'),
+        equals('place_id,name,address_components,geometry,types'),
       );
+    });
+
+    testWidgets('Failing place details keep the text and say so',
+        (tester) async {
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      final client = MockHttpClient();
+      when(() => client.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments[0] as Uri;
+        if (uri.path.contains('autocomplete')) {
+          final response = PlacesAutocompleteResponse(
+            status: 'OK',
+            predictions: [
+              Prediction(description: 'Musterstraße 1, Berlin', placeId: 'p'),
+            ],
+          );
+          return Response(jsonEncode(response.toJson()), 200);
+        }
+        // Details without place_id, as returned when the field list is too
+        // narrow – the model cannot parse this.
+        return Response(
+          jsonEncode({
+            'status': 'OK',
+            'result': {'name': 'Musterstraße 1'},
+            'html_attributions': [],
+          }),
+          200,
+        );
+      });
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: client),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byKey(const Key('AddressFormWidget.line1')),
+        'Muster',
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Musterstraße 1, Berlin'));
+      await tester.pumpAndSettle();
+
+      expect(component.data.value?.line1, equals('Muster'));
+      expect(component.data.value?.city, isNull);
+      expect(find.text('Address could not be applied'), findsOneWidget);
     });
 
     testWidgets('Suggestions are restricted to the chosen country',

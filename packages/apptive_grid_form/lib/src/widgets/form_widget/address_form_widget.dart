@@ -133,7 +133,9 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 4),
+                // Room for the field's floating label, so it does not collide
+                // with the decorator's own label above the group.
+                const SizedBox(height: 12),
                 _buildLine1Field(providerContext, formState, translations),
                 const SizedBox(height: 8),
                 TextField(
@@ -337,10 +339,24 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
       place = (await locationManager.getPlaceDetails(
         placeId,
         language: Localizations.maybeLocaleOf(context)?.languageCode,
-        fields: const ['address_components', 'geometry', 'name', 'types'],
+        // Only what the mapping needs – plus place_id and name, which the
+        // PlaceDetails model requires to parse at all.
+        fields: const [
+          'place_id',
+          'name',
+          'address_components',
+          'geometry',
+          'types',
+        ],
       ))
           .result;
     } catch (_) {
+      // The typed text stays; say why nothing was filled in.
+      if (mounted) {
+        setState(() {
+          _geocodingError = translations.addressSuggestionFailed;
+        });
+      }
       return;
     }
     if (!mounted) {

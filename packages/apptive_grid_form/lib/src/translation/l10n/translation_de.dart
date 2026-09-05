@@ -88,6 +88,9 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get addressGeocodingFailed =>
       "Position konnte nicht automatisch ermittelt werden";
   @override
+  String get addressSuggestionFailed =>
+      "Adresse konnte nicht übernommen werden";
+  @override
   String get recordVideo => "Video aufnehmen";
   @override
   String resourceGroupLabel(DataResourceMetaType metaType) =>
