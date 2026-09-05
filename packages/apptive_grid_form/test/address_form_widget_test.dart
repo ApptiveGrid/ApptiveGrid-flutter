@@ -392,6 +392,18 @@ void main() {
       expect(find.text('Berlin'), findsWidgets);
       expect(find.text('12345'), findsOneWidget);
       expect(find.text('Deutschland'), findsOneWidget);
+      // The suggestion list is gone and does not re-open for the new text.
+      expect(
+        find.text('Musterstraße 1, 12345 Berlin, Deutschland'),
+        findsNothing,
+      );
+      expect(
+        tester
+            .widget<TextField>(find.byKey(const Key('AddressFormWidget.line1')))
+            .focusNode
+            ?.hasFocus,
+        isFalse,
+      );
       final detailsRequest =
           requests.firstWhere((uri) => uri.path.contains('details'));
       expect(detailsRequest.queryParameters['placeid'], equals('placeId'));

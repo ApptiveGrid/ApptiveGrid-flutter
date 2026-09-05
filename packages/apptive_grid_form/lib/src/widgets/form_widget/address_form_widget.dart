@@ -374,6 +374,9 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
       widget.component.data.value = address;
     });
     formState.didChange(widget.component.data);
+    // Setting the text above would re-query the suggestions for the picked
+    // street; the address is complete now, so leave the field.
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   Widget _buildCountryField(
