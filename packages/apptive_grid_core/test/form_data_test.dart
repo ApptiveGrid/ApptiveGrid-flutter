@@ -1108,6 +1108,14 @@ void main() {
       );
     });
 
+    test('FormFieldTranslation toString()', () {
+      expect(
+        const FormFieldTranslation(label: 'Dateien', description: 'Anhang')
+            .toString(),
+        equals('FormFieldTranslation(label: Dateien, description: Anhang)'),
+      );
+    });
+
     test('Defaults keep the json minimal', () {
       final properties = FormFieldProperties(fieldId: 'f');
 

@@ -402,6 +402,45 @@ void main() {
       expect(copy.city, 'Berlin');
     });
 
+    test('copyWith() without arguments keeps every field', () {
+      const address = Address(
+        line1: 'Musterstraße 1',
+        line2: 'Hinterhaus',
+        city: 'Berlin',
+        postCode: '12345',
+        state: 'Berlin',
+        country: 'Deutschland',
+        geoLocation: Geolocation(latitude: 52.5, longitude: 13.4),
+      );
+
+      expect(address.copyWith(), equals(address));
+    });
+
+    test('copyWith() replaces every field', () {
+      const address = Address(line1: 'a');
+      const replacement = Address(
+        line1: 'Neue Straße 2',
+        line2: 'Vorderhaus',
+        city: 'Hamburg',
+        postCode: '20095',
+        state: 'Hamburg',
+        country: 'Deutschland',
+        geoLocation: Geolocation(latitude: 53.5, longitude: 10.0),
+      );
+
+      final copy = address.copyWith(
+        line1: replacement.line1,
+        line2: replacement.line2,
+        city: replacement.city,
+        postCode: replacement.postCode,
+        state: replacement.state,
+        country: replacement.country,
+        geoLocation: replacement.geoLocation,
+      );
+
+      expect(copy, equals(replacement));
+    });
+
     group('displayString', () {
       test('joins all parts like the frontend', () {
         const address = Address(
