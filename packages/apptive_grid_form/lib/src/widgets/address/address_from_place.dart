@@ -32,6 +32,21 @@ Address addressFromGeocodingResult(
       location: result.geometry.location,
     ).copyWith(geoLocation: location);
 
+/// Picks the reverse geocoding result worth turning into an address
+///
+/// Google orders results from specific to broad, but the most specific one
+/// is not always a street address – at a plaza or a landmark it can be a
+/// premise or a plus code without route and number. A `street_address`
+/// result is preferred wherever there is one; otherwise the first result.
+GeocodingResult? preferredGeocodingResult(List<GeocodingResult> results) {
+  for (final result in results) {
+    if (result.types.contains('street_address')) {
+      return result;
+    }
+  }
+  return results.isEmpty ? null : results.first;
+}
+
 /// Shared mapping of Google address components to an [Address]
 Address addressFromComponents({
   required List<AddressComponent> components,

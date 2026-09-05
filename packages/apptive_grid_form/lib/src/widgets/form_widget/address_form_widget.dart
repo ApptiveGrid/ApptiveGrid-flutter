@@ -560,7 +560,7 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
         language: languageCode,
       );
       if (!mounted) return;
-      final result = response.results.firstOrNull;
+      final result = preferredGeocodingResult(response.results);
       if (result == null) {
         setState(() {
           _geocodingError = translations.addressFromLocationFailed;

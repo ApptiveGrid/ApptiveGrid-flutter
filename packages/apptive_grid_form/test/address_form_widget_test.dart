@@ -641,6 +641,18 @@ void main() {
     GeocodingResponse reverseGeocoded() => GeocodingResponse(
           status: 'OK',
           results: [
+            // Google lists the most specific hit first – here a plaza without
+            // a street. The street address behind it must win.
+            GeocodingResult(
+              placeId: 'plaza',
+              types: const ['premise'],
+              geometry: Geometry(location: Location(lat: 47.001, lng: 11.001)),
+              addressComponents: [
+                placeComponent('locality', 'Innsbruck'),
+                placeComponent('postal_code', '6020'),
+                placeComponent('country', 'Österreich'),
+              ],
+            ),
             GeocodingResult(
               placeId: 'p',
               types: const ['street_address'],

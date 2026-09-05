@@ -173,6 +173,40 @@ void main() {
     });
   });
 
+  group('preferredGeocodingResult', () {
+    GeocodingResult result(List<String> types, String locality) =>
+        GeocodingResult(
+          placeId: locality,
+          types: types,
+          geometry: Geometry(location: Location(lat: 0, lng: 0)),
+          addressComponents: [component('locality', locality)],
+        );
+
+    test('prefers a street address over an earlier, broader result', () {
+      final picked = preferredGeocodingResult([
+        result(const ['plus_code'], 'plus'),
+        result(const ['premise'], 'premise'),
+        result(const ['street_address'], 'street'),
+        result(const ['street_address'], 'later street'),
+      ]);
+
+      expect(picked?.placeId, equals('street'));
+    });
+
+    test('falls back to the first result without a street address', () {
+      final picked = preferredGeocodingResult([
+        result(const ['premise'], 'premise'),
+        result(const ['locality', 'political'], 'city'),
+      ]);
+
+      expect(picked?.placeId, equals('premise'));
+    });
+
+    test('is null for no results', () {
+      expect(preferredGeocodingResult(const []), isNull);
+    });
+  });
+
   group('countries', () {
     test('has every country with both names', () {
       expect(kCountries.length, equals(249));
