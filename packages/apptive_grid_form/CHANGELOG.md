@@ -1,3 +1,7 @@
+## 2.3.1
+
+ - **FIX**: Depend on `cupertino_icons`. The attachment source menu (and the new "Record video" button) use `CupertinoIcons` on Apple platforms, but the icon font was never declared, so apps without their own `cupertino_icons` dependency rendered question marks instead of icons.
+
 ## 2.3.0
 
  - **FEAT**: Add `AddressFormWidget` to support the `Address` DataType, including a country field and a map/geocoding picker for the address' geolocation.
