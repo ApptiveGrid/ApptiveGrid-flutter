@@ -11,11 +11,19 @@ class DataResource {
   });
 
   /// Creates a new DataResource from a [json] response
+  ///
+  /// The resource is usually a nested object with a `_links.self` link. When a
+  /// value was written with [ResourceDataEntity.schemaValue] (or comes from an
+  /// older backend) it may only carry a bare `href` or `uri`, so those are
+  /// accepted as well.
   factory DataResource.fromJson(Map<String, dynamic> json) {
     final links = linkMapFromJson(json['_links'] ?? {});
+    final bareUri = json['href'] ?? json['uri'];
     return DataResource(
       href: links[ApptiveLinkType.self] ??
-          ApptiveLink(method: 'GET', uri: Uri.parse('missing_link')),
+          (bareUri is String
+              ? ApptiveLink(method: 'GET', uri: Uri.parse(bareUri))
+              : ApptiveLink(method: 'GET', uri: Uri.parse('missing_link'))),
       type: DataResourceType.values.firstWhere(
         (e) => e.backendName == json['type'],
         orElse: () => DataResourceType.unknown,
@@ -83,6 +91,15 @@ enum DataResourceMetaType {
   /// A block meta type
   block,
 
+  /// A view of a grid, e.g. a spreadsheet or kanban view
+  gridView,
+
+  /// An external link, e.g. a form link or a flow trigger
+  externalHook,
+
+  /// A node inside of a flow
+  flowNode,
+
   /// A unknown meta type
   unknown,
 }
@@ -118,6 +135,25 @@ enum DataResourceType {
 
   /// A gallery resource type
   galleryView(backendName: 'gallery'),
+
+  /// A list resource type
+  listView(backendName: 'list'),
+
+  /// A timeline resource type
+  timelineView(backendName: 'timeline'),
+
+  /// A flow
+  flow(backendName: 'flow'),
+
+  /// A running instance of a flow. These are listed by the backend but not
+  /// meant to be selected in forms
+  flowInstance(backendName: 'flowInstance'),
+
+  /// An external link that triggers a flow
+  externalFlowTrigger(backendName: 'externalFlowTrigger'),
+
+  /// An external link that adds an entity to a grid
+  addEntity(backendName: 'addEntity'),
 
   /// An unknown resource type
   unknown(backendName: 'unknown');

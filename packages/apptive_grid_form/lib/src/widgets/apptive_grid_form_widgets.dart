@@ -1,4 +1,5 @@
 export 'package:apptive_grid_form/src/widgets/actions/action_button.dart';
+export 'package:apptive_grid_form/src/widgets/form_widget/address_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/attachment_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/check_box_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/cross_reference_form_widget.dart';
@@ -15,6 +16,7 @@ export 'package:apptive_grid_form/src/widgets/form_widget/geolocation_form_widge
 export 'package:apptive_grid_form/src/widgets/form_widget/integer_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/multi_cross_reference_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/phone_number_form_widget.dart';
+export 'package:apptive_grid_form/src/widgets/form_widget/resource_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/signature_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/text_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/uri_form_widget.dart';

@@ -613,8 +613,11 @@ class FormPage extends StatelessWidget {
             if (properties?.hidden == true) {
               return const SizedBox();
             }
-            final componentWidget =
-                fromModel(component, enabled: properties?.disabled != true);
+            final componentWidget = fromModel(
+              component,
+              enabled: properties?.disabled != true,
+              properties: properties,
+            );
             if (componentWidget is EmptyFormWidget) {
               // UserReference Widget should be invisible in the Form
               // So returning without any Padding

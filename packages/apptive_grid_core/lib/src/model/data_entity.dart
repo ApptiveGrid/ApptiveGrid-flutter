@@ -68,6 +68,7 @@ sealed class DataEntity<T, S> with FilterableMixin {
                 {},
           ),
         DataType.geolocation => GeolocationDataEntity.fromJson(json),
+        DataType.address => AddressDataEntity.fromJson(json),
         DataType.multiCrossReference => MultiCrossReferenceDataEntity.fromJson(
             jsonValue: json,
             gridUri: field.schema['items']?['gridUri'] ?? '',
@@ -364,6 +365,25 @@ class GeolocationDataEntity extends DataEntity<Geolocation, dynamic> {
   dynamic get schemaValue => value?.toJson();
 }
 
+/// [DataEntity] representing [Address]es
+class AddressDataEntity extends DataEntity<Address, dynamic> {
+  /// Creates a new AddressDataEntity Object with value [value]
+  AddressDataEntity([super.value]);
+
+  /// Creates a new AddressDataEntity Object from json
+  factory AddressDataEntity.fromJson(dynamic json) {
+    Address? jsonValue;
+    if (json != null) {
+      jsonValue = Address.fromJson(json);
+    }
+    return AddressDataEntity(jsonValue);
+  }
+
+  /// Returns [value] as a json map
+  @override
+  dynamic get schemaValue => value?.toJson();
+}
+
 /// [DataEntity] representing a list of objects CrossReferencing to a different Grid
 class MultiCrossReferenceDataEntity
     extends DataEntity<List<CrossReferenceDataEntity>, dynamic>
@@ -641,7 +661,14 @@ class ResourceDataEntity extends DataEntity<DataResource, dynamic> {
     return ResourceDataEntity(jsonResource);
   }
 
-  /// Returns [value] as a json object map
+  /// Returns [value] as a json object map with an additional `href`
+  ///
+  /// The backend resolves a written resource solely through a top-level
+  /// `href` and ignores other keys, while [DataResource.toJson] alone would be
+  /// rejected. Keeping the full object next to it lets cached forms
+  /// ([FormData.toJson]) round-trip without losing name and type.
   @override
-  dynamic get schemaValue => value?.toJson();
+  dynamic get schemaValue => value != null
+      ? {...value!.toJson(), 'href': value!.href.uri.toString()}
+      : null;
 }

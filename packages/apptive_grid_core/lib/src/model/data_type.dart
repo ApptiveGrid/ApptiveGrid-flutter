@@ -73,7 +73,10 @@ enum DataType {
   formula(backendName: 'formula'),
 
   /// Type for a reference to a resource (e.g. grids, views)
-  resource(backendName: 'resource');
+  resource(backendName: 'resource'),
+
+  /// Type for a postal address
+  address(backendName: 'address');
 
   /// Define a Datatype with a corresponding [backendName]
   const DataType({

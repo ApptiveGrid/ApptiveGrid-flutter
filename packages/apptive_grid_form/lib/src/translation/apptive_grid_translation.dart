@@ -1,3 +1,5 @@
+import 'package:apptive_grid_core/apptive_grid_core.dart';
+
 /// Abstract class containing all Strings for ApptiveGrid
 abstract class ApptiveGridTranslation {
   /// Super const constructor
@@ -92,4 +94,49 @@ abstract class ApptiveGridTranslation {
 
   /// Label for the page back button
   String get pageBack;
+
+  /// Label for the first address line of an [AddressFormWidget]
+  String get addressLine1Label;
+
+  /// Label for the second address line of an [AddressFormWidget]
+  String get addressLine2Label;
+
+  /// Label for the city field of an [AddressFormWidget]
+  String get addressCityLabel;
+
+  /// Label for the postal code field of an [AddressFormWidget]
+  String get addressPostCodeLabel;
+
+  /// Label for the state field of an [AddressFormWidget]
+  String get addressStateLabel;
+
+  /// Label for the country field of an [AddressFormWidget]
+  String get addressCountryLabel;
+
+  /// Label for the Button that geocodes the entered address of an [AddressFormWidget]
+  String get determinePosition;
+
+  /// Message displayed when geocoding the entered address of an [AddressFormWidget] failed
+  String get addressGeocodingFailed;
+
+  /// Message displayed when a picked address suggestion could not be loaded in an [AddressFormWidget]
+  String get addressSuggestionFailed;
+
+  /// Tooltip of the button that fills an [AddressFormWidget] from the device position
+  String get useCurrentLocation;
+
+  /// Message displayed when the device position could not be turned into an address in an [AddressFormWidget]
+  String get addressFromLocationFailed;
+
+  /// Label of the button that reveals the map of an [AddressFormWidget]
+  String get showMap;
+
+  /// Label of the button that hides the map of an [AddressFormWidget]
+  String get hideMap;
+
+  /// Header for a group of resources of the same [DataResourceMetaType] in a [ResourceFormWidget]
+  String resourceGroupLabel(DataResourceMetaType metaType);
+
+  /// Label of the button that records a video in an [AttachmentFormWidget] with `typeOverride: videoRecorder`
+  String get recordVideo;
 }

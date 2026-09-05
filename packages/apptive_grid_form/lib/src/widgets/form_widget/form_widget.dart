@@ -4,11 +4,18 @@ import 'package:flutter/material.dart';
 
 /// Returns a corresponding Widget for a specific [component]
 ///
+/// [properties] are the [FormFieldProperties] of the component's field, if the
+/// form carries any. Widgets that support per-field settings read them from
+/// here.
+///
 /// Throws an [ArgumentError] if no Widget for a specific [DataType] is found
-Widget fromModel(FormComponent component, {bool enabled = true}) =>
+Widget fromModel(
+  FormComponent component, {
+  bool enabled = true,
+  FormFieldProperties? properties,
+}) =>
     switch (component.field.type) {
       DataType.text ||
-      DataType.resource ||
       DataType.richText =>
         TextFormWidget(component: component.cast<StringDataEntity>()),
       DataType.dateTime => DateTimeFormWidget(
@@ -29,12 +36,17 @@ Widget fromModel(FormComponent component, {bool enabled = true}) =>
         ),
       DataType.attachment => AttachmentFormWidget(
           component: component.cast<AttachmentDataEntity>(),
+          fieldProperties: properties,
         ),
       DataType.enumCollection => EnumCollectionFormWidget(
           component: component.cast<EnumCollectionDataEntity>(),
         ),
       DataType.geolocation => GeolocationFormWidget(
           component: component.cast<GeolocationDataEntity>(),
+        ),
+      DataType.address => AddressFormWidget(
+          component: component.cast<AddressDataEntity>(),
+          fieldProperties: properties,
         ),
       DataType.multiCrossReference => MultiCrossReferenceFormWidget(
           component: component.cast<MultiCrossReferenceDataEntity>(),
@@ -59,4 +71,7 @@ Widget fromModel(FormComponent component, {bool enabled = true}) =>
       DataType.reducedLookUp ||
       DataType.formula =>
         const EmptyFormWidget(),
+      DataType.resource => ResourceFormWidget(
+          component: component.cast<ResourceDataEntity>(),
+        ),
     };

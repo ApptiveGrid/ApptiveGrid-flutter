@@ -70,4 +70,49 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get pageNext => "Weiter";
   @override
   String get pageBack => "Zurück";
+  @override
+  String get addressLine1Label => "Adresse Zeile 1";
+  @override
+  String get addressLine2Label => "Adresse Zeile 2";
+  @override
+  String get addressCityLabel => "Stadt";
+  @override
+  String get addressPostCodeLabel => "Postleitzahl";
+  @override
+  String get addressStateLabel => "Bundesland";
+  @override
+  String get addressCountryLabel => "Land";
+  @override
+  String get determinePosition => "Position ermitteln";
+  @override
+  String get addressGeocodingFailed =>
+      "Position konnte nicht automatisch ermittelt werden";
+  @override
+  String get addressSuggestionFailed =>
+      "Adresse konnte nicht übernommen werden";
+  @override
+  String get useCurrentLocation => "Aktuellen Standort verwenden";
+  @override
+  String get addressFromLocationFailed =>
+      "Aktuelle Position konnte nicht in eine Adresse umgewandelt werden";
+  @override
+  String get showMap => "Karte anzeigen";
+  @override
+  String get hideMap => "Karte ausblenden";
+  @override
+  String get recordVideo => "Video aufnehmen";
+  @override
+  String resourceGroupLabel(DataResourceMetaType metaType) =>
+      switch (metaType) {
+        DataResourceMetaType.grid => "Grids und Ansichten",
+        DataResourceMetaType.view ||
+        DataResourceMetaType.gridView =>
+          "Ansichten",
+        DataResourceMetaType.space => "Spaces",
+        DataResourceMetaType.form => "Formulare",
+        DataResourceMetaType.block => "Seiten",
+        DataResourceMetaType.externalHook => "Links",
+        DataResourceMetaType.flowNode => "Flows",
+        DataResourceMetaType.unknown => "Sonstiges",
+      };
 }

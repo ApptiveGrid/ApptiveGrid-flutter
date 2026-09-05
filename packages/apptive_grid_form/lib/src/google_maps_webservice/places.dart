@@ -12,6 +12,7 @@ part 'places.g.dart';
 
 const _placesUrl = '/place';
 const _detailsSearchUrl = '/details/json';
+const _autocompleteUrl = '/autocomplete/json';
 const _queryAutocompleteUrl = '/queryautocomplete/json';
 
 /// https://developers.google.com/places/web-service/
@@ -40,6 +41,85 @@ class GoogleMapsPlaces extends GoogleWebService {
       region: region,
     );
     return _decodeDetailsResponse(await doGet(url, headers: apiHeaders));
+  }
+
+  /// Queries the Place Autocomplete endpoint
+  ///
+  /// Other than [queryAutocomplete] this endpoint supports [components] to
+  /// restrict the results, e.g. `Component(Component.country, 'de')`, and
+  /// [types] such as `address`.
+  Future<PlacesAutocompleteResponse> autocomplete(
+    String input, {
+    String? sessionToken,
+    num? offset,
+    Location? location,
+    num? radius,
+    String? language,
+    List<String> types = const [],
+    List<Component> components = const [],
+    bool strictbounds = false,
+  }) async {
+    final url = buildAutocompleteUrl(
+      input: input,
+      sessionToken: sessionToken,
+      location: location,
+      offset: offset,
+      radius: radius,
+      language: language,
+      types: types,
+      components: components,
+      strictbounds: strictbounds,
+    );
+    return _decodeAutocompleteResponse(await doGet(url, headers: apiHeaders));
+  }
+
+  String buildAutocompleteUrl({
+    required String input,
+    String? sessionToken,
+    num? offset,
+    Location? location,
+    num? radius,
+    String? language,
+    List<String> types = const [],
+    List<Component> components = const [],
+    bool strictbounds = false,
+  }) {
+    final params = <String, String>{
+      'input': input,
+    };
+    if (sessionToken != null) {
+      params['sessiontoken'] = sessionToken;
+    }
+    if (offset != null) {
+      params['offset'] = offset.toString();
+    }
+    if (location != null) {
+      params['location'] = '${location.lat},${location.lng}';
+    }
+    if (radius != null) {
+      params['radius'] = radius.toString();
+    }
+    if (language != null) {
+      params['language'] = language;
+    }
+    if (types.isNotEmpty) {
+      params['types'] = types.join('|');
+    }
+    if (components.isNotEmpty) {
+      params['components'] = components.join('|');
+    }
+    if (strictbounds) {
+      params['strictbounds'] = 'true';
+    }
+    if (apiKey != null) {
+      params['key'] = apiKey!;
+    }
+    return url
+        .replace(
+          path: '${url.path}$_autocompleteUrl',
+          queryParameters: params,
+        )
+        .toString();
   }
 
   Future<PlacesAutocompleteResponse> queryAutocomplete(

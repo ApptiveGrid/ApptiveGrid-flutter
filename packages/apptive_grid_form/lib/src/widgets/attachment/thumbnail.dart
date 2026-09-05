@@ -1,8 +1,7 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:io'
-    if (dart.library.html) 'package:apptive_grid_form/src/widgets/attachment/stub_io.dart';
+import 'package:apptive_grid_form/src/widgets/attachment/file_loaders.dart';
 
 part 'package:apptive_grid_form/src/widgets/attachment/type_map.dart';
 
@@ -51,7 +50,7 @@ class Thumbnail extends StatelessWidget {
       late final ImageProvider imageProvider;
       if (addAttachmentAction != null) {
         if (addAttachmentAction!.path != null) {
-          imageProvider = FileImage(File(addAttachmentAction!.path!));
+          imageProvider = fileImageProvider(addAttachmentAction!.path!);
         } else {
           imageProvider = MemoryImage(addAttachmentAction!.byteData!);
         }
@@ -104,7 +103,7 @@ class SvgLoaderFactory {
       return svgLoader;
     } else if (addAttachmentAction != null) {
       if (addAttachmentAction.path != null) {
-        return SvgFileLoader(File(addAttachmentAction.path!));
+        return svgFileLoader(addAttachmentAction.path!);
       } else {
         return SvgBytesLoader(addAttachmentAction.byteData!);
       }

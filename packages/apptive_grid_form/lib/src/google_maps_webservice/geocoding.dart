@@ -39,6 +39,20 @@ class GoogleMapsGeocoding extends GoogleWebService {
     return _decode(await doGet(url, headers: apiHeaders));
   }
 
+  Future<GeocodingResponse> searchByAddress(
+    String address, {
+    String? language,
+    String? region,
+  }) async {
+    final url = buildUrl(
+      address: address,
+      language: language,
+      region: region,
+    );
+
+    return _decode(await doGet(url, headers: apiHeaders));
+  }
+
   String buildUrl({
     String? address,
     Bounds? bounds,

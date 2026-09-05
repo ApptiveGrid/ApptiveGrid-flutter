@@ -288,6 +288,103 @@ void main() {
       expect(widget.runtimeType, equals(EmptyFormWidget));
     });
 
+    test('AddressComponent', () {
+      final component = FormComponent<AddressDataEntity>(
+        field: const GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.address,
+        ),
+        data: AddressDataEntity(),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, equals(AddressFormWidget));
+      expect((widget as AddressFormWidget).component, equals(component));
+    });
+
+    test('AttachmentComponent receives its FormFieldProperties', () {
+      const field = GridField(
+        id: 'id',
+        name: 'Property',
+        type: DataType.attachment,
+      );
+      final component = FormComponent<AttachmentDataEntity>(
+        field: field,
+        data: AttachmentDataEntity(),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+      final properties = FormFieldProperties(
+        fieldId: 'id',
+        appendOnlyAttachments: true,
+        typeOverride: 'videoRecorder',
+      );
+
+      final widget = fromModel(component, properties: properties);
+
+      expect(
+        (widget as AttachmentFormWidget).fieldProperties,
+        equals(properties),
+      );
+    });
+
+    test('AddressComponent receives its FormFieldProperties', () {
+      const field = GridField(
+        id: 'id',
+        name: 'Property',
+        type: DataType.address,
+      );
+      final component = FormComponent<AddressDataEntity>(
+        field: field,
+        data: AddressDataEntity(),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+      final properties = FormFieldProperties(
+        fieldId: 'id',
+        line1Label: 'Straße',
+        line2Label: 'Zusatz',
+      );
+
+      final widget = fromModel(component, properties: properties);
+
+      expect((widget as AddressFormWidget).fieldProperties, equals(properties));
+    });
+
+    test('ResourceComponent', () {
+      // Regression: `resource` used to be mapped to a TextFormWidget, which
+      // cast the ResourceDataEntity to a StringDataEntity and threw.
+      final component = FormComponent<ResourceDataEntity>(
+        field: const GridField(
+          id: 'id',
+          name: 'Property',
+          type: DataType.resource,
+        ),
+        data: ResourceDataEntity(
+          DataResource.fromJson(const {
+            'displayValue': 'A Resource',
+            'type': 'grid',
+            'metaType': 'gridUri',
+          }),
+        ),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+
+      final widget = fromModel(component);
+
+      expect(widget.runtimeType, equals(ResourceFormWidget));
+      expect((widget as ResourceFormWidget).component, equals(component));
+    });
+
     test('ReducedLookUp', () {
       final component = FormComponent<ReducedLookUpDataEntity>(
         field: const GridField(
