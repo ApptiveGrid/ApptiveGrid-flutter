@@ -1,5 +1,6 @@
 ## 2.3.1
 
+ - **FIX**: The back button and back gesture work again on the first page of a multi-page form. `canPop` of the form's `PopScope` was computed once at build time and never followed the page change, so after visiting a later page – or even on the very first build – leaving the form was silently refused.
  - **FIX**: Depend on `cupertino_icons`. The attachment source menu (and the new "Record video" button) use `CupertinoIcons` on Apple platforms, but the icon font was never declared, so apps without their own `cupertino_icons` dependency rendered question marks instead of icons.
 
 ## 2.3.0
