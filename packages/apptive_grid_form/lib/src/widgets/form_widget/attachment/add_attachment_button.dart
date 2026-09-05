@@ -71,6 +71,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
   Widget build(BuildContext context) {
     final l10n = ApptiveGridLocalization.of(context)!;
     if (widget.mode == AddAttachmentMode.videoRecorder) {
+      final isApple = UniversalPlatform.isMacOS || UniversalPlatform.isIOS;
       return TextButton(
         onPressed: () async {
           final attachments = await _recordVideo();
@@ -81,7 +82,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(_SourceOption.video.icon),
+            Icon(isApple ? CupertinoIcons.video_camera : Icons.videocam),
             const SizedBox(width: 4),
             Text(l10n.recordVideo),
           ],
@@ -122,7 +123,6 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
           _SourceOption.files => _pickFromFiles(),
           _SourceOption.gallery => _pickFromImageLibrary(),
           _SourceOption.camera => _takePicture(),
-          _SourceOption.video => _recordVideo(),
         };
         final attachments = await attachmentSelection;
         if (attachments != null) {
@@ -235,7 +235,7 @@ class _SourceOptionPopupItem extends StatelessWidget {
   }
 }
 
-enum _SourceOption { files, gallery, camera, video }
+enum _SourceOption { files, gallery, camera }
 
 extension _SourceOptionX on _SourceOption {
   IconData get icon {
@@ -246,8 +246,6 @@ extension _SourceOptionX on _SourceOption {
         isApple ? CupertinoIcons.photo_on_rectangle : Icons.photo,
       _SourceOption.camera =>
         isApple ? CupertinoIcons.camera : Icons.camera_alt,
-      _SourceOption.video =>
-        isApple ? CupertinoIcons.video_camera : Icons.videocam,
     };
   }
 }

@@ -206,6 +206,31 @@ void main() {
       expect(component.data.value?.line1, equals('Musterstraße 1'));
     });
 
+    testWidgets('Editing line2 and state updates value', (tester) async {
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: MockHttpClient()),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byKey(const Key('AddressFormWidget.line2')),
+        'Hinterhaus',
+      );
+      await tester.enterText(
+        find.byKey(const Key('AddressFormWidget.state')),
+        'Berlin',
+      );
+      await tester.pumpAndSettle();
+
+      expect(component.data.value?.line2, equals('Hinterhaus'));
+      expect(component.data.value?.state, equals('Berlin'));
+    });
+
     testWidgets('Editing city updates value', (tester) async {
       final component = FormComponent<AddressDataEntity>(
         property: 'property',
@@ -427,6 +452,41 @@ void main() {
       expect(autocomplete.queryParameters.containsKey('components'), isFalse);
     });
 
+    testWidgets('No suggestions shows nothing but keeps the text',
+        (tester) async {
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(),
+        field: field,
+      );
+      final client = MockHttpClient();
+      when(() => client.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((invocation) async {
+        final uri = invocation.positionalArguments[0] as Uri;
+        if (uri.path.contains('autocomplete')) {
+          final response = PlacesAutocompleteResponse(
+            status: 'ZERO_RESULTS',
+            predictions: [],
+          );
+          return Response(jsonEncode(response.toJson()), 200);
+        }
+        return Response('', 404);
+      });
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: client),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byKey(const Key('AddressFormWidget.line1')),
+        'Unbekannte Gasse 7',
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ListTile), findsNothing);
+      expect(component.data.value?.line1, equals('Unbekannte Gasse 7'));
+    });
+
     testWidgets('Failing suggestions keep the typed text', (tester) async {
       final component = FormComponent<AddressDataEntity>(
         property: 'property',
@@ -604,6 +664,38 @@ void main() {
       );
     });
 
+    testWidgets('Geocoding request failure shows error message',
+        (tester) async {
+      final component = FormComponent<AddressDataEntity>(
+        property: 'property',
+        data: AddressDataEntity(
+          const Address(
+            line1: 'Musterstraße 1',
+            city: 'Berlin',
+            postCode: '12345',
+            country: 'Germany',
+          ),
+        ),
+        field: field,
+      );
+      final client = MockHttpClient();
+      when(() => client.get(any(), headers: any(named: 'headers')))
+          .thenThrow(Exception('network down'));
+      await tester.pumpWidget(
+        targetWithComponent(component, geolocationHttpClient: client),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(TextButton));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Position could not be determined automatically'),
+        findsOneWidget,
+      );
+      expect(component.data.value?.geoLocation, isNull);
+    });
+
     group('Map', () {
       late GoogleMapsFlutterPlatform originalPlatform;
 
@@ -695,6 +787,41 @@ void main() {
 
       tearDown(() {
         GoogleMapsFlutterPlatform.instance = originalPlatform;
+      });
+
+      testWidgets('Moving the marker updates the geolocation', (tester) async {
+        final component = FormComponent<AddressDataEntity>(
+          property: 'property',
+          data: AddressDataEntity(
+            const Address(
+              line1: 'Musterstraße 1',
+              city: 'Berlin',
+              postCode: '12345',
+              country: 'Germany',
+              geoLocation: Geolocation(latitude: 52.5, longitude: 13.4),
+            ),
+          ),
+          field: field,
+        );
+        await tester.pumpWidget(
+          targetWithComponent(
+            component,
+            geolocationHttpClient: MockHttpClient(),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final map = tester.widget<GeolocationMap>(find.byType(GeolocationMap));
+        map.onLocationChanged!(
+          const Geolocation(latitude: 48.1, longitude: 11.6),
+        );
+        await tester.pumpAndSettle();
+
+        expect(
+          component.data.value?.geoLocation,
+          equals(const Geolocation(latitude: 48.1, longitude: 11.6)),
+        );
+        expect(component.data.value?.line1, equals('Musterstraße 1'));
       });
 
       testWidgets('Successful geocoding shows map', (tester) async {

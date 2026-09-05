@@ -285,6 +285,49 @@ void main() {
     });
   });
 
+  group('DataResourceWidget', () {
+    testWidgets('Renders an icon and the name for every resource type',
+        (tester) async {
+      DataResource resource(DataResourceType type, DataResourceMetaType meta) =>
+          DataResource(
+            href: ApptiveLink(
+              uri: Uri(path: '/r/${type.name}/${meta.name}'),
+              method: 'get',
+            ),
+            type: type,
+            name: '${type.name}·${meta.name}',
+            metaType: meta,
+          );
+      final resources = [
+        for (final type in DataResourceType.values)
+          if (type != DataResourceType.unknown)
+            resource(type, DataResourceMetaType.grid),
+        // The unknown type falls back to the meta type for its icon.
+        for (final meta in DataResourceMetaType.values)
+          resource(DataResourceType.unknown, meta),
+      ];
+
+      await tester.pumpWidget(
+        TestApp(
+          child: ListView(
+            children: [
+              for (final r in resources) DataResourceWidget(resource: r),
+            ],
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      for (final r in resources) {
+        expect(find.text(r.name, skipOffstage: false), findsOneWidget);
+      }
+      expect(
+        find.byType(Icon, skipOffstage: false),
+        findsNWidgets(resources.length),
+      );
+    });
+  });
+
   group('Loading', () {
     testWidgets('Without a resources link the client is not called',
         (tester) async {
@@ -310,6 +353,31 @@ void main() {
         find.byType(DropdownButtonFormField<DataResource>),
         findsOneWidget,
       );
+    });
+
+    testWidgets('Response without items yields an empty list', (tester) async {
+      mockForm(formField: field);
+      when(
+        () => client.performApptiveLink<List<DataResource>>(
+          link: resourcesLink,
+          parseResponse: any(named: 'parseResponse'),
+        ),
+      ).thenAnswer((invocation) async {
+        final parseResponse =
+            invocation.namedArguments[const Symbol('parseResponse')]
+                as Future<List<DataResource>?> Function(Response);
+        return parseResponse(Response(jsonEncode({}), 200));
+      });
+
+      await tester.pumpWidget(
+        TestApp(client: client, child: ApptiveGridForm(uri: formUri)),
+      );
+      await tester.pumpAndSettle();
+
+      final dropdown = tester.widget<DropdownButton<DataResource>>(
+        find.byType(DropdownButton<DataResource>, skipOffstage: false),
+      );
+      expect(dropdown.items, isEmpty);
     });
 
     testWidgets('Loading error is shown on the field', (tester) async {

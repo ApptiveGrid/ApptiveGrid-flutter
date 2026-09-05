@@ -144,6 +144,13 @@ void main() {
       expect(countryByName(null), isNull);
     });
 
+    test('toString() lists code and both names', () {
+      expect(
+        countryByName('Germany').toString(),
+        equals('Country(de, Germany, Deutschland)'),
+      );
+    });
+
     test('name() picks the language', () {
       final germany = countryByName('Germany')!;
       expect(germany.name('de'), equals('Deutschland'));

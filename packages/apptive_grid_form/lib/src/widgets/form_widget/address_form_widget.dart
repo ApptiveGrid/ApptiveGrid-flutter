@@ -286,8 +286,12 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
         title: Text(suggestion.description ?? ''),
       ),
       // A street Google does not know is still a valid input, so an empty
-      // result list shows nothing instead of a "no results" hint.
+      // result list shows nothing instead of a "no results" hint. The builder
+      // is required by the API but never reached with hideOnEmpty.
+      hideOnEmpty: true,
+      // coverage:ignore-start
       emptyBuilder: (_) => const SizedBox.shrink(),
+      // coverage:ignore-end
       onSelected: (suggestion) =>
           _applyPlace(providerContext, formState, suggestion),
     );
@@ -394,7 +398,12 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
       itemBuilder: (_, suggestion) => ListTile(
         title: Text(suggestion),
       ),
+      // No suggestion list for a country the list does not know; the builder
+      // is required by the API but never reached with hideOnEmpty.
+      hideOnEmpty: true,
+      // coverage:ignore-start
       emptyBuilder: (_) => const SizedBox.shrink(),
+      // coverage:ignore-end
       onSelected: (suggestion) {
         _countryController.text = suggestion;
         _updateAddress(
