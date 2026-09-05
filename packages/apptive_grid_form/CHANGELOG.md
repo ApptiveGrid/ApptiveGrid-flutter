@@ -7,6 +7,8 @@
  - **FEAT**: `AttachmentFormWidget` honours `appendOnlyAttachments` (attachments present when the form opens cannot be removed) and `typeOverride: videoRecorder` (a single "Record video" button instead of the source menu, one clip per field).
  - **FEAT**: Add `ResourceFormWidget` to select a resource in a `DataType.resource` field. Options are loaded from the field's `resources` link and grouped by meta type like on the web.
  - **FIX**: `DataType.resource` used to be mapped to `TextFormWidget`, whose cast to `StringDataEntity` threw at runtime for every form containing a resource field.
+ - **FEAT**: `AddressFormWidget` gets a "use current location" button next to the first line, like the geolocation field: it asks for the location permission, reverse geocodes the device position (preferring a `street_address` result) and fills every field. The map is opt-in behind a "Show map" / "Hide map" button next to "Determine position".
+ - **FIX**: Picking a Places suggestion in `AddressFormWidget` filled nothing because the details request omitted `place_id`; it now requests it, reports "Address could not be applied" on failure and leaves the field after applying so the suggestions do not re-open.
 
 ## 2.2.2
 
