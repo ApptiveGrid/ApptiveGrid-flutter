@@ -307,6 +307,33 @@ void main() {
       expect((widget as AddressFormWidget).component, equals(component));
     });
 
+    test('AttachmentComponent receives its FormFieldProperties', () {
+      const field = GridField(
+        id: 'id',
+        name: 'Property',
+        type: DataType.attachment,
+      );
+      final component = FormComponent<AttachmentDataEntity>(
+        field: field,
+        data: AttachmentDataEntity(),
+        property: 'Property',
+        required: false,
+        options: const FormComponentOptions(),
+      );
+      final properties = FormFieldProperties(
+        fieldId: 'id',
+        appendOnlyAttachments: true,
+        typeOverride: 'videoRecorder',
+      );
+
+      final widget = fromModel(component, properties: properties);
+
+      expect(
+        (widget as AttachmentFormWidget).fieldProperties,
+        equals(properties),
+      );
+    });
+
     test('AddressComponent receives its FormFieldProperties', () {
       const field = GridField(
         id: 'id',

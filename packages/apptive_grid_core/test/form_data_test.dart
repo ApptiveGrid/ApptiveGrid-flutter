@@ -1028,6 +1028,10 @@ void main() {
           false,
           null,
           null,
+          null,
+          false,
+          false,
+          Object.hashAllUnordered(const <int>[]),
         ),
       );
     });
@@ -1053,8 +1057,65 @@ void main() {
           'hidden: false, '
           'disabled: false, '
           'line1Label: null, '
-          'line2Label: null)',
+          'line2Label: null, '
+          'typeOverride: null, '
+          'enableBarcodeScanner: false, '
+          'appendOnlyAttachments: false, '
+          'i18n: {})',
         ),
+      );
+    });
+
+    test('Attachment, barcode and i18n options parse and serialize', () {
+      const field =
+          GridField(id: 'files', name: 'Files', type: DataType.attachment);
+      final json = {
+        'pageId': pageId,
+        'fieldIndex': 1,
+        'typeOverride': 'videoRecorder',
+        'enableBarcodeScanner': true,
+        'appendOnlyAttachments': true,
+        'i18n': {
+          'de': {'label': 'Dateien', 'description': 'Bitte anhängen'},
+          'fr': {'label': 'Fichiers'},
+        },
+      };
+
+      final properties = FormFieldProperties.fromJson(json: json, field: field);
+
+      expect(properties.typeOverride, equals('videoRecorder'));
+      expect(properties.isVideoRecorder, isTrue);
+      expect(properties.enableBarcodeScanner, isTrue);
+      expect(properties.appendOnlyAttachments, isTrue);
+      expect(
+        properties.i18n,
+        equals({
+          'de': const FormFieldTranslation(
+            label: 'Dateien',
+            description: 'Bitte anhängen',
+          ),
+          'fr': const FormFieldTranslation(label: 'Fichiers'),
+        }),
+      );
+      expect(properties.toJson(), equals(json));
+      expect(
+        properties,
+        equals(FormFieldProperties.fromJson(json: json, field: field)),
+      );
+      expect(
+        properties.hashCode,
+        equals(FormFieldProperties.fromJson(json: json, field: field).hashCode),
+      );
+    });
+
+    test('Defaults keep the json minimal', () {
+      final properties = FormFieldProperties(fieldId: 'f');
+
+      expect(properties.isVideoRecorder, isFalse);
+      expect(properties.toJson(), equals({}));
+      expect(
+        FormFieldTranslation.fromJson('not a map'),
+        equals(const FormFieldTranslation()),
       );
     });
 

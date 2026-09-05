@@ -121,4 +121,7 @@ abstract class ApptiveGridTranslation {
 
   /// Header for a group of resources of the same [DataResourceMetaType] in a [ResourceFormWidget]
   String resourceGroupLabel(DataResourceMetaType metaType);
+
+  /// Label of the button that records a video in an [AttachmentFormWidget] with `typeOverride: videoRecorder`
+  String get recordVideo;
 }

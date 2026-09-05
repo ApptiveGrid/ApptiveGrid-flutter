@@ -3,6 +3,7 @@
  - **FEAT**: Add `Address` DataType, `Address` model and `AddressDataEntity`.
  - **FEAT**: `Address.displayString` for a single-line representation, matching the frontend's `AGAddress.displayString`.
  - **FEAT**: `FormFieldProperties.line1Label` / `line2Label`, the per-field label overrides an address field can carry.
+ - **FEAT**: `FormFieldProperties` now carries every key the form builder writes: `typeOverride` (with `isVideoRecorder`), `enableBarcodeScanner`, `appendOnlyAttachments` and the per-language `i18n` translations as `FormFieldTranslation`.
  - **FEAT**: Add `ApptiveLinkType.resources`, the link a `DataType.resource` field offers to list its selectable resources.
  - **FEAT**: Add the missing `DataResourceType`s (`list`, `timeline`, `flow`, `flowInstance`, `externalFlowTrigger`, `addEntity`) and `DataResourceMetaType`s (`gridView`, `externalHook`, `flowNode`) the backend emits.
  - **FIX**: `ResourceDataEntity.schemaValue` now includes a top-level `href`, which is what the backend resolves a written resource reference through; without it the value was rejected. `DataResource.fromJson` accepts a bare `href` or `uri` in return.

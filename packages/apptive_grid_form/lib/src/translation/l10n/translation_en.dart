@@ -87,6 +87,8 @@ class ApptiveGridLocalizedTranslation extends ApptiveGridTranslation {
   String get addressGeocodingFailed =>
       "Position could not be determined automatically";
   @override
+  String get recordVideo => "Record video";
+  @override
   String resourceGroupLabel(DataResourceMetaType metaType) =>
       switch (metaType) {
         DataResourceMetaType.grid => "Grids and Views",

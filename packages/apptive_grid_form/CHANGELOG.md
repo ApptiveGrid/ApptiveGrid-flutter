@@ -4,6 +4,7 @@
  - **FEAT**: `AddressFormWidget` suggests addresses from Google Places while typing the first line and fills all fields from the picked place, restricted to the chosen country like on the web. Custom `line1Label` / `line2Label` from the field's `FormFieldProperties` are honoured.
  - **FEAT**: `LocationManager.autocompleteAddress` and `GoogleMapsPlaces.autocomplete` with `components` and `types` support.
  - **REFACTOR**: Replace the country name lists with `kCountries`, carrying ISO alpha-2 codes next to the English and German names.
+ - **FEAT**: `AttachmentFormWidget` honours `appendOnlyAttachments` (attachments present when the form opens cannot be removed) and `typeOverride: videoRecorder` (a single "Record video" button instead of the source menu, one clip per field).
  - **FEAT**: Add `ResourceFormWidget` to select a resource in a `DataType.resource` field. Options are loaded from the field's `resources` link and grouped by meta type like on the web.
  - **FIX**: `DataType.resource` used to be mapped to `TextFormWidget`, whose cast to `StringDataEntity` threw at runtime for every form containing a resource field.
 

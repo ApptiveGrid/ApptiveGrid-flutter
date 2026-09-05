@@ -14,10 +14,18 @@ class AttachmentFormWidget extends StatefulWidget {
   const AttachmentFormWidget({
     super.key,
     required this.component,
+    this.fieldProperties,
   });
 
   /// Component this Widget should reflect
   final FormComponent<AttachmentDataEntity> component;
+
+  /// Per-field settings of the form. Honoured here:
+  /// [FormFieldProperties.appendOnlyAttachments] keeps the attachments that
+  /// exist when the form opens read-only, and
+  /// [FormFieldProperties.isVideoRecorder] turns the field into a single
+  /// video recording.
+  final FormFieldProperties? fieldProperties;
 
   @override
   State<StatefulWidget> createState() => _AttachmentFormWidgetState();
@@ -27,6 +35,28 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+
+  /// Attachments the user must not remove. Captured once, like the frontend
+  /// does in `created()`; a default value has already been applied by then.
+  late final Set<Attachment> _protected;
+
+  bool get _appendOnly => widget.fieldProperties?.appendOnlyAttachments == true;
+
+  bool get _videoRecorder => widget.fieldProperties?.isVideoRecorder == true;
+
+  @override
+  void initState() {
+    super.initState();
+    _protected = _appendOnly ? {...?widget.component.data.value} : const {};
+  }
+
+  bool _canRemove(Attachment attachment) =>
+      widget.component.enabled && !_protected.contains(attachment);
+
+  /// The video recorder holds one clip; the button only shows while empty.
+  bool get _showAddButton =>
+      widget.component.enabled &&
+      (!_videoRecorder || (widget.component.data.value?.isEmpty ?? true));
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +113,7 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
                           Expanded(
                             child: Text(attachment.name),
                           ),
-                          if (widget.component.enabled)
+                          if (_canRemove(attachment))
                             IconButton(
                               onPressed: () {
                                 attachmentManager.removeAttachment(attachment);
@@ -97,8 +127,11 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
                       );
                     },
                   ),
-                if (widget.component.enabled)
+                if (_showAddButton)
                   AddAttachmentButton(
+                    mode: _videoRecorder
+                        ? AddAttachmentMode.videoRecorder
+                        : AddAttachmentMode.any,
                     onAttachmentsAdded: (newAttachments) =>
                         _attachmentsAdded(newAttachments, formState),
                   ),

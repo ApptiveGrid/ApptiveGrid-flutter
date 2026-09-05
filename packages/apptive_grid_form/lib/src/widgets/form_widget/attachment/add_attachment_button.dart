@@ -10,15 +10,32 @@ import 'package:permission_handler_platform_interface/permission_handler_platfor
 import 'package:provider/provider.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+/// How an [AddAttachmentButton] lets users add attachments
+enum AddAttachmentMode {
+  /// A menu with camera, gallery and files
+  any,
+
+  /// A single button that records one video with the camera. Used for
+  /// attachment fields with `typeOverride: videoRecorder`.
+  videoRecorder,
+}
+
 /// [PopupMenuButton] that presents different options to pick Attachments.
 ///
 /// Users can chosse to add Attachment from Camera, Image Gallery and Files
 class AddAttachmentButton extends StatefulWidget {
   /// Creates a new PopupMenuButton
-  const AddAttachmentButton({super.key, this.onAttachmentsAdded});
+  const AddAttachmentButton({
+    super.key,
+    this.onAttachmentsAdded,
+    this.mode = AddAttachmentMode.any,
+  });
 
   /// Callback invoked when the user has added new Attachments
   final void Function(List<Attachment>?)? onAttachmentsAdded;
+
+  /// Which sources the button offers
+  final AddAttachmentMode mode;
 
   @override
   State<AddAttachmentButton> createState() => _AddAttachmentButtonState();
@@ -53,6 +70,24 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
   @override
   Widget build(BuildContext context) {
     final l10n = ApptiveGridLocalization.of(context)!;
+    if (widget.mode == AddAttachmentMode.videoRecorder) {
+      return TextButton(
+        onPressed: () async {
+          final attachments = await _recordVideo();
+          if (attachments != null) {
+            widget.onAttachmentsAdded?.call(attachments);
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(_SourceOption.video.icon),
+            const SizedBox(width: 4),
+            Text(l10n.recordVideo),
+          ],
+        ),
+      );
+    }
     return PopupMenuButton<_SourceOption>(
       enableFeedback: false,
       key: _popupKey,
@@ -86,7 +121,8 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
         final Future<List<Attachment>?> attachmentSelection = switch (option) {
           _SourceOption.files => _pickFromFiles(),
           _SourceOption.gallery => _pickFromImageLibrary(),
-          _SourceOption.camera => _takePicture()
+          _SourceOption.camera => _takePicture(),
+          _SourceOption.video => _recordVideo(),
         };
         final attachments = await attachmentSelection;
         if (attachments != null) {
@@ -152,9 +188,17 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
     }
   }
 
+  Future<List<Attachment>?> _recordVideo() async {
+    final file = await _imagePicker.pickVideo(source: ImageSource.camera);
+    return _attachmentFromCapture(file);
+  }
+
   Future<List<Attachment>?> _takePicture() async {
     final file = await _imagePicker.pickImage(source: ImageSource.camera);
+    return _attachmentFromCapture(file);
+  }
 
+  Future<List<Attachment>?> _attachmentFromCapture(XFile? file) async {
     if (file != null && mounted) {
       final client = ApptiveGrid.getClient(context, listen: false);
       final attachmentManager =
@@ -191,7 +235,7 @@ class _SourceOptionPopupItem extends StatelessWidget {
   }
 }
 
-enum _SourceOption { files, gallery, camera }
+enum _SourceOption { files, gallery, camera, video }
 
 extension _SourceOptionX on _SourceOption {
   IconData get icon {
@@ -202,6 +246,8 @@ extension _SourceOptionX on _SourceOption {
         isApple ? CupertinoIcons.photo_on_rectangle : Icons.photo,
       _SourceOption.camera =>
         isApple ? CupertinoIcons.camera : Icons.camera_alt,
+      _SourceOption.video =>
+        isApple ? CupertinoIcons.video_camera : Icons.videocam,
     };
   }
 }

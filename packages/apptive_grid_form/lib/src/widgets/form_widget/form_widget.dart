@@ -36,6 +36,7 @@ Widget fromModel(
         ),
       DataType.attachment => AttachmentFormWidget(
           component: component.cast<AttachmentDataEntity>(),
+          fieldProperties: properties,
         ),
       DataType.enumCollection => EnumCollectionFormWidget(
           component: component.cast<EnumCollectionDataEntity>(),

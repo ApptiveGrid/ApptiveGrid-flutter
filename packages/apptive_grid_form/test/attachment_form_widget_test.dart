@@ -27,6 +27,8 @@ void main() {
     );
     registerFallbackValue(const MultiImagePickerOptions());
     registerFallbackValue(const ImagePickerOptions());
+    registerFallbackValue(CameraDevice.rear);
+    registerFallbackValue(Duration.zero);
   });
   const field =
       GridField(id: 'fieldId', name: 'name', type: DataType.attachment);
@@ -840,6 +842,256 @@ void main() {
         expect(captured.length, equals(1));
         final submittedData = captured.first as FormData;
         expect(submittedData.components!.first.data, equals(data));
+      });
+    });
+  });
+
+  group('Field properties', () {
+    final action = ApptiveLink(uri: Uri.parse('formAction'), method: 'POST');
+
+    MockApptiveGridClient clientFor(FormData formData) {
+      final client = MockApptiveGridClient();
+      when(() => client.sendPendingActions())
+          .thenAnswer((_) => Future.value([]));
+      when(() => client.submitFormWithProgress(action, any())).thenAnswer(
+        (_) => Stream.value(
+          SubmitCompleteProgressEvent(Response('body', 200)),
+        ),
+      );
+      final attachmentProcessor = MockAttachmentProcessor();
+      when(() => client.attachmentProcessor).thenReturn(attachmentProcessor);
+      when(() => attachmentProcessor.createAttachment(any())).thenAnswer(
+        (invocation) async {
+          final name = invocation.positionalArguments.first as String;
+          return Attachment(
+            name: name,
+            type: name.endsWith('mp4') ? 'video/mp4' : 'application/pdf',
+            url: Uri.parse('https://attachments.example/$name'),
+          );
+        },
+      );
+      return client;
+    }
+
+    FormData formWith({
+      required AttachmentDataEntity data,
+      required FormFieldProperties properties,
+    }) =>
+        FormData(
+          id: 'formId',
+          title: 'title',
+          components: [
+            FormComponent<AttachmentDataEntity>(
+              property: 'property',
+              data: data,
+              field: field,
+            ),
+          ],
+          fieldProperties: [properties],
+          links: {ApptiveLinkType.submit: action},
+          fields: [field],
+        );
+
+    group('Append only', () {
+      late FilePickerPlatform originalFilePicker;
+
+      setUp(() => originalFilePicker = FilePickerPlatform.instance);
+      tearDown(() => FilePickerPlatform.instance = originalFilePicker);
+
+      testWidgets('Existing attachments cannot be removed, new ones can',
+          (tester) async {
+        final existing = Attachment(
+          name: 'contract.pdf',
+          url: Uri.parse('https://attachments.example/contract.pdf'),
+          type: 'application/pdf',
+        );
+        final filePicker = MockFilePicker();
+        when(
+          () => filePicker.pickFiles(
+            dialogTitle: any(named: 'dialogTitle'),
+            allowMultiple: true,
+            withData: true,
+            type: FileType.any,
+          ),
+        ).thenAnswer(
+          (_) async => FilePickerResult([
+            PlatformFile(
+              name: 'addendum.pdf',
+              size: 10,
+              bytes: Uint8List(10),
+              path: 'path',
+            ),
+          ]),
+        );
+        FilePickerPlatform.instance = filePicker;
+
+        final formData = formWith(
+          data: AttachmentDataEntity([existing]),
+          properties: FormFieldProperties(
+            fieldId: field.id,
+            appendOnlyAttachments: true,
+          ),
+        );
+        final client = clientFor(formData);
+
+        await tester.pumpWidget(
+          TestApp(
+            client: client,
+            child: ApptiveGridFormData(formData: formData),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text('contract.pdf'), findsOneWidget);
+        expect(find.byIcon(Icons.close), findsNothing);
+
+        await tester.tap(find.text('Add attachment'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Select files'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('addendum.pdf'), findsOneWidget);
+        // Only the new attachment gets a remove button.
+        expect(find.byIcon(Icons.close), findsOneWidget);
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        final submitted =
+            verify(() => client.submitFormWithProgress(action, captureAny()))
+                .captured
+                .first as FormData;
+        final names =
+            (submitted.components!.first.data.value as List<Attachment>)
+                .map((a) => a.name);
+        expect(names, equals(['contract.pdf', 'addendum.pdf']));
+        expect(
+          submitted.attachmentActions[existing],
+          isNull,
+          reason: 'a protected attachment must not get a delete action',
+        );
+      });
+    });
+
+    group('Video recorder', () {
+      late ImagePickerPlatform originalImagePlatform;
+      late PermissionHandlerPlatform originalPermissionPlatform;
+
+      setUp(() {
+        originalImagePlatform = ImagePicker.platform;
+        originalPermissionPlatform = PermissionHandlerPlatform.instance;
+        final permissionHandler = MockPermissionHandler();
+        PermissionHandlerPlatform.instance = permissionHandler;
+        when(() => permissionHandler.checkPermissionStatus(Permission.camera))
+            .thenAnswer((_) async => PermissionStatus.granted);
+      });
+
+      tearDown(() {
+        ImagePickerPlatform.instance = originalImagePlatform;
+        PermissionHandlerPlatform.instance = originalPermissionPlatform;
+      });
+
+      testWidgets('Offers a single record button that adds one clip',
+          (tester) async {
+        final imagePicker = MockImagePicker();
+        final clip = MockXFile();
+        when(() => clip.name).thenReturn('clip.mp4');
+        when(() => clip.path).thenReturn('path/clip.mp4');
+        when(
+          () => imagePicker.getVideo(
+            source: ImageSource.camera,
+            preferredCameraDevice: any(named: 'preferredCameraDevice'),
+            maxDuration: any(named: 'maxDuration'),
+          ),
+        ).thenAnswer((_) async => clip);
+        ImagePickerPlatform.instance = imagePicker;
+
+        final formData = formWith(
+          data: AttachmentDataEntity(),
+          properties: FormFieldProperties(
+            fieldId: field.id,
+            typeOverride: 'videoRecorder',
+          ),
+        );
+        final client = clientFor(formData);
+
+        await tester.pumpWidget(
+          TestApp(
+            client: client,
+            child: ApptiveGridFormData(formData: formData),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text('Record video'), findsOneWidget);
+        expect(find.text('Add attachment'), findsNothing);
+
+        await tester.tap(find.text('Record video'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('clip.mp4'), findsOneWidget);
+        // One clip per field: the button is gone until the clip is removed.
+        expect(find.text('Record video'), findsNothing);
+
+        await tester.tap(find.byIcon(Icons.close));
+        await tester.pumpAndSettle();
+        expect(find.text('clip.mp4'), findsNothing);
+        expect(find.text('Record video'), findsOneWidget);
+
+        await tester.tap(find.text('Record video'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        final submitted =
+            verify(() => client.submitFormWithProgress(action, captureAny()))
+                .captured
+                .first as FormData;
+        expect(
+          submitted.components!.first.data,
+          equals(
+            AttachmentDataEntity([
+              Attachment(
+                name: 'clip.mp4',
+                type: 'video/mp4',
+                url: Uri.parse('https://attachments.example/clip.mp4'),
+              ),
+            ]),
+          ),
+        );
+      });
+
+      testWidgets('Cancelled recording leaves the field empty', (tester) async {
+        final imagePicker = MockImagePicker();
+        when(
+          () => imagePicker.getVideo(
+            source: ImageSource.camera,
+            preferredCameraDevice: any(named: 'preferredCameraDevice'),
+            maxDuration: any(named: 'maxDuration'),
+          ),
+        ).thenAnswer((_) async => null);
+        ImagePickerPlatform.instance = imagePicker;
+
+        final formData = formWith(
+          data: AttachmentDataEntity(),
+          properties: FormFieldProperties(
+            fieldId: field.id,
+            typeOverride: 'videoRecorder',
+          ),
+        );
+
+        await tester.pumpWidget(
+          TestApp(
+            client: clientFor(formData),
+            child: ApptiveGridFormData(formData: formData),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Record video'));
+        await tester.pumpAndSettle();
+
+        expect(formData.components!.first.data.value, isEmpty);
+        expect(find.text('Record video'), findsOneWidget);
       });
     });
   });
