@@ -1,3 +1,8 @@
+## 1.4.1
+
+ - **FIX**: Make `onSurface` contrast with `surface` instead of matching it. Content reading the token was invisible — date and time picker numbers, and disabled buttons, chips and icons.
+ - **FIX**: Derive the primary container roles from the brand blue rather than from the seed colour, so selected states no longer pick up an unrelated hue.
+
 ## 1.4.0
 
  - **FEAT**: Bundle Material Design Icons font directly, removing dependency on material_design_icons_flutter.

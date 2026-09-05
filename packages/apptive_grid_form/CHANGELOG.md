@@ -8,6 +8,10 @@
  - **FEAT**: Add `ResourceFormWidget` to select a resource in a `DataType.resource` field. Options are loaded from the field's `resources` link and grouped by meta type like on the web.
  - **FIX**: `DataType.resource` used to be mapped to `TextFormWidget`, whose cast to `StringDataEntity` threw at runtime for every form containing a resource field.
 
+## 2.2.2
+
+ - **FIX**: Load cross reference rows from `items` with the `indexed` layout. Cross reference and multi cross reference fields previously failed against real backends with "type 'Null' is not a subtype of type 'List<dynamic>' in type cast".
+
 ## 2.2.1
 
  - **CHORE**: Bump hand_signature to ^3.1.0 (#146).

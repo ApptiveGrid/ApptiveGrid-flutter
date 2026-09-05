@@ -524,4 +524,170 @@ void main() {
       );
     });
   });
+
+  group('Query response shapes', () {
+    // The entities endpoint answers either with a bare list or with a paged
+    // object under `items`. Only `entities` used to be handled, which threw
+    // "type 'Null' is not a subtype of type 'List<dynamic>'" against a real
+    // backend and broke every cross reference field. `entities` stays covered
+    // so deployments serving it don't regress.
+    const field = GridField(id: 'field', name: 'Name', type: DataType.text);
+    final gridUri = Uri.parse('/api/users/user/spaces/space/grids/grid');
+    final queryLink = ApptiveLink(
+      uri: gridUri.replace(path: '${gridUri.path}/query'),
+      method: 'get',
+    );
+
+    final rowJson = [
+      {
+        '_id': 'row1',
+        'fields': ['First'],
+        '_links': {
+          'self': {'href': '/api/entities/row1', 'method': 'get'},
+        },
+      },
+      {
+        '_id': 'row2',
+        'fields': ['Second'],
+        '_links': {
+          'self': {'href': '/api/entities/row2', 'method': 'get'},
+        },
+      },
+    ];
+
+    final shapes = <String, dynamic>{
+      'bare list': rowJson,
+      'paged items': {
+        'items': rowJson,
+        'numberOfItems': 2,
+        'numberOfPages': 1,
+        'size': 2,
+        'page': 1,
+      },
+      'legacy entities': {'entities': rowJson},
+    };
+
+    for (final entry in shapes.entries) {
+      testWidgets('parses a ${entry.key} response', (tester) async {
+        final client = MockApptiveGridClient();
+        final grid = Grid(
+          id: 'grid',
+          name: 'Test',
+          fields: [field],
+          rows: const [],
+          links: {
+            ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
+            ApptiveLinkType.query: queryLink,
+          },
+        );
+
+        when(() => client.sendPendingActions()).thenAnswer((_) async => []);
+        when(
+          () => client.loadGrid(uri: any(named: 'uri'), loadEntities: false),
+        ).thenAnswer((_) async => grid);
+        when(
+          () => client.performApptiveLink<List<GridRow>>(
+            link: queryLink,
+            queryParameters: any(named: 'queryParameters'),
+            parseResponse: any(named: 'parseResponse'),
+          ),
+        ).thenAnswer((invocation) async {
+          final parseResponse =
+              invocation.namedArguments[const Symbol('parseResponse')]
+                  as Future<List<GridRow>?> Function(Response);
+          return parseResponse(Response(jsonEncode(entry.value), 200));
+        });
+
+        await tester.pumpWidget(
+          TestApp(
+            client: client,
+            child: Form(
+              key: GlobalKey<FormState>(),
+              child: CrossReferenceFormWidget(
+                component: FormComponent<CrossReferenceDataEntity>(
+                  property: 'Property',
+                  data: CrossReferenceDataEntity(gridUri: gridUri),
+                  field: const GridField(
+                    id: 'fieldId',
+                    name: 'name',
+                    type: DataType.crossReference,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.arrow_drop_down));
+        await tester.pumpAndSettle();
+
+        expect(find.text('First'), findsNWidgets(1));
+        expect(find.text('Second'), findsNWidgets(1));
+      });
+    }
+
+    testWidgets('requests the indexed layout', (tester) async {
+      // Parsing indexes into entity['fields'], which only the indexed layout
+      // provides. The endpoint defaults to the `field` layout, where values
+      // are keyed by field id and `fields` is absent.
+      final client = MockApptiveGridClient();
+      Map<String, String>? sentQueryParameters;
+      final grid = Grid(
+        id: 'grid',
+        name: 'Test',
+        fields: [field],
+        rows: const [],
+        links: {
+          ApptiveLinkType.self: ApptiveLink(uri: gridUri, method: 'get'),
+          ApptiveLinkType.query: queryLink,
+        },
+      );
+
+      when(() => client.sendPendingActions()).thenAnswer((_) async => []);
+      when(() => client.loadGrid(uri: any(named: 'uri'), loadEntities: false))
+          .thenAnswer((_) async => grid);
+      when(
+        () => client.performApptiveLink<List<GridRow>>(
+          link: queryLink,
+          queryParameters: any(named: 'queryParameters'),
+          parseResponse: any(named: 'parseResponse'),
+        ),
+      ).thenAnswer((invocation) async {
+        sentQueryParameters =
+            invocation.namedArguments[const Symbol('queryParameters')]
+                as Map<String, String>?;
+        final parseResponse =
+            invocation.namedArguments[const Symbol('parseResponse')]
+                as Future<List<GridRow>?> Function(Response);
+        return parseResponse(Response(jsonEncode({'items': rowJson}), 200));
+      });
+
+      await tester.pumpWidget(
+        TestApp(
+          client: client,
+          child: Form(
+            key: GlobalKey<FormState>(),
+            child: CrossReferenceFormWidget(
+              component: FormComponent<CrossReferenceDataEntity>(
+                property: 'Property',
+                data: CrossReferenceDataEntity(gridUri: gridUri),
+                field: const GridField(
+                  id: 'fieldId',
+                  name: 'name',
+                  type: DataType.crossReference,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.arrow_drop_down));
+      await tester.pumpAndSettle();
+
+      expect(sentQueryParameters?['layout'], 'indexed');
+    });
+  });
 }

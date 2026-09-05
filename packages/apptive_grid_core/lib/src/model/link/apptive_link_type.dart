@@ -205,6 +205,19 @@ enum ApptiveLinkType {
   /// Create a new Grid from a CSV
   uploadCSV,
 
+  /// Requests a pre-signed upload target for an attachment of a [Space]
+  ///
+  /// Performing this link returns the url to upload a file to and the url the
+  /// uploaded file will be available at once the upload completed
+  s3UploadUri,
+
+  /// Requests a pre-signed upload target for an attachment of a [FormData] or a
+  /// [GridField] with [GridField.type] == [DataType.attachment]
+  ///
+  /// Performing this link returns the url to upload a file to and the url the
+  /// uploaded file will be available at once the upload completed
+  uploadUri,
+
   // SView
   /// Link to the respective Grid of a SView
   grid,

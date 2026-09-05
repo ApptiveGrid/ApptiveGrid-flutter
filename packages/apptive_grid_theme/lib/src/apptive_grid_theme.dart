@@ -59,7 +59,28 @@ class ApptiveGridTheme {
       onSecondary: Colors.white,
       surface: windowBackground,
       seedColor: windowBackground,
-      onSurface: windowBackground,
+      // `onSurface` is the colour of content drawn *on* `surface`, so it must
+      // contrast with it. It used to be `windowBackground` — the same value as
+      // `surface` — which left anything reading the token invisible: the time
+      // picker's dial numbers and unselected field, and the date picker's day
+      // grid, all rendered near-white on near-white.
+      onSurface: _withBrightness(
+        light: _lightOnSurface,
+        dark: _darkOnSurface,
+      ),
+      // `fromSeed` derives the container roles from `seedColor`, which here is
+      // the window background rather than the brand colour passed as
+      // `primary`. Selected states therefore picked up a hue unrelated to
+      // ApptiveGrid — a turquoise hour field in the time picker. Tie them back
+      // to the brand blue.
+      primaryContainer: _withBrightness(
+        light: _lightPrimaryContainer,
+        dark: _darkPrimaryContainer,
+      ),
+      onPrimaryContainer: _withBrightness(
+        light: ApptiveGridColors.apptiveGridBlue,
+        dark: _lightPrimaryContainer,
+      ),
     );
 
     return baseTheme.copyWith(
@@ -358,3 +379,17 @@ class ApptiveGridTheme {
     }
   }
 }
+
+/// Content colour on light surfaces. Near-black rather than pure black, to
+/// match the tone the text theme already uses.
+const _lightOnSurface = Color(0xFF212121);
+
+/// Content colour on dark surfaces.
+const _darkOnSurface = Color(0xFFF2F2F2);
+
+/// Tinted surface for selected states on a light background, derived from
+/// [ApptiveGridColors.apptiveGridBlue].
+const _lightPrimaryContainer = Color(0xFFD6E3F7);
+
+/// Tinted surface for selected states on a dark background.
+const _darkPrimaryContainer = Color(0xFF0D3C75);

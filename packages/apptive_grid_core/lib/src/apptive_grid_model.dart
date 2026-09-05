@@ -2,6 +2,7 @@ export 'package:apptive_grid_core/src/model/address/address.dart';
 export 'package:apptive_grid_core/src/model/attachment/attachment.dart';
 export 'package:apptive_grid_core/src/model/attachment/attachment_action.dart';
 export 'package:apptive_grid_core/src/model/attachment/attachment_configuration.dart';
+export 'package:apptive_grid_core/src/model/attachment/attachment_upload_target.dart';
 export 'package:apptive_grid_core/src/model/created_by/created_by.dart';
 export 'package:apptive_grid_core/src/model/data_entity.dart';
 export 'package:apptive_grid_core/src/model/data_type.dart';
