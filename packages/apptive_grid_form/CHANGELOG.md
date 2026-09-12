@@ -1,4 +1,4 @@
-## Unreleased
+## 2.4.0
 
  - **FEAT**: `ApptiveGridForm` and `ApptiveGridFormData` take a `labelPosition`. With `ApptiveGridLabelPosition.above` a field's label is shown as a separate `Text` above the field instead of as a floating label inside it, which also makes the field's placeholder visible while it is empty. `labelStyle` styles those labels, defaulting to `InputDecorationTheme.labelStyle` and then `TextTheme.titleMedium`. The default stays `ApptiveGridLabelPosition.floating`, so existing forms are unchanged.
  - **FEAT**: `ApptiveGridLabelPosition.above` also applies to the sub fields of an address field, so street, post code, city, state and country carry their label above them like every other field instead of mixing both styles within one group.
