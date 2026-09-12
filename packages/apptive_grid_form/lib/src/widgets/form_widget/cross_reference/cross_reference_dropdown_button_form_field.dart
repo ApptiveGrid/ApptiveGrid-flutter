@@ -171,8 +171,8 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
         }
       }.call(),
       decoration: widget.component.baseDecoration(context).copyWith(
-        errorText: _error?.toString(),
-      ),
+            errorText: _error?.toString(),
+          ),
     );
   }
 

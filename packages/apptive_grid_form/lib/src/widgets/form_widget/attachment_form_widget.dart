@@ -82,13 +82,13 @@ class _AttachmentFormWidgetState extends State<AttachmentFormWidget>
         builder: (formState) {
           return InputDecorator(
             decoration: widget.component.baseDecoration(context).copyWith(
-              errorText: formState.errorText,
-              contentPadding: EdgeInsets.zero,
-              border: InputBorder.none,
-              errorBorder: InputBorder.none,
-              isDense: true,
-              filled: false,
-            ),
+                  errorText: formState.errorText,
+                  contentPadding: EdgeInsets.zero,
+                  border: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  isDense: true,
+                  filled: false,
+                ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,

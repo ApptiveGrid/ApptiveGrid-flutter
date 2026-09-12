@@ -43,11 +43,11 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
       builder: (fieldState) {
         return InputDecorator(
           decoration: widget.component.baseDecoration(context).copyWith(
-            errorText: fieldState.errorText,
-            contentPadding: EdgeInsets.zero,
-            filled: false,
-            border: InputBorder.none,
-          ),
+                errorText: fieldState.errorText,
+                contentPadding: EdgeInsets.zero,
+                filled: false,
+                border: InputBorder.none,
+              ),
           child: Padding(
             padding: const EdgeInsets.only(top: 0),
             child: Builder(

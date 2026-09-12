@@ -35,11 +35,11 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
         builder: (fieldState) {
           return InputDecorator(
             decoration: widget.component.baseDecoration(context).copyWith(
-              errorText: fieldState.errorText,
-              contentPadding: EdgeInsets.zero,
-              filled: false,
-              border: InputBorder.none,
-            ),
+                  errorText: fieldState.errorText,
+                  contentPadding: EdgeInsets.zero,
+                  filled: false,
+                  border: InputBorder.none,
+                ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
