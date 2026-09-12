@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:apptive_grid_core/apptive_grid_core.dart';
+import 'package:apptive_grid_form/src/configurations/form_widget_configurations.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/src/util/submit_progress.dart';
 import 'package:apptive_grid_form/src/widgets/form_widget/attachment_manager.dart';
@@ -38,6 +39,8 @@ class ApptiveGridForm extends StatefulWidget {
     this.buttonLabel,
     this.hideButton = false,
     this.componentBuilder,
+    this.labelPosition = ApptiveGridLabelPosition.floating,
+    this.labelStyle,
   });
 
   /// [Uri] of the Form to display
@@ -125,6 +128,22 @@ class ApptiveGridForm extends StatefulWidget {
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
 
+  /// Where the label of a Form Field is displayed
+  ///
+  /// Defaults to [ApptiveGridLabelPosition.floating], the Material Design
+  /// behavior where the label floats from inside the field to its top edge.
+  /// Use [ApptiveGridLabelPosition.above] to show the label as a separate
+  /// [Text] above the field.
+  ///
+  /// Widgets provided by [componentBuilder] are not affected by this.
+  final ApptiveGridLabelPosition labelPosition;
+
+  /// Style for labels displayed with [ApptiveGridLabelPosition.above]
+  ///
+  /// If this is `null` the [InputDecorationTheme.labelStyle] is used, falling
+  /// back to [TextTheme.titleMedium]
+  final TextStyle? labelStyle;
+
   @override
   ApptiveGridFormState createState() => ApptiveGridFormState();
 }
@@ -188,6 +207,8 @@ class ApptiveGridFormState extends State<ApptiveGridForm> {
       buttonLabel: widget.buttonLabel,
       hideButton: widget.hideButton,
       componentBuilder: widget.componentBuilder,
+      labelPosition: widget.labelPosition,
+      labelStyle: widget.labelStyle,
     );
   }
 
@@ -258,6 +279,8 @@ class ApptiveGridFormData extends StatefulWidget {
     this.buttonLabel,
     this.hideButton = false,
     this.componentBuilder,
+    this.labelPosition = ApptiveGridLabelPosition.floating,
+    this.labelStyle,
   });
 
   /// [FormData] that should be displayed
@@ -336,6 +359,22 @@ class ApptiveGridFormData extends StatefulWidget {
 
   /// A custom Builder for Building custom Widgets for FormComponents
   final Widget? Function(BuildContext, FormComponent)? componentBuilder;
+
+  /// Where the label of a Form Field is displayed
+  ///
+  /// Defaults to [ApptiveGridLabelPosition.floating], the Material Design
+  /// behavior where the label floats from inside the field to its top edge.
+  /// Use [ApptiveGridLabelPosition.above] to show the label as a separate
+  /// [Text] above the field.
+  ///
+  /// Widgets provided by [componentBuilder] are not affected by this.
+  final ApptiveGridLabelPosition labelPosition;
+
+  /// Style for labels displayed with [ApptiveGridLabelPosition.above]
+  ///
+  /// If this is `null` the [InputDecorationTheme.labelStyle] is used, falling
+  /// back to [TextTheme.titleMedium]
+  final TextStyle? labelStyle;
 
   @override
   ApptiveGridFormDataState createState() => ApptiveGridFormDataState();
@@ -418,71 +457,75 @@ class ApptiveGridFormDataState extends State<ApptiveGridFormData> {
 
   @override
   Widget build(BuildContext context) {
-    return ApptiveGridLocalization(
-      child: Builder(
-        builder: (buildContext) {
-          if (_error != null) {
-            return FormErrorWidget(
-              error: _error,
-              padding: widget.contentPadding ?? _defaultPadding,
-              didTapBackButton: () {
-                if (_formData == null) {
-                  widget.triggerReload?.call();
-                }
-                _updateView(resetFormData: false);
-              },
-              scrollController: widget.scrollController,
-            );
-          } else if (_saved) {
-            return SavedSubmitWidget(
-              didTapAdditionalAnswer: () {
-                widget.triggerReload?.call();
-                _updateView();
-              },
-              additionalAnswerButtonLabel:
-                  _formData?.properties?.afterSubmitAction?.buttonTitle,
-              scrollController: widget.scrollController,
-            );
-          } else if (_success) {
-            return SuccessfulSubmitWidget(
-              didTapAdditionalAnswer: () {
-                widget.triggerReload?.call();
-                _updateView();
-              },
-              successTitle: _formData?.properties?.successTitle,
-              successMessage: _formData?.properties?.successMessage,
-              additionalAnswerButtonLabel:
-                  _formData?.properties?.afterSubmitAction?.buttonTitle,
-              scrollController: widget.scrollController,
-            );
-          } else if (_formData == null) {
-            return const LoadingFormWidget();
-          } else {
-            return Provider<AttachmentManager>.value(
-              value: _attachmentManager,
-              child: FormDataWidget(
-                data: _formData!,
-                isSubmitting: _submitting,
+    return ApptiveGridLabelConfiguration(
+      position: widget.labelPosition,
+      style: widget.labelStyle,
+      child: ApptiveGridLocalization(
+        child: Builder(
+          builder: (buildContext) {
+            if (_error != null) {
+              return FormErrorWidget(
+                error: _error,
                 padding: widget.contentPadding ?? _defaultPadding,
-                hideTitle: widget.hideTitle,
-                titlePadding: widget.titlePadding,
-                titleStyle: widget.titleStyle,
-                hideDescription: widget.hideDescription,
-                descriptionPadding: widget.descriptionPadding,
-                descriptionStyle: widget.descriptionStyle,
-                textBlockPadding: widget.textBlockPadding,
-                textBlockStyle: widget.textBlockStyle,
-                componentBuilder: widget.componentBuilder,
-                hideButton: widget.hideButton,
-                buttonLabel: widget.buttonLabel,
-                buttonAlignment: widget.buttonAlignment,
-                submitForm: submitForm,
-                progress: _progress,
+                didTapBackButton: () {
+                  if (_formData == null) {
+                    widget.triggerReload?.call();
+                  }
+                  _updateView(resetFormData: false);
+                },
                 scrollController: widget.scrollController,
-              ),
-            );
-          }
-        },
+              );
+            } else if (_saved) {
+              return SavedSubmitWidget(
+                didTapAdditionalAnswer: () {
+                  widget.triggerReload?.call();
+                  _updateView();
+                },
+                additionalAnswerButtonLabel:
+                    _formData?.properties?.afterSubmitAction?.buttonTitle,
+                scrollController: widget.scrollController,
+              );
+            } else if (_success) {
+              return SuccessfulSubmitWidget(
+                didTapAdditionalAnswer: () {
+                  widget.triggerReload?.call();
+                  _updateView();
+                },
+                successTitle: _formData?.properties?.successTitle,
+                successMessage: _formData?.properties?.successMessage,
+                additionalAnswerButtonLabel:
+                    _formData?.properties?.afterSubmitAction?.buttonTitle,
+                scrollController: widget.scrollController,
+              );
+            } else if (_formData == null) {
+              return const LoadingFormWidget();
+            } else {
+              return Provider<AttachmentManager>.value(
+                value: _attachmentManager,
+                child: FormDataWidget(
+                  data: _formData!,
+                  isSubmitting: _submitting,
+                  padding: widget.contentPadding ?? _defaultPadding,
+                  hideTitle: widget.hideTitle,
+                  titlePadding: widget.titlePadding,
+                  titleStyle: widget.titleStyle,
+                  hideDescription: widget.hideDescription,
+                  descriptionPadding: widget.descriptionPadding,
+                  descriptionStyle: widget.descriptionStyle,
+                  textBlockPadding: widget.textBlockPadding,
+                  textBlockStyle: widget.textBlockStyle,
+                  componentBuilder: widget.componentBuilder,
+                  hideButton: widget.hideButton,
+                  buttonLabel: widget.buttonLabel,
+                  buttonAlignment: widget.buttonAlignment,
+                  submitForm: submitForm,
+                  progress: _progress,
+                  scrollController: widget.scrollController,
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
   }

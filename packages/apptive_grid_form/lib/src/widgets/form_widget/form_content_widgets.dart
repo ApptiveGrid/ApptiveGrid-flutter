@@ -1,8 +1,8 @@
-import 'package:apptive_grid_core/apptive_grid_core.dart';
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/src/util/submit_progress.dart';
 import 'package:apptive_grid_form/src/widgets/apptive_grid_form_widgets.dart';
+import 'package:apptive_grid_form/src/widgets/form_widget/form_widget_helpers.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -643,7 +643,10 @@ class FormPage extends StatelessWidget {
                       if (customBuilder != null) {
                         return customBuilder;
                       } else {
-                        return componentWidget;
+                        return _LabeledFormComponent(
+                          component: component,
+                          child: componentWidget,
+                        );
                       }
                     },
                   ),
@@ -720,6 +723,31 @@ class FormPage extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+}
+
+/// Displays [child] with the label of [component] above it if the
+/// [ApptiveGridLabelConfiguration] asks for [ApptiveGridLabelPosition.above]
+class _LabeledFormComponent extends StatelessWidget {
+  const _LabeledFormComponent({
+    required this.component,
+    required this.child,
+  });
+
+  final FormComponent component;
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    // A CheckBox shows its label next to the box, so it never gets one above
+    if (child is CheckBoxFormWidget) {
+      return child;
+    }
+    return LabeledFormField(
+      label: component.labelText,
+      child: child,
     );
   }
 }

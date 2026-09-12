@@ -160,3 +160,21 @@ Widget build(BuildContext context) {
   );
 }
 ```
+
+### Label Position
+
+By default a field's label is a Material floating label: it sits inside the field and moves to its top edge once the field is focused or filled. Set `labelPosition` to `ApptiveGridLabelPosition.above` to render the label as a separate `Text` above the field instead. The field itself is then rendered without a label, which means a field's placeholder is visible while it is empty.
+
+`labelStyle` styles those labels. Without it the `InputDecorationTheme.labelStyle` is used, falling back to `TextTheme.titleMedium`, so a label above a field looks the same as a floating one until you style it.
+
+```dart
+ApptiveGridForm(
+  uri: Uri.parse('YOUR_FORM_URI'),
+  labelPosition: ApptiveGridLabelPosition.above,
+  labelStyle: Theme.of(context).textTheme.labelMedium,
+)
+```
+
+The sub fields of an address field (street, post code, city, state, country) follow the same setting, so one address group does not mix both styles.
+
+A checkbox always keeps its label next to the box. Widgets returned by `componentBuilder` are not touched, they bring their own label. Placeholders stay inside their field in both modes – this includes the date and time hints of a `DataType.dateTime` field, which are placeholders rather than labels.

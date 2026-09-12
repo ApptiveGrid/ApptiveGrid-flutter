@@ -56,7 +56,7 @@ class _TextFormWidgetState extends State<TextFormWidget>
       autovalidateMode: AutovalidateMode.onUserInteraction,
       minLines: widget.component.options.multi ? 3 : 1,
       maxLines: widget.component.options.multi ? null : 1,
-      decoration: widget.component.baseDecoration,
+      decoration: widget.component.baseDecoration(context),
       enabled: widget.component.enabled,
     );
   }

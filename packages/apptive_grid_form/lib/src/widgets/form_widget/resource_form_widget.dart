@@ -85,7 +85,7 @@ class _ResourceFormWidgetState extends State<ResourceFormWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final decoration = widget.component.baseDecoration;
+    final decoration = widget.component.baseDecoration(context);
     if (_error != null) {
       return InputDecorator(
         decoration: decoration.copyWith(errorText: _error.toString()),

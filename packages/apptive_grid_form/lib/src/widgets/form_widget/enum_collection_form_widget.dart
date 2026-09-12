@@ -42,7 +42,7 @@ class _EnumCollectionFormWidgetState extends State<EnumCollectionFormWidget>
       enabled: widget.component.enabled,
       builder: (fieldState) {
         return InputDecorator(
-          decoration: widget.component.baseDecoration.copyWith(
+          decoration: widget.component.baseDecoration(context).copyWith(
             errorText: fieldState.errorText,
             contentPadding: EdgeInsets.zero,
             filled: false,

@@ -57,7 +57,7 @@ class _UserDropdownButtonFormFieldState
       selectedItemBuilder: _selectedItems,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data.value,
-      decoration: widget.component.baseDecoration,
+      decoration: widget.component.baseDecoration(context),
     );
   }
 

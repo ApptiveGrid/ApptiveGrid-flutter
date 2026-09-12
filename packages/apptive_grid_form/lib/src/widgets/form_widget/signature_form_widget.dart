@@ -72,7 +72,7 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
               ? _openSignatureSheet
               : null,
           child: InputDecorator(
-            decoration: widget.component.baseDecoration.copyWith(
+            decoration: widget.component.baseDecoration(context).copyWith(
               errorText: formState.errorText,
               contentPadding: EdgeInsets.zero,
               border: const OutlineInputBorder(),

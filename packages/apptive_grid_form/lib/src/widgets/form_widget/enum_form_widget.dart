@@ -34,7 +34,7 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
         enabled: widget.component.enabled,
         builder: (fieldState) {
           return InputDecorator(
-            decoration: widget.component.baseDecoration.copyWith(
+            decoration: widget.component.baseDecoration(context).copyWith(
               errorText: fieldState.errorText,
               contentPadding: EdgeInsets.zero,
               filled: false,
@@ -95,7 +95,7 @@ class _EnumFormWidgetState extends State<EnumFormWidget>
       validator: _validate,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: widget.component.data.value,
-      decoration: widget.component.baseDecoration,
+      decoration: widget.component.baseDecoration(context),
     );
   }
 

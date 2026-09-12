@@ -6,6 +6,7 @@ import 'package:apptive_grid_form/src/google_maps_webservice/google_maps_webserv
 import 'package:apptive_grid_form/src/widgets/address/address_from_place.dart';
 import 'package:apptive_grid_form/src/widgets/address/countries.dart';
 import 'package:apptive_grid_form/src/widgets/form_widget/form_widget_helpers.dart';
+import 'package:apptive_grid_form/src/widgets/form_widget/labeled_form_field.dart';
 import 'package:apptive_grid_form/src/widgets/geolocation/geolocation_map.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -132,57 +133,68 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
             Provider.value(value: const PermissionManager()),
           ],
           builder: (providerContext, __) => InputDecorator(
-            decoration: widget.component.baseDecoration.copyWith(
-              errorText: formState.errorText,
-              contentPadding: EdgeInsets.zero,
-              border: InputBorder.none,
-              errorBorder: InputBorder.none,
-              filled: false,
-            ),
+            decoration: widget.component.baseDecoration(context).copyWith(
+                  errorText: formState.errorText,
+                  contentPadding: EdgeInsets.zero,
+                  border: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  filled: false,
+                ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Room for the field's floating label, so it does not collide
-                // with the decorator's own label above the group.
+                // Room for the first field's floating label, so it does not
+                // collide with the decorator's own label above the group. With
+                // labels above their fields it separates the group's label
+                // from the first field's one.
                 const SizedBox(height: 12),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: _buildLine1Field(
-                        providerContext,
-                        formState,
-                        translations,
+                LabeledFormField(
+                  label: _line1Label(translations),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: _buildLine1Field(
+                          providerContext,
+                          formState,
+                          translations,
+                        ),
                       ),
-                    ),
-                    if (_locationPermission !=
-                        PermissionStatus.permanentlyDenied) ...[
-                      const SizedBox(width: 4),
-                      IconButton(
-                        key: const Key('AddressFormWidget.currentLocation'),
-                        tooltip: translations.useCurrentLocation,
-                        onPressed: widget.component.enabled && !_locating
-                            ? () =>
-                                _useCurrentLocation(providerContext, formState)
-                            : null,
-                        icon: const Icon(Icons.my_location),
-                      ),
+                      if (_locationPermission !=
+                          PermissionStatus.permanentlyDenied) ...[
+                        const SizedBox(width: 4),
+                        IconButton(
+                          key: const Key('AddressFormWidget.currentLocation'),
+                          tooltip: translations.useCurrentLocation,
+                          onPressed: widget.component.enabled && !_locating
+                              ? () => _useCurrentLocation(
+                                    providerContext,
+                                    formState,
+                                  )
+                              : null,
+                          icon: const Icon(Icons.my_location),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 8),
-                TextField(
-                  key: const Key('AddressFormWidget.line2'),
-                  controller: _line2Controller,
-                  enabled: widget.component.enabled,
-                  decoration: InputDecoration(
-                    labelText: _line2Label(translations),
-                    isDense: true,
-                  ),
-                  onChanged: (value) => _updateAddress(
-                    formState,
-                    (address) => address.copyWith(line2: value),
+                LabeledFormField(
+                  label: _line2Label(translations),
+                  child: TextField(
+                    key: const Key('AddressFormWidget.line2'),
+                    controller: _line2Controller,
+                    enabled: widget.component.enabled,
+                    decoration: InputDecoration(
+                      labelText:
+                          labelInDecoration(context, _line2Label(translations)),
+                      isDense: true,
+                    ),
+                    onChanged: (value) => _updateAddress(
+                      formState,
+                      (address) => address.copyWith(line2: value),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -190,55 +202,76 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: TextField(
-                        key: const Key('AddressFormWidget.postCode'),
-                        controller: _postCodeController,
-                        enabled: widget.component.enabled,
-                        decoration: InputDecoration(
-                          labelText: translations.addressPostCodeLabel,
-                          isDense: true,
-                        ),
-                        onChanged: (value) => _updateAddress(
-                          formState,
-                          (address) => address.copyWith(postCode: value),
+                      child: LabeledFormField(
+                        label: translations.addressPostCodeLabel,
+                        child: TextField(
+                          key: const Key('AddressFormWidget.postCode'),
+                          controller: _postCodeController,
+                          enabled: widget.component.enabled,
+                          decoration: InputDecoration(
+                            labelText: labelInDecoration(
+                              context,
+                              translations.addressPostCodeLabel,
+                            ),
+                            isDense: true,
+                          ),
+                          onChanged: (value) => _updateAddress(
+                            formState,
+                            (address) => address.copyWith(postCode: value),
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       flex: 2,
-                      child: TextField(
-                        key: const Key('AddressFormWidget.city'),
-                        controller: _cityController,
-                        enabled: widget.component.enabled,
-                        decoration: InputDecoration(
-                          labelText: translations.addressCityLabel,
-                          isDense: true,
-                        ),
-                        onChanged: (value) => _updateAddress(
-                          formState,
-                          (address) => address.copyWith(city: value),
+                      child: LabeledFormField(
+                        label: translations.addressCityLabel,
+                        child: TextField(
+                          key: const Key('AddressFormWidget.city'),
+                          controller: _cityController,
+                          enabled: widget.component.enabled,
+                          decoration: InputDecoration(
+                            labelText: labelInDecoration(
+                              context,
+                              translations.addressCityLabel,
+                            ),
+                            isDense: true,
+                          ),
+                          onChanged: (value) => _updateAddress(
+                            formState,
+                            (address) => address.copyWith(city: value),
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                TextField(
-                  key: const Key('AddressFormWidget.state'),
-                  controller: _stateController,
-                  enabled: widget.component.enabled,
-                  decoration: InputDecoration(
-                    labelText: translations.addressStateLabel,
-                    isDense: true,
-                  ),
-                  onChanged: (value) => _updateAddress(
-                    formState,
-                    (address) => address.copyWith(state: value),
+                LabeledFormField(
+                  label: translations.addressStateLabel,
+                  child: TextField(
+                    key: const Key('AddressFormWidget.state'),
+                    controller: _stateController,
+                    enabled: widget.component.enabled,
+                    decoration: InputDecoration(
+                      labelText: labelInDecoration(
+                        context,
+                        translations.addressStateLabel,
+                      ),
+                      isDense: true,
+                    ),
+                    onChanged: (value) => _updateAddress(
+                      formState,
+                      (address) => address.copyWith(state: value),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
-                _buildCountryField(formState, translations),
+                LabeledFormField(
+                  label: translations.addressCountryLabel,
+                  child: _buildCountryField(formState, translations),
+                ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
@@ -315,7 +348,7 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
         focusNode: focusNode,
         enabled: widget.component.enabled,
         decoration: InputDecoration(
-          labelText: _line1Label(translations),
+          labelText: labelInDecoration(context, _line1Label(translations)),
           isDense: true,
         ),
         onChanged: (value) => _updateAddress(
@@ -428,7 +461,8 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
         focusNode: focusNode,
         enabled: widget.component.enabled,
         decoration: InputDecoration(
-          labelText: translations.addressCountryLabel,
+          labelText:
+              labelInDecoration(context, translations.addressCountryLabel),
           isDense: true,
         ),
         onChanged: (value) => _updateAddress(
