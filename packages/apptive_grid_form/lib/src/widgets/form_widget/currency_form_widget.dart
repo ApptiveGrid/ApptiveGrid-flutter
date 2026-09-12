@@ -107,7 +107,7 @@ class _CurrencyFormWidgetState extends State<CurrencyFormWidget>
       ],
       keyboardType:
           const TextInputType.numberWithOptions(signed: true, decimal: false),
-      decoration: widget.component.baseDecoration,
+      decoration: widget.component.baseDecoration(context),
     );
   }
 }

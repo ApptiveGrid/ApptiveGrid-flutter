@@ -72,14 +72,14 @@ class _SignatureFormWidgetState extends State<SignatureFormWidget>
               ? _openSignatureSheet
               : null,
           child: InputDecorator(
-            decoration: widget.component.baseDecoration.copyWith(
-              errorText: formState.errorText,
-              contentPadding: EdgeInsets.zero,
-              border: const OutlineInputBorder(),
-              errorBorder: const OutlineInputBorder(),
-              isDense: true,
-              filled: false,
-            ),
+            decoration: widget.component.baseDecoration(context).copyWith(
+                  errorText: formState.errorText,
+                  contentPadding: EdgeInsets.zero,
+                  border: const OutlineInputBorder(),
+                  errorBorder: const OutlineInputBorder(),
+                  isDense: true,
+                  filled: false,
+                ),
             child: AspectRatio(
               aspectRatio: 2,
               child: _signatureController.isFilled || _loadedSvg != null

@@ -75,7 +75,7 @@ class _DecimalFormWidgetState extends State<DecimalFormWidget>
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))],
       keyboardType:
           const TextInputType.numberWithOptions(signed: true, decimal: true),
-      decoration: widget.component.baseDecoration,
+      decoration: widget.component.baseDecoration(context),
     );
   }
 }

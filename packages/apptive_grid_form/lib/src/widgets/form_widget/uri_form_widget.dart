@@ -70,7 +70,7 @@ class _UriFormWidgetState extends State<UriFormWidget>
       autovalidateMode: AutovalidateMode.onUserInteraction,
       minLines: 1,
       maxLines: 1,
-      decoration: widget.component.baseDecoration,
+      decoration: widget.component.baseDecoration(context),
       enabled: widget.component.enabled,
     );
   }

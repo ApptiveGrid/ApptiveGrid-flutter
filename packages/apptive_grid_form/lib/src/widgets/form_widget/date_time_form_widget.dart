@@ -57,9 +57,9 @@ class _DateTimeFormWidgetState extends State<DateTimeFormWidget>
       builder: (state) {
         final localization = ApptiveGridLocalization.of(context)!;
         return InputDecorator(
-          decoration: widget.component.baseDecoration.copyWith(
-            errorText: state.errorText,
-          ),
+          decoration: widget.component.baseDecoration(context).copyWith(
+                errorText: state.errorText,
+              ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

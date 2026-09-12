@@ -1,3 +1,8 @@
+## Unreleased
+
+ - **FEAT**: `ApptiveGridForm` and `ApptiveGridFormData` take a `labelPosition`. With `ApptiveGridLabelPosition.above` a field's label is shown as a separate `Text` above the field instead of as a floating label inside it, which also makes the field's placeholder visible while it is empty. `labelStyle` styles those labels, defaulting to `InputDecorationTheme.labelStyle` and then `TextTheme.titleMedium`. The default stays `ApptiveGridLabelPosition.floating`, so existing forms are unchanged.
+ - **FEAT**: `ApptiveGridLabelPosition.above` also applies to the sub fields of an address field, so street, post code, city, state and country carry their label above them like every other field instead of mixing both styles within one group.
+
 ## 2.3.1
 
  - **FIX**: The back button and back gesture work again on the first page of a multi-page form. `canPop` of the form's `PopScope` was computed once at build time and never followed the page change, so after visiting a later page – or even on the very first build – leaving the form was silently refused.

@@ -62,7 +62,7 @@ class _EmailFormWidgetState extends State<EmailFormWidget>
       autovalidateMode: AutovalidateMode.onUserInteraction,
       minLines: 1,
       maxLines: 1,
-      decoration: widget.component.baseDecoration,
+      decoration: widget.component.baseDecoration(context),
       autofillHints: const {AutofillHints.email},
       keyboardType: TextInputType.emailAddress,
       enabled: widget.component.enabled,

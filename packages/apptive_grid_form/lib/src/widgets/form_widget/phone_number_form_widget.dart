@@ -67,7 +67,7 @@ class _PhoneNumberFormWidgetState extends State<PhoneNumberFormWidget>
       ],
       minLines: 1,
       maxLines: 1,
-      decoration: widget.component.baseDecoration,
+      decoration: widget.component.baseDecoration(context),
       autofillHints: const {
         AutofillHints.telephoneNumber,
         AutofillHints.telephoneNumberDevice,

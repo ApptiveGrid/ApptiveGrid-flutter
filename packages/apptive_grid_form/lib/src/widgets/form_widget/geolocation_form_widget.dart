@@ -82,13 +82,13 @@ class _GeolocationFormWidgetState extends State<GeolocationFormWidget>
             Provider.value(value: const PermissionManager()),
           ],
           builder: (_, __) => InputDecorator(
-            decoration: widget.component.baseDecoration.copyWith(
-              errorText: formState.errorText,
-              contentPadding: EdgeInsets.zero,
-              border: InputBorder.none,
-              errorBorder: InputBorder.none,
-              filled: false,
-            ),
+            decoration: widget.component.baseDecoration(context).copyWith(
+                  errorText: formState.errorText,
+                  contentPadding: EdgeInsets.zero,
+                  border: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  filled: false,
+                ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,

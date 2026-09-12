@@ -14,6 +14,7 @@ export 'package:apptive_grid_form/src/widgets/form_widget/enum_form_widget.dart'
 export 'package:apptive_grid_form/src/widgets/form_widget/form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/geolocation_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/integer_form_widget.dart';
+export 'package:apptive_grid_form/src/widgets/form_widget/labeled_form_field.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/multi_cross_reference_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/phone_number_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/resource_form_widget.dart';
