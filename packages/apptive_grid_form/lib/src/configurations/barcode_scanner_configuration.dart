@@ -25,9 +25,11 @@ import 'package:flutter/widgets.dart';
 /// )
 /// ```
 ///
-/// A scan button is only shown where the field's
-/// [FormFieldProperties.enableBarcodeScanner] is set as well, so the form's
-/// configuration stays in charge of which fields offer one.
+/// Where a button then appears differs by field: a text field also needs its
+/// [FormFieldProperties.enableBarcodeScanner] set, so the form's configuration
+/// stays in charge there. A cross reference field shows one whenever a scanner
+/// is available, because that flag is a text field setting the backend never
+/// sets on them.
 class BarcodeScannerConfiguration extends FormWidgetConfiguration {
   /// Creates a new [BarcodeScannerConfiguration]
   const BarcodeScannerConfiguration({

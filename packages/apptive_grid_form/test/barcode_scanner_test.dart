@@ -168,17 +168,14 @@ void main() {
 
     Future<void> pumpPicker(
       WidgetTester tester, {
-      required bool enableBarcodeScanner,
       BarcodeScannerConfiguration? configuration,
     }) async {
       // ApptiveGrid.getOptions reads them off the client, so the mock has to
       // carry them rather than TestApp
-      when(() => client.options).thenReturn(
-        ApptiveGridOptions(
-          formWidgetConfigurations: [
-            if (configuration != null) configuration,
-          ],
-        ),
+      (client as MockApptiveGridClient).options = ApptiveGridOptions(
+        formWidgetConfigurations: [
+          if (configuration != null) configuration,
+        ],
       );
       await tester.pumpWidget(
         TestApp(
@@ -189,8 +186,6 @@ void main() {
               data: CrossReferenceDataEntity(gridUri: gridUri),
               field: crossRefField,
             ),
-            fieldProperties:
-                _properties(enableBarcodeScanner: enableBarcodeScanner),
           ),
         ),
       );
@@ -200,9 +195,17 @@ void main() {
     }
 
     testWidgets('No button without a scanner from the app', (tester) async {
-      await pumpPicker(tester, enableBarcodeScanner: true);
+      await pumpPicker(tester);
       expect(_scanButton, findsNothing);
       expect(find.text('First'), findsOneWidget);
+    });
+
+    testWidgets('The button does not wait for enableBarcodeScanner',
+        (tester) async {
+      // Unlike a text field: the backend never sets that flag on a cross
+      // reference field, so the app providing a scanner is the whole condition
+      await pumpPicker(tester, configuration: _scanner('Second'));
+      expect(_scanButton, findsOneWidget);
     });
 
     testWidgets('A scan selects the row it unambiguously points at',
@@ -210,7 +213,6 @@ void main() {
       final scanned = <String>[];
       await pumpPicker(
         tester,
-        enableBarcodeScanner: true,
         configuration: _scanner('Second', log: scanned),
       );
       expect(_scanButton, findsOneWidget);

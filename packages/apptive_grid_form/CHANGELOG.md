@@ -1,6 +1,7 @@
 ## 2.5.0
 
- - **FEAT**: Fields whose `FormFieldProperties.enableBarcodeScanner` is set can offer a barcode or QR code scanner. The flag was already parsed from the backend but never acted on. Text and cross reference fields (single and multi) show a scan button, and in a cross reference picker a scan that matches exactly one row selects it right away instead of only filtering.
+ - **FEAT**: Text and cross reference fields can offer a barcode or QR code scanner. A text field shows a scan button where its `FormFieldProperties.enableBarcodeScanner` is set – a flag the backend already sent but no Widget acted on. A cross reference field shows one whenever a scanner is available, since that flag is a text field setting and is never set on them; a scan there searches the picker and selects the row right away when exactly one matches, instead of only filtering.
+ - **NOTE**: The cross reference picker now reads `ApptiveGridOptions` while building, to find out whether a scanner is available. A widget test that renders one against a mocked `ApptiveGridClient` has to answer its `options`, which a bare mock leaves as `null`.
  - **FEAT**: Add `BarcodeScannerConfiguration`. The package ships no scanner of its own – that would force native camera dependencies and a camera usage description on every app using it – so the app passes one through `ApptiveGridOptions.formWidgetConfigurations`, as it already does for the Places API key. Without it no scan button is shown anywhere, so nothing changes for apps that do not want one.
 
 ## 2.4.1

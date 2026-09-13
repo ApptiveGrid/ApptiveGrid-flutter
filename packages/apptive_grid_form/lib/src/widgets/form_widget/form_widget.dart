@@ -34,7 +34,6 @@ Widget fromModel(
         EnumFormWidget(component: component.cast<EnumDataEntity>()),
       DataType.crossReference => CrossReferenceFormWidget(
           component: component.cast<CrossReferenceDataEntity>(),
-          fieldProperties: properties,
         ),
       DataType.attachment => AttachmentFormWidget(
           component: component.cast<AttachmentDataEntity>(),
@@ -52,7 +51,6 @@ Widget fromModel(
         ),
       DataType.multiCrossReference => MultiCrossReferenceFormWidget(
           component: component.cast<MultiCrossReferenceDataEntity>(),
-          fieldProperties: properties,
         ),
       DataType.user =>
         UserFormWidget(component: component.cast<UserDataEntity>()),

@@ -64,7 +64,8 @@ class _TextFormWidgetState extends State<TextFormWidget>
       decoration: widget.component.baseDecoration(context).copyWith(
             suffixIcon: barcodeScanButton(
               context,
-              fieldProperties: widget.fieldProperties,
+              fieldAsksForScanner:
+                  widget.fieldProperties?.enableBarcodeScanner == true,
               enabled: widget.component.enabled,
               onScanned: (value) => _controller.text = value,
             ),

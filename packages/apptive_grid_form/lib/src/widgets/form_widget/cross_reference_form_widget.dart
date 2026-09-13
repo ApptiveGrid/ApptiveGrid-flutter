@@ -8,14 +8,10 @@ class CrossReferenceFormWidget extends StatefulWidget {
   const CrossReferenceFormWidget({
     super.key,
     required this.component,
-    this.fieldProperties,
   });
 
   /// Component this Widget should reflect
   final FormComponent<CrossReferenceDataEntity> component;
-
-  /// Properties of the component's field, used for the barcode scanner
-  final FormFieldProperties? fieldProperties;
 
   @override
   State<CrossReferenceFormWidget> createState() =>
@@ -35,7 +31,6 @@ class _CrossReferenceFormWidgetState extends State<CrossReferenceFormWidget> {
   Widget build(BuildContext context) {
     return CrossReferenceDropdownButtonFormField<CrossReferenceDataEntity>(
       component: widget.component,
-      fieldProperties: widget.fieldProperties,
       selectedItemBuilder: (data) => Text(
         data?.value?.toString() ?? '',
       ),

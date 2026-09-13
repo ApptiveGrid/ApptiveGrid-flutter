@@ -4,18 +4,17 @@ import 'package:flutter/material.dart';
 /// A button that scans a barcode into a field, or `null` where no scanner
 /// should be offered
 ///
-/// Returns `null` unless both sides agree: the app provides a
-/// [BarcodeScannerConfiguration] and the field's
-/// [FormFieldProperties.enableBarcodeScanner] is set. Being `null` rather than
-/// an empty Widget lets it be passed to [InputDecoration.suffixIcon] directly,
-/// where a placeholder would still take up space.
+/// Returns `null` unless the app provides a [BarcodeScannerConfiguration] and
+/// [fieldAsksForScanner] holds. Being `null` rather than an empty Widget lets
+/// it be passed to [InputDecoration.suffixIcon] directly, where a placeholder
+/// would still take up space.
 Widget? barcodeScanButton(
   BuildContext context, {
-  required FormFieldProperties? fieldProperties,
+  required bool fieldAsksForScanner,
   required bool enabled,
   required ValueChanged<String> onScanned,
 }) {
-  if (fieldProperties?.enableBarcodeScanner != true) {
+  if (!fieldAsksForScanner) {
     return null;
   }
   final configuration = ApptiveGrid.getOptions(context)

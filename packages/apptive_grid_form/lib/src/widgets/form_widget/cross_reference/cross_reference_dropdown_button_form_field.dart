@@ -19,7 +19,6 @@ class CrossReferenceDropdownButtonFormField<T extends DataEntity>
     required this.component,
     required this.selectedItemBuilder,
     required this.onSelected,
-    this.fieldProperties,
     required this.selectedNotifier,
   }) : assert(
           T == CrossReferenceDataEntity || T == MultiCrossReferenceDataEntity,
@@ -37,9 +36,6 @@ class CrossReferenceDropdownButtonFormField<T extends DataEntity>
     bool selected,
     CrossReferenceDropdownButtonFormFieldState<T> state,
   ) onSelected;
-
-  /// Properties of the component's field, used for the barcode scanner
-  final FormFieldProperties? fieldProperties;
 
   /// A [Notifier] to notify when the selected entity changed
   final SelectedRowsNotifier selectedNotifier;
@@ -207,7 +203,10 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
               ),
               suffixIcon: barcodeScanButton(
                 context,
-                fieldProperties: widget.fieldProperties,
+                // The backend's enableBarcodeScanner is a text field setting
+                // and is never set on a cross reference field, so here the app
+                // providing a scanner is the whole condition.
+                fieldAsksForScanner: true,
                 enabled: widget.component.enabled,
                 onScanned: (value) => _scannedValue.value = value,
               ),

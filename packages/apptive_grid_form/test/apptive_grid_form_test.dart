@@ -667,8 +667,8 @@ void main() {
         );
         when(() => cache.getPendingActionItems())
             .thenAnswer((invocation) => cacheMap.toList());
-        when(() => client.options)
-            .thenAnswer((invocation) => ApptiveGridOptions(cache: cache));
+        (client as MockApptiveGridClient).options =
+            ApptiveGridOptions(cache: cache);
         final target = TestApp(
           client: client,
           child: ApptiveGridForm(
@@ -1113,7 +1113,7 @@ void main() {
           AttachmentCompleteProgressEvent(http.Response('', 400)),
         ),
       );
-      when(() => client.options).thenReturn(ApptiveGridOptions(cache: cache));
+      client.options = ApptiveGridOptions(cache: cache);
 
       final target = TestApp(
         client: client,

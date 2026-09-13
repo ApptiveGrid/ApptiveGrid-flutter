@@ -181,9 +181,16 @@ ApptiveGrid(
 )
 ```
 
-`scan` completes with the scanned value, or `null` when the user cancels. Both sides have to agree before a button appears: the app provides the configuration **and** the field asks for it. Without the configuration no button is shown anywhere.
+`scan` completes with the scanned value, or `null` when the user cancels. Without the configuration no button is shown anywhere.
 
-Text fields put the scanned value into the field. Cross reference fields put it into the picker's search, and when exactly one row matches it is selected right away.
+Where a button appears differs by field:
+
+| Field | Shows a scan button | On a scan |
+| --- | --- | --- |
+| Text | where `enableBarcodeScanner` is set on the field | the value goes into the field |
+| Cross reference (single and multi) | whenever a scanner is configured | the picker searches for it and selects the row when exactly one matches |
+
+A cross reference field does not wait for `enableBarcodeScanner`: that flag is a text field setting and the backend never sets it on them.
 
 `buttonTooltip` lives in the configuration rather than in the package's translations because those are generated from POEditor — a string added locally would be dropped by the next update. Pass a localized label from the app.
 

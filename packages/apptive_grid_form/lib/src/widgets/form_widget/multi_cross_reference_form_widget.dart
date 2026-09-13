@@ -8,14 +8,10 @@ class MultiCrossReferenceFormWidget extends StatefulWidget {
   const MultiCrossReferenceFormWidget({
     super.key,
     required this.component,
-    this.fieldProperties,
   });
 
   /// Component this Widget should reflect
   final FormComponent<MultiCrossReferenceDataEntity> component;
-
-  /// Properties of the component's field, used for the barcode scanner
-  final FormFieldProperties? fieldProperties;
 
   @override
   State<MultiCrossReferenceFormWidget> createState() =>
@@ -38,7 +34,6 @@ class _MultiCrossReferenceFormWidgetState
   Widget build(BuildContext context) {
     return CrossReferenceDropdownButtonFormField<MultiCrossReferenceDataEntity>(
       component: widget.component,
-      fieldProperties: widget.fieldProperties,
       selectedItemBuilder: (data) => Text(
         data!.value!.map((e) => e.value ?? '').join(', '),
       ),
