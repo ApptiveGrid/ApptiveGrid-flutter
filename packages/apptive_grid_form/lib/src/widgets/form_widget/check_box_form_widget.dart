@@ -43,11 +43,9 @@ class _CheckBoxFormWidgetState extends State<CheckBoxFormWidget>
             helperMaxLines: 100,
             errorText: state.errorText,
             contentPadding: EdgeInsets.zero,
-            border: InputBorder.none,
-            errorBorder: InputBorder.none,
             isDense: true,
             filled: false,
-          ),
+          ).withoutBorder,
           child: ColorFiltered(
             colorFilter: ColorFilter.mode(
               Theme.of(context).colorScheme.error,
