@@ -1,5 +1,6 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
+import 'package:apptive_grid_form/src/widgets/form_widget/barcode_scan_button.dart';
 import 'package:apptive_grid_form/src/widgets/form_widget/form_widget_helpers.dart';
 import 'package:flutter/material.dart';
 
@@ -9,10 +10,14 @@ class TextFormWidget extends StatefulWidget {
   const TextFormWidget({
     super.key,
     required this.component,
+    this.fieldProperties,
   });
 
   /// Component this Widget should reflect
   final FormComponent<StringDataEntity> component;
+
+  /// Properties of the component's field, used for the barcode scanner
+  final FormFieldProperties? fieldProperties;
 
   @override
   State<TextFormWidget> createState() => _TextFormWidgetState();
@@ -56,7 +61,14 @@ class _TextFormWidgetState extends State<TextFormWidget>
       autovalidateMode: AutovalidateMode.onUserInteraction,
       minLines: widget.component.options.multi ? 3 : 1,
       maxLines: widget.component.options.multi ? null : 1,
-      decoration: widget.component.baseDecoration(context),
+      decoration: widget.component.baseDecoration(context).copyWith(
+            suffixIcon: barcodeScanButton(
+              context,
+              fieldProperties: widget.fieldProperties,
+              enabled: widget.component.enabled,
+              onScanned: (value) => _controller.text = value,
+            ),
+          ),
       enabled: widget.component.enabled,
     );
   }
