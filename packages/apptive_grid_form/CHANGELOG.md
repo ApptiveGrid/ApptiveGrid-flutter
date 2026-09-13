@@ -1,3 +1,9 @@
+## 2.5.0
+
+ - **FEAT**: Text and cross reference fields can offer a barcode or QR code scanner. A text field shows a scan button where its `FormFieldProperties.enableBarcodeScanner` is set – a flag the backend already sent but no Widget acted on. A cross reference field shows one whenever a scanner is available, since that flag is a text field setting and is never set on them; a scan there searches the picker and selects the row right away when exactly one matches, instead of only filtering.
+ - **NOTE**: The cross reference picker now reads `ApptiveGridOptions` while building, to find out whether a scanner is available. A widget test that renders one against a mocked `ApptiveGridClient` has to answer its `options`, which a bare mock leaves as `null`.
+ - **FEAT**: Add `BarcodeScannerConfiguration`. The package ships no scanner of its own – that would force native camera dependencies and a camera usage description on every app using it – so the app passes one through `ApptiveGridOptions.formWidgetConfigurations`, as it already does for the Places API key. Without it no scan button is shown anywhere, so nothing changes for apps that do not want one.
+
 ## 2.4.1
 
  - **FIX**: Form Widgets that bring their own layout no longer get a border from the embedding app. `CheckBoxFormWidget`, `AttachmentFormWidget`, `GeolocationFormWidget`, `AddressFormWidget`, `EnumFormWidget`, `EnumCollectionFormWidget` and the date and time fields inside `DateTimeFormWidget` only set `InputDecoration.border`, but an `InputDecorator` picks `enabledBorder`, `disabledBorder`, `focusedBorder`, `errorBorder` or `focusedErrorBorder` depending on the field's state and falls back to `border` only where the matching one is `null`. Since those are filled from the app's `InputDecorationTheme`, an app that styles the individual states – a line in the resting state, for example – drew a box around a checkbox or an option list. All five are now set.

@@ -14,7 +14,17 @@ import 'package:mocktail/mocktail.dart';
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-class MockApptiveGridClient extends Mock implements ApptiveGridClient {}
+class MockApptiveGridClient extends Mock implements ApptiveGridClient {
+  /// Options the Widgets read through [ApptiveGrid.getOptions]
+  ///
+  /// A bare mock answers `null` here although the type says it cannot be,
+  /// which throws in every Widget that reads options — the cross reference
+  /// picker does, to find a [BarcodeScannerConfiguration]. A real field keeps
+  /// that from happening and lets a test hand configurations to the Widget
+  /// under test.
+  @override
+  ApptiveGridOptions options = const ApptiveGridOptions();
+}
 
 class MockHttpClient extends Mock implements http.Client {}
 
@@ -93,7 +103,7 @@ class TestApp extends StatelessWidget {
     final client = MockApptiveGridClient();
     when(() => client.sendPendingActions())
         .thenAnswer((invocation) async => []);
-    when(() => client.options).thenReturn(options);
+    client.options = options;
     return client;
   }
 }

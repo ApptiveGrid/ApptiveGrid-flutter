@@ -15,9 +15,10 @@ Widget fromModel(
   FormFieldProperties? properties,
 }) =>
     switch (component.field.type) {
-      DataType.text ||
-      DataType.richText =>
-        TextFormWidget(component: component.cast<StringDataEntity>()),
+      DataType.text || DataType.richText => TextFormWidget(
+          component: component.cast<StringDataEntity>(),
+          fieldProperties: properties,
+        ),
       DataType.dateTime => DateTimeFormWidget(
           component: component.cast<DateTimeDataEntity>(),
         ),

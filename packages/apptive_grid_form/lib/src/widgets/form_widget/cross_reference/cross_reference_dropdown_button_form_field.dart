@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:apptive_grid_form/apptive_grid_form.dart';
+import 'package:apptive_grid_form/src/widgets/form_widget/barcode_scan_button.dart';
 import 'package:apptive_grid_form/src/translation/apptive_grid_localization.dart';
 import 'package:apptive_grid_form/src/widgets/form_widget/form_widget_helpers.dart';
 import 'package:apptive_grid_form/src/widgets/grid/grid_row.dart';
@@ -60,6 +61,13 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
   ScrollController? _headerController;
 
   final _filterController = TextEditingController();
+
+  /// The value of the last barcode scan, consumed by the selection grid
+  ///
+  /// Held here rather than written straight into [_filterController] so the
+  /// grid can tell a scan apart from typing and select a unique match on its
+  /// own.
+  final _scannedValue = ValueNotifier<String?>(null);
 
   late final Uri _gridUri;
 
@@ -193,6 +201,15 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
                 Icons.search,
                 color: Theme.of(context).textTheme.displayLarge?.color,
               ),
+              suffixIcon: barcodeScanButton(
+                context,
+                // The backend's enableBarcodeScanner is a text field setting
+                // and is never set on a cross reference field, so here the app
+                // providing a scanner is the whole condition.
+                fieldAsksForScanner: true,
+                enabled: widget.component.enabled,
+                onScanned: (value) => _scannedValue.value = value,
+              ),
               hintText: localization.crossRefSearch,
               isDense: true,
             ),
@@ -216,6 +233,7 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
           enabled: false,
           child: _CrossReferenceSelectionGrid(
             controller: _filterController,
+            scannedValue: _scannedValue,
             scrollControllerGroup: _scrollControllerGroup,
             grid: _grid!,
             selectedNotifier: widget.selectedNotifier,
@@ -268,6 +286,7 @@ class CrossReferenceDropdownButtonFormFieldState<T extends DataEntity>
 class _CrossReferenceSelectionGrid extends StatefulWidget {
   const _CrossReferenceSelectionGrid({
     required this.controller,
+    required this.scannedValue,
     required this.scrollControllerGroup,
     required this.grid,
     required this.selectedNotifier,
@@ -275,6 +294,7 @@ class _CrossReferenceSelectionGrid extends StatefulWidget {
   });
 
   final TextEditingController controller;
+  final ValueNotifier<String?> scannedValue;
   final LinkedScrollControllerGroup scrollControllerGroup;
   final Grid grid;
   final SelectedRowsNotifier selectedNotifier;
@@ -296,6 +316,38 @@ class _CrossReferenceSelectionGridState
   void initState() {
     super.initState();
     widget.controller.addListener(_loadRows);
+    widget.scannedValue.addListener(_onScanned);
+  }
+
+  /// Puts a scanned value into the filter so the query runs against it
+  ///
+  /// Scanning the same code twice leaves the text untouched, which would not
+  /// notify the filter listener, so the reload is triggered directly then.
+  void _onScanned() {
+    final scanned = widget.scannedValue.value;
+    if (scanned == null) {
+      return;
+    }
+    if (widget.controller.text == scanned) {
+      _loadRows();
+    } else {
+      widget.controller.text = scanned;
+    }
+  }
+
+  /// Selects the row a scan unambiguously points at
+  ///
+  /// Only for the load that belongs to the scan: if the user kept typing in
+  /// the meantime, the result is theirs to pick.
+  void _selectScannedMatch(List<GridRow>? rows) {
+    final scanned = widget.scannedValue.value;
+    if (scanned == null || scanned != widget.controller.text) {
+      return;
+    }
+    widget.scannedValue.value = null;
+    if (rows != null && rows.length == 1) {
+      widget.onSelected(rows.first, true);
+    }
   }
 
   @override
@@ -310,6 +362,7 @@ class _CrossReferenceSelectionGridState
   @override
   void dispose() {
     widget.controller.removeListener(_loadRows);
+    widget.scannedValue.removeListener(_onScanned);
     for (final controller in _scrollControllers.values) {
       controller.dispose();
     }
@@ -408,12 +461,14 @@ class _CrossReferenceSelectionGridState
         setState(() {
           _rows = rows;
         });
+        _selectScannedMatch(rows);
       }
     } else {
       if (mounted) {
         setState(() {
           _rows = [];
         });
+        _selectScannedMatch(const []);
       }
     }
   }

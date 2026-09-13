@@ -1,6 +1,7 @@
 export 'package:apptive_grid_form/src/widgets/actions/action_button.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/address_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/attachment_form_widget.dart';
+export 'package:apptive_grid_form/src/widgets/form_widget/barcode_scan_button.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/check_box_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/cross_reference_form_widget.dart';
 export 'package:apptive_grid_form/src/widgets/form_widget/currency_form_widget.dart';

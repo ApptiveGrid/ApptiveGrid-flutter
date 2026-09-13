@@ -161,6 +161,39 @@ Widget build(BuildContext context) {
 }
 ```
 
+### Barcode and QR Code Scanner
+
+A field whose `enableBarcodeScanner` is set in its `FormFieldProperties` can offer a scan button. The package brings no scanner itself: a scanner plugin means native camera dependencies and a camera usage description for every app using `apptive_grid_form`, whether it scans or not. Pass one in instead:
+
+```dart
+ApptiveGrid(
+  options: ApptiveGridOptions(
+    formWidgetConfigurations: [
+      BarcodeScannerConfiguration(
+        scan: (context) => Navigator.of(context).push<String>(
+          MaterialPageRoute(builder: (_) => const MyScannerPage()),
+        ),
+        buttonTooltip: 'Scan barcode',
+      ),
+    ],
+  ),
+  child: ...,
+)
+```
+
+`scan` completes with the scanned value, or `null` when the user cancels. Without the configuration no button is shown anywhere.
+
+Where a button appears differs by field:
+
+| Field | Shows a scan button | On a scan |
+| --- | --- | --- |
+| Text | where `enableBarcodeScanner` is set on the field | the value goes into the field |
+| Cross reference (single and multi) | whenever a scanner is configured | the picker searches for it and selects the row when exactly one matches |
+
+A cross reference field does not wait for `enableBarcodeScanner`: that flag is a text field setting and the backend never sets it on them.
+
+`buttonTooltip` lives in the configuration rather than in the package's translations because those are generated from POEditor — a string added locally would be dropped by the next update. Pass a localized label from the app.
+
 ### Label Position
 
 By default a field's label is a Material floating label: it sits inside the field and moves to its top edge once the field is focused or filled. Set `labelPosition` to `ApptiveGridLabelPosition.above` to render the label as a separate `Text` above the field instead. The field itself is then rendered without a label, which means a field's placeholder is visible while it is empty.

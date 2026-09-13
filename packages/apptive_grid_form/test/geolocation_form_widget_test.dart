@@ -1574,7 +1574,7 @@ void main() {
         throw 'MissingMockResponse for GET $requestUri';
       });
 
-      when(() => apptiveGridClient.options).thenReturn(options);
+      apptiveGridClient.options = options;
       when(() => apptiveGridClient.sendPendingActions())
           .thenAnswer((_) async => []);
       when(
