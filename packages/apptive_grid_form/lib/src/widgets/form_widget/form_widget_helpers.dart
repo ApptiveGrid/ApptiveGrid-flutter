@@ -1,5 +1,6 @@
 import 'package:apptive_grid_form/apptive_grid_form.dart';
-import 'package:flutter/material.dart' show BuildContext, InputDecoration;
+import 'package:flutter/material.dart'
+    show BuildContext, InputBorder, InputDecoration, InputDecorationTheme;
 
 /// Extension on [FormComponent]
 extension FormComponentX on FormComponent {
@@ -27,4 +28,34 @@ extension FormComponentX on FormComponent {
       hintText: options.placeholder,
     );
   }
+}
+
+/// Extension on [InputDecoration]
+extension InputDecorationX on InputDecoration {
+  /// Uses [border] in every state of the field
+  ///
+  /// Setting [InputDecoration.border] alone is not enough. An
+  /// [InputDecorator] picks [InputDecoration.enabledBorder],
+  /// [InputDecoration.disabledBorder], [InputDecoration.focusedBorder],
+  /// [InputDecoration.errorBorder] or [InputDecoration.focusedErrorBorder]
+  /// depending on the field's state and only falls back to
+  /// [InputDecoration.border] where the matching one is `null`. Since
+  /// [InputDecoration.applyDefaults] fills the missing ones from the
+  /// [InputDecorationTheme] of the embedding app, a border set through
+  /// [InputDecoration.border] is overridden as soon as an app styles the
+  /// individual states.
+  InputDecoration borderInEveryState(InputBorder border) => copyWith(
+        border: border,
+        enabledBorder: border,
+        disabledBorder: border,
+        focusedBorder: border,
+        errorBorder: border,
+        focusedErrorBorder: border,
+      );
+
+  /// Hides the field's border in every state
+  ///
+  /// Use this for Widgets that bring their own layout and must not be boxed in
+  /// by the [InputDecorationTheme] of the app they are displayed in.
+  InputDecoration get withoutBorder => borderInEveryState(InputBorder.none);
 }

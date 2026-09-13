@@ -1,3 +1,7 @@
+## 2.4.1
+
+ - **FIX**: Form Widgets that bring their own layout no longer get a border from the embedding app. `CheckBoxFormWidget`, `AttachmentFormWidget`, `GeolocationFormWidget`, `AddressFormWidget`, `EnumFormWidget`, `EnumCollectionFormWidget` and the date and time fields inside `DateTimeFormWidget` only set `InputDecoration.border`, but an `InputDecorator` picks `enabledBorder`, `disabledBorder`, `focusedBorder`, `errorBorder` or `focusedErrorBorder` depending on the field's state and falls back to `border` only where the matching one is `null`. Since those are filled from the app's `InputDecorationTheme`, an app that styles the individual states – a line in the resting state, for example – drew a box around a checkbox or an option list. All five are now set.
+
 ## 2.4.0
 
  - **FEAT**: `ApptiveGridForm` and `ApptiveGridFormData` take a `labelPosition`. With `ApptiveGridLabelPosition.above` a field's label is shown as a separate `Text` above the field instead of as a floating label inside it, which also makes the field's placeholder visible while it is empty. `labelStyle` styles those labels, defaulting to `InputDecorationTheme.labelStyle` and then `TextTheme.titleMedium`. The default stays `ApptiveGridLabelPosition.floating`, so existing forms are unchanged.

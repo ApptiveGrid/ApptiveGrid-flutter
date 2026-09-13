@@ -133,13 +133,14 @@ class _AddressFormWidgetState extends State<AddressFormWidget>
             Provider.value(value: const PermissionManager()),
           ],
           builder: (providerContext, __) => InputDecorator(
-            decoration: widget.component.baseDecoration(context).copyWith(
+            decoration: widget.component
+                .baseDecoration(context)
+                .copyWith(
                   errorText: formState.errorText,
                   contentPadding: EdgeInsets.zero,
-                  border: InputBorder.none,
-                  errorBorder: InputBorder.none,
                   filled: false,
-                ),
+                )
+                .withoutBorder,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
