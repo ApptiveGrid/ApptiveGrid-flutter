@@ -27,6 +27,13 @@ FormFieldProperties _properties({required bool enableBarcodeScanner}) =>
     );
 
 void main() {
+  test('BarcodeScannerConfiguration describes itself', () {
+    expect(
+      _scanner('value').toString(),
+      equals('BarcodeScannerConfiguration(buttonTooltip: Scan)'),
+    );
+  });
+
   setUpAll(() {
     registerFallbackValue(
       FormData(id: 'id', title: '', components: [], fields: [], links: {}),
@@ -206,6 +213,23 @@ void main() {
       // reference field, so the app providing a scanner is the whole condition
       await pumpPicker(tester, configuration: _scanner('Second'));
       expect(_scanButton, findsOneWidget);
+    });
+
+    testWidgets('Scanning what is already typed searches again',
+        (tester) async {
+      // Setting the same text would not notify the filter listener, so the
+      // scan has to trigger the query itself — otherwise the button looks
+      // broken to someone who typed the code before scanning it
+      await pumpPicker(tester, configuration: _scanner('Second'));
+
+      await tester.enterText(find.byType(TextField), 'Second');
+      await tester.pumpAndSettle();
+      expect(find.text('First'), findsNothing);
+
+      await tester.tap(_scanButton);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Second'), findsOneWidget);
     });
 
     testWidgets('A scan selects the row it unambiguously points at',
