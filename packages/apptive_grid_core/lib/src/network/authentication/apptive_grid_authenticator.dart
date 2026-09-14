@@ -55,8 +55,16 @@ class ApptiveGridAuthenticator {
 
     if (client.options.authenticationOptions.persistCredentials) {
       _authenticationStorage ??= const FlutterSecureStorageCredentialStorage();
-      await checkAuthentication(requestNewToken: false)
-          .then((_) => _setupCompleter.complete());
+      try {
+        await checkAuthentication(requestNewToken: false);
+      } catch (error) {
+        // Restoring the session failed for want of a connection — a
+        // rejected credential is handled inside and never thrown. Start
+        // without a token; the next authenticated request tries again.
+        debugPrint('Could not restore the session: $error');
+      } finally {
+        _setupCompleter.complete();
+      }
     } else {
       _setupCompleter.complete();
     }
@@ -342,11 +350,17 @@ class ApptiveGridAuthenticator {
               setToken(token);
               return;
             } on OpenIdException catch (openIdError) {
+              // The auth server turned the credential down: the session is
+              // over, and a login is the only way on.
               setCredential(null);
               debugPrint('Could not refresh saved token: $openIdError');
-            } catch (error) {
-              debugPrint('Error refreshing token: $error');
             }
+            // Anything else — no connection, a timeout, a server having a
+            // bad day — says nothing about the session. The credential stays
+            // for the next attempt and the failure propagates, instead of
+            // falling through to a login: sending someone who is merely
+            // offline to a login page they cannot load helps nobody, and the
+            // caller may well have a cached answer to fall back on.
           } else {
             setCredential(null);
           }

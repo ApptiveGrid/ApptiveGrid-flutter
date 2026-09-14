@@ -1060,8 +1060,12 @@ void main() {
 
     test(
         'Storage Provided '
-        'Error '
-        'Calls authenticate', () async {
+        'Connection error while refreshing '
+        'Keeps the credential, throws, does not log in', () async {
+      // No connection is not "no session". Sending the user to a login page
+      // they cannot load — over an app that could answer from its cache —
+      // was the old behaviour. Now the failure surfaces and the credential
+      // stays for the next attempt.
       final tokenTime = DateTime.now();
       final httpClient = MockHttpClient();
       final authClient = MockAuthClient();
@@ -1134,10 +1138,77 @@ void main() {
       when(() => client.issuer).thenReturn(zweidenkerIssuer);
       when(() => client.clientId).thenReturn('clientId');
 
-      await authenticator.checkAuthentication();
+      await expectLater(authenticator.checkAuthentication(), throwsException);
 
-      verify(testAuthenticator.authorize).called(1);
-      expect(await authenticator.isAuthenticated, equals(true));
+      verifyNever(testAuthenticator.authorize);
+      verifyNever(() => storage.saveCredential(null));
+      expect(await authenticator.isAuthenticatedWithToken, isFalse);
+    });
+
+    test(
+        'Storage Provided '
+        'Connection error while restoring at setup '
+        'Completes setup without a token', () async {
+      // The constructor restores the session silently. When that fails for
+      // want of a connection the authenticator must still finish setting
+      // up, or isAuthenticated would wait forever.
+      final tokenTime = DateTime.now();
+      final httpClient = MockHttpClient();
+      final authClient = MockAuthClient();
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
+      when(() => authClient.clientSecret).thenReturn('');
+      when(() => authClient.clientId).thenReturn('test');
+      when(() => authClient.httpClient).thenReturn(httpClient);
+
+      final tokenResponse = TokenResponse.fromJson({
+        'token_type': 'Bearer',
+        'access_token': '12345',
+        'expires_at': tokenTime.millisecondsSinceEpoch,
+        'expires_in': tokenTime.microsecondsSinceEpoch,
+      });
+      final credential = Credential.fromJson({
+        'issuer': authClient.issuer.metadata.toJson(),
+        'client_id': authClient.clientId,
+        'client_secret': authClient.clientSecret,
+        'token': tokenResponse.toJson(),
+        'nonce': null,
+      });
+      when(
+        () => httpClient.post(
+          any(),
+          body: any(named: 'body'),
+          headers: any(named: 'headers'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).thenAnswer(
+        (invocation) => Future.error(Exception('Network is unreachable')),
+      );
+
+      final storage = MockAuthenticationStorage();
+      when(() => storage.credential)
+          .thenAnswer((invocation) => jsonEncode(credential.toJson()));
+      final agClient = MockApptiveGridClient();
+      when(() => agClient.options).thenReturn(
+        const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+            persistCredentials: true,
+          ),
+        ),
+      );
+      final testAuthenticator = MockAuthenticator();
+
+      authenticator = ApptiveGridAuthenticator(
+        client: agClient,
+        authenticationStorage: storage,
+        httpClient: httpClient,
+      );
+      authenticator.testAuthenticator = testAuthenticator;
+      authenticator.setAuthClient(authClient);
+
+      expect(await authenticator.isAuthenticatedWithToken, isFalse);
+      verifyNever(testAuthenticator.authorize);
+      verifyNever(() => storage.saveCredential(null));
     });
 
     test(
