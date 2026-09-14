@@ -1,3 +1,7 @@
+## 2.3.1
+
+ - **FIX**: A saved token whose refresh fails for want of a connection no longer falls through to `authenticate()`. Only the auth server rejecting the credential (`OpenIdException`) leads to the login; any other failure keeps the credential and propagates from `checkAuthentication`, so an app that is merely offline can answer from its cache instead of sending the user to a login page they cannot load. `performSetup` completes either way, so `isAuthenticated` never hangs on a failed restore.
+
 ## 2.3.0
 
  - **FEAT**: Add `Address` DataType, `Address` model and `AddressDataEntity`.
