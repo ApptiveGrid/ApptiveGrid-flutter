@@ -368,9 +368,13 @@ class ApptiveGridClient extends ChangeNotifier {
 
   ApptiveLink? _uploadUriLink(Attachment attachment, FormData formData) {
     for (final component in formData.components ?? <FormComponent>[]) {
-      final data = component.data;
-      if (data is AttachmentDataEntity &&
-          (data.value?.contains(attachment) ?? false)) {
+      final holdsAttachment = switch (component.data) {
+        AttachmentDataEntity(:final value) =>
+          value?.contains(attachment) ?? false,
+        SignatureDataEntity(:final value) => value == attachment,
+        _ => false,
+      };
+      if (holdsAttachment) {
         final fieldLink = component.field.links[ApptiveLinkType.uploadUri];
         if (fieldLink != null) {
           return fieldLink;
@@ -402,6 +406,11 @@ class ApptiveGridClient extends ChangeNotifier {
           if (replacement != null) {
             attachments[i] = replacement;
           }
+        }
+      } else if (data is SignatureDataEntity) {
+        final replacement = replacements[data.value];
+        if (replacement != null) {
+          data.value = replacement;
         }
       }
     }

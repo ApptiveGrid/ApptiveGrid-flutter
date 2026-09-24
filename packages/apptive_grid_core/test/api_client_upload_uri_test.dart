@@ -128,6 +128,44 @@ void main() {
     );
   }
 
+  FormData signatureFormDataWith({
+    required Attachment signature,
+    LinkMap fieldLinks = const {},
+    LinkMap formLinks = const {},
+  }) {
+    final field = GridField(
+      id: 'signatureFieldId',
+      name: 'Unterschrift',
+      type: DataType.signature,
+      links: fieldLinks,
+    );
+    return FormData(
+      id: 'formId',
+      title: 'Title',
+      components: [
+        FormComponent<SignatureDataEntity>(
+          property: 'Unterschrift',
+          data: SignatureDataEntity(signature),
+          field: field,
+        ),
+      ],
+      fields: [field],
+      links: {ApptiveLinkType.submit: submitLink, ...formLinks},
+      attachmentActions: {
+        signature: AddAttachmentAction(
+          byteData: Uint8List.fromList(utf8.encode('<svg></svg>')),
+          attachment: signature,
+        ),
+      },
+    );
+  }
+
+  Attachment newSignature() => Attachment(
+        name: 'signature.svg',
+        url: Uri.parse('https://placeholder.url/local-signature'),
+        type: 'image/svg+xml',
+      );
+
   Attachment newAttachment() => Attachment(
         name: 'file.pdf',
         url: Uri.parse('https://placeholder.url/local-uuid'),
@@ -275,6 +313,76 @@ void main() {
         stored.single.url,
         Uri.parse('https://placeholder.url/local-uuid'),
       );
+    });
+  });
+
+  group('uploadUri HAL link for signatures', () {
+    test('stores the server uri in the signature', () async {
+      final signature = newSignature();
+      final formData = signatureFormDataWith(
+        signature: signature,
+        formLinks: {ApptiveLinkType.uploadUri: formUploadLink},
+      );
+
+      final response = await client.submitForm(submitLink, formData);
+
+      expect(response!.statusCode, 200);
+      verify(
+        () => httpClient.put(
+          Uri.parse(presignedUri),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).called(1);
+
+      final stored =
+          (formData.components!.first.data as SignatureDataEntity).value!;
+      expect(stored.url, Uri.parse(serverUri));
+      expect(stored.name, 'signature.svg');
+    });
+
+    test('prefers the link of the signature field over the one of the form',
+        () async {
+      final signature = newSignature();
+      final formData = signatureFormDataWith(
+        signature: signature,
+        fieldLinks: {ApptiveLinkType.uploadUri: fieldUploadLink},
+        formLinks: {ApptiveLinkType.uploadUri: formUploadLink},
+      );
+
+      await client.submitForm(submitLink, formData);
+
+      final requestedUploadUris = verify(() => httpClient.send(captureAny()))
+          .captured
+          .cast<BaseRequest>()
+          .map((request) => request.url.path)
+          .where((path) => path.endsWith('uploadUri'))
+          .toList();
+
+      expect(requestedUploadUris, ['/field/uploadUri']);
+    });
+
+    test('uses the link of the signature field without one on the form',
+        () async {
+      final signature = newSignature();
+      final formData = signatureFormDataWith(
+        signature: signature,
+        fieldLinks: {ApptiveLinkType.uploadUri: fieldUploadLink},
+      );
+
+      await client.submitForm(submitLink, formData);
+
+      verifyNever(
+        () => httpClient.get(
+          any(
+            that: predicate<Uri>((uri) => uri.path.endsWith('config.json')),
+          ),
+          headers: any(named: 'headers'),
+        ),
+      );
+      final stored =
+          (formData.components!.first.data as SignatureDataEntity).value!;
+      expect(stored.url, Uri.parse(serverUri));
     });
   });
 }
