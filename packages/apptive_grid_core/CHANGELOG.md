@@ -1,3 +1,7 @@
+## 2.3.2
+
+ - **FIX**: Signatures are uploaded through the `uploadUri` link as well. The link of the signature field is preferred over the one of the form, and the url the server assigns is written back into the `SignatureDataEntity`, so a submitted signature no longer points at the client generated url where no file was uploaded (#163).
+
 ## 2.3.1
 
  - **FIX**: A saved token whose refresh fails for want of a connection no longer falls through to `authenticate()`. Only the auth server rejecting the credential (`OpenIdException`) leads to the login; any other failure keeps the credential and propagates from `checkAuthentication`, so an app that is merely offline can answer from its cache instead of sending the user to a login page they cannot load. `performSetup` completes either way, so `isAuthenticated` never hangs on a failed restore.
