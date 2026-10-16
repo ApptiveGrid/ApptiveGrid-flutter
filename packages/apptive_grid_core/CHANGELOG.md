@@ -1,3 +1,7 @@
+## 2.3.3
+
+ - **FIX**: An expired refresh token no longer locks the user out. The ApptiveGrid auth server rejects it with a plain-text 401, which `openid_client` throws as an `HttpRequestException` rather than an `OpenIdException`, so since 2.3.1 the dead credential was kept and every login attempt failed with `token expired`. Client errors from the token endpoint (except 408 and 429) now count as a rejected credential, both when restoring the saved credential and when refreshing an expired token: token and credential are cleared and, with `autoAuthenticate`, the login opens (#165).
+
 ## 2.3.2
 
  - **FIX**: Signatures are uploaded through the `uploadUri` link as well. The link of the signature field is preferred over the one of the form, and the url the server assigns is written back into the `SignatureDataEntity`, so a submitted signature no longer points at the client generated url where no file was uploaded (#163).
