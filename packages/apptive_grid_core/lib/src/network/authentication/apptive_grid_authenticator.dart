@@ -349,11 +349,12 @@ class ApptiveGridAuthenticator {
               final token = await credential.getTokenResponse(true);
               setToken(token);
               return;
-            } on OpenIdException catch (openIdError) {
+            } catch (error) {
+              if (!isCredentialRejected(error)) rethrow;
               // The auth server turned the credential down: the session is
               // over, and a login is the only way on.
               setCredential(null);
-              debugPrint('Could not refresh saved token: $openIdError');
+              debugPrint('Could not refresh saved token: $error');
             }
             // Anything else — no connection, a timeout, a server having a
             // bad day — says nothing about the session. The credential stays
@@ -375,9 +376,47 @@ class ApptiveGridAuthenticator {
       });
     } else if ((_token?.expiresAt?.difference(DateTime.now()).inSeconds ?? 0) <
         70) {
-      final newToken = await _credential?.getTokenResponse(true);
-      await setToken(newToken);
+      try {
+        final newToken = await _credential?.getTokenResponse(true);
+        await setToken(newToken);
+      } catch (error) {
+        if (!isCredentialRejected(error)) rethrow;
+        // The refresh token is no longer accepted. Keeping the expired token
+        // would have every request fail with a 401 and every retry refresh
+        // with the same dead credential — no way out short of reinstalling.
+        debugPrint('Could not refresh token: $error');
+        await setToken(null);
+        if (client.options.authenticationOptions.apiKey == null &&
+            requestNewToken &&
+            client.options.authenticationOptions.autoAuthenticate) {
+          await authenticate();
+        }
+      }
     }
+  }
+
+  /// Whether [error], thrown while refreshing a token, means the auth server
+  /// rejected the credential rather than could not be reached.
+  ///
+  /// An OAuth error response surfaces as an [OpenIdException]. The ApptiveGrid
+  /// auth server answers an expired refresh token with a plain-text 401
+  /// instead (`the token is not valid: 'token expired'`), which `openid_client`
+  /// throws as an [HttpRequestException]. Any client error counts as a
+  /// rejection, except a timeout or rate limit, which say nothing about the
+  /// session.
+  @visibleForTesting
+  static bool isCredentialRejected(Object error) {
+    if (error is OpenIdException) return true;
+    if (error is HttpRequestException) {
+      final status = error.statusCode;
+      return status >= 400 &&
+          status < 500 &&
+          // Request Timeout
+          status != 408 &&
+          // Too Many Requests
+          status != 429;
+    }
+    return false;
   }
 
   /// Performs a call to Logout the User
