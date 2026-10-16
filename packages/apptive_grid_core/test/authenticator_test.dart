@@ -392,6 +392,140 @@ void main() {
     });
   });
 
+  group('Expired Token, refresh rejected', () {
+    late MockToken expiredToken;
+    late MockCredential credential;
+    late MockAuthenticator authBackend;
+
+    setUp(() async {
+      final client = MockApptiveGridClient();
+      when(() => client.options).thenReturn(
+        const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+          ),
+        ),
+      );
+      authenticator = ApptiveGridAuthenticator(
+        client: client,
+        httpClient: MockHttpClient(),
+      );
+
+      expiredToken = MockToken();
+      when(() => expiredToken.expiresAt)
+          .thenReturn(DateTime.now().subtract(const Duration(seconds: 20)));
+      when(() => expiredToken.toJson()).thenReturn(<String, dynamic>{});
+      when(() => expiredToken.tokenType).thenReturn('Bearer');
+      when(() => expiredToken.accessToken).thenReturn('expired');
+
+      final authClient = MockAuthClient();
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
+      when(() => authClient.clientId).thenReturn('clientId');
+      authenticator.setAuthClient(authClient);
+      await authenticator.setToken(expiredToken);
+
+      credential = MockCredential();
+      when(() => credential.toJson()).thenReturn(<String, dynamic>{});
+      await authenticator.setCredential(credential);
+
+      authBackend = MockAuthenticator();
+      authenticator.testAuthenticator = authBackend;
+    });
+
+    test('Rejected refresh clears the token and logs in again', () async {
+      when(() => credential.getTokenResponse(any())).thenAnswer(
+        (_) => Future.error(
+          HttpRequestException(
+            statusCode: 401,
+            body: "the token is not valid: 'token expired' [401 Unauthorized]",
+          ),
+        ),
+      );
+      final freshCredential = MockCredential();
+      when(() => freshCredential.toJson()).thenReturn(<String, dynamic>{});
+      when(() => freshCredential.getTokenResponse(any())).thenAnswer(
+        (_) async => TokenResponse.fromJson(
+          {'token_type': 'Bearer', 'access_token': 'fresh'},
+        ),
+      );
+      when(() => authBackend.authorize())
+          .thenAnswer((_) async => freshCredential);
+
+      await authenticator.checkAuthentication();
+
+      verify(authBackend.authorize).called(1);
+      expect(authenticator.header, equals('Bearer fresh'));
+    });
+
+    test('Rejected refresh without requestNewToken only clears the token',
+        () async {
+      when(() => credential.getTokenResponse(any())).thenAnswer(
+        (_) => Future.error(OpenIdException('invalid_grant', 'Token expired')),
+      );
+
+      await authenticator.checkAuthentication(requestNewToken: false);
+
+      verifyNever(authBackend.authorize);
+      expect(authenticator.header, isNull);
+      expect(await authenticator.isAuthenticatedWithToken, isFalse);
+    });
+
+    test('Connection error keeps the token and throws', () async {
+      when(() => credential.getTokenResponse(any())).thenAnswer(
+        (_) => Future.error(Exception('Network is unreachable')),
+      );
+
+      await expectLater(authenticator.checkAuthentication(), throwsException);
+
+      verifyNever(authBackend.authorize);
+      expect(authenticator.header, equals('Bearer expired'));
+    });
+  });
+
+  group('isCredentialRejected', () {
+    test('OpenIdException is a rejection', () {
+      expect(
+        ApptiveGridAuthenticator.isCredentialRejected(
+          OpenIdException('invalid_grant', null),
+        ),
+        isTrue,
+      );
+    });
+
+    test('Client errors are a rejection', () {
+      for (final status in [400, 401, 403]) {
+        expect(
+          ApptiveGridAuthenticator.isCredentialRejected(
+            HttpRequestException(statusCode: status),
+          ),
+          isTrue,
+          reason: '$status',
+        );
+      }
+    });
+
+    test('Timeouts, rate limits and server errors are not', () {
+      for (final status in [408, 429, 500, 502, 503]) {
+        expect(
+          ApptiveGridAuthenticator.isCredentialRejected(
+            HttpRequestException(statusCode: status),
+          ),
+          isFalse,
+          reason: '$status',
+        );
+      }
+    });
+
+    test('Other errors are not', () {
+      expect(
+        ApptiveGridAuthenticator.isCredentialRejected(
+          Exception('Network is unreachable'),
+        ),
+        isFalse,
+      );
+    });
+  });
+
   group('Authenticate', () {
     setUpAll(() {
       registerFallbackValue(<String, String>{});
@@ -1143,6 +1277,94 @@ void main() {
       verifyNever(testAuthenticator.authorize);
       verifyNever(() => storage.saveCredential(null));
       expect(await authenticator.isAuthenticatedWithToken, isFalse);
+    });
+
+    test(
+        'Storage Provided '
+        'Refresh token expired (plain-text 401) '
+        'Deletes the credential and calls authenticate', () async {
+      // The ApptiveGrid auth server answers an expired refresh token with a
+      // plain-text 401 instead of an OAuth error. openid_client throws that
+      // as an HttpRequestException, not an OpenIdException. Treating it like
+      // a lost connection kept the dead credential, and every login attempt
+      // refreshed it again and failed the same way.
+      final tokenTime = DateTime.now();
+      final httpClient = MockHttpClient();
+      final authClient = MockAuthClient();
+      when(() => authClient.issuer).thenReturn(zweidenkerIssuer);
+      when(() => authClient.clientSecret).thenReturn('');
+      when(() => authClient.clientId).thenReturn('test');
+      when(() => authClient.httpClient).thenReturn(httpClient);
+
+      final tokenResponse = TokenResponse.fromJson({
+        'token_type': 'Bearer',
+        'access_token': '12345',
+        'refresh_token': 'expired',
+        'expires_at': tokenTime.millisecondsSinceEpoch,
+        'expires_in': tokenTime.microsecondsSinceEpoch,
+      });
+      final credential = Credential.fromJson({
+        'issuer': authClient.issuer.metadata.toJson(),
+        'client_id': authClient.clientId,
+        'client_secret': authClient.clientSecret,
+        'token': tokenResponse.toJson(),
+        'nonce': null,
+      });
+      when(
+        () => httpClient.post(
+          any(),
+          body: any(named: 'body'),
+          headers: any(named: 'headers'),
+          encoding: any(named: 'encoding'),
+        ),
+      ).thenAnswer(
+        (invocation) async => Response(
+          "the token is not valid: 'token expired' [401 Unauthorized]",
+          401,
+          headers: {'content-type': 'text/plain; charset=utf-8'},
+          request: Request('POST', invocation.positionalArguments[0] as Uri),
+        ),
+      );
+
+      final testAuthenticator = MockAuthenticator();
+      final agClient = MockApptiveGridClient();
+      when(() => agClient.options).thenReturn(
+        const ApptiveGridOptions(
+          authenticationOptions: ApptiveGridAuthenticationOptions(
+            autoAuthenticate: true,
+            persistCredentials: true,
+          ),
+        ),
+      );
+
+      final storage = MockAuthenticationStorage();
+      authenticator = ApptiveGridAuthenticator(
+        client: agClient,
+        authenticationStorage: storage,
+        httpClient: httpClient,
+      );
+      authenticator.testAuthenticator = testAuthenticator;
+
+      when(() => storage.credential)
+          .thenAnswer((invocation) => jsonEncode(credential.toJson()));
+      final authCredential = MockCredential();
+      when(() => authCredential.getTokenResponse(any()))
+          .thenAnswer((invocation) async => tokenResponse);
+      when(() => testAuthenticator.authorize())
+          .thenAnswer((_) async => authCredential);
+      when(() => authCredential.toJson()).thenReturn({});
+
+      final client = MockAuthClient();
+      authenticator.setAuthClient(client);
+      when(() => client.issuer).thenReturn(zweidenkerIssuer);
+      when(() => client.clientId).thenReturn('clientId');
+
+      await authenticator.checkAuthentication();
+
+      verify(() => storage.saveCredential(null))
+          .called(greaterThanOrEqualTo(1));
+      verify(testAuthenticator.authorize).called(1);
+      expect(await authenticator.isAuthenticatedWithToken, isTrue);
     });
 
     test(
