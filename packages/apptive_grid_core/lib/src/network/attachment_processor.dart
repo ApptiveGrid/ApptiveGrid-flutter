@@ -69,18 +69,24 @@ class AttachmentProcessor {
   /// The [Attachment.type] is the mime determined by the ending of [name] through [lookupMimeType]
   /// If the Attachment is an image (type starts with `image/`) it will generate a new [Attachment] with thumbnail urls
   /// If the Attachment is not an image, [Attachment.smallThumbnail] and [Attachment.largeThunbnail] will be `null`
+  ///
+  /// The urls are based on [AttachmentConfiguration.attachmentApiEndpoint] of
+  /// [configuration]. If no [configuration] is available, placeholder urls
+  /// below [ApptiveGridEnvironment.url] of [options] are generated instead.
+  /// They are replaced by the urls the server assigns when the attachment is
+  /// uploaded through [upload] with a `resolveUploadTarget`.
   Future<Attachment> createAttachment(String name) async {
     final type = lookupMimeType(name) ?? '';
-    final config = await configuration;
+    final baseUri = await _attachmentBaseUri();
 
-    final url = _generateUri(config);
+    final url = _generateUri(baseUri);
 
     Uri? smallThumbnail;
     Uri? largeThumbnail;
 
     if (img.findDecoderForNamedImage(name) != null) {
-      smallThumbnail = _generateUri(config);
-      largeThumbnail = _generateUri(config);
+      smallThumbnail = _generateUri(baseUri);
+      largeThumbnail = _generateUri(baseUri);
     }
     final attachment = Attachment(
       name: name,
@@ -92,10 +98,20 @@ class AttachmentProcessor {
     return attachment;
   }
 
-  Uri _generateUri(AttachmentConfiguration configuration) {
+  Future<Uri> _attachmentBaseUri() async {
+    try {
+      return Uri.parse((await configuration).attachmentApiEndpoint);
+    } catch (error) {
+      debugPrint(
+        'No attachment configuration available, using placeholder urls: $error',
+      );
+      return Uri.parse('${options.environment.url}/attachments');
+    }
+  }
+
+  Uri _generateUri(Uri baseUri) {
     final id = _uuid.v4();
 
-    final baseUri = Uri.parse(configuration.attachmentApiEndpoint);
     return baseUri.replace(
       path: '${baseUri.path}/$id',
     );
