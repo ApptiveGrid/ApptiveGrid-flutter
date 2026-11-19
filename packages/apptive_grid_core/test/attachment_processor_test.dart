@@ -142,6 +142,112 @@ void main() {
         isNull,
       );
     });
+
+    group('Without attachment configuration', () {
+      late AttachmentProcessor processorWithoutConfiguration;
+      final environmentUri = Uri.parse(ApptiveGridEnvironment.production.url);
+
+      setUp(() {
+        processorWithoutConfiguration = AttachmentProcessor(
+          const ApptiveGridOptions(),
+          authenticator,
+          httpClient: httpClient,
+        );
+        when(
+          () => httpClient.get(
+            any(
+              that: predicate<Uri>(
+                (uri) => uri.path.endsWith('config.json'),
+              ),
+            ),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => http.Response(jsonEncode({}), 200));
+      });
+
+      bool isPlaceholder(Uri? uri) =>
+          uri != null &&
+          uri.scheme == environmentUri.scheme &&
+          uri.host == environmentUri.host &&
+          uri.pathSegments.length == 2 &&
+          uri.pathSegments.first == 'attachments' &&
+          uuidRegex.hasMatch(uri.pathSegments.last);
+
+      test('Image generates placeholder urls', () async {
+        final attachment = await processorWithoutConfiguration
+            .createAttachment('attachment.png');
+
+        expect(attachment.type, equals('image/png'));
+        expect(attachment.url, predicate<Uri>(isPlaceholder));
+        expect(attachment.smallThumbnail, predicate<Uri>(isPlaceholder));
+        expect(attachment.largeThumbnail, predicate<Uri>(isPlaceholder));
+        expect(
+          {
+            attachment.url,
+            attachment.smallThumbnail,
+            attachment.largeThumbnail,
+          },
+          hasLength(3),
+        );
+      });
+
+      test('Non image generates placeholder url', () async {
+        final attachment = await processorWithoutConfiguration
+            .createAttachment('attachment.pdf');
+
+        expect(attachment.type, equals('application/pdf'));
+        expect(attachment.url, predicate<Uri>(isPlaceholder));
+        expect(attachment.smallThumbnail, isNull);
+        expect(attachment.largeThumbnail, isNull);
+      });
+
+      test('Upload with resolveUploadTarget replaces placeholder url',
+          () async {
+        final serverUri = Uri.parse('https://storage.com/file.pdf');
+        final presignedUri =
+            Uri.parse('https://storage.com/file.pdf?signature=abc');
+        when(
+          () => httpClient.put(
+            presignedUri,
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          ),
+        ).thenAnswer((_) async => http.Response('', 200));
+
+        final attachment = await processorWithoutConfiguration
+            .createAttachment('attachment.pdf');
+        final result = await processorWithoutConfiguration.upload(
+          AddAttachmentAction(
+            byteData: Uint8List(10),
+            attachment: attachment,
+          ),
+          resolveUploadTarget: () async => AttachmentUploadTarget(
+            presignedUri: presignedUri,
+            uri: serverUri,
+          ),
+        );
+
+        expect(result.response.statusCode, equals(200));
+        expect(result.attachment.url, equals(serverUri));
+        expect(result.attachment.name, equals('attachment.pdf'));
+      });
+
+      test('Upload without resolveUploadTarget still requires configuration',
+          () async {
+        final attachment = await processorWithoutConfiguration
+            .createAttachment('attachment.pdf');
+
+        await expectLater(
+          processorWithoutConfiguration.upload(
+            AddAttachmentAction(
+              byteData: Uint8List(10),
+              attachment: attachment,
+            ),
+          ),
+          throwsException,
+        );
+      });
+    });
   });
 
   group('Scale Image', () {
